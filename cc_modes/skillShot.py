@@ -128,7 +128,8 @@ class SkillShot(game.Mode):
     def sw_rightRampBottom_active(self, sw):
         # kill the music
         self.game.sound.stop_music()
-        # play the sound and store the time it takes to play
+        # play the sound
+        ## TODO might need to move this to specific awards
         self.game.sound.play(self.game.assets.sfx_flourish7)
 
         # award the prize - TODO these will change to real awards later
@@ -142,57 +143,51 @@ class SkillShot(game.Mode):
 
         elif self.selectedPrizes[5:] == "D":
             self.game.score(20)
-            # this one is the lock
-            # TODO eventually this will have to check the lock state and do things acordingly
-            # TODO for now it's just going to say LOCK
+            # this one is the lock - going to be complicated
             # if no balls have been locked yet, this awards a free lock straight up
-            if self.game.show_tracking('ballsLockedTotal') == 0:
-                # tick up the total balls locked because we just locked one
-                self.game.increase_tracking('ballsLockedTotal')
-                # add one to the count of balls currently locked
-                self.game.increase_tracking('ballsLocked')
-                # play the ball lock 1 animation
-                anim = dmd.Animation().load(self.game.assets.anim_ballOneLocked)
-                # TODO add the sound to this and determine if it needs listenrs
-                # calcuate the wait time to start the next part of the display
-                #myWait = len(anim.frames) / 8.57
-                # play the first sound
-                #self.game.sound.play(self.game.assets.sfx_explosion1)
-                #self.game.sound.play(self.game.assets.quote_mayorMyMoneysInThere)
-                # set the animation
-                animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=False,frame_time=7)
-                # added a frame listener for the second sound effect
-                #animLayer.add_frame_listener(5, self.play_stage_one_sound)
-                # play the animation
-                self.layer = animLayer
-                ## todo - need to flash the lock animation - maybe unload this whole thing to the mine mode
+            # or if lock is lit, it locks the ball as well
+            if self.game.show_tracking('ballsLockedTotal') == 0 or self.game.show_tracking('isLockLit') == True:
+                # turn off the skillshot layer
+                self.layer = None
+                # run the lock ball routine
+                self.game.mine.lock_ball()
                 return
-
+            #  Otherwise we have to check some things
+            # if it's not lit, are two balls locked
+            elif self.game.show_tracking('ballsLocked') == 2:
+                # if they are, light multiball
+                self.game.mine.light_multiball()
+                # set the award text appropriately
+                awardStringTop = "MULTIBALL"
+                awardStringBottom = "IS LIT"
+            # If we get here, this is not the first lock of the game
+            # and the lock is not lit, and there are not 2 balls locked
+            # so we just light the lock
             else:
-                # TODO this needs to be finished up for options other than 0 locks
+                self.game.mine.light_lock()
+                # and set the award text
                 awardStringTop = "LOCK"
                 awardStringBottom = "IS LIT"
 
         elif self.selectedPrizes[5:] == "E":
-            self.game.score(30)
             # this one is the bounty
-            # TODO eventually this will have to light the bounty award
-            # TODO for now its just text
-            awardStringTop = "COLLECT BOUNTY"
-            awardStringBottom = "IS LIT"
+            self.layer = None
+            self.game.saloon.light_bounty()
+            return
+            #awardStringTop = "COLLECT BOUNTY"
+            #awardStringBottom = "IS LIT"
+
 
         elif self.selectedPrizes[5:] == "F":
-            self.game.score(40)
             awardStringTop = "RIVER RESCUE"
             awardStringBottom = "COMPLETE"
             self.game.set_tracking('leftRampStage',4)
             self.game.score(250000)
 
         elif self.selectedPrizes[5:] == "G":
-            self.game.score(50)
             # This one is the right loop
             awardStringTop = "TRICK SHOTS"
-            awardStringBottom = "COMPLETED"
+            awardStringBottom = "COMPLETE"
             self.game.set_tracking('rightLoopStage',4)
             self.game.score(250000)
 
@@ -206,7 +201,6 @@ class SkillShot(game.Mode):
 
         elif self.selectedPrizes[5:] == "I":
             # this one is the left loop
-            self.game.score(70)
             awardStringTop = "BUCK N BRONCO"
             awardStringBottom ="COMPLETE"
             self.game.set_tracking('leftLoopStage',4)
@@ -232,7 +226,6 @@ class SkillShot(game.Mode):
             self.game.increase_tracking('bonusX',3)
 
         elif self.selectedPrizes[5:] == "M":
-            self.game.score(110)
             awardStringTop = "TRAIN RESCUE"
             awardStringBottom = "COMPLETE"
             self.game.set_tracking('centerRampStage',4)
@@ -242,6 +235,17 @@ class SkillShot(game.Mode):
             self.game.score(1000000)
             awardStringTop = "ONE MILLION"
             awardStringBottom = "POINTS"
+            # setup the wipe animation and the text layer
+            topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("ONE", blink_frames=5)
+            million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
+            anim = dmd.Animation().load(self.game.assets.anim_cashWipe)
+            wipeLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            wipeLayer.composite_op = "blacksrc"
+            self.layer = dmd.GroupedLayer(128,32,[topText,million,wipeLayer])
+            self.game.sound.play(self.game.assets.sfx_thrownCoins)
+            self.game.sound.play(self.game.assets.sfx_yeeHoo)
+            self.delay(delay=1.6,handler=self.clear_layer)
+            return
 
         ## todo at some point there will need to be logic here if we're doing something else
         ## todo like showing the ball locked animation

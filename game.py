@@ -89,12 +89,12 @@ class CCGame(game.BasicGame):
         self.left_loop = cc_modes.LeftLoop(game=self,priority=13)
         self.right_loop = cc_modes.RightLoop(game=self,priority=14)
 
+        # mine and saloon have to stay high so they can interrupt other displays
         self.mine = cc_modes.Mine(game=self,priority=24)
         self.saloon = cc_modes.Saloon(game=self,priority=25)
 
-
+        # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=50)
-
 
         ## try adding the score display font override
         self.score_display.font_18x12 = self.assets.font_score_x12
@@ -143,6 +143,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.left_loop)
         self.modes.add(self.right_loop)
         self.modes.add(self.mine)
+        self.modes.add(self.saloon)
 
         self.modes.add(self.skill_shot)
 

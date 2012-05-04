@@ -40,6 +40,10 @@ class Assets():
 
         self.font_12px_az = dmd.Font(self.dmd_path + "Font_16_CactusCanyon.dmd")
 
+        self.font_12px_az_outline = dmd.Font(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
+        self.font_12px_az_outline.tracking = -1
+        self.font_12px_az_outline.composite_op = "blacksrc"
+
         self.font_13px_score = dmd.Font(self.dmd_path + "Font_8_CactusCanyon.dmd")
         self.font_13px_extra_thin_score = dmd.Font(self.dmd_path + "Font_11_CactusCanyon.dmd")
         self.font_13px_thin_score = dmd.Font(self.dmd_path + "Font_7_CactusCanyon.dmd")
@@ -65,6 +69,7 @@ class Assets():
 
         # CC Sounds
         # Sound Effects
+        self.sfx_ballOneLock = 'sfx_ballOneLock' ; self.game.sound.register_sound(self.sfx_ballOneLock, self.sfx_path + "241-sfx-ball-one-lock.wav")
         self.sfx_banjoTrillUp = 'sfx_banjoTrillUp' ; self.game.sound.register_sound(self.sfx_banjoTrillUp, self.sfx_path + "622-banjo-trill-up.wav")
         self.sfx_banjoTrillDown = 'sfx_banjoTrillDown' ; self.game.sound.register_sound(self.sfx_banjoTrillDown, self.sfx_path + "623-banjo-trill-down.wav")
         self.sfx_banjoTaDa = 'sfx_banjoTaDa' ; self.game.sound.register_sound(self.sfx_banjoTaDa, self.sfx_path + "624-banjo-ta-da.wav")
@@ -81,19 +86,26 @@ class Assets():
         self.sfx_rightRampEnter = 'sfx_rightRampEnter' ; self.game.sound.register_sound(self.sfx_rightRampEnter, self.sfx_path + "129-sfx-right-ramp-enter.wav")
         self.sfx_leftRampEnter = 'sfx_leftRampEnter' ; self.game.sound.register_sound(self.sfx_leftRampEnter, self.sfx_path + "407-sfx-river-ramp-splash.wav")
         self.sfx_leftLoopEnter = 'sfx_leftLoopEnter' ; self.game.sound.register_sound(self.sfx_leftLoopEnter, self.sfx_path + "179-woosh-with-horse-running.wav")
+        self.sfx_orchestraRiff = 'sfx_orchestraRiff' ; self.game.sound.register_sound(self.sfx_orchestraRiff, self.sfx_path + "041-orchestra-riff.wav")
         self.sfx_rattlesnake = 'sfx_rattlesnake' ; self.game.sound.register_sound(self.sfx_rattlesnake, self.sfx_path + "221-rattlesnake.wav")
         self.sfx_skillShotWoosh = 'sfx_skillShotWoosh' ; self.game.sound.register_sound(self.sfx_skillShotWoosh, self.sfx_path + "393-skillshot-woosh.wav")
         self.sfx_thrownCoins = 'sfx_thrownCoins' ; self.game.sound.register_sound(self.sfx_thrownCoins, self.sfx_path + "137-sfx-thrown-coins.wav")
+        self.sfx_yeeHoo = 'sfx_yeeHoo' ; self.game.sound.register_sound(self.sfx_yeeHoo, self.sfx_path + "1963-yee-hoo.wav")
+
+
         # Quotes
         self.quote_pollyOhHowBrave = 'quote_pollyOhHowBrave' ; self.game.sound.register_sound(self.quote_pollyOhHowBrave, self.quotes_path + "850-polly-ooh-how-brave.wav")
         self.quote_pollyThankYou = 'quote_pollyThankYou' ; self.game.sound.register_sound(self.quote_pollyThankYou,self.quotes_path + "835-polly-thank-you.wav")
         self.quote_pollyHeadedForFalls = 'quote_pollyHeadedForFalls' ; self.game.sound.register_sound(self.quote_pollyHeadedForFalls, self.quotes_path + "829-polly-were-headed-for-the-falls.wav")
         self.quote_pollyGoinOver = 'quote_pollyGoinOver' ; self.game.sound.register_sound(self.quote_pollyGoinOver, self.quotes_path + "830-polly-were-going-over-the-falls.wav")
+        # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1202-prospector-welcome-to-cactus-canyon.wav")
-        #self.quote_mayorWelcome = 'quote_mayorWelcome';
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1101-mayor-dewey-cheetum-at-your-service.wav")
-        #self.quote_undertakerWelcome = 'quote_undertakerWelcome' ;
+        self.quote_bountyLit = 'quote_bountyLit'
+        self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1012-mayor-theres-a-bounty-just-waitin-for-ya.wav")
+        self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1013-mayor-bounty-is-list.wav")
+
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1324-undertaker-welcome-to-cactus-canyon.wav")
         self.quote_leaderBartLaugh2 = 'quote_leaderBartLaugh2' ; self.game.sound.register_sound(self.quote_leaderBartLaugh2, self.quotes_path + "1579-leader-bart-laugh-2.wav")
         self.quote_playerTwo = 'quote_playerTwo' ; self.game.sound.register_sound(self.quote_playerTwo, self.quotes_path + "856-polly-player-two.wav")
@@ -102,6 +114,7 @@ class Assets():
         self.quote_mayorMyMoneysInThere = 'quote_mayorMyMoneysInThere' ; self.game.sound.register_sound(self.quote_mayorMyMoneysInThere, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
         self.quote_mayorFineRideSir = 'quote_mayorFineRideSir' ; self.game.sound.register_sound(self.quote_mayorFineRideSir, self.quotes_path + "1187-mayor-a-fine-ride-sir.wav")
         self.quote_prospectorGottaHurt = 'quote_prospectorGottaHurt' ; self.game.sound.register_sound(self.quote_prospectorGottaHurt, self.quotes_path + "1254-prospector-oh-boy-thats-gotta-hurt.wav")
+
         # Music
         self.music_shooterLaneGroove = 'music_shooterLaneGroove' ; self.game.sound.register_music(self.music_shooterLaneGroove, self.music_path + "005-shooter-lane-groove.wav")
         self.music_mainTheme = 'music_mainTheme' ; self.game.sound.register_music(self.music_mainTheme, self.music_path + "002-song-starting-gameplay.wav")
@@ -123,6 +136,9 @@ class Assets():
         self.anim_riverChase = self.dmd_path + "river-chase.dmd"
 
         self.anim_ballOneLocked = self.dmd_path + "ball-one-locked.dmd"
+        self.anim_ballTwoLocked = self.dmd_path + "ball-two-locked.dmd"
+
+        self.anim_cashWipe = self.dmd_path + "cash-wipe.dmd"
 
         # Shared Paths
         self.shared_sound_path = "shared/sound/"
