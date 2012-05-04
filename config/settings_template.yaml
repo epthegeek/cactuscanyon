@@ -1,0 +1,135 @@
+# This file is a template for all of the settings used in the game.  The game code will
+# load this file along with a user_settings.yaml file.  Any settings not present in
+# the user_settings.yaml file will default to the default value specified here.  When
+# any setting is saved (via the in-game service menu), the user_settings.yaml file
+# will be updated with ALL of the entries here without overwriting existing settings.
+
+Machine (Standard):
+  'Balls Per Game':
+    options: [1,10]
+    increments: 1
+    default: 3
+  'Tilt Warnings':
+    options: [1,10]
+    increments: 1
+    default: 2
+  'Maximum Extra Balls':
+    options: [0,10]
+    increments: 1
+    default: 4
+  'Maximum Extra Balls/Ball In Play':
+    options: [0,10]
+    increments: 1
+    default: 0
+  'Allow Dim Illumination':
+    options: ['Yes','No']
+    default: 'No'
+  'No Bonus Flips':
+    options: ['Yes','No']
+    default: 'No'
+  'Game Restart':
+    options: [True,False]
+    default: True
+#Sound:
+#  'Initial volume':
+#    options: [0.1,1.0]
+#    increments: 0.1
+#    default: 0.5
+#  'Music volume offset':
+#    options: [-0.4,0.4]
+#    increments: 0.1
+#    default: 0
+Display:
+  'Left side score justify':
+    # This example has no default.  The first option (right) will be used as the default.
+    options: [right, left]
+Replay:
+  'Replay Type':
+    options: ['none','auto','fixed','incremental']
+    default: 'auto'
+  'Replay Percentage':
+    options: [5,40]
+    increments: 5
+    default: 10
+  'Replay Award':
+    options: ['Audit', 'Extra Ball']
+    default: 'Audit'
+  'Replay Levels':
+    options: [1,2,3,4]
+    default: 1
+  'Replay Level 1':
+    options: [50000,5000000]
+    increments: 50000
+    default: 100000
+  'Replay Level 2':
+    options: [100000,5000000]
+    increments: 50000
+    default: 200000
+  'Replay Level 3':
+    options: [150000,5000000]
+    increments: 50000
+    default: 300000
+  'Replay Level 4':
+    options: [200000,5000000]
+    increments: 50000
+    default: 400000
+  'Replay Boost':
+    options: [50000,5000000]
+    increments: 50000
+    default: 100000
+  'Special':
+    options: ['Audit', 'Extra Ball','Points']
+    default: 'Audit'
+Highscore:
+  'Grand Champion':
+    options: [50000000,500000000]
+    increments: 50000000
+    default: 350000000
+Gameplay (Feature):
+  'Bart Brothers Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Quickdraw Timer':
+    options: [5,30]
+    increments: 5
+    default: 20
+  'Quickdraws Lit Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Multiball Locks Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
+  'Attract Mode Sounds':
+    options: ['Yes','No']
+    default: 'Yes'
+  'Attract Mode Music':
+    options: ['Yes','No']
+    default: 'No'
+  'Outlane Ball Save':
+    options: ['Yes','No']
+    default: 'No'
+  'Game Ballsaves':
+    options: [1,10]
+    increments: 1
+    default: 3
+  'Multiball Ballsaves':
+    options: [1,10]
+    increments: 1
+    default: 2
+Network:
+  'IP Address':
+    options: [0,255]
+    increments: 1
+    default: 0
+  'Subnet':
+    options: [0,255]
+    increments: 1
+    default: 0
+  'Gateway':
+    options: [0,255]
+    increments: 1
+    default: 0
+  'Tournament Server':
+    options: [0,255]
+    increments: 1
+    default: 0

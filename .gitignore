@@ -1,0 +1,16 @@
+
+*.pyc
+
+
+cc_modes/.DS_Store
+
+dmd/
+
+sounds/
+
+procgame
+
+dp/
+
+shared/
+

@@ -1,0 +1,383 @@
+# P-ROC Game Description file for Bally Cactus Canyon
+PRGame:
+    machineType: wpc95
+    numBalls: 4
+PRFlippers:
+    - flipperLwR
+    - flipperLwL
+PRBumpers:
+    - leftSlingshot
+    - rightSlingshot
+    - leftJetBumper
+    - rightJetBumper
+    - bottomJetBumper
+PRSwitches:
+    # **** Format ****
+    # name:
+    #   number: <number>
+    #   type: <type>
+    #
+    #   <number> can be: SFx (Flipper switch, labeled Fx in WPC manual
+    #                    SDx (Dedicated switch, labeled SDx in WPC manual
+    #                    Sx  (Matrix switch, labeled x in WPC manual
+    #   <type> can be: 'NO' (normally open.  This is the default; so no need to use this)
+    #    'NC' (normally closed.  Common for optos)
+
+    #Flipper Grounded Swithes
+    ## EOS switches?
+    flipperLwR:
+        number: SF2
+        type: 'NC'
+    flipperLwL:
+        number: SF4
+        type: 'NC'
+
+    #Dedicated Grounded Swtches
+    exit: 
+        number: SD5
+    down: 
+        number: SD6
+    up: 
+        number: SD7
+    enter: 
+        number: SD8
+
+    #Regular Switches
+    startButton:
+        number: S13
+    plumbBobTilt:
+        number: S14
+    mineEntrance:
+        number: S15
+    leftOutlane:
+        number: S16
+    rightReturnLane:
+        number: S17
+    shooterLane:
+        number: S18
+    tilt:
+        number: S21
+    coinDoorClosed:
+        number: S22
+    alwaysClosed:
+        number: S24
+    leftReturnLane:
+        number: S26
+    rightOutlane:
+        number: S27
+    bottomRightStandUp:
+        number: S28
+    troughEject:
+        number: S31
+        type: 'NC'
+    troughBallOne:
+        number: S32
+        type: 'NC'
+    troughBallTwo:
+        number: S33
+        type: 'NC'
+    troughBallThree:
+        number: S34
+        type: 'NC'
+    troughBallFour:
+        number: S35
+        type: 'NC'
+    leftLoopBottom:
+        number: S36
+        type: 'NC'
+    rightLoopBottom:
+        number: S37
+        type: 'NC'
+    minePopper:
+        number: S41
+        type: 'NC'
+    saloonPopper:
+        number: S42
+        type: 'NC'
+    topRightStandUp:
+        number: S44
+    beerMug:
+        number: S46
+    leftBonusLane:
+        number: S47
+    jetBumpersExit:
+        number: S48
+    leftSlingshot:
+        number: S51
+    rightSlingshot:
+        number: S52
+    leftJetBumper:
+        number: S53
+    rightJetBumper:
+        number: S54
+    bottomJetBumper:
+        number: S55
+    rightLoopTop:
+        number: S56
+    rightBonusLane:
+        number: S57
+    leftLoopTop:
+        number: S58
+    badGuyLeft:
+        number: S61
+    badGuyLeftCenter:
+        number: S62
+    badGuyRightCenter:
+        number: S63
+    badGuyRight:
+        number: S64
+    rightRampMake:
+        number: S65
+    rightRampEnter:
+        number: S66
+    skillBowl:
+        number: S67
+    rightRampBottom:
+        number: S68
+    trainEncoder:
+        number: S71
+    trainHome:
+        number: S72
+    saloonGate:
+        number: S73
+    saloonBart:
+        number: S75
+    mineHome:
+        number: S77
+    mineEncoder:
+        number: S78
+    centerRampEnter:
+        number: S82
+    leftRampMake:
+        number: S83
+    centerRampMake:
+        number: S84
+    leftRampEnter:
+        number: S85
+    topleftStandUp:
+        number: S86
+    bottomLeftStandUp:
+        number: S87
+    
+PRCoils:
+    flipperLwRMain:
+        number: FLRM
+    flipperLwRHold:
+        number: FLRH
+    flipperLwLMain:
+        number: FLLM
+    flipperLwLHold:
+        number: FLLH
+    moveBart:
+        number: FURM
+    moveBartHat:
+        number: FULH
+    autoPlunger:
+        number: C01
+    leftDropTarget:
+        number: C02
+    leftCenterDropTarget:
+        number: C03
+    rightCenterDropTarget:
+        number: C04
+    rightDropTarget:
+        number: C05
+    minePopper:
+        number: C06
+    saloonPopper:
+        number: C08
+    troughEject:
+        number: C09
+    leftSlingshot:
+        number: C10
+    rightSlingshot:
+        number: C11
+    leftJetBumper:
+        number: C12
+    rightJetBumper:
+        number: C13
+    leftGunFightPost:
+        number: C14
+    rightGunFightPost:
+        number: C15
+    bottomJetBumper:
+        number: C16
+    mineMotor:
+        number: C17
+    mineFlasher:
+        number: C18
+    leftGunFlasher:
+        number: C19
+    rightGunFlasher:
+        number: C20
+    flasherPOA:
+        number: C21
+    leftLoopGate:
+        number: C22
+    rightLoopGate:
+        number: C23
+    beaconFlasher:
+        number: C24
+    middleRightFlasher:
+        number: C25
+    saloonFlasher:
+        number: C26
+    backRightFlasher:
+        number: C27
+    backLeftFlasher:
+        number: C28
+    trainReverse:
+        number: C37
+    trainForward:
+        number: C38
+
+PRLamps:
+    rankStranger:
+        number: L11
+    rankPartner:
+        number: L12
+    rankDeputy:
+        number: L13
+    rankSheriff:
+        number: L14
+    rankMarshall:
+        number: L15
+    starMotherLode:
+        number: L16
+    leftBonusLane:
+        number: L17
+    rightBonusLane:
+        number: L18
+    bountyBeacon:
+        number: L21
+    jackpotBeacon:
+        number: L22
+    shootToCollect:
+        number: L23
+    extraBallLitBeacon:
+        number: L24
+    bountySaloon:
+        number: L25
+    saloonArrow:
+        number: L26
+    extraBall:
+        number: L27
+    mineLock:
+        number: L28
+    rightCenterBadGuy:
+        number: L31
+    leftBadGuy:
+        number: L32
+    leftQuickDraw:
+        number: L33
+    rightRampSoundAlarm:
+        number: L34
+    rightRampShootOut:
+        number: L35
+    rightRampSavePolly:
+        number: L36
+    rightRampJackpot:
+        number: L37
+    rightRampCombo:
+        number: L38
+    rightLoopCombo:
+        number: L41
+    rightLoopJackpot:
+        number: L42
+    rightLoopMarksman:
+        number: L43
+    rightLoopGunslinger:
+        number: L44
+    rightLoopGoodShot:
+        number: L45
+    leftReturnQuickDraw:
+        number: L46
+    leftGunfightPin:
+        number: L47
+    leftOutGunfight:
+        number: L48
+    rightBadGuy:
+        number: L51
+    bottomRightQuickDraw:
+        number: L52
+    topRightQuickDraw:
+        number: L53
+    centerRampCatchTrain:
+        number: L54
+    centerRampStopTrain:
+        number: L55
+    centerRampSavePolly:
+        number: L56
+    centerRampJackpot:
+        number: L57
+    centerRampCombo:
+        number: L58
+    leftRampWhiteWater:
+        number: L61
+    leftRampWaterFall:
+        number: L62
+    leftRampSavePolly:
+        number: L63
+    leftRampJackpot:
+        number: L64
+    leftRampCombo:
+        number: L65
+    rightReturnQuickdraw:
+        number: L66
+    rightOutSpecial:
+        number: L67
+    rightGunfightPin:
+        number: L68
+    starStampede:
+        number: L71
+    starCombo:
+        number: L72
+    starHighNoon:
+        number: L73
+    leftLoopCombo:
+        number: L74
+    leftLoopJackpot:
+        number: L75
+    leftLoopRideEm:
+        number: L76
+    leftLoopWildRide:
+        number: L77
+    leftLoopBuckNBronco:
+        number: L78
+    starBartBrothers:
+        number: L81
+    shootAgain:
+        number: L82
+    starShowdown:
+        number: L83
+    leftCenterBadGuy:
+        number: L84
+    startButton:
+        number: L88
+    gi01:
+        number: G01
+    gi02:
+        number: G02
+    gi03:
+        number: G03
+    gi04:
+        number: G04
+    gi05:
+        number: G05
+
+PRBallSave:
+    pulseCoils: [minePopper, saloonPopper, leftJetBumper, rightJetBumper, bottomJetBumper, leftSlingshot, rightSlingshot]
+    resetSwitches:
+        shooterLane: open
+        rightOutlane: open
+        leftOutlane: open
+        rightReturnLane: open
+        leftReturnLane: open
+    stopSwitches:
+        shooterLane: closed
+        minePopper: active
+        saloonPopper: active
+        # don't ball search if a flipper button is pressed
+        flipperLwL: closed
+        flipperLwR: closed
+
