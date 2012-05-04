@@ -166,13 +166,12 @@ class SkillShot(game.Mode):
                 # play the animation
                 self.layer = animLayer
                 ## todo - need to flash the lock animation - maybe unload this whole thing to the mine mode
-
                 return
+
             else:
                 # TODO this needs to be finished up for options other than 0 locks
                 awardStringTop = "LOCK"
                 awardStringBottom = "IS LIT"
-
 
         elif self.selectedPrizes[5:] == "E":
             self.game.score(30)
@@ -244,7 +243,6 @@ class SkillShot(game.Mode):
             awardStringTop = "ONE MILLION"
             awardStringBottom = "POINTS"
 
-    def show_award(self):
         ## todo at some point there will need to be logic here if we're doing something else
         ## todo like showing the ball locked animation
         # the award icon

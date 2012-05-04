@@ -30,7 +30,7 @@ class Mine(game.Mode):
     def sw_minePopper_closed_for_200ms(self,sw):
         print "PULSE THE KICKER FOR THE MINE"
 
-    def sw_mineEntrace_active(self,sw):
+    def sw_mineEntrance_active(self,sw):
         pass
 
 
