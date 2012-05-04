@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 
 class Mine(game.Mode):
-    """Game mode for controlling the skill shot"""
+    """Game mode for controlling the mine and such"""
     def __init__(self, game,priority):
         super(Mine, self).__init__(game, priority)
         # set the hits to light the lock based on the config option

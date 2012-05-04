@@ -6,7 +6,7 @@ A P-ROC Project.  Written by a less-than-amateur.  Seriously, this is the first 
 I'm a plagarist
 ===============
 
-A lot of code in this things is blatantly lifted from the work of others. A LOT. Most of the working code in here can be contributed to Adam Preble, Gerry Stellenberg, Koen Heltzel, Jim Askey and others.  They're awesome. I'm a nub.
+A lot of code in this thing is blatantly lifted from the work of others. A LOT. Most of the working code in here can be attributed to Adam Preble, Gerry Stellenberg, Koen Heltzel, Jim Askey and others.  They're awesome. I'm a nub.
 
 It's not all here
 =================
