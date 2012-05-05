@@ -20,7 +20,7 @@ class RightLoop(game.Mode):
     def sw_rightLoopBottom_active(self,sw):
         # low end of the loop
         # play the sound effect
-        # TODO Need the sound for the switch
+        self.game.sound.play(self.game.assets.sfx_rightLoopEnter)
         # score come points
         self.game.score(2530)
 
@@ -42,6 +42,10 @@ class RightLoop(game.Mode):
             myWait = len(anim.frames) / 10.0
             # create the layer
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+            animLayer.add_frame_listener(4,self.play_glass_sound_one)
+            animLayer.add_frame_listener(7,self.play_glass_sound_one)
+            animLayer.add_frame_listener(13,self.play_glass_sound_two)
+
             # put it in place
             self.layer = animLayer
             self.type = dp.DP_Transition.TYPE_CROSSFADE
@@ -108,8 +112,8 @@ class RightLoop(game.Mode):
             # combine them
         completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
         # swap in the new layer
-        #self.layer = completeFrame
-        self.transition = dp.DP_Transition(self,self.layer,completeFrame,self.type)
+        self.layer = completeFrame
+        #self.transition = dp.DP_Transition(self,self.layer,completeFrame,self.type)
 
         # clear in 2 seconds
         self.delay(delay=2,handler=self.clear_layer)
@@ -119,6 +123,12 @@ class RightLoop(game.Mode):
         print "TRANSITIONING WTF"
         self.transition = dp.DP_Transition(self,self.layer,self.game.score_display.layer,dp.DP_Transition.TYPE_PUSH,dp.DP_Transition.PARAM_SOUTH)
         self.transition.callback = self.clear_layer()
+
+    def play_glass_sound_one(self):
+        self.game.sound.play(self.game.assets.sfx_breakingGlass1)
+
+    def play_glass_sound_two(self):
+        self.game.sound.play(self.game.assets.sfx_breakingGlass2)
 
     def clear_layer(self):
         self.layer = None

@@ -19,23 +19,25 @@ class Tracking(game.Player):
         self.player_stats['isExtraBallLit'] = False
 
         self.player_stats['rightRampShots'] = 0
-        self.player_stats['rightRampStage'] = 4
+        self.player_stats['rightRampStage'] = 1
 
         self.player_stats['leftRampShots'] = 0
-        self.player_stats['leftRampStage'] = 4
+        self.player_stats['leftRampStage'] = 1
 
         self.player_stats['centerRampShots'] = 0
-        self.player_stats['centerRampStage'] = 4
+        self.player_stats['centerRampStage'] = 1
 
         self.player_stats['leftLoopShots'] = 0
-        self.player_stats['leftLoopStage'] = 4
+        self.player_stats['leftLoopStage'] = 1
 
         self.player_stats['rightLoopShots'] = 0
-        self.player_stats['rightLoopStage'] = 4
+        self.player_stats['rightLoopStage'] = 1
 
         self.player_stats['saloonShots'] = 0
 
         self.player_stats['mineShotsTotal'] = 0
+        # mine status - OPEN, LOCK, READY, RUNNING
+        self.player_stats['mineStatus'] = "OPEN"
         self.player_stats['mineHits'] = 0
         ## balls currently locked
         self.player_stats['ballsLocked'] = 0

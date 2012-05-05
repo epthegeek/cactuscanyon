@@ -74,6 +74,8 @@ class Assets():
         self.sfx_banjoTrillDown = 'sfx_banjoTrillDown' ; self.game.sound.register_sound(self.sfx_banjoTrillDown, self.sfx_path + "623-banjo-trill-down.wav")
         self.sfx_banjoTaDa = 'sfx_banjoTaDa' ; self.game.sound.register_sound(self.sfx_banjoTaDa, self.sfx_path + "624-banjo-ta-da.wav")
         self.sfx_blow = 'sfx_blow' ; self.game.sound.register_sound(self.sfx_blow, self.sfx_path + "169-sfx-blow-on-gun.wav")
+        self.sfx_breakingGlass1 = 'sfx_breakingGlass1' ; self.game.sound.register_sound(self.sfx_breakingGlass1, self.sfx_path + "119-sfx-breaking-glass-1.wav")
+        self.sfx_breakingGlass2 = 'sfx_breakingGlass2' ; self.game.sound.register_sound(self.sfx_breakingGlass2, self.sfx_path + "135-sfx-breaking-glass-2.wav")
         self.sfx_cactusMash = 'sfx_cactusMash' ; self.game.sound.register_sound(self.sfx_cactusMash, self.sfx_path + "235-bonus-cactus-mash.wav")
         self.sfx_explosion1 = 'sfx_explosion1' ; self.game.sound.register_sound(self.sfx_explosion1, self.sfx_path + "105-sfx-explosion-1.wav")
         self.sfx_explosion11 = 'sfx_explosion2' ; self.game.sound.register_sound(self.sfx_explosion11, self.sfx_path + "257-sfx-explosion-11.wav")
@@ -88,6 +90,7 @@ class Assets():
         self.sfx_leftLoopEnter = 'sfx_leftLoopEnter' ; self.game.sound.register_sound(self.sfx_leftLoopEnter, self.sfx_path + "179-woosh-with-horse-running.wav")
         self.sfx_orchestraRiff = 'sfx_orchestraRiff' ; self.game.sound.register_sound(self.sfx_orchestraRiff, self.sfx_path + "041-orchestra-riff.wav")
         self.sfx_rattlesnake = 'sfx_rattlesnake' ; self.game.sound.register_sound(self.sfx_rattlesnake, self.sfx_path + "221-rattlesnake.wav")
+        self.sfx_rightLoopEnter = 'sfx_rightLoopEnter' ; self.game.sound.register_sound(self.sfx_rightLoopEnter, self.sfx_path + "155-sfx-ricochet-triple.wav")
         self.sfx_skillShotWoosh = 'sfx_skillShotWoosh' ; self.game.sound.register_sound(self.sfx_skillShotWoosh, self.sfx_path + "393-skillshot-woosh.wav")
         self.sfx_thrownCoins = 'sfx_thrownCoins' ; self.game.sound.register_sound(self.sfx_thrownCoins, self.sfx_path + "137-sfx-thrown-coins.wav")
         self.sfx_yeeHoo = 'sfx_yeeHoo' ; self.game.sound.register_sound(self.sfx_yeeHoo, self.sfx_path + "1963-yee-hoo.wav")
@@ -95,6 +98,7 @@ class Assets():
 
         # Quotes
         self.quote_pollyOhHowBrave = 'quote_pollyOhHowBrave' ; self.game.sound.register_sound(self.quote_pollyOhHowBrave, self.quotes_path + "850-polly-ooh-how-brave.wav")
+        self.quote_pollyHelp = 'quote_pollyHelp' ; self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
         self.quote_pollyThankYou = 'quote_pollyThankYou' ; self.game.sound.register_sound(self.quote_pollyThankYou,self.quotes_path + "835-polly-thank-you.wav")
         self.quote_pollyHeadedForFalls = 'quote_pollyHeadedForFalls' ; self.game.sound.register_sound(self.quote_pollyHeadedForFalls, self.quotes_path + "829-polly-were-headed-for-the-falls.wav")
         self.quote_pollyGoinOver = 'quote_pollyGoinOver' ; self.game.sound.register_sound(self.quote_pollyGoinOver, self.quotes_path + "830-polly-were-going-over-the-falls.wav")
@@ -104,7 +108,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1101-mayor-dewey-cheetum-at-your-service.wav")
         self.quote_bountyLit = 'quote_bountyLit'
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1012-mayor-theres-a-bounty-just-waitin-for-ya.wav")
-        self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1013-mayor-bounty-is-list.wav")
+        self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1013-mayor-bounty-is-lit.wav")
 
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1324-undertaker-welcome-to-cactus-canyon.wav")
         self.quote_leaderBartLaugh2 = 'quote_leaderBartLaugh2' ; self.game.sound.register_sound(self.quote_leaderBartLaugh2, self.quotes_path + "1579-leader-bart-laugh-2.wav")

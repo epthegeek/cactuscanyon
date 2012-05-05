@@ -45,7 +45,7 @@ class SkillShot(game.Mode):
 
         # light lock (padlock)
         # if multiball is ready, then don't include light lock
-        if not self.game.show_tracking('isMultiballLit'):
+        if self.game.show_tracking('mineStatus') != "READY":
             prizes.append("D")
 
         # light bounty? (money bag) don't add if bounty is already lit
@@ -146,7 +146,7 @@ class SkillShot(game.Mode):
             # this one is the lock - going to be complicated
             # if no balls have been locked yet, this awards a free lock straight up
             # or if lock is lit, it locks the ball as well
-            if self.game.show_tracking('ballsLockedTotal') == 0 or self.game.show_tracking('isLockLit') == True:
+            if self.game.show_tracking('ballsLockedTotal') == 0 or self.game.show_tracking('mineStatus') == "LOCK":
                 # turn off the skillshot layer
                 self.layer = None
                 # run the lock ball routine
@@ -174,9 +174,6 @@ class SkillShot(game.Mode):
             self.layer = None
             self.game.saloon.light_bounty()
             return
-            #awardStringTop = "COLLECT BOUNTY"
-            #awardStringBottom = "IS LIT"
-
 
         elif self.selectedPrizes[5:] == "F":
             awardStringTop = "RIVER RESCUE"
@@ -207,13 +204,11 @@ class SkillShot(game.Mode):
             self.game.score(250000)
 
         elif self.selectedPrizes[5:] == "J":
-            self.game.score(80)
             awardStringTop = "EXTRA BALL"
             awardStringBottom ="IS LIT"
 
         elif self.selectedPrizes[5:] == "K":
             # this one is the rank
-            self.game.score(90)
             awardStringTop = "RANK INCREASED"
             self.game.increase_tracking('rank')
             ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
@@ -233,8 +228,6 @@ class SkillShot(game.Mode):
 
         elif self.selectedPrizes[5:] == "N":
             self.game.score(1000000)
-            awardStringTop = "ONE MILLION"
-            awardStringBottom = "POINTS"
             # setup the wipe animation and the text layer
             topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("ONE", blink_frames=5)
             million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
@@ -247,8 +240,6 @@ class SkillShot(game.Mode):
             self.delay(delay=1.6,handler=self.clear_layer)
             return
 
-        ## todo at some point there will need to be logic here if we're doing something else
-        ## todo like showing the ball locked animation
         # the award icon
         prizeList = dmd.TextLayer(126, 1, self.game.assets.font_skillshot, "right", opaque=False).set_text(self.selectedPrizes[5:])
         # the award text
@@ -265,7 +256,7 @@ class SkillShot(game.Mode):
         script = []
         count = 0
         for i in range(4,20,4):
-            # math out the new origin based on the setp
+            # math out the new origin based on the step
             setX = 126 + i
             # generate the new prize layer with the shifted origin and store it in a list spot
             prizeList=dmd.TextLayer(setX, 1, self.game.assets.font_skillshot, "right", opaque=True).set_text(self.selectedPrizes)
