@@ -11,4 +11,4 @@ A lot of code in this thing is blatantly lifted from the work of others. A LOT. 
 It's not all here
 =================
 
-There's other stuff involved.  The DMD graphics and sounds aren't in here.  Nor is the "DP" set of extensions that Koen wrote.  So, this won't run as is.
+There's other stuff involved.  The DMD graphics and sounds aren't in here.  So, this won't run as is.
