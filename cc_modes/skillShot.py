@@ -56,7 +56,7 @@ class SkillShot(game.Mode):
             prizes.append("G")
 
         # light quick draw (gun w/ quick draw)
-        if self.game.show_tracking('quickdrawStatus',key=1) != "READY":
+        if self.game.show_tracking('quickDrawStatus',key=1) != "READY":
             prizes.append("H")
 
         # left loop complete (horse)

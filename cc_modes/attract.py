@@ -6,7 +6,7 @@
 
 from procgame import *
 import cc_modes
-import dp
+import ep
 import locale
 
 locale.setlocale(locale.LC_ALL, "")
@@ -32,11 +32,11 @@ class Attract(game.Mode):
         # adding a blank layer
         blanker = self.game.score_display.layer
 
-        self.layers = [ {'layer':blanker,'type':dp.DP_Transition.TYPE_PUSH,'direction':dp.DP_Transition.PARAM_NORTH},
-                        {'layer':ballyBanner,'type':dp.DP_Transition.TYPE_PUSH, 'direction':dp.DP_Transition.PARAM_WEST},
-                        {'layer':presents,'type':dp.DP_Transition.TYPE_PUSH,'direction':dp.DP_Transition.PARAM_WEST},
-                        {'layer':splash,'type':dp.DP_Transition.TYPE_PUSH,'direction':dp.DP_Transition.PARAM_WEST},
-                        {'layer':proc_banner,'type':dp.DP_Transition.TYPE_CROSSFADE,'direction':False}]
+        self.layers = [ {'layer':blanker,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH},
+                        {'layer':ballyBanner,'type':ep.EP_Transition.TYPE_PUSH, 'direction':ep.EP_Transition.PARAM_WEST},
+                        {'layer':presents,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
+                        {'layer':splash,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
+                        {'layer':proc_banner,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False}]
 
         self.generate_score_frames()
 
@@ -60,9 +60,9 @@ class Attract(game.Mode):
         frameB = self.layers[indexB]
         # two versions of the transition creation to cover if a direction is needed or not
         if frameB['direction'] != False:
-            self.transition = dp.DP_Transition(self,frameA['layer'],frameB['layer'],frameB['type'],frameB['direction'])
+            self.transition = ep.EP_Transition(self,frameA['layer'],frameB['layer'],frameB['type'],frameB['direction'])
         else:
-            self.transition = dp.DP_Transition(self,frameA['layer'],frameB['layer'],frameB['type'])
+            self.transition = ep.EP_Transition(self,frameA['layer'],frameB['layer'],frameB['type'])
 
         # reset the timer to 3 for the next go around
         self.timer = 3
@@ -173,7 +173,7 @@ class Attract(game.Mode):
                         # combine the parts together
                         combined = dmd.GroupedLayer(128, 32, [title, initLine1, scoreLine1])
                         # add it to the stack
-                        self.layers.append({'layer':combined,'type':dp.DP_Transition.TYPE_PUSH,'direction':dp.DP_Transition.PARAM_SOUTH})
+                        self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
                     ## for the second and 4th names set the title and score line 1
                     if index == 1 or index == 3:
                         title = dmd.TextLayer(128/2, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("HIGHEST SCORES")
@@ -185,7 +185,7 @@ class Attract(game.Mode):
                         scoreLine2 = dmd.TextLayer(124, 21, self.game.assets.font_7px_bold_az, "right", opaque=False).set_text(score_str)
                         combined = dmd.GroupedLayer(128, 32, [title, initLine1, scoreLine1, initLine2, scoreLine2])
                         # add it to the stack
-                        self.layers.append({'layer':combined,'type':dp.DP_Transition.TYPE_PUSH,'direction':dp.DP_Transition.PARAM_NORTH})
+                        self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH})
 
                 # generate a screen for the high score champ
                 if category.game_data_key == 'QuickDrawChampHighScoreData':
@@ -194,4 +194,4 @@ class Attract(game.Mode):
                     initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
-                    self.layers.append({'layer':combined,'type':dp.DP_Transition.TYPE_PUSH,'direction':dp.DP_Transition.PARAM_SOUTH})
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})

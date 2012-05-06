@@ -165,21 +165,45 @@ class BaseGameMode(game.Mode):
     def clear_layer(self):
         self.layer = None
 
-    ## inlanes
-    def sw_rightReturnLane_active(self,sw):
-        self.game.sound.play(self.game.assets.sfx_rattlesnake)
-        self.game.score(2530)
+    ###
+    ###  ___       _
+    ### |_ _|_ __ | | __ _ _ __   ___  ___
+    ###  | || '_ \| |/ _` | '_ \ / _ \/ __|
+    ###  | || | | | | (_| | | | |  __/\__\
+    ### |___|_| |_|_|\__,_|_| |_|\___||___/
+    ###
+    ###
 
     def sw_leftReturnLane_active(self, sw):
+        # register a left return lane hit
+        self.return_lane_hit(0)
+
+    def sw_rightReturnLane_active(self,sw):
+        # register a right return lane hit
+        self.return_lane_hit(1)
+
+    def return_lane_hit(self,side):
+        # play the sound
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
+        # score the points
         self.game.score(2530)
+        # if gunfight is lit - run that passing which side started it
+        if self.game.show_tracking('gunfightStatus') == "READY":
+            ## TODO - haven't written gunfight yet
+            ## self.game.modes.gunfight.start_gunfight(side)
+            pass
+        # else if quickdraw is lit - run that passing which side started it
+        elif self.game.show_tracking('quickDrawStatus',side) == "READY":
+            self.start_quickdraw(side)
+        else:
+            pass
 
     ## Flipper switch detection for flipping the bonus lanes
-    def sw_flipperLwR_active(self,sw):
+    def sw_flipperLwL_active(self,sw):
         # toggle the bonus lane
         self.flip_bonus_lane()
 
-    def sw_flipperLwL_active(self,sw):
+    def sw_flipperLwR_active(self,sw):
         # toggle the bonus lane
         self.flip_bonus_lane()
 
@@ -194,33 +218,19 @@ class BaseGameMode(game.Mode):
     ###
 
     def sw_leftBonusLane_active(self,sw):
-        if not self.game.show_tracking('isLeftBonusLaneLit'):
-            # light the light
-            # set the lane to on
-            self.game.set_tracking('isLeftBonusLaneLit',True)
-            # then if they're both on, play the animation and turn them both off
-            # and score points accordingly - 100k for completing the pair, 35,000 for one
-            if self.is_time_to_increase_bonus():
-                self.game.sound.play(self.game.assets.sfx_banjoTaDa)
-                self.game.score(100000)
-                # play the animation
-                self.increase_bonus()
-            else:
-                self.game.sound.play(self.game.assets.sfx_banjoTrillUp)
-                self.game.score(35000)
-        # if the lane is already on play the alt sound and add points
-        else:
-            # play the alt sound
-            self.game.sound.play(self.game.assets.sfx_banjoTrillDown)
-            # add some points
-            self.game.score(15000)
+        self.bonus_lane_hit(0)
 
     def sw_rightBonusLane_active(self,sw):
-        if not self.game.show_tracking('isRightBonusLaneLit'):
-            # play the noise
+        self.bonus_lane_hit(1)
+
+    def bonus_lane_hit(self,side):
+        # lookup the status of the lane that got hit
+        stat = self.game.show_tracking('bonusLaneStatus',side)
+        # if the lane is off
+        if stat == "OFF":
+            # set the status to on for the lane that got hit
+            self.game.set_tracking('bonusLaneStatus',"ON",side)
             # light the light
-            # set the lane to on
-            self.game.set_tracking('isRightBonusLaneLit',True)
             # points for lighting bonus lane
             self.game.score(35000)
             # then if they're both on now play the animation and turn them both off
@@ -241,22 +251,25 @@ class BaseGameMode(game.Mode):
             self.game.score(15000)
 
     def flip_bonus_lane(self):
+        self.game.invert_tracking('bonusLaneStatus')
         # if the left one is on, turn it off and turn on the right one
-        if self.game.show_tracking('isLeftBonusLaneLit'):
-            self.game.set_tracking('isLeftBonusLaneLit', False)
-            self.game.set_tracking('isRightBonusLaneLit', True)
+       # if self.game.show_tracking('bonusLaneStatus',0) == "ON":
+       #     self.game.set_tracking('bonusLaneStatus',"OFF", 0)
+       #     self.game.set_tracking('bonusLaneStatus',"ON",1)
         # if the right one is on, turn it off and turn on the left one
-        elif self.game.show_tracking('isRightBonusLaneLit'):
-            self.game.set_tracking('isRightBonusLaneLit', False)
-            self.game.set_tracking('isLeftBonusLaneLit', True)
+       # elif self.game.show_tracking('bonusLaneStatus',1) == "ON":
+       #     self.game.set_tracking('bonusLaneStatus',"OFF", 1)
+       #     self.game.set_tracking('bonusLaneStatus',"ON", 0)
         # if they're both off, do nothing
-        else:
-            pass
+       # else:
+       #     pass
 
     def is_time_to_increase_bonus(self):
         # if both bonus lanes are lit, return true
-        if self.game.show_tracking('isLeftBonusLaneLit') and self.game.show_tracking('isRightBonusLaneLit'):
-                return True
+        #if self.game.show_tracking('isLeftBonusLaneLit') and self.game.show_tracking('isRightBonusLaneLit'):
+        # if neither one is off, IT IS TIME
+        if "OFF" not in self.game.show_tracking('bonusLaneStatus'):
+            return True
 
     def increase_bonus(self):
         # play the cactus mashing animation
@@ -271,8 +284,8 @@ class BaseGameMode(game.Mode):
         # increase the bonus
         self.game.increase_tracking('bonusX')
         # turn both lights off
-        self.game.set_tracking('isLeftBonusLaneLit', False)
-        self.game.set_tracking('isRightBonusLaneLit', False)
+        self.game.set_tracking('bonusLaneStatus',"OFF",0)
+        self.game.set_tracking('bonusLaneStatus',"OFF",1)
         # after the delay, show the award
         self.delay(delay=myWait,handler=self.show_bonus_award)
 
@@ -301,25 +314,72 @@ class BaseGameMode(game.Mode):
     ###  \__\_\\__,_|_|\___|_|\_\__,_|_|  \__,_| \_/\_/ |___/
     ###
     ### The handling of the Quickdraw targets and lights is here
-    ### the actual game mode loads and unloads as needed
-
-    def sw_topRightStandUp_active(self, sw):
-        self.quickdraw_hit('topRight')
-
-    def sw_bottomRightStandUp_active(self,sw):
-        self.quickdraw_hit('bottomRight')
+    ### the actual game mode loads and unloads as needed to set it
+    ### at a higher priority so it can take over the DMD -- maybe
 
     def sw_topLeftStandUp_active(self, sw):
-        self.quickdraw_hit('topLeft')
+        self.quickdraw_hit('TOP',0)
 
     def sw_bottomLeftStandUp_active(self,sw):
-        self.quickdraw_hit('bottomLeft')
+        self.quickdraw_hit('BOT',0)
 
-    def quickdraw_hit(self, target):
-        # if quickdraw is not running
-        # if the quick draw on that side is lit score points and play alt sound
-        # if it's not lit and we're on easy difficulty turn it on
-        # if we're on hard difficulty check if both were hit
-        # if not just register this hit and set the status
-        # if they were both hit, turn it on
-        pass
+    def sw_topRightStandUp_active(self, sw):
+        self.quickdraw_hit('TOP',1)
+
+    def sw_bottomRightStandUp_active(self,sw):
+        self.quickdraw_hit('BOT',1)
+
+
+    def quickdraw_hit(self, position,side):
+        # lookup the status of the side, and difficulty
+        stat = self.game.show_tracking('quickDrawStatus',side)
+        difficulty = self.game.user_settings['Gameplay (Feature)']['Multiball Locks Difficulty']
+        # if quickdraw is running or lit on the side hit, or position matches stat
+        if "RUNNING" in self.game.show_tracking('quickDrawStatus') or stat == "READY" or stat == position:
+            print "QUICKDRAW IS RUNNING OR LIT"
+            # register a lit hit
+            self.quickdraw_lit_hit()
+        # otherwise quickdraw is NOT running or LIT
+        else:
+            # register an unlit hit
+            self.quickdraw_unlit_hit(position,side,stat,difficulty)
+
+    def quickdraw_lit_hit(self):
+        #play the alt sound
+        self.game.sound.play(self.game.assets.sfx_quickdrawOn)
+        # award some points
+        self.game.score(10000)
+
+    def quickdraw_unlit_hit(self,position,side,stat,difficulty):
+        # play the sound
+        self.game.sound.play(self.game.assets.sfx_quickdrawOff)
+        # award the points -- dividing the normal 22500 for lighting quickdraw into 2 parts to acccount for "Hard" difficulty
+        self.game.score(10000)
+        # if the status is already BOT/TOP or the difficulty is easy
+        if stat == "BOT" or stat == "TOP" or  difficulty == "Easy":
+            # light quickdraw
+            self.light_quickdraw(side)
+        # else set the status to the hit target sending the position for the amount and side for the key
+        else:
+            # will also need to do something with lights here
+            self.game.set_tracking('quickDrawStatus',position,side)
+
+    def light_quickdraw(self,side):
+        # add the rest of the points for lighting the quickdraw
+        self.game.score(12500)
+        # turn on the quickdraw light
+        # play a quote from the stack
+        self.game.sound.play_voice(self.game.assets.quote_quickDrawLit)
+        # set the status for the hit side to READY
+        self.game.set_tracking('quickDrawStatus',"READY",side)
+
+    def start_quickdraw(self,side):
+        print "STARTING QUICKDRAW ON SIDE:" + str(side)
+        # set the status of this side to running
+        self.game.set_tracking('quickDrawStatus',"RUNNING",side)
+        self.delay(delay=2,handler=self.end_quickdraw,param=side)
+
+    def end_quickdraw(self,side):
+        print "ENDING QUICKDRAW"
+        # set the status to OPEN
+        self.game.set_tracking('quickDrawStatus',"OPEN",side)

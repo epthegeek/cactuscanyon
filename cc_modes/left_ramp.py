@@ -5,7 +5,7 @@
 
 from procgame import *
 import cc_modes
-import dp
+import ep
 
 class LeftRamp(game.Mode):
     """Cactus Canyon Right Ramp Mode"""
@@ -98,7 +98,7 @@ class LeftRamp(game.Mode):
         completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
         # swap in the new layer
         #self.layer = completeFrame
-        transition = dp.DP_Transition(self,self.layer,completeFrame,dp.DP_Transition.TYPE_PUSH,dp.DP_Transition.PARAM_WEST)
+        transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         # clear in 3 seconds
         self.delay(delay=2,handler=self.clear_layer)
 
@@ -106,7 +106,7 @@ class LeftRamp(game.Mode):
         print "TRANSITION MF"
         blank = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(self.game.assets.dmd_path+'blank.dmd').frames[0])
         blank.composite_op = "blacksrc"
-        transition = dp.DP_Transition(self,self.layer,blank,dp.DP_Transition.TYPE_PUSH,dp.DP_Transition.PARAM_WEST)
+        transition = ep.EP_Transition(self,self.layer,blank,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         transition.callback = self.clear_layer
 
     def clear_layer(self):

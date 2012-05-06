@@ -49,16 +49,16 @@ class Tracking(game.Player):
         self.player_stats['motherLodesCollected'] = 0
 
         self.player_stats['bonusX'] = 1
-        self.player_stats['isLeftBonusLaneLit'] = False
-        self.player_stats['isRightBonusLaneLit'] = False
+        # bonus lane status OFF/ON - left is 0 right is 1
+        self.player_stats['bonusLaneStatus'] = ["OFF","OFF"]
 
         self.player_stats['bountyCollected'] = 0
         self.player_stats['isBountyLit'] = False
 
         self.player_stats['rank'] = 1
 
-        # Quickdraw status - OPEN, HALF (for hard difficulty), READY, RUNNING -- 0 is left, 1 is right
-        self.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
+        # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING -- 0 is left, 1 is right
+        self.player_stats['quickDrawStatus'] = ["OPEN","OPEN"]
         self.player_stats['quickDrawsStarted'] = 0
         self.player_stats['quickDrawsWon'] = 0
         self.player_stats['badGuysDead'] = [False,False,False,False]
@@ -69,5 +69,7 @@ class Tracking(game.Player):
         self.player_stats['bartDefeated'] = 0
         self.player_stats['gunfightsStarted'] = 0
         self.player_stats['gunfightsWon'] = 0
+        # gunfight status, OPEN, READY, RUNNING
+        self.player_stats['gunfightStatus'] = "OPEN"
 
 

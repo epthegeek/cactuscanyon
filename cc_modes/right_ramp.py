@@ -5,6 +5,7 @@
 
 from procgame import *
 import cc_modes
+import ep
 
 class RightRamp(game.Mode):
     """Cactus Canyon Right Ramp Mode"""
@@ -48,9 +49,12 @@ class RightRamp(game.Mode):
             self.game.sound.play(self.game.assets.sfx_explosion1)
             self.game.sound.play_voice(self.game.assets.quote_rightRamp1)
             # set the animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=7)
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold = True
+            animLayer.frame_time = 7
+
             # added a frame listener for the second sound effect
-            animLayer.add_frame_listener(5, self.play_stage_one_sound)
+            animLayer.add_frame_listener(5, self.game.play_remote_sound,param=self.game.assets.sfx_fallAndCrash1)
             # play the animation
             self.layer = animLayer
             # add some score
@@ -66,11 +70,14 @@ class RightRamp(game.Mode):
             # calculate the wait time
             myWait = len(anim.frames) / 8.57
             # set the animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=7)
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold = True
+            animLayer.frame_time = 7
+
             # add listener frames
-            animLayer.add_frame_listener(15,self.play_gunshot_sound)
-            animLayer.add_frame_listener(17,self.play_gunshot_sound)
-            animLayer.add_frame_listener(19,self.play_gunshot_sound)
+            animLayer.add_frame_listener(15,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
+            animLayer.add_frame_listener(17,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
+            animLayer.add_frame_listener(19,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
             # play the start sound
             self.game.sound.play_voice(self.game.assets.quote_rightRamp2)
             # play the animation
@@ -115,24 +122,15 @@ class RightRamp(game.Mode):
         print "BANK VICTORY"
         anim = dmd.Animation().load(self.game.assets.anim_bankRampFour)
         myWait = len(anim.frames) / 8.57
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=7)
-        animLayer.add_frame_listener(7,self.play_sfx_blow)
-        animLayer.add_frame_listener(14,self.play_sfx_ding)
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 7
+
+        animLayer.add_frame_listener(7,self.game.play_remote_sound,param=self.game.assets.sfx_blow)
+        animLayer.add_frame_listener(14,self.game.play_remote_sound,param=self.game.assets.sfx_grinDing)
         # play animation
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.blink_award_text)
-
-    def play_stage_one_sound(self):
-        self.game.sound.play(self.game.assets.sfx_fallAndCrash1)
-
-    def play_gunshot_sound(self):
-        self.game.sound.play(self.game.assets.sfx_explosion11)
-
-    def play_sfx_ding(self):
-        self.game.sound.play(self.game.assets.sfx_grinDing)
-
-    def play_sfx_blow(self):
-        self.game.sound.play(self.game.assets.sfx_blow)
 
     def blink_award_text(self):
         # stage one of showing the award text - this one blinks

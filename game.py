@@ -175,32 +175,41 @@ class CCGame(game.BasicGame):
     ###                                   |___/
     ### Player stats and progress tracking
 
-    def set_tracking(self,item,amount,key=None):
+    def set_tracking(self,item,amount,key="foo"):
         p = self.current_player()
-        if key:
+        if key != "foo":
             p.player_stats[item][key] = amount
         else:
             p.player_stats[item] = amount
 
     # call from other modes to set a value
-    def increase_tracking(self,item,amount=1,key=None):
+    def increase_tracking(self,item,amount=1,key="foo"):
         ## tick up a stat by a declared amount
         p = self.current_player()
-        if key:
+        if key != "foo":
             p.player_stats[item][key] += amount
         else:
             p.player_stats[item] += amount
 
     # return values to wherever
-    def show_tracking(self,item,key=None):
-        p = self.current_player()
-        if key:
+    def show_tracking(self,item,key="foo"):
+      p = self.current_player()
+      if key != "foo":
             return p.player_stats[item][key]
-        else:
+      else:
             return p.player_stats[item]
+
+    # invert tracking only used for bonus, wise? dunno
+    def invert_tracking(self,item):
+        p = self.current_player()
+        p.player_stats[item].reverse()
 
     # extra method for adding bonus to make it shorter when used
     def add_bonus(self,points):
         p = self.current_player()
         p.player_stats['bonus'] += points
         print p.player_stats['bonus']
+
+    ## this is for frame listeners and delays
+    def play_remote_sound(self,param):
+        self.sound.play(param)

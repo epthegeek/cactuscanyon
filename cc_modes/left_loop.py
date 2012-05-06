@@ -5,7 +5,7 @@
 
 from procgame import *
 import cc_modes
-import dp
+import ep
 
 class LeftLoop(game.Mode):
     """Cactus Canyon Left Loop"""
@@ -14,9 +14,9 @@ class LeftLoop(game.Mode):
         # set up the animations they are to alternate
         self.anims = []
         anim1 = self.game.assets.anim_horseDrag
-        self.anims.append({'layer':anim1,'direction':dp.DP_Transition.PARAM_WEST})
+        self.anims.append({'layer':anim1,'direction':ep.EP_Transition.PARAM_WEST})
         anim2 = self.game.assets.anim_horseChase
-        self.anims.append({'layer':anim2,'direction':dp.DP_Transition.PARAM_EAST})
+        self.anims.append({'layer':anim2,'direction':ep.EP_Transition.PARAM_EAST})
 
     def mode_started(self):
     # this would have to turn on some lights and stuff
@@ -93,12 +93,12 @@ class LeftLoop(game.Mode):
         # swap in the new layer
         #self.layer = completeFrame
         myDirection = self.anims[1]['direction']
-        self.transition = dp.DP_Transition(self,self.layer,completeFrame,dp.DP_Transition.TYPE_SLIDEOVER,myDirection)
+        self.transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_SLIDEOVER,myDirection)
         # clear in 2 seconds
         self.delay(delay=2,handler=self.clear_layer)
 
     def push_out(self):
-        self.transition = dp.DP_Transition(self,self.layer,self.game.score_display.layer,dp.DP_Transition.TYPE_PUSH,self.anims[1]['direction'])
+        self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,self.anims[1]['direction'])
         self.transition.callback = self.clear_layer
 
     def clear_layer(self):

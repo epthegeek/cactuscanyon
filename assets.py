@@ -89,6 +89,8 @@ class Assets():
         self.sfx_leftRampEnter = 'sfx_leftRampEnter' ; self.game.sound.register_sound(self.sfx_leftRampEnter, self.sfx_path + "407-sfx-river-ramp-splash.wav")
         self.sfx_leftLoopEnter = 'sfx_leftLoopEnter' ; self.game.sound.register_sound(self.sfx_leftLoopEnter, self.sfx_path + "179-woosh-with-horse-running.wav")
         self.sfx_orchestraRiff = 'sfx_orchestraRiff' ; self.game.sound.register_sound(self.sfx_orchestraRiff, self.sfx_path + "041-orchestra-riff.wav")
+        self.sfx_quickdrawOff = 'sfx_quickdrawOff' ; self.game.sound.register_sound(self.sfx_quickdrawOff, self.sfx_path + "287-quickdraw-hit-light.wav")
+        self.sfx_quickdrawOn = 'sfx_quickdrawOn' ; self.game.sound.register_sound(self.sfx_quickdrawOn, self.sfx_path + "289-quickdraw-hit-already-lit.wav")
         self.sfx_rattlesnake = 'sfx_rattlesnake' ; self.game.sound.register_sound(self.sfx_rattlesnake, self.sfx_path + "221-rattlesnake.wav")
         self.sfx_rightLoopEnter = 'sfx_rightLoopEnter' ; self.game.sound.register_sound(self.sfx_rightLoopEnter, self.sfx_path + "155-sfx-ricochet-triple.wav")
         self.sfx_skillShotWoosh = 'sfx_skillShotWoosh' ; self.game.sound.register_sound(self.sfx_skillShotWoosh, self.sfx_path + "393-skillshot-woosh.wav")
@@ -108,12 +110,12 @@ class Assets():
         self.quote_bountyLit = 'quote_bountyLit'
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1012-mayor-theres-a-bounty-just-waitin-for-ya.wav")
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1013-mayor-bounty-is-lit.wav")
-        self.quote_quickdrawLit = 'quote_quickdrawLit'
-        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "509-townie-quickdraw-is-lit.wav")
-        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1304-undertaker-oh-goodie-quickdraw-is-lit.wav")
-        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1305-undertaker-quickdraws-are-good-for-business.wav")
-        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "2040-waitress-quickdraw-is-lit.wav")
-        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1037-mayor-quickdraw-is-lit.wav")
+        self.quote_quickDrawLit = 'quote_quickDrawLit'
+        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "509-townie-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1304-undertaker-oh-goodie-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1305-undertaker-quickdraws-are-good-for-business.wav")
+        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "2040-waitress-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1037-mayor-quickdraw-is-lit.wav")
         self.quote_lockLit = 'quote_lockLit'
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")
@@ -142,6 +144,8 @@ class Assets():
         self.quote_mayorMyMoneysInThere = 'quote_mayorMyMoneysInThere' ; self.game.sound.register_sound(self.quote_mayorMyMoneysInThere, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
         self.quote_mayorFineRideSir = 'quote_mayorFineRideSir' ; self.game.sound.register_sound(self.quote_mayorFineRideSir, self.quotes_path + "1187-mayor-a-fine-ride-sir.wav")
         self.quote_prospectorGottaHurt = 'quote_prospectorGottaHurt' ; self.game.sound.register_sound(self.quote_prospectorGottaHurt, self.quotes_path + "1254-prospector-oh-boy-thats-gotta-hurt.wav")
+
+
 
         # Music
         self.music_drumRiff = 'music_drumRiff' ; self.game.sound.register_sound(self.music_drumRiff, self.music_path + "001-drum-lead-in.wav")

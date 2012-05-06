@@ -4,7 +4,7 @@
 
 from procgame import *
 import cc_modes
-import dp
+import ep
 
 class RightLoop(game.Mode):
     """Cactus Canyon Left Loop"""
@@ -48,7 +48,7 @@ class RightLoop(game.Mode):
 
             # put it in place
             self.layer = animLayer
-            self.type = dp.DP_Transition.TYPE_CROSSFADE
+            self.type = ep.EP_Transition.TYPE_CROSSFADE
             self.direction = None
             # then delayed kickoff the text display
             self.delay(delay=myWait,handler=self.show_award_text)
@@ -62,7 +62,7 @@ class RightLoop(game.Mode):
             myWait = len(anim.frames) / 10.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
             self.layer = animLayer
-            self.type = dp.DP_Transition.TYPE_EXPAND
+            self.type = ep.EP_Transition.TYPE_EXPAND
             self.delay(delay=myWait,handler=self.show_award_text)
         elif stage == 3:
             self.awardString = "MARKSMAN"
@@ -113,7 +113,7 @@ class RightLoop(game.Mode):
         completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
         # swap in the new layer
         self.layer = completeFrame
-        #self.transition = dp.DP_Transition(self,self.layer,completeFrame,self.type)
+        #self.transition = ep.EP_Transition(self,self.layer,completeFrame,self.type)
 
         # clear in 2 seconds
         self.delay(delay=2,handler=self.clear_layer)
@@ -121,7 +121,7 @@ class RightLoop(game.Mode):
     def push_out(self):
         # crap I had this then it stopped working
         print "TRANSITIONING WTF"
-        self.transition = dp.DP_Transition(self,self.layer,self.game.score_display.layer,dp.DP_Transition.TYPE_PUSH,dp.DP_Transition.PARAM_SOUTH)
+        self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_SOUTH)
         self.transition.callback = self.clear_layer()
 
     def play_glass_sound_one(self):
