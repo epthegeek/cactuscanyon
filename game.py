@@ -167,24 +167,37 @@ class CCGame(game.BasicGame):
         # re-add the attract mode
         self.modes.add(self.attract_mode)
 
-    ##
-    ## Player Stats/progress tracking
-    ##
+    ###  _____               _    _
+    ### |_   _| __ __ _  ___| | _(_)_ __   __ _
+    ###   | || '__/ _` |/ __| |/ / | '_ \ / _` |
+    ###   | || | | (_| | (__|   <| | | | | (_| |
+    ###   |_||_|  \__,_|\___|_|\_\_|_| |_|\__, |
+    ###                                   |___/
+    ### Player stats and progress tracking
 
-    def set_tracking(self,item,amount):
+    def set_tracking(self,item,amount,key=None):
         p = self.current_player()
-        p.player_stats[item] = amount
+        if key:
+            p.player_stats[item][key] = amount
+        else:
+            p.player_stats[item] = amount
 
     # call from other modes to set a value
-    def increase_tracking(self,item,amount=1):
+    def increase_tracking(self,item,amount=1,key=None):
         ## tick up a stat by a declared amount
         p = self.current_player()
-        p.player_stats[item] += amount
+        if key:
+            p.player_stats[item][key] += amount
+        else:
+            p.player_stats[item] += amount
 
     # return values to wherever
-    def show_tracking(self,item):
+    def show_tracking(self,item,key=None):
         p = self.current_player()
-        return p.player_stats[item]
+        if key:
+            return p.player_stats[item][key]
+        else:
+            return p.player_stats[item]
 
     # extra method for adding bonus to make it shorter when used
     def add_bonus(self,points):

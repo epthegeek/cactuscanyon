@@ -184,7 +184,12 @@ class BaseGameMode(game.Mode):
         self.flip_bonus_lane()
 
     ###
-    ### BONUS LANES STUFF
+    ###  ____                          _
+    ### | __ )  ___  _ __  _   _ ___  | |    __ _ _ __   ___  ___
+    ### |  _ \ / _ \| '_ \| | | / __| | |   / _` | '_ \ / _ \/ __|
+    ### | |_) | (_) | | | | |_| \__ \ | |__| (_| | | | |  __/\__\
+    ### |____/ \___/|_| |_|\__,_|___/ |_____\__,_|_| |_|\___||___/
+    ###
     ### TODO: this still needs to control the lights
     ###
 
@@ -287,3 +292,34 @@ class BaseGameMode(game.Mode):
 
     def play_sfx_cactusMash(self):
         self.game.sound.play(self.game.assets.sfx_cactusMash)
+
+    ###
+    ###   ___        _      _       _
+    ###  / _ \ _   _(_) ___| | ____| |_ __ __ ___      _____
+    ### | | | | | | | |/ __| |/ / _` | '__/ _` \ \ /\ / / __|
+    ### | |_| | |_| | | (__|   < (_| | | | (_| |\ V  V /\__\
+    ###  \__\_\\__,_|_|\___|_|\_\__,_|_|  \__,_| \_/\_/ |___/
+    ###
+    ### The handling of the Quickdraw targets and lights is here
+    ### the actual game mode loads and unloads as needed
+
+    def sw_topRightStandUp_active(self, sw):
+        self.quickdraw_hit('topRight')
+
+    def sw_bottomRightStandUp_active(self,sw):
+        self.quickdraw_hit('bottomRight')
+
+    def sw_topLeftStandUp_active(self, sw):
+        self.quickdraw_hit('topLeft')
+
+    def sw_bottomLeftStandUp_active(self,sw):
+        self.quickdraw_hit('bottomLeft')
+
+    def quickdraw_hit(self, target):
+        # if quickdraw is not running
+        # if the quick draw on that side is lit score points and play alt sound
+        # if it's not lit and we're on easy difficulty turn it on
+        # if we're on hard difficulty check if both were hit
+        # if not just register this hit and set the status
+        # if they were both hit, turn it on
+        pass

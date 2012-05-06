@@ -57,8 +57,8 @@ class Tracking(game.Player):
 
         self.player_stats['rank'] = 1
 
-        self.player_stats['isRightQuickDrawLit'] = False
-        self.player_stats['isLeftQuickDrawLit'] = False
+        # Quickdraw status - OPEN, HALF (for hard difficulty), READY, RUNNING -- 0 is left, 1 is right
+        self.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
         self.player_stats['quickDrawsStarted'] = 0
         self.player_stats['quickDrawsWon'] = 0
         self.player_stats['badGuysDead'] = [False,False,False,False]

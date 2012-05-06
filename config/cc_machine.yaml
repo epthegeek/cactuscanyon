@@ -154,7 +154,7 @@ PRSwitches:
         number: S84
     leftRampEnter:
         number: S85
-    topleftStandUp:
+    topLeftStandUp:
         number: S86
     bottomLeftStandUp:
         number: S87
