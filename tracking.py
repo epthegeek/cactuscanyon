@@ -55,7 +55,6 @@ class Tracking(game.Player):
         self.player_stats['bountyCollected'] = 0
         self.player_stats['isBountyLit'] = False
 
-
         self.player_stats['rank'] = 1
 
         self.player_stats['isRightQuickDrawLit'] = False
@@ -64,10 +63,11 @@ class Tracking(game.Player):
         self.player_stats['quickDrawsWon'] = 0
         self.player_stats['badGuysDead'] = [False,False,False,False]
 
-
-        self.player_stats['bartBrothersDefeated'] = 0
-        self.player_stats['bartBrotherStage'] = 1
-        self.player_stats['bartBrotherHits'] = 0
-        self.player_stats['isBartBrotherActive'] = False
+        # bartStatus: OPEN, ACTIVE, DEAD
+        self.player_stats['bartStatus'] = 1
+        self.player_stats['bartHits'] = 0
+        self.player_stats['bartDefeated'] = 0
+        self.player_stats['gunfightsStarted'] = 0
+        self.player_stats['gunfightsWon'] = 0
 
 

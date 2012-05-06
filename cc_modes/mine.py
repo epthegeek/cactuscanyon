@@ -18,16 +18,14 @@ class Mine(game.Mode):
         # Easy version
         print "Difficulty is set to - " + difficulty
         if difficulty == 'Easy':
-            self.hitsToLightLock = [2,0,0,1,1,1,2,2,2,3]
+            self.hitsToLightLock = [1,0,0,1,1,1,2,2,2,3]
         # Hard version
         else:
             self.hitsToLightLock = [1,1,1,2,2,2,3,3,3,4]
 
-        # start the hits count at 0
-        self.hits = 0
 
 
-    # if the ball lands in the kicker -- for now, just get it out again
+    # if the ball lands in the kicker
     def sw_minePopper_closed_for_200ms(self,sw):
         # first, record the mine shot in the running total
         self.game.increase_tracking('mineShotsTotal')
@@ -78,8 +76,10 @@ class Mine(game.Mode):
     def light_lock(self):
         # set the lock status
         self.game.set_tracking('mineStatus', "LOCK")
-        # clear the its to light lock
+        # clear the hits to light lock
         self.game.set_tracking('mineHits', 0)
+        # play a quote
+        self.game.sound.play_voice(self.game.assets.quote_lockLit)
         print "LOCK IS LIT ... AND SO AM I"
         ## TODO lights and sounds
 

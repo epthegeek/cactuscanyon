@@ -14,9 +14,6 @@ class SkillShot(game.Mode):
         # the lasso layer for overlaying on the icons
         self.lasso = dmd.TextLayer(129, 1, self.game.assets.font_skillshot, "right", opaque=False).set_text("A")
         self.lasso.composite_op = "blacksrc"
-        #lassoFrame = self.make_mask()
-        #self.mask = dmd.FrameLayer(opaque=False,frame=lassoFrame)
-        #self.mask.set_target_position(98,1)
         self.mask = dmd.TextLayer(129,1,self.game.assets.font_skillshot,"right",opaque=False).set_text("B")
         self.mask.composite_op = "blacksrc"
         # offset for the icon layer
@@ -24,14 +21,12 @@ class SkillShot(game.Mode):
 
     def mode_started(self):
         # call the welcome quote - and start the theme song after on the first ball
+        self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1:
             # play a random voice call from a pre-set collection
-            wait = self.game.sound.play_voice(self.game.assets.quote_welcomes)
-            # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
-            self.delay(delay=wait,handler=self.music_on)
-        else:
-            # anything other than ball one and the music just starts
-            self.music_on()
+            self.delay(delay=0.3,handler=self.play_welcome)
+        # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
+        self.delay(delay=0.2,handler=self.music_on)
 
         # set up a blank list for prizes
         prizes = []
@@ -279,6 +274,9 @@ class SkillShot(game.Mode):
         # unload in 2 seconds - to give
         # the award junk time to finish
         self.delay(delay=2,handler=self.shutdown)
+
+    def play_welcome(self):
+        self.game.sound.play_voice(self.game.assets.quote_welcomes)
 
     def music_on(self):
         self.game.sound.play_music(self.game.assets.music_shooterLaneGroove, loops=-1)

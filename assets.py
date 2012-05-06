@@ -97,21 +97,45 @@ class Assets():
 
 
         # Quotes
-        self.quote_pollyOhHowBrave = 'quote_pollyOhHowBrave' ; self.game.sound.register_sound(self.quote_pollyOhHowBrave, self.quotes_path + "850-polly-ooh-how-brave.wav")
-        self.quote_pollyHelp = 'quote_pollyHelp' ; self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
-        self.quote_pollyThankYou = 'quote_pollyThankYou' ; self.game.sound.register_sound(self.quote_pollyThankYou,self.quotes_path + "835-polly-thank-you.wav")
-        self.quote_pollyHeadedForFalls = 'quote_pollyHeadedForFalls' ; self.game.sound.register_sound(self.quote_pollyHeadedForFalls, self.quotes_path + "829-polly-were-headed-for-the-falls.wav")
-        self.quote_pollyGoinOver = 'quote_pollyGoinOver' ; self.game.sound.register_sound(self.quote_pollyGoinOver, self.quotes_path + "830-polly-were-going-over-the-falls.wav")
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1202-prospector-welcome-to-cactus-canyon.wav")
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1101-mayor-dewey-cheetum-at-your-service.wav")
+        self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1324-undertaker-welcome-to-cactus-canyon.wav")
+        self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "2002-waitress-come-in-and-take-a-load-off-stranger.wav")
+        self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1100-mayor-welcome-to-cactus-canyon-stranger.wav")
+        self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "803-polly-welcome-to-town-stranger.wav")
         self.quote_bountyLit = 'quote_bountyLit'
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1012-mayor-theres-a-bounty-just-waitin-for-ya.wav")
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1013-mayor-bounty-is-lit.wav")
+        self.quote_quickdrawLit = 'quote_quickdrawLit'
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "509-townie-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1304-undertaker-oh-goodie-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1305-undertaker-quickdraws-are-good-for-business.wav")
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "2040-waitress-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1037-mayor-quickdraw-is-lit.wav")
+        self.quote_lockLit = 'quote_lockLit'
+        self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
+        self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")
+        self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1431-drunk-lock-is-lit.wav")
+        self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1432-drunk-lock-is-lit-and-so-am-i.wav")
+        self.quote_leftRamp1 = 'quote_leftRamp1'
+        self.game.sound.register_sound(self.quote_leftRamp1, self.quotes_path + "831-polly-im-gettin-all-wet")
+        self.game.sound.register_sound(self.quote_leftRamp1, self.quotes_path + "829-polly-were-headed-for-the-falls.wav")
+        self.game.sound.register_sound(self.quote_leftRamp1, self.quotes_path + "1579-leader-bart-laugh-2.wav")
+        self.quote_leftRamp2 = 'quote_leftRamp2'
+        self.game.sound.register_sound(self.quote_leftRamp2, self.quotes_path + "830-polly-were-going-over-the-falls.wav")
+        self.game.sound.register_sound(self.quote_leftRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
+        self.quote_rightRamp1 = 'quote_rightRamp1'
+        self.game.sound.register_sound(self.quote_rightRamp1, self.quotes_path + "1307-undertaker-oh-good-mayhem-at-the-bank.wav")
+        self.game.sound.register_sound(self.quote_rightRamp1, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
+        self.game.sound.register_sound(self.quote_rightRamp1, self.quotes_path + "1189-mayor-those-bart-boys-are-robbin-the-bank.wav")
+        self.quote_rightRamp2 = 'quote_rightRamp2'
+        self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
+        self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "850-polly-ooh-how-brave.wav")
 
-        self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1324-undertaker-welcome-to-cactus-canyon.wav")
-        self.quote_leaderBartLaugh2 = 'quote_leaderBartLaugh2' ; self.game.sound.register_sound(self.quote_leaderBartLaugh2, self.quotes_path + "1579-leader-bart-laugh-2.wav")
+        self.quote_pollyHelp = 'quote_pollyHelp' ; self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
+        self.quote_pollyThankYou = 'quote_pollyThankYou' ; self.game.sound.register_sound(self.quote_pollyThankYou,self.quotes_path + "835-polly-thank-you.wav")
         self.quote_playerTwo = 'quote_playerTwo' ; self.game.sound.register_sound(self.quote_playerTwo, self.quotes_path + "856-polly-player-two.wav")
         self.quote_playerThree = 'quote_playerThree' ; self.game.sound.register_sound(self.quote_playerThree, self.quotes_path + "857-polly-player-three.wav")
         self.quote_playerFour = 'quote_playerFour' ; self.game.sound.register_sound(self.quote_playerFour, self.quotes_path + "858-polly-player-four.wav")
@@ -120,7 +144,8 @@ class Assets():
         self.quote_prospectorGottaHurt = 'quote_prospectorGottaHurt' ; self.game.sound.register_sound(self.quote_prospectorGottaHurt, self.quotes_path + "1254-prospector-oh-boy-thats-gotta-hurt.wav")
 
         # Music
-        self.music_shooterLaneGroove = 'music_shooterLaneGroove' ; self.game.sound.register_music(self.music_shooterLaneGroove, self.music_path + "005-shooter-lane-groove.wav")
+        self.music_drumRiff = 'music_drumRiff' ; self.game.sound.register_sound(self.music_drumRiff, self.music_path + "001-drum-lead-in.wav")
+        self.music_shooterLaneGroove = 'music_shooterLaneGroove' ; self.game.sound.register_music(self.music_shooterLaneGroove, self.music_path + "001-shooter-lane-groove.wav")
         self.music_mainTheme = 'music_mainTheme' ; self.game.sound.register_music(self.music_mainTheme, self.music_path + "002-song-starting-gameplay.wav")
 
         # Lampshows

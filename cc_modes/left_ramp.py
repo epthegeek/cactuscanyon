@@ -57,17 +57,18 @@ class LeftRamp(game.Mode):
             self.awardString = "WHITE WATER"
             self.awardPoints = "125,000"
             self.game.score(125000)
-            self.game.sound.play(self.game.assets.quote_pollyHeadedForFalls)
+            self.game.sound.play_voice(self.game.assets.quote_leftRamp1)
         elif stage == 2:
             self.awardString = "WATER FALL"
             self.awardPoints = "150,000"
             self.game.score(150000)
-            self.game.sound.play(self.game.assets.quote_pollyGoinOver)
+            self.game.sound.play_voice(self.game.assets.quote_leftRamp2)
         elif stage == 3:
             ## todo find out what this text is
             self.awardString = "ADVENTURE COMPLETE"
             self.awardPoints = "175,000"
             self.game.score(175000)
+            self.game.sound.play.sound(self.game.assets.quote_pollyThankYou)
         else:
             self.awardString = "ADVENTURE COMPLETE"
             self.awardPoints = "150,000"

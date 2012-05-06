@@ -46,7 +46,7 @@ class RightRamp(game.Mode):
             myWait = len(anim.frames) / 8.57
             # play the first sound
             self.game.sound.play(self.game.assets.sfx_explosion1)
-            self.game.sound.play(self.game.assets.quote_mayorMyMoneysInThere)
+            self.game.sound.play_voice(self.game.assets.quote_rightRamp1)
             # set the animation
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=7)
             # added a frame listener for the second sound effect
@@ -72,7 +72,7 @@ class RightRamp(game.Mode):
             animLayer.add_frame_listener(17,self.play_gunshot_sound)
             animLayer.add_frame_listener(19,self.play_gunshot_sound)
             # play the start sound
-            self.game.sound.play(self.game.assets.quote_leaderBartLaugh2)
+            self.game.sound.play_voice(self.game.assets.quote_rightRamp2)
             # play the animation
             self.layer = animLayer
             # apply the delay
@@ -150,7 +150,6 @@ class RightRamp(game.Mode):
         # create the two text lines
         awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)
         awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False)
-        #awardTextMask = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_mask, justify="center",opaque=False)
         awardTextBottom.composite_op = "blacksrc"
         awardTextTop.composite_op = "blacksrc"
 
@@ -158,7 +157,6 @@ class RightRamp(game.Mode):
         if blink:
             awardTextTop.set_text(self.awardString,blink_frames=12)
             awardTextBottom.set_text(self.awardPoints,blink_frames=12)
-            #awardTextMask.set_text(self.awardPoints,blink_frames=12)
         else:
             awardTextTop.set_text(self.awardString)
             awardTextBottom.set_text(self.awardPoints)
