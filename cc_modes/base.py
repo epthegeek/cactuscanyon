@@ -197,7 +197,7 @@ class BaseGameMode(game.Mode):
         elif self.game.show_tracking('quickDrawStatus',side) == "READY":
             # load up the mode
             self.game.modes.add(self.game.quickdraw)
-            # call the start
+            # fire the startup
             self.game.quickdraw.start_quickdraw(side)
         else:
             pass

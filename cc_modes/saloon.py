@@ -5,6 +5,7 @@
 
 from procgame import *
 import cc_modes
+import ep
 
 class Saloon(game.Mode):
     """Game mode for controlling the skill shot"""

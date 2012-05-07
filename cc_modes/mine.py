@@ -5,6 +5,7 @@
 
 from procgame import *
 import cc_modes
+import ep
 
 class Mine(game.Mode):
     """Game mode for controlling the mine and such"""

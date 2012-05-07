@@ -118,13 +118,13 @@ PRSwitches:
         number: S57
     leftLoopTop:
         number: S58
-    badGuyLeft:
+    badGuySW0:
         number: S61
-    badGuyLeftCenter:
+    badGuySW1:
         number: S62
-    badGuyRightCenter:
+    badGuySW2:
         number: S63
-    badGuyRight:
+    badGuySW3:
         number: S64
     rightRampMake:
         number: S65
@@ -174,13 +174,13 @@ PRCoils:
         number: FULH
     autoPlunger:
         number: C01
-    leftDropTarget:
+    badGuyC0:
         number: C02
-    leftCenterDropTarget:
+    badGuyC1:
         number: C03
-    rightCenterDropTarget:
+    badGuyC2:
         number: C04
-    rightDropTarget:
+    badGuyC3:
         number: C05
     minePopper:
         number: C06
@@ -264,9 +264,9 @@ PRLamps:
         number: L27
     mineLock:
         number: L28
-    rightCenterBadGuy:
+    badGuyL2:
         number: L31
-    leftBadGuy:
+    badGuyL0:
         number: L32
     leftQuickDraw:
         number: L33
@@ -296,7 +296,7 @@ PRLamps:
         number: L47
     leftOutGunfight:
         number: L48
-    rightBadGuy:
+    badGuyL3:
         number: L51
     bottomRightQuickDraw:
         number: L52
@@ -350,7 +350,7 @@ PRLamps:
         number: L82
     starShowdown:
         number: L83
-    leftCenterBadGuy:
+    badGuyL1:
         number: L84
     startButton:
         number: L88
