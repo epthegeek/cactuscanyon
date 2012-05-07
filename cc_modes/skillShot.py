@@ -189,7 +189,7 @@ class SkillShot(game.Mode):
             awardStringBottom ="IS LIT"
             self.game.score(10000)
             # turn on the right quickdraw
-            self.game.light_quickdraw(1)
+            self.game.base_game_mode.light_quickdraw(1)
 
         elif self.selectedPrizes[5:] == "I":
             # this one is the left loop

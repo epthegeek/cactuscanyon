@@ -35,6 +35,8 @@ class LeftLoop(game.Mode):
         self.award_loop_score()
 
     def award_loop_score(self):
+        # cancel the "Clear" delay if there is one
+        self.cancel_delayed("ClearLeftLoop")
         # if we're on stage one
         stage = self.game.show_tracking('leftLoopStage')
         if stage == 1:
@@ -95,7 +97,7 @@ class LeftLoop(game.Mode):
         myDirection = self.anims[1]['direction']
         self.transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_SLIDEOVER,myDirection)
         # clear in 2 seconds
-        self.delay(delay=2,handler=self.clear_layer)
+        self.delay(name="ClearLeftLoop",delay=2,handler=self.clear_layer)
 
     def push_out(self):
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,self.anims[1]['direction'])

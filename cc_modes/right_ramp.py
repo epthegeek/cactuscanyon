@@ -34,6 +34,9 @@ class RightRamp(game.Mode):
         self.game.score(2530)
 
     def award_ramp_score(self):
+        # cancel the "Clear" delay if there is one
+        self.cancel_delayed("ClearRightRamp")
+
         # TODO these all need fleshing out with sounds and final animations
         stage = self.game.show_tracking('rightRampStage')
         if stage == 1:
@@ -142,7 +145,7 @@ class RightRamp(game.Mode):
         # stage 2 of showing the award text
         self.build_award_text()
         # turn it off in 1 seconds
-        self.delay(delay=1,handler=self.clear_layer)
+        self.delay(name="ClearRightRamp",delay=1,handler=self.clear_layer)
 
     def build_award_text(self,blink=None):
         # create the two text lines

@@ -195,7 +195,10 @@ class BaseGameMode(game.Mode):
             pass
         # else if quickdraw is lit - run that passing which side started it
         elif self.game.show_tracking('quickDrawStatus',side) == "READY":
-            self.start_quickdraw(side)
+            # load up the mode
+            self.game.modes.add(self.game.quickdraw)
+            # call the start
+            self.game.quickdraw.start_quickdraw(side)
         else:
             pass
 
@@ -289,6 +292,9 @@ class BaseGameMode(game.Mode):
             return True
 
     def increase_bonus(self):
+        # cancel the "Clear" delay if there is one
+        self.cancel_delayed("ClearBonus")
+
         # play the cactus mashing animation
         anim = dmd.Animation().load(self.game.assets.anim_increaseBonusX)
         # calculate the wait for displaying the text
@@ -320,7 +326,7 @@ class BaseGameMode(game.Mode):
         # set the layer active
         self.layer = newLayer
         # then 1.5 seconds later, shut it off
-        self.delay(delay=1.5,handler=self.clear_layer)
+        self.delay(name="ClearBonus",delay=1.5,handler=self.clear_layer)
 
     def play_sfx_cactusMash(self):
         self.game.sound.play(self.game.assets.sfx_cactusMash)
@@ -392,13 +398,3 @@ class BaseGameMode(game.Mode):
         # set the status for the hit side to READY
         self.game.set_tracking('quickDrawStatus',"READY",side)
 
-    def start_quickdraw(self,side):
-        print "STARTING QUICKDRAW ON SIDE:" + str(side)
-        # set the status of this side to running
-        self.game.set_tracking('quickDrawStatus',"RUNNING",side)
-        self.delay(delay=2,handler=self.end_quickdraw,param=side)
-
-    def end_quickdraw(self,side):
-        print "ENDING QUICKDRAW"
-        # set the status to OPEN
-        self.game.set_tracking('quickDrawStatus',"OPEN",side)

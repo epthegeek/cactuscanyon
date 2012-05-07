@@ -8,7 +8,8 @@ __all__ = [
     'saloon',
     'mine',
     'left_loop',
-    'right_loop'
+    'right_loop',
+    'quickdraw',
 ]
 from base import *
 from attract import *
@@ -20,3 +21,4 @@ from saloon import *
 from mine import *
 from left_loop import *
 from right_loop import *
+from quickdraw import *

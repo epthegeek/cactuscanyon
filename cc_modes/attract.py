@@ -16,11 +16,10 @@ class Attract(game.Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Attract, self).__init__(game, priority)
-        self.game = game
 
         self.timer = 3
         ## Set up the layers to use
-        ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(game.assets.dmd_path+'bally-banner.dmd').frames[0])
+        ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(self.game.assets.dmd_path+'bally-banner.dmd').frames[0])
 
         presentsText = dmd.TextLayer(128/2, 7, game.assets.font_jazz18, "center", opaque=False).set_text("  PRESENTS")
         gecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(game.assets.dmd_path+'gecko-border.dmd').frames[0])

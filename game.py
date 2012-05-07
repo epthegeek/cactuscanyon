@@ -93,8 +93,16 @@ class CCGame(game.BasicGame):
         self.mine = cc_modes.Mine(game=self,priority=24)
         self.saloon = cc_modes.Saloon(game=self,priority=25)
 
+        # Quickdraw battle
+        self.quickdraw = cc_modes.QuickDraw(game=self,priority=67)
+        # Gunfight
+        #self.gunfight = cc_modes.GunFight(game=self,priority=68)
+        # Showdown
+        #self.showdown = cc_modes.ShowDown(game=self,priority=69)
         # this mode unloads when not in use
-        self.skill_shot = cc_modes.SkillShot(game=self,priority=50)
+        self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
+        # High Noon
+        #self.high_noon = cc_modes.HighNoon(game=self,priority=71)
 
         ## try adding the score display font override
         self.score_display.font_18x12 = self.assets.font_score_x12
@@ -204,6 +212,8 @@ class CCGame(game.BasicGame):
         p = self.current_player()
         p.player_stats[item].reverse()
 
+
+
     # extra method for adding bonus to make it shorter when used
     def add_bonus(self,points):
         p = self.current_player()
@@ -212,4 +222,10 @@ class CCGame(game.BasicGame):
 
     ## this is for frame listeners and delays
     def play_remote_sound(self,param):
+        print param
         self.sound.play(param)
+
+    def play_remote_music(self,param):
+        print "ITS TIME TO START THE MUSIC"
+        print param
+        self.sound.play_music(param, loops=-1)

@@ -33,6 +33,9 @@ class LeftRamp(game.Mode):
         self.game.score(2530)
 
     def award_ramp_score(self):
+        # cancel the "Clear" delay if there is one
+        self.cancel_delayed("ClearLeftRamp")
+
         ##
         ## For now, all the river runs use the same animation so it's in here
         ## would be nice to come up with additional animations - but making them good enough? fuggedaboutit
@@ -100,7 +103,7 @@ class LeftRamp(game.Mode):
         #self.layer = completeFrame
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         # clear in 3 seconds
-        self.delay(delay=2,handler=self.clear_layer)
+        self.delay(name="ClearLeftRamp",delay=2,handler=self.clear_layer)
 
     def push_out(self):
         print "TRANSITION MF"

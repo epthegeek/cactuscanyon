@@ -97,7 +97,6 @@ class Assets():
         self.sfx_thrownCoins = 'sfx_thrownCoins' ; self.game.sound.register_sound(self.sfx_thrownCoins, self.sfx_path + "137-sfx-thrown-coins.wav")
         self.sfx_yeeHoo = 'sfx_yeeHoo' ; self.game.sound.register_sound(self.sfx_yeeHoo, self.sfx_path + "1963-yee-hoo.wav")
 
-
         # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
@@ -116,13 +115,28 @@ class Assets():
         self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1305-undertaker-quickdraws-are-good-for-business.wav")
         self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "2040-waitress-quickdraw-is-lit.wav")
         self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1037-mayor-quickdraw-is-lit.wav")
+        self.quote_quickDrawStart = 'quote_quickDrawStart'
+        self.game.sound.register_sound(self.quote_quickDrawStart, self.quotes_path + "1241-prospector-get-that-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickDrawStart, self.quotes_path + "1274-prospector-nail-that-bad-guy-lawman.wav")
+        self.game.sound.register_sound(self.quote_quickDrawStart, self.quotes_path + "1150-mayor-theres-a-bad-guy-out-there.wav")
+        self.quote_quickDrawTaunt = 'quote_quickDrawTaunt'
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1151-mayor-shoot-the-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1554-leader-bart-go-on-take-your-best-shot.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1550-leader-bart-you-cant-shoot.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1552-leader-bart-come-on-tough-guy.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1156-mayor-mertilate-that-villan.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1155-mayor-shoot-that-scurvy-scoundrel.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1277-prospector-the-bad-guy-shoot-the-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "2042-waitress-hit-that-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1520-leader-bart-go-get-im.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1416-drunk-shoot-that-bad-guy.wav")
         self.quote_lockLit = 'quote_lockLit'
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1431-drunk-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1432-drunk-lock-is-lit-and-so-am-i.wav")
         self.quote_leftRamp1 = 'quote_leftRamp1'
-        self.game.sound.register_sound(self.quote_leftRamp1, self.quotes_path + "831-polly-im-gettin-all-wet")
+        self.game.sound.register_sound(self.quote_leftRamp1, self.quotes_path + "831-polly-im-gettin-all-wet.wav")
         self.game.sound.register_sound(self.quote_leftRamp1, self.quotes_path + "829-polly-were-headed-for-the-falls.wav")
         self.game.sound.register_sound(self.quote_leftRamp1, self.quotes_path + "1579-leader-bart-laugh-2.wav")
         self.quote_leftRamp2 = 'quote_leftRamp2'
@@ -151,8 +165,10 @@ class Assets():
         self.music_drumRiff = 'music_drumRiff' ; self.game.sound.register_sound(self.music_drumRiff, self.music_path + "001-drum-lead-in.wav")
         self.music_shooterLaneGroove = 'music_shooterLaneGroove' ; self.game.sound.register_music(self.music_shooterLaneGroove, self.music_path + "001-shooter-lane-groove.wav")
         self.music_mainTheme = 'music_mainTheme' ; self.game.sound.register_music(self.music_mainTheme, self.music_path + "002-song-starting-gameplay.wav")
+        self.music_quickDrawBumper = 'music_quickDrawBumper' ; self.game.sound.register_sound(self.music_quickDrawBumper, self.music_path + "017-quickdraw-bumper.wav")
+        self.music_quickDraw = 'music_quickDraw' ; self.game.sound.register_music(self.music_quickDraw, self.music_path + "025-quickdraw.wav")
 
-        # Lampshows
+    # Lampshows
 
         # DMD Animations
         self.anim_bankRampOne = self.dmd_path + "bank-explodes.dmd"
@@ -167,6 +183,9 @@ class Assets():
         self.anim_marksman1 = self.dmd_path + "shot-card-animation.dmd"
         self.anim_marksman2 = self.dmd_path + "smoking-card-loop.dmd"
         self.anim_riverChase = self.dmd_path + "river-chase.dmd"
+
+        self.anim_quickDrawStart = self.dmd_path + "quickdraw-start.dmd"
+        self.anim_quickDrawHit = self.dmd_path + "quickdraw-hit.dmd"
 
         self.anim_ballOneLocked = self.dmd_path + "ball-one-locked.dmd"
         self.anim_ballTwoLocked = self.dmd_path + "ball-two-locked.dmd"

@@ -30,7 +30,9 @@ class RightLoop(game.Mode):
         self.award_loop_score()
 
     def award_loop_score(self):
-            # if we're on stage one
+        # cancel the "Clear" delay if there is one
+        self.cancel_delayed("Clear")
+        # if we're on stage one
         stage = self.game.show_tracking('rightLoopStage')
         if stage == 1:
             self.awardString = "GOOD SHOT"
@@ -115,11 +117,11 @@ class RightLoop(game.Mode):
             # combine them
         completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
         # swap in the new layer
-        self.layer = completeFrame
-        #self.transition = ep.EP_Transition(self,self.layer,completeFrame,self.type)
+        #self.layer = completeFrame
+        self.transition = ep.EP_Transition(self,self.layer,completeFrame,self.type)
 
         # clear in 2 seconds
-        self.delay(delay=2,handler=self.clear_layer)
+        self.delay(name="ClearRightLoop",delay=2,handler=self.clear_layer)
 
     def push_out(self):
         # crap I had this then it stopped working
