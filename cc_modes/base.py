@@ -208,13 +208,13 @@ class BaseGameMode(game.Mode):
     ###                  |___/
     ###
 
-    def sw_leftSlingShot_active(self,sw):
-        self.slingShotHit()
+    def sw_leftSlingshot_active(self,sw):
+        self.slingshot_hit()
 
-    def sw_rightSlingShot_active(self,sw):
-        self.slingshotHit()
+    def sw_rightSlingshot_active(self,sw):
+        self.slingshot_hit()
 
-    def slingShotHit(self):
+    def slingshot_hit(self):
         # play a sound
         # score points
         self.game.score(2530)
