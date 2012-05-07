@@ -15,6 +15,7 @@ class Tracking(game.Player):
         # load up tracking stats for the player
         self.player_stats['bonus'] = 0
 
+        self.player_stats['extraBallsTotal'] = 0
         self.player_stats['extraBalls'] = 0
         self.player_stats['isExtraBallLit'] = False
 

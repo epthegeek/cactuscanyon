@@ -41,10 +41,13 @@ class RightLoop(game.Mode):
             # calculate a wait
             myWait = len(anim.frames) / 10.0
             # create the layer
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
-            animLayer.add_frame_listener(4,self.play_glass_sound_one)
-            animLayer.add_frame_listener(7,self.play_glass_sound_one)
-            animLayer.add_frame_listener(13,self.play_glass_sound_two)
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time=6
+            animLayer.opaque=True
+            animLayer.add_frame_listener(4,self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+            animLayer.add_frame_listener(7,self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+            animLayer.add_frame_listener(13,self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass2)
 
             # put it in place
             self.layer = animLayer
@@ -123,12 +126,6 @@ class RightLoop(game.Mode):
         print "TRANSITIONING WTF"
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_SOUTH)
         self.transition.callback = self.clear_layer()
-
-    def play_glass_sound_one(self):
-        self.game.sound.play(self.game.assets.sfx_breakingGlass1)
-
-    def play_glass_sound_two(self):
-        self.game.sound.play(self.game.assets.sfx_breakingGlass2)
 
     def clear_layer(self):
         self.layer = None

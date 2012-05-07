@@ -5,6 +5,7 @@
 ##
 
 from procgame import *
+from assets import *
 import cc_modes
 import ep
 import locale
@@ -15,6 +16,7 @@ class Attract(game.Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Attract, self).__init__(game, priority)
+        self.game = game
 
         self.timer = 3
         ## Set up the layers to use

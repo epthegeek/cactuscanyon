@@ -24,7 +24,7 @@ class SkillShot(game.Mode):
         self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1:
             # play a random voice call from a pre-set collection
-            self.delay(delay=0.3,handler=self.play_welcome)
+            self.delay(delay=0.3,handler=self.game.play_remote_sound,param=self.game.assets.quote_welcomes)
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
         self.delay(delay=0.2,handler=self.music_on)
 
@@ -119,7 +119,7 @@ class SkillShot(game.Mode):
         self.selectedPrizes = prizeTemp2 + prizeTemp1 + prizeTemp2
 
 
-# if the ramp bottom switch gets hit - award the prize and unload the mode
+    # if the ramp bottom switch gets hit - award the prize and unload the mode
     def sw_rightRampBottom_active(self, sw):
         # kill the music
         self.game.sound.stop_music()
@@ -185,11 +185,11 @@ class SkillShot(game.Mode):
 
         elif self.selectedPrizes[5:] == "H":
             # This one is the quickdraw
-            # TODO this will have to kick off a quickdraw
-            # TODO for now just text
             awardStringTop = "QUICK DRAW"
             awardStringBottom ="IS LIT"
-            self.game.score(5000)
+            self.game.score(10000)
+            # turn on the right quickdraw
+            self.game.light_quickdraw(1)
 
         elif self.selectedPrizes[5:] == "I":
             # this one is the left loop
@@ -274,9 +274,6 @@ class SkillShot(game.Mode):
         # unload in 2 seconds - to give
         # the award junk time to finish
         self.delay(delay=2,handler=self.shutdown)
-
-    def play_welcome(self):
-        self.game.sound.play_voice(self.game.assets.quote_welcomes)
 
     def music_on(self):
         self.game.sound.play_music(self.game.assets.music_shooterLaneGroove, loops=-1)

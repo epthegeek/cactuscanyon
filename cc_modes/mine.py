@@ -143,11 +143,9 @@ class Mine(game.Mode):
         self.game.sound.play(self.game.assets.sfx_ballOneLock)
         # set the animation
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
-        # added a frame listener for the second sound effect
-        #animLayer.add_frame_listener(5, self.play_stage_one_sound)
         # play the animation
         self.layer = animLayer
-        self.delay(delay=1,handler=self.play_polly_help)
+        self.delay(delay=1,handler=self.game.play_remote_sound,param=self.game.assets.quote_pollyHelp)
         self.delay(delay=myWait,handler=self.lock_display_text)
 
     def play_ball_two_lock_anim(self):
@@ -156,12 +154,8 @@ class Mine(game.Mode):
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
         # play the first sound
-        #self.game.sound.play(self.game.assets.sfx_explosion1)
-        #self.game.sound.play(self.game.assets.quote_mayorMyMoneysInThere)
         # set the animation
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
-        # added a frame listener for the second sound effect
-        #animLayer.add_frame_listener(5, self.play_stage_one_sound)
         # play the animation
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.clear_layer)
@@ -172,9 +166,6 @@ class Mine(game.Mode):
         textLine.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[self.layer,textLine])
         self.delay(delay=2,handler=self.clear_layer)
-
-    def play_polly_help(self):
-        self.game.sound.play(self.game.assets.quote_pollyHelp)
 
     def clear_layer(self):
         self.layer = None

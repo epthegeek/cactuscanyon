@@ -10,6 +10,7 @@
 
 from procgame import *
 from assets import *
+import ep
 
 
 class BaseGameMode(game.Mode):
@@ -198,6 +199,35 @@ class BaseGameMode(game.Mode):
         else:
             pass
 
+    ###
+    ###  ____  _ _                 _           _
+    ### / ___|| (_)_ __   __ _ ___| |__   ___ | |_ ___
+    ### \___ \| | | '_ \ / _` / __| '_ \ / _ \| __/ __|
+    ###  ___) | | | | | | (_| \__ \ | | | (_) | |_\__\
+    ### |____/|_|_|_| |_|\__, |___/_| |_|\___/ \__|___/
+    ###                  |___/
+    ###
+
+    def sw_leftSlingShot_active(self,sw):
+        self.slingShotHit()
+
+    def sw_rightSlingShot_active(self,sw):
+        self.slingshotHit()
+
+    def slingShotHit(self):
+        # play a sound
+        # score points
+        self.game.score(2530)
+
+    ###
+    ###  _____ _ _
+    ### |  ___| (_)_ __  _ __   ___ _ __ ___
+    ### | |_  | | | '_ \| '_ \ / _ \ '__/ __|
+    ### |  _| | | | |_) | |_) |  __/ |  \__\
+    ### |_|   |_|_| .__/| .__/ \___|_|  |___/
+    ###           |_|   |_|
+    ###
+
     ## Flipper switch detection for flipping the bonus lanes
     def sw_flipperLwL_active(self,sw):
         # toggle the bonus lane
@@ -252,21 +282,8 @@ class BaseGameMode(game.Mode):
 
     def flip_bonus_lane(self):
         self.game.invert_tracking('bonusLaneStatus')
-        # if the left one is on, turn it off and turn on the right one
-       # if self.game.show_tracking('bonusLaneStatus',0) == "ON":
-       #     self.game.set_tracking('bonusLaneStatus',"OFF", 0)
-       #     self.game.set_tracking('bonusLaneStatus',"ON",1)
-        # if the right one is on, turn it off and turn on the left one
-       # elif self.game.show_tracking('bonusLaneStatus',1) == "ON":
-       #     self.game.set_tracking('bonusLaneStatus',"OFF", 1)
-       #     self.game.set_tracking('bonusLaneStatus',"ON", 0)
-        # if they're both off, do nothing
-       # else:
-       #     pass
 
     def is_time_to_increase_bonus(self):
-        # if both bonus lanes are lit, return true
-        #if self.game.show_tracking('isLeftBonusLaneLit') and self.game.show_tracking('isRightBonusLaneLit'):
         # if neither one is off, IT IS TIME
         if "OFF" not in self.game.show_tracking('bonusLaneStatus'):
             return True
@@ -277,8 +294,10 @@ class BaseGameMode(game.Mode):
         # calculate the wait for displaying the text
         myWait = (len(anim.frames) / 8.57) - 0.4
         # set the animation
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=7)
-        animLayer.add_frame_listener(2,self.play_sfx_cactusMash)
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold = True
+        animLayer.frame_time = 7
+        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_cactusMash)
         # run the animation
         self.layer = animLayer
         # increase the bonus
