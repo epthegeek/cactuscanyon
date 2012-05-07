@@ -19,15 +19,15 @@ class Attract(game.Mode):
 
         self.timer = 3
         ## Set up the layers to use
-        ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(self.game.assets.dmd_path+'bally-banner.dmd').frames[0])
+        ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bally-banner.dmd').frames[0])
 
         presentsText = dmd.TextLayer(128/2, 7, game.assets.font_jazz18, "center", opaque=False).set_text("  PRESENTS")
-        gecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(game.assets.dmd_path+'gecko-border.dmd').frames[0])
+        gecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gecko-border.dmd').frames[0])
         presents = dmd.GroupedLayer(128, 32, [gecko, presentsText])
 
         proc_banner = dmd.TextLayer(128/2, 7, game.assets.font_jazz18, "center", opaque=False).set_text("pyprocgame")
 
-        splash = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(game.assets.dmd_path+'cactus-canyon-banner.dmd').frames[0])
+        splash = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-canyon-banner.dmd').frames[0])
         self.myIndex = 0
 
         # adding a blank layer
@@ -190,7 +190,7 @@ class Attract(game.Mode):
 
                 # generate a screen for the high score champ
                 if category.game_data_key == 'QuickDrawChampHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(self.game.assets.dmd_path+'quick-draw-still.dmd').frames[0])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'quick-draw-still.dmd').frames[0])
                     title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("QUICKDRAW CHAMP")
                     initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")

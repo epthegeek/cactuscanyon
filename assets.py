@@ -168,30 +168,6 @@ class Assets():
         self.music_quickDrawBumper = 'music_quickDrawBumper' ; self.game.sound.register_sound(self.music_quickDrawBumper, self.music_path + "017-quickdraw-bumper.wav")
         self.music_quickDraw = 'music_quickDraw' ; self.game.sound.register_music(self.music_quickDraw, self.music_path + "025-quickdraw.wav")
 
-    # Lampshows
-
-        # DMD Animations
-        self.anim_bankRampOne = self.dmd_path + "bank-explodes.dmd"
-        self.anim_bankRampTwo = self.dmd_path + "bank-sherrif-arrives.dmd"
-        self.anim_bankRampFour = self.dmd_path + "bank-victory-animation.dmd"
-        self.anim_sheriffPan = self.dmd_path + "sheriff-pan.dmd"
-        self.anim_increaseBonusX = self.dmd_path + "bonus-cactus-mash.dmd"
-        self.anim_horseChase = self.dmd_path + "horse-chase.dmd"
-        self.anim_horseDrag = self.dmd_path + "horse-drag.dmd"
-        self.anim_goodShot = self.dmd_path + "shot-bottles-animation.dmd"
-        self.anim_gunslinger = self.dmd_path + "shot-candles-animation.dmd"
-        self.anim_marksman1 = self.dmd_path + "shot-card-animation.dmd"
-        self.anim_marksman2 = self.dmd_path + "smoking-card-loop.dmd"
-        self.anim_riverChase = self.dmd_path + "river-chase.dmd"
-
-        self.anim_quickDrawStart = self.dmd_path + "quickdraw-start.dmd"
-        self.anim_quickDrawHit = self.dmd_path + "quickdraw-hit.dmd"
-
-        self.anim_ballOneLocked = self.dmd_path + "ball-one-locked.dmd"
-        self.anim_ballTwoLocked = self.dmd_path + "ball-two-locked.dmd"
-
-        self.anim_cashWipe = self.dmd_path + "cash-wipe.dmd"
-
         # Shared Paths
         self.shared_sound_path = "shared/sound/"
         self.shared_dmd_path = "shared/dmd/"
@@ -211,14 +187,11 @@ class Assets():
         self.font_07x4 = dmd.Font(self.shared_dmd_path + "Font07x4.dmd")
         self.font_07x5 = dmd.Font(self.shared_dmd_path + "Font07x5.dmd")
 
-        # Shared Animations
-        self.anim_proclogo = dmd.Animation().load(self.shared_dmd_path + "Splash.dmd")
-
         # Shared Sounds
-        #self.game.sound.register_sound('service_enter', self.shared_sound_path + "menu_in.wav")
-        #self.game.sound.register_sound('service_exit', self.shared_sound_path + "menu_out.wav")
-        #self.game.sound.register_sound('service_next', self.shared_sound_path + "next_item.wav")
-        #self.game.sound.register_sound('service_previous', self.shared_sound_path + "previous_item.wav")
-        #self.game.sound.register_sound('service_switch_edge', self.shared_sound_path + "switch_edge.wav")
-        #self.game.sound.register_sound('service_save', self.shared_sound_path + "save.wav")
-        #self.game.sound.register_sound('service_cancel', self.shared_sound_path + "cancel.wav")
+        self.game.sound.register_sound('service_enter', self.shared_sound_path + "menu_in.wav")
+        self.game.sound.register_sound('service_exit', self.shared_sound_path + "menu_out.wav")
+        self.game.sound.register_sound('service_next', self.shared_sound_path + "next_item.wav")
+        self.game.sound.register_sound('service_previous', self.shared_sound_path + "previous_item.wav")
+        self.game.sound.register_sound('service_switch_edge', self.shared_sound_path + "switch_edge.wav")
+        self.game.sound.register_sound('service_save', self.shared_sound_path + "save.wav")
+        self.game.sound.register_sound('service_cancel', self.shared_sound_path + "cancel.wav")

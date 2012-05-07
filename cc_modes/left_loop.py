@@ -13,10 +13,15 @@ class LeftLoop(game.Mode):
         super(LeftLoop, self).__init__(game, priority)
         # set up the animations they are to alternate
         self.anims = []
-        anim1 = self.game.assets.anim_horseDrag
+        anim0 = ep.DMD_PATH + "horse-run-left.dmd"
+        self.anims.append({'layer':anim0,'direction':ep.EP_Transition.PARAM_WEST})
+        anim1 = ep.DMD_PATH + "horse-drag.dmd"
         self.anims.append({'layer':anim1,'direction':ep.EP_Transition.PARAM_WEST})
-        anim2 = self.game.assets.anim_horseChase
+        anim2 = ep.DMD_PATH + "horse-chase.dmd"
         self.anims.append({'layer':anim2,'direction':ep.EP_Transition.PARAM_EAST})
+        anim3 = ep.DMD_PATH + "horse-run-right.dmd"
+        self.anims.append({'layer':anim3,'direction':ep.EP_Transition.PARAM_EAST})
+
 
     def mode_started(self):
     # this would have to turn on some lights and stuff
@@ -44,10 +49,17 @@ class LeftLoop(game.Mode):
             self.awardPoints = "125,000"
             self.game.score(125000)
             self.game.sound.play(self.game.assets.quote_prospectorGottaHurt)
+            # set the item to use, frame time to use, and amount to divide my wait by
+            thisOne = 1
+            frame_time = 6
+            divisor = 10.0
         elif stage == 2:
             self.awardString = "WILD RIDE"
             self.awardPoints = "150,000"
             self.game.score(15000)
+            thisOne = 1
+            frame_time = 6
+            divisor = 10.0
             # play the sound
             self.game.sound.play(self.game.assets.sfx_horseYell)
         elif stage == 3:
@@ -55,25 +67,34 @@ class LeftLoop(game.Mode):
             self.awardPoints = "175,000"
             self.game.score(175000)
             self.game.sound.play(self.game.assets.quote_mayorFineRideSir)
+            thisOne = 0
+            frame_time = 4
+            divisor = 15
         # anything 4 or more is complete
         else:
             self.awardString = "BRONCO LOOPS COMPLETE"
             self.awardPoints = "150,000"
             self.game.score(15000)
+            thisOne = 0
+            frame_time = 4
+            divisor = 15
 
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('leftLoopStage')
 
         # load the animation based on which was last played
-        anim = dmd.Animation().load(self.anims[0]['layer'])
+        self.direction = self.anims[thisOne]['direction']
+        anim = dmd.Animation().load(self.anims[thisOne]['layer'])
+
+        # this works out ok because we play the 2 middle ones before the first
         # then flip it for next time
         self.anims.reverse()
 
         # calcuate the wait time to start the next part of the display
-        myWait = len(anim.frames) / 10.0 - .5
+        myWait = len(anim.frames) / divisor - .5
         # set the animation
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=frame_time)
         # run the animation
         self.layer = animLayer
         # then at the delay show the award
@@ -94,8 +115,8 @@ class LeftLoop(game.Mode):
         completeFrame = dmd.GroupedLayer(128, 32, [self.layer,awardTextTop,awardTextBottom])
         # swap in the new layer
         #self.layer = completeFrame
-        myDirection = self.anims[1]['direction']
-        self.transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_SLIDEOVER,myDirection)
+        #myDirection = self.anims[1]['direction']
+        self.transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_SLIDEOVER,self.direction)
         # clear in 2 seconds
         self.delay(name="ClearLeftLoop",delay=2,handler=self.clear_layer)
 

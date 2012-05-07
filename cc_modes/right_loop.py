@@ -11,7 +11,7 @@ class RightLoop(game.Mode):
     def __init__(self, game, priority):
         super(RightLoop, self).__init__(game, priority)
         # set up a frame layer with the guns border on it
-        self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(game.assets.dmd_path+'guns-border.dmd').frames[0])
+        self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'guns-border.dmd').frames[0])
 
     def mode_started(self):
         # this would have to turn on some lights and stuff
@@ -39,7 +39,7 @@ class RightLoop(game.Mode):
             self.awardPoints = "125,000"
             self.game.score(125000)
             # load the animation
-            anim = dmd.Animation().load(self.game.assets.anim_goodShot)
+            anim = dmd.Animation().load(ep.DMD_PATH+'shot-bottles-animation.dmd')
             # calculate a wait
             myWait = len(anim.frames) / 10.0
             # create the layer
@@ -63,7 +63,7 @@ class RightLoop(game.Mode):
             self.awardPoints = "150,000"
             self.game.score(15000)
             # play the animation and such
-            anim = dmd.Animation().load(self.game.assets.anim_gunslinger)
+            anim = dmd.Animation().load(ep.DMD_PATH+'shot-candles-animation.dmd')
             myWait = len(anim.frames) / 10.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
             self.layer = animLayer
@@ -74,7 +74,7 @@ class RightLoop(game.Mode):
             self.awardPoints = "175,000"
             self.game.score(175000)
             #self.show_award_text()
-            anim = dmd.Animation().load(self.game.assets.anim_marksman1)
+            anim = dmd.Animation().load(ep.DMD_PATH+'shot-card-animation.dmd')
             myWait = len(anim.frames) / 10.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
             self.layer = animLayer
@@ -91,7 +91,7 @@ class RightLoop(game.Mode):
             self.game.increase_tracking('rightLoopStage')
 
     def show_marksman_award(self):
-        anim = dmd.Animation().load(self.game.assets.anim_marksman2)
+        anim = dmd.Animation().load(ep.DMD_PATH+'smoking-card-loop.dmd')
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=7)
         awardTextTop = dmd.TextLayer(128/3,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
         awardTextBottom = dmd.TextLayer(128/3,11,self.game.assets.font_15px_az,justify="center",opaque=False)

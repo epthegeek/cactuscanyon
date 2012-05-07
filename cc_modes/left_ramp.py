@@ -14,7 +14,7 @@ class LeftRamp(game.Mode):
         # Set up the sounds
         # set up the animations
         self.game = game
-        self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(self.game.assets.dmd_path+'woodcut-border.dmd').frames[0])
+        self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'woodcut-border.dmd').frames[0])
 
     def mode_started(self):
         # this would have to turn on some lights and stuff
@@ -41,7 +41,7 @@ class LeftRamp(game.Mode):
         ## would be nice to come up with additional animations - but making them good enough? fuggedaboutit
         ##
         # load the animation
-        anim = dmd.Animation().load(self.game.assets.anim_riverChase)
+        anim = dmd.Animation().load(ep.DMD_PATH+'river-chase.dmd')
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
         # play the river ramp sound
@@ -107,7 +107,7 @@ class LeftRamp(game.Mode):
 
     def push_out(self):
         print "TRANSITION MF"
-        blank = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(self.game.assets.dmd_path+'blank.dmd').frames[0])
+        blank = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
         blank.composite_op = "blacksrc"
         transition = ep.EP_Transition(self,self.layer,blank,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         transition.callback = self.clear_layer

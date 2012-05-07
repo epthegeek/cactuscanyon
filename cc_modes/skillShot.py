@@ -226,7 +226,7 @@ class SkillShot(game.Mode):
             # setup the wipe animation and the text layer
             topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("ONE", blink_frames=5)
             million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
-            anim = dmd.Animation().load(self.game.assets.anim_cashWipe)
+            anim = dmd.Animation().load(ep.DMD_PATH+'cash-wipe.dmd')
             wipeLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
             wipeLayer.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[topText,million,wipeLayer])

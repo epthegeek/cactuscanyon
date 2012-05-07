@@ -28,7 +28,7 @@ class QuickDraw(game.Mode):
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_quickDrawStart)
         # pop that sucker up
-        anim = dmd.Animation().load(self.game.assets.anim_quickDrawStart)
+        anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-start.dmd')
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
         self.layer = animLayer
         # Needs the text overlayed on it

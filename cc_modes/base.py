@@ -296,7 +296,7 @@ class BaseGameMode(game.Mode):
         self.cancel_delayed("ClearBonus")
 
         # play the cactus mashing animation
-        anim = dmd.Animation().load(self.game.assets.anim_increaseBonusX)
+        anim = dmd.Animation().load(ep.DMD_PATH+'bonus-cactus-mash.dmd')
         # calculate the wait for displaying the text
         myWait = (len(anim.frames) / 8.57) - 0.4
         # set the animation

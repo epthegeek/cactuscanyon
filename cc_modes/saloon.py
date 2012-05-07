@@ -39,7 +39,7 @@ class Saloon(game.Mode):
         # set the tracking
         self.game.set_tracking('isBountyLit', True)
         # show something on the screen
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(self.game.assets.dmd_path+'stars-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stars-border.dmd').frames[0])
         topText = dmd.TextLayer(128/2, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("COLLECT BOUNTY",blink_frames=10)
         bottomText = dmd.TextLayer(128/2, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("IS LIT",blink_frames=10)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,topText,bottomText])

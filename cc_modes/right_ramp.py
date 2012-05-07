@@ -45,7 +45,7 @@ class RightRamp(game.Mode):
             self.awardPoints = "125,000*"
             self.game.score(125000)
             # load the animation
-            anim = dmd.Animation().load(self.game.assets.anim_bankRampOne)
+            anim = dmd.Animation().load(ep.DMD_PATH+'bank-explodes.dmd')
             # calcuate the wait time to start the next part of the display
             myWait = len(anim.frames) / 8.57
             # play the first sound
@@ -69,7 +69,7 @@ class RightRamp(game.Mode):
             self.awardPoints = "150,000*"
             self.game.score(150000)
             # load the animation
-            anim = dmd.Animation().load(self.game.assets.anim_bankRampTwo)
+            anim = dmd.Animation().load(ep.DMD_PATH+'bank-sherrif-arrives.dmd')
             # calculate the wait time
             myWait = len(anim.frames) / 8.57
             # set the animation
@@ -92,7 +92,7 @@ class RightRamp(game.Mode):
             self.awardString = "ROBBERY FOILED"
             self.awardPoints = "175,000*"
             self.game.score(175000)
-            anim = dmd.Animation().load(self.game.assets.anim_sheriffPan)
+            anim = dmd.Animation().load(ep.DMD_PATH+'sheriff-pan.dmd')
             # waith for the pan up to finish
             myWait = 1.14
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
@@ -123,7 +123,7 @@ class RightRamp(game.Mode):
 
     def anim_bank_victory(self):
         print "BANK VICTORY"
-        anim = dmd.Animation().load(self.game.assets.anim_bankRampFour)
+        anim = dmd.Animation().load(ep.DMD_PATH+'bank-victory-animation.dmd')
         myWait = len(anim.frames) / 8.57
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True

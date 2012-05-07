@@ -135,7 +135,7 @@ class Mine(game.Mode):
         print "MULTIBALL ENDED"
 
     def play_ball_one_lock_anim(self):
-        anim = dmd.Animation().load(self.game.assets.anim_ballOneLocked)
+        anim = dmd.Animation().load(ep.DMD_PATH+'ball-one-locked.dmd')
         # TODO add the sounds to this and determine if it needs listenrs
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
@@ -149,7 +149,7 @@ class Mine(game.Mode):
         self.delay(delay=myWait,handler=self.lock_display_text)
 
     def play_ball_two_lock_anim(self):
-        anim = dmd.Animation().load(self.game.assets.anim_ballTwoLocked)
+        anim = dmd.Animation().load(ep.DMD_PATH+'ball-two-locked.dmd')
         # TODO add the sounds to this and determine if it needs listenrs
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
