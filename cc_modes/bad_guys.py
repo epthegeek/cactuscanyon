@@ -213,8 +213,12 @@ class BadGuys(game.Mode):
         # kick out more ball
         # pop up the targets
         # play a startup animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'showdown.dmd')
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,repeat=False,frame_time=6)
+        myWait = len(anim.frames) / 10.0
         # setup the display
-        self.showdown_reset_guys()
+        self.layer = animLayer
+        self.delay(delay=myWait,handler=self.showdown_reset_guys)
         # music?
 
     def showdown_reset_guys(self):
