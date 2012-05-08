@@ -69,7 +69,7 @@ class SkillShot(game.Mode):
             prizes.append("J")
 
         # increae rank (star) don't include if already at max rank
-        if self.game.show_tracking('rank') < 5:
+        if self.game.show_tracking('rank') < 4:
             prizes.append("K")
 
         # bonus X don't include if bonus already 6x or more

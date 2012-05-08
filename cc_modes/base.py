@@ -198,7 +198,7 @@ class BaseGameMode(game.Mode):
             # load up the mode
             self.game.modes.add(self.game.bad_guys)
             # fire the startup
-            self.game.quickdraw.start_quickdraw(side)
+            self.game.bad_guys.start_quickdraw(side)
         else:
             pass
 

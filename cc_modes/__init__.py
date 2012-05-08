@@ -21,4 +21,4 @@ from saloon import *
 from mine import *
 from left_loop import *
 from right_loop import *
-from quickdraw import *
+from bad_guys import *
