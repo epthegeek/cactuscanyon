@@ -1,5 +1,4 @@
 ##
-## The quickdraw gameplay action extravaganza
 ##
 ##
 ##  Drop Target info:
@@ -19,6 +18,34 @@ class BadGuys(game.Mode):
         super(BadGuys, self).__init__(game,priority)
         ## here's where things happen
         #self.game = game
+
+
+    def sw_badGuySW0_active(self,sw):
+        # far left bad guy target
+        print "BAD GUY 1 HIT"
+        self.hit_bad_guy(0)
+
+    def sw_badGuySW1_active(self,sw):
+        # center left badguy target
+        print "BAD GUY 2 HIT"
+        self.hit_bad_guy(1)
+
+    def sw_badGuySW2_active(self,sw):
+        # center right bad guy target
+        print "BAD GUY 3 HIT"
+        self.hit_bad_guy(2)
+
+    def sw_badGuySW3_active(self,sw):
+        print "BAD GUY 4 HIT"
+        # far right bad guy target
+        self.hit_bad_guy(3)
+
+    def hit_bad_guy(self,position):
+        # kill the coil to the drop target based on position
+        # call back to base to turn on the light for this bad guy?
+        # have to add cases for showdown vs quickdraw, right now, is just quickdraw
+        self.quickdraw_won()
+
 
     def start_quickdraw(self,side):
         self.side = side
@@ -57,31 +84,6 @@ class BadGuys(game.Mode):
         runtime = self.game.user_settings['Gameplay (Feature)']['Quickdraw Timer']
         # queue up a delay for when the timer should run out if the mode hasn't been won
         self.quickdraw_delay = self.delay(delay=runtime, handler=self.quickdraw_lost)
-
-    def sw_badGuySW0_active(self,sw):
-        # far left bad guy target
-        print "BAD GUY 1 HIT"
-        self.hit_bad_guy(0)
-
-    def sw_badGuySW1_active(self,sw):
-        # center left badguy target
-        print "BAD GUY 2 HIT"
-        self.hit_bad_guy(1)
-
-    def sw_badGuySW2_active(self,sw):
-        # center right bad guy target
-        print "BAD GUY 3 HIT"
-        self.hit_bad_guy(2)
-
-    def sw_badGuySW3_active(self,sw):
-        print "BAD GUY 4 HIT"
-        # far right bad guy target
-        self.hit_bad_guy(3)
-
-    def hit_bad_guy(self,position):
-        # kill the coil to the drop target based on position
-        # call back to base to turn on the light for this bad guy?
-        self.quickdraw_won()
 
     def quickdraw_won(self):
         # If the mode is won, we cancel the timer

@@ -9,7 +9,7 @@ __all__ = [
     'mine',
     'left_loop',
     'right_loop',
-    'quickdraw',
+    'bad_guys',
 ]
 from base import *
 from attract import *
