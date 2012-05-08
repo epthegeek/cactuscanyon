@@ -74,19 +74,28 @@ class QuickDraw(game.Mode):
     def quickdraw_won(self):
         # If the mode is won, we cancel the timer
         self.cancel_delayed(self.quickdraw_delay)
-
-    def quickdraw_lost(self):
-        # status passes won/lost?
-        print "ENDING QUICKDRAW"
         # kill the mode music
         self.game.sound.stop_music()
+
+        # stuff specific to winning
+        self.end_quickdraw()
+
+    def quickdraw_lost(self):
+        # kill the mode music
+        self.game.sound.stop_music()
+        # stuff specific to losing
+        self.end_quickdraw()
+
+    def end_quickdraw(self):
+        # status passes won/lost?
+        print "ENDING QUICKDRAW"
         # set the status to OPEN
         self.game.set_tracking('quickDrawStatus',"OPEN",self.side)
         # turn off the layer
         self.layer = None
-        # play a parting quote
-
+        # play a parting quote?
+        # turn the main music back on
         self.game.base_game_mode.music_on()
         # unload this piece
         self.game.modes.remove(self.game.quickdraw)
-        pass
+
