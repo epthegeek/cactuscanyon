@@ -61,29 +61,41 @@ class LeftRamp(game.Mode):
             self.awardPoints = "125,000"
             self.game.score(125000)
             self.game.sound.play_voice(self.game.assets.quote_leftRamp1)
+            self.delay(delay=myWait,handler=self.show_award_text)
         elif stage == 2:
             self.awardString = "WATER FALL"
             self.awardPoints = "150,000"
             self.game.score(150000)
             self.game.sound.play_voice(self.game.assets.quote_leftRamp2)
+            self.delay(delay=myWait,handler=self.show_award_text)
         elif stage == 3:
-            ## todo find out what this text is
             self.awardString = "ADVENTURE COMPLETE"
             self.awardPoints = "175,000"
             self.game.score(175000)
-            self.game.sound.play.sound(self.game.assets.quote_pollyThankYou)
+            anim = dmd.Animation().load(ep.DMD_PATH+'sheriff-pan.dmd')
+            # waith for the pan up to finish
+            myWait = 1.14
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
+            # play sounds
+            # play the river ramp sound
+            self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+            self.game.sound.play(self.game.assets.quote_pollyThankYou)
+            # play animation
+            self.layer = animLayer
+            self.delay(delay=myWait,handler=self.anim_river_victory)
         else:
             self.awardString = "ADVENTURE COMPLETE"
             self.awardPoints = "150,000"
             self.game.score(150000)
+            # play sounds
+            # play the river ramp sound
+            self.game.sound.play_voice(self.game.assets.quote_victory)
+            # play animation
+            self.anim_river_victory()
 
-        # then tick the stage up for next time unless it's completed
+    # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('leftRampStage')
-
-        # setup the award display
-        # display the text of the score
-        self.delay(delay=myWait,handler=self.show_award_text)
 
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):
@@ -104,6 +116,21 @@ class LeftRamp(game.Mode):
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         # clear in 3 seconds
         self.delay(name="ClearLeftRamp",delay=2,handler=self.clear_layer)
+
+    def anim_river_victory(self):
+        print "RIVER VICTORY"
+        anim = dmd.Animation().load(ep.DMD_PATH+'bank-victory-animation.dmd')
+        myWait = len(anim.frames) / 8.57
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 7
+
+        animLayer.add_frame_listener(7,self.game.play_remote_sound,param=self.game.assets.sfx_blow)
+        animLayer.add_frame_listener(14,self.game.play_remote_sound,param=self.game.assets.sfx_grinDing)
+        # play animation
+        self.layer = animLayer
+        self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+        self.delay(delay=myWait,handler=self.show_award_text)
 
     def push_out(self):
         print "TRANSITION MF"

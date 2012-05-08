@@ -61,7 +61,7 @@ class RightRamp(game.Mode):
             # play the animation
             self.layer = animLayer
             # add some score
-            # apply the calculated delay to the next setp
+            # apply the calculated delay to the next step
             self.delay(delay=myWait,handler=self.blink_award_text)
         elif stage == 2:
             # set the text lines for the display
@@ -110,7 +110,7 @@ class RightRamp(game.Mode):
             self.game.score(150000)
             # play sounds
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
-            self.game.sound.play(self.game.assets.quote_pollyThankYou)
+            self.game.sound.play_voice(self.game.assets.quote_victory)
             # play animation
             self.anim_bank_victory()
 

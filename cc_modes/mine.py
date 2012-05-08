@@ -159,7 +159,7 @@ class Mine(game.Mode):
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         # play the animation
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.clear_layer)
+        self.delay(delay=myWait,handler=self.lock_display_text)
 
     def lock_display_text(self):
         self.game.sound.play(self.game.assets.sfx_orchestraRiff)

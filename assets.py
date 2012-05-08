@@ -84,7 +84,6 @@ class Assets():
         self.sfx_flourish6 = 'sfx_flourish6' ; self.game.sound.register_sound(self.sfx_flourish6, self.sfx_path + "032-flourish-6.wav")
         self.sfx_flourish7 = 'sfx_flourish7' ; self.game.sound.register_sound(self.sfx_flourish7, self.sfx_path + "034-flourish-7-Horns.wav")
         self.sfx_grinDing = 'sfx_grinDing' ; self.game.sound.register_sound(self.sfx_grinDing, self.sfx_path + "117-sfx-grin-ding.wav")
-        self.sfx_horseYell = 'sfx_horseYell' ; self.game.sound.register_sound(self.sfx_horseYell, self.sfx_path + "115-sfx-horse-running-with-yell.wav")
         self.sfx_rightRampEnter = 'sfx_rightRampEnter' ; self.game.sound.register_sound(self.sfx_rightRampEnter, self.sfx_path + "129-sfx-right-ramp-enter.wav")
         self.sfx_leftRampEnter = 'sfx_leftRampEnter' ; self.game.sound.register_sound(self.sfx_leftRampEnter, self.sfx_path + "407-sfx-river-ramp-splash.wav")
         self.sfx_leftLoopEnter = 'sfx_leftLoopEnter' ; self.game.sound.register_sound(self.sfx_leftLoopEnter, self.sfx_path + "179-woosh-with-horse-running.wav")
@@ -130,6 +129,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "2042-waitress-hit-that-bad-guy.wav")
         self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1520-leader-bart-go-get-im.wav")
         self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1416-drunk-shoot-that-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "511-prospector-you-cant-shoot-nothin.wav")
         self.quote_lockLit = 'quote_lockLit'
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")
@@ -149,6 +149,19 @@ class Assets():
         self.quote_rightRamp2 = 'quote_rightRamp2'
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "850-polly-ooh-how-brave.wav")
+        self.quote_leftLoop1 = 'quote_leftLoop1'
+        self.game.sound.register_sound(self.quote_leftLoop1, self.quotes_path + "1255-prospector-guess-that-horse-is-breakin-you-in.wav")
+        self.game.sound.register_sound(self.quote_leftLoop1, self.quotes_path + "1200-prospector-woo-cough.wav")
+        self.game.sound.register_sound(self.quote_leftLoop1, self.sfx_path + "115-sfx-horse-running-with-yell.wav")
+        self.game.sound.register_sound(self.quote_leftLoop1, self.quotes_path + "1254-prospector-oh-boy-thats-gotta-hurt.wav")
+        self.quote_leftLoop2 = 'quote_leftLoop2'
+        self.game.sound.register_sound(self.quote_leftLoop2, self.quotes_path + "2007-waitress-i-like-how-you-ride-that-horse.wav")
+        self.game.sound.register_sound(self.quote_leftLoop2, self.quotes_path + "1187-mayor-a-fine-ride-sir.wav")
+        self.game.sound.register_sound(self.quote_leftLoop2, self.quotes_path + "1256-prospector-ride-em-cowboy-hey-hey.wav")
+        self.quote_victory = 'quote_victory'
+        self.game.sound.register_sound(self.quote_victory, self.quotes_path + "836-polly-youre-the-greatest.wav")
+        self.game.sound.register_sound(self.quote_victory, self.quotes_path + "837-polly-youre-my-hero.wav")
+        self.game.sound.register_sound(self.quote_victory, self.quotes_path + "838-polly-my-hero.wav")
 
         self.quote_pollyHelp = 'quote_pollyHelp' ; self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
         self.quote_pollyThankYou = 'quote_pollyThankYou' ; self.game.sound.register_sound(self.quote_pollyThankYou,self.quotes_path + "835-polly-thank-you.wav")
@@ -156,8 +169,6 @@ class Assets():
         self.quote_playerThree = 'quote_playerThree' ; self.game.sound.register_sound(self.quote_playerThree, self.quotes_path + "857-polly-player-three.wav")
         self.quote_playerFour = 'quote_playerFour' ; self.game.sound.register_sound(self.quote_playerFour, self.quotes_path + "858-polly-player-four.wav")
         self.quote_mayorMyMoneysInThere = 'quote_mayorMyMoneysInThere' ; self.game.sound.register_sound(self.quote_mayorMyMoneysInThere, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
-        self.quote_mayorFineRideSir = 'quote_mayorFineRideSir' ; self.game.sound.register_sound(self.quote_mayorFineRideSir, self.quotes_path + "1187-mayor-a-fine-ride-sir.wav")
-        self.quote_prospectorGottaHurt = 'quote_prospectorGottaHurt' ; self.game.sound.register_sound(self.quote_prospectorGottaHurt, self.quotes_path + "1254-prospector-oh-boy-thats-gotta-hurt.wav")
 
 
 
