@@ -196,7 +196,7 @@ class BaseGameMode(game.Mode):
         # else if quickdraw is lit - run that passing which side started it
         elif self.game.show_tracking('quickDrawStatus',side) == "READY":
             # load up the mode
-            self.game.modes.add(self.game.quickdraw)
+            self.game.modes.add(self.game.bad_guys)
             # fire the startup
             self.game.quickdraw.start_quickdraw(side)
         else:

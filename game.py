@@ -94,7 +94,7 @@ class CCGame(game.BasicGame):
         self.saloon = cc_modes.Saloon(game=self,priority=25)
 
         # Quickdraw battle
-        self.quickdraw = cc_modes.QuickDraw(game=self,priority=67)
+        self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
         # Gunfight
         #self.gunfight = cc_modes.GunFight(game=self,priority=68)
         # Showdown
