@@ -93,12 +93,10 @@ class CCGame(game.BasicGame):
         self.mine = cc_modes.Mine(game=self,priority=24)
         self.saloon = cc_modes.Saloon(game=self,priority=25)
 
-        # Quickdraw battle
+        # Quickdraw battle and showdown
         self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
         # Gunfight
         #self.gunfight = cc_modes.GunFight(game=self,priority=68)
-        # Showdown
-        #self.showdown = cc_modes.ShowDown(game=self,priority=69)
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
         # High Noon

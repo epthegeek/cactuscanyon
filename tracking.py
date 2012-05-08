@@ -62,7 +62,7 @@ class Tracking(game.Player):
         self.player_stats['quickDrawStatus'] = ["OPEN","OPEN"]
         self.player_stats['quickDrawsStarted'] = 0
         self.player_stats['quickDrawsWon'] = 0
-        self.player_stats['badGuysDead'] = [False,False,False,False]
+        self.player_stats['badGuysDead'] = [False,True,True,True]
 
         # bartStatus: OPEN, ACTIVE, DEAD
         self.player_stats['bartStatus'] = 1
