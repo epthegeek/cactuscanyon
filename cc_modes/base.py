@@ -191,7 +191,8 @@ class BaseGameMode(game.Mode):
         # if gunfight is lit - run that passing which side started it
         if self.game.show_tracking('gunfightStatus') == "READY":
             ## TODO - haven't written gunfight yet
-            ## self.game.modes.gunfight.start_gunfight(side)
+            ## self.game.modes.add(self.game.bad_guys)
+            ## self.game.bad_guys.start_gunfight(side)
             pass
         # else if quickdraw is lit - run that passing which side started it
         elif self.game.show_tracking('quickDrawStatus',side) == "READY":
@@ -398,3 +399,12 @@ class BaseGameMode(game.Mode):
         # set the status for the hit side to READY
         self.game.set_tracking('quickDrawStatus',"READY",side)
 
+    ##
+    ## GUNFIGHT
+    ##
+
+    def light_gunfight(self):
+        # turn on the lights
+        # play a quote
+        # set the tracking
+        self.game.set_tracking('gunfightStatus',"READY")

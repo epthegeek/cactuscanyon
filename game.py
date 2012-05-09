@@ -194,8 +194,10 @@ class CCGame(game.BasicGame):
         p = self.current_player()
         if key != "foo":
             p.player_stats[item][key] += amount
+            return p.player_stats[item][key]
         else:
             p.player_stats[item] += amount
+            return p.player_stats[item]
 
     # return values to wherever
     def show_tracking(self,item,key="foo"):

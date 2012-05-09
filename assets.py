@@ -69,32 +69,58 @@ class Assets():
 
         # CC Sounds
         # Sound Effects
-        self.sfx_ballOneLock = 'sfx_ballOneLock' ; self.game.sound.register_sound(self.sfx_ballOneLock, self.sfx_path + "241-sfx-ball-one-lock.wav")
-        self.sfx_banjoTrillUp = 'sfx_banjoTrillUp' ; self.game.sound.register_sound(self.sfx_banjoTrillUp, self.sfx_path + "622-banjo-trill-up.wav")
-        self.sfx_banjoTrillDown = 'sfx_banjoTrillDown' ; self.game.sound.register_sound(self.sfx_banjoTrillDown, self.sfx_path + "623-banjo-trill-down.wav")
-        self.sfx_banjoTaDa = 'sfx_banjoTaDa' ; self.game.sound.register_sound(self.sfx_banjoTaDa, self.sfx_path + "624-banjo-ta-da.wav")
-        self.sfx_blow = 'sfx_blow' ; self.game.sound.register_sound(self.sfx_blow, self.sfx_path + "169-sfx-blow-on-gun.wav")
-        self.sfx_breakingGlass1 = 'sfx_breakingGlass1' ; self.game.sound.register_sound(self.sfx_breakingGlass1, self.sfx_path + "119-sfx-breaking-glass-1.wav")
-        self.sfx_breakingGlass2 = 'sfx_breakingGlass2' ; self.game.sound.register_sound(self.sfx_breakingGlass2, self.sfx_path + "135-sfx-breaking-glass-2.wav")
-        self.sfx_cactusMash = 'sfx_cactusMash' ; self.game.sound.register_sound(self.sfx_cactusMash, self.sfx_path + "235-bonus-cactus-mash.wav")
-        self.sfx_explosion1 = 'sfx_explosion1' ; self.game.sound.register_sound(self.sfx_explosion1, self.sfx_path + "105-sfx-explosion-1.wav")
-        self.sfx_explosion11 = 'sfx_explosion2' ; self.game.sound.register_sound(self.sfx_explosion11, self.sfx_path + "257-sfx-explosion-11.wav")
-        self.sfx_explosion17 = 'sfx_explosion17' ; self.game.sound.register_sound(self.sfx_explosion17, self.sfx_path + "341-sfx-explosion-17.wav")
-        self.sfx_fallAndCrash1 = 'sfx_fallAndCrash1' ; self.game.sound.register_sound(self.sfx_fallAndCrash1, self.sfx_path + "101-sfx-fall-and-crash-1.wav")
-        self.sfx_flourish6 = 'sfx_flourish6' ; self.game.sound.register_sound(self.sfx_flourish6, self.sfx_path + "032-flourish-6.wav")
-        self.sfx_flourish7 = 'sfx_flourish7' ; self.game.sound.register_sound(self.sfx_flourish7, self.sfx_path + "034-flourish-7-Horns.wav")
-        self.sfx_grinDing = 'sfx_grinDing' ; self.game.sound.register_sound(self.sfx_grinDing, self.sfx_path + "117-sfx-grin-ding.wav")
-        self.sfx_rightRampEnter = 'sfx_rightRampEnter' ; self.game.sound.register_sound(self.sfx_rightRampEnter, self.sfx_path + "129-sfx-right-ramp-enter.wav")
-        self.sfx_leftRampEnter = 'sfx_leftRampEnter' ; self.game.sound.register_sound(self.sfx_leftRampEnter, self.sfx_path + "407-sfx-river-ramp-splash.wav")
-        self.sfx_leftLoopEnter = 'sfx_leftLoopEnter' ; self.game.sound.register_sound(self.sfx_leftLoopEnter, self.sfx_path + "179-woosh-with-horse-running.wav")
-        self.sfx_orchestraRiff = 'sfx_orchestraRiff' ; self.game.sound.register_sound(self.sfx_orchestraRiff, self.sfx_path + "041-orchestra-riff.wav")
-        self.sfx_quickdrawOff = 'sfx_quickdrawOff' ; self.game.sound.register_sound(self.sfx_quickdrawOff, self.sfx_path + "287-quickdraw-hit-light.wav")
-        self.sfx_quickdrawOn = 'sfx_quickdrawOn' ; self.game.sound.register_sound(self.sfx_quickdrawOn, self.sfx_path + "289-quickdraw-hit-already-lit.wav")
-        self.sfx_rattlesnake = 'sfx_rattlesnake' ; self.game.sound.register_sound(self.sfx_rattlesnake, self.sfx_path + "221-rattlesnake.wav")
-        self.sfx_rightLoopEnter = 'sfx_rightLoopEnter' ; self.game.sound.register_sound(self.sfx_rightLoopEnter, self.sfx_path + "155-sfx-ricochet-triple.wav")
-        self.sfx_skillShotWoosh = 'sfx_skillShotWoosh' ; self.game.sound.register_sound(self.sfx_skillShotWoosh, self.sfx_path + "393-skillshot-woosh.wav")
-        self.sfx_thrownCoins = 'sfx_thrownCoins' ; self.game.sound.register_sound(self.sfx_thrownCoins, self.sfx_path + "137-sfx-thrown-coins.wav")
-        self.sfx_yeeHoo = 'sfx_yeeHoo' ; self.game.sound.register_sound(self.sfx_yeeHoo, self.sfx_path + "1963-yee-hoo.wav")
+        self.sfx_ballOneLock = 'sfx_ballOneLock'
+        self.game.sound.register_sound(self.sfx_ballOneLock, self.sfx_path + "241-sfx-ball-one-lock.wav")
+        self.sfx_banjoTrillUp = 'sfx_banjoTrillUp'
+        self.game.sound.register_sound(self.sfx_banjoTrillUp, self.sfx_path + "622-banjo-trill-up.wav")
+        self.sfx_banjoTrillDown = 'sfx_banjoTrillDown'
+        self.game.sound.register_sound(self.sfx_banjoTrillDown, self.sfx_path + "623-banjo-trill-down.wav")
+        self.sfx_banjoTaDa = 'sfx_banjoTaDa'
+        self.game.sound.register_sound(self.sfx_banjoTaDa, self.sfx_path + "624-banjo-ta-da.wav")
+        self.sfx_blow = 'sfx_blow'
+        self.game.sound.register_sound(self.sfx_blow, self.sfx_path + "169-sfx-blow-on-gun.wav")
+        self.sfx_breakingGlass1 = 'sfx_breakingGlass1'
+        self.game.sound.register_sound(self.sfx_breakingGlass1, self.sfx_path + "119-sfx-breaking-glass-1.wav")
+        self.sfx_breakingGlass2 = 'sfx_breakingGlass2'
+        self.game.sound.register_sound(self.sfx_breakingGlass2, self.sfx_path + "135-sfx-breaking-glass-2.wav")
+        self.sfx_cactusMash = 'sfx_cactusMash'
+        self.game.sound.register_sound(self.sfx_cactusMash, self.sfx_path + "235-bonus-cactus-mash.wav")
+        self.sfx_explosion1 = 'sfx_explosion1'
+        self.game.sound.register_sound(self.sfx_explosion1, self.sfx_path + "105-sfx-explosion-1.wav")
+        self.sfx_explosion11 = 'sfx_explosion2'
+        self.game.sound.register_sound(self.sfx_explosion11, self.sfx_path + "257-sfx-explosion-11.wav")
+        self.sfx_explosion17 = 'sfx_explosion17'
+        self.game.sound.register_sound(self.sfx_explosion17, self.sfx_path + "341-sfx-explosion-17.wav")
+        self.sfx_fallAndCrash1 = 'sfx_fallAndCrash1'
+        self.game.sound.register_sound(self.sfx_fallAndCrash1, self.sfx_path + "101-sfx-fall-and-crash-1.wav")
+        self.sfx_flourish6 = 'sfx_flourish6'
+        self.game.sound.register_sound(self.sfx_flourish6, self.sfx_path + "032-flourish-6.wav")
+        self.sfx_flourish7 = 'sfx_flourish7'
+        self.game.sound.register_sound(self.sfx_flourish7, self.sfx_path + "034-flourish-7-Horns.wav")
+        self.sfx_grinDing = 'sfx_grinDing'
+        self.game.sound.register_sound(self.sfx_grinDing, self.sfx_path + "117-sfx-grin-ding.wav")
+        self.sfx_rightRampEnter = 'sfx_rightRampEnter'
+        self.game.sound.register_sound(self.sfx_rightRampEnter, self.sfx_path + "129-sfx-right-ramp-enter.wav")
+        self.sfx_leftRampEnter = 'sfx_leftRampEnter'
+        self.game.sound.register_sound(self.sfx_leftRampEnter, self.sfx_path + "407-sfx-river-ramp-splash.wav")
+        self.sfx_leftLoopEnter = 'sfx_leftLoopEnter'
+        self.game.sound.register_sound(self.sfx_leftLoopEnter, self.sfx_path + "179-woosh-with-horse-running.wav")
+        self.sfx_orchestraRiff = 'sfx_orchestraRiff'
+        self.game.sound.register_sound(self.sfx_orchestraRiff, self.sfx_path + "041-orchestra-riff.wav")
+        self.sfx_quickdrawOff = 'sfx_quickdrawOff'
+        self.game.sound.register_sound(self.sfx_quickdrawOff, self.sfx_path + "287-quickdraw-hit-light.wav")
+        self.sfx_quickdrawOn = 'sfx_quickdrawOn'
+        self.game.sound.register_sound(self.sfx_quickdrawOn, self.sfx_path + "289-quickdraw-hit-already-lit.wav")
+        self.sfx_rattlesnake = 'sfx_rattlesnake'
+        self.game.sound.register_sound(self.sfx_rattlesnake, self.sfx_path + "221-rattlesnake.wav")
+        self.sfx_rightLoopEnter = 'sfx_rightLoopEnter'
+        self.game.sound.register_sound(self.sfx_rightLoopEnter, self.sfx_path + "155-sfx-ricochet-triple.wav")
+        self.sfx_skillShotWoosh = 'sfx_skillShotWoosh'
+        self.game.sound.register_sound(self.sfx_skillShotWoosh, self.sfx_path + "393-skillshot-woosh.wav")
+        self.sfx_thrownCoins = 'sfx_thrownCoins'
+        self.game.sound.register_sound(self.sfx_thrownCoins, self.sfx_path + "137-sfx-thrown-coins.wav")
+        self.sfx_yeeHoo = 'sfx_yeeHoo'
+        self.game.sound.register_sound(self.sfx_yeeHoo, self.sfx_path + "1963-yee-hoo.wav")
 
         # Quotes
         # this bunches the welcome strings together for play_voice()
@@ -163,21 +189,87 @@ class Assets():
         self.game.sound.register_sound(self.quote_victory, self.quotes_path + "837-polly-youre-my-hero.wav")
         self.game.sound.register_sound(self.quote_victory, self.quotes_path + "838-polly-my-hero.wav")
 
-        self.quote_pollyHelp = 'quote_pollyHelp' ; self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
-        self.quote_pollyThankYou = 'quote_pollyThankYou' ; self.game.sound.register_sound(self.quote_pollyThankYou,self.quotes_path + "835-polly-thank-you.wav")
-        self.quote_playerTwo = 'quote_playerTwo' ; self.game.sound.register_sound(self.quote_playerTwo, self.quotes_path + "856-polly-player-two.wav")
-        self.quote_playerThree = 'quote_playerThree' ; self.game.sound.register_sound(self.quote_playerThree, self.quotes_path + "857-polly-player-three.wav")
-        self.quote_playerFour = 'quote_playerFour' ; self.game.sound.register_sound(self.quote_playerFour, self.quotes_path + "858-polly-player-four.wav")
-        self.quote_mayorMyMoneysInThere = 'quote_mayorMyMoneysInThere' ; self.game.sound.register_sound(self.quote_mayorMyMoneysInThere, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
+        self.quote_hitBigBart = 'quote_hitBigBart'
+        self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
+        self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1452-big-hit-nothin-but-a-little-hole.wav")
+        self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1456-big-hit-ow-i-said.wav")
+        self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1460-big-hit-ow.wav")
+        self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1462-big-hit-well-that-hurt.wav")
+        self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1464-big-hit-ow-dangit.wav")
+        self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1465-big-hit-well-i-can-tell-ya-that-hurt.wav")
+        self.quote_tauntBigBart = 'quote_tauntBigBart'
+        self.game.sound.register_sound(self.quote_tauntBigBart, self.quotes_path + "1450-big-taunt-mess-with-me-will-ya.wav")
+        self.game.sound.register_sound(self.quote_tauntBigBart, self.quotes_path + "1454-big-taunt-youre-messin-with-the-wrong-hombre-hombre.wav")
+        self.game.sound.register_sound(self.quote_tauntBigBart, self.quotes_path + "1457-big-taunt-im-gonna-shoot-my-initials-in-ya-lawman.wav")
+        self.game.sound.register_sound(self.quote_tauntBigBart, self.quotes_path + "1467-big-taunt-what-do-you-think-youre-doin-pilgrim.wav")
+        self.quote_defeatBigBart = 'quote_defeatBigBart'
+        self.game.sound.register_sound(self.quote_defeatBigBart, self.quotes_path + "1468-big-defeat-well-im-done-for.wav")
+        self.game.sound.register_sound(self.quote_defeatBigBart, self.quotes_path + "1469-big-defeat-well-thats-all-folks.wav")
+        self.game.sound.register_sound(self.quote_defeatBigBart, self.quotes_path + "1470-big-defeat-i-guess-ill-just-fall-down-now.wav")
+
+        self.quote_hitBandeleroBart = 'quote_hitBandeleroBart'
+        self.game.sound.register_sound(self.quote_hitBandeleroBart, self.quotes_path + "1803-bandelero-hit-oh-i-think-ive-been-hit.wav")
+        self.game.sound.register_sound(self.quote_hitBandeleroBart, self.quotes_path + "1804-bandelero-hit-that-one-hurt.wav")
+        self.game.sound.register_sound(self.quote_hitBandeleroBart, self.quotes_path + "1806-bandelero-hit-ooh-ive-been-air-conditioned.wav")
+        self.game.sound.register_sound(self.quote_hitBandeleroBart, self.quotes_path + "1809-bandelero-hit-look-at-all-this-blood-my-wife-is-going-to-kill-me.wav")
+        self.game.sound.register_sound(self.quote_hitBandeleroBart, self.quotes_path + "1810-bandelero-hit-holy-camochie-ive-been-shot.wav")
+        self.game.sound.register_sound(self.quote_hitBandeleroBart, self.quotes_path + "1823-bandelero-hit-ooh.wav")
+        self.quote_tauntBandeleroBart = 'quote_tauntBandeleroBart'
+        self.game.sound.register_sound(self.quote_tauntBandeleroBart, self.quotes_path + "1801-bandelero-taunt-you-dont-think-i-see-you-but-i-do.wav")
+        self.game.sound.register_sound(self.quote_tauntBandeleroBart, self.quotes_path + "1807-bandelero-taunt-you-couldnt-hit-the-broad-side-of-a-burrito.wav")
+        self.game.sound.register_sound(self.quote_tauntBandeleroBart, self.quotes_path + "1808-bandelero-taunt-my-burro-can-shoot-better-than-that.wav")
+        self.game.sound.register_sound(self.quote_tauntBandeleroBart, self.quotes_path + "1821-bandelero-taunt-come-on-lone-ranger.wav")
+        self.quote_defeatBandeleroBart = 'quote_defeatBandeleroBart'
+        self.game.sound.register_sound(self.quote_defeatBandeleroBart, self.quotes_path + "1813-bandelero-defeat-adios-amigo-time-for-a-siesta.wav")
+        self.game.sound.register_sound(self.quote_defeatBandeleroBart, self.quotes_path + "1814-bandelero-defeat-say-youre-pretty-good.wav")
+        self.game.sound.register_sound(self.quote_defeatBandeleroBart, self.quotes_path + "1824-bandelero-defeat-you-got-me.wav")
+
+        self.quote_hitBubbaBart = 'quote_hitBubbaBart'
+        self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1900-bubba-hit-bubba-hit.wav")
+        self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1901-bubba-hit-bubba-mad-now.wav")
+        self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1906-bubba-hit-shiny-ball-hurt.wav")
+        self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1909-bubba-hit-uh.wav")
+        self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1910-bubba-hit-groan.wav")
+        self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1912-bubba-hit-oh.wav")
+        self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1914-bubba-hit-groan2.wav")
+        self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1918-bubba-hit-groan3.wav")
+        self.quote_tauntBubbaBart = 'quote_tauntBubbaBart'
+        self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1902-bubba-taunt-you-mess-wif-bubba-bubba-mess-wif-you.wav")
+        self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1903-bubba-taunt-bubba-mess-pants.wav")
+        self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1905-bubba-taunt-bubba-like-shiny-silver-ball.wav")
+        self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1915-bubba-taunt-me-bubba-you-dead.wav")
+        self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1917-bubba-taunt-bubba-gonna-mess-you-up.wav")
+        self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1919-bubba-taunt-youre-dead.wav")
+        self.quote_defeatBubbaBart = 'quote_defeatBubbaBart'
+        self.game.sound.register_sound(self.quote_defeatBubbaBart, self.quotes_path + "1904-bubba-defeat-bubba-take-dirt-nap.wav")
+        self.game.sound.register_sound(self.quote_defeatBubbaBart, self.quotes_path + "1916-bubba-defeat-nite-nite-bubba-go-to-sleep-now.wav")
+
+        self.quote_pollyHelp = 'quote_pollyHelp'
+        self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
+        self.quote_pollyThankYou = 'quote_pollyThankYou'
+        self.game.sound.register_sound(self.quote_pollyThankYou,self.quotes_path + "835-polly-thank-you.wav")
+        self.quote_playerTwo = 'quote_playerTwo'
+        self.game.sound.register_sound(self.quote_playerTwo, self.quotes_path + "856-polly-player-two.wav")
+        self.quote_playerThree = 'quote_playerThree'
+        self.game.sound.register_sound(self.quote_playerThree, self.quotes_path + "857-polly-player-three.wav")
+        self.quote_playerFour = 'quote_playerFour'
+        self.game.sound.register_sound(self.quote_playerFour, self.quotes_path + "858-polly-player-four.wav")
+        self.quote_mayorMyMoneysInThere = 'quote_mayorMyMoneysInThere'
+        self.game.sound.register_sound(self.quote_mayorMyMoneysInThere, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
 
 
 
         # Music
-        self.music_drumRiff = 'music_drumRiff' ; self.game.sound.register_sound(self.music_drumRiff, self.music_path + "001-drum-lead-in.wav")
-        self.music_shooterLaneGroove = 'music_shooterLaneGroove' ; self.game.sound.register_music(self.music_shooterLaneGroove, self.music_path + "001-shooter-lane-groove.wav")
-        self.music_mainTheme = 'music_mainTheme' ; self.game.sound.register_music(self.music_mainTheme, self.music_path + "002-song-starting-gameplay.wav")
-        self.music_quickDrawBumper = 'music_quickDrawBumper' ; self.game.sound.register_sound(self.music_quickDrawBumper, self.music_path + "017-quickdraw-bumper.wav")
-        self.music_quickDraw = 'music_quickDraw' ; self.game.sound.register_music(self.music_quickDraw, self.music_path + "025-quickdraw.wav")
+        self.music_drumRiff = 'music_drumRiff'
+        self.game.sound.register_sound(self.music_drumRiff, self.music_path + "001-drum-lead-in.wav")
+        self.music_shooterLaneGroove = 'music_shooterLaneGroove'
+        self.game.sound.register_music(self.music_shooterLaneGroove, self.music_path + "001-shooter-lane-groove.wav")
+        self.music_mainTheme = 'music_mainTheme'
+        self.game.sound.register_music(self.music_mainTheme, self.music_path + "002-song-starting-gameplay.wav")
+        self.music_quickDrawBumper = 'music_quickDrawBumper'
+        self.game.sound.register_sound(self.music_quickDrawBumper, self.music_path + "017-quickdraw-bumper.wav")
+        self.music_quickDraw = 'music_quickDraw'
+        self.game.sound.register_music(self.music_quickDraw, self.music_path + "025-quickdraw.wav")
 
         # Shared Paths
         self.shared_sound_path = "shared/sound/"

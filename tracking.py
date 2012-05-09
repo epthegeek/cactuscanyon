@@ -37,7 +37,7 @@ class Tracking(game.Player):
         self.player_stats['saloonShots'] = 0
 
         self.player_stats['mineShotsTotal'] = 0
-        # mine status - OPEN, LOCK, READY, RUNNING
+        # mine status - OPEN, LOCK, READY, RUNNING, SHOWDOWN
         self.player_stats['mineStatus'] = "OPEN"
         self.player_stats['mineHits'] = 0
         ## balls currently locked
@@ -64,10 +64,11 @@ class Tracking(game.Player):
         self.player_stats['quickDrawsWon'] = 0
         self.player_stats['badGuysDead'] = [False,True,True,True]
 
-        # bartStatus: OPEN, ACTIVE, DEAD
-        self.player_stats['bartStatus'] = 1
+        # bartStatus: OPEN, RUNNING, LAST, DEAD
+        self.player_stats['bartStatus'] = ["OPEN"]
         self.player_stats['bartHits'] = 0
         self.player_stats['bartDefeated'] = 0
+        self.player_stats['currentBart'] = 0
         self.player_stats['gunfightsStarted'] = 0
         self.player_stats['gunfightsWon'] = 0
         # gunfight status, OPEN, READY, RUNNING

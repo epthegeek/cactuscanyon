@@ -48,11 +48,11 @@ class Mine(game.Mode):
         # still nothing? Hm. Ok, register the hit
         else:
             # register the hit
-            self.game.increase_tracking('mineHits')
-            print "MINE HITS: " + str(self.game.show_tracking('mineHits'))
+            myMineHits = self.game.increase_tracking('mineHits')
+            print "MINE HITS: " + str(myMineHits)
             # now we have to see if that lights the lock
             # subtract the number of hits from the hitsToLight for the current lock position
-            hitStatus = self.hitsToLightLock[lockedBalls] - self.game.show_tracking('mineHits')
+            hitStatus = self.hitsToLightLock[lockedBalls] - myMineHits
             # if that's zero (or god forbid, less) then light the lock
             print "HITS TO LIGHT THIS LOCK: " + str(self.hitsToLightLock[lockedBalls])
             print "HITSTATUS: " + str(hitStatus)
@@ -94,25 +94,25 @@ class Mine(game.Mode):
 
     def lock_ball(self):
         # tick up the total balls locked because we just locked one
-        self.game.increase_tracking('ballsLockedTotal')
+        myBallsLockedTotal = self.game.increase_tracking('ballsLockedTotal')
         # add one to the count of balls currently locked
-        self.game.increase_tracking('ballsLocked')
+        myBallsLocked = self.game.increase_tracking('ballsLocked')
         # turn off the lock lit action
         self.game.set_tracking('mineStatus',"OPEN")
         # reset the mine hits
         self.game.set_tracking('mineHits', 0)
         # play the appropriate lock animation
 
-        if self.game.show_tracking('ballsLocked') == 1:
+        if myBallsLocked == 1:
             self.play_ball_one_lock_anim()
         else:
             self.play_ball_two_lock_anim()
             # then kick out of the routine
         ## this applies to the easy setting
         ## in the event that the hits to light lock is 0, turn the lock back on right away
-        if self.hitsToLightLock[self.game.show_tracking('ballsLockedTotal')] == 0:
+        if self.hitsToLightLock[myBallsLockedTotal] == 0:
             ## if two balls are now locked, light multiball
-            if self.game.show_tracking('ballsLocked') == 2:
+            if myBallsLocked == 2:
                 self.game.set_tracking('mineStatus', "READY")
             else:
                 self.game.set_tracking('mineStatus',"LOCK")

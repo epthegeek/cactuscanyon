@@ -50,11 +50,30 @@ class BadGuys(game.Mode):
             self.cancel_delayed("Timer Delay")
             # It's been won
             self.quickdraw_won(target)
-        # Otherwise, we must be in a showdown.
-        else:
+        # Otherwise, if all badguys are dead, we're in a showdown
+        elif "False" not in self.game.show_tracking('quickDrawStatus'):
             print "QUICKDRAW ISNT RUNNING OMG"
             self.showdown_hit(target)
             # showdown stuff would go here
+        # option 3 is a gunfight
+        else:
+            self.gunfight_won()
+
+    ## Trapping the return lane activity during gunfight/quickdraw/showdown
+    def sw_leftReturnLane_active(self, sw):
+        # register a left return lane hit
+        self.return_lane_hit(0)
+        self.game.SwitchStop
+
+    def sw_rightReturnLane_active(self,sw):
+        # register a right return lane hit
+        self.return_lane_hit(1)
+        self.game.SwitchStop
+
+    def return_lane_hit(self,side):
+        # score some points and play a sound
+        self.game.score(2530)
+        self.game.sound.play(self.game.assets.sfx_rattlesnake)
 
     ###
     ###   ___        _      _       _
@@ -299,5 +318,30 @@ class BadGuys(game.Mode):
         # kill the music
         # tally some score?
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
+        # reset the quickdraw status
+        for i in range(0,3,1):
+            self.game.set_tracking('quickDrawStatus',"False",i)
         # unload
+        pass
+
+    ###
+    ###   ____              __ _       _     _
+    ###  / ___|_   _ _ __  / _(_) __ _| |__ | |_
+    ### | |  _| | | | '_ \| |_| |/ _` | '_ \| __|
+    ### | |_| | |_| | | | |  _| | (_| | | | | |_
+    ###  \____|\__,_|_| |_|_| |_|\__, |_| |_|\__|
+    ###                          |___/
+    ###
+
+
+    def start_gunfight(self):
+        pass
+
+    def gunfight_won(self):
+        pass
+
+    def gunfight_lost(self):
+        pass
+
+    def end_gunfight(self):
         pass
