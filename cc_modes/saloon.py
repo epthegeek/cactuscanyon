@@ -130,7 +130,7 @@ class Saloon(game.Mode):
         textLayer3.set_text("YOU")
 
         textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
-        transition = ep.EP_Transition(self,self.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
+        transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         self.delay(delay=1.5,handler=self.clear_layer)
 
         # if there's only 1 hit to defeat this bart, set the status to last
@@ -267,6 +267,7 @@ class Saloon(game.Mode):
         textLayer2.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
         # play a quote
+        self.game.sound.play_voice(self.game.assets.quote_gunfightLit)
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
         self.delay(delay=2,handler=self.clear_layer)
