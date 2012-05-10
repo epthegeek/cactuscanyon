@@ -114,6 +114,7 @@ class Saloon(game.Mode):
         # not running? do this
         else:
             # he's dead waiting for a gun fight - TODO have to research what happens
+            # no points - play a sound?
             pass
 
     def activate_bart(self):
@@ -123,7 +124,7 @@ class Saloon(game.Mode):
         # clear the banner layer
         textLayer1 = dmd.TextLayer(42,2,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
         textLayer1.set_text(self.nameLine)
-        textLayer2 = dmd.TextLayer(42,12,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer2 = dmd.TextLayer(42,16,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
         textLayer2.set_text("CHALLENGES")
         textLayer3 = dmd.TextLayer(42,24,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
         textLayer3.set_text("YOU")
@@ -132,8 +133,6 @@ class Saloon(game.Mode):
         transition = ep.EP_Transition(self,self.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         self.delay(delay=1.5,handler=self.clear_layer)
 
-        # play a quote?
-        self.game.sound.play_voice(self.tauntQuote)
         # if there's only 1 hit to defeat this bart, set the status to last
         if self.hitsThisBart == 1:
             self.game.set_tracking('bartStatus',"LAST")
@@ -221,6 +220,7 @@ class Saloon(game.Mode):
         self.game.score(self.defeatValue)
         # reset the hits on bart
         self.game.set_tracking('bartHits',0)
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'weave-border.dmd').frames[0])
         textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
         textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
         if currentTotal < self.bartsForStar:
@@ -231,11 +231,10 @@ class Saloon(game.Mode):
         else:
             thetext = str(currentTotal) + " DEFEATED!"
         textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)
-        self.layer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3])
-        self.delay(delay=2,handler=self.clear_layer)
+        self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
 
         # light gunfight?
-        self.game.base_game_mode.light_gunfight()
+        self.delay(delay=2,handler=self.light_gunfight)
 
     def display_damage_one(self):
         # set up the top layer
@@ -252,3 +251,22 @@ class Saloon(game.Mode):
 
     def clear_layer(self):
         self.layer = None
+
+
+    ## Gunfight
+
+    def light_gunfight(self):
+        print "GUNFIGHT IS LIT"
+        # turn on the lights
+        # show the display
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-border.dmd').frames[0])
+        textLayer1 = dmd.TextLayer(77,2,self.game.assets.font_12px_az,justify="center",opaque=False)
+        textLayer1.set_text("GUNFIGHT")
+        textLayer2 = dmd.TextLayer(77,15,self.game.assets.font_12px_az,justify="center",opaque=False)
+        textLayer2.set_text("IS LIT")
+        textLayer2.composite_op = "blacksrc"
+        self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
+        # play a quote
+        # set the tracking
+        self.game.set_tracking('gunfightStatus',"READY")
+        self.delay(delay=2,handler=self.clear_layer)

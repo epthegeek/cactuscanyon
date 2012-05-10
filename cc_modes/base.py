@@ -398,15 +398,3 @@ class BaseGameMode(game.Mode):
         self.game.sound.play_voice(self.game.assets.quote_quickDrawLit)
         # set the status for the hit side to READY
         self.game.set_tracking('quickDrawStatus',"READY",side)
-
-    ##
-    ## GUNFIGHT
-    ##
-
-    def light_gunfight(self):
-        print "GUNFIGHT IS LIT"
-        # turn on the lights
-        # show the display
-        # play a quote
-        # set the tracking
-        self.game.set_tracking('gunfightStatus',"READY")
