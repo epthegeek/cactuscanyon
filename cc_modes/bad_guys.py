@@ -334,7 +334,12 @@ class BadGuys(game.Mode):
     ###
 
 
-    def start_gunfight(self):
+    def start_gunfight(self,side):
+        print "GUNFIGHT GOES HERE"
+        # for now just reset the bad guy and gunfight and loop it back
+        self.game.set_tracking('gunfightStatus',"OPEN")
+        self.game.set_tracking('bartStatus',"OPEN")
+        self.game.modes.remove(self.game.bad_guys)
         pass
 
     def gunfight_won(self):

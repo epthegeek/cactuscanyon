@@ -89,6 +89,10 @@ Gameplay (Feature):
   'Bart Brothers Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Bart Brothers for Star':
+    options: [2,10]
+    increments: 1
+    default: 3
   'Quickdraw Timer':
     options: [5,30]
     increments: 5

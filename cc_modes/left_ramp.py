@@ -40,17 +40,9 @@ class LeftRamp(game.Mode):
         ## For now, all the river runs use the same animation so it's in here
         ## would be nice to come up with additional animations - but making them good enough? fuggedaboutit
         ##
-        # load the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'river-chase.dmd')
-        # calcuate the wait time to start the next part of the display
-        myWait = len(anim.frames) / 10.0
         # play the river ramp sound
         self.game.sound.play(self.game.assets.sfx_leftRampEnter)
         # set the animation
-        # set the animation
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
-        # run the animation
-        self.layer = animLayer
 
         ## ramp award is determined by stage - starts at 1
         ## completed is CURRENTLY 4 - to reset the awards
@@ -61,13 +53,38 @@ class LeftRamp(game.Mode):
             self.awardPoints = "125,000"
             self.game.score(125000)
             self.game.sound.play_voice(self.game.assets.quote_leftRamp1)
+            # load the 2 animations
+            anim1 = dmd.Animation().load(ep.DMD_PATH+'blank-river.dmd')
+            anim2 = dmd.Animation().load(ep.DMD_PATH+'rowboat.dmd')
+            # set up the layers
+            animLayer1 = dmd.AnimatedLayer(frames=anim1.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+            animLayer2 = dmd.AnimatedLayer(frames=anim2.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            # layer 2 needs transparent
+            animLayer2.composite_op = "blacksrc"
+            # math out the wait
+            myWait = len(anim1.frames) / 10.0
+            # combine the 2 layers
+            animLayer = dmd.GroupedLayer(128,32,[animLayer1,animLayer2])
+            # turn it on
+            self.layer = animLayer
+            # set a delay to show the award
             self.delay(delay=myWait,handler=self.show_award_text)
         elif stage == 2:
             self.awardString = "WATER FALL"
             self.awardPoints = "150,000"
             self.game.score(150000)
             self.game.sound.play_voice(self.game.assets.quote_leftRamp2)
+            # load the animation
+            anim = dmd.Animation().load(ep.DMD_PATH+'river-chase.dmd')
+            # math out the wait
+            myWait = len(anim.frames) / 10.0
+            # set the animation
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            # turn it on
+            self.layer = animLayer
+            # set the delay for the award
             self.delay(delay=myWait,handler=self.show_award_text)
+
         elif stage == 3:
             self.awardString = "ADVENTURE COMPLETE"
             self.awardPoints = "175,000"
@@ -93,7 +110,7 @@ class LeftRamp(game.Mode):
             # play animation
             self.anim_river_victory()
 
-    # then tick the stage up for next time unless it's completed
+        # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('leftRampStage')
 

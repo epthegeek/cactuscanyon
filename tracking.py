@@ -65,13 +65,17 @@ class Tracking(game.Player):
         self.player_stats['badGuysDead'] = [False,True,True,True]
 
         # bartStatus: OPEN, RUNNING, LAST, DEAD
-        self.player_stats['bartStatus'] = ["OPEN"]
+        self.player_stats['bartStatus'] = "OPEN"
         self.player_stats['bartHits'] = 0
-        self.player_stats['bartDefeated'] = 0
+        self.player_stats['bartsDefeated'] = 0
         self.player_stats['currentBart'] = 0
         self.player_stats['gunfightsStarted'] = 0
         self.player_stats['gunfightsWon'] = 0
         # gunfight status, OPEN, READY, RUNNING
         self.player_stats['gunfightStatus'] = "OPEN"
 
+        # highNoonStatus = OPEN, READY, RUNNING
+        self.player_stats['highNoonStatus'] = "OPEN"
+        # list to store the lit items for the star ?
+        self.player_stats['highNoonProgress'] = []
 

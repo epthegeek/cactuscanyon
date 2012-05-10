@@ -21,7 +21,7 @@ class EP_AnimatedLayer(dmd.layers.AnimatedLayer):
 
     # TODO not currently using the callback feature Koen does - maybe add that later
     def __init__(self, animation, callback=None):
-        super(EP_AnimatedLayer, self).__init__(opaque=False, hold=False, repeat=False, frame_time=1, frames=animation.frames)
+        super(EP_AnimatedLayer, self).__init__(opaque=False, hold=False, repeat=False, frame_time=6, frames=animation.frames)
 
         if callback:
             self.add_frame_listener(-1, callback)
