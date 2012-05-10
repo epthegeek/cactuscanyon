@@ -7,6 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 import random
+import locale
 
 class Saloon(game.Mode):
     """Game mode for controlling the skill shot"""
@@ -120,16 +121,18 @@ class Saloon(game.Mode):
         self.setup_bart()
         # show the 'challenges you' display
         # clear the banner layer
-        self.bannerLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
-        theText = self.brother
-        textLayer1 = dmd.TextLayer(2,10,self.game.assets.font_5px_bold_AZ,justify="left",opaque=False).set_text(theText,blink_frames=10)
-        theText = "CHALLENGES YOU"
-        textLayer2 = dmd.TextLayer(2,20,self.game.assets.font_5px_bold_AZ,justify="left",opaque=False).set_text(theText)
-        self.textLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
-        self.textLayer.composite_op = "blacksrc"
-        self.display_damage_one()
+        textLayer1 = dmd.TextLayer(42,2,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer1.set_text(self.nameLine)
+        textLayer2 = dmd.TextLayer(42,12,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer2.set_text("CHALLENGES")
+        textLayer3 = dmd.TextLayer(42,24,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer3.set_text("YOU")
 
-    # play a quote?
+        textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
+        transition = ep.EP_Transition(self,self.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
+        self.delay(delay=1.5,handler=self.clear_layer)
+
+        # play a quote?
         self.game.sound.play_voice(self.tauntQuote)
         # if there's only 1 hit to defeat this bart, set the status to last
         if self.hitsThisBart == 1:
@@ -158,10 +161,19 @@ class Saloon(game.Mode):
         defeated = self.game.show_tracking('bartsDefeated')
         # setup the points value? 120,000 + 5,000 times the number of defeated barts
         self.hitValue = 120000 + (5000 * defeated)
+        self.hitString = locale.format("%d", self.hitValue, True) # Add commas
         # setup the defeat value 150,000 for first + 50,000 times the number of defeated barts
         self.defeatValue = 150000 + (50000 * defeated)
+        self.defeatString = locale.format("%d", self.defeatValue, True) # Add commas
         # setup the hits needed to defeat this bart
         self.hitsThisBart = self.hitsToDefeatBart[index]
+        # set up the name line for the cards
+        print self.brother + " IS THE BROTHER"
+        if self.brother != "BANDELERO":
+            self.nameLine = self.brother.upper() + " BART"
+        else:
+            self.nameLine = self.brother
+
 
     def damage_bart(self):
         print "DAMAGE BART"
@@ -182,12 +194,19 @@ class Saloon(game.Mode):
         if hitsLeft <= 1:
             # if it is, set the status to last
             self.game.set_tracking('bartStatus',"LAST")
-        theText = str(hitsLeft) + " HITS REMAINING"
-        self.textLayer = dmd.TextLayer(6,10,self.game.assets.font_5px_bold_AZ,justify="left",opaque=False).set_text(theText,blink_frames=10)
+        theText = str(hitsLeft) + " MORE HITS"
+        textLayer1 = dmd.TextLayer(42,1,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(self.nameLine)
+        textLayer2 = dmd.TextLayer(42,9,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(str(self.hitString))
+        textLayer3 = dmd.TextLayer(42,17,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText)
+        textLayer4 = dmd.TextLayer(42,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text("TO COLLECT")
+        self.textLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3,textLayer4])
+        self.textLayer.composite_op = "blacksrc"
         self.display_damage_one()
 
     def defeat_bart(self):
         print "DEFEATING BART"
+        # add to the defeated barts
+        currentTotal = self.game.increase_tracking('bartsDefeated')
         # play a defeated quote
         self.game.sound.play_voice(self.defeatQuote)
         # set the status to dead - gunfight has to set it back to open
@@ -202,10 +221,19 @@ class Saloon(game.Mode):
         self.game.score(self.defeatValue)
         # reset the hits on bart
         self.game.set_tracking('bartHits',0)
-        theText = "DEFEATED"
-        self.textLayer = dmd.TextLayer(6,10,self.game.assets.font_5px_bold_AZ,justify="left",opaque=False).set_text(theText,blink_frames=10)
+        textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
+        textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
+        if currentTotal < self.bartsForStar:
+            thetext = str(self.bartsForStar - currentTotal) + " MORE FOR BADGE"
+        elif currentTotal == self.bartsForStar:
+            thetext = "BADGE COLLECTED!"
+            # TODO actually collect the badge :P
+        else:
+            thetext = str(currentTotal) + " DEFEATED!"
+        textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)
+        self.layer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3])
+        self.delay(delay=2,handler=self.clear_layer)
 
-        self.display_damage_one()
         # light gunfight?
         self.game.base_game_mode.light_gunfight()
 

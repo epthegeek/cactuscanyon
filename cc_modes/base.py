@@ -406,6 +406,7 @@ class BaseGameMode(game.Mode):
     def light_gunfight(self):
         print "GUNFIGHT IS LIT"
         # turn on the lights
+        # show the display
         # play a quote
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
