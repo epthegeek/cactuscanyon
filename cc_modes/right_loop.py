@@ -23,15 +23,39 @@ class RightLoop(game.Mode):
         self.game.sound.play(self.game.assets.sfx_rightLoopEnter)
         # score come points
         self.game.score(2530)
+        # clear the last loop tracker
+        self.game.lastLoop = None
 
     def sw_rightLoopTop_active(self,sw):
-        # top end of the loop
-        # award the loop reward
-        self.award_loop_score()
+        # if we aren't coming through on a full loop - it's a natural hit and it counts
+        if self.game.lastLoop != "LEFT":
+            # if we're complete open the gate for a full run through
+            ## if the combo timer is on:
+            if self.game.comboTimer > 0:
+                # register the combo and reset the timer
+                combo = self.game.base_game_mode.combo_hit()
+                # if we're "complete" open the full loop
+                if self.game.show_tracking('rightLoopStage') >= 4:
+                    # pulse the coil to open the gate
+                    pass
+            # else the combo timer is NOT on so run award loop without the flag
+            else:
+                # and turn on the combo timer
+                combo = self.game.base_game_mode.start_combos()
 
-    def award_loop_score(self):
+            # award the loop reward
+            self.award_loop_score(combo)
+        # otherwise it's a roll through so just add some points
+        # maybe add tracking for full loops
+        else:
+            self.game.score(2530)
+        # set the last loop to this loop
+        self.game.lastLoop = "RIGHT"
+
+    def award_loop_score(self,combo=False):
         # cancel the "Clear" delay if there is one
         self.cancel_delayed("Clear")
+        self.cancel_delayed("Transition")
         # if we're on stage one
         stage = self.game.show_tracking('rightLoopStage')
         if stage == 1:
@@ -56,7 +80,7 @@ class RightLoop(game.Mode):
             self.type = ep.EP_Transition.TYPE_CROSSFADE
             self.direction = None
             # then delayed kickoff the text display
-            self.delay(delay=myWait,handler=self.show_award_text)
+            self.delay(name="Transition",delay=myWait,handler=self.show_award_text)
 
         elif stage == 2:
             self.awardString = "GUNSLINGER"
@@ -68,7 +92,7 @@ class RightLoop(game.Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
             self.layer = animLayer
             self.type = ep.EP_Transition.TYPE_EXPAND
-            self.delay(delay=myWait,handler=self.show_award_text)
+            self.delay(name="Transition",delay=myWait,handler=self.show_award_text)
         elif stage == 3:
             self.awardString = "MARKSMAN"
             self.awardPoints = "175,000"
@@ -78,14 +102,19 @@ class RightLoop(game.Mode):
             myWait = len(anim.frames) / 10.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
             self.layer = animLayer
-            self.delay(delay=myWait,handler=self.show_marksman_award)
+            self.delay(name="Transition",delay=myWait,handler=self.show_marksman_award)
 
-    # anything 4 or more is complete
+        # anything 4 or more is complete
         else:
             self.awardString = "SHOTS COMPLETE"
             self.awardPoints = "150,000"
             self.game.score(15000)
-            self.show_award_text()
+            # if we're not on a combo  show the award - combos after stage 4 should just show the combo
+            if combo:
+                self.layer = None
+                self.game.base_game_mode.combo_display()
+            else:
+                self.show_award_text()
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('rightLoopStage')

@@ -398,3 +398,74 @@ class BaseGameMode(game.Mode):
         self.game.sound.play_voice(self.game.assets.quote_quickDrawLit)
         # set the status for the hit side to READY
         self.game.set_tracking('quickDrawStatus',"READY",side)
+
+    #
+    # Combos
+    #
+
+
+    def combo_timer(self):
+        # tick down the comboTimer
+        self.game.comboTimer -= 1
+        # see if it hit zero
+        print "COMBO TIMER: " + str(self.game.comboTimer)
+        if self.game.comboTimer == 0:
+            self.end_combos()
+        else:
+            # if we're not at zero yet, come back in 1 second
+            self.delay(name="Combo Timer",delay=1,handler=self.combo_timer)
+
+    def end_combos(self):
+        # turn off the lights
+        print "Combos have ENDED"
+        pass
+
+    def start_combos(self):
+        print "Combos are ON"
+        # set the timer at the max settings from the game
+        self.game.comboTimer = self.game.user_settings['Gameplay (Feature)']['Combo Timer']
+        # turn the lights on
+        pass
+        #loop to the timer
+        self.delay(name="Combo Timer",delay=1,handler=self.combo_timer)
+        # send this back to what called it for use in determining if in a combo or not
+        return False
+
+    def combo_hit(self):
+        # cancel the current combo_timer delay
+        self.cancel_delayed("Combo Timer")
+        # add one to the combo total and reset the timer
+        self.game.comboTimer = self.game.user_settings['Gameplay (Feature)']['Combo Timer']
+        comboTotal = self.game.increase_tracking('combos')
+        print "COMBOS: " + str(comboTotal)
+        # show a display at this level? have the higher modes turn off their deisplay?
+        # or do the display in the other modes? HMM
+        # points? # TODO investigate points awarded for combos
+        # if we've got enough combos to light the badge, do that
+        if comboTotal == self.game.user_settings['Gameplay (Feature)']['Combos for Star']:
+            ## TODO actually award the badge
+            pass
+        # loop back to the timer
+        self.delay(name="Combo Timer",delay=1,handler=self.combo_timer)
+        # send this back to what called it for use in determining if in a combo or not
+        return True
+
+    def combo_display(self):
+        # build and show the display of combos made & left
+        textLine1 = dmd.TextLayer(64,2,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True).set_text("COMBO AWARDED")
+        textLine2 = dmd.TextLayer(64,10,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        textLine3 = dmd.TextLayer(64,18,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        combos = self.game.show_tracking('combos')
+        textLine2.set_text(str(combos) +" COMBOS",blink_frames=6)
+        combosForStar = self.game.user_settings['Gameplay (Feature)']['Combos for Star']
+        diff = combosForStar - combos
+        if combos > combosForStar:
+            comboString = "BADGE COMPLETE!"
+        elif combos == combosForStar:
+            comboString = "BADGE AWARDED"
+        else:
+            comboString = str(diff) + " MORE FOR BADGE!"
+        textLine3.set_text(comboString)
+        display = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
+        self.layer = display
+        self.delay(delay=2,handler=self.clear_layer)

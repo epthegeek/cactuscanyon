@@ -33,13 +33,38 @@ class LeftLoop(game.Mode):
         self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # score come points
         self.game.score(2530)
+        # clear the loop tracker
+        self.game.lastLoop = None
 
     def sw_leftLoopTop_active(self,sw):
-        # top end of the loop
-        # award the loop reward
-        self.award_loop_score()
 
-    def award_loop_score(self):
+        # if we aren't coming through on a full loop - it's a natural hit and it counts
+        if self.game.lastLoop != "RIGHT":
+            # if we're complete open the gate for a full run through
+            ## if the combo timer is on:
+            if self.game.comboTimer > 0:
+                # register the combo and reset the timer
+                combo = self.game.base_game_mode.combo_hit()
+                # if we're "complete" open the full loop
+                if self.game.show_tracking('rightLoopStage') >= 4:
+                    # pulse the coil to open the gate
+                    pass
+            # else the combo timer is NOT on so run award loop without the flag
+            else:
+                # and turn on the combo timer
+                combo = self.game.base_game_mode.start_combos()
+
+            # award the loop reward
+            self.award_loop_score(combo)
+        # otherwise it's a roll through so just add some points
+        # maybe add tracking for full loops
+        else:
+            self.game.score(2530)
+        # set the last loop to this loop
+        self.game.lastLoop = "LEFT"
+
+
+    def award_loop_score(self,combo=False):
         # cancel the "Clear" delay if there is one
         self.cancel_delayed("ClearLeftLoop")
         # if we're on stage one
@@ -83,6 +108,12 @@ class LeftLoop(game.Mode):
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('leftLoopStage')
+
+        # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display
+        if stage >= 4 and combo:
+            self.layer = None
+            self.game.base_game_mode.combo_display()
+            return
 
         # load the animation based on which was last played
         self.direction = self.anims[thisOne]['direction']

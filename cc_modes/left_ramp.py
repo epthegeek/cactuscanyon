@@ -24,15 +24,22 @@ class LeftRamp(game.Mode):
         # hitting this switch counts as a made ramp - really
         # tick one onto the total of ramp shots
         self.game.increase_tracking('leftRampShots')
-        # score the points
-        self.award_ramp_score()
+        # score the points and mess with the combo
+        if self.game.comboTimer > 0:
+            # register the combo and reset the timer - returns true for use later
+            combo = self.game.base_game_mode.combo_hit()
+        else:
+            # and turn on the combo timer - returns false for use later
+            combo = self.game.base_game_mode.start_combos()
+        self.award_ramp_score(combo)
+
 
     def sw_leftRampMake_active(self,sw):
         # in general gameplay this switch has no purpose
         # but I'm sure it adds points
         self.game.score(2530)
 
-    def award_ramp_score(self):
+    def award_ramp_score(self, combo=False):
         # cancel the "Clear" delay if there is one
         self.cancel_delayed("ClearLeftRamp")
 
@@ -107,8 +114,12 @@ class LeftRamp(game.Mode):
             # play sounds
             # play the river ramp sound
             self.game.sound.play_voice(self.game.assets.quote_victory)
-            # play animation
-            self.anim_river_victory()
+            # play animation if we're not in a combo after level 4
+            if combo:
+                self.layer = None
+                self.game.base_game_mode.combo_display()
+            else:
+                self.anim_river_victory()
 
         # then tick the stage up for next time unless it's completed
         if stage < 4:

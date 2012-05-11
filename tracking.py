@@ -57,12 +57,13 @@ class Tracking(game.Player):
         self.player_stats['isBountyLit'] = False
 
         self.player_stats['rank'] = 0
+        self.player_stats['combos'] = 0
 
         # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING -- 0 is left, 1 is right
         self.player_stats['quickDrawStatus'] = ["OPEN","OPEN"]
         self.player_stats['quickDrawsStarted'] = 0
         self.player_stats['quickDrawsWon'] = 0
-        self.player_stats['badGuysDead'] = [False,True,True,True]
+        self.player_stats['badGuysDead'] = [False,False,False,False]
 
         # bartStatus: OPEN, RUNNING, LAST, DEAD
         self.player_stats['bartStatus'] = "OPEN"
