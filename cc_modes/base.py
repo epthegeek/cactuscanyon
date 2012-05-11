@@ -400,7 +400,11 @@ class BaseGameMode(game.Mode):
         self.game.set_tracking('quickDrawStatus',"READY",side)
 
     #
-    # Combos
+    ###   ____                _
+    ###  / ___|___  _ __ ___ | |__   ___  ___
+    ### | |   / _ \| '_ ` _ \| '_ \ / _ \/ __|
+    ### | |__| (_) | | | | | | |_) | (_) \__\
+    ###  \____\___/|_| |_| |_|_.__/ \___/|___/
     #
 
 
@@ -451,6 +455,7 @@ class BaseGameMode(game.Mode):
         return True
 
     def combo_display(self):
+        # TODO this needs to look a lot better
         # build and show the display of combos made & left
         textLine1 = dmd.TextLayer(64,2,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True).set_text("COMBO AWARDED")
         textLine2 = dmd.TextLayer(64,10,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)

@@ -224,11 +224,14 @@ class BadGuys(game.Mode):
     ###
 
     ## Just an experiment at this point
+    ## right now, showdown will just end when 8 guys are killed
 
     def start_showdown(self):
         print "S H O W D O W N"
         # things, they go here
         self.deathTally = 0
+        # set the tracking
+        self.game.set_tracking('quickDrawStatus',"SHOWDOWN",self.side)
         # kick out more ball
         # pop up the targets
         # play a startup animation
@@ -313,16 +316,23 @@ class BadGuys(game.Mode):
             print "THEY'RE ALL DEAD JIM"
             self.delay(delay=myWait,handler=self.showdown_reset_guys)
 
+        ## a way out for now
+        if self.deathTally >= 8:
+            self.end_showdown()
+
     def end_showdown(self):
         #derp
         # kill the music
         # tally some score?
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
-        # reset the quickdraw status
+        # reset the quickdraw status of the bad guys
         for i in range(0,3,1):
             self.game.set_tracking('quickDrawStatus',"False",i)
+        # turn off lights
+        # tracking - turn it back to open
+        self.game.set_tracking('quickDrawStatus',"OPEN",self.side)
         # unload
-        pass
+        self.game.modes.remove(self.game.bad_guys)
 
     ###
     ###   ____              __ _       _     _
@@ -337,16 +347,30 @@ class BadGuys(game.Mode):
     def start_gunfight(self,side):
         print "GUNFIGHT GOES HERE"
         # for now just reset the bad guy and gunfight and loop it back
-        self.game.set_tracking('gunfightStatus',"OPEN")
-        self.game.set_tracking('bartStatus',"OPEN")
-        self.game.modes.remove(self.game.bad_guys)
-        pass
+        # temporary immediate exit
+        self.end_gunfight()
 
     def gunfight_won(self):
+        # play a quote
+        # set some tracking
+        # award some points
         pass
 
     def gunfight_lost(self):
+        # play a quote
+        # shut things down
         pass
 
     def end_gunfight(self):
+        # turn off some lights?
+        # tidy up - set the gunfight status and bart brothers status to open
+        self.game.set_tracking('gunfightStatus',"OPEN")
+        self.game.set_tracking('bartStatus',"OPEN")
+        # unload the mode
+        self.game.modes.remove(self.game.bad_guys)
+
+    def gunfight_intro(self,step):
+        # the intro animation
+        # going to be several parts
+        # thinking maybe I'll loop it through itself
         pass

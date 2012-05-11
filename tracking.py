@@ -37,7 +37,7 @@ class Tracking(game.Player):
         self.player_stats['saloonShots'] = 0
 
         self.player_stats['mineShotsTotal'] = 0
-        # mine status - OPEN, LOCK, READY, RUNNING, SHOWDOWN
+        # mine status - OPEN, LOCK, READY, RUNNING
         self.player_stats['mineStatus'] = "OPEN"
         self.player_stats['mineHits'] = 0
         ## balls currently locked
@@ -59,7 +59,7 @@ class Tracking(game.Player):
         self.player_stats['rank'] = 0
         self.player_stats['combos'] = 0
 
-        # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING -- 0 is left, 1 is right
+        # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING, SHOWDOWN -- 0 is left, 1 is right
         self.player_stats['quickDrawStatus'] = ["OPEN","OPEN"]
         self.player_stats['quickDrawsStarted'] = 0
         self.player_stats['quickDrawsWon'] = 0

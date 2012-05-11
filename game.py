@@ -203,6 +203,7 @@ class CCGame(game.BasicGame):
             return p.player_stats[item][key]
         else:
             p.player_stats[item] += amount
+            # send back the new value for use
             return p.player_stats[item]
 
     # return values to wherever
@@ -213,7 +214,7 @@ class CCGame(game.BasicGame):
       else:
             return p.player_stats[item]
 
-    # invert tracking only used for bonus, wise? dunno
+    # invert tracking only used for bonus lanes, wise? dunno
     def invert_tracking(self,item):
         p = self.current_player()
         p.player_stats[item].reverse()
