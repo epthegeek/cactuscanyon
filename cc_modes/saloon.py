@@ -81,7 +81,64 @@ class Saloon(game.Mode):
         # turn off the tracking
         self.game.set_tracking('isBountyLit', False)
         # select an award
+        # - Choices:
+        #   1 - Light Extra Ball
+        #   2 - Light Gun Fight
+        #   3 - Light Quick Draw
+        #   4 - Light Lock / Lock ball
+        #   5 - Bonus multiplier + 5
+        #   6 - Increase your rank
+        #   7 - Points 250,000
+        #   8 - Points 500,000
+        #   9 - + 1 Million Bonus
+
+        # play some sounds/music
         # give the award
+        mayorfeet = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mayor-feet.dmd').frames[0])
+        self.layer = mayorfeet
+        # pause a bit and then pan up the mayor
+        self.delay(delay=.3,handler=self.mayor_pan)
+
+    def mayor_pan(self):
+        anim = dmd.Animation().load(ep.DMD_PATH+'mayor-pan.dmd')
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
+        self.layer = animLayer
+        myWait = len(anim.frames) / 60.0
+        # when the pan finishes play the animation to reveal the award
+        self.delay(delay = myWait,handler=self.award_bounty)
+
+    def award_bounty(self):
+        # load the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'bounty-collected.dmd')
+        # set up the layer
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.composite_op = "blacksrc"
+        animLayer.frame_time = 6
+        animLayer.hold = True
+        # calculate a wait time with some buffer after to leave the text
+        myWait = (len(anim.frames) /10 ) + 2
+        # set the backdrop for the revealed award
+        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-border.dmd').frames[0])
+        # set the text for the award
+        #awardTextTop = dmd.TextLayer(72,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)
+        #awardTextTop.set_text("Bounty Collected")
+        awardTextTop = dmd.TextLayer(76,3,self.game.assets.font_6px_az,justify="center",opaque=False)
+        awardTextTop.set_text("BOUNTY COLLECTED")
+        awardTextTop.composite_op = "blacksrc"
+        awardTextMiddle = dmd.TextLayer(76,11,self.game.assets.font_6px_az,justify="center",opaque=False)
+        awardTextMiddle.set_text("OMG ITS BOUNTY")
+        awardTextBottom = dmd.TextLayer(76,20,self.game.assets.font_6px_az,justify="center",opaque=False)
+        awardTextBottom.set_text("NYAR!")
+
+        # play the thrown coin sound
+        self.game.sound.play(self.game.assets.sfx_thrownCoins)
+        # turn on the animation
+        self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextBottom,awardTextMiddle,awardTextTop,animLayer])
+        # then clear the layer
+        self.delay(delay = myWait,handler=self.clear_layer)
+        # todo actually do the awarding
+
+
 
     ###
     ###  ____             _     ____            _   _

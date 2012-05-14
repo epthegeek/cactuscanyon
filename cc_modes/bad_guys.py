@@ -107,7 +107,7 @@ class BadGuys(game.Mode):
         self.game.sound.play(self.game.assets.music_quickDrawBumper)
         self.delay(name="quickdraw music",delay=1.3,handler=self.game.play_remote_music,param=self.game.assets.music_quickDraw)
         # play a quote
-        myWait = self.game.sound.play_voice(self.game.assets.quote_quickDrawStart)
+        self.game.sound.play_voice(self.game.assets.quote_quickDrawStart)
         # pop that sucker up
         # TODO doesn't actually pop the sucker up yet
         # Set up the display
@@ -130,7 +130,7 @@ class BadGuys(game.Mode):
         self.portion = ((self.points / 10) / int(self.runtime * 5) * 10) - 370
         # queue up a delay for when the timer should run out if the mode hasn't been won
         # then start the timer after a 1 second grace period
-        self.delay(name="Grace",delay=myWait,handler=self.quickdraw_timer)
+        self.delay(name="Grace",delay=1.5,handler=self.quickdraw_timer)
 
     def quickdraw_timer(self):
         # ok, so this has to control the score and display?
@@ -369,8 +369,17 @@ class BadGuys(game.Mode):
         # unload the mode
         self.game.modes.remove(self.game.bad_guys)
 
-    def gunfight_intro(self,step):
+    def gunfight_pan(self):
         # the intro animation
         # going to be several parts
         # thinking maybe I'll loop it through itself
+        pass
+
+    def gunfight_intro_eyes(self):
+        pass
+
+    def gunfight_intro_hands(self):
+        pass
+
+    def gunfight_intro_boots(self):
         pass

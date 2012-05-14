@@ -456,12 +456,13 @@ class BaseGameMode(game.Mode):
 
     def combo_display(self):
         # TODO this needs to look a lot better
+        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-border.dmd').frames[0])
         # build and show the display of combos made & left
-        textLine1 = dmd.TextLayer(64,2,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True).set_text("COMBO AWARDED")
-        textLine2 = dmd.TextLayer(64,10,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        textLine3 = dmd.TextLayer(64,18,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        textLine1 = dmd.TextLayer(64,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False).set_text("COMBO AWARDED")
+        textLine2 = dmd.TextLayer(64,11,self.game.assets.font_9px_az,justify="center",opaque=False)
+        textLine3 = dmd.TextLayer(64,25,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
         combos = self.game.show_tracking('combos')
-        textLine2.set_text(str(combos) +" COMBOS",blink_frames=6)
+        textLine2.set_text(str(combos) +" COMBOS",blink_frames=10)
         combosForStar = self.game.user_settings['Gameplay (Feature)']['Combos for Star']
         diff = combosForStar - combos
         if combos > combosForStar:
@@ -471,6 +472,6 @@ class BaseGameMode(game.Mode):
         else:
             comboString = str(diff) + " MORE FOR BADGE!"
         textLine3.set_text(comboString)
-        display = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
+        display = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
         self.layer = display
         self.delay(delay=2,handler=self.clear_layer)

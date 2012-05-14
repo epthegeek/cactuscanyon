@@ -5,11 +5,13 @@
 
 from procgame import *
 import cc_modes
+import ep
 
 class CenterRamp(game.Mode):
     """Cactus Canyon Center Ramp Mode"""
     def __init__(self, game, priority):
         super(CenterRamp, self).__init__(game, priority)
+        self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
 
     def mode_started(self):
         # this would have to turn on some lights and stuff
@@ -17,7 +19,6 @@ class CenterRamp(game.Mode):
 
     def sw_centerRampEnter_active(self,sw):
         # play the switch sound
-        # TODO this should be the train noise
         self.game.sound.play(self.game.assets.sfx_rightRampEnter)
         # score the arbitrary and wacky points
         self.game.score(2530)
@@ -27,22 +28,95 @@ class CenterRamp(game.Mode):
         # so I don't either
         # tick one on to the total of player shots on the right ramp
         self.game.increase_tracking('centerRampShots')
-        self.award_ramp_score()
 
-    def award_ramp_score(self):
+        # hitting this switch counts as a made ramp - really
+        # score the points and mess with the combo
+        if self.game.comboTimer > 0:
+            # register the combo and reset the timer - returns true for use later
+            combo = self.game.base_game_mode.combo_hit()
+        else:
+            # and turn on the combo timer - returns false for use later
+            combo = self.game.base_game_mode.start_combos()
+        # award the ramp score
+        self.award_ramp_score(combo)
+
+
+    def award_ramp_score(self,combo):
+        # cancel the "Clear" delay if there is one
+        self.cancel_delayed("ClearCenterRamp")
+
         ## ramp award is determined by stage - starts at 1
         ## completed is CURRENTLY 4 - to reset the awards
         ## reset the leftRampStage
         stage = self.game.show_tracking('centerRampStage')
         if stage == 1:
-            self.game.score(10)
-        elif stage == 2:
-            self.game.score(20)
-        elif stage == 3:
-            self.game.score(30)
-        else:
-            self.game.score(30)
+            self.awardString = "CATCH TRAIN"
+            self.awardPoints = "125,000"
+            self.game.score(125000)
+            self.game.sound.play_voice(self.game.assets.quote_centerRamp1)
+            anim = dmd.Animation().load(ep.DMD_PATH+'train-boarding.dmd')
+            # math out the wait
+            myWait = len(anim.frames) / 10.0
+            # set the animation
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            # turn it on
+            self.layer = animLayer
+            # set the delay for the award
+            self.delay(delay=myWait,handler=self.show_award_text)
 
+
+        elif stage == 2:
+            self.awardString = "STOP TRAIN"
+            self.awardPoints = "150,000"
+            self.game.score(150000)
+            self.game.sound.play_voice(self.game.assets.quote_centerRamp2)
+            anim = dmd.Animation().load(ep.DMD_PATH+'train-running-on-top.dmd')
+            # math out the wait
+            myWait = len(anim.frames) / 10.0
+            # set the animation
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            # turn it on
+            self.layer = animLayer
+            # set the delay for the award
+            self.delay(delay=myWait,handler=self.show_award_text)
+
+        ## TODO this should kick into polly peril I guess - don't want to start it with the side ramps
+        ## TODO maybe provide a bonus for having them lit first - shots worth more points or something
+        elif stage == 3:
+            self.awardString = "SAVE POLLY"
+            self.awardPoints = "175,000"
+            self.game.score(175000)
+        # complete - after polly peril
+        else:
+            self.awardString = "POLLY SAVED"
+            self.awardPoints = "150,000"
+            self.game.score(150000)
+
+            if combo:
+                self.layer = None
+                self.game.base_game_mode.combo_display()
+            else:
+                pass
         # then tick the stage up for next time unless it's completed
         if self.game.show_tracking('centerRampStage') < 4:
             self.game.increase_tracking('centerRampStage')
+
+    # for now since this doesn't blink there's just one step
+    def show_award_text(self,blink=None):
+        # create the two text lines
+        awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+        # if blink frames we have to set them
+        if blink:
+            awardTextTop.set_text(self.awardString,blink_frames=12)
+            awardTextBottom.set_text(self.awardPoints,blink_frames=12)
+        else:
+            awardTextTop.set_text(self.awardString)
+            awardTextBottom.set_text(self.awardPoints)
+            # combine them
+        completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
+        # swap in the new layer
+        #self.layer = completeFrame
+        transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
+        # clear in 3 seconds
+        self.delay(name="ClearCenterRamp",delay=2,handler=self.clear_layer)
