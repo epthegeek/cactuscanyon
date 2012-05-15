@@ -64,8 +64,8 @@ class SkillShot(game.Mode):
         if self.game.show_tracking('leftLoopStage') < 4:
             prizes.append("I")
 
-        # extra ball (ball) don't include on ball 1
-        if self.game.ball != 1:
+        # extra ball (ball) don't include on ball 1 or if max extra balls is already hit
+        if self.game.ball != 1 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             prizes.append("J")
 
         # increae rank (star) don't include if already at max rank

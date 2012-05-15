@@ -402,6 +402,9 @@ class BadGuys(game.Mode):
     def gunfight_display_win(self):
         # set some tracking
         self.game.increase_tracking('gunfightsWon')
+        # up the rank if it's not full yet
+        if self.game.show_tracking('rank') < 4:
+            newrank = self.game.increase_tracking('rank')
         # award some points
         self.game.score(500)
         # show the win screen

@@ -119,17 +119,35 @@ class Saloon(game.Mode):
         # turn off the tracking
         self.game.set_tracking('isBountyLit', False)
         # select an award
+        prizes = []
         # - Choices:
-        #   1 - Light Extra Ball
-        #   2 - Light Gun Fight
+        #   1 - Light Extra Ball - include as long as we're not at maximum
+        if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            prizes.append('extraBall')
+        #   2 - Light Gun Fight - include if not currently lit via dead bart
+        if self.game.show_tracking('bartStatus') != "DEAD":
+            prizes.append('lightGunfight')
         #   3 - Light Quick Draw
-        #   4 - Light Lock / Lock ball
+        if "OPEN" in self.game.show_tracking('quickDrawStatus'):
+            prizes.append('lightQuickDraw')
+        #   4 - Light Lock / Lock ball - inclue if lock is ready or lit
+        if self.game.show_tracking('mineStatus') == "READY" or self.game.show_tracking('mineStatus') == "LOCK":
+            prizes.append('awardLock')
         #   5 - Bonus multiplier + 5
+        if self.game.show_tracking('bonusX') < 6:
+            prizes.append('bonusX')
         #   6 - Increase your rank
+        if self.game.show_tracking('rank') < 4:
+            prizes.append('rank')
         #   7 - Points 250,000
+        prizes.append('points250K')
         #   8 - Points 500,000
+        prizes.append('points500k')
         #   9 - + 1 Million Bonus
-
+        prizes.append('points1Mil')
+        # so as of this point we have a prizes list to use
+        # and pick one of those at random
+        self.bountyPrize = random.choice(prizes)
         # play some sounds/music
         # give the award
         mayorfeet = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mayor-feet.dmd').frames[0])
@@ -158,13 +176,11 @@ class Saloon(game.Mode):
         # set the backdrop for the revealed award
         backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-border.dmd').frames[0])
         # set the text for the award
-        #awardTextTop = dmd.TextLayer(72,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)
-        #awardTextTop.set_text("Bounty Collected")
         awardTextTop = dmd.TextLayer(76,3,self.game.assets.font_6px_az,justify="center",opaque=False)
         awardTextTop.set_text("BOUNTY COLLECTED")
         awardTextTop.composite_op = "blacksrc"
         awardTextMiddle = dmd.TextLayer(76,11,self.game.assets.font_6px_az,justify="center",opaque=False)
-        awardTextMiddle.set_text("OMG ITS BOUNTY")
+        awardTextMiddle.set_text(self.bountyPrize.upper())
         awardTextBottom = dmd.TextLayer(76,20,self.game.assets.font_6px_az,justify="center",opaque=False)
         awardTextBottom.set_text("NYAR!")
 
