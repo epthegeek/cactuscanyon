@@ -216,10 +216,11 @@ class SkillShot(game.Mode):
             awardStringBottom = "INCREASED +3"
             self.game.increase_tracking('bonusX',3)
 
+        # TODO need to ajust this perhaps - for handling polly peril
         elif self.selectedPrizes[5:] == "M":
             awardStringTop = "TRAIN RESCUE"
             awardStringBottom = "COMPLETE"
-            self.game.set_tracking('centerRampStage',4)
+            self.game.set_tracking('centerRampStage',3)
             self.game.score(250000)
 
         elif self.selectedPrizes[5:] == "N":

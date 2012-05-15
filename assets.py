@@ -129,7 +129,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_gunfightHit3, self.sfx_path + "015-gunfight-hit-3.wav")
         self.sfx_gunfightBell = 'sfx_gunfightBell'
         self.game.sound.register_sound(self.sfx_gunfightBell, self.sfx_path + "123-gunfight-four-bells.wav")
-
+        self.sfx_centerRampEnter = 'sfx_cetnerRampEnter'
+        self.game.sound.register_sound(self.sfx_centerRampEnter, self.sfx_path + "201-train-center-ramp-enter-chugging.wav")
 
         # Quotes
         # this bunches the welcome strings together for play_voice()
@@ -184,6 +185,10 @@ class Assets():
         self.quote_rightRamp2 = 'quote_rightRamp2'
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "850-polly-ooh-how-brave.wav")
+        self.quote_centerRamp1 = 'quote_centerRamp1'
+        self.game.sound.register_sound(self.quote_centerRamp1, self.quotes_path + "1576-leader-bart-you-cant-stop-this-train.wav")
+        self.quote_centerRamp2 = 'quote_centerRamp2'
+        self.game.sound.register_sound(self.quote_centerRamp2, self.quotes_path + "1577-leader-bart-youll-never-catch-us.wav")
         self.quote_leftLoop1 = 'quote_leftLoop1'
         self.game.sound.register_sound(self.quote_leftLoop1, self.quotes_path + "1255-prospector-guess-that-horse-is-breaking-you-in.wav")
         self.game.sound.register_sound(self.quote_leftLoop1, self.quotes_path + "1200-prospector-woo-cough.wav")

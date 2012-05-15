@@ -376,10 +376,12 @@ class BadGuys(game.Mode):
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_gunfightStart)
         # display the clouds with gunfight text
-        title = dmd.TextLayer(64, 3, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight")
+        title = dmd.TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight")
         title.composite_op = "blacksrc"
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-top.dmd').frames[0])
-        self.layer = dmd.GroupedLayer(128,32,[backdrop,title])
+        mask = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-mask.dmd').frames[0])
+        mask.composite_op = "blacksrc"
+        self.layer = dmd.GroupedLayer(128,32,[backdrop,mask,title])
         # after a delay pan down to the dude
         self.delay(name="pan",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
 
@@ -403,8 +405,8 @@ class BadGuys(game.Mode):
         # award some points
         self.game.score(500)
         # show the win screen
-        textLine1 = dmd.TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("Gunfight Won!")
-        textLine2 = dmd.TextLayer(64, 12, self.game.assets.font_9px_az, "center", opaque=True).set_text("You get stuff!")
+        textLine1 = dmd.TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("GUNFIGHT WON!")
+        textLine2 = dmd.TextLayer(64, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("YOU GET STUFF!")
         self.layer = dmd.GroupedLayer(128,32,[textLine1,textLine2])
         self.delay(delay=2,handler=self.end_gunfight)
 
@@ -429,8 +431,8 @@ class BadGuys(game.Mode):
     def gunfight_pan(self,badGuys):
         # the intro animation
         anim = dmd.Animation().load(ep.DMD_PATH+'gunfight-pan.dmd')
-        myWait = len(anim.frames) / 30.0 + 0.9
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
+        myWait = len(anim.frames) / 60 + 0.9
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=1)
         self.layer = animLayer
         self.delay(name="eyes",delay=myWait,handler=self.gunfight_intro_eyes,param=badGuys)
 

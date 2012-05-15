@@ -34,3 +34,4 @@ def format_score(score):
         return '00'
     else:
         return locale.format("%d", score, True)
+

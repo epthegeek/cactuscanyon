@@ -10,6 +10,7 @@ __all__ = [
     'left_loop',
     'right_loop',
     'bad_guys',
+    'save_polly',
 ]
 from base import *
 from attract import *
@@ -22,3 +23,4 @@ from mine import *
 from left_loop import *
 from right_loop import *
 from bad_guys import *
+from save_polly import *

@@ -114,7 +114,7 @@ class BaseGameMode(game.Mode):
         ## TODO check this point value
         self.game.score(2530)
         # play a quote
-        self.game.sound.play_voice(self.assets.quote_beerMug)
+        self.game.sound.play_voice(self.game.assets.quote_beerMug)
         ## -- set the last switch -- ##
         ep.last_switch = 'beerMug'
 

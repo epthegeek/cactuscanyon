@@ -19,7 +19,7 @@ class CenterRamp(game.Mode):
 
     def sw_centerRampEnter_active(self,sw):
         # play the switch sound
-        self.game.sound.play(self.game.assets.sfx_rightRampEnter)
+        self.game.sound.play(self.game.assets.sfx_centerRampEnter)
         # score the arbitrary and wacky points
         self.game.score(2530)
 
@@ -64,29 +64,22 @@ class CenterRamp(game.Mode):
             # set the delay for the award
             self.delay(delay=myWait,handler=self.show_award_text)
 
-
         elif stage == 2:
-            self.awardString = "STOP TRAIN"
-            self.awardPoints = "150,000"
-            self.game.score(150000)
-            self.game.sound.play_voice(self.game.assets.quote_centerRamp2)
-            anim = dmd.Animation().load(ep.DMD_PATH+'train-running-on-top.dmd')
-            # math out the wait
-            myWait = len(anim.frames) / 10.0
-            # set the animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
-            # turn it on
-            self.layer = animLayer
-            # set the delay for the award
-            self.delay(delay=myWait,handler=self.show_award_text)
+            self.train_stage_two(score=150000)
 
         ## TODO this should kick into polly peril I guess - don't want to start it with the side ramps
         ## TODO maybe provide a bonus for having them lit first - shots worth more points or something
+        ## we're going to hold at stage 3 on the train ramp unless the other 2 are ready to start polly
+        ## if the train gets hit again before the other two are ready, it's a repeat of stage 2
         elif stage == 3:
-            self.awardString = "SAVE POLLY"
-            self.awardPoints = "175,000"
-            self.game.score(175000)
+            if self.game.show_tracking('rightRampStage') >= 4 and self.game.show_tracking('leftRampStage') >= 4:
+                self.game.modes.add(self.game.save_polly)
+                self.game.save_polly.start_save_polly()
+            else:
+                self.train_stage_two(score=175000)
         # complete - after polly peril
+        # after polly is saved, before high noon, show the pull brakes animation
+        # and 'polly saved'
         else:
             self.awardString = "POLLY SAVED"
             self.awardPoints = "150,000"
@@ -98,7 +91,8 @@ class CenterRamp(game.Mode):
             else:
                 pass
         # then tick the stage up for next time unless it's completed
-        if self.game.show_tracking('centerRampStage') < 4:
+        # we're holding at 3, save polly peril will set it to 4
+        if self.game.show_tracking('centerRampStage') < 3:
             self.game.increase_tracking('centerRampStage')
 
     # for now since this doesn't blink there's just one step
@@ -120,3 +114,22 @@ class CenterRamp(game.Mode):
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         # clear in 3 seconds
         self.delay(name="ClearCenterRamp",delay=2,handler=self.clear_layer)
+
+    def train_stage_two(self,score):
+        self.awardString = "STOP TRAIN"
+        self.awardPoints = str(ep.format_score(score))
+        self.game.score(score)
+        self.game.sound.play_voice(self.game.assets.quote_centerRamp2)
+        anim = dmd.Animation().load(ep.DMD_PATH+'train-running-on-top.dmd')
+        # math out the wait
+        myWait = len(anim.frames) / 10.0
+        # set the animation
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        # turn it on
+        self.layer = animLayer
+        # set the delay for the award
+        self.delay(delay=myWait,handler=self.show_award_text)
+
+
+    def clear_layer(self):
+        self.layer = None

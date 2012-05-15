@@ -105,6 +105,10 @@ Gameplay (Feature):
     options: [5,30]
     increments: 5
     default: 20
+  'Shots to save Polly':
+    options: [2,15]
+    increments: 1
+    default: 5
   'Quickdraws Lit Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'

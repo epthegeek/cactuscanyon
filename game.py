@@ -102,8 +102,8 @@ class CCGame(game.BasicGame):
 
         # Quickdraw battle and showdown
         self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
-        # Gunfight
-        #self.gunfight = cc_modes.GunFight(game=self,priority=68)
+        # Svae Polly
+        self.save_polly = cc_modes.SavePolly(game=self,priority=68)
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
         # High Noon
