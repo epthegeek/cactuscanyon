@@ -28,17 +28,19 @@ class Saloon(game.Mode):
         self.banners = ['bam','biff','ouch','pow','wham','zoink']
 
     def mode_started(self):
-        # activate the first bart
-        self.game.set_tracking('bartStatus',"RUNNING")
-        self.setup_bart()
+        # activate the first bart if we're on the first ball
+        if self.game.ball == 1:
+            self.game.set_tracking('bartStatus',"RUNNING")
+            self.setup_bart()
 
     def sw_saloonPopper_closed_for_200ms(self,sw):
         ## if we went through the gate, and missed bart or snuck in the back way
         ## it counts as a hit so we have to do that first
         ## TODO can't make this work
         if ep.last_switch != "saloonBart":
+            # set the busy flag
             self.busy = True
-            ## TODO need to set this up to delay somehow
+            # then hit bart
             self.hit_bart()
         # now we check the bounty after an appropriate delay.
         self.wait_until_unbusy(self.check_bounty)
@@ -46,7 +48,7 @@ class Saloon(game.Mode):
         ep.last_switch = "saloonPopper"
 
     def sw_saloonBart_active(self,sw):
-        # just to be sure
+        # set the busy flag
         self.busy = True
         # a direct smack to el barto
         self.hit_bart()

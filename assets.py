@@ -121,6 +121,15 @@ class Assets():
         self.game.sound.register_sound(self.sfx_thrownCoins, self.sfx_path + "137-sfx-thrown-coins.wav")
         self.sfx_yeeHoo = 'sfx_yeeHoo'
         self.game.sound.register_sound(self.sfx_yeeHoo, self.sfx_path + "1963-yee-hoo.wav")
+        self.sfx_gunfightHit1 = 'sfx_gunfightHit1'
+        self.game.sound.register_sound(self.sfx_gunfightHit1, self.sfx_path + "011-gunfight-hit-1.wav")
+        self.sfx_gunfightHit2 = 'sfx_gunfightHit2'
+        self.game.sound.register_sound(self.sfx_gunfightHit2, self.sfx_path + "013-gunfight-hit-2.wav")
+        self.sfx_gunfightHit3 = 'sfx_gunfightHit3'
+        self.game.sound.register_sound(self.sfx_gunfightHit3, self.sfx_path + "015-gunfight-hit-3.wav")
+        self.sfx_gunfightBell = 'sfx_gunfightBell'
+        self.game.sound.register_sound(self.sfx_gunfightBell, self.sfx_path + "123-gunfight-four-bells.wav")
+
 
         # Quotes
         # this bunches the welcome strings together for play_voice()
@@ -192,7 +201,19 @@ class Assets():
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1038-mayor-gunfight-is-lit.wav")
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1237-prospector-gunfight-is-lit.wav")
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1306-undertaker-theres-going-to-be-a-gunfight.wav")
-
+        self.quote_gunfightStart = 'quote_gunfightStart'
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1004-mayor-ok-son-lets-gunfight.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1029-mayor-dont-move-its-a-gunfight.wav")
+        self.quote_gunWin = 'quote_gunWin'
+        self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1117-mayor-say-thats-a-pretty-good-eye-there.wav")
+        self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1170-mayor-quite-a-knack-with-those-six-shooters-friend.wav")
+        self.quote_gunFail = 'quote_gunFail'
+        self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1198-mayor-maybe-you-better-check-the-sights-on-that-weapon.wav")
+        self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1199-mayor-are-you-sure-that-thing-is-loaded.wav")
+        self.quote_beerMug = 'quote_beerMug'
+        self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1408-drunk-hey-buddy-you-shot-my-drink.wav")
+        self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1409-drunk-stop-shootin-at-my-drink.wav")
+        self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1414-drunk-i-was-drinking-that-thank-you.wav")
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1452-big-hit-nothin-but-a-little-hole.wav")
@@ -260,7 +281,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_playerFour, self.quotes_path + "858-polly-player-four.wav")
         self.quote_mayorMyMoneysInThere = 'quote_mayorMyMoneysInThere'
         self.game.sound.register_sound(self.quote_mayorMyMoneysInThere, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
-
+        self.quote_gunfightDraw = 'quote_gunfightDraw'
+        self.game.sound.register_sound(self.quote_gunfightDraw, self.quotes_path + "1507-leader-bart-draw.wav")
 
 
         # Music
@@ -274,6 +296,10 @@ class Assets():
         self.game.sound.register_sound(self.music_quickDrawBumper, self.music_path + "017-quickdraw-bumper.wav")
         self.music_quickDraw = 'music_quickDraw'
         self.game.sound.register_music(self.music_quickDraw, self.music_path + "025-quickdraw.wav")
+        self.music_gunfightIntro = 'music_gunfightIntro'
+        self.game.sound.register_sound(self.music_gunfightIntro, self.music_path + "009-gunfight-intro.wav")
+        self.music_drumRoll = 'music_drumRoll'
+        self.game.sound.register_music(self.music_drumRoll, self.music_path + "009-gunfight-drumroll.wav")
 
         # Shared Paths
         self.shared_sound_path = "shared/sound/"

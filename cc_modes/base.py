@@ -110,6 +110,13 @@ class BaseGameMode(game.Mode):
     # Set the switch name to the launch button on your game.
     # If manual plunger, remove the whole section.
 
+    def sw_beerMug_active(self,sw):
+        ## TODO check this point value
+        self.game.score(2530)
+        # play a quote
+        self.game.sound.play_voice(self.assets.quote_beerMug)
+        ## -- set the last switch -- ##
+        ep.last_switch = 'beerMug'
 
     # Allow service mode to be entered during a game.
     def sw_enter_active(self, sw):
