@@ -30,6 +30,7 @@ class CCGame(game.BasicGame):
         self.comboTimer = 0
         # last loop vairable for tracking runthrough loops
         self.lastLoop = None
+        self.lastSwitch = None
 
     def setup(self):
         """docstring for setup"""
@@ -236,3 +237,10 @@ class CCGame(game.BasicGame):
         print "ITS TIME TO START THE MUSIC"
         print param
         self.sound.play_music(param, loops=-1)
+
+    def get_last_switch(self):
+        return self.lastSwitch
+
+    def set_last_switch(self,value):
+        self.lastSwitch = value
+    last_switch = property(get_last_switch,set_last_switch)

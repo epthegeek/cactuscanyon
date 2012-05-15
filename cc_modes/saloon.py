@@ -33,19 +33,34 @@ class Saloon(game.Mode):
         self.setup_bart()
 
     def sw_saloonPopper_closed_for_200ms(self,sw):
-        if self.game.show_tracking('isBountyLit'):
-            self.collect_bounty()
-        print "PULSE THE KICKER FOR THE SALOON"
+        ## if we went through the gate, and missed bart
+        ## it counts as a hit so we have to do that first
+        ## TODO can't make this work
+        #if ep.last_switch == "saloonGate":
+            ## TODO need to set this up to delay somehow
+            #self.hit_bart()
+        # now we check the bounty after an appropriate delay.
+        self.check_bounty
+        ## -- set the last switch hit --
+        ep.last_switch = "saloonPopper"
 
     def sw_saloonBart_active(self,sw):
+        # just to be sure
+        self.saloonHit = False
+        self.busy = True
         # a direct smack to el barto
         self.hit_bart()
+        ## -- set the last switch hit --
+        ep.last_switch = "saloonBart"
 
     def sw_saloonGate_active(self,sw):
         # play the sound.
         # add some points
         self.game.score(2530)
         # exciting!
+        ## -- set the last switch hit --
+        ep.last_switch = "saloonGate"
+
 
     def sw_jetBumpersExit_active(self,sw):
         # if there's an active bart, play a quote
@@ -53,6 +68,11 @@ class Saloon(game.Mode):
             self.game.sound.play_voice(self.tauntQuote)
         # score some points
         self.game.score(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "jetBumpersExit"
+
+    def kick(self):
+        print "PULSE THE KICKER FOR THE SALOON"
 
     ###
     ###  ____                    _
@@ -62,6 +82,17 @@ class Saloon(game.Mode):
     ### |____/ \___/ \__,_|_| |_|\__|\__, |
     ###                              |___/
     ###
+    def check_bounty(self):
+        print "CHECKING BOUNTY"
+        # check the bounty lit status, and collect if needed
+        if self.game.show_tracking('isBountyLit'):
+            self.collect_bounty()
+        # otherwise clear the layer, as we may be coming from a saloon hit and have junk on the screen
+        else:
+            self.clear_layer()
+            # TODO kick the ball out here
+            self.kick()
+
 
     def light_bounty(self):
         # set the tracking
@@ -134,8 +165,9 @@ class Saloon(game.Mode):
         self.game.sound.play(self.game.assets.sfx_thrownCoins)
         # turn on the animation
         self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextBottom,awardTextMiddle,awardTextTop,animLayer])
-        # then clear the layer
+        # then clear the layer and kick the ball out
         self.delay(delay = myWait,handler=self.clear_layer)
+        self.delay(delay = myWait,handler=self.kick)
         # todo actually do the awarding
 
 
@@ -188,11 +220,11 @@ class Saloon(game.Mode):
 
         textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
         transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
-        self.delay(delay=1.5,handler=self.clear_layer)
 
         # if there's only 1 hit to defeat this bart, set the status to last
         if self.hitsThisBart == 1:
             self.game.set_tracking('bartStatus',"LAST")
+        self.delay(delay=1.5,handler=self.clear_layer)
 
     def setup_bart(self):
         # our cast of characters
@@ -231,7 +263,7 @@ class Saloon(game.Mode):
             self.nameLine = self.brother
 
 
-    def damage_bart(self):
+    def damage_bart(self,saloonHit=False):
         print "DAMAGE BART"
         # play a quote appropriate to the current bart
         self.game.sound.play_voice(self.hitQuote)
@@ -294,6 +326,7 @@ class Saloon(game.Mode):
         self.delay(delay=2,handler=self.light_gunfight)
 
     def display_damage_one(self):
+        print "MADE IT TO DAMAGE ONE"
         # set up the top layer
         layerOne = dmd.GroupedLayer(128,32,[self.bannerLayer,self.wantedFrameA])
         # activate it

@@ -33,13 +33,13 @@ class LeftLoop(game.Mode):
         self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # score come points
         self.game.score(2530)
-        # clear the loop tracker
-        self.game.lastLoop = None
+        ## -- set the last switch hit --
+        ep.last_switch = "leftLoopBottom"
 
     def sw_leftLoopTop_active(self,sw):
 
         # if we aren't coming through on a full loop - it's a natural hit and it counts
-        if self.game.lastLoop != "RIGHT":
+        if ep.last_switch != "rightLoopTop":
             # if we're complete open the gate for a full run through
             ## if the combo timer is on:
             if self.game.comboTimer > 0:
@@ -60,8 +60,8 @@ class LeftLoop(game.Mode):
         # maybe add tracking for full loops
         else:
             self.game.score(2530)
-        # set the last loop to this loop
-        self.game.lastLoop = "LEFT"
+        ## -- set the last switch --
+        ep.last_switch = "leftLoopTop"
 
 
     def award_loop_score(self,combo=False):

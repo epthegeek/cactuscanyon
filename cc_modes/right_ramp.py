@@ -22,6 +22,8 @@ class RightRamp(game.Mode):
         self.game.sound.play(self.game.assets.sfx_rightRampEnter)
         # score the arbitrary and wacky points
         self.game.score(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightRampEnter"
 
     def sw_rightRampMake_active(self,sw):
         # the actual game doesn't care if enter was just hit
@@ -36,9 +38,13 @@ class RightRamp(game.Mode):
             # and turn on the combo timer - returns false for use later
             combo = self.game.base_game_mode.start_combos()
         self.award_ramp_score(combo)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightRampMake"
 
     def sw_rightRampBottom_active(self,sw):
         self.game.score(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightRampBottom"
 
     def award_ramp_score(self,combo):
         # cancel the "Clear" delay if there is one

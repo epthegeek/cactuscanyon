@@ -18,6 +18,15 @@ SFX_PATH = "sounds/sfx/"
 MUSIC_PATH = "sounds/music/"
 QUOTES_PATH = "sounds/quotes/"
 
+# set up a property for last switch tracking
+def get_last_switch(self):
+    return self.game.lastSwitch
+
+def set_last_switch(self,value):
+    self.game.lastSwitch = value
+
+last_switch = property(get_last_switch,set_last_switch)
+
 def format_score(score):
     """Returns a string representation of the given score value.
          Override to customize the display of numeric score values."""
