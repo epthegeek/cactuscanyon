@@ -33,11 +33,11 @@ class Saloon(game.Mode):
         self.setup_bart()
 
     def sw_saloonPopper_closed_for_200ms(self,sw):
-        ## if we went through the gate, and missed bart
+        ## if we went through the gate, and missed bart or snuck in the back way
         ## it counts as a hit so we have to do that first
         ## TODO can't make this work
-        self.busy = True
-        if ep.last_switch == "saloonGate":
+        if ep.last_switch != "saloonBart":
+            self.busy = True
             ## TODO need to set this up to delay somehow
             self.hit_bart()
         # now we check the bounty after an appropriate delay.
