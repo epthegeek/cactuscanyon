@@ -36,17 +36,17 @@ class Saloon(game.Mode):
         ## if we went through the gate, and missed bart
         ## it counts as a hit so we have to do that first
         ## TODO can't make this work
-        #if ep.last_switch == "saloonGate":
+        self.busy = True
+        if ep.last_switch == "saloonGate":
             ## TODO need to set this up to delay somehow
-            #self.hit_bart()
+            self.hit_bart()
         # now we check the bounty after an appropriate delay.
-        self.check_bounty
+        self.wait_until_unbusy(self.check_bounty)
         ## -- set the last switch hit --
         ep.last_switch = "saloonPopper"
 
     def sw_saloonBart_active(self,sw):
         # just to be sure
-        self.saloonHit = False
         self.busy = True
         # a direct smack to el barto
         self.hit_bart()
@@ -74,6 +74,11 @@ class Saloon(game.Mode):
     def kick(self):
         print "PULSE THE KICKER FOR THE SALOON"
 
+    def wait_until_unbusy(self,myHandler):
+        if not self.busy:
+            myHandler()
+        else:
+            self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
     ###
     ###  ____                    _
     ### | __ )  ___  _   _ _ __ | |_ _   _
@@ -341,7 +346,7 @@ class Saloon(game.Mode):
 
     def clear_layer(self):
         self.layer = None
-
+        self.busy = False
 
     ## Gunfight
 
