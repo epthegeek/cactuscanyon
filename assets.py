@@ -41,6 +41,7 @@ class Assets():
         self.font_9px_az_dim = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_1.dmd")
 
         self.font_12px_az = dmd.Font(self.dmd_path + "Font_16_CactusCanyon.dmd")
+        self.font_12px_az_dim = dmd.Font(self.dmd_path + "Font_16_CactusCanyon_dim.dmd")
 
         self.font_12px_az_outline = dmd.Font(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
         self.font_12px_az_outline.tracking = -1
@@ -147,6 +148,11 @@ class Assets():
         self.game.sound.register_sound(self.sfx_gunfightShot, self.sfx_path + "339-sfx-gunfight-hit.wav")
         self.sfx_gunfightFlourish = 'sfx_gunfightFlourish'
         self.game.sound.register_sound(self.sfx_gunfightFlourish, self.sfx_path + "068-sfx-gunfight-flourish.wav")
+        self.sfx_shooterLaunch = 'sfx_shooterLaunch'
+        self.game.sound.register_sound(self.sfx_shooterLaunch, self.sfx_path + "273-sfx-shooter-lane-launch.wav")
+        self.sfx_outlane = 'sfx_outlane'
+        self.game.sound.register_sound(self.sfx_outlane, self.sfx_path + "283-sfx-outlane.wav")
+
         # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'

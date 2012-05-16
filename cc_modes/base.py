@@ -210,6 +210,25 @@ class BaseGameMode(game.Mode):
         else:
             pass
 
+
+    ###
+    ###   ___        _   _
+    ###  / _ \ _   _| |_| | __ _ _ __   ___  ___
+    ### | | | | | | | __| |/ _` | '_ \ / _ \/ __|
+    ### | |_| | |_| | |_| | (_| | | | |  __/\__\
+    ###  \___/ \__,_|\__|_|\__,_|_| |_|\___||___/
+    ###
+
+    def sw_leftOutlane_active(self,sw):
+        self.outlane_hit(0)
+
+    def sw_rightOutlane_active(self,sw):
+        self.outlane_hit(1)
+
+    def outlane_hit(self, side):
+        self.game.score(2530)
+        self.game.play.sound(self.game.assets.sfx_outlane)
+
     ###
     ###  ____  _ _                 _           _
     ### / ___|| (_)_ __   __ _ ___| |__   ___ | |_ ___

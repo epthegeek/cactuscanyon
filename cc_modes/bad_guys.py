@@ -409,12 +409,19 @@ class BadGuys(game.Mode):
         # up the rank if it's not full yet
         if self.game.show_tracking('rank') < 4:
             newrank = self.game.increase_tracking('rank')
+        ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
+        textString3 = "YOUR RANK: " + ranks[newrank]
+        values = ["500,000","750,000","1,000,000","1,500,000","2,000,000"]
+        textString4 = "QUICKDRAWS WORTH: " + values[newrank]
         # award some points
-        self.game.score(500)
+        points = 750000
+        self.game.score(points)
         # show the win screen
-        textLine1 = dmd.TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("GUNFIGHT WON!")
-        textLine2 = dmd.TextLayer(64, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("YOU GET STUFF!")
-        self.layer = dmd.GroupedLayer(128,32,[textLine1,textLine2])
+        textLine1 = dmd.TextLayer(64, 0, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("BAD GUY SHOT!")
+        textLine2 = ep.pulse_text(self,64,9,ep.format_score(points))
+        textLine3 = dmd.TextLayer(64, 20, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString3)
+        textLine4 = dmd.TextLayer(64, 26, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString4)
+        self.layer = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,textLine4])
         self.delay(delay=2,handler=self.end_gunfight)
 
     def gunfight_lost(self):
@@ -505,7 +512,8 @@ class BadGuys(game.Mode):
         self.game.sound.play(self.game.assets.quote_gunfightDraw)
         # relase the post - hm. no way to know which one is up Oops. # todo fix that later
         text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
-        self.layer = dmd.GroupedLayer(128,32,[self.layer,text])
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
+        self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
         print "DROP THE POST"
         # set a named timer for gunfight lost
         self.delay(name="Gunfight Lost",delay=4,handler=self.gunfight_lost)
