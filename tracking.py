@@ -40,13 +40,12 @@ class Tracking(game.Player):
         self.player_stats['mineShotsTotal'] = 0
         # mine status - OPEN, LOCK, READY, RUNNING
         self.player_stats['mineStatus'] = "OPEN"
+        # used for progression to lock
         self.player_stats['mineHits'] = 0
-        ## balls currently locked
+        # balls currently locked
         self.player_stats['ballsLocked'] = 0
         ## running tally of locked balls
         self.player_stats['ballsLockedTotal'] = 0
-        self.player_stats['isLockLit'] = False
-        self.player_stats['isMultiballLit'] = False
         self.player_stats['jackpotsCollected'] = 0
         self.player_stats['motherLodesCollected'] = 0
 
@@ -65,6 +64,7 @@ class Tracking(game.Player):
         self.player_stats['quickDrawsStarted'] = 0
         self.player_stats['quickDrawsWon'] = 0
         self.player_stats['badGuysDead'] = [False,False,False,False]
+        self.player_stats['showdownTotal'] = 0
 
         # bartStatus: OPEN, RUNNING, LAST, DEAD
         self.player_stats['bartStatus'] = "OPEN"

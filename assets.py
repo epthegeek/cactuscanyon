@@ -245,6 +245,8 @@ class Assets():
         self.quote_gunfightStart = 'quote_gunfightStart'
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1004-mayor-ok-son-lets-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1029-mayor-dont-move-its-a-gunfight.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "2041-waitress-looks-like-a-gunfight.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1233-prospector-ooh-i-smell-a-gunfight-brewin.wav")
         self.quote_gunWin = 'quote_gunWin'
         self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1117-mayor-say-thats-a-pretty-good-eye-there.wav")
         self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1170-mayor-quite-a-knack-with-those-six-shooters-friend.wav")
@@ -255,6 +257,11 @@ class Assets():
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1408-drunk-hey-buddy-you-shot-my-drink.wav")
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1409-drunk-stop-shootin-at-my-drink.wav")
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1414-drunk-i-was-drinking-that-thank-you.wav")
+        self.quote_extraBallLit = 'quote_extraBallLit'
+        self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "2013-waitress-that-extra-ball-is-lit-honey.wav")
+        self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1258-prospector-extra-ball-is-lit.wav")
+        self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1020-mayor-the-extra-ball-is-lit.wav")
+
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1452-big-hit-nothin-but-a-little-hole.wav")

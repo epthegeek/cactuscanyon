@@ -28,6 +28,10 @@ class Mine(game.Mode):
 
         # if the ball lands in the kicker
     def sw_minePopper_closed_for_200ms(self,sw):
+        # if there's an extra ball waiting, collect one
+        if self.game.show_tracking('extraBallsPending') > 0:
+            self.collect_extra_ball()
+        # then register the mine shot
         self.mine_shot()
 
     def sw_mineEntrance_active(self,sw):
@@ -195,7 +199,13 @@ class Mine(game.Mode):
     def light_extra_ball(self):
         # just a placeholder for now
         self.game.increase_tracking('extraBallsPending')
-        print "LIGHT EXTRA BALL"
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_extraBallLit)
+        print "EXTRA BALL LIT"
+
+    def collect_extra_ball(self):
+        # this needs to do things
+        pass
 
     def clear_layer(self):
         self.layer = None
