@@ -35,3 +35,21 @@ def format_score(score):
     else:
         return locale.format("%d", score, True)
 
+
+def pulse_9px(self,x,y,text,sequence=False,align="center",myOpaque=False):
+    if not sequence:
+        # default sequence
+        sequence = [3,1,3,1,3,1,3]
+    # fonts to use
+    levels = [0,self.game.assets.font_9px_az_dim,self.game.assets.font_9px_az_mid,self.game.assets.font_9px_az]
+    # blank list for frames
+    script = []
+    # iterate through the sequence creating text layers and appending them to anim.frames
+    for i in sequence:
+        frame = dmd.TextLayer(x, y, levels[i], align,opaque=myOpaque).set_text(text)
+        frame.composite_op = "blacksrc"
+        script.append({'seconds':0.2,'layer':frame})
+    # create an animated layer with the frames
+    scriptLayer  = dmd.ScriptedLayer(128,32,script)
+    scriptLayer.composite_op = "blacksrc"
+    return scriptLayer

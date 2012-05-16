@@ -37,6 +37,8 @@ class Assets():
         self.font_7px_bold_az = dmd.Font(self.dmd_path + "Font_14_CactusCanyon.dmd")
 
         self.font_9px_az = dmd.Font(self.dmd_path + "Font_15_CactusCanyon.dmd")
+        self.font_9px_az_mid = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_2.dmd")
+        self.font_9px_az_dim = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_1.dmd")
 
         self.font_12px_az = dmd.Font(self.dmd_path + "Font_16_CactusCanyon.dmd")
 
@@ -131,7 +133,20 @@ class Assets():
         self.game.sound.register_sound(self.sfx_gunfightBell, self.sfx_path + "123-gunfight-four-bells.wav")
         self.sfx_centerRampEnter = 'sfx_cetnerRampEnter'
         self.game.sound.register_sound(self.sfx_centerRampEnter, self.sfx_path + "201-train-center-ramp-enter-chugging.wav")
-
+        self.sfx_quickdrawHit = 'sfx_quickdrawHit'
+        self.game.sound.register_sound(self.sfx_quickdrawHit, self.sfx_path + "309-sfx-quickdraw-hit.wav")
+        self.sfx_quickdrawCheer = 'sfx_quickdrawCheer'
+        self.game.sound.register_sound(self.sfx_quickdrawCheer, self.sfx_path + "165-sfx-crowd-cheer-3.wav")
+        self.sfx_bountyBell = 'sfx_bountyBell'
+        self.game.sound.register_sound(self.sfx_bountyBell, self.sfx_path + "113-sfx-other-bell.wav")
+        self.sfx_bountyCollected = 'sfx_bountyCollected'
+        self.game.sound.register_sound(self.sfx_bountyCollected, self.sfx_path + "045-sfx-bounty-collected.wav")
+        self.sfx_gunCock = 'sfx_gunCock'
+        self.game.sound.register_sound(self.sfx_gunCock, self.sfx_path + "391-sfx-gun-cock.wav")
+        self.sfx_gunfightShot = 'sfx_gunfightShot'
+        self.game.sound.register_sound(self.sfx_gunfightShot, self.sfx_path + "339-sfx-gunfight-hit.wav")
+        self.sfx_gunfightFlourish = 'sfx_gunfightFlourish'
+        self.game.sound.register_sound(self.sfx_gunfightFlourish, self.sfx_path + "068-sfx-gunfight-flourish.wav")
         # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
@@ -144,6 +159,10 @@ class Assets():
         self.quote_bountyLit = 'quote_bountyLit'
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1012-mayor-theres-a-bounty-just-waitin-for-ya.wav")
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1013-mayor-bounty-is-lit.wav")
+        self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1043-mayor-collect-your-bounty-son.wav")
+        self.quote_bountyCollected = 'quote_bountyCollected'
+        self.game.sound.register_sound(self.quote_bountyCollected, self.quotes_path + "1014-mayor-your-bounty-friend.wav")
+        self.game.sound.register_sound(self.quote_bountyCollected, self.quotes_path + "1042-mayor-bounty-collected.wav")
         self.quote_quickDrawLit = 'quote_quickDrawLit'
         self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "509-townie-quickdraw-is-lit.wav")
         self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1304-undertaker-oh-goodie-quickdraw-is-lit.wav")
@@ -166,6 +185,17 @@ class Assets():
         self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1520-leader-bart-go-get-im.wav")
         self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1416-drunk-shoot-that-bad-guy.wav")
         self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "511-prospector-you-cant-shoot-nothin.wav")
+        self.quote_quickDrawWin = 'quote_quickDrawWin'
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "852-polly-nice-shootin.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "1315-undertaker-my-theyre-dropping-like-flies.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "2003-waitress-i-didnt-like-that-deadbeat-anyway.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "1318-undertaker-a-dead-ringer.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "1111-mayor-that-was-a-bit-too-close-for-comfort.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "839-polly-youre-quite-a-man.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "840-polly-congratulations.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "2008-waitress-amazing.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "2005-waitress-ooh-what-are-you-packin.wav")
+        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "1116-mayor-this-calls-for-a-drink.wav")
         self.quote_lockLit = 'quote_lockLit'
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")
@@ -286,6 +316,10 @@ class Assets():
         self.game.sound.register_sound(self.quote_playerFour, self.quotes_path + "858-polly-player-four.wav")
         self.quote_mayorMyMoneysInThere = 'quote_mayorMyMoneysInThere'
         self.game.sound.register_sound(self.quote_mayorMyMoneysInThere, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
+        self.quote_gunfightReady = 'quote_gunfightReady'
+        self.game.sound.register_sound(self.quote_gunfightReady, self.quotes_path + "1546-leader-bart-ready.wav")
+        self.quote_gunfightSet = 'quote_gunfight_Set'
+        self.game.sound.register_sound(self.quote_gunfightSet, self.quotes_path + "1547-leader-bart-set.wav")
         self.quote_gunfightDraw = 'quote_gunfightDraw'
         self.game.sound.register_sound(self.quote_gunfightDraw, self.quotes_path + "1507-leader-bart-draw.wav")
 
