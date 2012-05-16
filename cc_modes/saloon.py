@@ -106,8 +106,9 @@ class Saloon(game.Mode):
         self.game.set_tracking('isBountyLit', True)
         # show something on the screen
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stars-border.dmd').frames[0])
-        topText = dmd.TextLayer(128/2, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("COLLECT BOUNTY",blink_frames=10)
-        bottomText = dmd.TextLayer(128/2, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("IS LIT",blink_frames=10)
+        topText = ep.pulse_9px(self,64,4,"COLLECT BOUNTY")
+        bottomText = ep.pulse_9px(self,64,16,"IS LIT")
+        self.repeat_ding(4)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,topText,bottomText])
         # play a voice clip about the bounty being ready
         self.game.sound.play_voice(self.game.assets.quote_bountyLit)
@@ -115,6 +116,8 @@ class Saloon(game.Mode):
         self.delay(delay=1.6,handler=self.clear_layer)
 
     def collect_bounty(self):
+        # shutup the music
+        self.game.sound.stop_music()
         # TODO award the prize
         # turn off the tracking
         self.game.set_tracking('isBountyLit', False)
@@ -149,6 +152,8 @@ class Saloon(game.Mode):
         # and pick one of those at random
         self.bountyPrize = random.choice(prizes)
         # play some sounds/music
+        self.game.sound.play(self.game.assets.sfx_bountyCollected)
+
         # give the award
         mayorfeet = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mayor-feet.dmd').frames[0])
         self.layer = mayorfeet
@@ -183,17 +188,23 @@ class Saloon(game.Mode):
         awardTextMiddle.set_text(self.bountyPrize.upper())
         awardTextBottom = dmd.TextLayer(76,20,self.game.assets.font_6px_az,justify="center",opaque=False)
         awardTextBottom.set_text("NYAR!")
-
-        # play the thrown coin sound
-        self.game.sound.play(self.game.assets.sfx_thrownCoins)
+        self.game.sound.play_voice(self.game.assets.quote_bountyCollected)
         # turn on the animation
         self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextBottom,awardTextMiddle,awardTextTop,animLayer])
         # then clear the layer and kick the ball out
-        self.delay(delay = myWait,handler=self.clear_layer)
-        self.delay(delay = myWait,handler=self.kick)
+        self.delay(delay = myWait,handler=self.finish_up)
         # todo actually do the awarding
 
+    def finish_up(self):
+        self.clear_layer()
+        self.kick()
+        self.game.play_remote_music(self.game.assets.music_mainTheme)
 
+    def repeat_ding(self,times):
+        self.game.sound.play(self.game.assets.sfx_bountyBell)
+        times -= 1
+        if times > 0:
+            self.delay(delay=0.4,handler=self.repeat_ding,param=times)
 
     ###
     ###  ____             _     ____            _   _
@@ -319,7 +330,7 @@ class Saloon(game.Mode):
         # add to the defeated barts
         currentTotal = self.game.increase_tracking('bartsDefeated')
         # play a defeated quote
-        self.game.sound.play_voice(self.defeatQuote)
+        myWait = self.game.sound.play_voice(self.defeatQuote)
         # set the status to dead - gunfight has to set it back to open
         self.game.set_tracking('bartStatus',"DEAD")
         # if we're at the end of the line, reset to 0
@@ -346,7 +357,7 @@ class Saloon(game.Mode):
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
 
         # light gunfight?
-        self.delay(delay=2,handler=self.light_gunfight)
+        self.delay(delay=myWait,handler=self.light_gunfight)
 
     def display_damage_one(self):
         print "MADE IT TO DAMAGE ONE"

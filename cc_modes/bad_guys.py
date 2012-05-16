@@ -159,15 +159,17 @@ class BadGuys(game.Mode):
         self.game.sound.stop_music()
         # play the win animation
         anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-hit.dmd')
-        ## todo needs sounds
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         #  setup the text
         scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))
         # combine and activate
         textLayer = dmd.TextLayer(84,20, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("QUICK DRAW!")
+        self.game.sound.play(self.game.assets.sfx_quickdrawHit)
+        self.game.sound.play(self.game.assets.sfx_quickdrawCheer)
         self.layer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
         myWait = len(anim.frames) / 10.0 + 1
-
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_quickDrawWin)
         # stuff specific to winning
         # score the points
         self.game.score(self.points)
@@ -390,7 +392,9 @@ class BadGuys(game.Mode):
         # cancel the lose delay
         self.cancel_delayed("Gunfight Lost")
         # play a quote
-        self.game.sound.play_voice(self.game.assets.quote_gunWin)
+        self.game.sound.play(self.game.assets.sfx_gunfightShot)
+        self.delay(delay=0.2,handler=self.game.play_remote_sound,param=self.game.assets.sfx_gunfightFlourish)
+        self.delay(delay=0.3,handler=self.game.play_remote_sound,param=self.game.assets.quote_gunWin)
         # play the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-shoulders-up.dmd')
         myWait = len(anim.frames) / 10.0
@@ -434,7 +438,7 @@ class BadGuys(game.Mode):
     def gunfight_pan(self,badGuys):
         # the intro animation
         anim = dmd.Animation().load(ep.DMD_PATH+'gunfight-pan.dmd')
-        myWait = len(anim.frames) / 60 + 0.9
+        myWait = len(anim.frames) / 60 + 1.3
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=1)
         self.layer = animLayer
         self.delay(name="eyes",delay=myWait,handler=self.gunfight_intro_eyes,param=badGuys)
@@ -457,6 +461,7 @@ class BadGuys(game.Mode):
         # pop the second bad guy and remove it
         enemy = badGuys.pop(0)
         print "POP ENEMY: " + str(enemy)
+        self.game.sound.play(self.game.assets.quote_gunfightReady)
         # play the second orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit2)
         # show the hands animation
@@ -471,6 +476,7 @@ class BadGuys(game.Mode):
         # pop the third bad guy
         enemy = badGuys.pop(0)
         print "POP ENEMY: " + str(enemy)
+        self.game.sound.play(self.game.assets.quote_gunfightSet)
         # play the orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit3)
         # show the boots
@@ -485,6 +491,7 @@ class BadGuys(game.Mode):
         print "POP ENEMY: " + str(enemy)
         # play the 4 bells
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
+        self.delay(delay=0.6,handler=self.game.play_remote_sound,param=self.game.assets.sfx_gunCock)
         # run the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd')
         myWait = len(anim.frames) / 10.0
@@ -497,6 +504,9 @@ class BadGuys(game.Mode):
         # play the draw quote
         self.game.sound.play(self.game.assets.quote_gunfightDraw)
         # relase the post - hm. no way to know which one is up Oops. # todo fix that later
+        text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
+        self.layer = dmd.GroupedLayer(128,32,[self.layer,text])
         print "DROP THE POST"
         # set a named timer for gunfight lost
         self.delay(name="Gunfight Lost",delay=4,handler=self.gunfight_lost)
+
