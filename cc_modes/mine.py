@@ -26,11 +26,23 @@ class Mine(game.Mode):
 
 
 
-    # if the ball lands in the kicker
+        # if the ball lands in the kicker
     def sw_minePopper_closed_for_200ms(self,sw):
+        # if there's an extra ball waiting, collect one
+        if self.game.show_tracking('extraBallsPending') > 0:
+            self.collect_extra_ball()
+        # then register the mine shot
+        self.mine_shot()
+
+    def sw_mineEntrance_active(self,sw):
+        # play a sound
+        # award some points
+        self.game.score(2530)
+
+    def mine_shot(self):
         # first, record the mine shot in the running total
         self.game.increase_tracking('mineShotsTotal')
-        # set the balls locked number for use
+        # get the balls locked number for use
         lockedBalls = self.game.show_tracking('ballsLockedTotal')
         # if it's over 9, cap it back to 9
         if lockedBalls > 9:
@@ -49,26 +61,25 @@ class Mine(game.Mode):
             self.lock_ball()
         # still nothing? Hm. Ok, register the hit
         else:
-            # register the hit
-            myMineHits = self.game.increase_tracking('mineHits')
-            print "MINE HITS: " + str(myMineHits)
-            # now we have to see if that lights the lock
-            # subtract the number of hits from the hitsToLight for the current lock position
-            hitStatus = self.hitsToLightLock[lockedBalls] - myMineHits
-            # if that's zero (or god forbid, less) then light the lock
-            print "HITS TO LIGHT THIS LOCK: " + str(self.hitsToLightLock[lockedBalls])
-            print "HITSTATUS: " + str(hitStatus)
-            if hitStatus <= 0:
-                ## Ok so we're lighting something
-                if self.game.show_tracking('ballsLocked') == 2:
-                    # if 2 balls are locked, light multiball
-                    self.light_multiball()
-                else:
-                    # otherwise just light the next lock
-                    self.light_lock()
-            # if we haven't hit our total hits needed yet move on
+            self.mine_hit(lockedBalls)
+
+    def mine_hit(self,lockedBalls):
+        # register the hit
+        myMineHits = self.game.increase_tracking('mineHits')
+        print "MINE HITS: " + str(myMineHits)
+        # now we have to see if that lights the lock
+        # subtract the number of hits from the hitsToLight for the current lock position
+        hitStatus = self.hitsToLightLock[lockedBalls] - myMineHits
+        # if that's zero (or god forbid, less) then light the lock
+        print "HITS TO LIGHT THIS LOCK: " + str(self.hitsToLightLock[lockedBalls])
+        print "HITSTATUS: " + str(hitStatus)
+        if hitStatus <= 0:
+            ## Ok so we're lighting something
+            if self.game.show_tracking('ballsLocked') == 2:
+                 # if 2 balls are locked, light multiball
+                self.light_multiball()
             else:
-                # award some points? -- tests show the switch on the kicker alone gives no points
+                # award some points
                 print str(hitStatus) + " shots left to light lock"
         # kick the ball out
         print "PULSE THE MINE KICKER"
@@ -89,6 +100,8 @@ class Mine(game.Mode):
         self.game.sound.play_voice(self.game.assets.quote_lockLit)
         print "LOCK IS LIT ... AND SO AM I"
         ## TODO lights and sounds
+        ## then kick the ball
+        self.mine_kick(self)
 
     def light_multiball(self):
         ## TODO lights and sounds
@@ -97,6 +110,10 @@ class Mine(game.Mode):
         self.game.set_tracking('mineStatus', "READY")
         # clear the hits to light
         self.game.set_tracking('mineHits', 0)
+        # play a sound?
+        # show some display?
+        # then kick the ball
+        self.mine_kick()
 
     def lock_ball(self):
         # tick up the total balls locked because we just locked one
@@ -172,7 +189,20 @@ class Mine(game.Mode):
         textLine = dmd.TextLayer(128/2, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL " + str(self.game.show_tracking('ballsLocked')) + " LOCKED")
         textLine.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[self.layer,textLine])
+        # kick the ball out and clear the layer
+        self.delay(delay=2,handler=self.mine_kick)
         self.delay(delay=2,handler=self.clear_layer)
+
+    def light_extra_ball(self):
+        # just a placeholder for now
+        self.game.increase_tracking('extraBallsPending')
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_extraBallLit)
+        print "EXTRA BALL LIT"
+
+    def collect_extra_ball(self):
+        # this needs to do things
+        pass
 
     def clear_layer(self):
         self.layer = None

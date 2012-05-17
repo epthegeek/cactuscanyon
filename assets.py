@@ -41,6 +41,7 @@ class Assets():
         self.font_9px_az_dim = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_1.dmd")
 
         self.font_12px_az = dmd.Font(self.dmd_path + "Font_16_CactusCanyon.dmd")
+        self.font_12px_az_dim = dmd.Font(self.dmd_path + "Font_16_CactusCanyon_dim.dmd")
 
         self.font_12px_az_outline = dmd.Font(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
         self.font_12px_az_outline.tracking = -1
@@ -147,20 +148,11 @@ class Assets():
         self.game.sound.register_sound(self.sfx_gunfightShot, self.sfx_path + "339-sfx-gunfight-hit.wav")
         self.sfx_gunfightFlourish = 'sfx_gunfightFlourish'
         self.game.sound.register_sound(self.sfx_gunfightFlourish, self.sfx_path + "068-sfx-gunfight-flourish.wav")
-        self.sfx_mineKicker = 'sfx_mineKicker'
-        self.game.sound.register_sound(self.sfx_mineKicker, self.sfx_path + "255-sfx-mine-kicker.wav")
-        self.sfx_mineEntrance = 'sfx_mineEntrance'
-        self.game.sound.register_sound(self.sfx_mineEntrance, self.sfx_path + "121-sfx-mine-entrance.wav")
-        self.sfx_trainWhistle = 'sfx_trainWhistle'
-        self.game.sound.register_sound(self.sfx_trainWhistle, self.sfx_path + "271-sfx-train-whistle.wav")
-        self.sfx_trainChugShort = 'sfx_trainChugShort'
-        self.game.sound.register_sound(self.sfx_trainChugShort, self.sfx_path + "203-sfx-train-chug-short.wav")
+        self.sfx_shooterLaunch = 'sfx_shooterLaunch'
+        self.game.sound.register_sound(self.sfx_shooterLaunch, self.sfx_path + "273-sfx-shooter-lane-launch.wav")
+        self.sfx_outlane = 'sfx_outlane'
+        self.game.sound.register_sound(self.sfx_outlane, self.sfx_path + "283-sfx-outlane.wav")
 
-        self.sfx_ricochetSet = 'sfx_ricochetSet'
-        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
-        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "109-sfx-ricochet-2.wav")
-        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "111-sfx-ricochet-3.wav")
-        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "319-sfx-ricochet-4.wav")
         # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
@@ -258,6 +250,8 @@ class Assets():
         self.quote_gunfightStart = 'quote_gunfightStart'
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1004-mayor-ok-son-lets-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1029-mayor-dont-move-its-a-gunfight.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "2041-waitress-looks-like-a-gunfight.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1233-prospector-ooh-i-smell-a-gunfight-brewin.wav")
         self.quote_gunWin = 'quote_gunWin'
         self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1117-mayor-say-thats-a-pretty-good-eye-there.wav")
         self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1170-mayor-quite-a-knack-with-those-six-shooters-friend.wav")
@@ -268,6 +262,11 @@ class Assets():
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1408-drunk-hey-buddy-you-shot-my-drink.wav")
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1409-drunk-stop-shootin-at-my-drink.wav")
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1414-drunk-i-was-drinking-that-thank-you.wav")
+        self.quote_extraBallLit = 'quote_extraBallLit'
+        self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "2013-waitress-that-extra-ball-is-lit-honey.wav")
+        self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1258-prospector-extra-ball-is-lit.wav")
+        self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1020-mayor-the-extra-ball-is-lit.wav")
+
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1452-big-hit-nothin-but-a-little-hole.wav")

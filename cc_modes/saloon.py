@@ -106,8 +106,8 @@ class Saloon(game.Mode):
         self.game.set_tracking('isBountyLit', True)
         # show something on the screen
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stars-border.dmd').frames[0])
-        topText = ep.pulse_9px(self,64,4,"COLLECT BOUNTY")
-        bottomText = ep.pulse_9px(self,64,16,"IS LIT")
+        topText = ep.pulse_text(self,64,4,"COLLECT BOUNTY")
+        bottomText = ep.pulse_text(self,64,16,"IS LIT")
         self.repeat_ding(4)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,topText,bottomText])
         # play a voice clip about the bounty being ready
@@ -129,12 +129,12 @@ class Saloon(game.Mode):
             prizes.append('extraBall')
         #   2 - Light Gun Fight - include if not currently lit via dead bart
         if self.game.show_tracking('bartStatus') != "DEAD":
-            prizes.append('lightGunfight')
+            prizes.append('lightGunFight')
         #   3 - Light Quick Draw
         if "OPEN" in self.game.show_tracking('quickDrawStatus'):
             prizes.append('lightQuickDraw')
         #   4 - Light Lock / Lock ball - inclue if lock is ready or lit
-        if self.game.show_tracking('mineStatus') == "READY" or self.game.show_tracking('mineStatus') == "LOCK":
+        if self.game.show_tracking('mineStatus') == "OPEN" or self.game.show_tracking('mineStatus') == "LOCK":
             prizes.append('awardLock')
         #   5 - Bonus multiplier + 5
         if self.game.show_tracking('bonusX') < 6:
@@ -143,7 +143,7 @@ class Saloon(game.Mode):
         if self.game.show_tracking('rank') < 4:
             prizes.append('rank')
         #   7 - Points 250,000
-        prizes.append('points250K')
+        prizes.append('points250k')
         #   8 - Points 500,000
         prizes.append('points500k')
         #   9 - + 1 Million Bonus
@@ -151,6 +151,7 @@ class Saloon(game.Mode):
         # so as of this point we have a prizes list to use
         # and pick one of those at random
         self.bountyPrize = random.choice(prizes)
+        print "SELECTED BOUNTY: " + self.bountyPrize
         # play some sounds/music
         self.game.sound.play(self.game.assets.sfx_bountyCollected)
 
@@ -169,6 +170,62 @@ class Saloon(game.Mode):
         self.delay(delay = myWait,handler=self.award_bounty)
 
     def award_bounty(self):
+        # setup the award
+        # make this false unless set otherwise
+        self.prizeVal = False
+        prizeText2 = None
+        # set a prizeHandler and prizeParam based on bounty for use later
+        if self.bountyPrize == 'extraBall':
+            prizeText = "EXTRA BALL"
+            self.prizeHandler = self.game.mine.light_extra_ball
+            self.prizeParam = False
+        elif self.bountyPrize == 'lightGunFight':
+            prizeText = "GUNFIGHT"
+            prizeText2 = "IS LIT"
+            self.prizeHandler = self.light_gunfight
+            self.prizeParam = False
+        elif self.bountyPrize == 'lightQuickDraw':
+            prizeText = "QUICKDRAW"
+            prizeText2 = "IS LIT"
+            self.prizeHandler = self.game.base_game_mode.light_quickdraw
+            # have to figure out which quickdraw to light
+            if self.game.show_tracking('quickDrawStatus',0) != "READY":
+                self.prizeParam = 0
+            else:
+                self.prizeParam = 1
+        elif self.bountyPrize == 'awardLock':
+            prizeText = "ADVANCE MINE"
+            if self.game.show_tracking('mineStatus') == "OPEN":
+                self.prizeHandler = self.game.mine.light_lock
+            else:
+                self.prizeHandler = self.game.mine.lock_ball
+            self.prizeParam = False
+        elif self.bountyPrize == 'bonusX':
+            prizeText = "+5 BONUS X"
+            self.prizeHandler = self.game.increase_tracking
+            self.prizeParam = 'bonusX'
+            self.prizeVal = 5
+        elif self.bountyPrize == 'rank':
+            prizeText = "RANK"
+            prizeText2 = "INCREASED"
+            self.prizeHandler = self.game.increase_tracking
+            self.prizeParam = 'rank'
+        elif self.bountyPrize == 'points250k':
+            prizeText = "250,000"
+            self.prizeHandler = self.game.score
+            self.prizeParam = 250000
+        elif self.bountyPrize == 'points500k':
+            prizeText = "500,000"
+            self.prizeHandler = self.game.score
+            self.prizeParam = 500000
+        elif self.bountyPrize == 'points1Mil':
+            prizeText = "1,000,000"
+            self.prizeHandler = self.game.score
+            self.prizeParam = 1000000
+        else:
+            prizeText = "WTF"
+            print "WTF BOUNTY: " + self.bountyPrize
+
         # load the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'bounty-collected.dmd')
         # set up the layer
@@ -181,22 +238,36 @@ class Saloon(game.Mode):
         # set the backdrop for the revealed award
         backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-border.dmd').frames[0])
         # set the text for the award
-        awardTextTop = dmd.TextLayer(76,3,self.game.assets.font_6px_az,justify="center",opaque=False)
-        awardTextTop.set_text("BOUNTY COLLECTED")
+        awardTextTop = dmd.TextLayer(76,4,self.game.assets.font_9px_az,justify="center",opaque=False)
+        awardTextTop.set_text("YOUR BOUNTY:")
         awardTextTop.composite_op = "blacksrc"
-        awardTextMiddle = dmd.TextLayer(76,11,self.game.assets.font_6px_az,justify="center",opaque=False)
-        awardTextMiddle.set_text(self.bountyPrize.upper())
-        awardTextBottom = dmd.TextLayer(76,20,self.game.assets.font_6px_az,justify="center",opaque=False)
-        awardTextBottom.set_text("NYAR!")
+        if prizeText2 != None:
+            awardTextMiddle = dmd.TextLayer(76,15,self.game.assets.font_6px_az,justify="center",opaque=False)
+            awardTextBottom = dmd.TextLayer(76,24,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+            awardTextMiddle.set_text(prizeText)
+            awardTextMiddle.composite_op = "blacksrc"
+            awardTextBottom.set_text(prizeText2)
+            self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextBottom,awardTextMiddle,awardTextTop,animLayer])
+        else:
+            awardTextMiddle = dmd.TextLayer(76,17,self.game.assets.font_9px_az,justify="center",opaque=False)
+            awardTextMiddle.set_text(prizeText)
+            self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextMiddle,awardTextTop,animLayer])
+        # play the quote
         self.game.sound.play_voice(self.game.assets.quote_bountyCollected)
-        # turn on the animation
-        self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextBottom,awardTextMiddle,awardTextTop,animLayer])
         # then clear the layer and kick the ball out
         self.delay(delay = myWait,handler=self.finish_up)
         # todo actually do the awarding
 
     def finish_up(self):
         self.clear_layer()
+        # this should hopefully do the actual awarding
+        if self.prizeVal:
+            self.prizeHandler(self.prizeParam,self.prizeVal)
+        elif self.prizeParam != False:
+            self.prizeHandler(self.prizeParam)
+        else:
+            self.prizeHandler()
+        # then kick out
         self.kick()
         self.game.play_remote_music(self.game.assets.music_mainTheme)
 
@@ -384,11 +455,10 @@ class Saloon(game.Mode):
         # turn on the lights
         # show the display
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-border.dmd').frames[0])
-        textLayer1 = dmd.TextLayer(77,2,self.game.assets.font_12px_az,justify="center",opaque=False)
-        textLayer1.set_text("GUNFIGHT")
-        textLayer2 = dmd.TextLayer(77,15,self.game.assets.font_12px_az,justify="center",opaque=False)
-        textLayer2.set_text("IS LIT")
-        textLayer2.composite_op = "blacksrc"
+        textString1 = "GUNFIGHT"
+        textLayer1 = ep.pulse_text(self,77,2,textString1,size="12px")
+        textString2 = "IS LIT"
+        textLayer2 = ep.pulse_text(self,77,15,textString2,size="12px")
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_gunfightLit)

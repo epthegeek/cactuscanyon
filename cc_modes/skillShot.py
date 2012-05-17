@@ -101,6 +101,9 @@ class SkillShot(game.Mode):
         prizeList = dmd.TextLayer(self.x, 1, self.game.assets.font_skillshot, "right", opaque=True).set_text(self.selectedPrizes)
         self.layer = dmd.GroupedLayer(128, 32, [prizeList,self.mask, self.lasso])
 
+    def sw_shooterLane_inactive(self,sw):
+        # play the ball lanuch noise
+        self.game.sound.play(self.game.assets.sfx_shooterLaunch)
 
     # if the ramp switch gets hit - shift the prizes over
     # take the last prize off the string and stick it back on the front
