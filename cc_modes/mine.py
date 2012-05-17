@@ -36,6 +36,8 @@ class Mine(game.Mode):
         if lockedBalls > 9:
             lockedBalls = 9
         print "LOCKED BALLS: " + str(lockedBalls)
+        # stock sound for the switch
+        self.game.sound.play(self.game.assets.sfx_mineKicker)
         # check if we should lock the ball or start multiball
         # should we start multiball?
         # multiball itself will be a separate mode with switchstop that loads above this
@@ -66,13 +68,17 @@ class Mine(game.Mode):
                     self.light_lock()
             # if we haven't hit our total hits needed yet move on
             else:
-                # award some points
+                # award some points? -- tests show the switch on the kicker alone gives no points
                 print str(hitStatus) + " shots left to light lock"
         # kick the ball out
         print "PULSE THE MINE KICKER"
 
     def sw_mineEntrance_active(self,sw):
-        pass
+        # move the motor?
+        # play the default sound
+        self.game.sound.play(self.game.assets.sfx_mineEntrance)
+        # award some points
+        self.game.score(2530)
 
     def light_lock(self):
         # set the lock status

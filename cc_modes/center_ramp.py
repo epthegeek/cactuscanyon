@@ -53,7 +53,9 @@ class CenterRamp(game.Mode):
             self.awardString = "CATCH TRAIN"
             self.awardPoints = "125,000"
             self.game.score(125000)
-            self.game.sound.play_voice(self.game.assets.quote_centerRamp1)
+            self.game.sound.play(self.game.assets.quote_centerRamp1)
+            self.game.sound.play(self.game.assets.sfx_trainChugShort)
+            self.game.sound.play(self.game.assets.sfx_leftLoopEnter) # same sound used on left loop so the name is funny
             anim = dmd.Animation().load(ep.DMD_PATH+'train-boarding.dmd')
             # math out the wait
             myWait = len(anim.frames) / 10.0
@@ -109,8 +111,9 @@ class CenterRamp(game.Mode):
             awardTextBottom.set_text(self.awardPoints)
             # combine them
         completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
+        # play the sound effect
+        self.game.sound.play(self.game.assets.sfx_gunfightFlourish) # same noise from gunfight
         # swap in the new layer
-        #self.layer = completeFrame
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         # clear in 3 seconds
         self.delay(name="ClearCenterRamp",delay=2,handler=self.clear_layer)
@@ -119,7 +122,9 @@ class CenterRamp(game.Mode):
         self.awardString = "STOP TRAIN"
         self.awardPoints = str(ep.format_score(score))
         self.game.score(score)
-        self.game.sound.play_voice(self.game.assets.quote_centerRamp2)
+        self.game.sound.play(self.game.assets.quote_centerRamp2)
+        self.game.sound.play(self.game.assets.sfx_trainChugShort)
+        self.game.sound.play(self.game.assets.sfx_trainWhistle)
         anim = dmd.Animation().load(ep.DMD_PATH+'train-running-on-top.dmd')
         # math out the wait
         myWait = len(anim.frames) / 10.0

@@ -147,6 +147,20 @@ class Assets():
         self.game.sound.register_sound(self.sfx_gunfightShot, self.sfx_path + "339-sfx-gunfight-hit.wav")
         self.sfx_gunfightFlourish = 'sfx_gunfightFlourish'
         self.game.sound.register_sound(self.sfx_gunfightFlourish, self.sfx_path + "068-sfx-gunfight-flourish.wav")
+        self.sfx_mineKicker = 'sfx_mineKicker'
+        self.game.sound.register_sound(self.sfx_mineKicker, self.sfx_path + "255-sfx-mine-kicker.wav")
+        self.sfx_mineEntrance = 'sfx_mineEntrance'
+        self.game.sound.register_sound(self.sfx_mineEntrance, self.sfx_path + "121-sfx-mine-entrance.wav")
+        self.sfx_trainWhistle = 'sfx_trainWhistle'
+        self.game.sound.register_sound(self.sfx_trainWhistle, self.sfx_path + "271-sfx-train-whistle.wav")
+        self.sfx_trainChugShort = 'sfx_trainChugShort'
+        self.game.sound.register_sound(self.sfx_trainChugShort, self.sfx_path + "203-sfx-train-chug-short.wav")
+
+        self.sfx_ricochetSet = 'sfx_ricochetSet'
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "109-sfx-ricochet-2.wav")
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "111-sfx-ricochet-3.wav")
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "319-sfx-ricochet-4.wav")
         # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
@@ -216,9 +230,14 @@ class Assets():
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "850-polly-ooh-how-brave.wav")
         self.quote_centerRamp1 = 'quote_centerRamp1'
+        self.game.sound.register_sound(self.quote_centerRamp1, self.quotes_path + "1579-leader-bart-laugh-2.wav")
         self.game.sound.register_sound(self.quote_centerRamp1, self.quotes_path + "1576-leader-bart-you-cant-stop-this-train.wav")
+        self.game.sound.register_sound(self.quote_centerRamp1, self.quotes_path + "1552-leader-bart-come-on-tough-guy.wav")
         self.quote_centerRamp2 = 'quote_centerRamp2'
+        self.game.sound.register_sound(self.quote_centerRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
+        self.game.sound.register_sound(self.quote_centerRamp2, self.quotes_path + "1504-leader-bart-looks-like-we-got-us-some-company-boys.wav")
         self.game.sound.register_sound(self.quote_centerRamp2, self.quotes_path + "1577-leader-bart-youll-never-catch-us.wav")
+        self.game.sound.register_sound(self.quote_centerRamp2, self.quotes_path + "1553-leader-bart-im-over-here.wav")
         self.quote_leftLoop1 = 'quote_leftLoop1'
         self.game.sound.register_sound(self.quote_leftLoop1, self.quotes_path + "1255-prospector-guess-that-horse-is-breaking-you-in.wav")
         self.game.sound.register_sound(self.quote_leftLoop1, self.quotes_path + "1200-prospector-woo-cough.wav")

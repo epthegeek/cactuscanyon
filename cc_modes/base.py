@@ -11,7 +11,7 @@
 from procgame import *
 from assets import *
 import ep
-
+import random
 
 class BaseGameMode(game.Mode):
     """docstring for AttractMode"""
@@ -112,9 +112,13 @@ class BaseGameMode(game.Mode):
 
     def sw_beerMug_active(self,sw):
         ## TODO check this point value
-        self.game.score(2530)
-        # play a quote
-        self.game.sound.play_voice(self.game.assets.quote_beerMug)
+        self.game.score(2130)
+        # play a sound
+        self.game.sound.play(self.game.assets.sfx_ricochetSet)
+        # play a quote?
+        weDo = random.choice([False,True,False])
+        if weDo:
+            self.game.sound.play(self.game.assets.quote_beerMug)
         ## -- set the last switch -- ##
         ep.last_switch = 'beerMug'
 
@@ -227,8 +231,9 @@ class BaseGameMode(game.Mode):
 
     def slingshot_hit(self):
         # play a sound
+        self.game.sound.play(self.game.assets.sfx_ricochetSet)
         # score points
-        self.game.score(2530)
+        self.game.score(3770)
 
     ###
     ###  _____ _ _
