@@ -152,6 +152,20 @@ class Assets():
         self.game.sound.register_sound(self.sfx_shooterLaunch, self.sfx_path + "273-sfx-shooter-lane-launch.wav")
         self.sfx_outlane = 'sfx_outlane'
         self.game.sound.register_sound(self.sfx_outlane, self.sfx_path + "283-sfx-outlane.wav")
+        self.sfx_mineKicker = 'sfx_mineKicker'
+        self.game.sound.register_sound(self.sfx_mineKicker, self.sfx_path + "255-sfx-mine-kicker.wav")
+        self.sfx_mineEntrance = 'sfx_mineEntrance'
+        self.game.sound.register_sound(self.sfx_mineEntrance, self.sfx_path + "121-sfx-mine-entrance.wav")
+        self.sfx_trainWhistle = 'sfx_trainWhistle'
+        self.game.sound.register_sound(self.sfx_trainWhistle, self.sfx_path + "271-sfx-train-whistle.wav")
+        self.sfx_trainChugShort = 'sfx_trainChugShort'
+        self.game.sound.register_sound(self.sfx_trainChugShort, self.sfx_path + "203-sfx-train-chug-short.wav")
+
+        self.sfx_ricochetSet = 'sfx_ricochetSet'
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "109-sfx-ricochet-2.wav")
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "111-sfx-ricochet-3.wav")
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "319-sfx-ricochet-4.wav")
 
         # Quotes
         # this bunches the welcome strings together for play_voice()
