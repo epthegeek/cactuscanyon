@@ -35,6 +35,8 @@ class Tracking(game.Player):
         self.player_stats['rightLoopShots'] = 0
         self.player_stats['rightLoopStage'] = 1
 
+        self.player_stats['fullLoops'] = 0
+
         self.player_stats['saloonShots'] = 0
 
         self.player_stats['mineShotsTotal'] = 0

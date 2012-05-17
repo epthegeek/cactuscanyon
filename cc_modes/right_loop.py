@@ -30,14 +30,13 @@ class RightLoop(game.Mode):
         # if we aren't coming through on a full loop - it's a natural hit and it counts
         if ep.last_switch != "leftLoopTop":
             # if we're complete open the gate for a full run through
+            if self.game.show_tracking('rightLoopStage') >= 4:
+                # pulse the coil to open the gate
+                pass
             ## if the combo timer is on:
             if self.game.comboTimer > 0:
                 # register the combo and reset the timer
                 combo = self.game.base_game_mode.combo_hit()
-                # if we're "complete" open the full loop
-                if self.game.show_tracking('rightLoopStage') >= 4:
-                    # pulse the coil to open the gate
-                    pass
             # else the combo timer is NOT on so run award loop without the flag
             else:
                 # and turn on the combo timer
@@ -49,6 +48,7 @@ class RightLoop(game.Mode):
         # maybe add tracking for full loops
         else:
             self.game.score(2530)
+            self.game.increase_tracking('fullLoops')
         ## -- set the last switch hit --
         ep.last_switch = "rightLoopTop"
 

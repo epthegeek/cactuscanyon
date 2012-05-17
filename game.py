@@ -239,10 +239,3 @@ class CCGame(game.BasicGame):
         print "ITS TIME TO START THE MUSIC"
         print param
         self.sound.play_music(param, loops=-1)
-
-    def get_last_switch(self):
-        return self.lastSwitch
-
-    def set_last_switch(self,value):
-        self.lastSwitch = value
-    last_switch = property(get_last_switch,set_last_switch)
