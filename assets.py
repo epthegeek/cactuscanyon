@@ -280,6 +280,9 @@ class Assets():
         self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "2013-waitress-that-extra-ball-is-lit-honey.wav")
         self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1258-prospector-extra-ball-is-lit.wav")
         self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1020-mayor-the-extra-ball-is-lit.wav")
+        self.quote_extraBallSet = 'quote_extraBallSet'
+        self.game.sound.register_sound(self.quote_extraBallSet, self.quotes_path + "2018-waitress-extra-ball.wav")
+
 
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
@@ -354,7 +357,14 @@ class Assets():
         self.game.sound.register_sound(self.quote_gunfightSet, self.quotes_path + "1547-leader-bart-set.wav")
         self.quote_gunfightDraw = 'quote_gunfightDraw'
         self.game.sound.register_sound(self.quote_gunfightDraw, self.quotes_path + "1507-leader-bart-draw.wav")
-
+        self.quote_gold = 'quote_gold'
+        self.game.sound.register_sound(self.quote_gold, self.quotes_path + "539-prospector-gold.wav")
+        self.quote_mine = 'quote_mine'
+        self.game.sound.register_sound(self.quote_mine, self.quotes_path + "540-prospector-mine.wav")
+        self.quote_multiball = 'quote_multiball'
+        self.game.sound.register_sound(self.quote_multiball, self.quotes_path + "536-prospector-multiball.wav")
+        self.quote_extraBallGuy = 'quote_extraBallGuy'
+        self.game.sound.register_sound(self.quote_extraBallGuy, self.quotes_path + "538-guy-extra-ball.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'
@@ -371,6 +381,8 @@ class Assets():
         self.game.sound.register_sound(self.music_gunfightIntro, self.music_path + "009-gunfight-intro.wav")
         self.music_drumRoll = 'music_drumRoll'
         self.game.sound.register_music(self.music_drumRoll, self.music_path + "009-gunfight-drumroll.wav")
+        self.music_multiball_intro = 'music_multiball_intro'
+        self.game.sound.register_music(self.music_multiball_intro, self.music_path + "026-multiball-intro-music.wav")
 
         # Shared Paths
         self.shared_sound_path = "shared/sound/"

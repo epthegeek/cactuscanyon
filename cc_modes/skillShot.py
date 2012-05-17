@@ -205,6 +205,7 @@ class SkillShot(game.Mode):
         elif self.selectedPrizes[5:] == "J":
             awardStringTop = "EXTRA BALL"
             awardStringBottom ="IS LIT"
+            self.game.mine.light_extra_ball()
 
         elif self.selectedPrizes[5:] == "K":
             # this one is the rank

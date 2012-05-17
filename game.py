@@ -209,6 +209,18 @@ class CCGame(game.BasicGame):
             # send back the new value for use
             return p.player_stats[item]
 
+     # call from other modes to set a value
+    def decrease_tracking(self,item,amount=1,key="foo"):
+        ## tick up a stat by a declared amount
+        p = self.current_player()
+        if key != "foo":
+            p.player_stats[item][key] -= amount
+            return p.player_stats[item][key]
+        else:
+            p.player_stats[item] -= amount
+            # send back the new value for use
+            return p.player_stats[item]
+
     # return values to wherever
     def show_tracking(self,item,key="foo"):
       p = self.current_player()

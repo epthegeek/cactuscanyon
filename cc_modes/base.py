@@ -97,8 +97,11 @@ class BaseGameMode(game.Mode):
                 self.game.sound.play(self.game.assets.quote_playerThree)
             elif len(self.game.players) == 4:
                 self.game.sound.play(self.game.assets.quote_playerFour)
+        ## -- set the last switch hit --
+        ep.last_switch = "startButton"
 
-    #def sw_shooterLane_open_for_1s(self,sw):
+
+        #def sw_shooterLane_open_for_1s(self,sw):
     #    if self.ball_starting:
     #        self.ball_starting = False
     #        ball_save_time = 10
@@ -111,7 +114,9 @@ class BaseGameMode(game.Mode):
     # If manual plunger, remove the whole section.
 
     def sw_beerMug_active(self,sw):
-        ## TODO check this point value
+        # track it, because why not
+        self.game.increase_tracking('beerMugHits')
+        # score points
         self.game.score(2130)
         # play a sound
         self.game.sound.play(self.game.assets.sfx_ricochetSet)
@@ -189,10 +194,16 @@ class BaseGameMode(game.Mode):
     def sw_leftReturnLane_active(self, sw):
         # register a left return lane hit
         self.return_lane_hit(0)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftReturnLane"
+
 
     def sw_rightReturnLane_active(self,sw):
         # register a right return lane hit
         self.return_lane_hit(1)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightReturnLane"
+
 
     def return_lane_hit(self,side):
         # play the sound
@@ -225,9 +236,15 @@ class BaseGameMode(game.Mode):
 
     def sw_leftOutlane_active(self,sw):
         self.outlane_hit(0)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftOutlane"
+
 
     def sw_rightOutlane_active(self,sw):
         self.outlane_hit(1)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightOutlane"
+
 
     def outlane_hit(self, side):
         self.game.score(2530)
@@ -244,9 +261,15 @@ class BaseGameMode(game.Mode):
 
     def sw_leftSlingshot_active(self,sw):
         self.slingshot_hit()
+        ## -- set the last switch hit --
+        ep.last_switch = "leftSlingshot"
+
 
     def sw_rightSlingshot_active(self,sw):
         self.slingshot_hit()
+        ## -- set the last switch hit --
+        ep.last_switch = "rightSlingshot"
+
 
     def slingshot_hit(self):
         # play a sound
@@ -284,9 +307,15 @@ class BaseGameMode(game.Mode):
 
     def sw_leftBonusLane_active(self,sw):
         self.bonus_lane_hit(0)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftBonusLane"
+
 
     def sw_rightBonusLane_active(self,sw):
         self.bonus_lane_hit(1)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightBonusLane"
+
 
     def bonus_lane_hit(self,side):
         # lookup the status of the lane that got hit
@@ -376,15 +405,27 @@ class BaseGameMode(game.Mode):
 
     def sw_topLeftStandUp_active(self, sw):
         self.quickdraw_hit('TOP',0)
+        ## -- set the last switch hit --
+        ep.last_switch = "topLeftStandup"
+
 
     def sw_bottomLeftStandUp_active(self,sw):
         self.quickdraw_hit('BOT',0)
+        ## -- set the last switch hit --
+        ep.last_switch = "bottomLeftStandup"
+
 
     def sw_topRightStandUp_active(self, sw):
         self.quickdraw_hit('TOP',1)
+        ## -- set the last switch hit --
+        ep.last_switch = "topRightStandup"
+
 
     def sw_bottomRightStandUp_active(self,sw):
         self.quickdraw_hit('BOT',1)
+        ## -- set the last switch hit --
+        ep.last_switch = "bottomRightStandup"
+
 
 
     def quickdraw_hit(self, position,side):

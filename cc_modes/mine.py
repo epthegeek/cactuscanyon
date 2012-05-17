@@ -23,21 +23,32 @@ class Mine(game.Mode):
         # Hard version
         else:
             self.hitsToLightLock = [1,1,1,2,2,2,3,3,3,4]
-
+        self.busy = False
 
 
         # if the ball lands in the kicker
     def sw_minePopper_closed_for_200ms(self,sw):
+        # stock sound for the switch
+        self.game.sound.play(self.game.assets.sfx_mineKicker)
         # if there's an extra ball waiting, collect one
         if self.game.show_tracking('extraBallsPending') > 0:
+            # we'll be busy until this ends
+            self.busy = True
             self.collect_extra_ball()
         # then register the mine shot
-        self.mine_shot()
+        self.wait_until_unbusy(self.mine_shot)
+        ## -- set the last switch hit --
+        ep.last_switch = "minePopper"
+
 
     def sw_mineEntrance_active(self,sw):
-        # play a sound
+        # move the motor?
+        # play the default sound
+        self.game.sound.play(self.game.assets.sfx_mineEntrance)
         # award some points
         self.game.score(2530)
+        ep.last_switch = "mineEntrance"
+
 
     def mine_shot(self):
         # first, record the mine shot in the running total
@@ -48,8 +59,6 @@ class Mine(game.Mode):
         if lockedBalls > 9:
             lockedBalls = 9
         print "LOCKED BALLS: " + str(lockedBalls)
-        # stock sound for the switch
-        self.game.sound.play(self.game.assets.sfx_mineKicker)
         # check if we should lock the ball or start multiball
         # should we start multiball?
         # multiball itself will be a separate mode with switchstop that loads above this
@@ -95,13 +104,6 @@ class Mine(game.Mode):
     def mine_kick(self):
         # kick the ball out
         print "PULSE THE MINE KICKER"
-
-    def sw_mineEntrance_active(self,sw):
-        # move the motor?
-        # play the default sound
-        self.game.sound.play(self.game.assets.sfx_mineEntrance)
-        # award some points
-        self.game.score(2530)
 
     def light_lock(self):
         # set the lock status
@@ -164,6 +166,8 @@ class Mine(game.Mode):
         self.game.gm_multiball.start_multiball()
 
     def play_ball_one_lock_anim(self):
+        # stop the music
+        self.game.sound.stop_music()
         anim = dmd.Animation().load(ep.DMD_PATH+'ball-one-locked.dmd')
         # TODO add the sounds to this and determine if it needs listenrs
         # calcuate the wait time to start the next part of the display
@@ -178,6 +182,8 @@ class Mine(game.Mode):
         self.delay(delay=myWait,handler=self.lock_display_text)
 
     def play_ball_two_lock_anim(self):
+        # stop the music
+        self.game.sound.stop_music()
         anim = dmd.Animation().load(ep.DMD_PATH+'ball-two-locked.dmd')
         # TODO add the sounds to this and determine if it needs listenrs
         # calcuate the wait time to start the next part of the display
@@ -197,6 +203,7 @@ class Mine(game.Mode):
         # kick the ball out and clear the layer
         self.delay(delay=2,handler=self.mine_kick)
         self.delay(delay=2,handler=self.clear_layer)
+        self.delay(delay=2.1,handler=self.game.base_game_mode.music_on)
 
     def light_extra_ball(self):
         # just a placeholder for now
@@ -206,11 +213,63 @@ class Mine(game.Mode):
         print "EXTRA BALL LIT"
 
     def collect_extra_ball(self):
-        # this needs to do things
-        pass
+        # stop the music
+        self.game.sound.stop_music()
+        # add one to the total of extra balls
+        self.game.increase_tracking('extraBallsTotal')
+        # take one off of the pending total
+        self.game.decrease_tracking('extraBallsPending')
+        # add one to the pending to use queue
+        pending = self.game.increase_tracking('extraBallsToUse')
+        # if they've already gotten an extra ball - it should divert to the short version
+        if pending > 1:
+            # play the short one
+            self.extra_ball_ending(isLong=False)
+        # otherwise play the whole animation
+        else:
+            # load up the animation
+            anim = dmd.Animation().load(ep.DMD_PATH+'extra-ball.dmd')
+            # start the full on animation
+            myWait = len(anim.frames) / 8.57
+            # setup the animated layer
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time = 7
+            # keyframe a bunch of sounds
+            # turn that sucker on
+            self.layer = animLayer
+            # after a delay, play the ending
+            self.delay(delay=myWait,handler=self.extra_ball_ending)
+
+    def extra_ball_ending(self,isLong=True):
+        # play a quote
+        if isLong:
+            # play this quote
+            self.game.sound.play(self.game.assets.quote_extraBallGuy)
+        else:
+            # play this other quote
+            self.game.sound.play(self.game.assets.quote_extraBallSet)
+        # setup the backdrop
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'extra-ball.dmd').frames[49])
+        textLine = dmd.TextLayer(128/2, 12, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("EXTRA BALL")
+        myLayer = dmd.GroupedLayer(128,32,[backdrop,textLine])
+        self.layer = myLayer
+        self.delay(delay=2,handler=self.clear_layer)
+        self.delay(delay=2,handler=self.unbusy)
+        self.delay(delay=2,handler=self.game.base_game_mode.music_on)
+
+    def unbusy(self):
+        self.busy = False
 
     def clear_layer(self):
         self.layer = None
+
+    def wait_until_unbusy(self,myHandler):
+        if not self.busy:
+            myHandler()
+        else:
+            self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
+
 
 
 

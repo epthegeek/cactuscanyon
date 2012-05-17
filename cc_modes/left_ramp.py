@@ -32,12 +32,18 @@ class LeftRamp(game.Mode):
             # and turn on the combo timer - returns false for use later
             combo = self.game.base_game_mode.start_combos()
         self.award_ramp_score(combo)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftRampEnter"
+
 
 
     def sw_leftRampMake_active(self,sw):
         # in general gameplay this switch has no purpose
         # but I'm sure it adds points
         self.game.score(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftRampMake"
+
 
     def award_ramp_score(self, combo=False):
         # cancel the "Clear" delay if there is one

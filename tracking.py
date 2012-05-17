@@ -16,9 +16,12 @@ class Tracking(game.Player):
         self.player_stats['bonus'] = 0
 
         self.player_stats['extraBallsTotal'] = 0
-        self.player_stats['extraBalls'] = 0
+        # number of extra balls player has to use up
+        self.player_stats['extraBallsToUse'] = 0
         # allows for stacking of extra balls - if pending > 0 then extra ball is lit
         self.player_stats['extraBallsPending'] = 0
+
+        self.player_stats['beerMugHits'] = 0
 
         self.player_stats['rightRampShots'] = 0
         self.player_stats['rightRampStage'] = 1

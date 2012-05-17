@@ -22,12 +22,16 @@ class CenterRamp(game.Mode):
         self.game.sound.play(self.game.assets.sfx_centerRampEnter)
         # score the arbitrary and wacky points
         self.game.score(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "centerRampEnter"
 
     def sw_centerRampMake_active(self,sw):
         # the actual game doesn't care if enter was just hit
         # so I don't either
         # tick one on to the total of player shots on the right ramp
         self.game.increase_tracking('centerRampShots')
+        ## -- set the last switch hit --
+        ep.last_switch = "centerRampMake"
 
         # hitting this switch counts as a made ramp - really
         # score the points and mess with the combo
