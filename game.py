@@ -106,8 +106,10 @@ class CCGame(game.BasicGame):
         self.save_polly = cc_modes.SavePolly(game=self,priority=68)
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
+        # gold mine multiball
+        self.gm_multiball = cc_modes.GoldMine(game=self,priority=88)
         # High Noon
-        #self.high_noon = cc_modes.HighNoon(game=self,priority=71)
+        #self.high_noon = cc_modes.HighNoon(game=self,priority=90)
 
         ## try adding the score display font override
         self.score_display.font_18x12 = self.assets.font_score_x12

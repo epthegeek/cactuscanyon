@@ -79,8 +79,20 @@ class Mine(game.Mode):
                  # if 2 balls are locked, light multiball
                 self.light_multiball()
             else:
-                # award some points
-                print str(hitStatus) + " shots left to light lock"
+            # otherwise just light the next lock
+                self.light_lock()
+        # if we haven't hit our total hits needed yet move on
+        else:
+            self.mine_update(hitStatus)
+
+    def mine_update(self,hitStatus):
+        # award some points ?
+        print str(hitStatus) + " shots left to light lock"
+        # display a "shots left to light lock type thing
+        # then kick the ball
+        self.mine_kick()
+
+    def mine_kick(self):
         # kick the ball out
         print "PULSE THE MINE KICKER"
 
@@ -101,7 +113,7 @@ class Mine(game.Mode):
         print "LOCK IS LIT ... AND SO AM I"
         ## TODO lights and sounds
         ## then kick the ball
-        self.mine_kick(self)
+        self.mine_kick()
 
     def light_multiball(self):
         ## TODO lights and sounds
@@ -148,15 +160,8 @@ class Mine(game.Mode):
         # reset the locked ball count
         self.game.set_tracking('ballsLocked', 0)
         # start multiball!!
-        # TODO a thing would go here like self.game.modes.add(self.game.multiball)
-        # for now we'll just print a thing
-        print "MULTIBALL STARTING"
-        # and wait a bit to turn it off, that'd be cool, right?
-        self.delay(delay=3,handler=self.temp_end_multiball)
-
-    def temp_end_multiball(self):
-        self.game.set_tracking('mineStatus','OPEN')
-        print "MULTIBALL ENDED"
+        self.game.modes.add(self.game.gm_multiball)
+        self.game.gm_multiball.start_multiball()
 
     def play_ball_one_lock_anim(self):
         anim = dmd.Animation().load(ep.DMD_PATH+'ball-one-locked.dmd')
