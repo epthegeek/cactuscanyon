@@ -36,52 +36,52 @@ class SkillShot(game.Mode):
         # but for now, randomly select 5 items to build the prize list
 
         # right ramp complete (bank)
-        if self.game.show_tracking('rightRampStage') < 4:
-            prizes.append("C")
+       # if self.game.show_tracking('rightRampStage') < 4:
+       #     prizes.append("C")
 
         # light lock (padlock)
         # if multiball is ready, then don't include light lock
-        if self.game.show_tracking('mineStatus') != "READY":
-            prizes.append("D")
+       # if self.game.show_tracking('mineStatus') != "READY":
+       #     prizes.append("D")
 
         # light bounty? (money bag) don't add if bounty is already lit
-        if not self.game.show_tracking('isBountyLit'):
-            prizes.append("E")
+       # if not self.game.show_tracking('isBountyLit'):
+       #     prizes.append("E")
 
         # left ramp complete (boat)
-        if self.game.show_tracking('leftRampStage') < 4:
-            prizes.append("F")
+       # if self.game.show_tracking('leftRampStage') < 4:
+       #     prizes.append("F")
 
         # right loop complete (gun)
-        if self.game.show_tracking('rightLoopStage') < 4:
-            prizes.append("G")
+       # if self.game.show_tracking('rightLoopStage') < 4:
+       #     prizes.append("G")
 
         # light quick draw (gun w/ quick draw)
-        if self.game.show_tracking('quickDrawStatus',key=1) != "READY":
-            prizes.append("H")
+       # if self.game.show_tracking('quickDrawStatus',key=1) != "READY":
+       #     prizes.append("H")
 
         # left loop complete (horse)
-        if self.game.show_tracking('leftLoopStage') < 4:
-            prizes.append("I")
+       # if self.game.show_tracking('leftLoopStage') < 4:
+       #     prizes.append("I")
 
         # extra ball (ball) don't include on ball 1 or if max extra balls is already hit
-        if self.game.ball != 1 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-            prizes.append("J")
+       # if self.game.ball != 1 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+        prizes.append("J")
 
         # increae rank (star) don't include if already at max rank
-        if self.game.show_tracking('rank') < 4:
-            prizes.append("K")
+       # if self.game.show_tracking('rank') < 4:
+       #     prizes.append("K")
 
         # bonus X don't include if bonus already 6x or more
-        if self.game.show_tracking('bonusX') < 6:
-            prizes.append("L")
+       # if self.game.show_tracking('bonusX') < 6:
+       #     prizes.append("L")
 
         # center ramp complete (train)
-        if self.game.show_tracking('centerRampStage') < 4:
-            prizes.append("M")
+       # if self.game.show_tracking('centerRampStage') < 4:
+       #     prizes.append("M")
 
         # 1 million points (1M) is always available
-        prizes.append("N")
+       # prizes.append("N")
 
         # initialize some junk
         count = 0
@@ -205,7 +205,10 @@ class SkillShot(game.Mode):
         elif self.selectedPrizes[5:] == "J":
             awardStringTop = "EXTRA BALL"
             awardStringBottom ="IS LIT"
+            # turn off the skill shot layer
+            self.layer = None
             self.game.mine.light_extra_ball()
+            return
 
         elif self.selectedPrizes[5:] == "K":
             # this one is the rank

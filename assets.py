@@ -160,6 +160,20 @@ class Assets():
         self.game.sound.register_sound(self.sfx_trainWhistle, self.sfx_path + "271-sfx-train-whistle.wav")
         self.sfx_trainChugShort = 'sfx_trainChugShort'
         self.game.sound.register_sound(self.sfx_trainChugShort, self.sfx_path + "203-sfx-train-chug-short.wav")
+        self.sfx_ebMusic = 'sfx_ebMusic'
+        self.game.sound.register_sound(self.sfx_ebMusic, self.sfx_path + "029-sfx-extra-ball-intro.wav")
+        self.sfx_ebDrink = 'sfx_ebDrink'
+        self.game.sound.register_sound(self.sfx_ebDrink, self.sfx_path + "173-sfx-eb-drink.wav")
+        self.sfx_ebGunfire = 'sfx_ebGunfire'
+        self.game.sound.register_sound(self.sfx_ebGunfire, self.sfx_path + "181-sfx-eb-gunfire.wav")
+        self.sfx_ebLookRight = 'sfx_ebLookRight'
+        self.game.sound.register_sound(self.sfx_ebLookRight, self.sfx_path + "058-sfx-eb-look-right.wav")
+        self.sfx_ebLookLeft = 'sfx_eblookLeft'
+        self.game.sound.register_sound(self.sfx_ebLookLeft, self.sfx_path + "060-sfx-eb-look-left.wav")
+        self.sfx_ebFallAndCrash = 'sfx_ebFallAndCrash'
+        self.game.sound.register_sound(self.sfx_ebFallAndCrash, self.sfx_path + "149-sfx-eb-fall-and-crash.wav")
+        self.sfx_ebFlourish = 'sfx_ebFlourish'
+        self.game.sound.register_sound(self.sfx_ebFlourish, self.sfx_path + "074-sfx-eb-flourish.wav")
 
         self.sfx_ricochetSet = 'sfx_ricochetSet'
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
@@ -365,6 +379,10 @@ class Assets():
         self.game.sound.register_sound(self.quote_multiball, self.quotes_path + "536-prospector-multiball.wav")
         self.quote_extraBallGuy = 'quote_extraBallGuy'
         self.game.sound.register_sound(self.quote_extraBallGuy, self.quotes_path + "538-guy-extra-ball.wav")
+        self.quote_thirsty = 'quote_thirsty'
+        self.game.sound.register_sound(self.quote_thirsty, self.quotes_path + "1427-drunk-boy-im-thirsty.wav")
+        self.quote_whatThe = 'quote_whatThe'
+        self.game.sound.register_sound(self.quote_whatThe, self.quotes_path + "1423-drunk-what-the.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

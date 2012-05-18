@@ -206,10 +206,30 @@ class Mine(game.Mode):
         self.delay(delay=2.1,handler=self.game.base_game_mode.music_on)
 
     def light_extra_ball(self):
-        # just a placeholder for now
+        # add the ball to the pending extra balls
         self.game.increase_tracking('extraBallsPending')
+        # turn the light on
+        # setup  a bunch of text
+        textLine1 = dmd.TextLayer(28, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("EXTRA")
+        textLine2 = dmd.TextLayer(28, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("BALL")
+        textLine3 = ep.pulse_text(self,96,4,"IS")
+        textLine4 = ep.pulse_text(self,96,16,"LIT",sequence=[1,3])
+        # and a backdrop
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'ball.dmd').frames[0])
+        # and the wipe animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'horse-wipe-right.dmd')
+        myWait = len(anim.frames) / 10.0 + 1
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        animLayer.composite_op = "blacksrc"
+        # slap it all together
+        composite = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3,textLine4,animLayer])
+        # and turn it on
+        self.layer = composite
+        # with a sound effect
+        self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # play a quote
         self.game.sound.play(self.game.assets.quote_extraBallLit)
+        self.delay(delay=myWait,handler=self.clear_layer)
         print "EXTRA BALL LIT"
 
     def collect_extra_ball(self):
@@ -230,12 +250,23 @@ class Mine(game.Mode):
             # load up the animation
             anim = dmd.Animation().load(ep.DMD_PATH+'extra-ball.dmd')
             # start the full on animation
-            myWait = len(anim.frames) / 8.57
+            myWait = len(anim.frames) / 7.50
             # setup the animated layer
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
-            animLayer.frame_time = 7
+            animLayer.frame_time = 8
             # keyframe a bunch of sounds
+            animLayer.add_frame_listener(13,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
+            animLayer.add_frame_listener(15,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
+            animLayer.add_frame_listener(17,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
+            animLayer.add_frame_listener(23,self.game.play_remote_sound,param=self.game.assets.quote_whatThe)
+            animLayer.add_frame_listener(25,self.game.play_remote_sound,param=self.game.assets.sfx_ebGunfire)
+            animLayer.add_frame_listener(41,self.game.play_remote_sound,param=self.game.assets.sfx_ebLookRight)
+            animLayer.add_frame_listener(45,self.game.play_remote_sound,param=self.game.assets.sfx_ebLookLeft)
+            animLayer.add_frame_listener(46,self.game.play_remote_sound,param=self.game.assets.sfx_ebFallAndCrash)
+            # play the intro sounds
+            self.game.sound.play(self.game.assets.sfx_ebMusic)
+            self.game.sound.play(self.game.assets.quote_thirsty)
             # turn that sucker on
             self.layer = animLayer
             # after a delay, play the ending
@@ -249,14 +280,17 @@ class Mine(game.Mode):
         else:
             # play this other quote
             self.game.sound.play(self.game.assets.quote_extraBallSet)
+        # play a music riff
+        self.game.sound.play(self.game.assets.sfx_ebFlourish)
         # setup the backdrop
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'extra-ball.dmd').frames[49])
-        textLine = dmd.TextLayer(128/2, 12, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("EXTRA BALL")
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'extra-ball.dmd').frames[58])
+        textLine = dmd.TextLayer(128/2, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("EXTRA>  BALL@")
+        textLine.composite_op = "blacksrc"
         myLayer = dmd.GroupedLayer(128,32,[backdrop,textLine])
         self.layer = myLayer
-        self.delay(delay=2,handler=self.clear_layer)
-        self.delay(delay=2,handler=self.unbusy)
-        self.delay(delay=2,handler=self.game.base_game_mode.music_on)
+        self.delay(delay=3,handler=self.clear_layer)
+        self.delay(delay=3,handler=self.unbusy)
+        self.delay(delay=3,handler=self.game.base_game_mode.music_on)
 
     def unbusy(self):
         self.busy = False
