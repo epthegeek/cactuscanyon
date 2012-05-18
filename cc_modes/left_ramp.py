@@ -17,8 +17,48 @@ class LeftRamp(game.Mode):
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'woodcut-border.dmd').frames[0])
 
     def mode_started(self):
-        # this would have to turn on some lights and stuff
-        pass
+        self.game.update_lamps()
+
+    def mode_stopped(self):
+        self.disable_lamps()
+
+    def update_lamps(self):
+        self.disable_lamps()
+        stage = self.game.show_tracking('leftLoopStage')
+
+        if stage == 1:
+            # blink the first light
+            self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+        elif stage == 2:
+            # first light on
+            self.game.lamps.leftRampWhiteWater.enable()
+            # blink the second
+            self.game.lamps.leftRampWaterFall.schedule(0x00FF00FF)
+        elif stage == 3:
+            # first two on
+            self.game.lamps.leftRampWhiteWater.enable()
+            self.game.lamps.leftRampWaterFall.enable()
+            # blink the third
+            self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+        # this is completed - pulse the 3rd light
+        elif stage == 4:
+            # two on
+            self.game.lamps.leftRampWhiteWater.enable()
+            self.game.lamps.leftRampWaterFall.enable()
+            # pulse the third
+            self.game.lamps.leftRampSavePolly.schedule(0x4677EE62)
+        # after polly, before stampede all three stay on
+        elif stage == 5:
+            self.game.lamps.leftRampWhiteWater.enable()
+            self.game.lamps.leftRampWaterFall.enable()
+            self.game.lamps.leftRampSavePolly.enable()
+        else:
+            pass
+
+    def disable_lamps(self):
+        self.game.lamps.leftRampWhiteWater.disable()
+        self.game.lamps.leftRampWaterFall.disable()
+        self.game.lamps.leftRampSavePolly.disable()
 
     def sw_leftRampEnter_active(self,sw):
         # hitting this switch counts as a made ramp - really
@@ -34,7 +74,6 @@ class LeftRamp(game.Mode):
         self.award_ramp_score(combo)
         ## -- set the last switch hit --
         ep.last_switch = "leftRampEnter"
-
 
 
     def sw_leftRampMake_active(self,sw):
@@ -130,6 +169,8 @@ class LeftRamp(game.Mode):
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('leftRampStage')
+            # update the lamps
+            self.game.update_lamps()
 
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):

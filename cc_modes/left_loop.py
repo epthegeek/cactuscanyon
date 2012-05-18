@@ -76,7 +76,7 @@ class LeftLoop(game.Mode):
         if ep.last_switch != "rightLoopTop":
             # if we're complete open the gate for a full run through
             # if we're "complete" open the full loop
-            if self.game.show_tracking('rightLoopStage') >= 4:
+            if self.game.show_tracking('leftLoopStage') >= 4:
                 # pulse the coil to open the gate
                 pass
             ## if the combo timer is on:
@@ -143,6 +143,9 @@ class LeftLoop(game.Mode):
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('leftLoopStage')
+            # update the lamps
+            self.game.update_lamps()
+
 
         # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display
         if stage >= 4 and combo:

@@ -14,8 +14,48 @@ class RightRamp(game.Mode):
         # Set up the sounds
 
     def mode_started(self):
-        # this would have to turn on some lights and stuff
-        pass
+        self.game.update_lamps()
+
+    def mode_stopped(self):
+        self.disable_lamps()
+
+    def update_lamps(self):
+        self.disable_lamps()
+        stage = self.game.show_tracking('leftLoopStage')
+
+        if stage == 1:
+            # blink the first light
+            self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
+        elif stage == 2:
+            # first light on
+            self.game.lamps.rightRampSoundAlarm.enable()
+            # blink the second
+            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+        elif stage == 3:
+            # first two on
+            self.game.lamps.rightRampSoundAlarm.enable()
+            self.game.lamps.rightRampShootOut.enable()
+            # blink the third
+            self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+        # this is completed - pulse the 3rd light
+        elif stage == 4:
+            # two on
+            self.game.lamps.rightRampSoundAlarm.enable()
+            self.game.lamps.rightRampShootOut.enable()
+            # pulse the third
+            self.game.lamps.rightRampSavePolly.schedule(0x4677EE62)
+        # after polly, before stampede all three stay on
+        elif stage == 5:
+            self.game.lamps.rightRampSoundAlarm.enable()
+            self.game.lamps.rightRampShootOut.enable()
+            self.game.lamps.rightRampSavePolly.enable()
+        else:
+            pass
+
+    def disable_lamps(self):
+        self.game.lamps.rightRampSoundAlarm.disable()
+        self.game.lamps.rightRampShootOut.disable()
+        self.game.lamps.rightRampSavePolly.disable()
 
     def sw_rightRampEnter_active(self,sw):
         # play the switch sound
@@ -134,6 +174,9 @@ class RightRamp(game.Mode):
         # then tick the stage up for next time unless it's completed
         if self.game.show_tracking('rightRampStage') < 4:
             self.game.increase_tracking('rightRampStage')
+            # update the lamps
+            self.game.update_lamps()
+
 
     def clear_layer(self):
         self.layer = None

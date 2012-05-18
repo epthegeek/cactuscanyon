@@ -152,6 +152,9 @@ class RightLoop(game.Mode):
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('rightLoopStage')
+            # update the lamps
+            self.game.update_lamps()
+
 
     def show_marksman_award(self):
         anim = dmd.Animation().load(ep.DMD_PATH+'smoking-card-loop.dmd')
