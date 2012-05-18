@@ -24,8 +24,42 @@ class LeftLoop(game.Mode):
 
 
     def mode_started(self):
-    # this would have to turn on some lights and stuff
-        pass
+        self.game.update_lamps()
+
+    def mode_stopped(self):
+        self.disable_lamps()
+
+    def update_lamps(self):
+        self.disable_lamps()
+        stage = self.game.show_tracking('leftLoopStage')
+
+        if stage == 1:
+            # blink the first light
+            self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
+        elif stage == 2:
+            # first light on
+            self.game.lamps.leftLoopBuckNBronco.enable()
+            # blink the second
+            self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
+        elif stage == 3:
+            # first two on
+            self.game.lamps.leftLoopBuckNBronco.enable()
+            self.game.lamps.leftLoopWildRide.enable()
+            # blink the third
+            self.game.lamps.leftLoopsRidEm.schedule(0x00FF00FF)
+        # this is completed
+        elif stage == 4:
+            # all three on
+            self.game.lamps.leftLoopBuckNBronco.enable()
+            self.game.lamps.leftLoopWildRide.enable()
+            self.game.lamps.leftLoopsRidEm.enable()
+        else:
+            pass
+
+    def disable_lamps(self):
+        self.game.lamps.leftLoopBuckNBronco.disable()
+        self.game.lamps.leftLoopWildRide.disable()
+        self.game.lamps.leftLoopRidEm.disable()
 
     def sw_leftLoopBottom_active(self,sw):
         # low end of the loop

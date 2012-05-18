@@ -14,8 +14,42 @@ class RightLoop(game.Mode):
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'guns-border.dmd').frames[0])
 
     def mode_started(self):
-        # this would have to turn on some lights and stuff
-        pass
+        self.game.update_lamps()
+
+    def mode_stopped(self):
+        self.disable_lamps()
+
+    def update_lamps(self):
+        self.disable_lamps()
+        stage = self.game.show_tracking('rightLoopStage')
+
+        if stage == 1:
+            # blink the first light
+            self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+        elif stage == 2:
+            # first light on
+            self.game.lamps.rightLoopGoodShot.enable()
+            # blink the second
+            self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
+        elif stage == 3:
+            # first two on
+            self.game.lamps.rightLoopGoodShot.enable()
+            self.game.lamps.rightLoopGunslinger.enable()
+            # blink the third
+            self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+        # this is completed
+        elif stage == 4:
+            # all three on
+            self.game.lamps.rightLoopGoodShot.enable()
+            self.game.lamps.rightLoopGunslinger.enable()
+            self.game.lamps.rightLoopMarksman.enable()
+        else:
+            pass
+
+    def disable_lamps(self):
+        self.game.lamps.rightLoopGoodShot.disable()
+        self.game.lamps.rightLoopGunslinger.disable()
+        self.game.lamps.rightLoopMarksman.disable()
 
     def sw_rightLoopBottom_active(self,sw):
         # low end of the loop
