@@ -27,7 +27,7 @@ def main():
     fakePinProc = (len(sys.argv) > 1 and sys.argv[1] == 'fakepinproc')
     try:
         # create the game object
-        game = CCGame()
+        game = CCGame(machineType,fakePinProc)
         # set the game's config path
         game.yamlpath = yaml_path
         # fire off the setup

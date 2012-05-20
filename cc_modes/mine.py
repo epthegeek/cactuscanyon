@@ -239,10 +239,10 @@ class Mine(game.Mode):
         self.game.increase_tracking('extraBallsTotal')
         # take one off of the pending total
         self.game.decrease_tracking('extraBallsPending')
-        # add one to the pending to use queue
-        pending = self.game.increase_tracking('extraBallsToUse')
+        # add one to the pending the player for use - using the framework standard for storing extra_balls
+        self.current_player().extra_balls += 1
         # if they've already gotten an extra ball - it should divert to the short version
-        if pending > 1:
+        if self.current_player().extra_balls > 1:
             # play the short one
             self.extra_ball_ending(isLong=False)
         # otherwise play the whole animation

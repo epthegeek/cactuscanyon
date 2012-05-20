@@ -16,11 +16,14 @@ user_settings_path = "config/user_settings.yaml"
 
 ## Subclass BasicGame to create the main game
 class CCGame(game.BasicGame):
+    def __init__(self,machineType, fakePinProc = False):
+        if (fakePinProc):
+            config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
 
-    def __init__(self):
-        super(CCGame, self).__init__(pinproc.MachineTypeWPC)
+        super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
         self.sound = sound.SoundController(self)
+        self.lampctrl = lamps.LampController(self)
         self.assets = Assets(self)
 
         ## This resets the color mapping so my 1 value pixels are black - even on composite - HUGE WIN!
@@ -28,8 +31,7 @@ class CCGame(game.BasicGame):
 
         # combo timer variable
         self.comboTimer = 0
-        # last loop vairable for tracking runthrough loops
-        self.lastLoop = None
+        # last switch variable for tracking
         self.lastSwitch = None
 
     def setup(self):

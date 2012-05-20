@@ -133,14 +133,14 @@ class Attract(game.Mode):
 
     def sw_startButton_active(self, sw):
         # If the trough is full start a game
-        # But we're not runnin the trough yet
+        # But we're not running the trough yet
         # so I'll just put this stuff here
 
         self.game.modes.remove(self.game.attract_mode)
         self.game.start_game()
         self.game.add_player()
         self.game.start_ball()
-        return True
+        #return True
 
         #if self.game.trough.is_full:
         # Remove attract mode from mode queue - Necessary?
