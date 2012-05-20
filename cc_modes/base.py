@@ -23,9 +23,20 @@ class BaseGameMode(game.Mode):
                             self.game.lamps.centerRampCombo,
                             self.game.lamps.leftLoopCombo,
                             self.game.lamps.rightLoopCombo)
+        # rank - set up the bulb list
+        self.rankLamps = [self.game.lamps.rankStranger,
+                     self.game.lamps.rankPartner,
+                     self.game.lamps.rankDeputy,
+                     self.game.lamps.rankSheriff,
+                     self.game.lamps.rankMarshall]
+        # bad guys
+        self.badGuyLamps = [self.game.lamps.badGuyL0,
+                       self.game.lamps.BadGuyL1,
+                       self.game.lamps.BadGuyL2,
+                       self.game.lamps.badGuyL3]
+
 
     def mode_started(self):
-        pass
         # Disable any previously active lamp
         #for lamp in self.game.lamps:
         #    lamp.disable()
@@ -62,20 +73,18 @@ class BaseGameMode(game.Mode):
 
         # Deactivate the ball search logic so it won't search due to no
         # switches being hit.
-        #self.game.ball_search.disable()
+        self.game.ball_search.disable()
 
-    #def ball_drained_callback(self):
-    #    if self.game.trough.num_balls_in_play == 0:
-    #        # End the ball
-    #        self.finish_ball()
-
+    def ball_drained(self):
+        if self.game.trough.num_balls_in_play == 0:
+            # End the ball
+            self.finish_ball()
 
     def finish_ball(self):
-
         # Turn off tilt display (if it was on) now that the ball has drained.
         if self.tilt_status and self.layer == self.tilt_layer:
             self.layer = None
-
+        # TODO bonus would go in here?
         self.end_ball()
 
     def end_ball(self):
@@ -84,12 +93,36 @@ class BaseGameMode(game.Mode):
         self.game.end_ball()
 
     def update_lamps(self):
+        # reset first
+        self.disable_lamps()
         # lots to do here
         # quickdraw lamps
+        if self.game.show_tracking('quickDraw',0) == 'READY':
+            self.game.lamps.leftReturnQuickDraw.enable()
+        if self.game.show_tracking('quickDraw', 1) == 'READY':
+            self.game.lamps.rightReturnQuickDraw.enable()
         # bonus lanes
-        # rank
-        # badge lamps
-        pass
+        if self.game.show_tracking('bonusLaneStatus',0) == 'ON':
+            self.game.lamps.leftBonusLane.enable()
+        if self.game.show_tracking('bonusLandStatus',1) == 'ON':
+            self.game.lamps.rightBonusLane.enable()
+        rank = self.game.show_tracking('rank')
+        # loop through 0 through current rank and turn the lamps on
+        for lamp in range(0,rank,1):
+            self.rankLamps[lamp].enable()
+        for lamp in self.game.show_tracking('badGuysDead'):
+            if lamp:
+                self.badGuyLamps[lamp].enable()
+
+    def disable_lamps(self):
+        for lamp in self.rankLamps:
+            lamp.disable()
+        for lamp in self.badGuyLamps:
+            lamp.disable()
+        self.game.lamps.leftReturnQuickDraw.disable()
+        self.game.lamps.rightReturnQuickDraw.disable()
+        self.game.lamps.leftBonusLane.disable()
+        self.game.lamps.rightBonusLane.disable()
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
@@ -106,18 +139,13 @@ class BaseGameMode(game.Mode):
         ## -- set the last switch hit --
         ep.last_switch = "startButton"
 
-
-        #def sw_shooterLane_open_for_1s(self,sw):
-    #    if self.ball_starting:
-    #        self.ball_starting = False
-    #        ball_save_time = 10
-    #        self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
-        #else:
-        #	self.game.ball_save.disable()
-
-    # Note: Game specific item
-    # Set the switch name to the launch button on your game.
-    # If manual plunger, remove the whole section.
+    def sw_shooterLane_open_for_1s(self,sw):
+        if self.game.ballStarting:
+            self.game.ballStarting = False
+            ball_save_time = 10
+            self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
+        else:
+            self.game.ball_save.disable()
 
     def sw_beerMug_active(self,sw):
         # track it, because why not
@@ -139,19 +167,26 @@ class BaseGameMode(game.Mode):
         return True
 
     def sw_tilt_active(self, sw):
-        if self.times_warned == 2:
+        # first, register the hit
+        status = self.game.increase_tracking('tiltStatus')
+        # if that puts us at three, time to tilt
+        if status == 3:
             self.tilt()
+        # if it puts us at 2, time for second warning
+        if status == 2:
+            print "DANGER DANGER"
+            # double warning
+        # otherwise this must be the first warning
         else:
-            self.times_warned += 1
+            print "DANGER"
             #play sound
             #add a display layer and add a delayed removal of it.
-            self.game.set_status("Tilt Warning " + str(self.times_warned) + "!")
 
     def tilt(self):
         # Process tilt.
         # First check to make sure tilt hasn't already been processed once.
         # No need to do this stuff again if for some reason tilt already occurred.
-        if self.tilt_status == 0:
+        if self.game.show_tracking('tiltStatus') == 3:
 
             # Display the tilt graphic
             self.layer = self.tilt_layer
@@ -161,7 +196,6 @@ class BaseGameMode(game.Mode):
 
             # Make sure ball won't be saved when it drains.
             self.game.ball_save.disable()
-            #self.game.modes.remove(self.ball_save)
 
             # Make sure the ball search won't run while ball is draining.
             self.game.ball_search.disable()
@@ -171,11 +205,12 @@ class BaseGameMode(game.Mode):
                 lamp.disable()
 
             # Kick balls out of places it could be stuck.
-            if self.game.switches.shooterR.is_active():
-                self.game.coils.shooterR.pulse(50)
-            if self.game.switches.shooterL.is_active():
-                self.game.coils.shooterL.pulse(20)
-            self.tilt_status = 1
+            if self.game.switches.minePopper.is_active():
+                self.game.coils.minePopper.pulse(40)
+            if self.game.switches.saloonPopper.is_active():
+                self.game.coils.saloonPopper.pulse(40)
+            # reset the tilt
+            self.game.set_tracking('tiltStatus',0)
         #play sound
         #play video
 
@@ -283,8 +318,12 @@ class BaseGameMode(game.Mode):
         # score points
         self.game.score(3770)
 
-
-    ### jet bumpers
+    ###  ____
+    ### | __ ) _   _ _ __ ___  _ __   ___ _ __ ___
+    ### |  _ \| | | | '_ ` _ \| '_ \ / _ \ '__/ __|
+    ### | |_) | |_| | | | | | | |_) |  __/ |  \__\
+    ### |____/ \__,_|_| |_| |_| .__/ \___|_|  |___/
+    ###                       |_|
 
     def sw_leftJetBumper_active(self,sw):
         self.bumper_hit('left')
@@ -296,6 +335,7 @@ class BaseGameMode(game.Mode):
         self.bumper_hit('bottom')
 
     def bumper_hit(self,bumper):
+        # TODO add some more interesting purpose to the bumpers?
         # score some points
         self.game.score(2530)
         # play a noise
@@ -326,7 +366,6 @@ class BaseGameMode(game.Mode):
     ### | |_) | (_) | | | | |_| \__ \ | |__| (_| | | | |  __/\__\
     ### |____/ \___/|_| |_|\__,_|___/ |_____\__,_|_| |_|\___||___/
     ###
-    ### TODO: this still needs to control the lights
     ###
 
     def sw_leftBonusLane_active(self,sw):
@@ -348,6 +387,7 @@ class BaseGameMode(game.Mode):
         if stat == "OFF":
             # set the status to on for the lane that got hit
             self.game.set_tracking('bonusLaneStatus',"ON",side)
+            self.update_lamps()
             # light the light
             # points for lighting bonus lane
             self.game.score(35000)
@@ -412,6 +452,7 @@ class BaseGameMode(game.Mode):
         self.layer = newLayer
         # then 1.5 seconds later, shut it off
         self.delay(name="ClearBonus",delay=1.5,handler=self.clear_layer)
+        self.delay(delay=1.5,handler=self.update_lamps)
 
     def play_sfx_cactusMash(self):
         self.game.sound.play(self.game.assets.sfx_cactusMash)

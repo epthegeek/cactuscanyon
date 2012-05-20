@@ -33,6 +33,7 @@ class CCGame(game.BasicGame):
         self.comboTimer = 0
         # last switch variable for tracking
         self.lastSwitch = None
+        self.ballStarting = False
 
     def setup(self):
         """docstring for setup"""
@@ -154,7 +155,7 @@ class CCGame(game.BasicGame):
         self.log("BALL STARTING")
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
-
+        self.ballStarting = True
         # launch a ball, unless there is one in the shooter lane already - but really, this shouldn't
         # happen because we're only starting if trough is full
         if not self.game.switches.shooterLane.is_active:
@@ -164,7 +165,9 @@ class CCGame(game.BasicGame):
         self.game.ball_search.enable()
         # turn the flippers on
         self.enable_flippers(True)
-        # and load the skill_shot mode into the mode queue
+        # reset the tilt status
+        self.game.set_tracking('tiltStatus',0)
+
         # load the base game mode here
         self.modes.add(self.base_game_mode)
         ## TODO maybe move all these to base game for starting stopping
@@ -175,7 +178,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.right_loop)
         self.modes.add(self.mine)
         self.modes.add(self.saloon)
-
+        # and the skill shot
         self.modes.add(self.skill_shot)
 
     # Empty callback just incase a ball drains into the trough before another

@@ -84,3 +84,5 @@ class Tracking(game.Player):
         # list to store the lit items for the star ?
         self.player_stats['highNoonProgress'] = []
 
+        self.player_stats['tiltStatus'] = 0
+
