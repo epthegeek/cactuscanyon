@@ -46,20 +46,20 @@ class LeftLoop(game.Mode):
             self.game.lamps.leftLoopBuckNBronco.enable()
             self.game.lamps.leftLoopWildRide.enable()
             # blink the third
-            self.game.lamps.leftLoopsRidEm.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopsRideEm.schedule(0x00FF00FF)
         # this is completed
         elif stage == 4:
             # all three on
             self.game.lamps.leftLoopBuckNBronco.enable()
             self.game.lamps.leftLoopWildRide.enable()
-            self.game.lamps.leftLoopsRidEm.enable()
+            self.game.lamps.leftLoopsRideEm.enable()
         else:
             pass
 
     def disable_lamps(self):
         self.game.lamps.leftLoopBuckNBronco.disable()
         self.game.lamps.leftLoopWildRide.disable()
-        self.game.lamps.leftLoopRidEm.disable()
+        self.game.lamps.leftLoopRideEm.disable()
 
     def sw_leftLoopBottom_active(self,sw):
         # low end of the loop
