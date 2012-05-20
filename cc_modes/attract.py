@@ -91,11 +91,12 @@ class Attract(game.Mode):
     def mode_started(self):
         # Blink the start button to notify player about starting a game.
         self.game.lamps.startButton.schedule(schedule=0x00ff00ff, cycle_seconds=0, now=False)
-        # Turn on minimal GI lamps
-        # Some games don't have controllable GI's (ie Stern games)
-        #self.game.lamps.gi01.pulse(0)
-        #self.game.lamps.gi02.disable()
 
+        # Turn on the GIs
+        self.game.lamps.gi01.enable()
+        self.game.lamps.gi02.enable()
+        self.game.lamps.gi03.enable()
+        self.game.lamps.gi04.enable()
 
     def mode_stopped(self):
         pass
@@ -136,25 +137,24 @@ class Attract(game.Mode):
         # But we're not running the trough yet
         # so I'll just put this stuff here
 
-        self.game.modes.remove(self.game.attract_mode)
-        self.game.start_game()
-        self.game.add_player()
-        self.game.start_ball()
+        #self.game.modes.remove(self.game.attract_mode)
+        #self.game.start_game()
+        #self.game.add_player()
+        #self.game.start_ball()
         #return True
 
-        #if self.game.trough.is_full:
-        # Remove attract mode from mode queue - Necessary?
-        #self.game.modes.remove(self)
-        # Initialize game
-        #self.game.start_game()
-        # Add the first player
-        #self.game.add_player()
-        # Start the ball.  This includes ejecting a ball from the trough.
-        #self.game.start_ball()
-        #else:
-
-        #self.game.set_status("Ball Search!")
-        #self.game.ball_search.perform_search(5)
+        if self.game.trough.is_full or self.game.switches.shooterLane.is_active():
+            # Remove attract mode from mode queue - Necessary?
+            self.game.modes.remove(self)
+            # Initialize game
+            self.game.start_game()
+            # Add the first player
+            self.game.add_player()
+            # Start the ball.  This includes ejecting a ball from the trough.
+            self.game.start_ball()
+        else:
+            print "BALL SEARCH"
+            #self.game.ball_search.perform_search(5)
 
     def generate_score_frames(self):
         # This big mess generates frames for the attract loop based on high score data.

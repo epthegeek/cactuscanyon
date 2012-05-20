@@ -30,13 +30,6 @@ class BaseGameMode(game.Mode):
         #for lamp in self.game.lamps:
         #    lamp.disable()
 
-        # Turn on the GIs
-        # Some games don't have controllable GI's (ie Stern games)
-        self.game.lamps.gi01.pulse(0)
-        self.game.lamps.gi02.pulse(0)
-        self.game.lamps.gi03.pulse(0)
-        self.game.lamps.gi04.pulse(0)
-
         # Enable the flippers
         self.game.enable_flippers(enable=True)
 

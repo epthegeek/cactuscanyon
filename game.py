@@ -44,20 +44,16 @@ class CCGame(game.BasicGame):
         # Set the balls per game per the user settings
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']
 
+        # set up the ball search - not using this yet
         #self.setup_ball_search()
 
-        # Note - Game specific item:
-        # Here, trough6 is used for the 'eject_switchname'.  This must
-        # be the switch of the next ball to be ejected.  Some games
-        # number the trough switches in the opposite order; so trough1
-        # might be the proper switchname to user here.
+        # set up the trough mode
         trough_switchnames = ['troughBallOne', 'troughBallTwo', 'troughBallThree', 'troughBallFour']
         early_save_switchnames = ['rightOutlane', 'leftOutlane']
         # can't turn on the trough yet
-        #self.trough = modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
-        # not dealing with ballsave yet either
-        #self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
-        #self.ball_save.trough_enable_ball_save = self.trough.ballsave
+        self.trough = modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
+        # set up ball save
+        self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
 
         # High Score stuff
         self.highscore_categories = []
@@ -77,7 +73,7 @@ class CCGame(game.BasicGame):
             category.load_from_game(self)
 
 
-    # Instead of resetting everything here as well as when a user
+        # Instead of resetting everything here as well as when a user
         # initiated reset occurs, do everything in self.reset() and call it
         # now and during a user initiated reset.
         self.reset()
@@ -86,9 +82,7 @@ class CCGame(game.BasicGame):
         # run the reset from proc.game.BasicGame
         super(CCGame,self).reset()
 
-
         # Create the objects for the basic modes
-        #self.trough = trough.Trough(game=self)
         self.base_game_mode = cc_modes.BaseGameMode(game=self,priority=4)
         self.attract_mode = cc_modes.Attract(game=self,priority=5)
 
@@ -119,11 +113,27 @@ class CCGame(game.BasicGame):
         # Setup and instantiate service mode
         self.service_mode = service.ServiceMode(self,100,self.assets.font_tiny7,[])
 
-        # Add in the modes that are active at start
-        # not running the trough yet
-        # self.modes.add(self.trough)
-        self.modes.add(self.attract_mode)
+        # set up an array of the modes
+        self.ep_modes = [self.base_game_mode,
+                         self.attract_mode,
+                         self.right_ramp,
+                         self.right_loop,
+                         self.center_ramp,
+                         self.left_loop,
+                         self.left_ramp,
+                         self.saloon,
+                         self.mine,
+                         self.bad_guys,
+                         self.save_polly,
+                         self.skill_shot,
+                         self.gm_multiball]
 
+        self.ep_modes.sort(lambda x, y: y.priority - x.priority)
+
+        # Add in the modes that are active at start
+        self.modes.add(self.trough)
+        self.modes.add(self.ball_save)
+        self.modes.add(self.attract_mode)
 
     def start_ball(self):
         # run the start_ball from proc.game.BasicGame
@@ -144,9 +154,10 @@ class CCGame(game.BasicGame):
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
 
-        # TODO: Check that there is not already a ball in the shooter lane.
-        # TODO: Pulse the trough until we get a hit from the shooter lane switch.
-        # self.coils.trough.pulse() # eject a ball into the shooter lane
+        # launch a ball, unless there is one in the shooter lane already - but really, this shouldn't
+        # happen because we're only starting if trough is full
+        if not self.game.switches.shooterLane.is_active:
+            self.trough.launch_balls(1) # eject a ball into the shooter lane
 
         # turn the flippers on
         self.enable_flippers(True)
@@ -164,12 +175,26 @@ class CCGame(game.BasicGame):
 
         self.modes.add(self.skill_shot)
 
+    # Empty callback just incase a ball drains into the trough before another
+     # drain_callback can be installed by a gameplay mode.
+    def ball_drained(self):
+        # Tell every mode a ball has drained by calling the ball_drained function if it exists
+        for mode in self.ep_modes:
+            if getattr(mode, "ball_drained", None):
+                mode.ball_drained()
+
     def ball_ended(self):
         """Called by end_ball(), which is itself called by base_game_mode.trough_changed."""
         self.log("BALL ENDED")
-        # unload the base game mode from the queue
-        # TODO hmm, should all modes be unloaded at the end of the ball?
+        # unload the all the basic game modes from the queue
         self.modes.remove(self.base_game_mode)
+        self.modes.remove(self.right_ramp)
+        self.modes.remove(self.left_ramp)
+        self.modes.remove(self.center_ramp)
+        self.modes.remove(self.left_loop)
+        self.modes.remove(self.right_loop)
+        self.modes.remove(self.mine)
+        self.modes.remove(self.saloon)
         # turn off the flippers
         self.enable_flippers(False)
         # then call the ball_ended from proc.game.BasicGame
