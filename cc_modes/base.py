@@ -28,13 +28,13 @@ class BaseGameMode(game.Mode):
 
         # Turn on the GIs
         # Some games don't have controllable GI's (ie Stern games)
-        #self.game.lamps.gi01.pulse(0)
-        #self.game.lamps.gi02.pulse(0)
-        #self.game.lamps.gi03.pulse(0)
-        #self.game.lamps.gi04.pulse(0)
+        self.game.lamps.gi01.pulse(0)
+        self.game.lamps.gi02.pulse(0)
+        self.game.lamps.gi03.pulse(0)
+        self.game.lamps.gi04.pulse(0)
 
         # Enable the flippers
-        #self.game.enable_flippers(enable=True)
+        self.game.enable_flippers(enable=True)
 
         # Put the ball into play and start tracking it.
         # self.game.coils.trough.pulse(40)
@@ -85,6 +85,14 @@ class BaseGameMode(game.Mode):
         # Tell the game object it can process the end of ball
         # (to end player's turn or shoot again)
         self.game.end_ball()
+
+    def update_lamps(self):
+        # lots to do here
+        # quickdraw lamps
+        # bonus lanes
+        # rank
+        # badge lamps
+        pass
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
