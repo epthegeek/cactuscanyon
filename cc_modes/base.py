@@ -18,7 +18,11 @@ class BaseGameMode(game.Mode):
     def __init__(self, game,priority):
         super(BaseGameMode, self).__init__(game, priority)
         self.ball_starting = True
-        self.comboLights = ('rightRampCombo','leftRampCombo','centerRampCombo','leftLoopCombo','rightLoopCombo')
+        self.comboLights = (self.game.lamps.rightRampCombo,
+                            self.game.lamps.leftRampCombo,
+                            self.game.lamps.centerRampCombo,
+                            self.game.lamps.leftLoopCombo,
+                            self.game.lamps.rightLoopCombo)
 
     def mode_started(self):
         pass
@@ -499,19 +503,19 @@ class BaseGameMode(game.Mode):
         else:
             # two seconds left, speed up the blink
             if self.game.comboTimer == 2:
-                for lamp in self.comboLights:
-                    self.game.lamps.comboLights[lamp].schedule(0x00FF00FF)
+                for myLamp in self.comboLights:
+                    myLamp.schedule(0x00FF00FF)
             # one second left, speed it up even more
             if self.game.comboTimer == 1:
-                for lamp in self.comboLights:
-                    self.game.lamps.comboLights[lamp].schedule(0x0F0F0F0F)
+                for myLamp in self.comboLights:
+                    myLamp.schedule(0x0F0F0F0F)
             # if we're not at zero yet, come back in 1 second
             self.delay(name="Combo Timer",delay=1,handler=self.combo_timer)
 
     def end_combos(self):
         # turn off the lights
-        for lamp in self.comboLights:
-            self.game.lamps.comboLights[lamp].disable()
+        for myLamp in self.comboLights:
+            myLamp.disable()
         print "Combos have ENDED"
 
     def start_combos(self):
@@ -519,8 +523,8 @@ class BaseGameMode(game.Mode):
         # set the timer at the max settings from the game
         self.game.comboTimer = self.game.user_settings['Gameplay (Feature)']['Combo Timer']
         # turn the lights on
-        for lamp in self.comboLights:
-            self.game.lamps.comboLights[lamp].schedule(0x0000FFFF)
+        for myLamp in self.comboLights:
+            myLamp.schedule(0x0000FFFF)
         #loop to the timer
         self.delay(name="Combo Timer",delay=1,handler=self.combo_timer)
         # send this back to what called it for use in determining if in a combo or not
