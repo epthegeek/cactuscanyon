@@ -337,7 +337,7 @@ class BaseGameMode(game.Mode):
     def bumper_hit(self,bumper):
         # TODO add some more interesting purpose to the bumpers?
         # score some points
-        self.game.score(2530)
+        self.game.score(5250)
         # play a noise
 
 
