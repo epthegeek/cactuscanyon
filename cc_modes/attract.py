@@ -154,7 +154,7 @@ class Attract(game.Mode):
             self.game.start_ball()
         else:
             print "BALL SEARCH"
-            #self.game.ball_search.perform_search(5)
+            self.game.ball_search.perform_search(2)
 
     def generate_score_frames(self):
         # This big mess generates frames for the attract loop based on high score data.

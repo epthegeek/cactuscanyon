@@ -74,7 +74,8 @@ class Saloon(game.Mode):
         ep.last_switch = "jetBumpersExit"
 
     def kick(self):
-        print "PULSE THE KICKER FOR THE SALOON"
+        # kick the ball out
+        self.game.coils.saloonPopper.pulse(40)
 
     def wait_until_unbusy(self,myHandler):
         if not self.busy:

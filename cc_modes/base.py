@@ -283,6 +283,24 @@ class BaseGameMode(game.Mode):
         # score points
         self.game.score(3770)
 
+
+    ### jet bumpers
+
+    def sw_leftJetBumper_active(self,sw):
+        self.bumper_hit('left')
+
+    def sw_rightJetBumper_active(self,sw):
+        self.bumper_hit('right')
+
+    def sw_bottomJetBumper_active(self,sw):
+        self.bumper_hit('bottom')
+
+    def bumper_hit(self,bumper):
+        # score some points
+        self.game.score(2530)
+        # play a noise
+
+
     ###
     ###  _____ _ _
     ### |  ___| (_)_ __  _ __   ___ _ __ ___

@@ -27,7 +27,7 @@ class Mine(game.Mode):
 
 
         # if the ball lands in the kicker
-    def sw_minePopper_closed_for_200ms(self,sw):
+    def sw_minePopper_closed_for_400ms(self,sw):
         # stock sound for the switch
         self.game.sound.play(self.game.assets.sfx_mineKicker)
         # if there's an extra ball waiting, collect one
@@ -103,7 +103,8 @@ class Mine(game.Mode):
 
     def mine_kick(self):
         # kick the ball out
-        print "PULSE THE MINE KICKER"
+        self.game.coils.minePopper.pulse(40)
+
 
     def light_lock(self):
         # set the lock status

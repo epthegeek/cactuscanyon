@@ -45,7 +45,7 @@ class CCGame(game.BasicGame):
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']
 
         # set up the ball search - not using this yet
-        #self.setup_ball_search()
+        self.setup_ball_search()
 
         # set up the trough mode
         trough_switchnames = ['troughBallOne', 'troughBallTwo', 'troughBallThree', 'troughBallFour']
@@ -133,6 +133,7 @@ class CCGame(game.BasicGame):
         # Add in the modes that are active at start
         self.modes.add(self.trough)
         self.modes.add(self.ball_save)
+        self.modes.add(self.ball_search)
         self.modes.add(self.attract_mode)
 
     def start_ball(self):
@@ -159,6 +160,8 @@ class CCGame(game.BasicGame):
         if not self.game.switches.shooterLane.is_active:
             self.trough.launch_balls(1) # eject a ball into the shooter lane
 
+        # enable the ball search
+        self.game.ball_search.enable()
         # turn the flippers on
         self.enable_flippers(True)
         # and load the skill_shot mode into the mode queue
@@ -195,6 +198,8 @@ class CCGame(game.BasicGame):
         self.modes.remove(self.right_loop)
         self.modes.remove(self.mine)
         self.modes.remove(self.saloon)
+        # turn off ball save
+        self.game.ball_search.disable()
         # turn off the flippers
         self.enable_flippers(False)
         # then call the ball_ended from proc.game.BasicGame
@@ -208,6 +213,11 @@ class CCGame(game.BasicGame):
         self.modes.remove(self.base_game_mode)
         # re-add the attract mode
         self.modes.add(self.attract_mode)
+
+    def setup_ball_search(self):
+        # No special handlers in starter game.
+        special_handler_modes = []
+        self.ball_search = modes.BallSearch(self, priority=100,countdown_time=30, coils=self.ballsearch_coils,reset_switches=self.ballsearch_resetSwitches,stop_switches=self.ballsearch_stopSwitches,special_handler_modes=special_handler_modes)
 
     ###  _____               _    _
     ### |_   _| __ __ _  ___| | _(_)_ __   __ _
