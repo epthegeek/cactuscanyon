@@ -65,6 +65,7 @@ class Attract(game.Mode):
             self.game.assets.lamp_starShots,
             self.game.assets.lamp_starShots
         ]
+        self.game.enable_lampshow()
         self.game.schedule_lampshows(lampshows,True)
 
         # run an initial pass on the animation loop
@@ -157,6 +158,8 @@ class Attract(game.Mode):
         #self.game.add_player()
         #self.game.start_ball()
         #return True
+        # turn off the lampsho
+        self.game.disable_lampshow()
 
         if self.game.trough.is_full or self.game.switches.shooterLane.is_active():
             # Remove attract mode from mode queue - Necessary?

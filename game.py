@@ -34,6 +34,7 @@ class CCGame(game.BasicGame):
         # last switch variable for tracking
         self.lastSwitch = None
         self.ballStarting = False
+        self.runLampShows = False
 
     def setup(self):
         """docstring for setup"""
@@ -232,17 +233,25 @@ class CCGame(game.BasicGame):
         self.lampctrl.play_show(self.scheduled_lampshows[self.scheduled_lampshow_index], False, self.lampshow_ended)
 
     def lampshow_ended(self):
-        self.scheduled_lampshow_index = self.scheduled_lampshow_index + 1
-        if self.scheduled_lampshow_index == len(self.scheduled_lampshows):
-            if self.scheduled_lampshows_repeat:
-                self.scheduled_lampshow_index = 0
-                self.start_lampshow()
+        if self.runLampShows:
+            self.scheduled_lampshow_index = self.scheduled_lampshow_index + 1
+            if self.scheduled_lampshow_index == len(self.scheduled_lampshows):
+                if self.scheduled_lampshows_repeat:
+                    self.scheduled_lampshow_index = 0
+                    self.start_lampshow()
+                else:
+                    # Finished playing the lampshows and not repeating...
+                    pass
             else:
-                # Finished playing the lampshows and not repeating...
-                pass
+                self.start_lampshow()
         else:
-            self.start_lampshow()
+            pass
 
+    def enable_lampshow(self):
+        self.runLampShows = True
+
+    def disable_lampshow(self):
+        self.runLampShows = False
 
     ###  _____               _    _
     ### |_   _| __ __ _  ___| | _(_)_ __   __ _

@@ -16,6 +16,16 @@ class BadGuys(game.Mode):
     """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """
     def __init__(self,game,priority):
         super(BadGuys, self).__init__(game,priority)
+        self.coils = [self.game.coils.badGuyC0,
+                      self.game.coils.badGuyC1,
+                      self.game.coils.badGuyC2,
+                      self.game.coils.badGuyC3]
+        self.lights = [self.game.lamps.badGuyL0,
+                       self.game.lamps.badGuyL1,
+                       self.game.lamps.badGuyL2,
+                       self.game.lamps.badGuyL3]
+        self.posts = [self.game.coils.leftGunFightPost,
+                      self.game.coils.rightGunFightPost]
 
 
     def sw_badGuySW0_active(self,sw):
@@ -41,6 +51,7 @@ class BadGuys(game.Mode):
     def hit_bad_guy(self,target):
         # stop the timer
         # kill the coil to the drop target based on position
+        self.target_down(target)
         # call back to base to turn on the light for this bad guy?
 
         # If there's a quickdraw running
@@ -74,6 +85,14 @@ class BadGuys(game.Mode):
         # score some points and play a sound
         self.game.score(2530)
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
+
+    def target_up(self,target):
+        self.coils[target].patter(on_time=2,off_time=20,original_on_time=20)
+        self.lights[target].enable()
+
+    def target_down(self,target):
+        self.coils[target].disable()
+        self.lights[target].disable()
 
     ###
     ###   ___        _      _       _
@@ -109,7 +128,7 @@ class BadGuys(game.Mode):
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_quickdrawStart)
         # pop that sucker up
-        # TODO doesn't actually pop the sucker up yet
+        self.target_up(target)
         # Set up the display
         anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-start.dmd')
         self.animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
@@ -130,15 +149,15 @@ class BadGuys(game.Mode):
         self.portion = ((self.points / 10) / int(self.runtime * 5) * 10) - 370
         # queue up a delay for when the timer should run out if the mode hasn't been won
         # then start the timer after a 1 second grace period
-        self.delay(name="Grace",delay=1.5,handler=self.quickdraw_timer)
+        self.delay(name="Grace",delay=1.5,handler=self.quickdraw_timer,param=target)
 
-    def quickdraw_timer(self):
+    def quickdraw_timer(self,target):
         # ok, so this has to control the score and display?
         # for now stepping in 1/5 second
         self.runtime -= 0.2
         if self.runtime <= 0:
             # timer runs out - player lost
-            self.quickdraw_lost()
+            self.quickdraw_lost(target)
         else:
             # every 3 seconds, play a taunt quote
             if int(self.runtime % 3.0) == 0 and self.runtime >= 5:
@@ -152,7 +171,7 @@ class BadGuys(game.Mode):
             # make it active
             self.layer = dmd.GroupedLayer(128,32,[self.animLayer,scoreLayer])
             # delay the next iteration
-            self.delay("Timer Delay", delay = 0.2, handler = self.quickdraw_timer)
+            self.delay("Timer Delay", delay = 0.2, handler = self.quickdraw_timer, param=target)
 
     def quickdraw_won(self,target):
         # kill the mode music
@@ -180,7 +199,7 @@ class BadGuys(game.Mode):
 
     def quickdraw_check_bounty(self):
         # if the bounty isn't lit, light bounty - should these stack?
-        # TODO investigate bounty stacking
+        # TODO stock game does not stack bounties - might be fun to add that
         if not self.game.show_tracking('isBountyLit'):
             # turn off the current layer
             self.layer = None
@@ -192,10 +211,12 @@ class BadGuys(game.Mode):
             self.end_quickdraw()
 
 
-    def quickdraw_lost(self):
+    def quickdraw_lost(self,target):
         # kill the mode music
         self.game.sound.stop_music()
         # stuff specific to losing
+        # drop the coil and kill the lamp
+        self.target_down(target)
         # else just end the quickdraw
         self.end_quickdraw()
 
@@ -212,6 +233,7 @@ class BadGuys(game.Mode):
 
             self.start_showdown()
         else:
+            self.game.update_lamps()
             # turn the main music back on
             self.game.base_game_mode.music_on()
             # unload this piece
@@ -351,6 +373,8 @@ class BadGuys(game.Mode):
         print "GUNFIGHT GOES HERE"
         # pop up the post
         print "RAISE POST ON SIDE: " + str(side)
+        self.activeSide = side
+        self.posts[self.activeSide].patter()
         # set the bad guy pop order accounting for the side it started on
         badGuys = [0,1,2,3]
         # select our eventual target
@@ -425,6 +449,8 @@ class BadGuys(game.Mode):
         self.delay(delay=2,handler=self.end_gunfight)
 
     def gunfight_lost(self):
+        # drop the bad guy
+        self.target_down(self.enemy)
         self.game.sound.stop_music()
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_gunFail)
@@ -454,6 +480,7 @@ class BadGuys(game.Mode):
         # pop up the first bad guy and remove it from the array
         enemy = badGuys.pop(0)
         print "POP ENEMY: " + str(enemy)
+        self.target_up(enemy)
         # play the orchestra hit sound
         self.game.sound.play(self.game.assets.sfx_gunfightHit1)
         # show the eyes animation
@@ -463,11 +490,14 @@ class BadGuys(game.Mode):
         self.layer = animLayer
         # after a delay pass to the hands with the pop order
         self.delay(name="hands",delay=1.1,handler=self.gunfight_intro_hands,param=badGuys)
+        # and drop the current one
+        self.delay(delay=1.1,handler=self.target_down,param=enemy)
 
     def gunfight_intro_hands(self,badGuys):
         # pop the second bad guy and remove it
         enemy = badGuys.pop(0)
         print "POP ENEMY: " + str(enemy)
+        self.target_up(enemy)
         self.game.sound.play(self.game.assets.quote_gunfightReady)
         # play the second orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit2)
@@ -478,11 +508,13 @@ class BadGuys(game.Mode):
         self.layer = animLayer
         # after a delay pass to the feet with the pop order
         self.delay(name="boots",delay=1.1,handler=self.gunfight_intro_boots,param=badGuys)
+        self.delay(delay=1.1,handler=self.target_down,param=enemy)
 
     def gunfight_intro_boots(self,badGuys):
         # pop the third bad guy
         enemy = badGuys.pop(0)
         print "POP ENEMY: " + str(enemy)
+        self.target_up(enemy)
         self.game.sound.play(self.game.assets.quote_gunfightSet)
         # play the orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit3)
@@ -491,11 +523,15 @@ class BadGuys(game.Mode):
         self.layer = boots
         # after a delay - pass to the final setp
         self.delay(name="draw",delay=1.1,handler=self.gunfight_intro_draw,param=badGuys)
+        self.delay(delay=1.1,handler=self.target_down,param=enemy)
 
     def gunfight_intro_draw(self,badGuys):
         # pop the last bad guy
         enemy = badGuys.pop(0)
         print "POP ENEMY: " + str(enemy)
+        # need this for the lost
+        self.enemy = enemy
+        self.target_up(enemy)
         # play the 4 bells
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
         self.delay(delay=0.6,handler=self.game.play_remote_sound,param=self.game.assets.sfx_gunCock)
@@ -515,6 +551,7 @@ class BadGuys(game.Mode):
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
         print "DROP THE POST"
+        self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost
         self.delay(name="Gunfight Lost",delay=4,handler=self.gunfight_lost)
 

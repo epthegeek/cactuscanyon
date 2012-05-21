@@ -86,6 +86,8 @@ class Saloon(game.Mode):
             self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
 
     def update_lamps(self):
+        self.disable_lamps()
+
         beacon = False
         if self.game.show_tracking('bartStatus') == 'RUNNING' or self.game.show_tracking('bartStatus') == 'LAST':
             self.game.lamps.saloonArrow.enable()
@@ -94,24 +96,24 @@ class Saloon(game.Mode):
             self.game.lamps.bountyBeacon.enable()
             beacon = True
         if self.game.show_tracking('extraBallsPending') > 0:
-            self.game.lamps.extraBallBeacon.enable()
+            self.game.lamps.extraBallLitBeacon.enable()
             beacon = True
         ## todo jackpot isn't set up
         if beacon:
             self.game.lamps.shootToCollect.enable()
         if self.game.show_tracking('gunfightStatus') == 'READY':
-            self.game.lamps.rightGunfight.enable()
-            self.game.lamps.leftGunfight.enable()
+            self.game.lamps.rightGunfightPin.enable()
+            self.game.lamps.leftGunfightPin.enable()
 
     def disable_lamps(self):
         self.game.lamps.saloonArrow.disable()
         self.game.lamps.bountySaloon.disable()
-        self.game.lamps.ShootToCollect.disable()
+        self.game.lamps.shootToCollect.disable()
         self.game.lamps.bountyBeacon.disable()
-        self.game.lamps.extraBallBeacon.disable()
+        self.game.lamps.extraBallLitBeacon.disable()
         self.game.lamps.jackpotBeacon.disable()
-        self.game.lamps.rightGunfight.disable()
-        self.game.lamps.leftGunfight.disable()
+        self.game.lamps.rightGunfightPin.disable()
+        self.game.lamps.leftGunfightPin.disable()
 
     def clear_layer(self):
         self.layer = None
@@ -311,6 +313,7 @@ class Saloon(game.Mode):
 
     def repeat_ding(self,times):
         self.game.sound.play(self.game.assets.sfx_bountyBell)
+        self.game.coils.beaconFlasher.pulse(40)
         times -= 1
         if times > 0:
             self.delay(delay=0.4,handler=self.repeat_ding,param=times)

@@ -47,6 +47,8 @@ class Mine(game.Mode):
         self.game.sound.play(self.game.assets.sfx_mineEntrance)
         # award some points
         self.game.score(2530)
+        # move the mine entry a bit # TODO this should be more specific to open/closed
+        self.game.coils.mineMotor.pulse(100)
         ep.last_switch = "mineEntrance"
 
 

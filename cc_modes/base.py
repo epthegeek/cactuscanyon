@@ -18,22 +18,22 @@ class BaseGameMode(game.Mode):
     def __init__(self, game,priority):
         super(BaseGameMode, self).__init__(game, priority)
         self.ball_starting = True
-        self.comboLights = (self.game.lamps.rightRampCombo,
+        self.comboLights = [self.game.lamps.rightRampCombo,
                             self.game.lamps.leftRampCombo,
                             self.game.lamps.centerRampCombo,
                             self.game.lamps.leftLoopCombo,
-                            self.game.lamps.rightLoopCombo)
+                            self.game.lamps.rightLoopCombo]
         # rank - set up the bulb list
-        self.rankLamps = (self.game.lamps.rankStranger,
+        self.rankLamps = [self.game.lamps.rankStranger,
                           self.game.lamps.rankPartner,
                           self.game.lamps.rankDeputy,
                           self.game.lamps.rankSheriff,
-                          self.game.lamps.rankMarshall)
+                          self.game.lamps.rankMarshall]
         # bad guys
-        self.badGuyLamps = (self.game.lamps.badGuyL0,
+        self.badGuyLamps = [self.game.lamps.badGuyL0,
                             self.game.lamps.badGuyL1,
                             self.game.lamps.badGuyL2,
-                            self.game.lamps.badGuyL3)
+                            self.game.lamps.badGuyL3]
 
 
     def mode_started(self):
@@ -131,8 +131,9 @@ class BaseGameMode(game.Mode):
         for lamp in range(0,rank,1):
             self.rankLamps[lamp].enable()
         # bad guy lights hopefully this sets any lamp that returns true to be on
-        for lamp in self.game.show_tracking('badGuysDead'):
-            if lamp:
+        for lamp in range(0,3,1):
+            status = self.game.show_tracking('badGuysDead',lamp)
+            if status == True:
                 self.badGuyLamps[lamp].enable()
 
     def disable_lamps(self):
