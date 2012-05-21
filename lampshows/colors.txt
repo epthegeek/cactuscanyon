@@ -26,11 +26,11 @@ starBartBrothers
 starCombo
 starMotherLode
 starStampede
-rightReturnQuickDraw
-leftReturnQuickDraw
-leftQuickDraw
-topRightQuickDraw
-bottomRightQuickDraw
+rightReturnQuickdraw
+leftReturnQuickdraw
+leftQuickdraw
+topRightQuickdraw
+bottomRightQuickdraw
 saloonArrow
 #### RED
 leftOutGunFight

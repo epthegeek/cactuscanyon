@@ -13,7 +13,7 @@ import ep
 import random
 
 class BadGuys(game.Mode):
-    """BadGuys for great justice - covers QuickDraw, Showdown, and ... ? """
+    """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """
     def __init__(self,game,priority):
         super(BadGuys, self).__init__(game,priority)
 
@@ -44,14 +44,14 @@ class BadGuys(game.Mode):
         # call back to base to turn on the light for this bad guy?
 
         # If there's a quickdraw running
-        if "RUNNING" in self.game.show_tracking('quickDrawStatus'):
+        if "RUNNING" in self.game.show_tracking('quickdrawStatus'):
             # kill the timer
             self.cancel_delayed("Grace")
             self.cancel_delayed("Timer Delay")
             # It's been won
             self.quickdraw_won(target)
         # Otherwise, if all badguys are dead, we're in a showdown
-        elif "SHOWDOWN" in self.game.show_tracking('quickDrawStatus'):
+        elif "SHOWDOWN" in self.game.show_tracking('quickdrawStatus'):
             print "SHOWDOWN RUNNING OMG"
             self.showdown_hit(target)
             # showdown stuff would go here
@@ -87,7 +87,7 @@ class BadGuys(game.Mode):
         self.side = side
         print "STARTING QUICKDRAW ON SIDE:" + str(side)
         # set the status of this side to running
-        self.game.set_tracking('quickDrawStatus',"RUNNING",side)
+        self.game.set_tracking('quickdrawStatus',"RUNNING",side)
         # figure out the available bad guys
         choices = []
         count = 0
@@ -104,10 +104,10 @@ class BadGuys(game.Mode):
         # kill the game music
         self.game.sound.stop_music()
         # start the mode music
-        self.game.sound.play(self.game.assets.music_quickDrawBumper)
-        self.delay(name="quickdraw music",delay=1.3,handler=self.game.play_remote_music,param=self.game.assets.music_quickDraw)
+        self.game.sound.play(self.game.assets.music_quickdrawBumper)
+        self.delay(name="quickdraw music",delay=1.3,handler=self.game.play_remote_music,param=self.game.assets.music_quickdraw)
         # play a quote
-        self.game.sound.play_voice(self.game.assets.quote_quickDrawStart)
+        self.game.sound.play_voice(self.game.assets.quote_quickdrawStart)
         # pop that sucker up
         # TODO doesn't actually pop the sucker up yet
         # Set up the display
@@ -142,7 +142,7 @@ class BadGuys(game.Mode):
         else:
             # every 3 seconds, play a taunt quote
             if int(self.runtime % 3.0) == 0 and self.runtime >= 5:
-                self.game.sound.play_voice(self.game.assets.quote_quickDrawTaunt)
+                self.game.sound.play_voice(self.game.assets.quote_quickdrawTaunt)
             # take points off the score
             self.points -= self.portion
             # update the score text layer
@@ -169,7 +169,7 @@ class BadGuys(game.Mode):
         self.layer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
         myWait = len(anim.frames) / 10.0 + 1
         # play a quote
-        self.game.sound.play(self.game.assets.quote_quickDrawWin)
+        self.game.sound.play(self.game.assets.quote_quickdrawWin)
         # stuff specific to winning
         # score the points
         self.game.score(self.points)
@@ -203,7 +203,7 @@ class BadGuys(game.Mode):
         # status passes won/lost?
         print "ENDING QUICKDRAW"
         # set the status to OPEN
-        self.game.set_tracking('quickDrawStatus',"OPEN",self.side)
+        self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
         # turn off the layer
         self.layer = None
         # play a parting quote?
@@ -233,7 +233,7 @@ class BadGuys(game.Mode):
         # things, they go here
         self.deathTally = 0
         # set the tracking
-        self.game.set_tracking('quickDrawStatus',"SHOWDOWN",self.side)
+        self.game.set_tracking('quickdrawStatus',"SHOWDOWN",self.side)
         # kick out more ball
         # pop up the targets
         # play a startup animation
@@ -329,10 +329,10 @@ class BadGuys(game.Mode):
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # reset the quickdraw status of the bad guys
         for i in range(0,3,1):
-            self.game.set_tracking('quickDrawStatus',"False",i)
+            self.game.set_tracking('quickdrawStatus',"False",i)
         # turn off lights
         # tracking - turn it back to open
-        self.game.set_tracking('quickDrawStatus',"OPEN",self.side)
+        self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
         # unload
         self.game.modes.remove(self.game.bad_guys)
 

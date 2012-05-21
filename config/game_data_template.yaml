@@ -19,7 +19,7 @@ ClassicHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: EMM, score: 100000}
 RiverBankHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
-QuickDrawChampHighScoreData:
+QuickdrawChampHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
 ComboChampHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}

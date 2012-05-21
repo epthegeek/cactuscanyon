@@ -68,6 +68,8 @@ class Saloon(game.Mode):
         # if there's an active bart, play a quote
         if self.game.show_tracking('bartStatus') == "RUNNING":
             self.game.sound.play_voice(self.tauntQuote)
+        # and move the bart
+        self.move_bart()
         # score some points
         self.game.score(2530)
         ## -- set the last switch hit --
@@ -82,6 +84,39 @@ class Saloon(game.Mode):
             myHandler()
         else:
             self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
+
+    def update_lamps(self):
+        beacon = False
+        if self.game.show_tracking('bartStatus') == 'RUNNING' or self.game.show_tracking('bartStatus') == 'LAST':
+            self.game.lamps.saloonArrow.enable()
+        if self.game.show_tracking('isBountyLit'):
+            self.game.lamps.bountySaloon.enable()
+            self.game.lamps.bountyBeacon.enable()
+            beacon = True
+        if self.game.show_tracking('extraBallsPending') > 0:
+            self.game.lamps.extraBallBeacon.enable()
+            beacon = True
+        ## todo jackpot isn't set up
+        if beacon:
+            self.game.lamps.shootToCollect.enable()
+        if self.game.show_tracking('gunfightStatus') == 'READY':
+            self.game.lamps.rightGunfight.enable()
+            self.game.lamps.leftGunfight.enable()
+
+    def disable_lamps(self):
+        self.game.lamps.saloonArrow.disable()
+        self.game.lamps.bountySaloon.disable()
+        self.game.lamps.ShootToCollect.disable()
+        self.game.lamps.bountyBeacon.disable()
+        self.game.lamps.extraBallBeacon.disable()
+        self.game.lamps.jackpotBeacon.disable()
+        self.game.lamps.rightGunfight.disable()
+        self.game.lamps.leftGunfight.disable()
+
+    def clear_layer(self):
+        self.layer = None
+        self.busy = False
+
     ###
     ###  ____                    _
     ### | __ )  ___  _   _ _ __ | |_ _   _
@@ -101,7 +136,6 @@ class Saloon(game.Mode):
             # TODO kick the ball out here
             self.kick()
 
-
     def light_bounty(self):
         # set the tracking
         self.game.set_tracking('isBountyLit', True)
@@ -114,7 +148,9 @@ class Saloon(game.Mode):
         # play a voice clip about the bounty being ready
         self.game.sound.play_voice(self.game.assets.quote_bountyLit)
         # lights and whatnot
+        self.update_lamps()
         self.delay(delay=1.6,handler=self.clear_layer)
+
 
     def collect_bounty(self):
         # shutup the music
@@ -132,8 +168,8 @@ class Saloon(game.Mode):
         if self.game.show_tracking('bartStatus') != "DEAD":
             prizes.append('lightGunFight')
         #   3 - Light Quick Draw
-        if "OPEN" in self.game.show_tracking('quickDrawStatus'):
-            prizes.append('lightQuickDraw')
+        if "OPEN" in self.game.show_tracking('quickdrawStatus'):
+            prizes.append('lightQuickdraw')
         #   4 - Light Lock / Lock ball - inclue if lock is ready or lit
         if self.game.show_tracking('mineStatus') == "OPEN" or self.game.show_tracking('mineStatus') == "LOCK":
             prizes.append('awardLock')
@@ -185,12 +221,12 @@ class Saloon(game.Mode):
             prizeText2 = "IS LIT"
             self.prizeHandler = self.light_gunfight
             self.prizeParam = False
-        elif self.bountyPrize == 'lightQuickDraw':
+        elif self.bountyPrize == 'lightQuickdraw':
             prizeText = "QUICKDRAW"
             prizeText2 = "IS LIT"
             self.prizeHandler = self.game.base_game_mode.light_quickdraw
             # have to figure out which quickdraw to light
-            if self.game.show_tracking('quickDrawStatus',0) != "READY":
+            if self.game.show_tracking('quickdrawStatus',0) != "READY":
                 self.prizeParam = 0
             else:
                 self.prizeParam = 1
@@ -269,6 +305,7 @@ class Saloon(game.Mode):
         else:
             self.prizeHandler()
         # then kick out
+        self.update_lamps()
         self.kick()
         self.game.play_remote_music(self.game.assets.music_mainTheme)
 
@@ -373,9 +410,13 @@ class Saloon(game.Mode):
         print "DAMAGE BART"
         # play a quote appropriate to the current bart
         self.game.sound.play_voice(self.hitQuote)
+        # move bart
+        self.move_bart(hat=True)
         # score the points
         self.game.score(self.hitValue)
         # flash the light and move the dude
+        # a flourish lampshow
+        self.game.lampctrl.play_show('sparkle', repeat=False,callback=self.game.update_lamps)
         # display the info
         # register the hit
         # increase the hits on bart - and store the new amount
@@ -401,6 +442,8 @@ class Saloon(game.Mode):
         print "DEFEATING BART"
         # add to the defeated barts
         currentTotal = self.game.increase_tracking('bartsDefeated')
+        # move bart
+        self.move_bart(hat=True)
         # play a defeated quote
         myWait = self.game.sound.play_voice(self.defeatQuote)
         # set the status to dead - gunfight has to set it back to open
@@ -445,9 +488,15 @@ class Saloon(game.Mode):
         transition = ep.EP_Transition(self,layerOne,layerTwo,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         self.delay(delay = 1.5,handler=self.clear_layer)
 
-    def clear_layer(self):
-        self.layer = None
-        self.busy = False
+    def move_bart(self,hat=False):
+        # move the bart, flash his light, and optionally move his hat
+        # pulse the flasher light
+        self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
+        # pulse the bart move coil
+        self.game.coils.moveBart.pulse(40)
+        # if asked, pulse the hat
+        if hat:
+            self.game.coils.moveBartHat.pulse(40)
 
     ## Gunfight
 
@@ -465,4 +514,5 @@ class Saloon(game.Mode):
         self.game.sound.play_voice(self.game.assets.quote_gunfightLit)
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
+        self.update_lamps()
         self.delay(delay=2,handler=self.clear_layer)

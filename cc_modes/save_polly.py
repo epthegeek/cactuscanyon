@@ -8,7 +8,7 @@ import cc_modes
 import ep
 
 class SavePolly(game.Mode):
-    """BadGuys for great justice - covers QuickDraw, Showdown, and ... ? """
+    """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """
     def __init__(self,game,priority):
         super(SavePolly, self).__init__(game,priority)
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Shots to save Polly']

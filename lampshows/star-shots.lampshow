@@ -1,41 +1,41 @@
-lamp:starStampede        |...      ...      ...      ...      ...
-lamp:starMotherLode      |...      ...      ...      ...      ...
-lamp:starCombo           |...      ...      ...      ...      ...
-lamp:starBartBrothers    |...      ...      ...      ...      ...
-lamp:starShowdown        |...      ...      ...      ...      ...
-lamp:starHighNoon        |...      ...      ...      ...      ...
-lamp:rankStranger        |...      ...      ...      ...      ...
-lamp:rankPartner         |...      ...      ...      ...      ...
-lamp:rankDeputy          |...      ...      ...      ...      ...
-lamp:rankSheriff         |...      ...      ...      ...      ...
-lamp:rankMarshall        |...      ...      ...      ...      ...
+lamp:starStampede        | ...      ...      ...      ...      ...
+lamp:starMotherLode      | ...      ...      ...      ...      ...
+lamp:starCombo           | ...      ...      ...      ...      ...
+lamp:starBartBrothers    | ...      ...      ...      ...      ...
+lamp:starShowdown        | ...      ...      ...      ...      ...
+lamp:starHighNoon        | ...      ...      ...      ...      ...
+lamp:rankStranger        | ...      ...      ...      ...      ...
+lamp:rankPartner         | ...      ...      ...      ...      ...
+lamp:rankDeputy          | ...      ...      ...      ...      ...
+lamp:rankSheriff         | ...      ...      ...      ...      ...
+lamp:rankMarshall        | ...      ...      ...      ...      ...
 ##
-lamp:leftRampWhiteWater  |   ..
-lamp:leftRampWaterfall   |    ..
-lamp:leftRampSavePolly   |     ..
-lamp:leftRampJackpot     |      ..
-lamp:leftRampCombo       |       ..
+lamp:leftRampWhiteWater  |    ..
+lamp:leftRampWaterfall   |     ..
+lamp:leftRampSavePolly   |      ..
+lamp:leftRampJackpot     |       ..
+lamp:leftRampCombo       |        ..
 ##
-lamp:leftLoopBuckNBronco |            ..
-lamp:leftLoopWildRide    |             ..
-lamp:leftLoopRideEm      |              ..
-lamp:leftLoopJackpot     |               ..
-lamp:leftLoopCombo       |                ..
+lamp:leftLoopBuckNBronco |             ..
+lamp:leftLoopWildRide    |              ..
+lamp:leftLoopRideEm      |               ..
+lamp:leftLoopJackpot     |                ..
+lamp:leftLoopCombo       |                 ..
 ##
-lamp:centerRampCatchTrain|                     ..
-lamp:centerRampStopTrain |                      ..
-lamp:centerRampSavePolly |                       ..
-lamp:centerRampJackpot   |                        ..
-lamp:centerRampCombo     |                         ..
+lamp:centerRampCatchTrain|                      ..
+lamp:centerRampStopTrain |                       ..
+lamp:centerRampSavePolly |                        ..
+lamp:centerRampJackpot   |                         ..
+lamp:centerRampCombo     |                          ..
 ##
-lamp:rightLoopGoodShot   |                              ..
-lamp:rightLoopGunslinger |                               ..
-lamp:rightLoopMarksman   |                                ..
-lamp:rightLoopJackpot    |                                 ..
-lamp:rightLoopCombo      |                                  ..
+lamp:rightLoopGoodShot   |                               ..
+lamp:rightLoopGunslinger |                                ..
+lamp:rightLoopMarksman   |                                 ..
+lamp:rightLoopJackpot    |                                  ..
+lamp:rightLoopCombo      |                                   ..
 ##
-lamp:rightRampSoundAlarm |                                       ..
-lamp:rightRampShootOut   |                                        ..
-lamp:rightRampSavePolly  |                                         ..
-lamp:rightRampJackpot    |                                          ..
-lamp:rightRampCombo      |                                           ..
+lamp:rightRampSoundAlarm |                                        ..
+lamp:rightRampShootOut   |                                         ..
+lamp:rightRampSavePolly  |                                          ..
+lamp:rightRampJackpot    |                                           ..
+lamp:rightRampCombo      |                                            ..

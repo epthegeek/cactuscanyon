@@ -18,14 +18,17 @@ class Attract(game.Mode):
         super(Attract, self).__init__(game, priority)
 
         self.timer = 3
+
+    def mode_started(self):
+
         ## Set up the layers to use
         ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bally-banner.dmd').frames[0])
 
-        presentsText = dmd.TextLayer(128/2, 7, game.assets.font_jazz18, "center", opaque=False).set_text("  PRESENTS")
+        presentsText = dmd.TextLayer(128/2, 7, self.game.assets.font_jazz18, "center", opaque=False).set_text("  PRESENTS")
         gecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gecko-border.dmd').frames[0])
         presents = dmd.GroupedLayer(128, 32, [gecko, presentsText])
 
-        proc_banner = dmd.TextLayer(128/2, 7, game.assets.font_jazz18, "center", opaque=False).set_text("pyprocgame")
+        proc_banner = dmd.TextLayer(128/2, 7, self.game.assets.font_jazz18, "center", opaque=False).set_text("pyprocgame")
 
         splash = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-canyon-banner.dmd').frames[0])
         self.myIndex = 0
@@ -41,6 +44,28 @@ class Attract(game.Mode):
 
         self.generate_score_frames()
 
+        # Blink the start button to notify player about starting a game.
+        self.game.lamps.startButton.schedule(schedule=0x00ff00ff, cycle_seconds=0, now=False)
+
+        # Turn on the GIs
+        self.game.lamps.gi01.enable()
+        self.game.lamps.gi02.enable()
+        self.game.lamps.gi03.enable()
+        self.game.lamps.gi04.enable()
+
+        ## lampshows for attract mode
+        lampshows = [
+            self.game.assets.lamp_topToBottom,
+            self.game.assets.lamp_topToBottom,
+            self.game.assets.lamp_topToBottom,
+            self.game.assets.lamp_rightToLeft,
+            self.game.assets.lamp_rightToLeft,
+            self.game.assets.lamp_rightToLeft,
+            self.game.assets.lamp_starShots,
+            self.game.assets.lamp_starShots,
+            self.game.assets.lamp_starShots
+        ]
+        self.game.schedule_lampshows(lampshows,True)
 
         # run an initial pass on the animation loop
         self.run_animation_loop()
@@ -87,16 +112,6 @@ class Attract(game.Mode):
 
     def mode_topmost(self):
         pass
-
-    def mode_started(self):
-        # Blink the start button to notify player about starting a game.
-        self.game.lamps.startButton.schedule(schedule=0x00ff00ff, cycle_seconds=0, now=False)
-
-        # Turn on the GIs
-        self.game.lamps.gi01.enable()
-        self.game.lamps.gi02.enable()
-        self.game.lamps.gi03.enable()
-        self.game.lamps.gi04.enable()
 
     def mode_stopped(self):
         pass
@@ -189,7 +204,7 @@ class Attract(game.Mode):
                         self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH})
 
                 # generate a screen for the high score champ
-                if category.game_data_key == 'QuickDrawChampHighScoreData':
+                if category.game_data_key == 'QuickdrawChampHighScoreData':
                     backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'quick-draw-still.dmd').frames[0])
                     title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("QUICKDRAW CHAMP")
                     initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)

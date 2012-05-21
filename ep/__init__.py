@@ -17,6 +17,7 @@ SOUNDS_PATH = "sounds/"
 SFX_PATH = "sounds/sfx/"
 MUSIC_PATH = "sounds/music/"
 QUOTES_PATH = "sounds/quotes/"
+FLASHER_PULSE = int(1000 / 32)
 
 # set up a property for last switch tracking
 def get_last_switch(self):

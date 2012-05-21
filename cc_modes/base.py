@@ -24,16 +24,16 @@ class BaseGameMode(game.Mode):
                             self.game.lamps.leftLoopCombo,
                             self.game.lamps.rightLoopCombo)
         # rank - set up the bulb list
-        self.rankLamps = [self.game.lamps.rankStranger,
-                     self.game.lamps.rankPartner,
-                     self.game.lamps.rankDeputy,
-                     self.game.lamps.rankSheriff,
-                     self.game.lamps.rankMarshall]
+        self.rankLamps = (self.game.lamps.rankStranger,
+                          self.game.lamps.rankPartner,
+                          self.game.lamps.rankDeputy,
+                          self.game.lamps.rankSheriff,
+                          self.game.lamps.rankMarshall)
         # bad guys
-        self.badGuyLamps = [self.game.lamps.badGuyL0,
-                       self.game.lamps.BadGuyL1,
-                       self.game.lamps.BadGuyL2,
-                       self.game.lamps.badGuyL3]
+        self.badGuyLamps = (self.game.lamps.badGuyL0,
+                            self.game.lamps.badGuyL1,
+                            self.game.lamps.badGuyL2,
+                            self.game.lamps.badGuyL3)
 
 
     def mode_started(self):
@@ -98,32 +98,32 @@ class BaseGameMode(game.Mode):
         # lots to do here
         # quickdraw lamps
         # left side - either the playfield light is on or blinking, or the inlane light is on
-        left = self.game.show_tracking('quickDraw',0)
+        left = self.game.show_tracking('quickdrawStatus',0)
         if left == 'OPEN':
-            self.game.lamps.leftQuickDraw.enable()
+            self.game.lamps.leftQuickdraw.enable()
         elif left == 'TOP' or left == 'BOT':
-            self.game.lamps.leftQuickDraw.schedule(0x00FF00FF)
+            self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
         elif left == 'READY':
-            self.game.lamps.leftReturnQuickDraw.enable()
+            self.game.lamps.leftReturnQuickdraw.enable()
         else:
             pass
         # right has 2 lights so if unhit the light appropriate is on, or the inlane if ready
-        right = self.game.show_tracking('quickDraw',1)
+        right = self.game.show_tracking('quickdrawStatus',1)
         if right == 'OPEN':
-            self.game.lamps.topRightQuickDraw.enable()
-            self.game.lamps.bottomRightQuickDraw.enable()
+            self.game.lamps.topRightQuickdraw.enable()
+            self.game.lamps.bottomRightQuickdraw.enable()
         elif right == 'TOP':
-            self.game.lamps.bottomRightQuickDraw.enable()
+            self.game.lamps.bottomRightQuickdraw.enable()
         elif right == 'BOT':
-            self.game.lamps.topRightQuickDraw.enable()
-        elif self.game.show_tracking('quickDraw', 1) == 'READY':
-            self.game.lamps.rightReturnQuickDraw.enable()
+            self.game.lamps.topRightQuickdraw.enable()
+        elif right == 'READY':
+            self.game.lamps.rightReturnQuickdraw.enable()
         else:
             pass
         # bonus lanes
         if self.game.show_tracking('bonusLaneStatus',0) == 'ON':
             self.game.lamps.leftBonusLane.enable()
-        if self.game.show_tracking('bonusLandStatus',1) == 'ON':
+        if self.game.show_tracking('bonusLaneStatus',1) == 'ON':
             self.game.lamps.rightBonusLane.enable()
         # the rank lights
         rank = self.game.show_tracking('rank')
@@ -141,11 +141,11 @@ class BaseGameMode(game.Mode):
             lamp.disable()
         for lamp in self.badGuyLamps:
             lamp.disable()
-        self.game.lamps.leftQuickDraw.disable()
-        self.game.lamps.bottomRightQuickDraw.disable()
-        self.game.lamps.topRightQuickDraw.disable()
-        self.game.lamps.leftReturnQuickDraw.disable()
-        self.game.lamps.rightReturnQuickDraw.disable()
+        self.game.lamps.leftQuickdraw.disable()
+        self.game.lamps.bottomRightQuickdraw.disable()
+        self.game.lamps.topRightQuickdraw.disable()
+        self.game.lamps.leftReturnQuickdraw.disable()
+        self.game.lamps.rightReturnQuickdraw.disable()
         self.game.lamps.leftBonusLane.disable()
         self.game.lamps.rightBonusLane.disable()
 
@@ -283,7 +283,7 @@ class BaseGameMode(game.Mode):
             self.game.bad_guys.start_gunfight(side)
             pass
         # else if quickdraw is lit - run that passing which side started it
-        elif self.game.show_tracking('quickDrawStatus',side) == "READY":
+        elif self.game.show_tracking('quickdrawStatus',side) == "READY":
             # load up the mode
             self.game.modes.add(self.game.bad_guys)
             # fire the startup
@@ -520,10 +520,10 @@ class BaseGameMode(game.Mode):
 
     def quickdraw_hit(self, position,side):
         # lookup the status of the side, and difficulty
-        stat = self.game.show_tracking('quickDrawStatus',side)
+        stat = self.game.show_tracking('quickdrawStatus',side)
         difficulty = self.game.user_settings['Gameplay (Feature)']['Multiball Locks Difficulty']
         # if quickdraw is running or lit on the side hit, or position matches stat
-        if "RUNNING" in self.game.show_tracking('quickDrawStatus') or stat == "READY" or stat == position:
+        if "RUNNING" in self.game.show_tracking('quickdrawStatus') or stat == "READY" or stat == position:
             print "QUICKDRAW IS RUNNING OR LIT"
             # register a lit hit
             self.quickdraw_lit_hit()
@@ -550,7 +550,7 @@ class BaseGameMode(game.Mode):
         # else set the status to the hit target sending the position for the amount and side for the key
         else:
             # will also need to do something with lights here
-            self.game.set_tracking('quickDrawStatus',position,side)
+            self.game.set_tracking('quickdrawStatus',position,side)
             self.update_lamps()
 
     def light_quickdraw(self,side):
@@ -558,9 +558,9 @@ class BaseGameMode(game.Mode):
         self.game.score(12500)
         # turn on the quickdraw light
         # play a quote from the stack
-        self.game.sound.play_voice(self.game.assets.quote_quickDrawLit)
+        self.game.sound.play_voice(self.game.assets.quote_quickdrawLit)
         # set the status for the hit side to READY
-        self.game.set_tracking('quickDrawStatus',"READY",side)
+        self.game.set_tracking('quickdrawStatus',"READY",side)
         self.update_lamps()
 
     #

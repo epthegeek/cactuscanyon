@@ -197,39 +197,39 @@ class Assets():
         self.quote_bountyCollected = 'quote_bountyCollected'
         self.game.sound.register_sound(self.quote_bountyCollected, self.quotes_path + "1014-mayor-your-bounty-friend.wav")
         self.game.sound.register_sound(self.quote_bountyCollected, self.quotes_path + "1042-mayor-bounty-collected.wav")
-        self.quote_quickDrawLit = 'quote_quickDrawLit'
-        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "509-townie-quickdraw-is-lit.wav")
-        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1304-undertaker-oh-goodie-quickdraw-is-lit.wav")
-        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1305-undertaker-quickdraws-are-good-for-business.wav")
-        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "2040-waitress-quickdraw-is-lit.wav")
-        self.game.sound.register_sound(self.quote_quickDrawLit, self.quotes_path + "1037-mayor-quickdraw-is-lit.wav")
-        self.quote_quickDrawStart = 'quote_quickDrawStart'
-        self.game.sound.register_sound(self.quote_quickDrawStart, self.quotes_path + "1241-prospector-get-that-bad-guy.wav")
-        self.game.sound.register_sound(self.quote_quickDrawStart, self.quotes_path + "1274-prospector-nail-that-bad-guy-lawman.wav")
-        self.game.sound.register_sound(self.quote_quickDrawStart, self.quotes_path + "1150-mayor-theres-a-bad-guy-out-there.wav")
-        self.quote_quickDrawTaunt = 'quote_quickDrawTaunt'
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1151-mayor-shoot-the-bad-guy.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1554-leader-bart-go-on-take-your-best-shot.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1550-leader-bart-you-cant-shoot.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1552-leader-bart-come-on-tough-guy.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1156-mayor-mertilate-that-villan.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1155-mayor-shoot-that-scurvy-scoundrel.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1277-prospector-the-bad-guy-shoot-the-bad-guy.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "2042-waitress-hit-that-bad-guy.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1520-leader-bart-go-get-im.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "1416-drunk-shoot-that-bad-guy.wav")
-        self.game.sound.register_sound(self.quote_quickDrawTaunt, self.quotes_path + "511-prospector-you-cant-shoot-nothin.wav")
-        self.quote_quickDrawWin = 'quote_quickDrawWin'
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "852-polly-nice-shootin.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "1315-undertaker-my-theyre-dropping-like-flies.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "2003-waitress-i-didnt-like-that-deadbeat-anyway.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "1318-undertaker-a-dead-ringer.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "1111-mayor-that-was-a-bit-too-close-for-comfort.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "839-polly-youre-quite-a-man.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "840-polly-congratulations.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "2008-waitress-amazing.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "2005-waitress-ooh-what-are-you-packin.wav")
-        self.game.sound.register_sound(self.quote_quickDrawWin, self.quotes_path + "1116-mayor-this-calls-for-a-drink.wav")
+        self.quote_quickdrawLit = 'quote_quickdrawLit'
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "509-townie-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1304-undertaker-oh-goodie-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1305-undertaker-quickdraws-are-good-for-business.wav")
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "2040-waitress-quickdraw-is-lit.wav")
+        self.game.sound.register_sound(self.quote_quickdrawLit, self.quotes_path + "1037-mayor-quickdraw-is-lit.wav")
+        self.quote_quickdrawStart = 'quote_quickdrawStart'
+        self.game.sound.register_sound(self.quote_quickdrawStart, self.quotes_path + "1241-prospector-get-that-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickdrawStart, self.quotes_path + "1274-prospector-nail-that-bad-guy-lawman.wav")
+        self.game.sound.register_sound(self.quote_quickdrawStart, self.quotes_path + "1150-mayor-theres-a-bad-guy-out-there.wav")
+        self.quote_quickdrawTaunt = 'quote_quickdrawTaunt'
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1151-mayor-shoot-the-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1554-leader-bart-go-on-take-your-best-shot.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1550-leader-bart-you-cant-shoot.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1552-leader-bart-come-on-tough-guy.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1156-mayor-mertilate-that-villan.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1155-mayor-shoot-that-scurvy-scoundrel.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1277-prospector-the-bad-guy-shoot-the-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "2042-waitress-hit-that-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1520-leader-bart-go-get-im.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "1416-drunk-shoot-that-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_quickdrawTaunt, self.quotes_path + "511-prospector-you-cant-shoot-nothin.wav")
+        self.quote_quickdrawWin = 'quote_quickdrawWin'
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "852-polly-nice-shootin.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1315-undertaker-my-theyre-dropping-like-flies.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2003-waitress-i-didnt-like-that-deadbeat-anyway.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1318-undertaker-a-dead-ringer.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1111-mayor-that-was-a-bit-too-close-for-comfort.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "839-polly-youre-quite-a-man.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "840-polly-congratulations.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2008-waitress-amazing.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2005-waitress-ooh-what-are-you-packin.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1116-mayor-this-calls-for-a-drink.wav")
         self.quote_lockLit = 'quote_lockLit'
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")
@@ -391,16 +391,28 @@ class Assets():
         self.game.sound.register_music(self.music_shooterLaneGroove, self.music_path + "001-shooter-lane-groove.wav")
         self.music_mainTheme = 'music_mainTheme'
         self.game.sound.register_music(self.music_mainTheme, self.music_path + "002-song-starting-gameplay.wav")
-        self.music_quickDrawBumper = 'music_quickDrawBumper'
-        self.game.sound.register_sound(self.music_quickDrawBumper, self.music_path + "017-quickdraw-bumper.wav")
-        self.music_quickDraw = 'music_quickDraw'
-        self.game.sound.register_music(self.music_quickDraw, self.music_path + "025-quickdraw.wav")
+        self.music_quickdrawBumper = 'music_quickdrawBumper'
+        self.game.sound.register_sound(self.music_quickdrawBumper, self.music_path + "017-quickdraw-bumper.wav")
+        self.music_quickdraw = 'music_quickdraw'
+        self.game.sound.register_music(self.music_quickdraw, self.music_path + "025-quickdraw.wav")
         self.music_gunfightIntro = 'music_gunfightIntro'
         self.game.sound.register_sound(self.music_gunfightIntro, self.music_path + "009-gunfight-intro.wav")
         self.music_drumRoll = 'music_drumRoll'
         self.game.sound.register_music(self.music_drumRoll, self.music_path + "009-gunfight-drumroll.wav")
         self.music_multiball_intro = 'music_multiball_intro'
         self.game.sound.register_music(self.music_multiball_intro, self.music_path + "026-multiball-intro-music.wav")
+
+
+        # lampshows
+        lampshows = list()
+
+        self.lamp_topToBottom = "top-to-bottom"; lampshows.append(self.lamp_topToBottom)
+        self.lamp_rightToLeft = "right-to-left"; lampshows.append(self.lamp_rightToLeft)
+        self.lamp_starShots = "star-shots"; lampshows.append(self.lamp_starShots)
+        self.lamp_sparkle = "sparkle"; lampshows.append(self.lamp_sparkle)
+
+        for lampshow in lampshows:
+            self.game.lampctrl.register_show(lampshow,self.lampshows_path + lampshow + ".lampshow")
 
         # Shared Paths
         self.shared_sound_path = "shared/sound/"

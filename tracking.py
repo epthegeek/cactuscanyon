@@ -63,9 +63,9 @@ class Tracking(game.Player):
         self.player_stats['combos'] = 0
 
         # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING, SHOWDOWN -- 0 is left, 1 is right
-        self.player_stats['quickDrawStatus'] = ["OPEN","OPEN"]
-        self.player_stats['quickDrawsStarted'] = 0
-        self.player_stats['quickDrawsWon'] = 0
+        self.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
+        self.player_stats['quickdrawsStarted'] = 0
+        self.player_stats['quickdrawsWon'] = 0
         self.player_stats['badGuysDead'] = [False,False,False,False]
         self.player_stats['showdownTotal'] = 0
 

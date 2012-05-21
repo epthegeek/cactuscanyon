@@ -268,7 +268,7 @@ PRLamps:
         number: L31
     badGuyL0:
         number: L32
-    leftQuickDraw:
+    leftQuickdraw:
         number: L33
     rightRampSoundAlarm:
         number: L34
@@ -290,7 +290,7 @@ PRLamps:
         number: L44
     rightLoopGoodShot:
         number: L45
-    leftReturnQuickDraw:
+    leftReturnQuickdraw:
         number: L46
     leftGunfightPin:
         number: L47
@@ -298,9 +298,9 @@ PRLamps:
         number: L48
     badGuyL3:
         number: L51
-    bottomRightQuickDraw:
+    bottomRightQuickdraw:
         number: L52
-    topRightQuickDraw:
+    topRightQuickdraw:
         number: L53
     centerRampCatchTrain:
         number: L54
@@ -314,7 +314,7 @@ PRLamps:
         number: L58
     leftRampWhiteWater:
         number: L61
-    leftRampWaterFall:
+    leftRampWaterfall:
         number: L62
     leftRampSavePolly:
         number: L63

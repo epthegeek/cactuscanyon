@@ -33,31 +33,31 @@ class LeftRamp(game.Mode):
             # first light on
             self.game.lamps.leftRampWhiteWater.enable()
             # blink the second
-            self.game.lamps.leftRampWaterFall.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
         elif stage == 3:
             # first two on
             self.game.lamps.leftRampWhiteWater.enable()
-            self.game.lamps.leftRampWaterFall.enable()
+            self.game.lamps.leftRampWaterfall.enable()
             # blink the third
             self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
         # this is completed - pulse the 3rd light
         elif stage == 4:
             # two on
             self.game.lamps.leftRampWhiteWater.enable()
-            self.game.lamps.leftRampWaterFall.enable()
+            self.game.lamps.leftRampWaterfall.enable()
             # pulse the third
             self.game.lamps.leftRampSavePolly.schedule(0x4677EE62)
         # after polly, before stampede all three stay on
         elif stage == 5:
             self.game.lamps.leftRampWhiteWater.enable()
-            self.game.lamps.leftRampWaterFall.enable()
+            self.game.lamps.leftRampWaterfall.enable()
             self.game.lamps.leftRampSavePolly.enable()
         else:
             pass
 
     def disable_lamps(self):
         self.game.lamps.leftRampWhiteWater.disable()
-        self.game.lamps.leftRampWaterFall.disable()
+        self.game.lamps.leftRampWaterfall.disable()
         self.game.lamps.leftRampSavePolly.disable()
 
     def sw_leftRampEnter_active(self,sw):

@@ -64,7 +64,7 @@ class CCGame(game.BasicGame):
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
-        cat.game_data_key = 'QuickDrawChampHighScoreData'
+        cat.game_data_key = 'QuickdrawChampHighScoreData'
         cat.titles = ['Quickdraw Champ']
         self.highscore_categories.append(cat)
 
@@ -158,15 +158,15 @@ class CCGame(game.BasicGame):
         self.ballStarting = True
         # launch a ball, unless there is one in the shooter lane already - but really, this shouldn't
         # happen because we're only starting if trough is full
-        if not self.game.switches.shooterLane.is_active:
+        if not self.switches.shooterLane.is_active():
             self.trough.launch_balls(1) # eject a ball into the shooter lane
 
         # enable the ball search
-        self.game.ball_search.enable()
+        self.ball_search.enable()
         # turn the flippers on
         self.enable_flippers(True)
         # reset the tilt status
-        self.game.set_tracking('tiltStatus',0)
+        self.set_tracking('tiltStatus',0)
 
         # load the base game mode here
         self.modes.add(self.base_game_mode)
@@ -202,7 +202,7 @@ class CCGame(game.BasicGame):
         self.modes.remove(self.mine)
         self.modes.remove(self.saloon)
         # turn off ball save
-        self.game.ball_search.disable()
+        self.ball_search.disable()
         # turn off the flippers
         self.enable_flippers(False)
         # then call the ball_ended from proc.game.BasicGame
@@ -221,6 +221,28 @@ class CCGame(game.BasicGame):
         # No special handlers in starter game.
         special_handler_modes = []
         self.ball_search = modes.BallSearch(self, priority=100,countdown_time=30, coils=self.ballsearch_coils,reset_switches=self.ballsearch_resetSwitches,stop_switches=self.ballsearch_stopSwitches,special_handler_modes=special_handler_modes)
+
+    def schedule_lampshows(self,lampshows,repeat=True):
+        self.scheduled_lampshows = lampshows
+        self.scheduled_lampshows_repeat = repeat
+        self.scheduled_lampshow_index = 0
+        self.start_lampshow()
+
+    def start_lampshow(self):
+        self.lampctrl.play_show(self.scheduled_lampshows[self.scheduled_lampshow_index], False, self.lampshow_ended)
+
+    def lampshow_ended(self):
+        self.scheduled_lampshow_index = self.scheduled_lampshow_index + 1
+        if self.scheduled_lampshow_index == len(self.scheduled_lampshows):
+            if self.scheduled_lampshows_repeat:
+                self.scheduled_lampshow_index = 0
+                self.start_lampshow()
+            else:
+                # Finished playing the lampshows and not repeating...
+                pass
+        else:
+            self.start_lampshow()
+
 
     ###  _____               _    _
     ### |_   _| __ __ _  ___| | _(_)_ __   __ _
