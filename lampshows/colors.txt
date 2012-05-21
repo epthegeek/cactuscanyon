@@ -1,0 +1,44 @@
+##
+## This list is separated by color
+##
+#### WHITE
+leftRampCombo
+leftLoopCombo
+centerRampCombo
+rightLoopCombo
+rightRampCombo
+leftBonusLane
+rightBonusLane
+leftGunFight
+rightGunFight
+#### YELLOW
+badGuyL0
+badGuyL1
+badGuyL2
+badGuyl3
+rankStranger
+rankPartner
+rankDeputy
+rankSheriff
+rankMarshall
+starShowdown
+starBartBrothers
+starCombo
+starMotherLode
+starStampede
+rightReturnQuickDraw
+leftReturnQuickDraw
+leftQuickDraw
+topRightQuickDraw
+bottomRightQuickDraw
+saloonArrow
+#### RED
+leftOutGunFight
+rightOutSpecial
+shootAgain
+leftRampJackpot
+leftLoopJackpot
+centerRampJackpot
+rightLoopJackpot
+rightRampJackpot
+
