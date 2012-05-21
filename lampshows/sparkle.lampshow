@@ -1,74 +1,74 @@
 ## Bonus Lanes
-lamp:rightBonusLane      | . . . . .
-lamp:leftBonusLane       |  . . . . .
+lamp:rightBonusLane      | ..  ..  ..  ..  ..
+lamp:leftBonusLane       |   ..  ..  ..  ..  ..
 ## Left Ramp
-lamp:leftRampCombo       | . . . . .
-lamp:leftRampJackpot     |  . . . . .
-lamp:leftRampSavePolly   | . . . . .
-lamp:leftRampWaterfall   |  . . . . .
-lamp:leftRampWhiteWater  | . . . . .
+lamp:leftRampCombo       | ..  ..  ..  ..  ..
+lamp:leftRampJackpot     |   ..  ..  ..  ..  ..
+lamp:leftRampSavePolly   | ..  ..  ..  ..  ..
+lamp:leftRampWaterfall   |   ..  ..  ..  ..  ..
+lamp:leftRampWhiteWater  | ..  ..  ..  ..  ..
 ## Left Loop
-lamp:leftLoopCombo       |  . . . . .
-lamp:leftLoopJackpot     | . . . . .
-lamp:leftLoopRideEm      |  . . . . .
-lamp:leftLoopWildRide    | . . . . .
-lamp:leftLoopBuckNBronco |  . . . . .
+lamp:leftLoopCombo       |   ..  ..  ..  ..  ..
+lamp:leftLoopJackpot     | ..  ..  ..  ..  ..
+lamp:leftLoopRideEm      |   ..  ..  ..  ..  ..
+lamp:leftLoopWildRide    | ..  ..  ..  ..  ..
+lamp:leftLoopBuckNBronco |   ..  ..  ..  ..  ..
 ## Mine
-lamp:extraBall           | . . . . .
-lamp:mineLock            |  . . . . .
+lamp:extraBall           | ..  ..  ..  ..  ..
+lamp:mineLock            |   ..  ..  ..  ..  ..
 ## Center Ramp
-lamp:centerRampCombo     |  . . . . .
-lamp:centerRampJackpot   | . . . . .
-lamp:centerRampSavePolly |  . . . . .
-lamp:centerRampStopTrain | . . . . .
-lamp:centerRampCatchTrain|  . . . . .
+lamp:centerRampCombo     |   ..  ..  ..  ..  ..
+lamp:centerRampJackpot   | ..  ..  ..  ..  ..
+lamp:centerRampSavePolly |   ..  ..  ..  ..  ..
+lamp:centerRampStopTrain | ..  ..  ..  ..  ..
+lamp:centerRampCatchTrain|   ..  ..  ..  ..  ..
 ## Saloon
-lamp:bountySaloon        | . . . . .
-lamp:saloonArrow         |  . . . . .
+lamp:bountySaloon        | ..  ..  ..  ..  ..
+lamp:saloonArrow         |   ..  ..  ..  ..  ..
 ## Right Loop
-lamp:rightLoopCombo      |  . . . . .
-lamp:rightLoopJackpot    | . . . . .
-lamp:rightLoopMarksman   |  . . . . .
-lamp:rightLoopGunslinger | . . . . .
-lamp:rightLoopGoodShot   |  . . . . .
+lamp:rightLoopCombo      |   ..  ..  ..  ..  ..
+lamp:rightLoopJackpot    | ..  ..  ..  ..  ..
+lamp:rightLoopMarksman   |   ..  ..  ..  ..  ..
+lamp:rightLoopGunslinger | ..  ..  ..  ..  ..
+lamp:rightLoopGoodShot   |   ..  ..  ..  ..  ..
 ## Right Ramp
-lamp:rightRampCombo      | . . . . .
-lamp:rightRampJackpot    |  . . . . .
-lamp:rightRampSavePolly  | . . . . .
-lamp:rightRampShootOut   |  . . . . .
-lamp:rightRampSoundAlarm | . . . . .
+lamp:rightRampCombo      | ..  ..  ..  ..  ..
+lamp:rightRampJackpot    |   ..  ..  ..  ..  ..
+lamp:rightRampSavePolly  | ..  ..  ..  ..  ..
+lamp:rightRampShootOut   |   ..  ..  ..  ..  ..
+lamp:rightRampSoundAlarm | ..  ..  ..  ..  ..
 ## Bad guys
-lamp:badGuyL0            | . . . . .
-lamp:badGuyL1            |  . . . . .
-lamp:badGuyL2            | . . . . .
-lamp:badGuyL3            |  . . . . .
+lamp:badGuyL0            | ..  ..  ..  ..  ..
+lamp:badGuyL1            |   ..  ..  ..  ..  ..
+lamp:badGuyL2            | ..  ..  ..  ..  ..
+lamp:badGuyL3            |   ..  ..  ..  ..  ..
 ## Ranks
-lamp:rankStranger        | . . . . .
-lamp:rankPartner         |  . . . . .
-lamp:rankDeputy          | . . . . .
-lamp:rankSheriff         |  . . . . .
-lamp:rankMarshall        | . . . . .
+lamp:rankStranger        | ..  ..  ..  ..  ..
+lamp:rankPartner         |   ..  ..  ..  ..  ..
+lamp:rankDeputy          | ..  ..  ..  ..  ..
+lamp:rankSheriff         |   ..  ..  ..  ..  ..
+lamp:rankMarshall        | ..  ..  ..  ..  ..
 ## beacon
-lamp:shootToCollect      | . . . . .
-lamp:extraBallLitBeacon  |  . . . . .
-lamp:jackpotBeacon       | . . . . .
-lamp:bountyBeacon        |  . . . . .
+lamp:shootToCollect      | ..  ..  ..  ..  ..
+lamp:extraBallLitBeacon  |   ..  ..  ..  ..  ..
+lamp:jackpotBeacon       | ..  ..  ..  ..  ..
+lamp:bountyBeacon        |   ..  ..  ..  ..  ..
 ## Quickdraws
-lamp:topRightQuickdraw   | . . . . .
-lamp:bottomRightQuickdraw|  . . . . .
-lamp:leftQuickdraw       | . . . . .
+lamp:topRightQuickdraw   | ..  ..  ..  ..  ..
+lamp:bottomRightQuickdraw|   ..  ..  ..  ..  ..
+lamp:leftQuickdraw       | ..  ..  ..  ..  ..
 ##
-lamp:starMotherLode      | . . . . .
-lamp:starCombo           |  . . . . .
-lamp:starBartBrothers    | . . . . .
-lamp:starShowdown        |  . . . . .
-lamp:starStampede        | . . . . .
-lamp:starHighNoon        |  . . . . .
+lamp:starMotherLode      | ..  ..  ..  ..  ..
+lamp:starCombo           |   ..  ..  ..  ..  ..
+lamp:starBartBrothers    | ..  ..  ..  ..  ..
+lamp:starShowdown        |   ..  ..  ..  ..  ..
+lamp:starStampede        | ..  ..  ..  ..  ..
+lamp:starHighNoon        |   ..  ..  ..  ..  ..
 ## in/out lanes
-lamp:leftOutGunfight     | . . . . .
-lamp:leftReturnQuickdraw |  . . . . .
-lamp:leftGunfightPin     | . . . . .
-lamp:shootAgain          |  . . . . .
-lamp:rightGunfightPin    | . . . . .
-lamp:rightReturnQuickdraw|  . . . . .
-lamp:rightOutSpecial     | . . . . .
+lamp:leftOutGunfight     | ..  ..  ..  ..  ..
+lamp:leftReturnQuickdraw |   ..  ..  ..  ..  ..
+lamp:leftGunfightPin     | ..  ..  ..  ..  ..
+lamp:shootAgain          |   ..  ..  ..  ..  ..
+lamp:rightGunfightPin    | ..  ..  ..  ..  ..
+lamp:rightReturnQuickdraw|   ..  ..  ..  ..  ..
+lamp:rightOutSpecial     | ..  ..  ..  ..  ..
