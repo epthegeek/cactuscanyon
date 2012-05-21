@@ -44,10 +44,6 @@ class BaseGameMode(game.Mode):
         # Enable the flippers
         self.game.enable_flippers(enable=True)
 
-        # Put the ball into play and start tracking it.
-        # self.game.coils.trough.pulse(40)
-        #self.game.trough.launch_balls(1, self.ball_launch_callback)
-
         # Enable ball search in case a ball gets stuck during gameplay.
         #self.game.ball_search.enable()
 
@@ -232,9 +228,9 @@ class BaseGameMode(game.Mode):
 
             # Kick balls out of places it could be stuck.
             if self.game.switches.minePopper.is_active():
-                self.game.coils.minePopper.pulse(40)
+                self.game.coils.minePopper.pulse(30)
             if self.game.switches.saloonPopper.is_active():
-                self.game.coils.saloonPopper.pulse(40)
+                self.game.coils.saloonPopper.pulse(30)
             # reset the tilt
             self.game.set_tracking('tiltStatus',0)
         #play sound

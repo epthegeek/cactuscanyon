@@ -70,6 +70,7 @@ class Saloon(game.Mode):
             self.game.sound.play_voice(self.tauntQuote)
         # and move the bart
         self.move_bart()
+        self.delay(delay=0.03,handler=self.light_bart)
         # score some points
         self.game.score(2530)
         ## -- set the last switch hit --
@@ -77,7 +78,7 @@ class Saloon(game.Mode):
 
     def kick(self):
         # kick the ball out
-        self.game.coils.saloonPopper.pulse(40)
+        self.game.coils.saloonPopper.pulse(30)
 
     def wait_until_unbusy(self,myHandler):
         if not self.busy:
@@ -313,7 +314,7 @@ class Saloon(game.Mode):
 
     def repeat_ding(self,times):
         self.game.sound.play(self.game.assets.sfx_bountyBell)
-        self.game.coils.beaconFlasher.pulse(40)
+        self.game.coils.beaconFlasher.pulse(ep.FLASHER_PULSE)
         times -= 1
         if times > 0:
             self.delay(delay=0.4,handler=self.repeat_ding,param=times)
@@ -414,7 +415,10 @@ class Saloon(game.Mode):
         # play a quote appropriate to the current bart
         self.game.sound.play_voice(self.hitQuote)
         # move bart
-        self.move_bart(hat=True)
+        self.move_hat()
+        self.delay(delay=0.03,handler=self.move_bart)
+        self.delay(delay=0.06,handler=self.light_bart)
+
         # score the points
         self.game.score(self.hitValue)
         # flash the light and move the dude
@@ -446,7 +450,10 @@ class Saloon(game.Mode):
         # add to the defeated barts
         currentTotal = self.game.increase_tracking('bartsDefeated')
         # move bart
-        self.move_bart(hat=True)
+        self.move_hat()
+        self.delay(delay=0.03,handler=self.move_bart)
+        self.delay(delay=0.06,handler=self.light_bart)
+
         # play a defeated quote
         myWait = self.game.sound.play_voice(self.defeatQuote)
         # set the status to dead - gunfight has to set it back to open
@@ -491,15 +498,16 @@ class Saloon(game.Mode):
         transition = ep.EP_Transition(self,layerOne,layerTwo,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         self.delay(delay = 1.5,handler=self.clear_layer)
 
-    def move_bart(self,hat=False):
-        # move the bart, flash his light, and optionally move his hat
+    def move_bart(self):
+        # pulse the bart move coil
+        self.game.coils.moveBart.pulse(30)
+
+    def move_hat(self):
+        self.game.coils.moveBartHat.pulse(30)
+
+    def light_bart(self):
         # pulse the flasher light
         self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
-        # pulse the bart move coil
-        self.game.coils.moveBart.pulse(40)
-        # if asked, pulse the hat
-        if hat:
-            self.game.coils.moveBartHat.pulse(40)
 
     ## Gunfight
 

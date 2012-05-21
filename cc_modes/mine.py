@@ -105,7 +105,7 @@ class Mine(game.Mode):
 
     def mine_kick(self):
         # kick the ball out
-        self.game.coils.minePopper.pulse(40)
+        self.game.coils.minePopper.pulse(30)
 
 
     def light_lock(self):
