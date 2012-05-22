@@ -26,6 +26,28 @@ class Mine(game.Mode):
         self.busy = False
 
 
+    def mode_started(self):
+        self.update_lamps()
+
+    def mode_stopped(self):
+        self.disable_lamps()
+
+    def update_lamps(self):
+        self.disable_lamps()
+        if self.game.show_tracking('extraBallsPending') > 0:
+            self.game.lamps.extraBallLitBeacon.enable()
+            self.game.lamps.extraBall.enable()
+        status = self.game.show_tracking('mineStatus')
+        if status == "LOCK":
+            self.game.lamps.mineLock.enable()
+        elif status == "READY":
+            self.game.lamps.mineLock.schedule(0x00FF00FF)
+
+    def disable_lamps(self):
+        self.game.lamps.extraBallLitBeacon.disable()
+        self.game.lamps.extraBall.disable()
+        self.game.lamps.mineLock.disable()
+
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
         # stock sound for the switch
@@ -106,7 +128,10 @@ class Mine(game.Mode):
     def mine_kick(self):
         # kick the ball out
         self.game.coils.minePopper.pulse(30)
+        self.delay(delay=0.03,handler=self.mine_flash)
 
+    def mine_flash(self):
+        self.game.coils.mineFlasher.pulse(30)
 
     def light_lock(self):
         # set the lock status
@@ -118,7 +143,9 @@ class Mine(game.Mode):
         print "LOCK IS LIT ... AND SO AM I"
         ## TODO lights and sounds
         ## then kick the ball
+        self.update_lamps()
         self.mine_kick()
+
 
     def light_multiball(self):
         ## TODO lights and sounds
@@ -129,8 +156,10 @@ class Mine(game.Mode):
         self.game.set_tracking('mineHits', 0)
         # play a sound?
         # show some display?
+        self.update_lamps()
         # then kick the ball
         self.mine_kick()
+
 
     def lock_ball(self):
         # tick up the total balls locked because we just locked one
@@ -156,6 +185,7 @@ class Mine(game.Mode):
                 self.game.set_tracking('mineStatus', "READY")
             else:
                 self.game.set_tracking('mineStatus',"LOCK")
+        self.update_lamps()
 
     def start_multiball(self):
         # tag on another ball to the locked total, even though it's not really referred to as a lock
@@ -164,6 +194,7 @@ class Mine(game.Mode):
         self.game.set_tracking('mineStatus', "RUNNING")
         # reset the locked ball count
         self.game.set_tracking('ballsLocked', 0)
+        self.update_lamps()
         # start multiball!!
         self.game.modes.add(self.game.gm_multiball)
         self.game.gm_multiball.start_multiball()
@@ -232,6 +263,7 @@ class Mine(game.Mode):
         self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # play a quote
         self.game.sound.play(self.game.assets.quote_extraBallLit)
+        self.update_lamps()
         self.delay(delay=myWait,handler=self.clear_layer)
         print "EXTRA BALL LIT"
 
@@ -242,6 +274,7 @@ class Mine(game.Mode):
         self.game.increase_tracking('extraBallsTotal')
         # take one off of the pending total
         self.game.decrease_tracking('extraBallsPending')
+        selfupdate_lamps()
         # add one to the pending the player for use - using the framework standard for storing extra_balls
         self.current_player().extra_balls += 1
         # if they've already gotten an extra ball - it should divert to the short version

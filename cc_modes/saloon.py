@@ -98,7 +98,6 @@ class Saloon(game.Mode):
             self.game.lamps.bountyBeacon.enable()
             beacon = True
         if self.game.show_tracking('extraBallsPending') > 0:
-            self.game.lamps.extraBallLitBeacon.enable()
             beacon = True
         ## todo jackpot isn't set up
         if beacon:
@@ -112,7 +111,6 @@ class Saloon(game.Mode):
         self.game.lamps.bountySaloon.disable()
         self.game.lamps.shootToCollect.disable()
         self.game.lamps.bountyBeacon.disable()
-        self.game.lamps.extraBallLitBeacon.disable()
         self.game.lamps.jackpotBeacon.disable()
         self.game.lamps.rightGunfightPin.disable()
         self.game.lamps.leftGunfightPin.disable()

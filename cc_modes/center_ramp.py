@@ -14,8 +14,48 @@ class CenterRamp(game.Mode):
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
 
     def mode_started(self):
-        # this would have to turn on some lights and stuff
-        pass
+        self.update_lamps()
+
+    def mode_stopped(self):
+        self.disable_lamps()
+
+    def update_lamps(self):
+        self.disable_lamps()
+        stage = self.game.show_tracking('centerRampStage')
+
+        if stage == 1:
+            # blink the first light
+            self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
+        elif stage == 2:
+            # first light on
+            self.game.lamps.centerRampCatchTrain.enable()
+            # blink the second
+            self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
+        elif stage == 3:
+            # first two on
+            self.game.lamps.centerRampCatchTrain.enable()
+            self.game.lamps.centerRampStopTrain.enable()
+            # blink the third
+            self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+        # this is completed - pulse the 3rd light
+        elif stage == 4:
+            # two on
+            self.game.lamps.centerRampCatchTrain.enable()
+            self.game.lamps.centerRampStopTrain.enable()
+            # pulse the third
+            self.game.lamps.centerRampSavePolly.schedule(0x4677EE62)
+        # after polly, before stampede all three stay on
+        elif stage == 5:
+            self.game.lamps.centerRampCatchTrain.enable()
+            self.game.lamps.centerRampStopTrain.enable()
+            self.game.lamps.centerRampSavePolly.enable()
+        else:
+            pass
+
+    def disable_lamps(self):
+        self.game.lamps.centerRampCatchTrain.disable()
+        self.game.lamps.centerRampStopTrain.disable()
+        self.game.lamps.centerRampSavePolly.disable()
 
     def sw_centerRampEnter_active(self,sw):
         # play the switch sound
@@ -100,6 +140,7 @@ class CenterRamp(game.Mode):
         # we're holding at 3, save polly peril will set it to 4
         if self.game.show_tracking('centerRampStage') < 3:
             self.game.increase_tracking('centerRampStage')
+            self.update_lamps()
 
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):

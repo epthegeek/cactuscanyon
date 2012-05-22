@@ -14,7 +14,7 @@ class RightLoop(game.Mode):
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'guns-border.dmd').frames[0])
 
     def mode_started(self):
-        self.game.update_lamps()
+        self.update_lamps()
 
     def mode_stopped(self):
         self.disable_lamps()

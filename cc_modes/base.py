@@ -71,6 +71,7 @@ class BaseGameMode(game.Mode):
                 # go check the bonus - after that we'll finish the ball
                 self.check_bonus()
             else:
+                self.layer = None
                 self.game.ball_ended()
 
     def update_lamps(self):
@@ -183,11 +184,19 @@ class BaseGameMode(game.Mode):
         if status == 2:
             print "DANGER DANGER"
             # double warning
+            line1 = dmd.TextLayer(128/2, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
+            line2 = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
+            self.layer = dmd.GroupedLayer(128,32,[line1,line2])
+            # play a sound
+            self.delay(delay=1,handler=self.clear_layer())
+
         # otherwise this must be the first warning
         else:
             print "DANGER"
-            #play sound
             #add a display layer and add a delayed removal of it.
+            self.layer = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
+            #play sound
+            self.delay(delay=1,handler=self.clear_layer())
 
     def tilt(self):
         # Process tilt.
@@ -195,8 +204,10 @@ class BaseGameMode(game.Mode):
         # No need to do this stuff again if for some reason tilt already occurred.
         if self.game.show_tracking('tiltStatus') == 3:
 
+            # build a tilt graphic
+            tiltLayer = dmd.TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=False).set_text("TILT")
             # Display the tilt graphic
-            self.layer = self.tilt_layer
+            self.layer = tiltLayer
 
             # Disable flippers so the ball will drain.
             self.game.enable_flippers(enable=False)

@@ -198,7 +198,7 @@ class CCGame(game.BasicGame):
             for mode in self.ep_modes:
                 if getattr(mode, "clear_layer", None):
                     mode.clear_layer()
-        ## and tell all the modes the ball drained
+        ## and tell all the modes the ball drained no matter what
         for mode in self.ep_modes:
             if getattr(mode, "ball_drained", None):
                 mode.ball_drained()

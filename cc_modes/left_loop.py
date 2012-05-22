@@ -24,7 +24,7 @@ class LeftLoop(game.Mode):
 
 
     def mode_started(self):
-        self.game.update_lamps()
+        self.update_lamps()
 
     def mode_stopped(self):
         self.disable_lamps()

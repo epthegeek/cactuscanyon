@@ -14,14 +14,14 @@ class RightRamp(game.Mode):
         # Set up the sounds
 
     def mode_started(self):
-        self.game.update_lamps()
+        self.update_lamps()
 
     def mode_stopped(self):
         self.disable_lamps()
 
     def update_lamps(self):
         self.disable_lamps()
-        stage = self.game.show_tracking('leftLoopStage')
+        stage = self.game.show_tracking('rightRampStage')
 
         if stage == 1:
             # blink the first light
