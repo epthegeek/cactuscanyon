@@ -93,9 +93,9 @@ class BadGuys(game.Mode):
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
 
     def target_up(self,target):
-        self.coils[target].patter(on_time=3,off_time=20,original_on_time=30)
+        self.coils[target].patter(on_time=3,off_time=18,original_on_time=30)
         self.lights[target].enable()
-        self.delay(delay=0.1,handler=self.target_activate,target)
+        self.delay(delay=0.1,handler=self.target_activate,param=target)
 
     def target_down(self,target):
         # kill the delay that enables switch recognition - this is for gunfights mostly

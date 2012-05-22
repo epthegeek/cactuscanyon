@@ -142,16 +142,16 @@ class CCGame(game.BasicGame):
 
     def start_game(self):
         # remove the attract mode
-        self.modes.remove(self.attract)
+        self.modes.remove(self.attract_mode)
         # turn off all the ligths
         for lamp in self.lamps:
             lamp.disable()
-        # load the base game mode
-        self.modes.add(self.base_game_mode)
         # run the start ball from parent
         super(CCGame,self).start_game()
         # Add the first player
         self.add_player()
+        # load the base game mode
+        self.modes.add(self.base_game_mode)
         # Start the ball.  This includes ejecting a ball from the trough.
         self.start_ball()
 

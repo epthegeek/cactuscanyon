@@ -38,13 +38,13 @@ class BaseGameMode(game.Mode):
 
     def mode_started(self):
         ## Load up all the base modes
-        self.modes.add(self.right_ramp)
-        self.modes.add(self.left_ramp)
-        self.modes.add(self.center_ramp)
-        self.modes.add(self.left_loop)
-        self.modes.add(self.right_loop)
-        self.modes.add(self.mine)
-        self.modes.add(self.saloon)
+        self.game.modes.add(self.game.right_ramp)
+        self.game.modes.add(self.game.left_ramp)
+        self.game.modes.add(self.game.center_ramp)
+        self.game.modes.add(self.game.left_loop)
+        self.game.modes.add(self.game.right_loop)
+        self.game.modes.add(self.game.mine)
+        self.game.modes.add(self.game.saloon)
         # and update the lamps
         self.game.update_lamps()
 
@@ -54,6 +54,14 @@ class BaseGameMode(game.Mode):
         # Deactivate the ball search logic so it won't search due to no
         # switches being hit.
         self.game.ball_search.disable()
+        # shut down all the modes
+        self.game.modes.remove(self.game.right_ramp)
+        self.game.modes.remove(self.game.left_ramp)
+        self.game.modes.remove(self.game.center_ramp)
+        self.game.modes.remove(self.game.left_loop)
+        self.game.modes.remove(self.game.right_loop)
+        self.game.modes.remove(self.game.mine)
+        self.game.modes.remove(self.game.saloon)
 
     def ball_drained(self):
         # if that was the last ball in play need to finish up

@@ -68,8 +68,8 @@ class Attract(game.Mode):
             self.game.assets.lamp_starShots,
             self.game.assets.lamp_colors,
             self.game.assets.lamp_colors,
-            self.game.assets.gitest,
-            self.game.assets.gitest
+            self.game.assets.lamp_giTest,
+            self.game.assets.lamp_giTest
         ]
         self.game.enable_lampshow()
         self.game.schedule_lampshows(lampshows,True)
@@ -158,7 +158,7 @@ class Attract(game.Mode):
         # If the trough is full start a game
         # after killing the lampshow
         self.game.disable_lampshow()
-        self.lampctrl.stop_show()
+        self.game.lampctrl.stop_show()
 
         if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
             # Initialize game
