@@ -71,6 +71,7 @@ class Saloon(game.Mode):
         # and move the bart
         self.move_bart()
         self.delay(delay=0.03,handler=self.light_bart)
+        self.delay(delay=0.07,handler=self.move_bart)
         # score some points
         self.game.score(2530)
         ## -- set the last switch hit --
@@ -418,6 +419,7 @@ class Saloon(game.Mode):
         self.move_hat()
         self.delay(delay=0.03,handler=self.move_bart)
         self.delay(delay=0.06,handler=self.light_bart)
+        self.delay(delay=0.1,handler=self.move_bart)
 
         # score the points
         self.game.score(self.hitValue)
@@ -443,6 +445,8 @@ class Saloon(game.Mode):
         textLayer4 = dmd.TextLayer(42,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text("TO COLLECT")
         self.textLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3,textLayer4])
         self.textLayer.composite_op = "blacksrc"
+        # play a fancy lamp show
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
         self.display_damage_one()
 
     def defeat_bart(self):
@@ -453,6 +457,7 @@ class Saloon(game.Mode):
         self.move_hat()
         self.delay(delay=0.03,handler=self.move_bart)
         self.delay(delay=0.06,handler=self.light_bart)
+        self.delay(delay=0.1,handler=self.move_bart)
 
         # play a defeated quote
         myWait = self.game.sound.play_voice(self.defeatQuote)
@@ -468,6 +473,9 @@ class Saloon(game.Mode):
         self.game.score(self.defeatValue)
         # reset the hits on bart
         self.game.set_tracking('bartHits',0)
+        # play a fancy lampshow
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
+        # setup the display
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'weave-border.dmd').frames[0])
         textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
         textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))

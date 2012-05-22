@@ -28,30 +28,30 @@ class BadGuys(game.Mode):
                       self.game.coils.rightGunFightPost]
 
     def mode_started(self):
-        self.badGuyUp = False
+        self.badGuyUp = [False,False,False,False]
 
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
         print "BAD GUY 1 HIT"
-        if self.badGuyUp:
+        if self.badGuyUp[0]:
             self.hit_bad_guy(0)
 
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
         print "BAD GUY 2 HIT"
-        if self.badGuyUp:
+        if self.badGuyUp[1]:
             self.hit_bad_guy(1)
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
         print "BAD GUY 3 HIT"
-        if self.badGuyUp:
+        if self.badGuyUp[2]:
             self.hit_bad_guy(2)
 
     def sw_badGuySW3_active(self,sw):
         print "BAD GUY 4 HIT"
         # far right bad guy target
-        if self.badGuyUp:
+        if self.badGuyUp[3]:
             self.hit_bad_guy(3)
 
     def hit_bad_guy(self,target):
@@ -95,15 +95,16 @@ class BadGuys(game.Mode):
     def target_up(self,target):
         self.coils[target].patter(on_time=3,off_time=20,original_on_time=30)
         self.lights[target].enable()
-        self.delay(delay=0.1,handler=self.target_activate)
+        self.delay(delay=0.1,handler=self.target_activate,target)
 
     def target_down(self,target):
+        # kill the delay that enables switch recognition - this is for gunfights mostly
         self.coils[target].disable()
         self.lights[target].disable()
-        self.badGuyUp = False
+        self.badGuyUp[target] = False
 
-    def target_activate(self):
-        self.badGuyUp = True
+    def target_activate(self,target):
+        self.badGuyUp[target] = True
     ###
     ###   ___        _      _       _
     ###  / _ \ _   _(_) ___| | ____| |_ __ __ ___      __
@@ -384,7 +385,7 @@ class BadGuys(game.Mode):
         # pop up the post
         print "RAISE POST ON SIDE: " + str(side)
         self.activeSide = side
-        self.posts[self.activeSide].patter()
+        self.posts[self.activeSide].patter(on_time=2,off_time=8,original_on_time=30)
         # set the bad guy pop order accounting for the side it started on
         badGuys = [0,1,2,3]
         # select our eventual target
@@ -443,6 +444,9 @@ class BadGuys(game.Mode):
         # up the rank if it's not full yet
         if self.game.show_tracking('rank') < 4:
             newrank = self.game.increase_tracking('rank')
+        # if it is full, this bit is awkward
+        else:
+            newrank = 4
         ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
         textString3 = "YOUR RANK: " + ranks[newrank]
         values = ["500,000","750,000","1,000,000","1,500,000","2,000,000"]

@@ -49,10 +49,8 @@ class BaseGameMode(game.Mode):
         self.game.update_lamps()
 
     def mode_stopped(self):
-
         # Ensure flippers are disabled
         self.game.enable_flippers(enable=False)
-
         # Deactivate the ball search logic so it won't search due to no
         # switches being hit.
         self.game.ball_search.disable()
@@ -417,6 +415,7 @@ class BaseGameMode(game.Mode):
 
     def flip_bonus_lane(self):
         self.game.invert_tracking('bonusLaneStatus')
+        self.update_lamps()
 
     def is_time_to_increase_bonus(self):
         # if neither one is off, IT IS TIME
@@ -670,4 +669,4 @@ class BaseGameMode(game.Mode):
         # play a final sound
         # maybe update the display?
         # then loop back to end ball
-        self.delay(delay=1.5,handler=self.ball_ended)
+        self.delay(delay=1.5,handler=self.game.ball_ended)

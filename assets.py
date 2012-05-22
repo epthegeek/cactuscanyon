@@ -406,8 +406,12 @@ class Assets():
         # lampshows
         lampshows = list()
 
+        self.lamp_giTest = 'gi-test'; lampshows.append(self.lamp_giTest)
+        self.lamp_colors = 'colors'; lampshows.append(self.lamp_colors)
         self.lamp_topToBottom = "top-to-bottom"; lampshows.append(self.lamp_topToBottom)
+        self.lamp_bottomToTop = "bottom-to-top"; lampshows.append(self.lamp_bottomToTop)
         self.lamp_rightToLeft = "right-to-left"; lampshows.append(self.lamp_rightToLeft)
+        self.lamp_leftToRight = "left-to-right"; lampshows.append(self.lamp_leftToRight)
         self.lamp_starShots = "star-shots"; lampshows.append(self.lamp_starShots)
         self.lamp_sparkle = "sparkle"; lampshows.append(self.lamp_sparkle)
 
