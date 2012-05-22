@@ -150,29 +150,16 @@ class Attract(game.Mode):
 
     def sw_startButton_active(self, sw):
         # If the trough is full start a game
-        # But we're not running the trough yet
-        # so I'll just put this stuff here
-
-        #self.game.modes.remove(self.game.attract_mode)
-        #self.game.start_game()
-        #self.game.add_player()
-        #self.game.start_ball()
-        #return True
-        # turn off the lampsho
+        # after killing the lampshow
         self.game.disable_lampshow()
+        self.lampctrl.stop_show()
 
         if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
-            # Remove attract mode from mode queue - Necessary?
-            self.game.modes.remove(self)
             # Initialize game
             self.game.start_game()
-            # Add the first player
-            self.game.add_player()
-            # Start the ball.  This includes ejecting a ball from the trough.
-            self.game.start_ball()
         else:
             print "BALL SEARCH"
-            self.game.ball_search.perform_search(2)
+            self.game.ball_search.perform_search(1)
 
     def generate_score_frames(self):
         # This big mess generates frames for the attract loop based on high score data.

@@ -142,3 +142,5 @@ class CenterRamp(game.Mode):
 
     def clear_layer(self):
         self.layer = None
+
+

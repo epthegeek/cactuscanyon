@@ -37,30 +37,16 @@ class BaseGameMode(game.Mode):
 
 
     def mode_started(self):
-        # Disable any previously active lamp
-        #for lamp in self.game.lamps:
-        #    lamp.disable()
-
-        # Enable the flippers
-        self.game.enable_flippers(enable=True)
-
-        # Enable ball search in case a ball gets stuck during gameplay.
-        #self.game.ball_search.enable()
-
-        # Reset tilt warnings and status
-        #self.times_warned = 0;
-        #self.tilt_status = 0
-
-        # In case a higher priority mode doesn't install it's own ball_drained
-        # handler.
-        #self.game.trough.drain_callback = self.ball_drained_callback
-
-        # Each time this mode is added to game Q, set this flag true.
-        #self.ball_starting = True
-
-    #def ball_launch_callback(self):
-    #    if self.ball_starting:
-    #        self.game.ball_save.start_lamp()
+        ## Load up all the base modes
+        self.modes.add(self.right_ramp)
+        self.modes.add(self.left_ramp)
+        self.modes.add(self.center_ramp)
+        self.modes.add(self.left_loop)
+        self.modes.add(self.right_loop)
+        self.modes.add(self.mine)
+        self.modes.add(self.saloon)
+        # and update the lamps
+        self.game.update_lamps()
 
     def mode_stopped(self):
 
@@ -72,21 +58,22 @@ class BaseGameMode(game.Mode):
         self.game.ball_search.disable()
 
     def ball_drained(self):
+        # if that was the last ball in play need to finish up
         if self.game.trough.num_balls_in_play == 0:
-            # End the ball
-            self.finish_ball()
-
-    def finish_ball(self):
-        # Turn off tilt display (if it was on) now that the ball has drained.
-        #if self.tilt_status and self.layer == self.tilt_layer:
-        #    self.layer = None
-        # TODO bonus would go in here?
-        self.end_ball()
-
-    def end_ball(self):
-        # Tell the game object it can process the end of ball
-        # (to end player's turn or shoot again)
-        self.game.end_ball()
+            # turn off all the lights
+            for lamp in self.game.lamps:
+                lamp.disable()
+                # stop the music
+            self.game.sound.stop_music()
+            # turn off ball save
+            self.game.ball_search.disable()
+            # turn off the flippers
+            self.game.enable_flippers(False)
+            if self.game.show_tracking('tiltStatus') != 3:
+                # go check the bonus - after that we'll finish the ball
+                self.check_bonus()
+            else:
+                self.game.ball_ended()
 
     def update_lamps(self):
         # reset first
@@ -231,8 +218,6 @@ class BaseGameMode(game.Mode):
                 self.game.coils.minePopper.pulse(30)
             if self.game.switches.saloonPopper.is_active():
                 self.game.coils.saloonPopper.pulse(30)
-            # reset the tilt
-            self.game.set_tracking('tiltStatus',0)
         #play sound
         #play video
 
@@ -646,3 +631,43 @@ class BaseGameMode(game.Mode):
         display = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
         self.layer = display
         self.delay(delay=2,handler=self.clear_layer)
+
+    ## Bonus
+
+    def check_bonus(self):
+        # get the bonus multiplier
+        times = self.game.show_tracking('bonusX')
+        # then reset it for next time
+        self.game.set_tracking('bonusX',1)
+        # then loop through the display
+        # get the bonus points
+        self.bonus = self.game.show_tracking('bonus')
+        # and reset it
+        self.game.set_tracking('bonus',0)
+        # and clear the running total
+        self.runningTotal = 0
+        self.display_bonus(times)
+
+    def display_bonus(self,times):
+        titleString = "BONUS " + str(times) + "X"
+        titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_9px_az, "center", opaque=False).set_text(titleString)
+        # add the bonus amount to the running total
+        self.runningTotal += self.bonus
+        pointsLine = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text(ep.format_score(self.runningTotal))
+        # turn the layer on
+        self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
+        # play a sound
+        # tick down the counter of times
+        times -= 1
+        if times <= 0:
+            # if we're at the last one, it's time to finish up
+            self.finish_bonus()
+        else:
+            # if not, loop back around after a delay
+            self.delay(delay=0.5,handler=self.display_bonus,param=times)
+
+    def finish_bonus(self):
+        # play a final sound
+        # maybe update the display?
+        # then loop back to end ball
+        self.delay(delay=1.5,handler=self.ball_ended)

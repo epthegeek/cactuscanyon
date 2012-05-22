@@ -7,6 +7,7 @@ import cc_modes
 import pinproc
 import tracking
 from assets import *
+import ep
 
 ## Define the config file locations
 user_game_data_path = "config/game_data.yaml"
@@ -139,6 +140,21 @@ class CCGame(game.BasicGame):
         self.modes.add(self.ball_search)
         self.modes.add(self.attract_mode)
 
+    def start_game(self):
+        # remove the attract mode
+        self.modes.remove(self.attract)
+        # turn off all the ligths
+        for lamp in self.lamps:
+            lamp.disable()
+        # load the base game mode
+        self.modes.add(self.base_game_mode)
+        # run the start ball from parent
+        super(CCGame,self).start_game()
+        # Add the first player
+        self.add_player()
+        # Start the ball.  This includes ejecting a ball from the trough.
+        self.start_ball()
+
     def start_ball(self):
         # run the start_ball from proc.game.BasicGame
         super(CCGame, self).start_ball()
@@ -170,23 +186,19 @@ class CCGame(game.BasicGame):
         # reset the tilt status
         self.set_tracking('tiltStatus',0)
 
-        # load the base game mode here
-        self.modes.add(self.base_game_mode)
-        ## TODO maybe move all these to base game for starting stopping
-        self.modes.add(self.right_ramp)
-        self.modes.add(self.left_ramp)
-        self.modes.add(self.center_ramp)
-        self.modes.add(self.left_loop)
-        self.modes.add(self.right_loop)
-        self.modes.add(self.mine)
-        self.modes.add(self.saloon)
-        # and the skill shot
+        # and load the skill shot
         self.modes.add(self.skill_shot)
 
     # Empty callback just incase a ball drains into the trough before another
      # drain_callback can be installed by a gameplay mode.
     def ball_drained(self):
         # Tell every mode a ball has drained by calling the ball_drained function if it exists
+        if self.game.trough.num_balls_in_play == 0:
+            # kill all the display layers
+            for mode in self.ep_modes:
+                if getattr(mode, "clear_layer", None):
+                    mode.clear_layer()
+        ## and tell all the modes the ball drained
         for mode in self.ep_modes:
             if getattr(mode, "ball_drained", None):
                 mode.ball_drained()
@@ -194,21 +206,11 @@ class CCGame(game.BasicGame):
     def ball_ended(self):
         """Called by end_ball(), which is itself called by base_game_mode.trough_changed."""
         self.log("BALL ENDED")
-        # unload the all the basic game modes from the queue
-        self.modes.remove(self.base_game_mode)
-        self.modes.remove(self.right_ramp)
-        self.modes.remove(self.left_ramp)
-        self.modes.remove(self.center_ramp)
-        self.modes.remove(self.left_loop)
-        self.modes.remove(self.right_loop)
-        self.modes.remove(self.mine)
-        self.modes.remove(self.saloon)
-        # turn off ball save
-        self.ball_search.disable()
-        # turn off the flippers
-        self.enable_flippers(False)
+        # reset the tilt
+        self.game.set_tracking('tiltStatus',0)
         # then call the ball_ended from proc.game.BasicGame
         super(CCGame, self).ball_ended()
+        self.end_ball()
 
     def game_ended(self):
         self.log("GAME ENDED")
@@ -310,13 +312,6 @@ class CCGame(game.BasicGame):
         p.player_stats[item].reverse()
 
 
-
-    # extra method for adding bonus to make it shorter when used
-    def add_bonus(self,points):
-        p = self.current_player()
-        p.player_stats['bonus'] += points
-        print p.player_stats['bonus']
-
     ## this is for frame listeners and delays
     def play_remote_sound(self,param):
         print param
@@ -326,3 +321,12 @@ class CCGame(game.BasicGame):
         print "ITS TIME TO START THE MUSIC"
         print param
         self.sound.play_music(param, loops=-1)
+
+    ## bonus stuff
+
+    # extra method for adding bonus to make it shorter when used
+    def add_bonus(self,points):
+        p = self.current_player()
+        p.player_stats['bonus'] += points
+        print p.player_stats['bonus']
+
