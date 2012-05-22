@@ -80,12 +80,12 @@ class BadGuys(game.Mode):
     def sw_leftReturnLane_active(self, sw):
         # register a left return lane hit
         self.return_lane_hit(0)
-        return self.game.SwitchStop
+        return game.SwitchStop
 
     def sw_rightReturnLane_active(self,sw):
         # register a right return lane hit
         self.return_lane_hit(1)
-        return self.game.SwitchStop
+        return game.SwitchStop
 
     def return_lane_hit(self,side):
         # score some points and play a sound

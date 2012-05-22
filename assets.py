@@ -96,6 +96,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_explosion17, self.sfx_path + "341-sfx-explosion-17.wav")
         self.sfx_fallAndCrash1 = 'sfx_fallAndCrash1'
         self.game.sound.register_sound(self.sfx_fallAndCrash1, self.sfx_path + "101-sfx-fall-and-crash-1.wav")
+        self.sfx_bonusX = 'sfx_bonusX'
+        self.game.sound.register_sound(self.sfx_bonusX, self.sfx_path + "036-sfx-bonus-x.wav")
         self.sfx_flourish6 = 'sfx_flourish6'
         self.game.sound.register_sound(self.sfx_flourish6, self.sfx_path + "032-flourish-6.wav")
         self.sfx_flourish7 = 'sfx_flourish7'
@@ -174,6 +176,18 @@ class Assets():
         self.game.sound.register_sound(self.sfx_ebFallAndCrash, self.sfx_path + "149-sfx-eb-fall-and-crash.wav")
         self.sfx_ebFlourish = 'sfx_ebFlourish'
         self.game.sound.register_sound(self.sfx_ebFlourish, self.sfx_path + "074-sfx-eb-flourish.wav")
+        self.sfx_tiltDanger = 'sfx_tiltDanger'
+        self.game.sound.register_sound(self.sfx_tiltDanger, self.sfx_path + "0143-sfx-tilt-danger.wav")
+        self.sfx_cow1 = 'sfx_cow1'
+        self.game.sound.register_sound(self.sfx_cow1, self.sfx_path + "321-sfx-cow-1.wav")
+        self.sfx_cow2 = 'sfx_cow2'
+        self.game.sound.register_sound(self.sfx_cow2, self.sfx_path + "323-sfx-cow-2.wav")
+        self.sfx_lockTwoMinecrart = 'sfx_lockTwoMinecart'
+        self.game.sound.register_sound(self.sfx_lockTwoMinecrart, self.sfx_path + "243-sfx-lock-2-minecart.wav")
+        self.sfx_trainStop = 'sfx_trainStop'
+        self.game.sound.register_sound(self.sfx_trainStop, self.sfx_path + "199-sfx-train-stops.wav")
+        self.sfx_trainStopWithBrake = 'sfx_trainStopWithBrake'
+        self.game.sound.register_sound(self.sfx_trainStopWithBrake, self.sfx_path + "205-sfx-train-stops-with-brake.wav")
 
         self.sfx_ricochetSet = 'sfx_ricochetSet'
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
@@ -401,7 +415,8 @@ class Assets():
         self.game.sound.register_music(self.music_drumRoll, self.music_path + "009-gunfight-drumroll.wav")
         self.music_multiball_intro = 'music_multiball_intro'
         self.game.sound.register_music(self.music_multiball_intro, self.music_path + "026-multiball-intro-music.wav")
-
+        self.music_pollyPeril = 'music_pollyPeril'
+        self.game.sound.register_music(self.music_pollyPeril, self.music_path + "031-polly-peril.wav")
 
         # lampshows
         lampshows = list()

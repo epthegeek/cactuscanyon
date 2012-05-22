@@ -35,17 +35,16 @@ class CenterRamp(game.Mode):
             # first two on
             self.game.lamps.centerRampCatchTrain.enable()
             self.game.lamps.centerRampStopTrain.enable()
-            # blink the third
-            self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
-        # this is completed - pulse the 3rd light
+            if self.game.show_tracking('leftRampStage') == 4 and self.game.show_tracking('rightRampStage') == 4:
+                # blink the third
+                self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+            else:
+                # pulse the third
+                self.game.lamps.centerRampSavePolly.schedule(0x4677EE62)
+
+        # this is after polly peril - all three on
         elif stage == 4:
-            # two on
-            self.game.lamps.centerRampCatchTrain.enable()
-            self.game.lamps.centerRampStopTrain.enable()
-            # pulse the third
-            self.game.lamps.centerRampSavePolly.schedule(0x4677EE62)
         # after polly, before stampede all three stay on
-        elif stage == 5:
             self.game.lamps.centerRampCatchTrain.enable()
             self.game.lamps.centerRampStopTrain.enable()
             self.game.lamps.centerRampSavePolly.enable()
@@ -127,15 +126,12 @@ class CenterRamp(game.Mode):
         # after polly is saved, before high noon, show the pull brakes animation
         # and 'polly saved'
         else:
-            self.awardString = "POLLY SAVED"
-            self.awardPoints = "150,000"
-            self.game.score(150000)
-
             if combo:
                 self.layer = None
                 self.game.base_game_mode.combo_display()
             else:
-                pass
+                # if we're not in a combo we show the animation
+                self.train_victory()
         # then tick the stage up for next time unless it's completed
         # we're holding at 3, save polly peril will set it to 4
         if self.game.show_tracking('centerRampStage') < 3:
@@ -180,6 +176,25 @@ class CenterRamp(game.Mode):
         # set the delay for the award
         self.delay(delay=myWait,handler=self.show_award_text)
 
+    def train_victory(self):
+        self.awardString = "POLLY SAVED"
+        self.awardPoints = "150,000"
+        self.game.score(150000)
+        # load up the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'train-brake-pull.dmd')
+        # start the full on animation
+        myWait = len(anim.frames) / 8.57
+        # setup the animated layer
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 7
+        # keyframe sounds
+        animLayer.add_frame_listener(13,self.game.play_remote_sound,param=self.game.assets.sfx_trainStopWithBrakePull)
+        # play the short chug
+        self.game.sound.play(self.game.assets.sfx_trainChugShort)
+        # turn on the animation
+        self.layer = animLayer
+        self.delay(delay=myWait,handler=self.show_award_text)
 
     def clear_layer(self):
         self.layer = None

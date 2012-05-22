@@ -182,6 +182,23 @@ class BaseGameMode(game.Mode):
         self.game.modes.add(self.game.service_mode)
         return True
 
+    def music_on(self):
+            self.game.sound.play_music(self.game.assets.music_mainTheme, loops=-1)
+
+    def delayed_music_on(self,wait):
+        self.delay(delay=wait, handler=self.music_on)
+
+    def clear_layer(self):
+        self.layer = None
+
+    ###
+    ###  _____ _ _ _
+    ### |_   _(_) | |_
+    ###   | | | | | __|
+    ###   | | | | | |_
+    ###   |_| |_|_|\__|
+    ###
+
     def sw_tilt_active(self, sw):
         # first, register the hit
         status = self.game.increase_tracking('tiltStatus')
@@ -204,6 +221,7 @@ class BaseGameMode(game.Mode):
             #add a display layer and add a delayed removal of it.
             self.layer = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
             #play sound
+            self.play_tilt_sound()
             self.delay(delay=1,handler=self.clear_layer())
 
     def tilt(self):
@@ -216,6 +234,8 @@ class BaseGameMode(game.Mode):
             tiltLayer = dmd.TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=False).set_text("TILT")
             # Display the tilt graphic
             self.layer = tiltLayer
+            myWait = self.play_tilt_sound()
+            self.delay(delay=myWait,handler=self.play_tilt_sound())
 
             # Disable flippers so the ball will drain.
             self.game.enable_flippers(enable=False)
@@ -238,14 +258,8 @@ class BaseGameMode(game.Mode):
         #play sound
         #play video
 
-    def music_on(self):
-        self.game.sound.play_music(self.game.assets.music_mainTheme, loops=-1)
-
-    def delayed_music_on(self,wait):
-        self.delay(delay=wait, handler=self.music_on)
-
-    def clear_layer(self):
-        self.layer = None
+    def play_tilt_sound(self):
+        self.game.sound.play(self.game.assets.sfx_tiltDanger)
 
     ###
     ###  ___       _
@@ -563,14 +577,13 @@ class BaseGameMode(game.Mode):
         self.game.set_tracking('quickdrawStatus',"READY",side)
         self.update_lamps()
 
-    #
+    ###
     ###   ____                _
     ###  / ___|___  _ __ ___ | |__   ___  ___
     ### | |   / _ \| '_ ` _ \| '_ \ / _ \/ __|
     ### | |__| (_) | | | | | | |_) | (_) \__\
     ###  \____\___/|_| |_| |_|_.__/ \___/|___/
-    #
-
+    ###
 
     def combo_timer(self):
         # tick down the comboTimer
@@ -650,7 +663,13 @@ class BaseGameMode(game.Mode):
         self.layer = display
         self.delay(delay=2,handler=self.clear_layer)
 
-    ## Bonus
+    ###
+    ###  ____
+    ### | __ )  ___  _ __  _   _ ___
+    ### |  _ \ / _ \| '_ \| | | / __|
+    ### | |_) | (_) | | | | |_| \__\
+    ### |____/ \___/|_| |_|\__,_|___/
+    ###
 
     def check_bonus(self):
         # get the bonus multiplier
@@ -675,6 +694,7 @@ class BaseGameMode(game.Mode):
         # turn the layer on
         self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
         # play a sound
+        self.game.sound.play(self.game.assets.sfx_bonusX)
         # tick down the counter of times
         times -= 1
         if times <= 0:
@@ -686,6 +706,7 @@ class BaseGameMode(game.Mode):
 
     def finish_bonus(self):
         # play a final sound
+        self.game.sound.play(self.game.assets.sfx_flourish6)
         # maybe update the display?
         # then loop back to end ball
         self.delay(delay=1.5,handler=self.game.ball_ended)
