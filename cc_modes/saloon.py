@@ -33,7 +33,7 @@ class Saloon(game.Mode):
             self.game.set_tracking('bartStatus',"RUNNING")
             self.setup_bart()
 
-    def sw_saloonPopper_closed_for_200ms(self,sw):
+    def sw_saloonPopper_active_for_200ms(self,sw):
         ## if we went through the gate, and missed bart or snuck in the back way
         ## it counts as a hit so we have to do that first
         ## TODO can't make this work

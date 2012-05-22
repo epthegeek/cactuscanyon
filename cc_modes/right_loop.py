@@ -183,8 +183,8 @@ class RightLoop(game.Mode):
             # combine them
         completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
         # swap in the new layer
-        #self.layer = completeFrame
-        self.transition = ep.EP_Transition(self,self.layer,completeFrame,self.type)
+        currentLayer = self.layer
+        self.transition = ep.EP_Transition(self,currentLayer,completeFrame,self.type)
 
         # clear in 2 seconds
         self.delay(name="ClearRightLoop",delay=2,handler=self.clear_layer)

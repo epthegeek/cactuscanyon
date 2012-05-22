@@ -52,7 +52,7 @@ class LeftLoop(game.Mode):
             # all three on
             self.game.lamps.leftLoopBuckNBronco.enable()
             self.game.lamps.leftLoopWildRide.enable()
-            self.game.lamps.leftLoopsRideEm.enable()
+            self.game.lamps.leftLoopRideEm.enable()
         else:
             pass
 

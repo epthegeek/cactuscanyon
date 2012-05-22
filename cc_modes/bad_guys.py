@@ -27,26 +27,32 @@ class BadGuys(game.Mode):
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
 
+    def mode_started(self):
+        self.badGuyUp = False
 
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
         print "BAD GUY 1 HIT"
-        self.hit_bad_guy(0)
+        if self.badGuyUp:
+            self.hit_bad_guy(0)
 
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
         print "BAD GUY 2 HIT"
-        self.hit_bad_guy(1)
+        if self.badGuyUp:
+            self.hit_bad_guy(1)
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
         print "BAD GUY 3 HIT"
-        self.hit_bad_guy(2)
+        if self.badGuyUp:
+            self.hit_bad_guy(2)
 
     def sw_badGuySW3_active(self,sw):
         print "BAD GUY 4 HIT"
         # far right bad guy target
-        self.hit_bad_guy(3)
+        if self.badGuyUp:
+            self.hit_bad_guy(3)
 
     def hit_bad_guy(self,target):
         # stop the timer
@@ -74,12 +80,12 @@ class BadGuys(game.Mode):
     def sw_leftReturnLane_active(self, sw):
         # register a left return lane hit
         self.return_lane_hit(0)
-        self.game.SwitchStop
+        return self.game.SwitchStop
 
     def sw_rightReturnLane_active(self,sw):
         # register a right return lane hit
         self.return_lane_hit(1)
-        self.game.SwitchStop
+        return self.game.SwitchStop
 
     def return_lane_hit(self,side):
         # score some points and play a sound
@@ -87,13 +93,17 @@ class BadGuys(game.Mode):
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
 
     def target_up(self,target):
-        self.coils[target].patter(on_time=2,off_time=20,original_on_time=20)
+        self.coils[target].patter(on_time=3,off_time=20,original_on_time=30)
         self.lights[target].enable()
+        self.delay(delay=0.1,handler=self.target_activate)
 
     def target_down(self,target):
         self.coils[target].disable()
         self.lights[target].disable()
+        self.badGuyUp = False
 
+    def target_activate(self):
+        self.badGuyUp = True
     ###
     ###   ___        _      _       _
     ###  / _ \ _   _(_) ___| | ____| |_ __ __ ___      __

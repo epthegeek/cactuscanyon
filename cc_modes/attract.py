@@ -134,12 +134,12 @@ class Attract(game.Mode):
     # Outside of the service mode, up/down control audio volume.
     def sw_down_active(self, sw):
         volume = self.game.sound.volume_down()
-        self.game.set_status("Volume Down : " + str(volume))
+        #self.game.set_status("Volume Down : " + str(volume))
         return True
 
     def sw_up_active(self, sw):
         volume = self.game.sound.volume_up()
-        self.game.set_status("Volume Up : " + str(volume))
+        #self.game.set_status("Volume Up : " + str(volume))
         return True
 
     # Start button starts a game if the trough is full.  Otherwise it
@@ -161,7 +161,7 @@ class Attract(game.Mode):
         # turn off the lampsho
         self.game.disable_lampshow()
 
-        if self.game.trough.is_full or self.game.switches.shooterLane.is_active():
+        if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
             # Remove attract mode from mode queue - Necessary?
             self.game.modes.remove(self)
             # Initialize game

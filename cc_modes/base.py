@@ -78,8 +78,8 @@ class BaseGameMode(game.Mode):
 
     def finish_ball(self):
         # Turn off tilt display (if it was on) now that the ball has drained.
-        if self.tilt_status and self.layer == self.tilt_layer:
-            self.layer = None
+        #if self.tilt_status and self.layer == self.tilt_layer:
+        #    self.layer = None
         # TODO bonus would go in here?
         self.end_ball()
 

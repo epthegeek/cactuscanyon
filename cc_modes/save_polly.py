@@ -18,15 +18,15 @@ class SavePolly(game.Mode):
     def sw_centerRampMake_active(self,sw):
         # center ramp pauses the train
         self.pause_train()
-        self.game.SwitchStop
+        return procgame.game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
         self.advance_save_polly()
-        self.game.SwitchStop
+        return procgame.game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         self.advance_save_polly()
-        self.game.SwitchStop
+        return procgame.game.SwitchStop
 
     def sw_trainEncoder_active(self,sw):
         # this is the moving train
