@@ -134,13 +134,6 @@ class CCGame(game.BasicGame):
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
-        # home the mine
-        if not self.switches.mineHome.is_active:
-            self.reset_mine()
-        # home the train
-        if not self.switches.trainHome.is_active:
-            self.reset_train()
-
         # Add in the modes that are active at start
         self.modes.add(self.trough)
         self.modes.add(self.ball_save)
@@ -265,24 +258,6 @@ class CCGame(game.BasicGame):
 
     def set_status(self,derp):
         self.status = derp
-
-    def reset_mine(self):
-        self.coils.enable.mine()
-        self.mineReset = True
-
-    def sw_mineHome_active(self,sw):
-        if self.mineReset:
-            self.coils.disable.mine()
-            self.mineReset = False
-
-    def reset_train(self):
-        self.coils.trainReverse.enable()
-        self.trainReset = True
-
-    def sw_trainHome_active(self,sw):
-        if self.trainReset:
-            self.coils.trainReverse.disable()
-            self.trainReset = False
 
     ###  _____               _    _
     ### |_   _| __ __ _  ___| | _(_)_ __   __ _

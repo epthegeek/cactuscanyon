@@ -21,6 +21,12 @@ class Attract(game.Mode):
 
     def mode_started(self):
 
+        # home the mine
+        self.reset_mine()
+        # home the train
+        self.reset_train()
+
+
         ## Set up the layers to use
         ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bally-banner.dmd').frames[0])
 
@@ -207,3 +213,24 @@ class Attract(game.Mode):
                     scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
                     self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
+    def reset_mine(self):
+        if not self.game.switches.mineHome.is_active():
+            self.game.coils.mineMotor.enable()
+            self.mineReset = True
+
+    def sw_mineHome_active(self,sw):
+        print "HEY I AM HOOOME"
+        if self.mineReset:
+            self.game.coils.mineMotor.disable()
+            self.mineReset = False
+
+    def reset_train(self):
+        if not self.game.switches.trainHome.is_active():
+            self.game.coils.trainReverse.enable()
+            self.trainReset = True
+
+    def sw_trainHome_active(self,sw):
+        if self.trainReset:
+            self.game.coils.trainReverse.disable()
+            self.trainReset = False
