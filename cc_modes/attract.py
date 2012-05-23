@@ -66,8 +66,8 @@ class Attract(game.Mode):
             self.game.assets.lamp_starShots,
             self.game.assets.lamp_starShots,
             self.game.assets.lamp_starShots,
-            self.game.assets.lamp_colors,
-            self.game.assets.lamp_colors,
+            #self.game.assets.lamp_colors,
+            #self.game.assets.lamp_colors,
             self.game.assets.lamp_giTest,
             self.game.assets.lamp_giTest
         ]

@@ -24,6 +24,8 @@ class LeftRamp(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
+        if self.game.show_tracking('dark'):
+            return
         stage = self.game.show_tracking('leftRampStage')
 
         if stage == 1:

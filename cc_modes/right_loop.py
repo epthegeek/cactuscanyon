@@ -12,6 +12,7 @@ class RightLoop(game.Mode):
         super(RightLoop, self).__init__(game, priority)
         # set up a frame layer with the guns border on it
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'guns-border.dmd').frames[0])
+        self.layer = None
 
     def mode_started(self):
         self.update_lamps()
@@ -21,6 +22,8 @@ class RightLoop(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
+        if self.game.show_tracking('dark'):
+            return
         stage = self.game.show_tracking('rightLoopStage')
 
         if stage == 1:
@@ -36,7 +39,7 @@ class RightLoop(game.Mode):
             self.game.lamps.rightLoopGoodShot.enable()
             self.game.lamps.rightLoopGunslinger.enable()
             # blink the third
-            self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopMarksman.schedule(0x0000FFFF)
         # this is completed
         elif stage == 4:
             # all three on
@@ -62,7 +65,7 @@ class RightLoop(game.Mode):
 
     def sw_rightLoopTop_active(self,sw):
         # if we aren't coming through on a full loop - it's a natural hit and it counts
-        if ep.last_switch != "leftLoopTop":
+        if ep.last_switch == 'rightLoopBottom':
             # if we're complete open the gate for a full run through
             if self.game.show_tracking('rightLoopStage') >= 4:
                 # pulse the coil to open the gate
@@ -80,7 +83,7 @@ class RightLoop(game.Mode):
             self.award_loop_score(combo)
         # otherwise it's a roll through so just add some points
         # maybe add tracking for full loops
-        else:
+        elif  ep.last_switch == "leftLoopTop":
             self.game.score(2530)
             self.game.increase_tracking('fullLoops')
         ## -- set the last switch hit --

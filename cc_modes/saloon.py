@@ -68,10 +68,10 @@ class Saloon(game.Mode):
         # if there's an active bart, play a quote
         if self.game.show_tracking('bartStatus') == "RUNNING":
             self.game.sound.play_voice(self.tauntQuote)
-        # and move the bart
-        self.move_bart()
-        self.delay(delay=0.03,handler=self.light_bart)
-        self.delay(delay=0.07,handler=self.move_bart)
+            # and move the bart
+            self.move_bart()
+            self.delay(delay=0.03,handler=self.light_bart)
+            self.delay(delay=0.07,handler=self.move_bart)
         # score some points
         self.game.score(2530)
         ## -- set the last switch hit --
@@ -89,6 +89,8 @@ class Saloon(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
+        if self.game.show_tracking('dark'):
+            return
 
         beacon = False
         if self.game.show_tracking('bartStatus') == 'RUNNING' or self.game.show_tracking('bartStatus') == 'LAST':
@@ -506,7 +508,7 @@ class Saloon(game.Mode):
 
     def move_bart(self):
         # pulse the bart move coil
-        self.game.coils.moveBart.pulse(30)
+        self.game.coils.moveBart.pulse(20)
 
     def move_hat(self):
         self.game.coils.moveBartHat.pulse(30)

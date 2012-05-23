@@ -244,6 +244,8 @@ class SkillShot(game.Mode):
             self.delay(delay=1.6,handler=self.clear_layer)
             return
 
+        # call the lamp update so the prize is shown properly
+        self.game.update_lamps()
         # the award icon
         prizeList = dmd.TextLayer(126, 1, self.game.assets.font_skillshot, "right", opaque=False).set_text(self.selectedPrizes[5:])
         # the award text

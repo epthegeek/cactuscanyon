@@ -93,7 +93,7 @@ class BadGuys(game.Mode):
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
 
     def target_up(self,target):
-        self.coils[target].patter(on_time=3,off_time=18,original_on_time=30)
+        self.coils[target].patter(on_time=4,off_time=16,original_on_time=35)
         self.lights[target].enable()
         self.delay(delay=0.1,handler=self.target_activate,param=target)
 
@@ -205,6 +205,7 @@ class BadGuys(game.Mode):
         self.game.score(self.points)
         # update the bad guys
         self.game.set_tracking('badGuysDead',"True",target)
+        self.update_lamps()
         # end the quickdraw after the animation bit - and maybe pad for sound
         self.delay(delay=myWait,handler=self.quickdraw_check_bounty)
 
@@ -263,7 +264,8 @@ class BadGuys(game.Mode):
 
     def start_showdown(self):
         print "S H O W D O W N"
-        # things, they go here
+        self.end_showdown() # this is broken, avoid for now
+        """# things, they go here
         self.deathTally = 0
         # set the tracking
         self.game.set_tracking('quickdrawStatus',"SHOWDOWN",self.side)
@@ -277,6 +279,7 @@ class BadGuys(game.Mode):
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.showdown_reset_guys)
         # music?
+        """
 
     def showdown_reset_guys(self):
         self.guyLayers = []
@@ -364,6 +367,8 @@ class BadGuys(game.Mode):
         for i in range(0,3,1):
             self.game.set_tracking('quickdrawStatus',"False",i)
         # turn off lights
+        for i in range(0,4,1):
+            self.game.set_tracking('badGuysDead',i,False)
         # tracking - turn it back to open
         self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
         # unload
@@ -380,12 +385,18 @@ class BadGuys(game.Mode):
 
 
     def start_gunfight(self,side):
+        self.game.set_tracking('dark',True)
+        self.game.update_lamps()
+        if side == 0:
+            self.game.leftGunfightPin.schedule(0x00FF00FF)
+        else:
+            self.game.rightGunfightPin.schedule(0x00FF00FF)
         self.game.increase_tracking('gunfightsStarted')
         print "GUNFIGHT GOES HERE"
         # pop up the post
         print "RAISE POST ON SIDE: " + str(side)
         self.activeSide = side
-        self.posts[self.activeSide].patter(on_time=2,off_time=8,original_on_time=30)
+        self.posts[self.activeSide].patter(on_time=4,off_time=12,original_on_time=30)
         # set the bad guy pop order accounting for the side it started on
         badGuys = [0,1,2,3]
         # select our eventual target
@@ -474,6 +485,8 @@ class BadGuys(game.Mode):
     def end_gunfight(self):
         self.layer = None
         # turn off some lights?
+        self.game.set_tracking('dark', False)
+        self.game.update_lamps()
         # tidy up - set the gunfight status and bart brothers status to open
         self.game.set_tracking('gunfightStatus',"OPEN")
         self.game.set_tracking('bartStatus',"OPEN")
@@ -564,6 +577,11 @@ class BadGuys(game.Mode):
         text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
+        self.game.lamps.gi01.enable()
+        self.game.lamps.gi02.enable()
+        self.game.lamps.gi03.enable()
+        self.game.lamps.leftGunfightPin.disable()
+        self.game.lamps.rightGunfightPin.disable()
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost

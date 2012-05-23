@@ -134,6 +134,13 @@ class CCGame(game.BasicGame):
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
+        # home the mine
+        if not self.switches.mineHome.is_active:
+            self.reset_mine()
+        # home the train
+        if not self.switches.trainHome.is_active:
+            self.reset_train()
+
         # Add in the modes that are active at start
         self.modes.add(self.trough)
         self.modes.add(self.ball_save)
@@ -185,7 +192,8 @@ class CCGame(game.BasicGame):
         self.enable_flippers(True)
         # reset the tilt status
         self.set_tracking('tiltStatus',0)
-
+        # update the lamps
+        self.update_lamps()
         # and load the skill shot
         self.modes.add(self.skill_shot)
 
@@ -193,7 +201,7 @@ class CCGame(game.BasicGame):
      # drain_callback can be installed by a gameplay mode.
     def ball_drained(self):
         # Tell every mode a ball has drained by calling the ball_drained function if it exists
-        if self.game.trough.num_balls_in_play == 0:
+        if self.trough.num_balls_in_play == 0:
             # kill all the display layers
             for mode in self.ep_modes:
                 if getattr(mode, "clear_layer", None):
@@ -207,9 +215,8 @@ class CCGame(game.BasicGame):
         """Called by end_ball(), which is itself called by base_game_mode.trough_changed."""
         self.log("BALL ENDED")
         # reset the tilt
-        self.game.set_tracking('tiltStatus',0)
+        self.set_tracking('tiltStatus',0)
         # then call the ball_ended from proc.game.BasicGame
-        super(CCGame, self).ball_ended()
         self.end_ball()
 
     def game_ended(self):
@@ -258,6 +265,24 @@ class CCGame(game.BasicGame):
 
     def set_status(self,derp):
         self.status = derp
+
+    def reset_mine(self):
+        self.coils.enable.mine()
+        self.mineReset = True
+
+    def sw_mineHome_active(self,sw):
+        if self.mineReset:
+            self.coils.disable.mine()
+            self.mineReset = False
+
+    def reset_train(self):
+        self.coils.trainReverse.enable()
+        self.trainReset = True
+
+    def sw_trainHome_active(self,sw):
+        if self.trainReset:
+            self.coils.trainReverse.disable()
+            self.trainReset = False
 
     ###  _____               _    _
     ### |_   _| __ __ _  ___| | _(_)_ __   __ _

@@ -34,6 +34,9 @@ class BaseGameMode(game.Mode):
                             self.game.lamps.badGuyL1,
                             self.game.lamps.badGuyL2,
                             self.game.lamps.badGuyL3]
+        self.giLamps = [self.game.lamps.gi01,
+                        self.game.lamps.gi02,
+                        self.game.lamps.gi03]
 
 
     def mode_started(self):
@@ -85,8 +88,12 @@ class BaseGameMode(game.Mode):
     def update_lamps(self):
         # reset first
         self.disable_lamps()
+        if self.game.show_tracking('dark'):
+            return
         # lots to do here
         # quickdraw lamps
+        for lamp in self.giLamps:
+                lamp.enable()
         # left side - either the playfield light is on or blinking, or the inlane light is on
         left = self.game.show_tracking('quickdrawStatus',0)
         if left == 'OPEN':
@@ -118,12 +125,12 @@ class BaseGameMode(game.Mode):
         # the rank lights
         rank = self.game.show_tracking('rank')
         # loop through 0 through current rank and turn the lamps on
-        for lamp in range(0,rank,1):
+        for lamp in range(0,(rank +1),1):
             self.rankLamps[lamp].enable()
         # bad guy lights hopefully this sets any lamp that returns true to be on
-        for lamp in range(0,3,1):
+        for lamp in range(0,4,1):
             status = self.game.show_tracking('badGuysDead',lamp)
-            if status == True:
+            if status:
                 self.badGuyLamps[lamp].enable()
 
     def disable_lamps(self):
@@ -132,6 +139,8 @@ class BaseGameMode(game.Mode):
             lamp.disable()
         for lamp in self.badGuyLamps:
             lamp.disable()
+        for lamp in self.giLamps:
+            lamp.disable()
         self.game.lamps.leftQuickdraw.disable()
         self.game.lamps.bottomRightQuickdraw.disable()
         self.game.lamps.topRightQuickdraw.disable()
@@ -139,6 +148,7 @@ class BaseGameMode(game.Mode):
         self.game.lamps.rightReturnQuickdraw.disable()
         self.game.lamps.leftBonusLane.disable()
         self.game.lamps.rightBonusLane.disable()
+
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
@@ -199,7 +209,7 @@ class BaseGameMode(game.Mode):
     ###   |_| |_|_|\__|
     ###
 
-    def sw_tilt_active(self, sw):
+    def sw_plumbBobTilt_active(self, sw):
         # first, register the hit
         status = self.game.increase_tracking('tiltStatus')
         # if that puts us at three, time to tilt
@@ -327,7 +337,7 @@ class BaseGameMode(game.Mode):
 
     def outlane_hit(self, side):
         self.game.score(2530)
-        self.game.play.sound(self.game.assets.sfx_outlane)
+        self.game.sound.play(self.game.assets.sfx_outlane)
 
     ###
     ###  ____  _ _                 _           _
@@ -642,14 +652,15 @@ class BaseGameMode(game.Mode):
         return True
 
     def combo_display(self):
-        # TODO this needs to look a lot better
+        self.cancel_delayed("clearCombo")
         backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-border.dmd').frames[0])
         # build and show the display of combos made & left
         textLine1 = dmd.TextLayer(64,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False).set_text("COMBO AWARDED")
         textLine2 = dmd.TextLayer(64,11,self.game.assets.font_9px_az,justify="center",opaque=False)
         textLine3 = dmd.TextLayer(64,25,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
         combos = self.game.show_tracking('combos')
-        textLine2.set_text(str(combos) +" COMBOS",blink_frames=10)
+        textString2 = str(combos) + " COMBOS"
+        textLine2.set_text(textString2,blink_frames=10)
         combosForStar = self.game.user_settings['Gameplay (Feature)']['Combos for Star']
         diff = combosForStar - combos
         if combos > combosForStar:
@@ -659,9 +670,10 @@ class BaseGameMode(game.Mode):
         else:
             comboString = str(diff) + " MORE FOR BADGE!"
         textLine3.set_text(comboString)
-        display = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
-        self.layer = display
-        self.delay(delay=2,handler=self.clear_layer)
+        combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
+        self.layer = combined
+        print "I MADE IT THROUGH COMBO DISPLAY"
+        self.delay(name="clearCombo",delay=2,handler=self.clear_layer)
 
     ###
     ###  ____
@@ -710,3 +722,4 @@ class BaseGameMode(game.Mode):
         # maybe update the display?
         # then loop back to end ball
         self.delay(delay=1.5,handler=self.game.ball_ended)
+        self.delay(delay=1.5,handler=self.clear_layer)

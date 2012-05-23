@@ -21,8 +21,10 @@ class RightRamp(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        stage = self.game.show_tracking('rightRampStage')
+        if self.game.show_tracking('dark'):
+            return
 
+        stage = self.game.show_tracking('rightRampStage')
         if stage == 1:
             # blink the first light
             self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)

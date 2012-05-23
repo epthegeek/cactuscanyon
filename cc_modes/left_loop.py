@@ -31,6 +31,9 @@ class LeftLoop(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
+        if self.game.show_tracking('dark'):
+            return
+
         stage = self.game.show_tracking('leftLoopStage')
 
         if stage == 1:
@@ -46,7 +49,7 @@ class LeftLoop(game.Mode):
             self.game.lamps.leftLoopBuckNBronco.enable()
             self.game.lamps.leftLoopWildRide.enable()
             # blink the third
-            self.game.lamps.leftLoopsRideEm.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopRideEm.schedule(0x0000FFFF)
         # this is completed
         elif stage == 4:
             # all three on
