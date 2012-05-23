@@ -41,6 +41,7 @@ class BaseGameMode(game.Mode):
 
     def mode_started(self):
         ## Load up all the base modes
+        self.game.modes.add(self.game.interrupter)
         self.game.modes.add(self.game.right_ramp)
         self.game.modes.add(self.game.left_ramp)
         self.game.modes.add(self.game.center_ramp)
@@ -58,6 +59,7 @@ class BaseGameMode(game.Mode):
         # switches being hit.
         self.game.ball_search.disable()
         # shut down all the modes
+        self.game.modes.remove(self.game.interrupter)
         self.game.modes.remove(self.game.right_ramp)
         self.game.modes.remove(self.game.left_ramp)
         self.game.modes.remove(self.game.center_ramp)
@@ -215,24 +217,9 @@ class BaseGameMode(game.Mode):
         # if that puts us at three, time to tilt
         if status == 3:
             self.tilt()
-        # if it puts us at 2, time for second warning
-        if status == 2:
-            print "DANGER DANGER"
-            # double warning
-            line1 = dmd.TextLayer(128/2, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
-            line2 = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
-            self.layer = dmd.GroupedLayer(128,32,[line1,line2])
-            # play a sound
-            self.delay(delay=1,handler=self.clear_layer())
-
-        # otherwise this must be the first warning
+        # for 2 or 1 hand off to interrupter jones
         else:
-            print "DANGER"
-            #add a display layer and add a delayed removal of it.
-            self.layer = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
-            #play sound
-            self.play_tilt_sound()
-            self.delay(delay=1,handler=self.clear_layer())
+            self.game.interrupter.tilt_danger(status)
 
     def tilt(self):
         # Process tilt.
@@ -240,13 +227,7 @@ class BaseGameMode(game.Mode):
         # No need to do this stuff again if for some reason tilt already occurred.
         if self.game.show_tracking('tiltStatus') == 3:
 
-            # build a tilt graphic
-            tiltLayer = dmd.TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=False).set_text("TILT")
-            # Display the tilt graphic
-            self.layer = tiltLayer
-            myWait = self.play_tilt_sound()
-            self.delay(delay=myWait,handler=self.play_tilt_sound())
-
+            self.game.interrupter.tilt_display()
             # Disable flippers so the ball will drain.
             self.game.enable_flippers(enable=False)
 
@@ -267,9 +248,6 @@ class BaseGameMode(game.Mode):
                 self.game.coils.saloonPopper.pulse(30)
         #play sound
         #play video
-
-    def play_tilt_sound(self):
-        self.game.sound.play(self.game.assets.sfx_tiltDanger)
 
     ###
     ###  ___       _
@@ -698,28 +676,49 @@ class BaseGameMode(game.Mode):
         self.display_bonus(times)
 
     def display_bonus(self,times):
+        background = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-border.dmd').frames[0])
         titleString = "BONUS " + str(times) + "X"
-        titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_9px_az, "center", opaque=False).set_text(titleString)
+        titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(titleString)
         # add the bonus amount to the running total
         self.runningTotal += self.bonus
-        pointsLine = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text(ep.format_score(self.runningTotal))
+        pointsLine = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(ep.format_score(self.runningTotal))
         # turn the layer on
-        self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
+        self.layer = dmd.GroupedLayer(128,32,[background,titleLine,pointsLine])
         # play a sound
         self.game.sound.play(self.game.assets.sfx_bonusX)
         # tick down the counter of times
         times -= 1
         if times <= 0:
             # if we're at the last one, it's time to finish up
-            self.finish_bonus()
+            self.reveal_bonus(self.runningTotal)
         else:
             # if not, loop back around after a delay
             self.delay(delay=0.5,handler=self.display_bonus,param=times)
 
-    def finish_bonus(self):
+    def reveal_bonus(self,points):
+        # load up the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
+        # start the full on animation
+        myWait = len(anim.frames) / 8.57
+        # setup the animated layer
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 7
+        self.layer = animLayer
+        self.delay(delay=myWait,handler=self.finish_bonus,param=points)
+
+    def finish_bonus(self,points):
+        # set up the text display
+        titleString = "TOTAL BONUS:"
+        titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(titleString)
+        pointsLine = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(ep.format_score(points))
+        newLayer = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
+        # crossfade from previous anim
+        transition = ep.EP_Transition(self,self.layer,newLayer,ep.EP_Transition.TYPE_CROSSFADE)
+        # add the points to the score
+        self.game.score(points)
         # play a final sound
         self.game.sound.play(self.game.assets.sfx_flourish6)
-        # maybe update the display?
         # then loop back to end ball
         self.delay(delay=1.5,handler=self.game.ball_ended)
         self.delay(delay=1.5,handler=self.clear_layer)
