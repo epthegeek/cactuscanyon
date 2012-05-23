@@ -24,8 +24,10 @@ class LeftRamp(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        if self.game.show_tracking('dark'):
+        ## if status is off, we bail here
+        if self.game.show_tracking('lampStatus') == "OFF":
             return
+
         stage = self.game.show_tracking('leftRampStage')
 
         if stage == 1:
@@ -87,8 +89,10 @@ class LeftRamp(game.Mode):
 
 
     def award_ramp_score(self, combo=False):
-        # cancel the "Clear" delay if there is one
-        self.cancel_delayed("ClearLeftRamp")
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
 
         ##
         ## For now, all the river runs use the same animation so it's in here
@@ -122,7 +126,7 @@ class LeftRamp(game.Mode):
             # turn it on
             self.layer = animLayer
             # set a delay to show the award
-            self.delay(delay=myWait,handler=self.show_award_text)
+            self.delay(name="Display",delay=myWait,handler=self.show_award_text)
         elif stage == 2:
             self.awardString = "WATER FALL"
             self.awardPoints = "150,000"
@@ -137,7 +141,7 @@ class LeftRamp(game.Mode):
             # turn it on
             self.layer = animLayer
             # set the delay for the award
-            self.delay(delay=myWait,handler=self.show_award_text)
+            self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 3:
             self.awardString = "ADVENTURE COMPLETE"
@@ -153,7 +157,7 @@ class LeftRamp(game.Mode):
             self.game.sound.play(self.game.assets.quote_pollyThankYou)
             # play animation
             self.layer = animLayer
-            self.delay(delay=myWait,handler=self.anim_river_victory)
+            self.delay(name="Display",delay=myWait,handler=self.anim_river_victory)
         else:
             self.awardString = "ADVENTURE COMPLETE"
             self.awardPoints = "150,000"
@@ -207,7 +211,7 @@ class LeftRamp(game.Mode):
         # play animation
         self.layer = animLayer
         self.game.sound.play(self.game.assets.sfx_leftRampEnter)
-        self.delay(delay=myWait,handler=self.show_award_text)
+        self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
     def push_out(self):
         print "TRANSITION MF"
@@ -217,5 +221,8 @@ class LeftRamp(game.Mode):
         transition.callback = self.clear_layer
 
     def clear_layer(self):
-        print "I GOT A CALL BACK"
         self.layer = None
+
+    def abort_display(self):
+        self.clear_layer()
+        self.cancel_delayed("Display")

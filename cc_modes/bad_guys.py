@@ -385,7 +385,7 @@ class BadGuys(game.Mode):
 
 
     def start_gunfight(self,side):
-        self.game.set_tracking('dark',True)
+        self.game.set_tracking('lampStatus',"OFF")
         self.game.update_lamps()
         if side == 0:
             self.game.leftGunfightPin.schedule(0x00FF00FF)
@@ -485,7 +485,7 @@ class BadGuys(game.Mode):
     def end_gunfight(self):
         self.layer = None
         # turn off some lights?
-        self.game.set_tracking('dark', False)
+        self.game.set_tracking('lampStatus', "ON")
         self.game.update_lamps()
         # tidy up - set the gunfight status and bart brothers status to open
         self.game.set_tracking('gunfightStatus',"OPEN")
@@ -577,11 +577,11 @@ class BadGuys(game.Mode):
         text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
-        self.game.lamps.gi01.enable()
-        self.game.lamps.gi02.enable()
-        self.game.lamps.gi03.enable()
-        self.game.lamps.leftGunfightPin.disable()
-        self.game.lamps.rightGunfightPin.disable()
+        # turn the GI back on
+        self.game.set_tracking('lampStatus', "GIONLY")
+        self.game.update_lamps()
+        # and turn on target guy
+        self.lights[enemy].enable()
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost

@@ -21,7 +21,8 @@ class RightRamp(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        if self.game.show_tracking('dark'):
+        ## if status is off, we bail here
+        if self.game.show_tracking('lampStatus') == "OFF":
             return
 
         stage = self.game.show_tracking('rightRampStage')
@@ -89,8 +90,10 @@ class RightRamp(game.Mode):
         ep.last_switch = "rightRampBottom"
 
     def award_ramp_score(self,combo):
-        # cancel the "Clear" delay if there is one
-        self.cancel_delayed("ClearRightRamp")
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
 
         # TODO these all need fleshing out with sounds and final animations
         stage = self.game.show_tracking('rightRampStage')
@@ -117,7 +120,7 @@ class RightRamp(game.Mode):
             self.layer = animLayer
             # add some score
             # apply the calculated delay to the next step
-            self.delay(delay=myWait,handler=self.blink_award_text)
+            self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
         elif stage == 2:
             # set the text lines for the display
             self.awardString = "SHOOT OUT"
@@ -141,7 +144,7 @@ class RightRamp(game.Mode):
             # play the animation
             self.layer = animLayer
             # apply the delay
-            self.delay(delay=myWait,handler=self.blink_award_text)
+            self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
 
         elif stage == 3:
             self.awardString = "ROBBERY FOILED"
@@ -156,7 +159,7 @@ class RightRamp(game.Mode):
             self.game.sound.play(self.game.assets.quote_pollyThankYou)
             # play animation
             self.layer = animLayer
-            self.delay(delay=myWait,handler=self.anim_bank_victory)
+            self.delay(name="Display",delay=myWait,handler=self.anim_bank_victory)
 
         ## for now, anything above 3 is 'complete'
         else:
@@ -179,10 +182,6 @@ class RightRamp(game.Mode):
             # update the lamps
             self.game.update_lamps()
 
-
-    def clear_layer(self):
-        self.layer = None
-
     def anim_bank_victory(self):
         print "BANK VICTORY"
         anim = dmd.Animation().load(ep.DMD_PATH+'bank-victory-animation.dmd')
@@ -195,19 +194,19 @@ class RightRamp(game.Mode):
         animLayer.add_frame_listener(14,self.game.play_remote_sound,param=self.game.assets.sfx_grinDing)
         # play animation
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.blink_award_text)
+        self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
 
     def blink_award_text(self):
         # stage one of showing the award text - this one blinks
         self.build_award_text(12)
         # switch to solid in 1 seconds
-        self.delay(delay=1,handler=self.show_award_text)
+        self.delay(name="Display",delay=1,handler=self.show_award_text)
 
     def show_award_text(self):
         # stage 2 of showing the award text
         self.build_award_text()
         # turn it off in 1 seconds
-        self.delay(name="ClearRightRamp",delay=1,handler=self.clear_layer)
+        self.delay(name="Display",delay=1,handler=self.clear_layer)
 
     def build_award_text(self,blink=None):
         # create the two text lines
@@ -228,3 +227,11 @@ class RightRamp(game.Mode):
         completeFrame = dmd.GroupedLayer(128, 32, [self.layer,awardTextTop,awardTextBottom])
         # swap in the new layer
         self.layer = completeFrame
+
+
+    def clear_layer(self):
+        self.layer = None
+
+    def abort_display(self):
+        self.clear_layer()
+        self.cancel_delayed("Display")

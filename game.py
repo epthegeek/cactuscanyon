@@ -89,6 +89,7 @@ class CCGame(game.BasicGame):
         # Create the objects for the basic modes
         self.base_game_mode = cc_modes.BaseGameMode(game=self,priority=4)
         self.attract_mode = cc_modes.Attract(game=self,priority=5)
+        self.train = cc_modes.Train(game=self,priority=6)
 
         self.right_ramp = cc_modes.RightRamp(game=self,priority=10)
         self.left_ramp = cc_modes.LeftRamp(game=self,priority=11)
@@ -142,6 +143,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.ball_save)
         self.modes.add(self.ball_search)
         self.modes.add(self.attract_mode)
+        self.modes.add(self.train)
 
     def start_game(self):
         # remove the attract mode
@@ -239,7 +241,6 @@ class CCGame(game.BasicGame):
         self.lampctrl.play_show(self.scheduled_lampshows[self.scheduled_lampshow_index], False, self.lampshow_ended)
 
     def lampshow_ended(self):
-        if self.runLampShows:
             self.scheduled_lampshow_index = self.scheduled_lampshow_index + 1
             if self.scheduled_lampshow_index == len(self.scheduled_lampshows):
                 if self.scheduled_lampshows_repeat:
@@ -250,14 +251,6 @@ class CCGame(game.BasicGame):
                     pass
             else:
                 self.start_lampshow()
-        else:
-            pass
-
-    def enable_lampshow(self):
-        self.runLampShows = True
-
-    def disable_lampshow(self):
-        self.runLampShows = False
 
     def set_status(self,derp):
         self.status = derp

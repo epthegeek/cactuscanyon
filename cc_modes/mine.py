@@ -34,8 +34,10 @@ class Mine(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        if self.game.show_tracking('dark'):
+        ## if status is off, we bail here
+        if self.game.show_tracking('lampStatus') == "OFF":
             return
+
         if self.game.show_tracking('extraBallsPending') > 0:
             self.game.lamps.extraBallLitBeacon.enable()
             self.game.lamps.extraBall.enable()

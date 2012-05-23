@@ -1,44 +1,46 @@
 ##
 ## This list is separated by color
 ##
+#                                   1         2         3           1         2         3           1         2         3
+#           METER        # 1234567890123456789012345678901-1234567890123456789012345678901-1234567890123456789012345678901-
 #### WHITE
-lamp:leftRampCombo       | .. .. .. .. .. .. .. ..
-lamp:leftLoopCombo       | .. .. .. .. .. .. .. ..
-lamp:centerRampCombo     | .. .. .. .. .. .. .. ..
-lamp:rightLoopCombo      | .. .. .. .. .. .. .. ..
-lamp:rightRampCombo      | .. .. .. .. .. .. .. ..
-lamp:leftBonusLane       | .. .. .. .. .. .. .. ..
-lamp:rightBonusLane      | .. .. .. .. .. .. .. ..
-lamp:leftGunFight        | .. .. .. .. .. .. .. ..
-lamp:rightGunFight       | .. .. .. .. .. .. .. ..
+lamp:leftRampCombo       | .. .. .. .. .. .. ..
+lamp:leftLoopCombo       | .. .. .. .. .. .. ..
+lamp:centerRampCombo     | .. .. .. .. .. .. ..
+lamp:rightLoopCombo      | .. .. .. .. .. .. ..
+lamp:rightRampCombo      | .. .. .. .. .. .. ..
+lamp:leftBonusLane       | .. .. .. .. .. .. ..
+lamp:rightBonusLane      | .. .. .. .. .. .. ..
+lamp:leftGunFight        | .. .. .. .. .. .. ..
+lamp:rightGunFight       | .. .. .. .. .. .. ..
 #### YELLOW
-lamp:badGuyL0            |                         .. .. .. .. .. .. .. ..
-lamp:badGuyL1            |                         .. .. .. .. .. .. .. ..
-lamp:badGuyL2            |                         .. .. .. .. .. .. .. ..
-lamp:badGuyl3            |                         .. .. .. .. .. .. .. ..
-lamp:rankStranger        |                         .. .. .. .. .. .. .. ..
-lamp:rankPartner         |                         .. .. .. .. .. .. .. ..
-lamp:rankDeputy          |                         .. .. .. .. .. .. .. ..
-lamp:rankSheriff         |                         .. .. .. .. .. .. .. ..
-lamp:rankMarshall        |                         .. .. .. .. .. .. .. ..
-lamp:starShowdown        |                         .. .. .. .. .. .. .. ..
-lamp:starBartBrothers    |                         .. .. .. .. .. .. .. ..
-lamp:starCombo           |                         .. .. .. .. .. .. .. ..
-lamp:starMotherLode      |                         .. .. .. .. .. .. .. ..
-lamp:starStampede        |                         .. .. .. .. .. .. .. ..
-lamp:rightReturnQuickdraw|                         .. .. .. .. .. .. .. ..
-lamp:leftReturnQuickdraw |                         .. .. .. .. .. .. .. ..
-lamp:leftQuickdraw       |                         .. .. .. .. .. .. .. ..
-lamp:topRightQuickdraw   |                         .. .. .. .. .. .. .. ..
-lamp:bottomRightQuickdraw|                         .. .. .. .. .. .. .. ..
-lamp:saloonArrow         |                         .. .. .. .. .. .. .. ..
+lamp:badGuyL0            |                      .. .. .. .. .. .. ..
+lamp:badGuyL1            |                      .. .. .. .. .. .. ..
+lamp:badGuyL2            |                      .. .. .. .. .. .. ..
+lamp:badGuyl3            |                      .. .. .. .. .. .. ..
+lamp:rankStranger        |                      .. .. .. .. .. .. ..
+lamp:rankPartner         |                      .. .. .. .. .. .. ..
+lamp:rankDeputy          |                      .. .. .. .. .. .. ..
+lamp:rankSheriff         |                      .. .. .. .. .. .. ..
+lamp:rankMarshall        |                      .. .. .. .. .. .. ..
+lamp:starShowdown        |                      .. .. .. .. .. .. ..
+lamp:starBartBrothers    |                      .. .. .. .. .. .. ..
+lamp:starCombo           |                      .. .. .. .. .. .. ..
+lamp:starMotherLode      |                      .. .. .. .. .. .. ..
+lamp:starStampede        |                      .. .. .. .. .. .. ..
+lamp:rightReturnQuickdraw|                      .. .. .. .. .. .. ..
+lamp:leftReturnQuickdraw |                      .. .. .. .. .. .. ..
+lamp:leftQuickdraw       |                      .. .. .. .. .. .. ..
+lamp:topRightQuickdraw   |                      .. .. .. .. .. .. ..
+lamp:bottomRightQuickdraw|                      .. .. .. .. .. .. ..
+lamp:saloonArrow         |                      .. .. .. .. .. .. ..
 #### RED
-lamp:leftOutGunFight     |                                                 .. .. .. .. .. .. .. ..
-lamp:rightOutSpecial     |                                                 .. .. .. .. .. .. .. ..
-lamp:shootAgain          |                                                 .. .. .. .. .. .. .. ..
-lamp:leftRampJackpot     |                                                 .. .. .. .. .. .. .. ..
-lamp:leftLoopJackpot     |                                                 .. .. .. .. .. .. .. ..
-lamp:centerRampJackpot   |                                                 .. .. .. .. .. .. .. ..
-lamp:rightLoopJackpot    |                                                 .. .. .. .. .. .. .. ..
-lamp:rightRampJackpot    |                                                 .. .. .. .. .. .. .. ..
+lamp:leftOutGunFight     |                                           .. .. .. .. .. .. ..
+lamp:rightOutSpecial     |                                           .. .. .. .. .. .. ..
+lamp:shootAgain          |                                           .. .. .. .. .. .. ..
+lamp:leftRampJackpot     |                                           .. .. .. .. .. .. ..
+lamp:leftLoopJackpot     |                                           .. .. .. .. .. .. ..
+lamp:centerRampJackpot   |                                           .. .. .. .. .. .. ..
+lamp:rightLoopJackpot    |                                           .. .. .. .. .. .. ..
+lamp:rightRampJackpot    |                                           .. .. .. .. .. .. ..
 

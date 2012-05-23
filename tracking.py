@@ -86,5 +86,6 @@ class Tracking(game.Player):
 
         self.player_stats['tiltStatus'] = 0
         # used to disable the GI in an update lamps pass
-        self.player_stats['dark'] = False
+        # lamp status modes: ON, OFF, GIONLY .. ?
+        self.player_stats['lampStatus'] = "ON"
 

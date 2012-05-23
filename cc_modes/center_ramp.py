@@ -85,8 +85,10 @@ class CenterRamp(game.Mode):
 
 
     def award_ramp_score(self,combo):
-        # cancel the "Clear" delay if there is one
-        self.cancel_delayed("ClearCenterRamp")
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
 
         ## ramp award is determined by stage - starts at 1
         ## completed is CURRENTLY 4 - to reset the awards
@@ -107,7 +109,7 @@ class CenterRamp(game.Mode):
             # turn it on
             self.layer = animLayer
             # set the delay for the award
-            self.delay(delay=myWait,handler=self.show_award_text)
+            self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 2:
             self.train_stage_two(score=150000)
@@ -157,7 +159,7 @@ class CenterRamp(game.Mode):
         # swap in the new layer
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         # clear in 3 seconds
-        self.delay(name="ClearCenterRamp",delay=2,handler=self.clear_layer)
+        self.delay(name="Display",delay=2,handler=self.clear_layer)
 
     def train_stage_two(self,score):
         self.awardString = "STOP TRAIN"
@@ -174,7 +176,7 @@ class CenterRamp(game.Mode):
         # turn it on
         self.layer = animLayer
         # set the delay for the award
-        self.delay(delay=myWait,handler=self.show_award_text)
+        self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
     def train_victory(self):
         self.awardString = "POLLY SAVED"
@@ -194,9 +196,13 @@ class CenterRamp(game.Mode):
         self.game.sound.play(self.game.assets.sfx_trainChugShort)
         # turn on the animation
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.show_award_text)
+        self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
     def clear_layer(self):
         self.layer = None
+
+    def abort_display(self):
+        self.clear_layer()
+        self.cancel_delayed("Display")
 
 

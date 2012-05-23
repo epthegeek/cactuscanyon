@@ -1,0 +1,17 @@
+#                                   1         2         3           1         2         3           1         2         3
+#           METER        # 1234567890123456789012345678901-1234567890123456789012345678901-1234567890123456789012345678901-
+lamp:leftRampCombo       |      ..      ..       ..      ..
+lamp:leftRampJackpot     |      ..      ..       ..      ..
+lamp:leftRampSavePolly   |     ..      ..       ..      ..
+lamp:leftRampWaterfall   |   ..      ..       ..      ..
+lamp:leftRampWhiteWater  | ..      ..       ..      ..
+lamp:centerRampCombo     |             ....            ....
+lamp:centerRampJackpot   |             ....            ....
+lamp:centerRampSavePolly |         ....            ....
+lamp:centerRampStopTrain |     ....            ....
+lamp:centerRampCatchTrain| ....            ....
+lamp:rightRampCombo      |      ..      ..       ..      ..
+lamp:rightRampJackpot    |      ..      ..       ..      ..
+lamp:rightRampSavePolly  |     ..      ..       ..      ..
+lamp:rightRampShootOut   |   ..      ..       ..      ..
+lamp:rightRampSoundAlarm | ..      ..       ..      ..

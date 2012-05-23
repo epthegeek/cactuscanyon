@@ -90,12 +90,16 @@ class BaseGameMode(game.Mode):
     def update_lamps(self):
         # reset first
         self.disable_lamps()
-        if self.game.show_tracking('dark'):
+        status = self.game.show_tracking('lampStatus')
+        ## if status is off, we bail here
+        if status == "OFF":
             return
-        # lots to do here
-        # quickdraw lamps
+        # the GI lamps
         for lamp in self.giLamps:
                 lamp.enable()
+        # if status is GI only, we bail here
+        if status == "GIONLY":
+            return
         # left side - either the playfield light is on or blinking, or the inlane light is on
         left = self.game.show_tracking('quickdrawStatus',0)
         if left == 'OPEN':
@@ -270,7 +274,6 @@ class BaseGameMode(game.Mode):
         self.return_lane_hit(1)
         ## -- set the last switch hit --
         ep.last_switch = "rightReturnLane"
-
 
     def return_lane_hit(self,side):
         # play the sound

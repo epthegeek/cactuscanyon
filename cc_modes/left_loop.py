@@ -31,7 +31,8 @@ class LeftLoop(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        if self.game.show_tracking('dark'):
+        ## if status is off, we bail here
+        if self.game.show_tracking('lampStatus') == "OFF":
             return
 
         stage = self.game.show_tracking('leftLoopStage')
@@ -103,9 +104,12 @@ class LeftLoop(game.Mode):
 
 
     def award_loop_score(self,combo=False):
-        # cancel the "Clear" delay if there is one
-        self.cancel_delayed("ClearLeftLoop")
-        # if we're on stage one
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
+
+            # if we're on stage one
         stage = self.game.show_tracking('leftLoopStage')
         if stage == 1:
             self.awardString = "BUCK N BRONCO"
@@ -171,7 +175,7 @@ class LeftLoop(game.Mode):
         # run the animation
         self.layer = animLayer
         # then at the delay show the award
-        self.delay(delay=myWait,handler=self.show_award_text)
+        self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
     def show_award_text(self,blink=None):
         # create the two text lines
@@ -191,7 +195,7 @@ class LeftLoop(game.Mode):
         #myDirection = self.anims[1]['direction']
         self.transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_SLIDEOVER,self.direction)
         # clear in 2 seconds
-        self.delay(name="ClearLeftLoop",delay=2,handler=self.clear_layer)
+        self.delay(name="Display",delay=2,handler=self.clear_layer)
 
     def push_out(self):
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,self.anims[1]['direction'])
@@ -199,3 +203,7 @@ class LeftLoop(game.Mode):
 
     def clear_layer(self):
         self.layer = None
+
+    def abort_display(self):
+        self.clear_layer()
+        self.cancel_delayed("Display")

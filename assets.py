@@ -429,6 +429,7 @@ class Assets():
         self.lamp_leftToRight = "left-to-right"; lampshows.append(self.lamp_leftToRight)
         self.lamp_starShots = "star-shots"; lampshows.append(self.lamp_starShots)
         self.lamp_sparkle = "sparkle"; lampshows.append(self.lamp_sparkle)
+        self.lamp_pollyPeril = "polly-peril"; lampshows.append(self.lamp_pollyPeril)
 
         for lampshow in lampshows:
             self.game.lampctrl.register_show(lampshow,self.lampshows_path + lampshow + ".lampshow")

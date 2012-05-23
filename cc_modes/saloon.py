@@ -89,7 +89,8 @@ class Saloon(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        if self.game.show_tracking('dark'):
+        ## if status is off, we bail here
+        if self.game.show_tracking('lampStatus') == "OFF":
             return
 
         beacon = False
@@ -425,7 +426,7 @@ class Saloon(game.Mode):
         self.game.score(self.hitValue)
         # flash the light and move the dude
         # a flourish lampshow
-        self.game.lampctrl.play_show('sparkle', repeat=False,callback=self.game.update_lamps)
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.game.update_lamps)
         # display the info
         # register the hit
         # increase the hits on bart - and store the new amount

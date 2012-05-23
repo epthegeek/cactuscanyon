@@ -22,8 +22,10 @@ class RightLoop(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        if self.game.show_tracking('dark'):
+        ## if status is off, we bail here
+        if self.game.show_tracking('lampStatus') == "OFF":
             return
+
         stage = self.game.show_tracking('rightLoopStage')
 
         if stage == 1:
@@ -64,6 +66,11 @@ class RightLoop(game.Mode):
         ep.last_switch = "rightLoopBottom"
 
     def sw_rightLoopTop_active(self,sw):
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
+
         # if we aren't coming through on a full loop - it's a natural hit and it counts
         if ep.last_switch == 'rightLoopBottom':
             # if we're complete open the gate for a full run through
@@ -117,7 +124,7 @@ class RightLoop(game.Mode):
             self.type = ep.EP_Transition.TYPE_CROSSFADE
             self.direction = None
             # then delayed kickoff the text display
-            self.delay(name="Transition",delay=myWait,handler=self.show_award_text)
+            self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 2:
             self.awardString = "GUNSLINGER"
@@ -129,7 +136,7 @@ class RightLoop(game.Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
             self.layer = animLayer
             self.type = ep.EP_Transition.TYPE_EXPAND
-            self.delay(name="Transition",delay=myWait,handler=self.show_award_text)
+            self.delay(name="Display",delay=myWait,handler=self.show_award_text)
         elif stage == 3:
             self.awardString = "MARKSMAN"
             self.awardPoints = "175,000"
@@ -139,7 +146,7 @@ class RightLoop(game.Mode):
             myWait = len(anim.frames) / 10.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
             self.layer = animLayer
-            self.delay(name="Transition",delay=myWait,handler=self.show_marksman_award)
+            self.delay(name="Display",delay=myWait,handler=self.show_marksman_award)
 
         # anything 4 or more is complete
         else:
@@ -169,7 +176,7 @@ class RightLoop(game.Mode):
         completeFrame = dmd.GroupedLayer(128, 32, [animLayer,awardTextTop,awardTextBottom])
         self.layer = completeFrame
         ## TODO this delay doesn't seem to be working
-        self.delay(delay=2,handler=self.clear_layer)
+        self.delay(name="Display",delay=2,handler=self.clear_layer)
 
 
     def show_award_text(self,blink=None):
@@ -190,7 +197,7 @@ class RightLoop(game.Mode):
         self.transition = ep.EP_Transition(self,currentLayer,completeFrame,self.type)
 
         # clear in 2 seconds
-        self.delay(name="ClearRightLoop",delay=2,handler=self.clear_layer)
+        self.delay(name="Display",delay=2,handler=self.clear_layer)
 
     def push_out(self):
         # crap I had this then it stopped working
@@ -201,3 +208,7 @@ class RightLoop(game.Mode):
     def clear_layer(self):
         self.layer = None
         return True
+
+    def abort_display(self):
+        self.clear_layer()
+        self.cancel_delayed("Display")

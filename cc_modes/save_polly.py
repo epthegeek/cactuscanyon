@@ -14,105 +14,141 @@ class SavePolly(game.Mode):
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Shots to save Polly']
         self.shotsSoFar = 0
         self.cows = [self.game.assets.sfx_cow1, self.game.assets.sfx_cow2]
+        self.modeTimer = 0
 
     def sw_centerRampMake_active(self,sw):
+        # kill the mode timer until x
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Pause Timer")
         # center ramp pauses the train
         self.pause_train()
         return game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
+        # kill the mode timer until x
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Pause Timer")
         self.advance_save_polly()
         return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
+        # kill the mode timer until x
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Pause Timer")
         self.advance_save_polly()
         return game.SwitchStop
-
-    def sw_trainEncoder_active(self,sw):
-        # this is the moving train
-        # each time it hits increment the train progress
-        self.trainProgress += 1
-        print "TRAIN PROGRESS" + str(self.trainProgress)
-        # when it gets to a certain number, polly dies
-        if self.trainProgress >= 10:
-            self.polly_died()
-
-    def sw_trainHome_active(self,sw):
-        # turn off the reverse motor
-        self.game.coils.trainReverse.disable()
-        # when we hit the home switch it's time to unload
-        self.end_save_polly()
 
     def start_save_polly(self):
         # clear any running music
         self.game.sound.stop_music()
-        # reset the train progress
-        self.trainProgress = 0
-        # play the intro animation
+        # kill the lights
+        self.game.set_tracking('lampStatus',"GIONLY")
+        self.game.update_lamps()
+        # TODO polly intro music?
+        # run a polly lampshow
+        self.game.lampctrl.play_show(self.game.assets.lamp_pollyPeril, repeat=True,callback=None)
+        # reset the train
+        self.game.train.reset_toy()
         # run the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'polly-peril.dmd')
-        myWait = len(anim.frames) / 12 + 2
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=4)
+        myWait = len(anim.frames) / 30 + 2
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
         self.layer = animLayer
-        # start up the music
-        self.delay(delay=myWait,handler=self.in_progress)
+        # then hand off to the main loop
+        self.delay(delay=myWait,handler=self.get_going)
 
-    def in_progress(self):
+    # start the music, set up the static text lines an animations
+    def get_going(self):
+        print "POLLY GET GOING"
         # start the music
         self.game.sound.play_music(self.game.assets.music_pollyPeril)
-        # start the train moving
-        self.move_train()
-        # setup the mode screen with the animated train
+        # set the timer for the mode
+        self.modeTimer = 30
+        # setup the 2 animations
         anim = dmd.Animation().load(ep.DMD_PATH+'train-head-on.dmd')
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=True,frame_time=6)
-        self.layer = animLayer
-        # this is a temporary mechanism for making the mode work for now
-        self.delay(delay=30,handler=self.end_save_polly)
+        self.trainLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=True,frame_time=6)
+        anim = dmd.Animation().load(ep.DMD_PATH+'cow-on-tracks.dmd')
+        self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
+        self.pollyTitle = dmd.TextLayer(34, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
+        self.awardLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("EXTRA BALL LIT")
+        # jump into the mode loop
+        self.in_progress()
 
-    # for moving the train forward - since we'll have to delay call it
-    def move_train(self):
-        self.game.coils.trainForward.enable()
+    ## this is the main mode loop - not passing the time to the loop because it's global
+    ## due to going in and out of pause
+    def in_progress(self):
+        print "POLLY IN PROGRESS"
+        # start the train moving
+        self.game.train.move()
+        # setup the mode screen with the animated train
+        # and all the text
+        p = self.game.current_player()
+        scoreString = ep.format_score(p.score)
+        scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
+        timeString = "TIME: " + str(self.modeTimer)
+        timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString)
+        textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
+        awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
 
-    # for a center ramp hit
+        # stick together the animation and static text with the dynamic text
+        composite = dmd.GroupedLayer(128,32,[self.trainLayer,self.pollyTitle,scoreLine,awardLine1,self.awardLine2,timeLine])
+        self.layer = composite
+        ## tick down the timer
+        self.modeTimer -= 1
+        ## TODO play some hurry quote at 5 seconds?
+        # if we've run out of time
+        if self.modeTimer == 0:
+            # go to a grace period
+            self.polly_died()
+        # otherwise ...
+        else:
+            # set up a delay to come back in 1 second with the lowered time
+            self.delay(name="Mode Timer",delay=1,handler=self.in_progress)
+
+    # for a ramp hit - time and if advanced or not are conditional for side vs center ramps
     def pause_train(self,advanced=False, time=5):
         print "PAUSE TRAIN"
         # stop the train from moving
-        self.stop_train()
-        # play the running on top animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'cow-on-tracks.dmd')
-        # math out the wait
-        myWait = len(anim.frames) / 8.57
-        # set the animation
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=7)
-        if advanced:
-            # this is the side ramp shot version
-            pass
-        else:
+        self.game.train.stop()
+        if not advanced:
             # play the pause display
             self.game.sound.play(self.cows[0])
             # swap for the next shot
             self.cows.reverse()
-            # set a delay to start the train again
-        self.layer = dmd.GroupedLayer(128,32,[animLayer])
-        self.pause_timer(time)
+            # setup the display
+            border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
+            awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+            awardTextTop.set_text("TRAIN")
+            awardTextBottom.set_text("PAUSED",blink_frames=12)
+            completeFrame = dmd.GroupedLayer(128, 32, [border,awardTextTop,awardTextBottom])
+            transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
+
+        # set a delay to start the train again
+        self.delay(delay=1.5,handler=self.pause_timer,param=time)
 
     def pause_timer(self,time):
         # if the timer is at 0 start the train up again
         if time <= 0:
             self.in_progress()
         else:
+            # set up the display
+            p = self.game.current_player()
+            scoreString = ep.format_score(p.score)
+            scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
+            timeString = "TIME: PAUSED"
+            timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString,blink_frames=10)
+            textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
+            awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+
+            # stick together the animation and static text with the dynamic text
+            composite = dmd.GroupedLayer(128,32,[self.cowLayer,self.pollyTitle,scoreLine,awardLine1,self.awardLine2,timeLine])
+            self.layer = composite
+
             # if not, tick off one
             time -= 1
             # then reschedule 1 second later with the new time
-            self.delay(delay=1,handler=self.pause_timer,param=time)
-
-    def reset_train(self):
-        # turn on the reverse motor
-        self.game.coils.trainReverse.enable()
-
-    def stop_train(self):
-        # turn off the moving train solenoid
-        self.game.coils.trainForward.disable()
+            self.delay(name="Pause Timer",delay=1,handler=self.pause_timer,param=time)
 
         # for a side ramp hit
     def advance_save_polly(self):
@@ -121,45 +157,62 @@ class SavePolly(game.Mode):
         if self.shotsSoFar >= self.shotsToWin:
             self.polly_saved()
         else:
-            # play the running on top animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'train-running-on-top.dmd')
-            # math out the wait
-            myWait = len(anim.frames) / 10.0
-            # set the animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
-            # display something
-            self.layer = animLayer
+            # score points
+            self.game.score(500000)
+            # TODO play some sound?
+            # setup the display
+            border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
+            pollyTitle = dmd.TextLayer(64, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
+            scoreLine = dmd.TextLayer(64, 6, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("500,000")
+            textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
+            awardLine1 = dmd.TextLayer(64, 15, self.game.assets.font_6px_az, "center", opaque=False).set_text(textString2)
+            awardLine2 = dmd.TextLayer(64, 23, self.game.assets.font_7px_az, "center", opaque=False).set_text("EXTRA BALL LIT")
+            completeFrame = dmd.GroupedLayer(128,32,[border,pollyTitle,scoreLine,awardLine1,awardLine2])
+            transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
             # pause the train briefly
-            self.delay(delay=myWait,handler=self.register_advance)
+            self.delay(name="Pause Timer",delay=1.5,handler=self.pause_timer,param=2)
 
-    def register_advance(self):
-        self.pause_train(advanced=True,time=2)
 
     # success
     def polly_saved(self):
         # sound for this is self.game.assets.sfx_trainStop
         # play the train stopping animation and some sounds
-        # light extra ball? or is that score extra ball?
+        # TODO needs sounds
+        anim = dmd.Animation().load(ep.DMD_PATH+'train-polly-on-tracks.dmd')
+        # math out the wait
+        myWait = len(anim.frames) / 10.0
+        # set the animation
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        # turn it on
+        self.layer = animLayer
+        # set the delay for the award
+        self.delay(delay=myWait,handler=self.give_award)
+
+    def give_award(self):
+        # light extra ball?
+        self.game.mine.light_extra_ball()
         # then after a delay, reset train
         self.polly_finished() # should delay this
 
     # fail
     def polly_died(self):
-        self.poly_finished()
+        self.polly_finished()
 
     def polly_finished(self):
         # stop the polly music
         self.game.sound.stop_music()
         # turn the main game music back on
         self.game.base_game_mode.music_on()
-        self.reset_train()
+        self.game.train.reset_toy()
         # turn off the polly display
         self.layer = None
         # set the tracking on the ramps
         # this is mostly for the lights
-        self.game.set_tracking('leftRampStage = 5')
-        self.game.set_tracking('rightRampStage = 5')
-        self.game.set_tracking('centerRampStage = 4')
+        self.game.set_tracking('leftRampStage',5)
+        self.game.set_tracking('rightRampStage',5)
+        self.game.set_tracking('centerRampStage',4)
+        # todo CHECK STAR STATUS FOR HIGH NOON
+        self.end_save_polly()
 
     # clean up and exit
     def end_save_polly(self):

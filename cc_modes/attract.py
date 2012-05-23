@@ -23,9 +23,6 @@ class Attract(game.Mode):
 
         # home the mine
         self.reset_mine()
-        # home the train
-        self.reset_train()
-
 
         ## Set up the layers to use
         ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bally-banner.dmd').frames[0])
@@ -77,7 +74,6 @@ class Attract(game.Mode):
             self.game.assets.lamp_giTest,
             self.game.assets.lamp_giTest
         ]
-        self.game.enable_lampshow()
         self.game.schedule_lampshows(lampshows,True)
 
         # run an initial pass on the animation loop
@@ -163,7 +159,6 @@ class Attract(game.Mode):
     def sw_startButton_active(self, sw):
         # If the trough is full start a game
         # after killing the lampshow
-        self.game.disable_lampshow()
         self.game.lampctrl.stop_show()
 
         if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
@@ -225,12 +220,3 @@ class Attract(game.Mode):
             self.game.coils.mineMotor.disable()
             self.mineReset = False
 
-    def reset_train(self):
-        if not self.game.switches.trainHome.is_active():
-            self.game.coils.trainReverse.enable()
-            self.trainReset = True
-
-    def sw_trainHome_active(self,sw):
-        if self.trainReset:
-            self.game.coils.trainReverse.disable()
-            self.trainReset = False
