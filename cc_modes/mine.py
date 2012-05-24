@@ -51,7 +51,7 @@ class Mine(game.Mode):
         if eb > 0 and status != "RUNNING":
             self.game.coils.mineFlasher.schedule(0x00100000)
         # if multiball is running and motherload is available - flash the light
-        if satus == "RUNNING" and self.game.show_tracking('motherLodePending') > 0:
+        if status == "RUNNING" and self.game.show_tracking('motherLodePending') > 0:
             self.game.coils.mineFlasher.schedule(0x00010001)
 
     def disable_lamps(self):

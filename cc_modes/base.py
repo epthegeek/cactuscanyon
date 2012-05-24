@@ -42,14 +42,6 @@ class BaseGameMode(game.Mode):
     def mode_started(self):
         ## cancel the closing song delay, just in case
         self.game.interrupter.dispatch_delayed()
-        ## Load up all the base modes
-        self.game.modes.add(self.game.right_ramp)
-        self.game.modes.add(self.game.left_ramp)
-        self.game.modes.add(self.game.center_ramp)
-        self.game.modes.add(self.game.left_loop)
-        self.game.modes.add(self.game.right_loop)
-        self.game.modes.add(self.game.mine)
-        self.game.modes.add(self.game.saloon)
         # and update the lamps
         self.game.update_lamps()
 
@@ -60,6 +52,20 @@ class BaseGameMode(game.Mode):
         # switches being hit.
         self.game.ball_search.disable()
         # shut down all the modes
+        self.remove_modes()
+
+    def load_modes(self):
+        self.game.modes.add(self.game.bonus_lanes)
+        self.game.modes.add(self.game.right_ramp)
+        self.game.modes.add(self.game.left_ramp)
+        self.game.modes.add(self.game.center_ramp)
+        self.game.modes.add(self.game.left_loop)
+        self.game.modes.add(self.game.right_loop)
+        self.game.modes.add(self.game.mine)
+        self.game.modes.add(self.game.saloon)
+
+    def remove_modes(self):
+        self.game.modes.remove(self.game.bonus_lanes)
         self.game.modes.remove(self.game.right_ramp)
         self.game.modes.remove(self.game.left_ramp)
         self.game.modes.remove(self.game.center_ramp)
@@ -67,6 +73,8 @@ class BaseGameMode(game.Mode):
         self.game.modes.remove(self.game.right_loop)
         self.game.modes.remove(self.game.mine)
         self.game.modes.remove(self.game.saloon)
+
+
 
     def ball_drained(self):
         # if that was the last ball in play need to finish up
@@ -80,6 +88,8 @@ class BaseGameMode(game.Mode):
             self.game.ball_search.disable()
             # turn off the flippers
             self.game.enable_flippers(False)
+            # unload the modes
+            self.remove_modes()
             if self.game.show_tracking('tiltStatus') != 3:
                 # go check the bonus - after that we'll finish the ball
                 self.check_bonus()
@@ -123,11 +133,6 @@ class BaseGameMode(game.Mode):
             self.game.lamps.rightReturnQuickdraw.enable()
         else:
             pass
-        # bonus lanes
-        if self.game.show_tracking('bonusLaneStatus',0) == 'ON':
-            self.game.lamps.leftBonusLane.enable()
-        if self.game.show_tracking('bonusLaneStatus',1) == 'ON':
-            self.game.lamps.rightBonusLane.enable()
         # the rank lights
         rank = self.game.show_tracking('rank')
         # loop through 0 through current rank and turn the lamps on
@@ -153,9 +158,6 @@ class BaseGameMode(game.Mode):
         self.game.lamps.topRightQuickdraw.disable()
         self.game.lamps.leftReturnQuickdraw.disable()
         self.game.lamps.rightReturnQuickdraw.disable()
-        self.game.lamps.leftBonusLane.disable()
-        self.game.lamps.rightBonusLane.disable()
-
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
@@ -383,11 +385,11 @@ class BaseGameMode(game.Mode):
     ## Flipper switch detection for flipping the bonus lanes
     def sw_flipperLwL_active(self,sw):
         # toggle the bonus lane
-        self.flip_bonus_lane()
+        self.bonus_lane.flip()
 
     def sw_flipperLwR_active(self,sw):
         # toggle the bonus lane
-        self.flip_bonus_lane()
+        self.bonus_lane.flip()
 
     ### shooter lane stuff
 
@@ -406,109 +408,10 @@ class BaseGameMode(game.Mode):
         # if the ball sits in the shooter lane, flash the player number
         self.game.interrupter.display_player_number(idle=True)
 
-    def sw_skillBowl_active(self):
+    def sw_skillBowl_active(self,sw):
         if self.game.ballSaved:
             self.game.ballSaved = False
 
-
-    ###
-    ###  ____                          _
-    ### | __ )  ___  _ __  _   _ ___  | |    __ _ _ __   ___  ___
-    ### |  _ \ / _ \| '_ \| | | / __| | |   / _` | '_ \ / _ \/ __|
-    ### | |_) | (_) | | | | |_| \__ \ | |__| (_| | | | |  __/\__\
-    ### |____/ \___/|_| |_|\__,_|___/ |_____\__,_|_| |_|\___||___/
-    ###
-    ###
-
-    def sw_leftBonusLane_active(self,sw):
-        self.bonus_lane_hit(0)
-        ## -- set the last switch hit --
-        ep.last_switch = "leftBonusLane"
-
-
-    def sw_rightBonusLane_active(self,sw):
-        self.bonus_lane_hit(1)
-        ## -- set the last switch hit --
-        ep.last_switch = "rightBonusLane"
-
-
-    def bonus_lane_hit(self,side):
-        # lookup the status of the lane that got hit
-        stat = self.game.show_tracking('bonusLaneStatus',side)
-        # if the lane is off
-        if stat == "OFF":
-            # set the status to on for the lane that got hit
-            self.game.set_tracking('bonusLaneStatus',"ON",side)
-            self.update_lamps()
-            # light the light
-            # points for lighting bonus lane
-            self.game.score(35000)
-            # then if they're both on now play the animation and turn them both off
-            # and score points accordingly - 100k for completing the pair, 35,000 for one
-            if self.is_time_to_increase_bonus():
-                self.game.sound.play(self.game.assets.sfx_banjoTaDa)
-                self.game.score(100000)
-                self.increase_bonus()
-            else:
-                self.game.sound.play(self.game.assets.sfx_banjoTrillUp)
-                self.game.score(35000)
-
-        # if the lane is already on play the alternate sound and add points
-        else:
-            # play the alt sound
-            self.game.sound.play(self.game.assets.sfx_banjoTrillDown)
-            # add some points
-            self.game.score(15000)
-
-    def flip_bonus_lane(self):
-        self.game.invert_tracking('bonusLaneStatus')
-        self.update_lamps()
-
-    def is_time_to_increase_bonus(self):
-        # if neither one is off, IT IS TIME
-        if "OFF" not in self.game.show_tracking('bonusLaneStatus'):
-            return True
-
-    def increase_bonus(self):
-        # cancel the "Clear" delay if there is one
-        self.cancel_delayed("ClearBonus")
-
-        # play the cactus mashing animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'bonus-cactus-mash.dmd')
-        # calculate the wait for displaying the text
-        myWait = (len(anim.frames) / 8.57) - 0.4
-        # set the animation
-        animLayer = ep.EP_AnimatedLayer(anim)
-        animLayer.hold = True
-        animLayer.frame_time = 7
-        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_cactusMash)
-        # run the animation
-        self.layer = animLayer
-        # increase the bonus
-        self.game.increase_tracking('bonusX')
-        # turn both lights off
-        self.game.set_tracking('bonusLaneStatus',"OFF",0)
-        self.game.set_tracking('bonusLaneStatus',"OFF",1)
-        # after the delay, show the award
-        self.delay(delay=myWait,handler=self.show_bonus_award)
-
-    def show_bonus_award(self):
-        ## the top text line is just bonus
-        awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        awardTextTop.set_text("BONUS:")
-        ## The second line is the tracking value + X
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-        awardTextBottom.set_text(str(self.game.show_tracking('bonusX')) + "X")
-        # combine the text onto the held cactus animation
-        newLayer = dmd.GroupedLayer(128, 32, [self.layer,awardTextTop,awardTextBottom])
-        # set the layer active
-        self.layer = newLayer
-        # then 1.5 seconds later, shut it off
-        self.delay(name="ClearBonus",delay=1.5,handler=self.clear_layer)
-        self.delay(delay=1.5,handler=self.update_lamps)
-
-    def play_sfx_cactusMash(self):
-        self.game.sound.play(self.game.assets.sfx_cactusMash)
 
     ###
     ###   ___        _      _       _
