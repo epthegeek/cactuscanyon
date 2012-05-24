@@ -180,7 +180,7 @@ class RightRamp(game.Mode):
         if self.game.show_tracking('rightRampStage') < 4:
             self.game.increase_tracking('rightRampStage')
             # update the lamps
-            self.game.update_lamps()
+            self.update_lamps()
 
     def anim_bank_victory(self):
         print "BANK VICTORY"

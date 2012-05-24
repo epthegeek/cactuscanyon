@@ -163,7 +163,7 @@ class RightLoop(game.Mode):
         if stage < 4:
             self.game.increase_tracking('rightLoopStage')
             # update the lamps
-            self.game.update_lamps()
+            self.update_lamps()
 
 
     def show_marksman_award(self):

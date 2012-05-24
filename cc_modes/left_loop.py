@@ -151,7 +151,7 @@ class LeftLoop(game.Mode):
         if stage < 4:
             self.game.increase_tracking('leftLoopStage')
             # update the lamps
-            self.game.update_lamps()
+            self.update_lamps()
 
 
         # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display
