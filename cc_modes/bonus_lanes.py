@@ -105,7 +105,7 @@ class BonusLanes(game.Mode):
         self.game.set_tracking('bonusLaneStatus',"OFF",0)
         self.game.set_tracking('bonusLaneStatus',"OFF",1)
         # after the delay, show the award
-        self.delay(delay=myWait,handler=self.show_bonus_award)
+        self.delay(name="Display",delay=myWait,handler=self.show_bonus_award)
 
     def show_bonus_award(self):
         ## the top text line is just bonus
@@ -119,7 +119,7 @@ class BonusLanes(game.Mode):
         # set the layer active
         self.layer = newLayer
         # then 1.5 seconds later, shut it off
-        self.delay(name="ClearBonus",delay=1.5,handler=self.clear_layer)
+        self.delay(name="Display",delay=1.5,handler=self.clear_layer)
         self.delay(delay=1.5,handler=self.update_lamps)
 
     def play_sfx_cactusMash(self):
@@ -127,3 +127,7 @@ class BonusLanes(game.Mode):
 
     def clear_layer(self):
         self.layer = None
+
+    def abort_display(self):
+        self.clear_layer()
+        self.cancel_delayed("Display")

@@ -86,11 +86,11 @@ class LeftLoop(game.Mode):
             ## if the combo timer is on:
             if self.game.comboTimer > 0:
                 # register the combo and reset the timer
-                combo = self.game.base_game_mode.combo_hit()
+                combo = self.game.combos.hit()
             # else the combo timer is NOT on so run award loop without the flag
             else:
                 # and turn on the combo timer
-                combo = self.game.base_game_mode.start_combos()
+                combo = self.game.combos.start()
 
             # award the loop reward
             self.award_loop_score(combo)
@@ -157,7 +157,7 @@ class LeftLoop(game.Mode):
         # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display
         if stage >= 4 and combo:
             self.layer = None
-            self.game.base_game_mode.combo_display()
+            self.game.combos.display()
             return
 
         # load the animation based on which was last played

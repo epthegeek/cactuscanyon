@@ -18,11 +18,6 @@ class BaseGameMode(game.Mode):
     def __init__(self, game,priority):
         super(BaseGameMode, self).__init__(game, priority)
         self.ball_starting = True
-        self.comboLights = [self.game.lamps.rightRampCombo,
-                            self.game.lamps.leftRampCombo,
-                            self.game.lamps.centerRampCombo,
-                            self.game.lamps.leftLoopCombo,
-                            self.game.lamps.rightLoopCombo]
         # rank - set up the bulb list
         self.rankLamps = [self.game.lamps.rankStranger,
                           self.game.lamps.rankPartner,
@@ -56,6 +51,7 @@ class BaseGameMode(game.Mode):
 
     def load_modes(self):
         self.game.modes.add(self.game.bonus_lanes)
+        self.game.modes.add(self.game.combos)
         self.game.modes.add(self.game.right_ramp)
         self.game.modes.add(self.game.left_ramp)
         self.game.modes.add(self.game.center_ramp)
@@ -66,6 +62,7 @@ class BaseGameMode(game.Mode):
 
     def remove_modes(self):
         self.game.modes.remove(self.game.bonus_lanes)
+        self.game.modes.remove(self.game.combos)
         self.game.modes.remove(self.game.right_ramp)
         self.game.modes.remove(self.game.left_ramp)
         self.game.modes.remove(self.game.center_ramp)
@@ -495,94 +492,6 @@ class BaseGameMode(game.Mode):
         self.update_lamps()
 
     ###
-    ###   ____                _
-    ###  / ___|___  _ __ ___ | |__   ___  ___
-    ### | |   / _ \| '_ ` _ \| '_ \ / _ \/ __|
-    ### | |__| (_) | | | | | | |_) | (_) \__\
-    ###  \____\___/|_| |_| |_|_.__/ \___/|___/
-    ###
-
-    def combo_timer(self):
-        # tick down the comboTimer
-        self.game.comboTimer -= 1
-        # see if it hit zero
-        print "COMBO TIMER: " + str(self.game.comboTimer)
-        if self.game.comboTimer == 0:
-            self.end_combos()
-        else:
-            # two seconds left, speed up the blink
-            if self.game.comboTimer == 2:
-                for myLamp in self.comboLights:
-                    myLamp.schedule(0x00FF00FF)
-            # one second left, speed it up even more
-            if self.game.comboTimer == 1:
-                for myLamp in self.comboLights:
-                    myLamp.schedule(0x0F0F0F0F)
-            # if we're not at zero yet, come back in 1 second
-            self.delay(name="Combo Timer",delay=1,handler=self.combo_timer)
-
-    def end_combos(self):
-        # turn off the lights
-        for myLamp in self.comboLights:
-            myLamp.disable()
-        print "Combos have ENDED"
-
-    def start_combos(self):
-        print "Combos are ON"
-        # set the timer at the max settings from the game
-        self.game.comboTimer = self.game.user_settings['Gameplay (Feature)']['Combo Timer']
-        # turn the lights on
-        for myLamp in self.comboLights:
-            myLamp.schedule(0x0000FFFF)
-        #loop to the timer
-        self.delay(name="Combo Timer",delay=1,handler=self.combo_timer)
-        # send this back to what called it for use in determining if in a combo or not
-        return False
-
-    def combo_hit(self):
-        # cancel the current combo_timer delay
-        self.cancel_delayed("Combo Timer")
-        # add one to the combo total and reset the timer
-        self.game.comboTimer = self.game.user_settings['Gameplay (Feature)']['Combo Timer']
-        comboTotal = self.game.increase_tracking('combos')
-        print "COMBOS: " + str(comboTotal)
-        # show a display at this level? have the higher modes turn off their deisplay?
-        # or do the display in the other modes? HMM
-        # points? # TODO investigate points awarded for combos
-        # if we've got enough combos to light the badge, do that
-        if comboTotal == self.game.user_settings['Gameplay (Feature)']['Combos for Star']:
-            ## TODO actually award the badge
-            pass
-        # loop back to the timer
-        self.delay(name="Combo Timer",delay=1,handler=self.combo_timer)
-        # send this back to what called it for use in determining if in a combo or not
-        return True
-
-    def combo_display(self):
-        self.cancel_delayed("clearCombo")
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-border.dmd').frames[0])
-        # build and show the display of combos made & left
-        textLine1 = dmd.TextLayer(64,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False).set_text("COMBO AWARDED")
-        textLine2 = dmd.TextLayer(64,11,self.game.assets.font_9px_az,justify="center",opaque=False)
-        textLine3 = dmd.TextLayer(64,25,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        combos = self.game.show_tracking('combos')
-        textString2 = str(combos) + " COMBOS"
-        textLine2.set_text(textString2,blink_frames=10)
-        combosForStar = self.game.user_settings['Gameplay (Feature)']['Combos for Star']
-        diff = combosForStar - combos
-        if combos > combosForStar:
-            comboString = "BADGE COMPLETE!"
-        elif combos == combosForStar:
-            comboString = "BADGE AWARDED"
-        else:
-            comboString = str(diff) + " MORE FOR BADGE!"
-        textLine3.set_text(comboString)
-        combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
-        self.layer = combined
-        print "I MADE IT THROUGH COMBO DISPLAY"
-        self.delay(name="clearCombo",delay=2,handler=self.clear_layer)
-
-    ###
     ###  ____
     ### | __ )  ___  _ __  _   _ ___
     ### |  _ \ / _ \| '_ \| | | / __|
@@ -619,7 +528,7 @@ class BaseGameMode(game.Mode):
         times -= 1
         if times <= 0:
             # if we're at the last one, it's time to finish up
-            self.delay(delay=0.5,handler=self.reveal_bonus,param=self.runningTotal)
+            self.delay(delay=1.5,handler=self.reveal_bonus,param=self.runningTotal)
         else:
             # if not, loop back around after a delay
             self.delay(delay=0.5,handler=self.display_bonus,param=times)

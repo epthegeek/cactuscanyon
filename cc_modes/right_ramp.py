@@ -76,10 +76,10 @@ class RightRamp(game.Mode):
         # score the points and mess with the combo
         if self.game.comboTimer > 0:
             # register the combo and reset the timer - returns true for use later
-            combo = self.game.base_game_mode.combo_hit()
+            combo = self.game.combos.hit()
         else:
             # and turn on the combo timer - returns false for use later
-            combo = self.game.base_game_mode.start_combos()
+            combo = self.game.combos.start()
         self.award_ramp_score(combo)
         ## -- set the last switch hit --
         ep.last_switch = "rightRampMake"
@@ -172,7 +172,7 @@ class RightRamp(game.Mode):
             # play animation
             if combo:
                 self.layer = None
-                self.game.base_game_mode.combo_display()
+                self.game.combos.display()
             else:
                 self.anim_bank_victory()
 

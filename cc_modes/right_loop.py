@@ -80,11 +80,11 @@ class RightLoop(game.Mode):
             ## if the combo timer is on:
             if self.game.comboTimer > 0:
                 # register the combo and reset the timer
-                combo = self.game.base_game_mode.combo_hit()
+                combo = self.game.combos.hit()
             # else the combo timer is NOT on so run award loop without the flag
             else:
                 # and turn on the combo timer
-                combo = self.game.base_game_mode.start_combos()
+                combo = self.game.combos.start()
 
             # award the loop reward
             self.award_loop_score(combo)
@@ -156,7 +156,7 @@ class RightLoop(game.Mode):
             # if we're not on a combo  show the award - combos after stage 4 should just show the combo
             if combo:
                 self.layer = None
-                self.game.base_game_mode.combo_display()
+                self.game.combos.display()
             else:
                 self.show_award_text()
         # then tick the stage up for next time unless it's completed

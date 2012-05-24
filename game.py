@@ -105,6 +105,7 @@ class CCGame(game.BasicGame):
         self.train = cc_modes.Train(game=self,priority=6)
         self.mountain = cc_modes.Mountain(game=self,priority = 7)
 
+        self.combos = cc_modes.Combos(game=self,priority=9)
         self.right_ramp = cc_modes.RightRamp(game=self,priority=10)
         self.left_ramp = cc_modes.LeftRamp(game=self,priority=11)
         self.center_ramp = cc_modes.CenterRamp(game=self,priority=12)
