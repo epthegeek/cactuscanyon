@@ -39,12 +39,10 @@ class CenterRamp(game.Mode):
             # first two on
             self.game.lamps.centerRampCatchTrain.enable()
             self.game.lamps.centerRampStopTrain.enable()
+            # small change here - only blink the 3rd light if the other ramps are done
             if self.game.show_tracking('leftRampStage') == 4 and self.game.show_tracking('rightRampStage') == 4:
                 # blink the third
                 self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
-            else:
-                # pulse the third
-                self.game.lamps.centerRampSavePolly.schedule(0x4677EE62)
 
         # this is after polly peril - all three on
         elif stage == 4:

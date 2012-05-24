@@ -45,8 +45,8 @@ class RightRamp(game.Mode):
             # two on
             self.game.lamps.rightRampSoundAlarm.enable()
             self.game.lamps.rightRampShootOut.enable()
-            # pulse the third
-            self.game.lamps.rightRampSavePolly.schedule(0x4677EE62)
+            # the pulse idea didn't really work so we'll just turn it on
+            self.game.lamps.rightRampSavePolly.enable()
         # after polly, before stampede all three stay on
         elif stage == 5:
             self.game.lamps.rightRampSoundAlarm.enable()

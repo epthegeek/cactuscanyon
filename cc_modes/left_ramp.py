@@ -49,8 +49,8 @@ class LeftRamp(game.Mode):
             # two on
             self.game.lamps.leftRampWhiteWater.enable()
             self.game.lamps.leftRampWaterfall.enable()
-            # pulse the third
-            self.game.lamps.leftRampSavePolly.schedule(0x4677EE62)
+            # the pulse idea didn't really work - so we'll just turn it on
+            self.game.lamps.leftRampSavePolly.enable()
         # after polly, before stampede all three stay on
         elif stage == 5:
             self.game.lamps.leftRampWhiteWater.enable()
