@@ -136,7 +136,8 @@ class BaseGameMode(game.Mode):
         # bad guy lights hopefully this sets any lamp that returns true to be on
         for lamp in range(0,4,1):
             status = self.game.show_tracking('badGuysDead',lamp)
-            if status:
+            active = self.game.show_tracking('badGuyUp',lamp)
+            if status or active:
                 self.badGuyLamps[lamp].enable()
 
     def disable_lamps(self):
@@ -693,7 +694,7 @@ class BaseGameMode(game.Mode):
         times -= 1
         if times <= 0:
             # if we're at the last one, it's time to finish up
-            self.reveal_bonus(self.runningTotal)
+            self.delay(delay=0.5,handler=self.reveal_bonus,param=self.runningTotal)
         else:
             # if not, loop back around after a delay
             self.delay(delay=0.5,handler=self.display_bonus,param=times)

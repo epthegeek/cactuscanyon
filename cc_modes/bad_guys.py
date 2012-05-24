@@ -27,31 +27,28 @@ class BadGuys(game.Mode):
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
 
-    def mode_started(self):
-        self.badGuyUp = [False,False,False,False]
-
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
         print "BAD GUY 1 HIT"
-        if self.badGuyUp[0]:
+        if self.game.show_tracking('badGuyUp',0):
             self.hit_bad_guy(0)
 
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
         print "BAD GUY 2 HIT"
-        if self.badGuyUp[1]:
+        if self.game.show_tracking('badGuyUp',1):
             self.hit_bad_guy(1)
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
         print "BAD GUY 3 HIT"
-        if self.badGuyUp[2]:
+        if self.game.show_tracking('badGuyUp',2):
             self.hit_bad_guy(2)
 
     def sw_badGuySW3_active(self,sw):
         print "BAD GUY 4 HIT"
         # far right bad guy target
-        if self.badGuyUp[3]:
+        if self.game.show_tracking('badGuyUp',3):
             self.hit_bad_guy(3)
 
     def hit_bad_guy(self,target):
@@ -99,12 +96,12 @@ class BadGuys(game.Mode):
 
     def target_down(self,target):
         # kill the delay that enables switch recognition - this is for gunfights mostly
+        self.game.set_tracking('badGuyUp',False,target)
         self.coils[target].disable()
         self.lights[target].disable()
-        self.badGuyUp[target] = False
 
     def target_activate(self,target):
-        self.badGuyUp[target] = True
+        self.game.set_tracking('badGuyUp',True,target)
     ###
     ###   ___        _      _       _
     ###  / _ \ _   _(_) ___| | ____| |_ __ __ ___      __
@@ -365,9 +362,11 @@ class BadGuys(game.Mode):
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # reset the quickdraw status of the bad guys
         for i in range(0,3,1):
-            self.game.set_tracking('quickdrawStatus',"False",i)
+            print "END SHOWDOWN: " + str(i)
+            self.game.set_tracking('quickdrawStatus',False,i)
         # turn off lights
         for i in range(0,4,1):
+            print "END SHOWDOWN BAD GUYS " + str(i)
             self.game.set_tracking('badGuysDead',i,False)
         # tracking - turn it back to open
         self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
@@ -388,9 +387,9 @@ class BadGuys(game.Mode):
         self.game.set_tracking('lampStatus',"OFF")
         self.game.update_lamps()
         if side == 0:
-            self.game.leftGunfightPin.schedule(0x00FF00FF)
+            self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
         else:
-            self.game.rightGunfightPin.schedule(0x00FF00FF)
+            self.game.lamp.rightGunfightPin.schedule(0x00FF00FF)
         self.game.increase_tracking('gunfightsStarted')
         print "GUNFIGHT GOES HERE"
         # pop up the post
@@ -581,7 +580,7 @@ class BadGuys(game.Mode):
         self.game.set_tracking('lampStatus', "GIONLY")
         self.game.update_lamps()
         # and turn on target guy
-        self.lights[enemy].enable()
+        self.lights[self.enemy].enable()
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost

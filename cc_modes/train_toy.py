@@ -11,6 +11,7 @@ class Train(game.Mode):
     def __init__(self, game, priority):
         super(Train, self).__init__(game, priority)
         self.trainProgress = 0
+        self.trainReset = False
 
     def mode_started(self):
         # home the train

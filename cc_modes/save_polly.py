@@ -199,6 +199,8 @@ class SavePolly(game.Mode):
         self.polly_finished()
 
     def polly_finished(self):
+        # stop the lampshow
+        self.game.lampctrl.stop_show()
         # stop the polly music
         self.game.sound.stop_music()
         # turn the main game music back on
@@ -211,6 +213,7 @@ class SavePolly(game.Mode):
         self.game.set_tracking('leftRampStage',5)
         self.game.set_tracking('rightRampStage',5)
         self.game.set_tracking('centerRampStage',4)
+        self.game.update_lamps()
         # todo CHECK STAR STATUS FOR HIGH NOON
         self.end_save_polly()
 

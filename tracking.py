@@ -67,6 +67,7 @@ class Tracking(game.Player):
         self.player_stats['quickdrawsStarted'] = 0
         self.player_stats['quickdrawsWon'] = 0
         self.player_stats['badGuysDead'] = [False,False,False,False]
+        self.player_stats['badGuyUp'] = [False,False,False,False]
         self.player_stats['showdownTotal'] = 0
 
         # bartStatus: OPEN, RUNNING, LAST, DEAD

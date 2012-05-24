@@ -32,7 +32,7 @@ class LeftLoop(game.Mode):
     def update_lamps(self):
         self.disable_lamps()
         ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') == "OFF":
+        if self.game.show_tracking('lampStatus') != "ON":
             return
 
         stage = self.game.show_tracking('leftLoopStage')
