@@ -41,10 +41,8 @@ class SavePolly(game.Mode):
     def start_save_polly(self):
         # clear any running music
         self.game.sound.stop_music()
-        # kill the lights
-        self.game.set_tracking('lampStatus',"GIONLY")
-        self.game.update_lamps()
-        # TODO polly intro music?
+        # start the music
+        self.game.sound.play_music(self.game.assets.music_pollyPeril)
         # run a polly lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_pollyPeril, repeat=True,callback=None)
         # reset the train
@@ -60,8 +58,6 @@ class SavePolly(game.Mode):
     # start the music, set up the static text lines an animations
     def get_going(self):
         print "POLLY GET GOING"
-        # start the music
-        self.game.sound.play_music(self.game.assets.music_pollyPeril)
         # set the timer for the mode
         self.modeTimer = 30
         # setup the 2 animations

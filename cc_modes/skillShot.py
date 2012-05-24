@@ -101,16 +101,6 @@ class SkillShot(game.Mode):
         prizeList = dmd.TextLayer(self.x, 1, self.game.assets.font_skillshot, "right", opaque=True).set_text(self.selectedPrizes)
         self.layer = dmd.GroupedLayer(128, 32, [prizeList,self.mask, self.lasso])
 
-    def sw_shooterLane_inactive_for_100ms(self,sw):
-        # play the ball lanuch noise
-        self.game.sound.play(self.game.assets.sfx_shooterLaunch)
-        # kill the player number display if active
-        self.game.interrupter.abort_player_number()
-
-    def sw_shooterLane_active_for_5s(self,sw):
-        # if the ball sits in the shooter lane, flash the player number
-        self.game.interrupter.display_player_number(idle=True)
-
     # if the ramp switch gets hit - shift the prizes over
     # take the last prize off the string and stick it back on the front
     def sw_skillBowl_active(self, sw):
@@ -127,7 +117,6 @@ class SkillShot(game.Mode):
         prizeTemp1 = self.selectedPrizes[0:4]
         prizeTemp2 = self.selectedPrizes[4:5]
         self.selectedPrizes = prizeTemp2 + prizeTemp1 + prizeTemp2
-
 
     # if the ramp bottom switch gets hit - award the prize and unload the mode
     def sw_rightRampBottom_active(self, sw):

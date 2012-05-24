@@ -37,6 +37,7 @@ class CCGame(game.BasicGame):
         self.ballStarting = False
         self.runLampShows = False
         self.status = None
+        self.ballSaved = False
 
     def setup(self):
         """docstring for setup"""
@@ -62,6 +63,9 @@ class CCGame(game.BasicGame):
         self.ball_save.trough_enable_ball_save = self.trough.enable_ball_save
         self.trough.ball_save_callback = self.ball_save.launch_callback
         self.trough.num_balls_to_save = self.ball_save.get_num_balls_to_save
+        # set the ball save callback
+        self.ball_save.callback = self.ball_saved
+
 
         # High Score stuff
         self.highscore_categories = []
@@ -155,6 +159,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.attract_mode)
         self.modes.add(self.train)
         self.modes.add(self.mountain)
+        self.modes.add(self.interrupter)
 
     def start_game(self):
         # remove the attract mode
@@ -208,6 +213,13 @@ class CCGame(game.BasicGame):
         # and load the skill shot
         self.modes.add(self.skill_shot)
 
+    def ball_saved(self):
+        # tell interrupter jones to show the ball save
+        self.interrupter.ball_saved()
+        # if the ball was saved, we need a new one
+        self.trough.launch_balls(1)
+        self.ballSaved = True
+
     # Empty callback just incase a ball drains into the trough before another
      # drain_callback can be installed by a gameplay mode.
     def ball_drained(self):
@@ -244,6 +256,10 @@ class CCGame(game.BasicGame):
         # remove the base game mode
         self.modes.remove(self.base_game_mode)
 
+        ## TODO need to add some crap here to see if there's a high score to enter - and play the lead in
+        # play the closing song
+        self.interrupter.closing_song()
+
         # High Score Stuff
         self.seq_manager = highscore.EntrySequenceManager(game=self, priority=2)
         self.seq_manager.finished_handler = self.highscore_entry_finished
@@ -271,6 +287,8 @@ class CCGame(game.BasicGame):
 
         # re-add the attract mode
         self.modes.add(self.attract_mode)
+        # play a quote
+        self.sound.play(self.game.assets.quote_goodbye)
         # tally up the some audit data
         # Handle stats for last ball here
         self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
@@ -280,11 +298,6 @@ class CCGame(game.BasicGame):
             game_time = self.get_game_time(i)
             self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
             self.game_data['Audits']['Games Played'] += 1
-        # and games played
-        for i in range(0,len(self.players)):
-            game_time = self.get_game_time(i)
-        self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
-        self.game_data['Audits']['Games Played'] += 1
         # save the game data
         self.save_game_data()
 

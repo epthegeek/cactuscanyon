@@ -40,8 +40,9 @@ class BaseGameMode(game.Mode):
 
 
     def mode_started(self):
+        ## cancel the closing song delay, just in case
+        self.game.interrupter.dispatch_delayed()
         ## Load up all the base modes
-        self.game.modes.add(self.game.interrupter)
         self.game.modes.add(self.game.right_ramp)
         self.game.modes.add(self.game.left_ramp)
         self.game.modes.add(self.game.center_ramp)
@@ -59,7 +60,6 @@ class BaseGameMode(game.Mode):
         # switches being hit.
         self.game.ball_search.disable()
         # shut down all the modes
-        self.game.modes.remove(self.game.interrupter)
         self.game.modes.remove(self.game.right_ramp)
         self.game.modes.remove(self.game.left_ramp)
         self.game.modes.remove(self.game.center_ramp)
@@ -388,6 +388,28 @@ class BaseGameMode(game.Mode):
     def sw_flipperLwR_active(self,sw):
         # toggle the bonus lane
         self.flip_bonus_lane()
+
+    ### shooter lane stuff
+
+    def sw_shooter_lane_active_for_300MS(self,sw):
+        # if we're dealing with a saved ball, plunge like the wind
+        if self.game.ballSaved:
+            self.game.coils.autoPlunger.pulse(40)
+
+    def sw_shooterLane_inactive_for_100ms(self,sw):
+        # play the ball lanuch noise
+        self.game.sound.play(self.game.assets.sfx_shooterLaunch)
+        # kill the player number display if active
+        self.game.interrupter.abort_player_number()
+
+    def sw_shooterLane_active_for_5s(self,sw):
+        # if the ball sits in the shooter lane, flash the player number
+        self.game.interrupter.display_player_number(idle=True)
+
+    def sw_skillBowl_active(self):
+        if self.game.ballSaved:
+            self.game.ballSaved = False
+
 
     ###
     ###  ____                          _

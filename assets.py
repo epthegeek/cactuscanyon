@@ -310,6 +310,10 @@ class Assets():
         self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1020-mayor-the-extra-ball-is-lit.wav")
         self.quote_extraBallSet = 'quote_extraBallSet'
         self.game.sound.register_sound(self.quote_extraBallSet, self.quotes_path + "2018-waitress-extra-ball.wav")
+        self.quote_goodbye = 'quote_goodbye'
+        self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1317-undertaker-hope-to-see-you-soon.wav")
+        self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1421-drunk-its-all-over-citizens.wav")
+        self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "876-polly-come-back-soon.wav")
 
 
         self.quote_hitBigBart = 'quote_hitBigBart'
@@ -397,6 +401,10 @@ class Assets():
         self.game.sound.register_sound(self.quote_thirsty, self.quotes_path + "1427-drunk-boy-im-thirsty.wav")
         self.quote_whatThe = 'quote_whatThe'
         self.game.sound.register_sound(self.quote_whatThe, self.quotes_path + "1423-drunk-what-the.wav")
+        self.quote_dontMove = 'quote_dontMove'
+        self.game.sound.register_sound(self.quote_dontMove, self.quotes_path + "1265-prospector-dont-move.wav")
+        self.quote_dontJustStandThere = 'quote_dontJustStandThere'
+        self.game.sound.register_sound(self.quote_dontJustStandThere, self.quotes_path + "1196-mayor-dont-just-stand-there-do-somethin.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'
@@ -417,6 +425,10 @@ class Assets():
         self.game.sound.register_music(self.music_multiball_intro, self.music_path + "026-multiball-intro-music.wav")
         self.music_pollyPeril = 'music_pollyPeril'
         self.game.sound.register_music(self.music_pollyPeril, self.music_path + "031-polly-peril.wav")
+        self.music_highScoreLead = 'music_highScoreLead'
+        self.game.sound.register_sound(self.music_highScoreLead, self.music_path + "044-high-score-entry-lead.wav")
+        self.music_closingSong = 'music_closingSong'
+        self.game.sound.register_music(self.music_closingSong, self.music_path + "008-closing-song.wav")
 
         # lampshows
         lampshows = list()

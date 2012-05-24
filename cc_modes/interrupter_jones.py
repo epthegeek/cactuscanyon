@@ -12,6 +12,7 @@ class Interrupter(game.Mode):
     """Cactus Canyon Interrupter Jones"""
     def __init__(self, game, priority):
         super(Interrupter, self).__init__(game, priority)
+        rotator = [True,False,False,False,False]
 
     def display_player_number(self,idle=False):
         # for when the ball is sitting in the shooter lane with nothing going on
@@ -27,7 +28,13 @@ class Interrupter(game.Mode):
         display.composite_op = "blacksrc"
         # turn the display on
         self.layer = display
-        # todo add a quote if idle?
+        # every fifth time razz them
+        if rotator[0]:
+            self.game.sound.play(self.game.assets.quote_dontJustStandThere)
+        # then stick the current value on the end
+        foo = rotator.pop(0)
+        rotator.append(foo)
+        ## then shift 0 to the end
         self.delay(name="clearInterrupter",delay=1.5,handler=self.clear_layer)
         # with an idle call, set a repeat
         if idle:
@@ -72,3 +79,16 @@ class Interrupter(game.Mode):
     def play_tilt_sound(self):
         self.game.sound.play(self.game.assets.sfx_tiltDanger)
 
+    def ball_saved(self):
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_dontMove)
+        # show some display
+        # todo fancy this up
+        myLayer = dmd.TextLayer(128/2, 7, self.game.assets.font_9px_az, "center", opaque=True).set_text("BALL SAVED")
+        self.layer = myLayer
+        self.delay(delay=1,handler=self.clear_layer)
+
+    def closing_song(self):
+        self.game.sound.play_music(self.game.assets.music_closingSong, loops=-1)
+        # and set a delay to fade it out after 2 minutes
+        self.delay(delay=120,handler=self.game.sound.fadeout_music)
