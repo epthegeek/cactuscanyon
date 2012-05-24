@@ -14,6 +14,7 @@ __all__ = [
     'gold_mine_multiball',
     'interrupter_jones',
     'train_toy',
+    'mountain',
 ]
 from base import *
 from attract import *
@@ -30,3 +31,4 @@ from save_polly import *
 from gold_mine_multiball import *
 from interrupter_jones import *
 from train_toy import *
+from mountain import *

@@ -77,12 +77,12 @@ class LeftLoop(game.Mode):
     def sw_leftLoopTop_active(self,sw):
 
         # if we aren't coming through on a full loop - it's a natural hit and it counts
-        if ep.last_switch != "rightLoopTop":
+        if ep.last_switch == 'leftLoopBottom':
             # if we're complete open the gate for a full run through
             # if we're "complete" open the full loop
             if self.game.show_tracking('leftLoopStage') >= 4:
                 # pulse the coil to open the gate
-                pass
+                self.game.coils.rightLoopGate.pulse(50)
             ## if the combo timer is on:
             if self.game.comboTimer > 0:
                 # register the combo and reset the timer

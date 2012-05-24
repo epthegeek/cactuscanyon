@@ -76,7 +76,7 @@ class RightLoop(game.Mode):
             # if we're complete open the gate for a full run through
             if self.game.show_tracking('rightLoopStage') >= 4:
                 # pulse the coil to open the gate
-                pass
+                self.game.coils.leftLoopGate.pulse(50)
             ## if the combo timer is on:
             if self.game.comboTimer > 0:
                 # register the combo and reset the timer

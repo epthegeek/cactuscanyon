@@ -210,12 +210,10 @@ PRCoils:
         number: C19
     rightGunFlasher:
         number: C20
-    flasherPOA:
-        number: C21
     leftLoopGate:
-        number: C22
+        number: C21
     rightLoopGate:
-        number: C23
+        number: C22
     beaconFlasher:
         number: C24
     middleRightFlasher:

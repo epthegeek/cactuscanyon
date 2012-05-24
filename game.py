@@ -58,7 +58,10 @@ class CCGame(game.BasicGame):
         self.trough = modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
         # set up ball save
         self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
+        # this is what links the ball save to the trough.  I THINK.
         self.ball_save.trough_enable_ball_save = self.trough.enable_ball_save
+        self.trough.ball_save_callback = self.ball_save.launch_callback
+        self.trough.num_balls_to_save = self.ball_save.get_num_balls_to_save
 
         # High Score stuff
         self.highscore_categories = []
@@ -77,7 +80,7 @@ class CCGame(game.BasicGame):
         cat.titles = ['Showdown Champ']
         self.highscore_categories.append(cat)
 
-        ## TODO later - add showdown and combo champ
+        ## TODO later - and combo champ
 
         for category in self.highscore_categories:
             category.load_from_game(self)
@@ -96,6 +99,7 @@ class CCGame(game.BasicGame):
         self.base_game_mode = cc_modes.BaseGameMode(game=self,priority=4)
         self.attract_mode = cc_modes.Attract(game=self,priority=5)
         self.train = cc_modes.Train(game=self,priority=6)
+        self.mountain = cc_modes.Mountain(game=self,priority = 7)
 
         self.right_ramp = cc_modes.RightRamp(game=self,priority=10)
         self.left_ramp = cc_modes.LeftRamp(game=self,priority=11)
@@ -150,6 +154,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.ball_search)
         self.modes.add(self.attract_mode)
         self.modes.add(self.train)
+        self.modes.add(self.mountain)
 
     def start_game(self):
         # remove the attract mode

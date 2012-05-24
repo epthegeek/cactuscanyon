@@ -49,6 +49,8 @@ class GoldMine(game.Mode):
         myLayer = dmd.ScriptedLayer(128,32,script)
         self.layer = myLayer
 
+        ## TEMPORARY - kick the ball out
+        self.game.mine_toy.eject()
         # show it for a bit
         self.delay(delay=1.5,handler=self.end_multiball)
 

@@ -37,8 +37,8 @@ class Mine(game.Mode):
         ## if status is off, we bail here
         if self.game.show_tracking('lampStatus') == "OFF":
             return
-
-        if self.game.show_tracking('extraBallsPending') > 0:
+        eb = self.game.show_tracking('extraBallsPending')
+        if eb > 0:
             self.game.lamps.extraBallLitBeacon.enable()
             self.game.lamps.extraBall.enable()
         status = self.game.show_tracking('mineStatus')
@@ -46,11 +46,19 @@ class Mine(game.Mode):
             self.game.lamps.mineLock.enable()
         elif status == "READY":
             self.game.lamps.mineLock.schedule(0x00FF00FF)
+        # the mine flasher
+        # if there's an extra ball waiting, and the mine status multiball is not running, falsh the light
+        if eb > 0 and status != "RUNNING":
+            self.game.coils.mineFlasher.schedule(0x00100000)
+        # if multiball is running and motherload is available - flash the light
+        if satus == "RUNNING" and self.game.show_tracking('motherLodePending') > 0:
+            self.game.coils.mineFlasher.schedule(0x00010001)
 
     def disable_lamps(self):
         self.game.lamps.extraBallLitBeacon.disable()
         self.game.lamps.extraBall.disable()
         self.game.lamps.mineLock.disable()
+        self.game.coils.mineFlasher.disable()
 
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
@@ -66,17 +74,14 @@ class Mine(game.Mode):
         ## -- set the last switch hit --
         ep.last_switch = "minePopper"
 
-
     def sw_mineEntrance_active(self,sw):
-        # move the motor?
+        self.game.mountain.twitch()
+        self.game.mountain.flash()
         # play the default sound
         self.game.sound.play(self.game.assets.sfx_mineEntrance)
         # award some points
         self.game.score(2530)
-        # move the mine entry a bit # TODO this should be more specific to open/closed
-        self.game.coils.mineMotor.pulse(255)
         ep.last_switch = "mineEntrance"
-
 
     def mine_shot(self):
         # first, record the mine shot in the running total
@@ -124,18 +129,11 @@ class Mine(game.Mode):
 
     def mine_update(self,hitStatus):
         # award some points ?
+        # TODO fancy this up
         print str(hitStatus) + " shots left to light lock"
         # display a "shots left to light lock type thing
         # then kick the ball
-        self.mine_kick()
-
-    def mine_kick(self):
-        # kick the ball out
-        self.game.coils.minePopper.pulse(30)
-        self.delay(delay=0.03,handler=self.mine_flash)
-
-    def mine_flash(self):
-        self.game.coils.mineFlasher.pulse(30)
+        self.game.mountain.eject()
 
     def light_lock(self):
         # set the lock status
@@ -145,14 +143,13 @@ class Mine(game.Mode):
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_lockLit)
         print "LOCK IS LIT ... AND SO AM I"
-        ## TODO lights and sounds
         ## then kick the ball
         self.update_lamps()
-        self.mine_kick()
+        self.game.mountain.eject()
 
 
     def light_multiball(self):
-        ## TODO lights and sounds
+        ## TODO sounds?
         # set the multiball status
         print "MULTIBALL IS LIT"
         self.game.set_tracking('mineStatus', "READY")
@@ -162,7 +159,7 @@ class Mine(game.Mode):
         # show some display?
         self.update_lamps()
         # then kick the ball
-        self.mine_kick()
+        self.game.mountain.eject()
 
 
     def lock_ball(self):
@@ -239,7 +236,7 @@ class Mine(game.Mode):
         textLine.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[self.layer,textLine])
         # kick the ball out and clear the layer
-        self.delay(delay=2,handler=self.mine_kick)
+        self.delay(delay=2,handler=self.game.mountain.eject)
         self.delay(delay=2,handler=self.clear_layer)
         self.delay(delay=2.1,handler=self.game.base_game_mode.music_on)
 
@@ -274,6 +271,7 @@ class Mine(game.Mode):
     def collect_extra_ball(self):
         # stop the music
         self.game.sound.stop_music()
+        # turn off the mine flasher
         # add one to the total of extra balls
         self.game.increase_tracking('extraBallsTotal')
         # take one off of the pending total

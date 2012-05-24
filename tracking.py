@@ -50,6 +50,7 @@ class Tracking(game.Player):
         ## running tally of locked balls
         self.player_stats['ballsLockedTotal'] = 0
         self.player_stats['jackpotsCollected'] = 0
+        self.player_stats['motherLodePending'] = 0
         self.player_stats['motherLodesCollected'] = 0
 
         self.player_stats['bonusX'] = 1
