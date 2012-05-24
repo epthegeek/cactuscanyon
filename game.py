@@ -58,6 +58,7 @@ class CCGame(game.BasicGame):
         self.trough = modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
         # set up ball save
         self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
+        self.ball_save.trough_enable_ball_save = self.trough.enable_ball_save
 
         # High Score stuff
         self.highscore_categories = []
@@ -69,6 +70,11 @@ class CCGame(game.BasicGame):
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'QuickdrawChampHighScoreData'
         cat.titles = ['Quickdraw Champ']
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'ShowdownChampHighScoreData'
+        cat.titles = ['Showdown Champ']
         self.highscore_categories.append(cat)
 
         ## TODO later - add showdown and combo champ
@@ -148,6 +154,8 @@ class CCGame(game.BasicGame):
     def start_game(self):
         # remove the attract mode
         self.modes.remove(self.attract_mode)
+        # tick up the audits
+        self.game_data['Audits']['Games Started'] += 1
         # turn off all the ligths
         for lamp in self.lamps:
             lamp.disable()
@@ -214,6 +222,12 @@ class CCGame(game.BasicGame):
         self.log("BALL ENDED")
         # reset the tilt
         self.set_tracking('tiltStatus',0)
+        # stop the music
+        self.sound.stop_music()
+
+        self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
+        self.game_data['Audits']['Balls Played'] += 1
+
         # then call the ball_ended from proc.game.BasicGame
         self.end_ball()
 
@@ -221,10 +235,57 @@ class CCGame(game.BasicGame):
         self.log("GAME ENDED")
         ## call the game_ended from proc.game.BasicGame
         super(CCGame, self).game_ended()
+
         # remove the base game mode
         self.modes.remove(self.base_game_mode)
+
+        # High Score Stuff
+        self.seq_manager = highscore.EntrySequenceManager(game=self, priority=2)
+        self.seq_manager.finished_handler = self.highscore_entry_finished
+        self.seq_manager.logic = highscore.CategoryLogic(game=self, categories=self.highscore_categories)
+        self.seq_manager.ready_handler = self.highscore_entry_ready_to_prompt
+        self.modes.add(self.seq_manager)
+
+    def highscore_entry_ready_to_prompt(self, mode, prompt):
+        banner_mode = game.Mode(game=self, priority=8)
+        markup = dmd.MarkupFrameGenerator()
+        markup.font_plain = self.assets.font_tiny7
+        markup.font_bold = self.assets.font_tiny7
+        text = '\n[GREAT JOB]\n#%s#\n' % (prompt.left.upper()) # we know that the left is the player name
+        frame = markup.frame_for_markup(markup=text, y_offset=0)
+        banner_mode.layer = dmd.ScriptedLayer(width=128, height=32, script=[{'seconds':2.0, 'layer':dmd.FrameLayer(frame=frame)}])
+        banner_mode.layer.on_complete = lambda: self.highscore_banner_complete(banner_mode=banner_mode, highscore_entry_mode=mode)
+        self.modes.add(banner_mode)
+
+    def highscore_banner_complete(self, banner_mode, highscore_entry_mode):
+        self.modes.remove(banner_mode)
+        highscore_entry_mode.prompt()
+
+    def highscore_entry_finished(self, mode):
+        self.modes.remove(mode)
+
         # re-add the attract mode
         self.modes.add(self.attract_mode)
+        # tally up the some audit data
+        # Handle stats for last ball here
+        self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
+        self.game_data['Audits']['Balls Played'] += 1
+        # Also handle game stats.
+        for i in range(0,len(self.players)):
+            game_time = self.get_game_time(i)
+            self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
+            self.game_data['Audits']['Games Played'] += 1
+        # and games played
+        for i in range(0,len(self.players)):
+            game_time = self.get_game_time(i)
+        self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
+        self.game_data['Audits']['Games Played'] += 1
+        # save the game data
+        self.save_game_data()
+
+    def save_game_data(self):
+        super(Game, self).save_game_data(game_data_path)
+
 
     def setup_ball_search(self):
         # No special handlers in starter game.
@@ -326,3 +387,22 @@ class CCGame(game.BasicGame):
         p.player_stats['bonus'] += points
         print p.player_stats['bonus']
 
+    def calc_time_average_string(self, prev_total, prev_x, new_value):
+        prev_time_list = prev_x.split(':')
+        prev_time = (int(prev_time_list[0]) * 60) + int(prev_time_list[1])
+        avg_game_time = int((int(prev_total) * int(prev_time)) + int(new_value)) / (int(prev_total) + 1)
+        avg_game_time_min = avg_game_time/60
+        avg_game_time_sec = str(avg_game_time%60)
+        if len(avg_game_time_sec) == 1:
+            avg_game_time_sec = '0' + avg_game_time_sec
+
+        return_str = str(avg_game_time_min) + ':' + avg_game_time_sec
+        return return_str
+
+    def calc_number_average(self, prev_total, prev_x, new_value):
+        avg_game_time = int((prev_total * prev_x) + new_value) / (prev_total + 1)
+        return int(avg_game_time)
+
+
+    def save_settings(self):
+        super(CCGame,self).save_settings(user_settings_path)

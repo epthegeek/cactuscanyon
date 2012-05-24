@@ -509,10 +509,10 @@ class Saloon(game.Mode):
 
     def move_bart(self):
         # pulse the bart move coil
-        self.game.coils.moveBart.pulse(20)
+        self.game.coils.moveBart.pulse(10)
 
     def move_hat(self):
-        self.game.coils.moveBartHat.pulse(30)
+        self.game.coils.moveBartHat.pulse(20)
 
     def light_bart(self):
         # pulse the flasher light

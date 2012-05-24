@@ -142,12 +142,10 @@ class Attract(game.Mode):
     # Outside of the service mode, up/down control audio volume.
     def sw_down_active(self, sw):
         volume = self.game.sound.volume_down()
-        #self.game.set_status("Volume Down : " + str(volume))
         return True
 
     def sw_up_active(self, sw):
         volume = self.game.sound.volume_up()
-        #self.game.set_status("Volume Up : " + str(volume))
         return True
 
     # Start button starts a game if the trough is full.  Otherwise it
@@ -158,10 +156,10 @@ class Attract(game.Mode):
 
     def sw_startButton_active(self, sw):
         # If the trough is full start a game
-        # after killing the lampshow
-        self.game.lampctrl.stop_show()
 
         if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
+            # kill the lampshow
+            self.game.lampctrl.stop_show()
             # Initialize game
             self.game.start_game()
         else:
@@ -200,12 +198,22 @@ class Attract(game.Mode):
                         # add it to the stack
                         self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH})
 
-                # generate a screen for the high score champ
+                # generate a screen for the quickdraw high score champ
                 if category.game_data_key == 'QuickdrawChampHighScoreData':
                     backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'quick-draw-still.dmd').frames[0])
                     title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("QUICKDRAW CHAMP")
                     initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
+                # Generate a screen for the showdown champ
+                if category.game_data_key == 'ShowdownChampHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+                    backdrop.set_target_position(40,0)
+                    title = dmd.TextLayer(44, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("SHOWDOWN CHAMP")
+                    initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(44, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
                     self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 

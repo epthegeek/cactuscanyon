@@ -577,7 +577,7 @@ class BadGuys(game.Mode):
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
         # turn the GI back on
-        self.game.set_tracking('lampStatus', "GIONLY")
+        self.game.set_tracking('lampStatus', "ON")
         self.game.update_lamps()
         # and turn on target guy
         self.lights[self.enemy].enable()

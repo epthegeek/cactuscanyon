@@ -703,11 +703,11 @@ class BaseGameMode(game.Mode):
         # load up the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
         # start the full on animation
-        myWait = len(anim.frames) / 8.57
+        myWait = len(anim.frames) / 30
         # setup the animated layer
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
-        animLayer.frame_time = 7
+        animLayer.frame_time = 2
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.finish_bonus,param=points)
 

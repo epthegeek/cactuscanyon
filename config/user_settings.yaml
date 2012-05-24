@@ -1,0 +1,14 @@
+Display: {Left side score justify: right}
+Gameplay (Feature): {Attract Mode Music: 'No', Attract Mode Sounds: 'Yes', Bart Brothers Difficulty: Easy,
+  Bart Brothers for Star: 4, Combo Timer: 5, Combos for Star: 10, Game Ballsaves: 3,
+  Multiball Ballsaves: 2, Multiball Locks Difficulty: Easy, Outlane Ball Save: 'No',
+  Quickdraw Timer: 20, Quickdraws Lit Difficulty: Easy, Shots to save Polly: 5}
+Highscore: {Grand Champion: 350000000}
+Machine (Standard): {Allow Dim Illumination: 'No', Balls Per Game: 3, Game Restart: true,
+  Maximum Extra Balls: 4, Maximum Extra Balls/Ball In Play: 0, No Bonus Flips: 'No',
+  Tilt Warnings: 2}
+Network: {Gateway: 0, IP Address: 0, Subnet: 0, Tournament Server: 0}
+Replay: {Replay Award: Audit, Replay Boost: 100000, Replay Level 1: 100000, Replay Level 2: 200000,
+  Replay Level 3: 300000, Replay Level 4: 400000, Replay Levels: 1, Replay Percentage: 10,
+  Replay Type: auto, Special: Audit}
+Sound: {Initial volume: 0.5, Music volume offset: 0}
