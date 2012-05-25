@@ -61,11 +61,11 @@ class CCGame(game.BasicGame):
         self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
         # this is what links the ball save to the trough.  I THINK.
         self.ball_save.trough_enable_ball_save = self.trough.enable_ball_save
-        self.trough.ball_save_callback = self.ball_save.launch_callback
+        #self.trough.ball_save_callback = self.ball_save.launch_callback
         self.trough.num_balls_to_save = self.ball_save.get_num_balls_to_save
         # set the ball save callback
-        self.ball_save.callback = self.ball_saved
-
+        #self.ball_save.callback = self.ball_saved
+        self.trough.ball_save_callback = self.ball_saved
 
         # High Score stuff
         self.highscore_categories = []
@@ -222,7 +222,7 @@ class CCGame(game.BasicGame):
         # tell interrupter jones to show the ball save
         self.interrupter.ball_saved()
         # if the ball was saved, we need a new one
-        self.trough.launch_balls(1)
+        #self.trough.launch_balls(1)
         self.ballSaved = True
 
     # Empty callback just incase a ball drains into the trough before another
@@ -249,7 +249,7 @@ class CCGame(game.BasicGame):
         # unload the base add on modes
         self.base_game_mode.remove_modes()
 
-        self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
+        #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
         self.game_data['Audits']['Balls Played'] += 1
 
         # then call the ball_ended from proc.game.BasicGame
@@ -295,15 +295,15 @@ class CCGame(game.BasicGame):
         # re-add the attract mode
         self.modes.add(self.attract_mode)
         # play a quote
-        self.sound.play(self.game.assets.quote_goodbye)
+        self.sound.play(self.assets.quote_goodbye)
         # tally up the some audit data
         # Handle stats for last ball here
-        self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
+        #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
         self.game_data['Audits']['Balls Played'] += 1
         # Also handle game stats.
         for i in range(0,len(self.players)):
             game_time = self.get_game_time(i)
-            self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
+            #self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
             self.game_data['Audits']['Games Played'] += 1
         # save the game data
         self.save_game_data()

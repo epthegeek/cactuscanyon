@@ -382,11 +382,11 @@ class BaseGameMode(game.Mode):
     ## Flipper switch detection for flipping the bonus lanes
     def sw_flipperLwL_active(self,sw):
         # toggle the bonus lane
-        self.bonus_lane.flip()
+        self.game.bonus_lanes.flip()
 
     def sw_flipperLwR_active(self,sw):
         # toggle the bonus lane
-        self.bonus_lane.flip()
+        self.game.bonus_lanes.flip()
 
     ### shooter lane stuff
 
@@ -481,7 +481,14 @@ class BaseGameMode(game.Mode):
             self.game.set_tracking('quickdrawStatus',position,side)
             self.update_lamps()
 
-    def light_quickdraw(self,side):
+    def light_quickdraw(self,side=9):
+        # this is for handling a call to light quickdraw with no side favor the right
+        if side == 9:
+            targets = self.game.show_tracking('quickdrawStatus')
+            if target[1] == "READY":
+                side = 0
+            else:
+                side = 1
         # add the rest of the points for lighting the quickdraw
         self.game.score(12500)
         # turn on the quickdraw light

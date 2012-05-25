@@ -389,7 +389,7 @@ class BadGuys(game.Mode):
         if side == 0:
             self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
         else:
-            self.game.lamp.rightGunfightPin.schedule(0x00FF00FF)
+            self.game.lamps.rightGunfightPin.schedule(0x00FF00FF)
         self.game.increase_tracking('gunfightsStarted')
         print "GUNFIGHT GOES HERE"
         # pop up the post

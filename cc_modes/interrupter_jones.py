@@ -12,7 +12,7 @@ class Interrupter(game.Mode):
     """Cactus Canyon Interrupter Jones"""
     def __init__(self, game, priority):
         super(Interrupter, self).__init__(game, priority)
-        rotator = [True,False,False,False,False]
+        self.rotator = [True,False,False,False,False]
 
     def display_player_number(self,idle=False):
         # for when the ball is sitting in the shooter lane with nothing going on
@@ -29,11 +29,11 @@ class Interrupter(game.Mode):
         # turn the display on
         self.layer = display
         # every fifth time razz them
-        if rotator[0]:
+        if self.rotator[0]:
             self.game.sound.play(self.game.assets.quote_dontJustStandThere)
         # then stick the current value on the end
-        foo = rotator.pop(0)
-        rotator.append(foo)
+        foo = self.rotator.pop(0)
+        self.rotator.append(foo)
         ## then shift 0 to the end
         self.delay(name="clearInterrupter",delay=1.5,handler=self.clear_layer)
         # with an idle call, set a repeat
