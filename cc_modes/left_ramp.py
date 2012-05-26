@@ -25,7 +25,14 @@ class LeftRamp(game.Mode):
     def update_lamps(self):
         self.disable_lamps()
         ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') != "ON":
+        lampStatus = self.game.show_tracking('lampStatus')
+        if lampStatus == "MULTIBALL":
+            if self.game.show_tracking('jackpotStatus',1):
+                self.game.lamps.leftRampWhiteWater.schedule(0xFFFFF39C)
+                self.game.lamps.leftRampWaterfall.schedule(0x0FFFF39C)
+                self.game.lamps.leftRampSavePolly.schedule(0x00FFF39C)
+                self.game.lamps.leftRampJackpot.schedule(0x000FF39C)
+        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('leftRampStage')
@@ -63,6 +70,7 @@ class LeftRamp(game.Mode):
         self.game.lamps.leftRampWhiteWater.disable()
         self.game.lamps.leftRampWaterfall.disable()
         self.game.lamps.leftRampSavePolly.disable()
+        self.game.lamps.leftRampJackpot.disable()
 
     def sw_leftRampEnter_active(self,sw):
         # hitting this switch counts as a made ramp - really

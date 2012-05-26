@@ -22,8 +22,16 @@ class RightLoop(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') != "ON":
+        ## if status is multiball check the jackpot and take actions
+        lampStatus = self.game.show_tracking('lampStatus')
+        if lampStatus == "MULTIBALL":
+            if self.game.show_tracking('jackpotStatus',3):
+                self.game.lamps.rightLoopGoodShot.schedule(0xFFFFF39C)
+                self.game.lamps.rightLoopGunslinger.schedule(0x0FFFF39C)
+                self.game.lamps.rightLoopMarksman.schedule(0x00FFF39C)
+                self.game.lamps.rightLoopJackpot.schedule(0x000FF39C)
+            # if status is anything other than on, we bail here
+        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('rightLoopStage')
@@ -55,6 +63,7 @@ class RightLoop(game.Mode):
         self.game.lamps.rightLoopGoodShot.disable()
         self.game.lamps.rightLoopGunslinger.disable()
         self.game.lamps.rightLoopMarksman.disable()
+        self.game.lamps.rightLoopJackpot.disable()
 
     def sw_rightLoopBottom_active(self,sw):
         # low end of the loop

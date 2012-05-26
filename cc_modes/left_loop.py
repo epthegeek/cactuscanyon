@@ -32,8 +32,16 @@ class LeftLoop(game.Mode):
     def update_lamps(self):
         self.disable_lamps()
         ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') != "ON":
+        lampStatus = self.game.show_tracking('lampStatus')
+        if lampStatus == "MULTIBALL":
+            if self.game.show_tracking('jackpotStatus',0):
+                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFFF39C)
+                self.game.lamps.leftLoopWildRide.schedule(0x0FFFF39C)
+                self.game.lamps.leftLoopRideEm.schedule(0x00FFF39C)
+                self.game.lamps.leftLoopJackpot.schedule(0x000FF39C)
+        if lampStatus != "ON":
             return
+
 
         stage = self.game.show_tracking('leftLoopStage')
 
@@ -64,6 +72,7 @@ class LeftLoop(game.Mode):
         self.game.lamps.leftLoopBuckNBronco.disable()
         self.game.lamps.leftLoopWildRide.disable()
         self.game.lamps.leftLoopRideEm.disable()
+        self.game.lamps.leftLoopJackpot.disable()
 
     def sw_leftLoopBottom_active(self,sw):
         # low end of the loop

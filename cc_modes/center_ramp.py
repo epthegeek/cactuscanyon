@@ -21,8 +21,16 @@ class CenterRamp(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') != "ON":
+        ## if status is multiball check the jackpot and take actions
+        lampStatus = self.game.show_tracking('lampStatus')
+        if lampStatus == "MULTIBALL":
+            if self.game.show_tracking('jackpotStatus',2):
+                self.game.lamps.centerRampCatchTrain.schedule(0xFFFFF39C)
+                self.game.lamps.centerRampStopTrain.schedule(0x0FFFF39C)
+                self.game.lamps.centerRampSavePolly.schedule(0x00FFF39C)
+                self.game.lamps.centerRampJackpot.schedule(0x000FF39C)
+        # if status is anything other than on, we bail here
+        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('centerRampStage')
@@ -57,6 +65,7 @@ class CenterRamp(game.Mode):
         self.game.lamps.centerRampCatchTrain.disable()
         self.game.lamps.centerRampStopTrain.disable()
         self.game.lamps.centerRampSavePolly.disable()
+        self.game.lamps.centerRampJacpot.disable()
 
     def sw_centerRampEnter_active(self,sw):
         # play the switch sound

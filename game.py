@@ -77,11 +77,14 @@ class CCGame(game.BasicGame):
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'QuickdrawChampHighScoreData'
         cat.titles = ['Quickdraw Champ']
+        cat.score_for_player = lambda player: player.player_stats('quickdrawsWon')
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'ShowdownChampHighScoreData'
+        cat.score_for_player = lambda player: player.player_stats('quickdrawsWon')
         cat.titles = ['Showdown Champ']
+
         self.highscore_categories.append(cat)
 
         ## TODO later - and combo champ

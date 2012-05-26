@@ -52,6 +52,8 @@ class Tracking(game.Player):
         self.player_stats['jackpotsCollected'] = 0
         self.player_stats['motherLodePending'] = 0
         self.player_stats['motherLodesCollected'] = 0
+        # lit status for jackpots: Left Loop, Left Ramp, Center Ramp, Right Loop, Right Ramp
+        self.player_stats['jackpotStatus'] = [True,True,True,True,True]
 
         self.player_stats['bonusX'] = 1
         # bonus lane status OFF/ON - left is 0 right is 1

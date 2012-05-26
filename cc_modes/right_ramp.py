@@ -21,8 +21,16 @@ class RightRamp(game.Mode):
 
     def update_lamps(self):
         self.disable_lamps()
-        ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') != "ON":
+        ## if status is multiball check the jackpot and take actions
+        lampStatus = self.game.show_tracking('lampStatus')
+        if lampStatus == "MULTIBALL":
+            if self.game.show_tracking('jackpotStatus',4):
+                self.game.lamps.rightRampSoundAlarm.schedule(0xFFFFF39C)
+                self.game.lamps.rightRampShootOut.schedule(0x0FFFF39C)
+                self.game.lamps.rightRampSavePolly.schedule(0x00FFF39C)
+                self.game.lamps.rightRampJackpot.schedule(0x000FF39C)
+            # if status is anything other than on, we bail here
+        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('rightRampStage')
@@ -59,6 +67,7 @@ class RightRamp(game.Mode):
         self.game.lamps.rightRampSoundAlarm.disable()
         self.game.lamps.rightRampShootOut.disable()
         self.game.lamps.rightRampSavePolly.disable()
+        self.game.lamps.rightRampJackpot.disable()
 
     def sw_rightRampEnter_active(self,sw):
         # play the switch sound
