@@ -35,7 +35,7 @@ class Mine(game.Mode):
     def update_lamps(self):
         self.disable_lamps()
         ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') == "OFF":
+        if self.game.show_tracking('lampStatus') != "ON" or "MULTIBALL":
             return
         eb = self.game.show_tracking('extraBallsPending')
         if eb > 0:
@@ -50,9 +50,10 @@ class Mine(game.Mode):
         # if there's an extra ball waiting, and the mine status multiball is not running, falsh the light
         if eb > 0 and status != "RUNNING":
             self.game.coils.mineFlasher.schedule(0x00100000)
-        # if multiball is running and motherload is available - flash the light
+        # if multiball is running and motherload is available - flash the light in the mine and blink the lock arrow
         if status == "RUNNING" and self.game.show_tracking('motherLodePending') > 0:
             self.game.coils.mineFlasher.schedule(0x00010001)
+            self.game.coils.mineLock.schedule(0x00FF00FF)
 
     def disable_lamps(self):
         self.game.lamps.extraBallLitBeacon.disable()
