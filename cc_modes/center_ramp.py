@@ -65,7 +65,7 @@ class CenterRamp(game.Mode):
         self.game.lamps.centerRampCatchTrain.disable()
         self.game.lamps.centerRampStopTrain.disable()
         self.game.lamps.centerRampSavePolly.disable()
-        self.game.lamps.centerRampJacpot.disable()
+        self.game.lamps.centerRampJackpot.disable()
 
     def sw_centerRampEnter_active(self,sw):
         # play the switch sound
