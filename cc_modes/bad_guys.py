@@ -27,6 +27,8 @@ class BadGuys(game.Mode):
                        self.game.lamps.badGuyL3]
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
+        #efault
+        self.side = 0
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -148,6 +150,8 @@ class BadGuys(game.Mode):
         target = random.choice(choices)
         print "BAD GUY ACTIVE IS: " + str(target)
         # kill the game music
+        print "START QUICKDRAW IS KILLING THE MUSIC"
+
         self.game.sound.stop_music()
         # start the mode music
         self.game.sound.play(self.game.assets.music_quickdrawBumper)
@@ -202,6 +206,8 @@ class BadGuys(game.Mode):
 
     def quickdraw_won(self,target):
         # kill the mode music
+        print "QUICKDRAW WON IS KILLING THE MUSIC"
+
         self.game.sound.stop_music()
         # play the win animation
         anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-hit.dmd')
@@ -241,6 +247,7 @@ class BadGuys(game.Mode):
 
     def quickdraw_lost(self,target):
         # kill the mode music
+        print "QUICKDRAW LOST IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # stuff specific to losing
         # drop the coil and kill the lamp
@@ -440,6 +447,8 @@ class BadGuys(game.Mode):
         badGuys.append(enemy)
         print badGuys
         # stop the music
+        print "START GUNFIGHT IS KILLING THE MUSIC"
+
         self.game.sound.stop_music()
         # play the intro riff
         myWait = self.game.sound.play(self.game.assets.music_gunfightIntro)
@@ -458,6 +467,7 @@ class BadGuys(game.Mode):
         self.delay(name="pan",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
 
     def gunfight_won(self):
+        print "GUNFIGHT WON IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # cancel the lose delay
         self.cancel_delayed("Gunfight Lost")
@@ -500,6 +510,7 @@ class BadGuys(game.Mode):
     def gunfight_lost(self):
         # drop the bad guy
         self.target_down(self.enemy)
+        print "GUNFIGHT LOST IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_gunFail)

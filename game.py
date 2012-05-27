@@ -56,7 +56,7 @@ class CCGame(game.BasicGame):
         trough_switchnames = ['troughBallOne', 'troughBallTwo', 'troughBallThree', 'troughBallFour']
         early_save_switchnames = ['rightOutlane', 'leftOutlane']
         # can't turn on the trough yet
-        self.trough = modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
+        self.trough = cc_modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
         # set up ball save
         self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
         # this is what links the ball save to the trough.  I THINK.
@@ -64,6 +64,7 @@ class CCGame(game.BasicGame):
         self.trough.num_balls_to_save = self.ball_save.get_num_balls_to_save
         # set the ball save callback
         self.trough.ball_save_callback = self.ball_saved
+        self.trough.launch_callback = self.launch_callback
 
         # High Score stuff
         self.highscore_categories = []
@@ -205,6 +206,8 @@ class CCGame(game.BasicGame):
         # happen because we're only starting if trough is full
         if not self.switches.shooterLane.is_active():
             self.trough.launch_balls(1) # eject a ball into the shooter lane
+        else:
+            self.trough.num_balls_in_play += 1
 
         # enable the ball search
         self.ball_search.enable()
@@ -219,12 +222,19 @@ class CCGame(game.BasicGame):
         # update the lamps
         self.update_lamps()
 
+    def launch_callback(self):
+        pass
+
     def ball_saved(self):
-        # tell interrupter jones to show the ball save
-        self.interrupter.ball_saved()
-        # if the ball was saved, we need a new one
-        #self.trough.launch_balls(1)
-        self.ballSaved = True
+        if self.trough.ball_save_active:
+            # tell interrupter jones to show the ball save
+            print "GAME THINKS THE BALL WAS SAVED"
+            self.interrupter.ball_saved()
+            # if the ball was saved, we need a new one
+            #self.trough.launch_balls(1)
+            self.ballSaved = True
+            self.ball_save.disable()
+
 
     # Empty callback just incase a ball drains into the trough before another
      # drain_callback can be installed by a gameplay mode.
@@ -238,12 +248,14 @@ class CCGame(game.BasicGame):
             for mode in self.ep_modes:
                 if getattr(mode, "clear_layer", None):
                     mode.clear_layer()
+            print "BALL DRAINED IS KILLING THE MUSIC"
+            self.sound.stop_music()
+
         ## and tell all the modes the ball drained no matter what
         for mode in self.ep_modes:
             if getattr(mode, "ball_drained", None):
                 mode.ball_drained()
         # kill the music
-        self.sound.stop_music()
 
     def ball_ended(self):
         """Called by end_ball(), which is itself called by base_game_mode.trough_changed."""
@@ -251,9 +263,12 @@ class CCGame(game.BasicGame):
         # reset the tilt
         self.set_tracking('tiltStatus',0)
         # stop the music
+        print "BALL ENDED IS KILLING THE MUSIC"
+
         self.sound.stop_music()
         # unload the base add on modes
         self.base_game_mode.remove_modes()
+        print "BALL SAVED STATE: " + str(self.ballSaved)
 
         #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
         self.game_data['Audits']['Balls Played'] += 1
@@ -315,7 +330,7 @@ class CCGame(game.BasicGame):
         self.save_game_data()
 
     def save_game_data(self):
-        super(CCGame, self).save_game_data(game_data_path)
+        super(CCGame, self).save_game_data(self.game_data_path)
 
 
     def setup_ball_search(self):

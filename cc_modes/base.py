@@ -80,6 +80,8 @@ class BaseGameMode(game.Mode):
             for lamp in self.game.lamps:
                 lamp.disable()
                 # stop the music
+            print "game.ball_drained IS KILLING THE MUSIC"
+
             self.game.sound.stop_music()
             # turn off ball save
             self.game.ball_search.disable()
@@ -395,10 +397,13 @@ class BaseGameMode(game.Mode):
 
     ### shooter lane stuff
 
-    def sw_shooter_lane_active_for_300MS(self,sw):
+    def sw_shooterLane_active_for_300ms(self,sw):
         # if we're dealing with a saved ball, plunge like the wind
-        if self.game.ballSaved:
+        print "checking ball saved"
+        if self.game.ballSaved == True:
+            print "AUTOPLUNGE, MF"
             self.game.coils.autoPlunger.pulse(40)
+
 
     def sw_shooterLane_inactive_for_100ms(self,sw):
         # play the ball lanuch noise
@@ -412,6 +417,7 @@ class BaseGameMode(game.Mode):
 
     def sw_skillBowl_active(self,sw):
         if self.game.ballSaved:
+            print "TURNING OFF BALL SAVED FLAG"
             self.game.ballSaved = False
 
 

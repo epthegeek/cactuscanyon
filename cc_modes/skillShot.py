@@ -121,6 +121,8 @@ class SkillShot(game.Mode):
     # if the ramp bottom switch gets hit - award the prize and unload the mode
     def sw_rightRampBottom_active(self, sw):
         # kill the music
+        print "stillshot rightRampBottom IS KILLING THE MUSIC"
+
         self.game.sound.stop_music()
         # play the sound
         ## TODO might need to move this to specific awards
@@ -282,7 +284,7 @@ class SkillShot(game.Mode):
         self.delay(delay=2,handler=self.shutdown)
 
     def music_on(self):
-        print "ITS TIME TO START THE MUSIC"
+        print "ITS TIME TO START THE SHOOTER LANE MUSIC"
         self.game.sound.play_music(self.game.assets.music_shooterLaneGroove, loops=-1)
 
     def shutdown(self):

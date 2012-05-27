@@ -42,6 +42,7 @@ class SavePolly(game.Mode):
 
     def start_save_polly(self):
         # clear any running music
+        print "start_save_polly IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # set the ramps to crazy stage
         self.game.set_tracking('leftRampStage',99)
@@ -204,6 +205,7 @@ class SavePolly(game.Mode):
 
     def polly_finished(self):
         # stop the polly music
+        print "polly_finished IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # turn the main game music back on
         self.game.base_game_mode.music_on()

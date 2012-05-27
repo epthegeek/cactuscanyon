@@ -30,9 +30,12 @@ class Train(game.Mode):
         self.trainProgress += 1
         print "TRAIN PROGRESS" + str(self.trainProgress)
 
+    def sw_rightReturnLane_active(self,sw):
+        self.stop()
+
         # for moving the train forward - since we'll have to delay call it
     def move(self):
-        #self.game.coils.trainForward.enable()
+        self.game.coils.trainForward.patter(on_time=3,off_time=8)
         ## For now, not moving the train
         pass
 
@@ -43,6 +46,7 @@ class Train(game.Mode):
     def reset_toy(self):
         # check this again because save polly requests the reset directly
         if not self.game.switches.trainHome.is_active():
+            self.game.coils.trainForward.disable()
             self.game.coils.trainReverse.enable()
             self.trainReset = True
 

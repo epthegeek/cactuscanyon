@@ -203,6 +203,7 @@ class Mine(game.Mode):
 
     def play_ball_one_lock_anim(self):
         # stop the music
+        print "one lock anim IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         anim = dmd.Animation().load(ep.DMD_PATH+'ball-one-locked.dmd')
         # TODO add the sounds to this and determine if it needs listenrs
@@ -219,6 +220,7 @@ class Mine(game.Mode):
 
     def play_ball_two_lock_anim(self):
         # stop the music
+        print "two lock anim IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         anim = dmd.Animation().load(ep.DMD_PATH+'ball-two-locked.dmd')
         # TODO add the sounds to this and determine if it needs listenrs
@@ -243,8 +245,10 @@ class Mine(game.Mode):
 
     def light_extra_ball(self):
         # add the ball to the pending extra balls
-        self.game.increase_tracking('extraBallsPending')
+        derp = self.game.increase_tracking('extraBallsPending')
+        print derp
         # turn the light on
+        self.update_lamps()
         # setup  a bunch of text
         textLine1 = dmd.TextLayer(28, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("EXTRA")
         textLine2 = dmd.TextLayer(28, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("BALL")
@@ -271,13 +275,14 @@ class Mine(game.Mode):
 
     def collect_extra_ball(self):
         # stop the music
+        print "collect_extra_ball IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # turn off the mine flasher
         # add one to the total of extra balls
         self.game.increase_tracking('extraBallsTotal')
         # take one off of the pending total
         self.game.decrease_tracking('extraBallsPending')
-        selfupdate_lamps()
+        self.update_lamps()
         # add one to the pending the player for use - using the framework standard for storing extra_balls
         self.current_player().extra_balls += 1
         # if they've already gotten an extra ball - it should divert to the short version

@@ -158,6 +158,7 @@ class Saloon(game.Mode):
 
     def collect_bounty(self):
         # shutup the music
+        print "collect_bounty IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # TODO award the prize
         # turn off the tracking

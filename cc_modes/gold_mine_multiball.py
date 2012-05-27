@@ -18,6 +18,7 @@ class GoldMine(game.Mode):
         print "MULTIBALL STARTING"
         # and then end
         # kill the music
+        print "start multiball IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         self.game.sound.play_music(self.game.assets.music_multiball_intro, loops=-1)
         self.intro_animation()

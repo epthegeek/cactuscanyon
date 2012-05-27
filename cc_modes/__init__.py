@@ -17,6 +17,7 @@ __all__ = [
     'mountain',
     'bonus_lanes',
     'combos',
+    'trough',
 ]
 from base import *
 from attract import *
@@ -36,3 +37,4 @@ from train_toy import *
 from mountain import *
 from bonus_lanes import *
 from combos import *
+from trough import *
