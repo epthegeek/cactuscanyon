@@ -60,6 +60,12 @@ class RightRamp(game.Mode):
             self.game.lamps.rightRampSoundAlarm.enable()
             self.game.lamps.rightRampShootOut.enable()
             self.game.lamps.rightRampSavePolly.enable()
+        # save polly
+        elif stage == 99:
+            self.game.lamps.rightRampJackpot.schedule(0xFF00FF00)
+            self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
+            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+            self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
         else:
             pass
 
@@ -81,6 +87,7 @@ class RightRamp(game.Mode):
         # the actual game doesn't care if enter was just hit
         # so I don't either
         # tick one on to the total of player shots on the right ramp
+        status = self.game.show_tracking('rightRampStage')
         self.game.increase_tracking('rightRampShots')
         # score the points and mess with the combo
         if self.game.comboTimer > 0:
@@ -89,7 +96,12 @@ class RightRamp(game.Mode):
         else:
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
-        self.award_ramp_score(combo)
+        # if we're not in save polly
+        if status != 99:
+            self.award_ramp_score(combo)
+        # if we are, just award points
+        else:
+            self.game.score(2530)
         ## -- set the last switch hit --
         ep.last_switch = "rightRampMake"
 
@@ -190,6 +202,7 @@ class RightRamp(game.Mode):
             self.game.increase_tracking('rightRampStage')
             # update the lamps
             self.update_lamps()
+            self.game.center_ramp.update_lamps()
 
     def anim_bank_victory(self):
         print "BANK VICTORY"

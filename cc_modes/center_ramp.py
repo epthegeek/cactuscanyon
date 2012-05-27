@@ -53,11 +53,17 @@ class CenterRamp(game.Mode):
                 self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
 
         # this is after polly peril - all three on
-        elif stage == 4:
+        elif stage == 5:
         # after polly, before stampede all three stay on
             self.game.lamps.centerRampCatchTrain.enable()
             self.game.lamps.centerRampStopTrain.enable()
             self.game.lamps.centerRampSavePolly.enable()
+        # save polly
+        elif stage == 99:
+            self.game.lamps.centerRampJackpot.schedule   (0xFFFF0000)
+            self.game.lamps.centerRampSavePolly.schedule (0x00FFFF00)
+            self.game.lamps.centerRampStopTrain.schedule (0x0000FFFF)
+            self.game.lamps.centerRampCatchTrain.schedule(0xFF0000FF)
         else:
             pass
 
@@ -79,6 +85,7 @@ class CenterRamp(game.Mode):
         # the actual game doesn't care if enter was just hit
         # so I don't either
         # tick one on to the total of player shots on the right ramp
+        status = self.game.show_tracking('centerRampStage')
         self.game.increase_tracking('centerRampShots')
         ## -- set the last switch hit --
         ep.last_switch = "centerRampMake"
@@ -91,9 +98,13 @@ class CenterRamp(game.Mode):
         else:
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
-        # award the ramp score
-        self.award_ramp_score(combo)
-
+        # if we're not in save polly
+        if status != 99:
+            # award the ramp score
+            self.award_ramp_score(combo)
+        # if we are, just award points
+        else:
+            self.game.score(2530)
 
     def award_ramp_score(self,combo):
         # cancel any other displays
@@ -131,6 +142,7 @@ class CenterRamp(game.Mode):
         ## if the train gets hit again before the other two are ready, it's a repeat of stage 2
         elif stage == 3:
             if self.game.show_tracking('rightRampStage') >= 4 and self.game.show_tracking('leftRampStage') >= 4:
+                self.game.increase_tracking('centerRampStage')
                 self.game.modes.add(self.game.save_polly)
                 self.game.save_polly.start_save_polly()
             else:
@@ -202,7 +214,7 @@ class CenterRamp(game.Mode):
         animLayer.hold=True
         animLayer.frame_time = 7
         # keyframe sounds
-        animLayer.add_frame_listener(13,self.game.play_remote_sound,param=self.game.assets.sfx_trainStopWithBrakePull)
+        animLayer.add_frame_listener(13,self.game.play_remote_sound,param=self.game.assets.sfx_trainStopWithBrake)
         # play the short chug
         self.game.sound.play(self.game.assets.sfx_trainChugShort)
         # turn on the animation

@@ -85,6 +85,7 @@ class Interrupter(game.Mode):
         # show some display
         backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'skyline.dmd').frames[0])
         myLayer = dmd.TextLayer(128/2, 7, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("BALL SAVED")
+        myLayer.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[backdrop,myLayer])
         self.layer = combined
         self.delay(delay=1,handler=self.clear_layer)

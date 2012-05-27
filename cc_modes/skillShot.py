@@ -282,6 +282,7 @@ class SkillShot(game.Mode):
         self.delay(delay=2,handler=self.shutdown)
 
     def music_on(self):
+        print "ITS TIME TO START THE MUSIC"
         self.game.sound.play_music(self.game.assets.music_shooterLaneGroove, loops=-1)
 
     def shutdown(self):

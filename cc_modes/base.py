@@ -330,20 +330,25 @@ class BaseGameMode(game.Mode):
     ###
 
     def sw_leftSlingshot_active(self,sw):
-        self.slingshot_hit()
+        self.slingshot_hit(0)
         ## -- set the last switch hit --
         ep.last_switch = "leftSlingshot"
 
 
     def sw_rightSlingshot_active(self,sw):
-        self.slingshot_hit()
+        self.slingshot_hit(1)
         ## -- set the last switch hit --
         ep.last_switch = "rightSlingshot"
 
 
-    def slingshot_hit(self):
+    def slingshot_hit(self,side):
         # play a sound
         self.game.sound.play(self.game.assets.sfx_ricochetSet)
+        # blink a flasher
+        if side == 0:
+            self.delay(delay=0.03,handler=self.game.coils.leftGunFlasher.pulse)
+        else:
+            self.delay(delay=0.03,handler=self.game.coils.rightGunFlasher.pulse)
         # score points
         self.game.score(3770)
 
@@ -509,6 +514,7 @@ class BaseGameMode(game.Mode):
     def check_bonus(self):
         # get the bonus multiplier
         times = self.game.show_tracking('bonusX')
+        print "BONUS TIMES: " + str(times)
         # then reset it for next time
         self.game.set_tracking('bonusX',1)
         # then loop through the display

@@ -11,6 +11,7 @@ from procgame import *
 import cc_modes
 import ep
 import random
+import procgame
 
 class BadGuys(game.Mode):
     """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """
@@ -26,6 +27,21 @@ class BadGuys(game.Mode):
                        self.game.lamps.badGuyL3]
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
+
+    def ball_drained(self):
+        if self.game.trough.num_balls_in_play == 0:
+            if self.game.show_tracking('quickdrawStatus') == "RUNNING" or "SHOWDOWN" or self.game.show_tracking('gunfightStatus') == "RUNNING":
+                self.dispatch_delayed()
+                for coil in self.coils:
+                    coil.disable()
+                for coil in self.posts:
+                    coil.disable()
+                if self.game.show_tracking('quickdrawStatus',self.side) == "RUNNING":
+                    self.quickdraw_lost(self.side)
+                if self.game.show_tracking('quickdrawStatus',self.side) == "SHOWDOWN":
+                    self.end_showdown()
+                if self.game.show_tracking('gunfightStatus') == "RUNNING":
+                    self.gunfight_lost()
 
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
@@ -77,12 +93,12 @@ class BadGuys(game.Mode):
     def sw_leftReturnLane_active(self, sw):
         # register a left return lane hit
         self.return_lane_hit(0)
-        return game.SwitchStop
+        return procgame.game.SwitchStop
 
     def sw_rightReturnLane_active(self,sw):
         # register a right return lane hit
         self.return_lane_hit(1)
-        return game.SwitchStop
+        return procgame.game.SwitchStop
 
     def return_lane_hit(self,side):
         # score some points and play a sound
@@ -102,6 +118,9 @@ class BadGuys(game.Mode):
 
     def target_activate(self,target):
         self.game.set_tracking('badGuyUp',True,target)
+
+    def clear_layer(self):
+        self.layer = None
     ###
     ###   ___        _      _       _
     ###  / _ \ _   _(_) ___| | ____| |_ __ __ ___      __
@@ -368,6 +387,12 @@ class BadGuys(game.Mode):
         for i in range(0,4,1):
             print "END SHOWDOWN BAD GUYS " + str(i)
             self.game.set_tracking('badGuysDead',i,False)
+        # drop all teh targets
+        for coil in self.coils:
+            coil.disable()
+        # reset the badguy UP tracking just inc ase
+        for i in range (0,4,1):
+            self.game.set_tracking('badGuysUp',i,False)
         # tracking - turn it back to open
         self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
         # unload

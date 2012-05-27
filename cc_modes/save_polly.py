@@ -16,35 +16,43 @@ class SavePolly(game.Mode):
         self.cows = [self.game.assets.sfx_cow1, self.game.assets.sfx_cow2]
         self.modeTimer = 0
 
+    def ball_drained(self):
+        if self.game.trough.num_balls_in_play == 0:
+            if self.game.show_tracking("centerRampStage") == 99:
+                self.polly_finished()
+
     def sw_centerRampMake_active(self,sw):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
         # center ramp pauses the train
         self.pause_train()
-        return game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
         self.advance_save_polly()
-        return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
         self.advance_save_polly()
-        return game.SwitchStop
 
     def start_save_polly(self):
         # clear any running music
         self.game.sound.stop_music()
-        # start the music
-        self.game.sound.play_music(self.game.assets.music_pollyPeril)
-        # run a polly lampshow
-        self.game.lampctrl.play_show(self.game.assets.lamp_pollyPeril, repeat=True,callback=None)
+        # set the ramps to crazy stage
+        self.game.set_tracking('leftRampStage',99)
+        self.game.set_tracking('rightRampStage',99)
+        self.game.set_tracking('centerRampStage',99)
+        self.game.right_ramp.update_lamps()
+        self.game.center_ramp.update_lamps()
+        self.game.left_ramp.update_lamps()
+
+    # start the music
+        self.game.sound.play_music(self.game.assets.music_pollyPeril,loops=-1)
         # reset the train
         self.game.train.reset_toy()
         # run the animation
@@ -195,8 +203,6 @@ class SavePolly(game.Mode):
         self.polly_finished()
 
     def polly_finished(self):
-        # stop the lampshow
-        self.game.lampctrl.stop_show()
         # stop the polly music
         self.game.sound.stop_music()
         # turn the main game music back on
@@ -208,7 +214,7 @@ class SavePolly(game.Mode):
         # this is mostly for the lights
         self.game.set_tracking('leftRampStage',5)
         self.game.set_tracking('rightRampStage',5)
-        self.game.set_tracking('centerRampStage',4)
+        self.game.set_tracking('centerRampStage',5)
         self.game.update_lamps()
         # todo CHECK STAR STATUS FOR HIGH NOON
         self.end_save_polly()
@@ -218,3 +224,5 @@ class SavePolly(game.Mode):
         # unload the mode
         self.game.modes.remove(self.game.save_polly)
 
+    def clear_layer(self):
+        self.layer = None

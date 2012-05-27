@@ -84,14 +84,19 @@ class LeftLoop(game.Mode):
         ep.last_switch = "leftLoopBottom"
 
     def sw_leftLoopTop_active(self,sw):
-
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
+        # turn off the left loop gate by default
+        self.game.coils.leftLoopGate.disable()
         # if we aren't coming through on a full loop - it's a natural hit and it counts
         if ep.last_switch == 'leftLoopBottom':
             # if we're complete open the gate for a full run through
             # if we're "complete" open the full loop
             if self.game.show_tracking('leftLoopStage') >= 4:
                 # pulse the coil to open the gate
-                self.game.coils.rightLoopGate.pulse(50)
+                self.game.coils.rightLoopGate.pulse(150)
             ## if the combo timer is on:
             if self.game.comboTimer > 0:
                 # register the combo and reset the timer
@@ -161,6 +166,7 @@ class LeftLoop(game.Mode):
             self.game.increase_tracking('leftLoopStage')
             # update the lamps
             self.update_lamps()
+            self.game.center_ramp.update_lamps()
 
 
         # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display

@@ -63,6 +63,12 @@ class LeftRamp(game.Mode):
             self.game.lamps.leftRampWhiteWater.enable()
             self.game.lamps.leftRampWaterfall.enable()
             self.game.lamps.leftRampSavePolly.enable()
+        # save polly
+        elif stage == 99:
+            self.game.lamps.leftRampJackpot.schedule(0xFF00FF00)
+            self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
+            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
         else:
             pass
 
@@ -75,6 +81,7 @@ class LeftRamp(game.Mode):
     def sw_leftRampEnter_active(self,sw):
         # hitting this switch counts as a made ramp - really
         # tick one onto the total of ramp shots
+        status = self.game.show_tracking('leftRampStage')
         self.game.increase_tracking('leftRampShots')
         # score the points and mess with the combo
         if self.game.comboTimer > 0:
@@ -83,7 +90,14 @@ class LeftRamp(game.Mode):
         else:
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
-        self.award_ramp_score(combo)
+        # play the river ramp sound
+        self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+
+        # if we're not in save polly proceed normally
+        if status != 99:
+            self.award_ramp_score(combo)
+        else:
+            self.game.score(2530)
         ## -- set the last switch hit --
         ep.last_switch = "leftRampEnter"
 
@@ -106,8 +120,6 @@ class LeftRamp(game.Mode):
         ## For now, all the river runs use the same animation so it's in here
         ## would be nice to come up with additional animations - but making them good enough? fuggedaboutit
         ##
-        # play the river ramp sound
-        self.game.sound.play(self.game.assets.sfx_leftRampEnter)
         # set the animation
 
         ## ramp award is determined by stage - starts at 1

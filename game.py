@@ -61,10 +61,8 @@ class CCGame(game.BasicGame):
         self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
         # this is what links the ball save to the trough.  I THINK.
         self.ball_save.trough_enable_ball_save = self.trough.enable_ball_save
-        #self.trough.ball_save_callback = self.ball_save.launch_callback
         self.trough.num_balls_to_save = self.ball_save.get_num_balls_to_save
         # set the ball save callback
-        #self.ball_save.callback = self.ball_saved
         self.trough.ball_save_callback = self.ball_saved
 
         # High Score stuff
@@ -77,12 +75,12 @@ class CCGame(game.BasicGame):
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'QuickdrawChampHighScoreData'
         cat.titles = ['Quickdraw Champ']
-        cat.score_for_player = lambda player: player.player_stats('quickdrawsWon')
+        cat.score_for_player = lambda player: self.show_tracking('quickdrawsWon')
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'ShowdownChampHighScoreData'
-        cat.score_for_player = lambda player: player.player_stats('quickdrawsWon')
+        cat.score_for_player = lambda player: self.show_tracking('quickdrawsWon')
         cat.titles = ['Showdown Champ']
 
         self.highscore_categories.append(cat)
@@ -233,6 +231,9 @@ class CCGame(game.BasicGame):
     def ball_drained(self):
         # Tell every mode a ball has drained by calling the ball_drained function if it exists
         if self.trough.num_balls_in_play == 0:
+            # turn off the lights
+            for lamp in self.lamps:
+                lamp.disable()
             # kill all the display layers
             for mode in self.ep_modes:
                 if getattr(mode, "clear_layer", None):
@@ -241,6 +242,8 @@ class CCGame(game.BasicGame):
         for mode in self.ep_modes:
             if getattr(mode, "ball_drained", None):
                 mode.ball_drained()
+        # kill the music
+        self.sound.stop_music()
 
     def ball_ended(self):
         """Called by end_ball(), which is itself called by base_game_mode.trough_changed."""
@@ -312,7 +315,7 @@ class CCGame(game.BasicGame):
         self.save_game_data()
 
     def save_game_data(self):
-        super(Game, self).save_game_data(game_data_path)
+        super(CCGame, self).save_game_data(game_data_path)
 
 
     def setup_ball_search(self):

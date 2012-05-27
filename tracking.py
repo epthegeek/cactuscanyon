@@ -22,13 +22,13 @@ class Tracking(game.Player):
         self.player_stats['beerMugHits'] = 0
 
         self.player_stats['rightRampShots'] = 0
-        self.player_stats['rightRampStage'] = 1
+        self.player_stats['rightRampStage'] = 4
 
         self.player_stats['leftRampShots'] = 0
-        self.player_stats['leftRampStage'] = 1
+        self.player_stats['leftRampStage'] = 4
 
         self.player_stats['centerRampShots'] = 0
-        self.player_stats['centerRampStage'] = 1
+        self.player_stats['centerRampStage'] = 3
 
         self.player_stats['leftLoopShots'] = 0
         self.player_stats['leftLoopStage'] = 1

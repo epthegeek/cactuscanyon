@@ -79,13 +79,14 @@ class RightLoop(game.Mode):
         for mode in self.game.ep_modes:
             if getattr(mode, "abort_display", None):
                 mode.abort_display()
-
+        # by default turn off the right side loop gate when we get to this switch
+        self.game.coils.rightLoopGate.disable()
         # if we aren't coming through on a full loop - it's a natural hit and it counts
         if ep.last_switch == 'rightLoopBottom':
             # if we're complete open the gate for a full run through
             if self.game.show_tracking('rightLoopStage') >= 4:
                 # pulse the coil to open the gate
-                self.game.coils.leftLoopGate.pulse(50)
+                self.game.coils.leftLoopGate.pulse(150)
             ## if the combo timer is on:
             if self.game.comboTimer > 0:
                 # register the combo and reset the timer
@@ -162,6 +163,7 @@ class RightLoop(game.Mode):
             self.awardString = "SHOTS COMPLETE"
             self.awardPoints = "150,000"
             self.game.score(15000)
+            self.type = ep.EP_Transition.TYPE_CROSSFADE
             # if we're not on a combo  show the award - combos after stage 4 should just show the combo
             if combo:
                 self.layer = None

@@ -55,11 +55,13 @@ class Combos(game.Mode):
             myLamp.disable()
 
     def timer(self):
+        # just to be sure
+        self.cancel_delayed("Combo Timer")
         # tick down the timer
         self.myTimer -= 1
         # see if it hit zero
         print "COMBO TIMER: " + str(self.myTimer)
-        if self.myTimer == 0:
+        if self.myTimer <= 0:
             self.end()
         else:
             self.update_lamps()
