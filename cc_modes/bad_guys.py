@@ -29,6 +29,7 @@ class BadGuys(game.Mode):
                       self.game.coils.rightGunFightPost]
         #efault
         self.side = 0
+        self.showdownValue = 300000
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -287,8 +288,7 @@ class BadGuys(game.Mode):
 
     def start_showdown(self):
         print "S H O W D O W N"
-        self.end_showdown() # this is broken, avoid for now
-        """# things, they go here
+        # things, they go here
         self.deathTally = 0
         # set the tracking
         self.game.set_tracking('quickdrawStatus',"SHOWDOWN",self.side)
@@ -298,13 +298,90 @@ class BadGuys(game.Mode):
         anim = dmd.Animation().load(ep.DMD_PATH+'showdown.dmd')
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,repeat=False,frame_time=6)
         myWait = len(anim.frames) / 10.0
+        # time a bunch of delay flashes
+        self.delay(delay=0.432,handler=self.lightning,param='top')
+        self.delay(delay=0.864,handler=self.lightning,param='top')
+        self.delay(delay=1.08,handler=self.lightning,param='right')
+        self.delay(delay=1.728,handler=self.lightning,param='top')
+        self.delay(delay=2.16,handler=self.lightning,param='top')
+        self.delay(delay=2.376,handler=self.lightning,param='left')
         # setup the display
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.showdown_reset_guys)
-        # music?
-        """
+        #self.delay(delay=myWait,handler=self.get_going)
+        self.delay(delay=myWait,handler=self.end_showdown)
+
+    def get_going(self):
+        self.game.sound.play_music(self.game.assets.music_showdown)
+        self.showdown_reset_guys()
+
+    def new_rack(self):
+        # TODO stuff
+        # if 2 balls in play - add one
+        # if 3 balls in play - run ball save
+        # play the interstitial animation
+        # load up the lightning
+        anim = dmd.Animation().load(ep.DMD_PATH+'cloud-lightning.dmd')
+        # math out the wait
+        myWait = len(anim.frames) / 10.0
+        # set the animation
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        # turn it on
+        self.layer = animLayer
+        self.delay(delay=0.432,handler=self.lightning,param='top')
+        self.delay(delay=0.648,handler=self.lightning,param='left')
+        self.delay(delay=1.08,handler=self.lightning,param='top')
+        self.delay(delay=1.296,handler=self.lightning,param='right')
+
+        self.delay(delay=myWait,handler=self.new_rack_pan)
+
+    def new_rack_pan(self):
+    # setup the pan script
+        script =[]
+        for i in range(0,52,1):
+            showdownStill = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'showdown-still.dmd').frames[0])
+            showdownStill.set_target(0,i)
+            if i == 51:
+                time = 0.25
+            else:
+                time = 0.01
+            script.append({'seconds':time,'layer':showdownStill})
+        showdownPan = dmd.ScriptedLayer(128,32,script)
+        self.layer = showdownPan
+        self.delay(delay=0.76,handler=new_rack_display)
+
+    def new_rack_display(self):
+        # this is where to show "ball added" or "ball saver on"
+        # TODO stuff
+        # if 2 balls in play - add one
+        # if 3 balls in play - run ball save
+        self.new_rack_finish()
+
+    def new_rack_finish(self):
+            # reset the dudes
+        self.showdown_reset_guys()
+
+    def lightning(self,section):
+        # set which section of the GI to flash
+        if section == 'top':
+            lamp = self.game.base_game_mode.giLamps[0]
+        elif section == 'right':
+            lamp = self.game.base_game_mode.giLamps[1]
+        elif section == 'left':
+            lamp = self.game.base_game_mode.giLamps[2]
+        else:
+            pass
+        # then flash it
+        lamp.pulse(216)
+
+    def setup_targets(self):
+        # pop up the targets
+        for i in range(0,4,1):
+            self.target_up(i)
 
     def showdown_reset_guys(self):
+        # pop up all the targets
+        self.setup_targets()
+        # then reset the display
         self.guyLayers = []
         self.badGuy0 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
         self.badGuy0.set_target_position(-49,0)
@@ -326,12 +403,17 @@ class BadGuys(game.Mode):
         combined.composite_op = "blacksrc"
         self.layer = combined
 
-
     def showdown_hit(self,target):
         # handle a guy hit in a showdown
         print "KILLING GUY: " + str(target)
         # count the dead guy
         self.deathTally += 1
+        # score points
+        # after the 4th guy the point value goes up
+        if self.deathTally > 4:
+            self.showdownValue = 450000
+        self.game.score(self.showdownValue)
+
         # swap out the appropriate layer
         shotguy = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd')
         if target == 0:
@@ -375,7 +457,9 @@ class BadGuys(game.Mode):
         myWait = len(shotguy.frames) / 10.0
         if self.deathTally % 4 == 0:
             print "THEY'RE ALL DEAD JIM"
-            self.delay(delay=myWait,handler=self.showdown_reset_guys)
+            self.delay(delay=myWait,handler=self.new_rack)
+
+        # TODO put an else here that cues an interrupter points value display
 
         ## a way out for now
         if self.deathTally >= 8:
@@ -384,6 +468,7 @@ class BadGuys(game.Mode):
     def end_showdown(self):
         #derp
         # kill the music
+        self.game.sound.stop_music()
         # tally some score?
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # reset the quickdraw status of the bad guys
@@ -397,11 +482,13 @@ class BadGuys(game.Mode):
         # drop all teh targets
         for coil in self.coils:
             coil.disable()
-        # reset the badguy UP tracking just inc ase
+        # reset the badguy UP tracking just in case
         for i in range (0,4,1):
             self.game.set_tracking('badGuysUp',i,False)
         # tracking - turn it back to open
         self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
+        # start up the main themse again
+        self.game.base_game_mode.music_on()
         # unload
         self.game.modes.remove(self.game.bad_guys)
 
