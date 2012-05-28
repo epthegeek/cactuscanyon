@@ -150,7 +150,7 @@ class Saloon(game.Mode):
         self.repeat_ding(4)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,topText,bottomText])
         # play a voice clip about the bounty being ready
-        self.game.sound.play_voice(self.game.assets.quote_bountyLit)
+        self.game.sound.play(self.game.assets.quote_bountyLit)
         # lights and whatnot
         self.update_lamps()
         self.delay(delay=1.6,handler=self.clear_layer)

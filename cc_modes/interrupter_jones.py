@@ -94,3 +94,13 @@ class Interrupter(game.Mode):
         self.game.sound.play_music(self.game.assets.music_mainTheme, loops=-1)
         # and set a delay to fade it out after 2 minutes
         self.delay(delay=60,handler=self.game.sound.fadeout_music)
+
+    def showdown_hit(self,points):
+        pointString = ep.format_score(points)
+        textLine1 = dmd.TextLayer(128/2, 0, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BAD GUY SHOT!")
+        textLine2 = dmd.TextLayer(128/2, 15, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(pointString,blink_frames=8)
+        combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
+        combined.composite_op = "blacksrc"
+        self.layer = combined
+        self.delay(name="Display",delay=1,handler=self.clear_layer)
+

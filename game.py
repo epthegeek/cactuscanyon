@@ -18,8 +18,8 @@ user_settings_path = "config/user_settings.yaml"
 ## Subclass BasicGame to create the main game
 class CCGame(game.BasicGame):
     def __init__(self,machineType, fakePinProc = False):
-        #if (fakePinProc):
-            #config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
+        if (fakePinProc):
+            config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')

@@ -298,25 +298,30 @@ class BadGuys(game.Mode):
         # pop up the targets
         # play a startup animation
         anim = dmd.Animation().load(ep.DMD_PATH+'showdown.dmd')
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,repeat=False,frame_time=6)
         myWait = len(anim.frames) / 10.0
-        # time a bunch of delay flashes
-        self.delay(delay=0.432,handler=self.lightning,param='top')
-        self.delay(delay=0.864,handler=self.lightning,param='top')
-        self.delay(delay=1.08,handler=self.lightning,param='right')
-        self.delay(delay=1.728,handler=self.lightning,param='top')
-        self.delay(delay=2.16,handler=self.lightning,param='top')
-        self.delay(delay=2.376,handler=self.lightning,param='left')
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        # keyframe sounds
+        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
+        animLayer.add_frame_listener(2,self.lightning,param="top")
+        animLayer.add_frame_listener(4,self.lightning,param="top")
+        animLayer.add_frame_listener(5,self.lightning,param="left")
+        animLayer.add_frame_listener(8,self.game.play_remote_sound,param=self.game.assets.sfx_lightningRumble)
+        animLayer.add_frame_listener(8,self.lightning,param="top")
+        animLayer.add_frame_listener(10,self.lightning,param="top")
+        animLayer.add_frame_listener(11,self.lightning,param="left")
         # setup the display
         self.layer = animLayer
-        #self.delay(delay=myWait,handler=self.get_going)
-        self.delay(delay=myWait,handler=self.end_showdown)
+        self.delay(delay=myWait,handler=self.get_going)
 
     def get_going(self):
         # turn the GI back on
+        self.game.sound.play(self.game.assets.quote_showdown)
         self.game.base_game_mode.gi_toggle("ON")
-        self.game.sound.play_music(self.game.assets.music_showdown)
-        self.showdown_reset_guys()
+        self.game.sound.play_music(self.game.assets.music_showdown,loops=-1)
+        #self.showdown_reset_guys()
+        self.new_rack_pan()
 
     def new_rack(self):
         # kill the GI again
@@ -330,14 +335,21 @@ class BadGuys(game.Mode):
         # math out the wait
         myWait = len(anim.frames) / 10.0
         # set the animation
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        # keyframe sounds
+        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
+        animLayer.add_frame_listener(2,self.lightning,param="top")
+        animLayer.add_frame_listener(3,self.lightning,param="left")
+        animLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
+        animLayer.add_frame_listener(6,self.lightning,param="top")
+        animLayer.add_frame_listener(7,self.lightning,param="left")
+        animLayer.add_frame_listener(10,self.game.play_remote_sound,param=self.game.assets.sfx_lightningRumble)
+        animLayer.add_frame_listener(10,self.lightning,param="top")
+        animLayer.add_frame_listener(11,self.lightning,param="right")
         # turn it on
         self.layer = animLayer
-        self.delay(delay=0.432,handler=self.lightning,param='top')
-        self.delay(delay=0.648,handler=self.lightning,param='left')
-        self.delay(delay=1.08,handler=self.lightning,param='top')
-        self.delay(delay=1.296,handler=self.lightning,param='right')
-
         self.delay(delay=myWait,handler=self.new_rack_pan)
 
 
@@ -346,17 +358,18 @@ class BadGuys(game.Mode):
         self.game.base_game_mode.gi_toggle("ON")
         # setup the pan script
         script =[]
-        for i in range(0,51,1):
+        for i in range(0,-52,-1):
+            print "PAN i VALUE: " + str(i)
             showdownStill = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'town-pan.dmd').frames[0])
-            showdownStill.set_target(0,i)
-            if i == 51:
-                time = 0.25
+            showdownStill.set_target_position(0,i)
+            if i == -51:
+                time = 1
             else:
-                time = 0.01
+                time = 0.015
             script.append({'seconds':time,'layer':showdownStill})
         showdownPan = dmd.ScriptedLayer(128,32,script)
         self.layer = showdownPan
-        self.delay(delay=0.76,handler=new_rack_display)
+        self.delay(delay=1.5,handler=self.new_rack_display)
 
     def new_rack_display(self):
         # this is where to show "ball added" or "ball saver on"
@@ -458,17 +471,20 @@ class BadGuys(game.Mode):
             # append on the new layer to the end to put it in the front
             self.guyLayers.append(self.badGuy3)
 
+        myWait = len(shotguy.frames) / 10.0
         # put the new layer  in place
         combined = dmd.GroupedLayer(128,32,self.guyLayers)
         combined.composite_op = "blacksrc"
         self.layer = combined
+        # play a shot sound
+        self.game.sound.play(self.game.assets.sfx_gunfightShot)
         # if the 4 dudes are dead, reset them
         myWait = len(shotguy.frames) / 10.0
         if self.deathTally % 4 == 0:
             print "THEY'RE ALL DEAD JIM"
             self.delay(delay=myWait,handler=self.new_rack)
-
-        # TODO put an else here that cues an interrupter points value display
+        else:
+            self.delay(delay=myWait,handler=self.game.interrupter.showdown_hit,param=self.showdownValue)
 
         ## a way out for now
         if self.deathTally >= 8:
@@ -485,14 +501,14 @@ class BadGuys(game.Mode):
             print "END SHOWDOWN QUICKDRAWS: " + str(i)
             self.game.set_tracking('quickdrawStatus',False,i)
         # turn off lights
-        for i in range(0,3,1):
+        for i in range(0,4,1):
             print "END SHOWDOWN BAD GUYS " + str(i)
             self.game.set_tracking('badGuysDead',i,False)
         # drop all teh targets
         for coil in self.coils:
             coil.disable()
         # reset the badguy UP tracking just in case
-        for i in range (0,3,1):
+        for i in range (0,4,1):
             self.game.set_tracking('badGuyUp',i,False)
         # tracking - turn it back to open
         self.game.set_tracking('quickdrawStatus',"OPEN",self.side)

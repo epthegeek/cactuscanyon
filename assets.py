@@ -192,6 +192,12 @@ class Assets():
         self.game.sound.register_sound(self.sfx_trainStop, self.sfx_path + "199-sfx-train-stops.wav")
         self.sfx_trainStopWithBrake = 'sfx_trainStopWithBrake'
         self.game.sound.register_sound(self.sfx_trainStopWithBrake, self.sfx_path + "205-sfx-train-stops-with-brake.wav")
+        self.sfx_lightning1 = 'sfx_lightning1'
+        self.game.sound.register_sound(self.sfx_lightning1, self.sfx_path + "249-sfx-lightning-1.wav")
+        self.sfx_lightning2 = 'sfx_lightning2'
+        self.game.sound.register_sound(self.sfx_lightning2, self.sfx_path + "251-sfx-lightning-2.wav")
+        self.sfx_lightningRumble = 'sfx_lightningRumble'
+        self.game.sound.register_sound(self.sfx_lightningRumble, self.sfx_path + "295-sfx-lightning-with-rumble.wav")
 
         self.sfx_ricochetSet = 'sfx_ricochetSet'
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
@@ -411,6 +417,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_dontJustStandThere, self.quotes_path + "1196-mayor-dont-just-stand-there-do-somethin.wav")
         self.quote_gasp = 'quote_gasp'
         self.game.sound.register_sound(self.quote_gasp, self.quotes_path + "878-polly-gasp.wav")
+        self.quote_showdown = 'quote_showdown'
+        self.game.sound.register_sound(self.quote_showdown, self.quotes_path + "1005-mayor-oh-my-a-showdown.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'
