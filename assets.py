@@ -184,6 +184,10 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cow2, self.sfx_path + "323-sfx-cow-2.wav")
         self.sfx_lockTwoMinecrart = 'sfx_lockTwoMinecart'
         self.game.sound.register_sound(self.sfx_lockTwoMinecrart, self.sfx_path + "243-sfx-lock-2-minecart.wav")
+        self.sfx_lockTwoFlourish = 'sfx_lockTwoFlourish'
+        self.game.sound.register_sound(self.sfx_lockTwoFlourish, self.sfx_path + "048-sfx-lock-two-orchestra-hit.wav")
+        self.sfx_lockTwoExplosion = 'sfx_lockTwoExplosion'
+        self.game.sound.register_sound(self.sfx_lockTwoExplosion, self.sfx_path + "213-sfx-mine-lock-2-explosion.wav")
         self.sfx_trainStop = 'sfx_trainStop'
         self.game.sound.register_sound(self.sfx_trainStop, self.sfx_path + "199-sfx-train-stops.wav")
         self.sfx_trainStopWithBrake = 'sfx_trainStopWithBrake'
@@ -405,6 +409,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_dontMove, self.quotes_path + "1265-prospector-dont-move.wav")
         self.quote_dontJustStandThere = 'quote_dontJustStandThere'
         self.game.sound.register_sound(self.quote_dontJustStandThere, self.quotes_path + "1196-mayor-dont-just-stand-there-do-somethin.wav")
+        self.quote_gasp = 'quote_gasp'
+        self.game.sound.register_sound(self.quote_gasp, self.quotes_path + "878-polly-gasp.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'
@@ -427,8 +433,10 @@ class Assets():
         self.game.sound.register_music(self.music_pollyPeril, self.music_path + "031-polly-peril.wav")
         self.music_highScoreLead = 'music_highScoreLead'
         self.game.sound.register_sound(self.music_highScoreLead, self.music_path + "044-high-score-entry-lead.wav")
-        self.music_closingSong = 'music_closingSong'
-        self.game.sound.register_music(self.music_closingSong, self.music_path + "008-closing-song.wav")
+        self.music_goldmineMultiball = 'music_goldmineMultiball'
+        self.game.sound.register_music(self.music_goldmineMultiball, self.music_path + "008-goldmine-multiball.wav")
+        self.music_showdown = 'music_showdown'
+        self.game.sound.register_music(self.music_showdown, self.music_path + "022-showdown.wav")
 
         # lampshows
         lampshows = list()

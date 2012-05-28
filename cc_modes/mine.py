@@ -216,7 +216,7 @@ class Mine(game.Mode):
         # play the animation
         self.layer = animLayer
         self.delay(delay=1,handler=self.game.play_remote_sound,param=self.game.assets.quote_pollyHelp)
-        self.delay(delay=myWait,handler=self.lock_display_text)
+        self.delay(name="Display",delay=myWait,handler=self.lock_display_text)
 
     def play_ball_two_lock_anim(self):
         # stop the music
@@ -226,27 +226,36 @@ class Mine(game.Mode):
         # TODO add the sounds to this and determine if it needs listenrs
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
-        # play the first sound
         # set the animation
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        # keyframe some sounds
+        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.quote_gasp)
+        animLayer.add_frame_listener(15,self.game.play_remote_sound,param=self.game.assets.sfx_lockTwoMinecart)
+        animLayer.add_frame_listener(32,self.game.play_remote_sound,param=self.game.assets.sfx_lockTwoExplosion)
+
         # play the animation
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.lock_display_text)
+        self.delay(name="Display",delay=myWait,handler=self.lock_display_text,param=2)
 
-    def lock_display_text(self):
-        self.game.sound.play(self.game.assets.sfx_orchestraRiff)
+    def lock_display_text(self,lock=1):
+        if lock == 1:
+            self.game.sound.play(self.game.assets.sfx_orchestraRiff)
+        if lock == 2:
+            self.game.sound.play(self.game.assets.sfx_lockTwoFlourish)
         textLine = dmd.TextLayer(128/2, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL " + str(self.game.show_tracking('ballsLocked')) + " LOCKED")
         textLine.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[self.layer,textLine])
         # kick the ball out and clear the layer
         self.delay(delay=2,handler=self.game.mountain.eject)
-        self.delay(delay=2,handler=self.clear_layer)
+        self.delay(name="Display",delay=2,handler=self.clear_layer)
         self.delay(delay=2.1,handler=self.game.base_game_mode.music_on)
 
     def light_extra_ball(self):
         # add the ball to the pending extra balls
         derp = self.game.increase_tracking('extraBallsPending')
-        print derp
+        print "EXTRA BALLS PENDING: " + str(derp)
         # turn the light on
         self.update_lamps()
         # setup  a bunch of text
