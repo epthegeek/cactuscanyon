@@ -104,3 +104,16 @@ class Interrupter(game.Mode):
         self.layer = combined
         self.delay(name="Display",delay=1,handler=self.clear_layer)
 
+    def ball_added(self):
+        textLine = dmd.TextLayer(128/2, 9, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("BALL ADDED",blink_frames=8)
+        textLine.composite_op = "blacksrc"
+        self.layer = textLine
+        self.delay(name="Display",delay=1,handler=self.clear_layer)
+
+    def ball_save_activated(self):
+        textLine1 = dmd.TextLayer(128/2, 0, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL SAVER")
+        textLine2 = dmd.TextLayer(128/2, 15, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("ACTIVATED",blink_frames=8)
+        combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
+        combined.composite_op = "blacksrc"
+        self.layer = combined
+        self.delay(name="Display",delay=1,handler=self.clear_layer)

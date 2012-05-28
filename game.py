@@ -37,7 +37,7 @@ class CCGame(game.BasicGame):
         self.ballStarting = False
         self.runLampShows = False
         self.status = None
-        self.ballSaved = False
+        self.autoPlunge = False
 
     def setup(self):
         """docstring for setup"""
@@ -232,7 +232,7 @@ class CCGame(game.BasicGame):
             self.interrupter.ball_saved()
             # if the ball was saved, we need a new one
             #self.trough.launch_balls(1)
-            self.ballSaved = True
+            self.autoPlunge = True
             self.ball_save.disable()
 
 
@@ -268,7 +268,7 @@ class CCGame(game.BasicGame):
         self.sound.stop_music()
         # unload the base add on modes
         self.base_game_mode.remove_modes()
-        print "BALL SAVED STATE: " + str(self.ballSaved)
+        print "Auto Plunge STATE: " + str(self.autoPlunge)
 
         #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
         self.game_data['Audits']['Balls Played'] += 1

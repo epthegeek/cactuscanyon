@@ -408,7 +408,7 @@ class BaseGameMode(game.Mode):
     def sw_shooterLane_active_for_300ms(self,sw):
         # if we're dealing with a saved ball, plunge like the wind
         print "checking ball saved"
-        if self.game.ballSaved == True:
+        if self.game.autoPlunge == True:
             print "AUTOPLUNGE, MF"
             self.game.coils.autoPlunger.pulse(40)
 
@@ -424,9 +424,9 @@ class BaseGameMode(game.Mode):
         self.game.interrupter.display_player_number(idle=True)
 
     def sw_skillBowl_active(self,sw):
-        if self.game.ballSaved:
+        if self.game.autoPlunge:
             print "TURNING OFF BALL SAVED FLAG"
-            self.game.ballSaved = False
+            self.game.autoPlunge = False
 
 
     ###

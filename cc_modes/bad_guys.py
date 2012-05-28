@@ -32,8 +32,11 @@ class BadGuys(game.Mode):
         self.showdownValue = 300000
 
     def ball_drained(self):
+    # if we're dropping down to one ball, and showdown is running - do stuff
+        if self.game.num_balls_in_play == 1 and "SHOWDOWN" in self.game.show_tracking('quickdrawStatus'):
+            self.end_showdown()
         if self.game.trough.num_balls_in_play == 0:
-            if self.game.show_tracking('quickdrawStatus') == "RUNNING" or "SHOWDOWN" or self.game.show_tracking('gunfightStatus') == "RUNNING":
+            if "RUNNING" or "SHOWDOWN" in self.game.show_tracking('quickdrawStatus') or self.game.show_tracking('gunfightStatus') == "RUNNING":
                 self.dispatch_delayed()
                 for coil in self.coils:
                     coil.disable()
@@ -316,12 +319,19 @@ class BadGuys(game.Mode):
         self.delay(delay=myWait,handler=self.get_going)
 
     def get_going(self):
-        # turn the GI back on
         self.game.sound.play(self.game.assets.quote_showdown)
+        # turn the GI back on
         self.game.base_game_mode.gi_toggle("ON")
+        # add a ball
+        self.add_ball()
+        # start the music
         self.game.sound.play_music(self.game.assets.music_showdown,loops=-1)
         #self.showdown_reset_guys()
         self.new_rack_pan()
+
+    def add_ball(self):
+        self.game.autoPlunge = True
+        self.game.trough.launch_balls(1)
 
     def new_rack(self):
         # kill the GI again
@@ -372,10 +382,15 @@ class BadGuys(game.Mode):
         self.delay(delay=1.5,handler=self.new_rack_display)
 
     def new_rack_display(self):
+        # if 2 balls are in play add another
+        if self.game.num_balls_in_play == 2:
+            self.add_ball()
+            self.game.interrupter.ball_added()
+        # if 3 balls are already in play
+        elif self.game.num_balls_in_play == 3:
+            self.game.ball_save.start(num_balls_to_save=1, time=10, now=True, allow_multiple_saves=False)
+            self.game.interrupter.ball_save_activated()
         # this is where to show "ball added" or "ball saver on"
-        # TODO stuff
-        # if 2 balls in play - add one
-        # if 3 balls in play - run ball save
         self.new_rack_finish()
 
     def new_rack_finish(self):
@@ -487,14 +502,21 @@ class BadGuys(game.Mode):
             self.delay(delay=myWait,handler=self.game.interrupter.showdown_hit,param=self.showdownValue)
 
         ## a way out for now
-        if self.deathTally >= 8:
-            self.end_showdown()
+        #if self.deathTally >= 8:
+        #    self.end_showdown()
 
     def end_showdown(self):
         #derp
         # kill the music
         self.game.sound.stop_music()
         # tally some score?
+        # play a quote about bodycount
+        bodycount = self.game.show_tracking('showdownTotal')
+        # if the total for this round of showdown was higher stored, store it
+        if self.deathTally > bodycount:
+            self.game.set_tracking('showdownTotal',self.deathTally)
+        # and reset the death tally
+        self.deathTally = 0
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # reset the quickdraw status of the bad guys
         for i in range(0,2,1):
