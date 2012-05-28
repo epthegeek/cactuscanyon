@@ -158,6 +158,14 @@ class BaseGameMode(game.Mode):
         self.game.lamps.leftReturnQuickdraw.disable()
         self.game.lamps.rightReturnQuickdraw.disable()
 
+    def gi_toggle(self,state):
+        if state == "OFF":
+            for lamp in self.giLamps:
+                lamp.disable()
+        else:
+            for lamp in self.giLamps:
+                lamp.enable()
+
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
         # if we're on the first ball and there are less than four players, add one.

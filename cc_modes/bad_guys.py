@@ -288,6 +288,8 @@ class BadGuys(game.Mode):
 
     def start_showdown(self):
         print "S H O W D O W N"
+        # kill the GI
+        self.game.base_game_mode.gi_toggle("OFF")
         # things, they go here
         self.deathTally = 0
         # set the tracking
@@ -311,10 +313,14 @@ class BadGuys(game.Mode):
         self.delay(delay=myWait,handler=self.end_showdown)
 
     def get_going(self):
+        # turn the GI back on
+        self.game.base_game_mode.gi_toggle("ON")
         self.game.sound.play_music(self.game.assets.music_showdown)
         self.showdown_reset_guys()
 
     def new_rack(self):
+        # kill the GI again
+        self.game.base_game_mode.gi_toggle("OFF")
         # TODO stuff
         # if 2 balls in play - add one
         # if 3 balls in play - run ball save
@@ -334,11 +340,14 @@ class BadGuys(game.Mode):
 
         self.delay(delay=myWait,handler=self.new_rack_pan)
 
+
     def new_rack_pan(self):
-    # setup the pan script
+        # turn the GI back on here
+        self.game.base_game_mode.gi_toggle("ON")
+        # setup the pan script
         script =[]
-        for i in range(0,52,1):
-            showdownStill = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'showdown-still.dmd').frames[0])
+        for i in range(0,51,1):
+            showdownStill = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'town-pan.dmd').frames[0])
             showdownStill.set_target(0,i)
             if i == 51:
                 time = 0.25
@@ -472,19 +481,19 @@ class BadGuys(game.Mode):
         # tally some score?
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # reset the quickdraw status of the bad guys
-        for i in range(0,3,1):
-            print "END SHOWDOWN: " + str(i)
+        for i in range(0,2,1):
+            print "END SHOWDOWN QUICKDRAWS: " + str(i)
             self.game.set_tracking('quickdrawStatus',False,i)
         # turn off lights
-        for i in range(0,4,1):
+        for i in range(0,3,1):
             print "END SHOWDOWN BAD GUYS " + str(i)
             self.game.set_tracking('badGuysDead',i,False)
         # drop all teh targets
         for coil in self.coils:
             coil.disable()
         # reset the badguy UP tracking just in case
-        for i in range (0,4,1):
-            self.game.set_tracking('badGuysUp',i,False)
+        for i in range (0,3,1):
+            self.game.set_tracking('badGuyUp',i,False)
         # tracking - turn it back to open
         self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
         # start up the main themse again
