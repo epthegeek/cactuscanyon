@@ -33,10 +33,11 @@ class BadGuys(game.Mode):
 
     def ball_drained(self):
     # if we're dropping down to one ball, and showdown is running - do stuff
-        if self.game.num_balls_in_play == 1 and "SHOWDOWN" in self.game.show_tracking('quickdrawStatus'):
+        if self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('isShowdownRunning'):
             self.end_showdown()
         if self.game.trough.num_balls_in_play == 0:
-            if "RUNNING" or "SHOWDOWN" in self.game.show_tracking('quickdrawStatus') or self.game.show_tracking('gunfightStatus') == "RUNNING":
+            status = self.game.show_tracking('quickdrawStatus',self.side)
+            if status == "RUNNING" or self.game.show_tracking('isShowdownRunning') or self.game.show_tracking('gunfightStatus') == "RUNNING":
                 self.dispatch_delayed()
                 for coil in self.coils:
                     coil.disable()
@@ -44,7 +45,7 @@ class BadGuys(game.Mode):
                     coil.disable()
                 if self.game.show_tracking('quickdrawStatus',self.side) == "RUNNING":
                     self.quickdraw_lost(self.side)
-                if self.game.show_tracking('quickdrawStatus',self.side) == "SHOWDOWN":
+                if self.game.show_tracking('isShowdownRunning'):
                     self.end_showdown()
                 if self.game.show_tracking('gunfightStatus') == "RUNNING":
                     self.gunfight_lost()
@@ -78,7 +79,7 @@ class BadGuys(game.Mode):
         # kill the coil to the drop target based on position
         self.target_down(target)
         # call back to base to turn on the light for this bad guy?
-
+        print "QD STATUS CHECK: " + str(self.game.show_tracking('quickdrawStatus'))
         # If there's a quickdraw running
         if "RUNNING" in self.game.show_tracking('quickdrawStatus'):
             # kill the timer
@@ -87,7 +88,7 @@ class BadGuys(game.Mode):
             # It's been won
             self.quickdraw_won(target)
         # Otherwise, if all badguys are dead, we're in a showdown
-        elif "SHOWDOWN" in self.game.show_tracking('quickdrawStatus'):
+        elif self.game.show_tracking('isShowdownRunning'):
             print "SHOWDOWN RUNNING OMG"
             self.showdown_hit(target)
             # showdown stuff would go here
@@ -112,7 +113,7 @@ class BadGuys(game.Mode):
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
 
     def target_up(self,target):
-        self.coils[target].patter(on_time=4,off_time=16,original_on_time=35)
+        self.coils[target].patter(on_time=4,off_time=12,original_on_time=35)
         self.lights[target].enable()
         self.delay(delay=0.1,handler=self.target_activate,param=target)
 
@@ -159,7 +160,7 @@ class BadGuys(game.Mode):
         self.game.sound.stop_music()
         # start the mode music
         self.game.sound.play(self.game.assets.music_quickdrawBumper)
-        self.delay(name="quickdraw music",delay=1.3,handler=self.game.play_remote_music,param=self.game.assets.music_quickdraw)
+        self.delay(name="quickdraw music",delay=1.3,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_quickdraw)
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_quickdrawStart)
         # pop that sucker up
@@ -274,7 +275,7 @@ class BadGuys(game.Mode):
         else:
             self.game.update_lamps()
             # turn the main music back on
-            self.game.base_game_mode.music_on()
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
             # unload this piece
             self.game.modes.remove(self.game.bad_guys)
 
@@ -291,12 +292,12 @@ class BadGuys(game.Mode):
 
     def start_showdown(self):
         print "S H O W D O W N"
+        # set the showdown tracking
+        self.game.set_tracking('isShowdownRunning', True)
         # kill the GI
         self.game.base_game_mode.gi_toggle("OFF")
         # things, they go here
         self.deathTally = 0
-        # set the tracking
-        self.game.set_tracking('quickdrawStatus',"SHOWDOWN",self.side)
         # kick out more ball
         # pop up the targets
         # play a startup animation
@@ -322,10 +323,8 @@ class BadGuys(game.Mode):
         self.game.sound.play(self.game.assets.quote_showdown)
         # turn the GI back on
         self.game.base_game_mode.gi_toggle("ON")
-        # add a ball
-        self.add_ball()
         # start the music
-        self.game.sound.play_music(self.game.assets.music_showdown,loops=-1)
+        self.game.base_game_mode.music_on(self.game.assets.music_showdown)
         #self.showdown_reset_guys()
         self.new_rack_pan()
 
@@ -369,7 +368,6 @@ class BadGuys(game.Mode):
         # setup the pan script
         script =[]
         for i in range(0,-52,-1):
-            print "PAN i VALUE: " + str(i)
             showdownStill = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'town-pan.dmd').frames[0])
             showdownStill.set_target_position(0,i)
             if i == -51:
@@ -383,11 +381,11 @@ class BadGuys(game.Mode):
 
     def new_rack_display(self):
         # if 2 balls are in play add another
-        if self.game.num_balls_in_play == 2:
+        if self.game.trough.num_balls_in_play <= 2:
             self.add_ball()
             self.game.interrupter.ball_added()
         # if 3 balls are already in play
-        elif self.game.num_balls_in_play == 3:
+        elif self.game.trough.num_balls_in_play == 3:
             self.game.ball_save.start(num_balls_to_save=1, time=10, now=True, allow_multiple_saves=False)
             self.game.interrupter.ball_save_activated()
         # this is where to show "ball added" or "ball saver on"
@@ -506,8 +504,10 @@ class BadGuys(game.Mode):
         #    self.end_showdown()
 
     def end_showdown(self):
-        #derp
-        # kill the music
+        # drop all teh targets
+        for coil in self.coils:
+            coil.disable()
+            # kill the music
         self.game.sound.stop_music()
         # tally some score?
         # play a quote about bodycount
@@ -518,24 +518,21 @@ class BadGuys(game.Mode):
         # and reset the death tally
         self.deathTally = 0
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
-        # reset the quickdraw status of the bad guys
-        for i in range(0,2,1):
-            print "END SHOWDOWN QUICKDRAWS: " + str(i)
-            self.game.set_tracking('quickdrawStatus',False,i)
+        # reset the showdown status
+        self.game.set_tracking('isShowdownRunning',False)
         # turn off lights
         for i in range(0,4,1):
             print "END SHOWDOWN BAD GUYS " + str(i)
             self.game.set_tracking('badGuysDead',i,False)
-        # drop all teh targets
-        for coil in self.coils:
-            coil.disable()
+            print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
+        self.game.base_game_mode.update_lamps()
         # reset the badguy UP tracking just in case
         for i in range (0,4,1):
             self.game.set_tracking('badGuyUp',i,False)
         # tracking - turn it back to open
         self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
         # start up the main themse again
-        self.game.base_game_mode.music_on()
+        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # unload
         self.game.modes.remove(self.game.bad_guys)
 
@@ -587,7 +584,7 @@ class BadGuys(game.Mode):
         # play the intro riff
         myWait = self.game.sound.play(self.game.assets.music_gunfightIntro)
         # delayed play the drum roll
-        self.delay(delay=myWait,handler=self.game.play_remote_music,param=self.game.assets.music_drumRoll)
+        self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_drumRoll)
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_gunfightStart)
         # display the clouds with gunfight text
@@ -660,7 +657,7 @@ class BadGuys(game.Mode):
         self.game.set_tracking('gunfightStatus',"OPEN")
         self.game.set_tracking('bartStatus',"OPEN")
         # turn the main game music back on
-        self.game.base_game_mode.music_on()
+        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # unload the mode
         self.game.modes.remove(self.game.bad_guys)
 

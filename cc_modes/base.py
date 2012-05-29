@@ -32,6 +32,7 @@ class BaseGameMode(game.Mode):
         self.giLamps = [self.game.lamps.gi01,
                         self.game.lamps.gi02,
                         self.game.lamps.gi03]
+        self.current_music = self.game.assets.music_mainTheme
 
 
     def mode_started(self):
@@ -208,11 +209,15 @@ class BaseGameMode(game.Mode):
         self.game.modes.add(self.game.service_mode)
         return True
 
-    def music_on(self):
-            self.game.sound.play_music(self.game.assets.music_mainTheme, loops=-1)
+    def music_on(self,song=None):
+            # if a song is passed, set that to the active song
+            # if not, just re-activate the current
+            if song:
+                self.current_music = song
+            self.game.sound.play_music(self.current_music, loops=-1)
 
-    def delayed_music_on(self,wait):
-        self.delay(delay=wait, handler=self.music_on)
+    def delayed_music_on(self,wait,song=None):
+        self.delay(delay=wait, handler=self.music_on,param=song)
 
     def clear_layer(self):
         self.layer = None
@@ -290,14 +295,19 @@ class BaseGameMode(game.Mode):
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
         # score the points
         self.game.score(2530)
-        # if gunfight is lit - run that passing which side started it
-        if self.game.show_tracking('gunfightStatus') == "READY":
+        # if there's a running quickdraw or showdown - pass
+        status = self.game.show_tracking('quickdrawStatus',side)
+        print "RETURN LANE STATUS: " + str(status)
+        if status == "RUNNING" or self.game.show_tracking('isShowdownRunning'):
+            print "PASSING - QD status: " + str(status)
+        # if there's no showdown or quckdra running, gunfight is possible
+        elif self.game.show_tracking('gunfightStatus') == "READY":
             ## TODO - haven't written gunfight yet
             self.game.modes.add(self.game.bad_guys)
             self.game.bad_guys.start_gunfight(side)
             pass
         # else if quickdraw is lit - run that passing which side started it
-        elif self.game.show_tracking('quickdrawStatus',side) == "READY":
+        elif status == "READY":
             # load up the mode
             self.game.modes.add(self.game.bad_guys)
             # fire the startup
@@ -564,11 +574,11 @@ class BaseGameMode(game.Mode):
         # load up the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
         # start the full on animation
-        myWait = len(anim.frames) / 30
+        myWait = len(anim.frames) / 12
         # setup the animated layer
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
-        animLayer.frame_time = 2
+        animLayer.frame_time = 8
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.finish_bonus,param=points)
 

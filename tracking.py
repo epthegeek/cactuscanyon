@@ -65,13 +65,14 @@ class Tracking(game.Player):
         self.player_stats['rank'] = 0
         self.player_stats['combos'] = 0
 
-        # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING, SHOWDOWN -- 0 is left, 1 is right
+        # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING-- 0 is left, 1 is right
         self.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
         self.player_stats['quickdrawsStarted'] = 0
         self.player_stats['quickdrawsWon'] = 0
         self.player_stats['badGuysDead'] = [True,False,True,True]
         # these are separate because the bad guy can be dead (quickdraw) but also up (showdown/gunfight)
         self.player_stats['badGuyUp'] = [False,False,False,False]
+        self.player_stats['isShowdownRunning'] = False
         self.player_stats['showdownTotal'] = 0
 
         # bartStatus: OPEN, RUNNING, LAST, DEAD

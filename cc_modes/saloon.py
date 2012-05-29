@@ -36,7 +36,7 @@ class Saloon(game.Mode):
     def sw_saloonPopper_active_for_300ms(self,sw):
         ## if we went through the gate, and missed bart or snuck in the back way
         ## it counts as a hit so we have to do that first
-        if ep.last_switch != "saloonBart" or "rightLoopTop":
+        if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
             # set the busy flag
             self.busy = True
             # then hit bart
@@ -312,7 +312,7 @@ class Saloon(game.Mode):
         # then kick out
         self.update_lamps()
         self.kick()
-        self.game.play_remote_music(self.game.assets.music_mainTheme)
+        self.game.base_game_mode.music_on()
 
     def repeat_ding(self,times):
         self.game.sound.play(self.game.assets.sfx_bountyBell)

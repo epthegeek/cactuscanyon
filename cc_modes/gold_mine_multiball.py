@@ -20,7 +20,7 @@ class GoldMine(game.Mode):
         # kill the music
         print "start multiball IS KILLING THE MUSIC"
         self.game.sound.stop_music()
-        self.game.sound.play_music(self.game.assets.music_multiball_intro, loops=-1)
+        self.game.base_game_mode.music_on(self.game.assets.music_multiball_intro)
         self.intro_animation()
 
     def intro_animation(self):
@@ -63,7 +63,7 @@ class GoldMine(game.Mode):
         self.game.set_tracking('mineStatus','OPEN')
         print "MULTIBALL ENDED"
         # start the music back up
-        self.game.base_game_mode.music_on()
+        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # unload the mode
         self.game.modes.remove(self.game.gm_multiball)
 

@@ -278,14 +278,14 @@ class SkillShot(game.Mode):
         # this is how the actual CC tracks the end of
         # the skillshot and I'm not going to argue
         # start the main game music
-        self.game.base_game_mode.music_on()
+        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # unload in 2 seconds - to give
         # the award junk time to finish
         self.delay(delay=2,handler=self.shutdown)
 
     def music_on(self):
         print "ITS TIME TO START THE SHOOTER LANE MUSIC"
-        self.game.sound.play_music(self.game.assets.music_shooterLaneGroove, loops=-1)
+        self.game.base_game_mode.music_on(self.game.assets.music_shooterLaneGroove)
 
     def shutdown(self):
         # unload the skill shot since it's not needed

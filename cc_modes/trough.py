@@ -90,7 +90,6 @@ class Trough(Mode):
     # the delay will call the real handler (check_switches).
     def position_switch_handler(self, sw):
         self.cancel_delayed('check_switches')
-        print "HOLDING ON DELAY"
         self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
 
     def check_switches(self):

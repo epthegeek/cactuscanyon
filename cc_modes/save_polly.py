@@ -53,7 +53,7 @@ class SavePolly(game.Mode):
         self.game.left_ramp.update_lamps()
 
     # start the music
-        self.game.sound.play_music(self.game.assets.music_pollyPeril,loops=-1)
+        self.game.base_game_mode.music_on(self.game.assets.music_pollyPeril)
         # reset the train
         self.game.train.reset_toy()
         # run the animation
@@ -208,7 +208,7 @@ class SavePolly(game.Mode):
         print "polly_finished IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # turn the main game music back on
-        self.game.base_game_mode.music_on()
+        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         self.game.train.reset_toy()
         # turn off the polly display
         self.layer = None

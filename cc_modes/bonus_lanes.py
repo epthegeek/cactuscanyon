@@ -18,7 +18,7 @@ class BonusLanes(game.Mode):
 
     def mode_started(self):
         # reset the bonus multiplier
-        self.game.set_tracking('bonusX',0)
+        self.game.set_tracking('bonusX',1)
 
     def update_lamps(self):
         # reset first
@@ -86,7 +86,7 @@ class BonusLanes(game.Mode):
 
     def increase(self):
         # cancel the "Clear" delay if there is one
-        self.cancel_delayed("ClearBonus")
+        self.abort_display()
 
         # play the cactus mashing animation
         anim = dmd.Animation().load(ep.DMD_PATH+'bonus-cactus-mash.dmd')

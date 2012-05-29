@@ -182,8 +182,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cow1, self.sfx_path + "321-sfx-cow-1.wav")
         self.sfx_cow2 = 'sfx_cow2'
         self.game.sound.register_sound(self.sfx_cow2, self.sfx_path + "323-sfx-cow-2.wav")
-        self.sfx_lockTwoMinecrart = 'sfx_lockTwoMinecart'
-        self.game.sound.register_sound(self.sfx_lockTwoMinecrart, self.sfx_path + "243-sfx-lock-2-minecart.wav")
+        self.sfx_lockTwoMinecart = 'sfx_lockTwoMinecart'
+        self.game.sound.register_sound(self.sfx_lockTwoMinecart, self.sfx_path + "243-sfx-lock-2-minecart.wav")
         self.sfx_lockTwoFlourish = 'sfx_lockTwoFlourish'
         self.game.sound.register_sound(self.sfx_lockTwoFlourish, self.sfx_path + "048-sfx-lock-two-orchestra-hit.wav")
         self.sfx_lockTwoExplosion = 'sfx_lockTwoExplosion'

@@ -28,7 +28,6 @@ class Train(game.Mode):
         # this is the moving train
         # each time it hits increment the train progress
         self.trainProgress += 1
-        print "TRAIN PROGRESS" + str(self.trainProgress)
 
     def sw_rightReturnLane_active(self,sw):
         self.stop()

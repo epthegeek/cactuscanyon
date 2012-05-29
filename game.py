@@ -330,7 +330,7 @@ class CCGame(game.BasicGame):
         self.save_game_data()
 
     def save_game_data(self):
-        super(CCGame, self).save_game_data(self.game_data_path)
+        super(CCGame, self).save_game_data(self.user_game_data_path)
 
 
     def setup_ball_search(self):
@@ -419,11 +419,6 @@ class CCGame(game.BasicGame):
     def play_remote_sound(self,param):
         print param
         self.sound.play(param)
-
-    def play_remote_music(self,param):
-        print "ITS TIME TO START THE MUSIC"
-        print param
-        self.sound.play_music(param, loops=-1)
 
     ## bonus stuff
 
