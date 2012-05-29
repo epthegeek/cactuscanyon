@@ -28,7 +28,7 @@ class Combos(game.Mode):
         self.disable_lamps()
         lampStatus = self.game.show_tracking('lampStatus')
         # if status is multiball ...
-        if lampStatus == "MULTIBALL":
+        if lampStatus == "GOLDMINE":
             # loop through and turn on the appropriate lights
             for i in range(0,5,1):
                 if self.game.show_tracking('jackpotStatus',i):
@@ -94,8 +94,11 @@ class Combos(game.Mode):
         # points? # TODO investigate points awarded for combos
         # if we've got enough combos to light the badge, do that
         if comboTotal == self.game.user_settings['Gameplay (Feature)']['Combos for Star']:
-            ## TODO actually award the badge
-            pass
+            ## actually award the badge
+            self.game.set_tracking('starStatus',True,1)
+            # Then run the check to see if it's high noon time
+            self.game.base_game_mode.check_high_noon()
+            self.game.base_game_mode.update_lamps()
             # loop back to the timer
         self.delay(name="Combo Timer",delay=1,handler=self.timer)
         # send this back to what called it for use in determining if in a combo or not

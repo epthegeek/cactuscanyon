@@ -41,6 +41,8 @@ class SavePolly(game.Mode):
         self.advance_save_polly()
 
     def start_save_polly(self):
+        # set the level 1 stack flag
+        self.game.set_tracking('stackLevel',True,1)
         # clear any running music
         print "start_save_polly IS KILLING THE MUSIC"
         self.game.sound.stop_music()
@@ -207,8 +209,9 @@ class SavePolly(game.Mode):
         # stop the polly music
         print "polly_finished IS KILLING THE MUSIC"
         self.game.sound.stop_music()
-        # turn the main game music back on
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        # turn the main game music back on if showdown isn't running
+        if self.game.show_tracking('showdownStatus') != "RUNNING":
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         self.game.train.reset_toy()
         # turn off the polly display
         self.layer = None
@@ -218,13 +221,16 @@ class SavePolly(game.Mode):
         self.game.set_tracking('rightRampStage',5)
         self.game.set_tracking('centerRampStage',5)
         self.game.update_lamps()
-        # todo CHECK STAR STATUS FOR HIGH NOON
         self.end_save_polly()
 
     # clean up and exit
     def end_save_polly(self):
         # unload the mode
         self.game.modes.remove(self.game.save_polly)
+        # turn the level 1 stack flag back off
+        self.game.set_tracking('stackLevel',False,1)
+        # check to see if stampede is ready
+        self.game.base_game_mode.check_stampede()
 
     def clear_layer(self):
         self.layer = None

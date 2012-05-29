@@ -21,7 +21,7 @@ class BadGuys(game.Mode):
                       self.game.coils.badGuyC1,
                       self.game.coils.badGuyC2,
                       self.game.coils.badGuyC3]
-        self.lights = [self.game.lamps.badGuyL0,
+        self.lamps = [self.game.lamps.badGuyL0,
                        self.game.lamps.badGuyL1,
                        self.game.lamps.badGuyL2,
                        self.game.lamps.badGuyL3]
@@ -33,11 +33,11 @@ class BadGuys(game.Mode):
 
     def ball_drained(self):
     # if we're dropping down to one ball, and showdown is running - do stuff
-        if self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('isShowdownRunning'):
+        if self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('showdownStatus') == "RUNNING":
             self.end_showdown()
         if self.game.trough.num_balls_in_play == 0:
             status = self.game.show_tracking('quickdrawStatus',self.side)
-            if status == "RUNNING" or self.game.show_tracking('isShowdownRunning') or self.game.show_tracking('gunfightStatus') == "RUNNING":
+            if status == "RUNNING" or self.game.show_tracking('showdownStatus') == "RUNNING" or self.game.show_tracking('gunfightStatus') == "RUNNING":
                 self.dispatch_delayed()
                 for coil in self.coils:
                     coil.disable()
@@ -45,10 +45,30 @@ class BadGuys(game.Mode):
                     coil.disable()
                 if self.game.show_tracking('quickdrawStatus',self.side) == "RUNNING":
                     self.quickdraw_lost(self.side)
-                if self.game.show_tracking('isShowdownRunning'):
+                if self.game.show_tracking('showdownStatus') == "RUNNING":
                     self.end_showdown()
                 if self.game.show_tracking('gunfightStatus') == "RUNNING":
                     self.gunfight_lost()
+
+    def update_lamps(self):
+        # reset first
+        self.disable_lamps()
+        status = self.game.show_tracking('lampStatus')
+        if status != "ON":
+            return
+        # bad guy lights hopefully this sets any lamp that returns true to be on
+        for lamp in range(0,4,1):
+            status = self.game.show_tracking('badGuysDead',lamp)
+            active = self.game.show_tracking('badGuyUp',lamp)
+            if status:
+                self.lamps[lamp].enable()
+            if active:
+                self.lamps[lamp].schedule(0x00FF00FF)
+
+    def disable_lamps(self):
+        for lamp in self.lamps:
+            lamp.disable()
+
 
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
@@ -88,7 +108,7 @@ class BadGuys(game.Mode):
             # It's been won
             self.quickdraw_won(target)
         # Otherwise, if all badguys are dead, we're in a showdown
-        elif self.game.show_tracking('isShowdownRunning'):
+        elif self.game.show_tracking('showdownStatus') == "RUNNING":
             print "SHOWDOWN RUNNING OMG"
             self.showdown_hit(target)
             # showdown stuff would go here
@@ -96,6 +116,7 @@ class BadGuys(game.Mode):
         else:
             self.gunfight_won()
 
+    """
     ## Trapping the return lane activity during gunfight/quickdraw/showdown
     def sw_leftReturnLane_active(self, sw):
         # register a left return lane hit
@@ -111,17 +132,18 @@ class BadGuys(game.Mode):
         # score some points and play a sound
         self.game.score(2530)
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
+    """
 
     def target_up(self,target):
         self.coils[target].patter(on_time=4,off_time=12,original_on_time=35)
-        self.lights[target].enable()
+        self.lamps[target].schedule(0x00FF00FF)
         self.delay(delay=0.1,handler=self.target_activate,param=target)
 
     def target_down(self,target):
         # kill the delay that enables switch recognition - this is for gunfights mostly
         self.game.set_tracking('badGuyUp',False,target)
         self.coils[target].disable()
-        self.lights[target].disable()
+        self.lamps[target].disable()
 
     def target_activate(self,target):
         self.game.set_tracking('badGuyUp',True,target)
@@ -137,6 +159,8 @@ class BadGuys(game.Mode):
     ###
 
     def start_quickdraw(self,side):
+        # set the flag to stop other gun modes
+        self.game.set_tracking('stackLevel',True,0)
         self.side = side
         print "STARTING QUICKDRAW ON SIDE:" + str(side)
         # set the status of this side to running
@@ -268,16 +292,16 @@ class BadGuys(game.Mode):
         # turn off the layer
         self.layer = None
         # play a parting quote?
-        # If all the bad guys are now dead - SHOWDOWN - TODO may need to move this to win or whatever - investigate process
+        # If all the bad guys are now dead, make showdown ready
         if False not in self.game.show_tracking('badGuysDead'):
+            self.game.set_tracking('showdownStatus',"READY")
 
-            self.start_showdown()
-        else:
-            self.game.update_lamps()
-            # turn the main music back on
+        self.update_lamps()
+        # turn the main music back on - if a second level mode isn't running
+        if not self.game.show_tracking('stackLevel',1):
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
-            # unload this piece
-            self.game.modes.remove(self.game.bad_guys)
+        # turn the level 1 flag off
+        self.game.set_tracking('stackLevel',False,0)
 
     ###
     ###  ____  _                      _
@@ -291,9 +315,12 @@ class BadGuys(game.Mode):
     ## right now, showdown will just end when 8 guys are killed
 
     def start_showdown(self):
+        # showdown comes from the end of quickdraw, so guns are already down
         print "S H O W D O W N"
+        # set the layer tracking
+        self.game.set_tracking('stackLayer',True,0)
         # set the showdown tracking
-        self.game.set_tracking('isShowdownRunning', True)
+        self.game.set_tracking('showdownStatus', "RUNNING")
         # kill the GI
         self.game.base_game_mode.gi_toggle("OFF")
         # things, they go here
@@ -510,6 +537,11 @@ class BadGuys(game.Mode):
             # kill the music
         self.game.sound.stop_music()
         # tally some score?
+        # award the badge light
+        self.game.set_tracking('starStatus',True,3)
+        self.game.base_game_mode.check_high_noon()
+        self.game.base_game_mode.update_lamps()
+
         # play a quote about bodycount
         bodycount = self.game.show_tracking('showdownTotal')
         # if the total for this round of showdown was higher stored, store it
@@ -519,22 +551,23 @@ class BadGuys(game.Mode):
         self.deathTally = 0
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # reset the showdown status
-        self.game.set_tracking('isShowdownRunning',False)
+        self.game.set_tracking('showdownStatus',"OPEN")
         # turn off lights
         for i in range(0,4,1):
             print "END SHOWDOWN BAD GUYS " + str(i)
-            self.game.set_tracking('badGuysDead',i,False)
+            self.game.set_tracking('badGuysDead',False,i)
             print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
-        self.game.base_game_mode.update_lamps()
         # reset the badguy UP tracking just in case
         for i in range (0,4,1):
-            self.game.set_tracking('badGuyUp',i,False)
+            self.game.set_tracking('badGuyUp',False,i)
+        self.update_lamps()
         # tracking - turn it back to open
         self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
-        # start up the main themse again
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
-        # unload
-        self.game.modes.remove(self.game.bad_guys)
+        # start up the main themse again if a second level mode isn't running
+        if not self.game.show_tracking('stackLevel',1):
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        # turn off the level 1 flag
+        self.game.set_tracking('stackLevel',False,0)
 
     ###
     ###   ____              __ _       _     _
@@ -547,6 +580,9 @@ class BadGuys(game.Mode):
 
 
     def start_gunfight(self,side):
+        # set the level 1 stack flag
+        self.game.set_tracking('stackLevel',True,0)
+        # turn off the lights
         self.game.set_tracking('lampStatus',"OFF")
         self.game.update_lamps()
         if side == 0:
@@ -650,16 +686,15 @@ class BadGuys(game.Mode):
 
     def end_gunfight(self):
         self.layer = None
-        # turn off some lights?
-        self.game.set_tracking('lampStatus', "ON")
-        self.game.update_lamps()
+        self.update_lamps()
         # tidy up - set the gunfight status and bart brothers status to open
         self.game.set_tracking('gunfightStatus',"OPEN")
         self.game.set_tracking('bartStatus',"OPEN")
-        # turn the main game music back on
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
-        # unload the mode
-        self.game.modes.remove(self.game.bad_guys)
+        # turn the main game music back on if a second level mode isn't running
+        if not self.game.show_tracking('stackLevel',1):
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        # turn off the level one flag
+        self.game.set_tracking('stackLevel',False,0)
 
     def gunfight_pan(self,badGuys):
         # the intro animation
@@ -747,7 +782,7 @@ class BadGuys(game.Mode):
         self.game.set_tracking('lampStatus', "ON")
         self.game.update_lamps()
         # and turn on target guy
-        self.lights[self.enemy].enable()
+        #self.lamps[self.enemy].enable()  ## this shouldn't be needed with the lamps in this mode now
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost

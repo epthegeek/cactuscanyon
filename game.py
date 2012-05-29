@@ -111,18 +111,20 @@ class CCGame(game.BasicGame):
         self.right_ramp = cc_modes.RightRamp(game=self,priority=10)
         self.left_ramp = cc_modes.LeftRamp(game=self,priority=11)
         self.center_ramp = cc_modes.CenterRamp(game=self,priority=12)
-        self.left_loop = cc_modes.LeftLoop(game=self,priority=13)
-        self.right_loop = cc_modes.RightLoop(game=self,priority=14)
-        self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=15)
+        # save polly rides above the ramps, but below the loops
+        self.save_polly = cc_modes.SavePolly(game=self,priority=13)
+        self.left_loop = cc_modes.LeftLoop(game=self,priority=14)
+        self.right_loop = cc_modes.RightLoop(game=self,priority=15)
+        self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=16)
 
         # mine and saloon have to stay high so they can interrupt other displays
         self.mine = cc_modes.Mine(game=self,priority=24)
         self.saloon = cc_modes.Saloon(game=self,priority=25)
 
+
         # Quickdraw battle and showdown
         self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
-        # Save polly - priority falls under basic game modes
-        self.save_polly = cc_modes.SavePolly(game=self,priority=9)
+        self.stampede = cc_modes.Stampede(game=self,priority=68)
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
         # gold mine multiball
@@ -153,7 +155,8 @@ class CCGame(game.BasicGame):
                          self.skill_shot,
                          self.gm_multiball,
                          self.interrupter,
-                         self.bonus_lanes]
+                         self.bonus_lanes,
+                         self.stampede]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
@@ -215,6 +218,9 @@ class CCGame(game.BasicGame):
         self.enable_flippers(True)
         # reset the tilt status
         self.set_tracking('tiltStatus',0)
+        # reset the stack levels
+        for i in range(0,4,1):
+            self.set_tracking('stackLevel',False,i)
         # and load the skill shot
         self.modes.add(self.skill_shot)
         # and all the other modes

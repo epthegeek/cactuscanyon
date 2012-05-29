@@ -36,8 +36,9 @@ class Mine(game.Mode):
         self.disable_lamps()
         ## if status is off, we bail here
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus != "ON" and lampStatus != "MULTIBALL":
+        if lampStatus != "ON" and lampStatus != "GOLDMINE":
             return
+        stackLevel = self.game.show_tracking('stackLevel')
         eb = self.game.show_tracking('extraBallsPending')
         if eb > 0:
             self.game.lamps.extraBallLitBeacon.enable()
@@ -45,9 +46,9 @@ class Mine(game.Mode):
         status = self.game.show_tracking('mineStatus')
         if status == "LOCK":
             self.game.lamps.mineLock.enable()
-        elif status == "READY":
+        # if there is an active 0 or 1 mode, we don't allow multiball to start, so skip the light
+        elif status == "READY" and True not in stackLevel[:2]:
             self.game.lamps.mineLock.schedule(0x00FF00FF)
-        # the mine flasher
         # if there's an extra ball waiting, and the mine status multiball is not running, falsh the light
         if eb > 0 and status != "RUNNING":
             self.game.coils.mineFlasher.schedule(0x00100000)
@@ -99,7 +100,12 @@ class Mine(game.Mode):
         # multiball itself will be a separate mode with switchstop that loads above this
         # so we don't have to handle 'RUNNING' here
         if self.game.show_tracking('mineStatus') == "READY":
-            self.start_multiball()
+            ## If any level below is running, avoid multiball start
+            stackLevel = self.game.show_tracking('stackLevel')
+            if True in stackLevel[:2]:
+                self.game.mountain.kick()
+            else:
+                self.start_multiball()
         # not start multiball? ok, lock ball perhaps?
         elif self.game.show_tracking('mineStatus') == "LOCK":
             self.lock_ball()

@@ -33,15 +33,25 @@ class LeftLoop(game.Mode):
         self.disable_lamps()
         ## if status is off, we bail here
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "MULTIBALL":
+        if lampStatus == "GOLDMINE":
             if self.game.show_tracking('jackpotStatus',0):
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFFF39C)
                 self.game.lamps.leftLoopWildRide.schedule(0x0FFFF39C)
                 self.game.lamps.leftLoopRideEm.schedule(0x00FFF39C)
                 self.game.lamps.leftLoopJackpot.schedule(0x000FF39C)
+        if lampStatus == "STAMPEDE":
+            ## left loop is #0 in the stampede jackpot list
+            if self.game.stampede.active == 0:
+                self.game.lamps.leftLoopJackpot.schedule(0x000000FF)
+                self.game.lamps.leftLoopRideEm.schedule(0x0000FFFF)
+                self.game.lamps.leftLoopWildRide.schedule(0x00FFFFFF)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFFFFFF)
+            # if not active, just turn on the jackpot light only
+            else:
+                self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+        # we bail here if the others don't match and it's not "ON"
         if lampStatus != "ON":
             return
-
 
         stage = self.game.show_tracking('leftLoopStage')
 
@@ -163,10 +173,13 @@ class LeftLoop(game.Mode):
 
         # then tick the stage up for next time unless it's completed
         if stage < 4:
-            self.game.increase_tracking('leftLoopStage')
+            newstage = self.game.increase_tracking('leftLoopStage')
             # update the lamps
             self.update_lamps()
             self.game.center_ramp.update_lamps()
+            # if we're complete, check the stampede tally
+            if newstage == 4:
+                self.game.base_game_mode.check_stampede()
 
 
         # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display

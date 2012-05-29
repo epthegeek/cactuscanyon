@@ -23,13 +23,23 @@ class RightRamp(game.Mode):
         self.disable_lamps()
         ## if status is multiball check the jackpot and take actions
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "MULTIBALL":
+        if lampStatus == "GOLDMINE":
             if self.game.show_tracking('jackpotStatus',4):
                 self.game.lamps.rightRampSoundAlarm.schedule(0xFFFFF39C)
                 self.game.lamps.rightRampShootOut.schedule(0x0FFFF39C)
                 self.game.lamps.rightRampSavePolly.schedule(0x00FFF39C)
                 self.game.lamps.rightRampJackpot.schedule(0x000FF39C)
-            # if status is anything other than on, we bail here
+        if lampStatus == "STAMPEDE":
+            ## right ramp is #4 in the stampede jackpot list
+            if self.game.stampede.active == 4:
+                self.game.lamps.rightRampJackpot.schedule(0x000000FF)
+                self.game.lamps.rightRampSavePolly.schedule(0x0000FFFF)
+                self.game.lamps.rightRampShootOut.schedule(0x00FFFFFF)
+                self.game.lamps.rightRampSoundAlarm.schedule(0xFFFFFFFF)
+            # if not active, just turn on the jackpot light only
+            else:
+                self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+                # we bail here if the others don't match and it's not "ON"
         if lampStatus != "ON":
             return
 

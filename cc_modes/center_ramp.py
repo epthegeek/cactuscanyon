@@ -23,13 +23,23 @@ class CenterRamp(game.Mode):
         self.disable_lamps()
         ## if status is multiball check the jackpot and take actions
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "MULTIBALL":
+        if lampStatus == "GOLDMINE":
             if self.game.show_tracking('jackpotStatus',2):
                 self.game.lamps.centerRampCatchTrain.schedule(0xFFFFF39C)
                 self.game.lamps.centerRampStopTrain.schedule(0x0FFFF39C)
                 self.game.lamps.centerRampSavePolly.schedule(0x00FFF39C)
                 self.game.lamps.centerRampJackpot.schedule(0x000FF39C)
-        # if status is anything other than on, we bail here
+        if lampStatus == "STAMPEDE":
+            ## center ramp is #2 in the stampede jackpot list
+            if self.game.stampede.active == 2:
+                self.game.lamps.centerRampJackpot.schedule(0x000000FF)
+                self.game.lamps.centerRampSavePolly.schedule(0x0000FFFF)
+                self.game.lamps.centerRampStopTrain.schedule(0x00FFFFFF)
+                self.game.lamps.centerRampCatchTrain.schedule(0xFFFFFFFF)
+            # if not active, just turn on the jackpot light only
+            else:
+                self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
+            # we bail here if the others don't match and it's not "ON"
         if lampStatus != "ON":
             return
 

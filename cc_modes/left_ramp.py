@@ -26,12 +26,23 @@ class LeftRamp(game.Mode):
         self.disable_lamps()
         ## if status is off, we bail here
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "MULTIBALL":
+        if lampStatus == "GOLDMINE":
             if self.game.show_tracking('jackpotStatus',1):
                 self.game.lamps.leftRampWhiteWater.schedule(0xFFFFF39C)
                 self.game.lamps.leftRampWaterfall.schedule(0x0FFFF39C)
                 self.game.lamps.leftRampSavePolly.schedule(0x00FFF39C)
                 self.game.lamps.leftRampJackpot.schedule(0x000FF39C)
+        if lampStatus == "STAMPEDE":
+            ## left ramp is #1 in the stampede jackpot list
+            if self.game.stampede.active == 1:
+                self.game.lamps.leftLoopJackpot.schedule(0x000000FF)
+                self.game.lamps.leftRampSavePolly.schedule(0x0000FFFF)
+                self.game.lamps.leftRampWaterfall.schedule(0x00FFFFFF)
+                self.game.lamps.leftRampWhiteWater.schedule(0xFFFFFFFF)
+            # if not active, just turn on the jackpot light only
+            else:
+                self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
+        # we bail here if the others don't match and it's not "ON"
         if lampStatus != "ON":
             return
 

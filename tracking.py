@@ -72,8 +72,10 @@ class Tracking(game.Player):
         self.player_stats['badGuysDead'] = [True,False,True,True]
         # these are separate because the bad guy can be dead (quickdraw) but also up (showdown/gunfight)
         self.player_stats['badGuyUp'] = [False,False,False,False]
-        self.player_stats['isShowdownRunning'] = False
+        # showdown status - OPEN, READY, RUNNING
+        self.player_stats['showdownStatus'] = "OPEN"
         self.player_stats['showdownTotal'] = 0
+        self.player_stats['showdownPoints'] = 0
 
         # bartStatus: OPEN, RUNNING, LAST, DEAD
         self.player_stats['bartStatus'] = "OPEN"
@@ -88,11 +90,19 @@ class Tracking(game.Player):
         # highNoonStatus = OPEN, READY, RUNNING
         self.player_stats['highNoonStatus'] = "OPEN"
         # list to store the lit items for the star ?
-        self.player_stats['highNoonProgress'] = []
+        # Starts at the top of the star with 0, goes clockwise. 0 = motherlode, 1=combo, 2=barts, 3=showdown, 4=stampede
+        self.player_stats['starStatus'] = [False,False,False,False,False]
 
         self.player_stats['tiltStatus'] = 0
         # used to disable the GI in an update lamps pass
-        # lamp status modes: ON, OFF, GIONLY .. ?
+        # lamp status modes: ON, OFF, GIONLY, GOLDMINE, STAMPEDE, ... ?
         self.player_stats['lampStatus'] = "ON"
         self.player_stats['activeMultiBall'] = False
+
+        # a new idea - stack level for tracking what can or can not start
+        # Level 0 is Gunfight, Quick Draw and showdown - only one of these can run at a time, and can finish even if a level 2 starts
+        # Level 1 is Stampede, and Save Polly - only one of these can run at a time, and they are allowed to run with level 0
+        # Level 2 is goldmine multiball - should not start if a level 1 mode is active
+        # Level 3 is high noon
+        self.player_stats['stackLevel'] = [False,False,False,False]
 

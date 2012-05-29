@@ -12,11 +12,16 @@ class GoldMine(game.Mode):
     def __init__(self,game,priority):
         super(GoldMine, self).__init__(game,priority)
 
+    def ball_drained(self):
+    # if we're dropping down to one ball, and goldmine multiball is running - do stuff
+        if self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('stackLevel',2):
+            self.end_multiball()
 
     def start_multiball(self):
+        # set the stack level flag
+        self.game.set_tracking('stackLevel',True,2)
         # for now we'll just print a thing
         print "MULTIBALL STARTING"
-        # and then end
         # kill the music
         print "start multiball IS KILLING THE MUSIC"
         self.game.sound.stop_music()
@@ -50,11 +55,16 @@ class GoldMine(game.Mode):
         myLayer = dmd.ScriptedLayer(128,32,script)
         self.layer = myLayer
 
-        ## TEMPORARY - kick the ball out
+        ## TEMPORARY - kick the ball out -- when finished, use get_going
         self.game.mine_toy.eject()
         # show it for a bit
         self.delay(delay=1.5,handler=self.end_multiball)
 
+    #def get_going()
+        # kick teh ball out of the mine
+        # launch 2 more balls
+        # turn the light flag to GOLDMINE
+        # reset the jackpots just in case
 
     def end_multiball(self):
         # clear the layer
@@ -66,4 +76,6 @@ class GoldMine(game.Mode):
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # unload the mode
         self.game.modes.remove(self.game.gm_multiball)
+        # set the stack flag back off
+        self.game.set_tracking('stackLevel',False,2)
 

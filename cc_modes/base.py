@@ -24,14 +24,14 @@ class BaseGameMode(game.Mode):
                           self.game.lamps.rankDeputy,
                           self.game.lamps.rankSheriff,
                           self.game.lamps.rankMarshall]
-        # bad guys
-        self.badGuyLamps = [self.game.lamps.badGuyL0,
-                            self.game.lamps.badGuyL1,
-                            self.game.lamps.badGuyL2,
-                            self.game.lamps.badGuyL3]
         self.giLamps = [self.game.lamps.gi01,
                         self.game.lamps.gi02,
                         self.game.lamps.gi03]
+        self.starLamps = [self.game.lamps.starMotherLode,
+                          self.game.lamps.starCombo,
+                          self.game.lamps.starBartBrothers,
+                          self.game.lamps.starShowdown,
+                          self.game.lamps.starStampede]
         self.current_music = self.game.assets.music_mainTheme
 
 
@@ -60,6 +60,7 @@ class BaseGameMode(game.Mode):
         self.game.modes.add(self.game.right_loop)
         self.game.modes.add(self.game.mine)
         self.game.modes.add(self.game.saloon)
+        self.game.modes.add(self.game.bad_guys)
 
     def remove_modes(self):
         self.game.modes.remove(self.game.bonus_lanes)
@@ -71,8 +72,7 @@ class BaseGameMode(game.Mode):
         self.game.modes.remove(self.game.right_loop)
         self.game.modes.remove(self.game.mine)
         self.game.modes.remove(self.game.saloon)
-
-
+        self.game.modes.remove(self.game.bad_guys)
 
     def ball_drained(self):
         # if that was the last ball in play need to finish up
@@ -80,9 +80,8 @@ class BaseGameMode(game.Mode):
             # turn off all the lights
             for lamp in self.game.lamps:
                 lamp.disable()
-                # stop the music
+            # stop the music
             print "game.ball_drained IS KILLING THE MUSIC"
-
             self.game.sound.stop_music()
             # turn off ball save
             self.game.ball_search.disable()
@@ -133,25 +132,30 @@ class BaseGameMode(game.Mode):
             self.game.lamps.rightReturnQuickdraw.enable()
         else:
             pass
+        ## on a second pass thorugh the returns - if showdown is ready, flash 'em
+        if self.game.show_tracking('showdownStatus') == "READY":
+            self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
+            self.game.lamps.leftReturnQuickdraw.schedule(0x0F0F0F0F)
+
         # the rank lights
         rank = self.game.show_tracking('rank')
         # loop through 0 through current rank and turn the lamps on
         for lamp in range(0,(rank +1),1):
             self.rankLamps[lamp].enable()
-        # bad guy lights hopefully this sets any lamp that returns true to be on
-        for lamp in range(0,4,1):
-            status = self.game.show_tracking('badGuysDead',lamp)
-            active = self.game.show_tracking('badGuyUp',lamp)
-            if status or active:
-                self.badGuyLamps[lamp].enable()
+        # star lamps for high noon
+        for lamp in range(0,5,1):
+            if self.game.show_tracking('starStatus',lamp):
+                lamp.enable()
+        # center of high noon
+        if False not in self.game.show_tracking('starStatus'):
+            self.game.lamps.starHighNoon.schedule(0x00FF0FF)
 
     def disable_lamps(self):
-        # combos are not disabled here currently
         for lamp in self.rankLamps:
             lamp.disable()
-        for lamp in self.badGuyLamps:
-            lamp.disable()
         for lamp in self.giLamps:
+            lamp.disable()
+        for lamp in self.starLamps:
             lamp.disable()
         self.game.lamps.leftQuickdraw.disable()
         self.game.lamps.bottomRightQuickdraw.disable()
@@ -296,24 +300,31 @@ class BaseGameMode(game.Mode):
         # score the points
         self.game.score(2530)
         # if there's a running quickdraw or showdown - pass
-        status = self.game.show_tracking('quickdrawStatus',side)
-        print "RETURN LANE STATUS: " + str(status)
-        if status == "RUNNING" or self.game.show_tracking('isShowdownRunning'):
-            print "PASSING - QD status: " + str(status)
-        # if there's no showdown or quckdra running, gunfight is possible
+        if not self.guns_allowed():
+            print "PASSING - Guns disabled"
+            print self.game.show_tracking('stackLevel')
+        # if guns are allowed, and showdown is ready do that
+        elif self.game.show_tracking('showdownStatus') == "READY":
+            self.game.bad_guys.start_showdown()
+        # if there's no showdown ready, gunfight is possible
         elif self.game.show_tracking('gunfightStatus') == "READY":
             ## TODO - haven't written gunfight yet
-            self.game.modes.add(self.game.bad_guys)
             self.game.bad_guys.start_gunfight(side)
             pass
         # else if quickdraw is lit - run that passing which side started it
-        elif status == "READY":
-            # load up the mode
-            self.game.modes.add(self.game.bad_guys)
+        elif self.game.show_tracking('quickdrawStatus',side) == "READY":
             # fire the startup
             self.game.bad_guys.start_quickdraw(side)
         else:
             pass
+
+    def guns_allowed(self):
+        # this is for turning the guns back on if the conditions are good
+        if True in self.game.show_tracking('stackLevel'):
+        # if any stack level is active, new gunfight action is not allowed
+            return False
+        else:
+            return True
 
 
     ###
@@ -438,6 +449,29 @@ class BaseGameMode(game.Mode):
             print "TURNING OFF BALL SAVED FLAG"
             self.game.autoPlunge = False
 
+    ### stampede
+    def check_stampede(self):
+        # if both loops are done and the save polly is finished, then it's time to stampede
+        if self.game.show_tracking('leftLoopStage') == 4 and \
+            self.game.show_tracking('rightLoopStage') == 4 and \
+            self.game.show_tracking('centerRampStage') == 5:
+
+            self.game.modes.add(self.game.stampede)
+            self.game.stampede.start_stampede()
+        else:
+            pass
+
+    ### High noon
+
+    def check_high_noon(self):
+        # if all the lights are on, it's high noon time
+        if False not in self.game.show_tracking('starStatus'):
+            self.light_high_noon()
+
+    def light_high_noon(self):
+        # display?
+        # quotes?
+        self.game.set_tracking('highNoonStatus', "READY")
 
     ###
     ###   ___        _      _       _

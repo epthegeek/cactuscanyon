@@ -484,7 +484,11 @@ class Saloon(game.Mode):
             thetext = str(self.bartsForStar - currentTotal) + " MORE FOR BADGE"
         elif currentTotal == self.bartsForStar:
             thetext = "BADGE COLLECTED!"
-            # TODO actually collect the badge :P
+            # actually collect the badge
+            self.game.set_tracking('starStatus',True,2)
+            # then see if it's high noon time
+            self.game.base_game_mode.check_high_noon()
+            self.game.base_game_mode.update_lamps()
         else:
             thetext = str(currentTotal) + " DEFEATED!"
         textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)
