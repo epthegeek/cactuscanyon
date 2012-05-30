@@ -29,17 +29,7 @@ class RightRamp(game.Mode):
                 self.game.lamps.rightRampShootOut.schedule(0x0FFFF39C)
                 self.game.lamps.rightRampSavePolly.schedule(0x00FFF39C)
                 self.game.lamps.rightRampJackpot.schedule(0x000FF39C)
-        if lampStatus == "STAMPEDE":
-            ## right ramp is #4 in the stampede jackpot list
-            if self.game.stampede.active == 4:
-                self.game.lamps.rightRampJackpot.schedule(0x000000FF)
-                self.game.lamps.rightRampSavePolly.schedule(0x0000FFFF)
-                self.game.lamps.rightRampShootOut.schedule(0x00FFFFFF)
-                self.game.lamps.rightRampSoundAlarm.schedule(0xFFFFFFFF)
-            # if not active, just turn on the jackpot light only
-            else:
-                self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
-                # we bail here if the others don't match and it's not "ON"
+        # we bail here if the others don't match and it's not "ON"
         if lampStatus != "ON":
             return
 
@@ -76,6 +66,17 @@ class RightRamp(game.Mode):
             self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
+        elif stage == 89:
+        ## right ramp is #4 in the stampede jackpot list
+            if self.game.stampede.active == 4:
+                self.game.lamps.rightRampJackpot.schedule(0x000000FF)
+                self.game.lamps.rightRampSavePolly.schedule(0x0000FFFF)
+                self.game.lamps.rightRampShootOut.schedule(0x00FFFFFF)
+                self.game.lamps.rightRampSoundAlarm.schedule(0xFFFFFFFF)
+            # if not active, just turn on the jackpot light only
+            else:
+                self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+
         else:
             pass
 
@@ -97,7 +98,6 @@ class RightRamp(game.Mode):
         # the actual game doesn't care if enter was just hit
         # so I don't either
         # tick one on to the total of player shots on the right ramp
-        status = self.game.show_tracking('rightRampStage')
         self.game.increase_tracking('rightRampShots')
         # score the points and mess with the combo
         if self.game.comboTimer > 0:
@@ -106,12 +106,7 @@ class RightRamp(game.Mode):
         else:
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
-        # if we're not in save polly
-        if status != 99:
-            self.award_ramp_score(combo)
-        # if we are, just award points
-        else:
-            self.game.score(2530)
+        self.award_ramp_score(combo)
         ## -- set the last switch hit --
         ep.last_switch = "rightRampMake"
 

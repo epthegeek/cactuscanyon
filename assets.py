@@ -198,6 +198,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_lightning2, self.sfx_path + "251-sfx-lightning-2.wav")
         self.sfx_lightningRumble = 'sfx_lightningRumble'
         self.game.sound.register_sound(self.sfx_lightningRumble, self.sfx_path + "295-sfx-lightning-with-rumble.wav")
+        self.sfx_flyByNoise = 'sfx_flyByNoise'
+        self.game.sound.register_sound(self.sfx_flyByNoise, self.sfx_path + "285-sfx-fly-by-noise.wav")
 
         self.sfx_ricochetSet = 'sfx_ricochetSet'
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
@@ -324,6 +326,15 @@ class Assets():
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1317-undertaker-hope-to-see-you-soon.wav")
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1421-drunk-its-all-over-citizens.wav")
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "876-polly-come-back-soon.wav")
+        self.quote_stampedeStart = 'quote_stampedeStart'
+        self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "1260-prospector-its-a-stampede.wav")
+        self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "531-prospector-stampede-multiball.wav")
+        self.quote_jackpot = 'quote_jackpot'
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "530-prospector-jackpot")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "529-prospector-jakcpot-hey-hey.wav")
+        self.quote_stampedeWiff = 'quote_stampedeWiff'
+        self.game.sound.register_sound(self.quote_stampedeWiff, self.quotes_path + "1243-prospector-woo-hoo.wav")
+        self.game.sound.register_sound(self.quote_stampedeWiff, self.quotes_path + "1200-prospector-woo-cough.wav")
 
 
         self.quote_hitBigBart = 'quote_hitBigBart'
@@ -445,6 +456,8 @@ class Assets():
         self.game.sound.register_music(self.music_goldmineMultiball, self.music_path + "008-goldmine-multiball.wav")
         self.music_showdown = 'music_showdown'
         self.game.sound.register_music(self.music_showdown, self.music_path + "022-showdown.wav")
+        self.music_stampede = 'music_stampede'
+        self.game.sound.register_music(self.music_stampede, self.music_path + "003-stampede.wav")
 
         # lampshows
         lampshows = list()

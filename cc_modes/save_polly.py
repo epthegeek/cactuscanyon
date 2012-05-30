@@ -27,18 +27,21 @@ class SavePolly(game.Mode):
         self.cancel_delayed("Pause Timer")
         # center ramp pauses the train
         self.pause_train()
+        return game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
         self.advance_save_polly()
+        return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
         self.advance_save_polly()
+        return game.SwitchStop
 
     def start_save_polly(self):
         # set the level 1 stack flag

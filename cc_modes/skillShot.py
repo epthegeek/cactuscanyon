@@ -279,6 +279,8 @@ class SkillShot(game.Mode):
         # the skillshot and I'm not going to argue
         # start the main game music
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        # check if the award finished stampede
+        self.game.base_game_mode.check_stampede()
         # unload in 2 seconds - to give
         # the award junk time to finish
         self.delay(delay=2,handler=self.shutdown)

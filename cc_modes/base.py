@@ -446,8 +446,13 @@ class BaseGameMode(game.Mode):
 
     def sw_skillBowl_active(self,sw):
         if self.game.autoPlunge:
-            print "TURNING OFF BALL SAVED FLAG"
-            self.game.autoPlunge = False
+            self.cancel_delayed("Stop Autoplunge")
+            # delay cancelling auto punge for 3 seconds in case more balls are coming
+            self.delay(name="Stop Autoplunge",delay=3,handler=self.disable_auto_plunge)
+
+    def disable_auto_plunge(self):
+        print "TURNING OFF AUTOPLUNGE"
+        self.game.autoPlunge = False
 
     ### stampede
     def check_stampede(self):

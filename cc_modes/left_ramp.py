@@ -32,16 +32,6 @@ class LeftRamp(game.Mode):
                 self.game.lamps.leftRampWaterfall.schedule(0x0FFFF39C)
                 self.game.lamps.leftRampSavePolly.schedule(0x00FFF39C)
                 self.game.lamps.leftRampJackpot.schedule(0x000FF39C)
-        if lampStatus == "STAMPEDE":
-            ## left ramp is #1 in the stampede jackpot list
-            if self.game.stampede.active == 1:
-                self.game.lamps.leftLoopJackpot.schedule(0x000000FF)
-                self.game.lamps.leftRampSavePolly.schedule(0x0000FFFF)
-                self.game.lamps.leftRampWaterfall.schedule(0x00FFFFFF)
-                self.game.lamps.leftRampWhiteWater.schedule(0xFFFFFFFF)
-            # if not active, just turn on the jackpot light only
-            else:
-                self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
         # we bail here if the others don't match and it's not "ON"
         if lampStatus != "ON":
             return
@@ -80,6 +70,18 @@ class LeftRamp(game.Mode):
             self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+        # stampede
+        elif stage == 89:
+        ## left ramp is #1 in the stampede jackpot list
+            if self.game.stampede.active == 1:
+                self.game.lamps.leftLoopJackpot.schedule(0x000000FF)
+                self.game.lamps.leftRampSavePolly.schedule(0x0000FFFF)
+                self.game.lamps.leftRampWaterfall.schedule(0x00FFFFFF)
+                self.game.lamps.leftRampWhiteWater.schedule(0xFFFFFFFF)
+            # if not active, just turn on the jackpot light only
+            else:
+                self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
+
         else:
             pass
 
@@ -92,7 +94,6 @@ class LeftRamp(game.Mode):
     def sw_leftRampEnter_active(self,sw):
         # hitting this switch counts as a made ramp - really
         # tick one onto the total of ramp shots
-        status = self.game.show_tracking('leftRampStage')
         self.game.increase_tracking('leftRampShots')
         # score the points and mess with the combo
         if self.game.comboTimer > 0:
@@ -104,11 +105,7 @@ class LeftRamp(game.Mode):
         # play the river ramp sound
         self.game.sound.play(self.game.assets.sfx_leftRampEnter)
 
-        # if we're not in save polly proceed normally
-        if status != 99:
-            self.award_ramp_score(combo)
-        else:
-            self.game.score(2530)
+        self.award_ramp_score(combo)
         ## -- set the last switch hit --
         ep.last_switch = "leftRampEnter"
 

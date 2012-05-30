@@ -30,17 +30,7 @@ class RightLoop(game.Mode):
                 self.game.lamps.rightLoopGunslinger.schedule(0x0FFFF39C)
                 self.game.lamps.rightLoopMarksman.schedule(0x00FFF39C)
                 self.game.lamps.rightLoopJackpot.schedule(0x000FF39C)
-        if lampStatus == "STAMPEDE":
-            ## right loop is #3 in the stampede jackpot list
-            if self.game.stampede.active == 3:
-                self.game.lamps.rightLoopJackpot.schedule(0x000000FF)
-                self.game.lamps.rightLoopMarksman.schedule(0x0000FFFF)
-                self.game.lamps.rightLoopGunslinger.schedule(0x00FFFFFF)
-                self.game.lamps.rightLoopGoodShot.schedule(0xFFFFFFFF)
-            # if not active, just turn on the jackpot light only
-            else:
-                self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
-                # we bail here if the others don't match and it's not "ON"
+        # we bail here if the others don't match and it's not "ON"
         if lampStatus != "ON":
             return
 
@@ -66,6 +56,18 @@ class RightLoop(game.Mode):
             self.game.lamps.rightLoopGoodShot.enable()
             self.game.lamps.rightLoopGunslinger.enable()
             self.game.lamps.rightLoopMarksman.enable()
+        # stampede
+        elif stage == 89:
+        ## right loop is #3 in the stampede jackpot list
+            if self.game.stampede.active == 3:
+                self.game.lamps.rightLoopJackpot.schedule(0x000000FF)
+                self.game.lamps.rightLoopMarksman.schedule(0x0000FFFF)
+                self.game.lamps.rightLoopGunslinger.schedule(0x00FFFFFF)
+                self.game.lamps.rightLoopGoodShot.schedule(0xFFFFFFFF)
+            # if not active, just turn on the jackpot light only
+            else:
+                self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
+
         else:
             pass
 
@@ -108,8 +110,7 @@ class RightLoop(game.Mode):
 
             # award the loop reward
             self.award_loop_score(combo)
-        # otherwise it's a roll through so just add some points
-        # maybe add tracking for full loops
+        # if it's a roll through so just add some points
         elif  ep.last_switch == "leftLoopTop":
             self.game.score(2530)
             self.game.increase_tracking('fullLoops')
