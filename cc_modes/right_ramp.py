@@ -23,17 +23,21 @@ class RightRamp(game.Mode):
         self.disable_lamps()
         ## if status is multiball check the jackpot and take actions
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "GOLDMINE":
+        # we bail here if the others don't match and it's not "ON"
+        if lampStatus != "ON":
+            return
+
+        # goldmine multiball check
+        if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',4):
                 self.game.lamps.rightRampSoundAlarm.schedule(0xFFFFF39C)
                 self.game.lamps.rightRampShootOut.schedule(0x0FFFF39C)
                 self.game.lamps.rightRampSavePolly.schedule(0x00FFF39C)
                 self.game.lamps.rightRampJackpot.schedule(0x000FF39C)
-        # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('rightRampStage')
+
         if stage == 1:
             # blink the first light
             self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)

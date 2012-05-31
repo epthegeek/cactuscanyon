@@ -41,7 +41,7 @@ class Tracking(game.Player):
         self.player_stats['saloonShots'] = 0
 
         self.player_stats['mineShotsTotal'] = 0
-        # mine status - OPEN, LOCK, READY, RUNNING
+        # mine status - OPEN, LOCK, READY, (RUNNING == Gold mine multiball)
         self.player_stats['mineStatus'] = "OPEN"
         # used for progression to lock
         self.player_stats['mineHits'] = 0
@@ -50,8 +50,10 @@ class Tracking(game.Player):
         ## running tally of locked balls
         self.player_stats['ballsLockedTotal'] = 0
         self.player_stats['jackpotsCollected'] = 0
-        self.player_stats['motherLodePending'] = 0
-        self.player_stats['motherLodesCollected'] = 0
+        self.player_stats['motherlodeMultiplier'] = 1
+        self.player_stats['motherlodesCollected'] = 0
+        self.player_stats['motherlodeLit'] = False
+
         # lit status for jackpots: Left Loop, Left Ramp, Center Ramp, Right Loop, Right Ramp
         self.player_stats['jackpotStatus'] = [True,True,True,True,True]
 
@@ -95,9 +97,8 @@ class Tracking(game.Player):
 
         self.player_stats['tiltStatus'] = 0
         # used to disable the GI in an update lamps pass
-        # lamp status modes: ON, OFF, GIONLY, GOLDMINE, STAMPEDE, ... ?
+        # lamp status modes: ON, OFF, GIONLY, ... ?
         self.player_stats['lampStatus'] = "ON"
-        self.player_stats['activeMultiBall'] = False
 
         # a new idea - stack level for tracking what can or can not start
         # Level 0 is Gunfight, Quick Draw and showdown - only one of these can run at a time, and can finish even if a level 2 starts

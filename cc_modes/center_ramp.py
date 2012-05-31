@@ -23,14 +23,17 @@ class CenterRamp(game.Mode):
         self.disable_lamps()
         ## if status is multiball check the jackpot and take actions
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "GOLDMINE":
+            # we bail here if the others don't match and it's not "ON"
+        if lampStatus != "ON":
+            return
+
+        # check goldmine active status
+        if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',2):
                 self.game.lamps.centerRampCatchTrain.schedule(0xFFFFF39C)
                 self.game.lamps.centerRampStopTrain.schedule(0x0FFFF39C)
                 self.game.lamps.centerRampSavePolly.schedule(0x00FFF39C)
                 self.game.lamps.centerRampJackpot.schedule(0x000FF39C)
-            # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('centerRampStage')

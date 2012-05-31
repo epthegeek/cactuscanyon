@@ -26,14 +26,17 @@ class LeftRamp(game.Mode):
         self.disable_lamps()
         ## if status is off, we bail here
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "GOLDMINE":
+        # we bail here if the others don't match and it's not "ON"
+        if lampStatus != "ON":
+            return
+
+        # check for goldmine multiball
+        if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',1):
                 self.game.lamps.leftRampWhiteWater.schedule(0xFFFFF39C)
                 self.game.lamps.leftRampWaterfall.schedule(0x0FFFF39C)
                 self.game.lamps.leftRampSavePolly.schedule(0x00FFF39C)
                 self.game.lamps.leftRampJackpot.schedule(0x000FF39C)
-        # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('leftRampStage')

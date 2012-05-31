@@ -24,14 +24,17 @@ class RightLoop(game.Mode):
         self.disable_lamps()
         ## if status is multiball check the jackpot and take actions
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "GOLDMINE":
+        # we bail here if the others don't match and it's not "ON"
+        if lampStatus != "ON":
+            return
+
+        # goldmine active check
+        if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',3):
                 self.game.lamps.rightLoopGoodShot.schedule(0xFFFFF39C)
                 self.game.lamps.rightLoopGunslinger.schedule(0x0FFFF39C)
                 self.game.lamps.rightLoopMarksman.schedule(0x00FFF39C)
                 self.game.lamps.rightLoopJackpot.schedule(0x000FF39C)
-        # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('rightLoopStage')

@@ -27,7 +27,7 @@ class BaseGameMode(game.Mode):
         self.giLamps = [self.game.lamps.gi01,
                         self.game.lamps.gi02,
                         self.game.lamps.gi03]
-        self.starLamps = [self.game.lamps.starMotherLode,
+        self.starLamps = [self.game.lamps.starMotherlode,
                           self.game.lamps.starCombo,
                           self.game.lamps.starBartBrothers,
                           self.game.lamps.starShowdown,

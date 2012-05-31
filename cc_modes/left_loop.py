@@ -33,14 +33,18 @@ class LeftLoop(game.Mode):
         self.disable_lamps()
         ## if status is off, we bail here
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus == "GOLDMINE":
+        # we bail here if the others don't match and it's not "ON"
+        if lampStatus != "ON":
+            return
+
+        ## goldmine check - if stack level 2 is true, it's on
+        if self.game.show_tracking('mineStatus') == "RUNNING":
+            # check if this jackpot shot is active
             if self.game.show_tracking('jackpotStatus',0):
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFFF39C)
                 self.game.lamps.leftLoopWildRide.schedule(0x0FFFF39C)
                 self.game.lamps.leftLoopRideEm.schedule(0x00FFF39C)
                 self.game.lamps.leftLoopJackpot.schedule(0x000FF39C)
-        # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
             return
 
         stage = self.game.show_tracking('leftLoopStage')

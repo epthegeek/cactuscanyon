@@ -13,6 +13,10 @@ class Mountain(game.Mode):
         self.mineReset = False
         self.inMotion = False
 
+    def ball_drained(self):
+        if self.game.trough.num_balls_in_play == 0:
+            self.stop()
+
     def mode_started(self):
         # home the train
         if not self.game.switches.trainHome.is_active():

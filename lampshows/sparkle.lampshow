@@ -60,7 +60,7 @@ lamp:topRightQuickdraw   | ..  ..  ..  ..  ..  ..
 lamp:bottomRightQuickdraw|   ..  ..  ..  ..  ..  ..
 lamp:leftQuickdraw       | ..  ..  ..  ..  ..  ..
 ##
-lamp:starMotherLode      | ..  ..  ..  ..  ..  ..
+lamp:starMotherlode      | ..  ..  ..  ..  ..  ..
 lamp:starCombo           |   ..  ..  ..  ..  ..  ..
 lamp:starBartBrothers    | ..  ..  ..  ..  ..  ..
 lamp:starShowdown        |   ..  ..  ..  ..  ..  ..

@@ -36,9 +36,11 @@ class Mine(game.Mode):
         self.disable_lamps()
         ## if status is off, we bail here
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus != "ON" and lampStatus != "GOLDMINE":
+        if lampStatus != "ON":
             return
+
         stackLevel = self.game.show_tracking('stackLevel')
+
         eb = self.game.show_tracking('extraBallsPending')
         if eb > 0:
             self.game.lamps.extraBallLitBeacon.enable()
@@ -53,7 +55,7 @@ class Mine(game.Mode):
         if eb > 0 and status != "RUNNING":
             self.game.coils.mineFlasher.schedule(0x00100000)
         # if multiball is running and motherload is available - flash the light in the mine and blink the lock arrow
-        if status == "RUNNING" and self.game.show_tracking('motherLodePending') > 0:
+        if status == "RUNNING" and self.game.show_tracking('motherlodeLit'):
             self.game.coils.mineFlasher.schedule(0x00010001)
             self.game.coils.mineLock.schedule(0x00FF00FF)
 
@@ -73,7 +75,12 @@ class Mine(game.Mode):
             self.busy = True
             self.collect_extra_ball()
         # then register the mine shot
-        self.wait_until_unbusy(self.mine_shot)
+        # if we're in a GM multiball, let that mode take it
+        if self.game.show_tracking('mineStatus') == "RUNNING":
+            self.wait_until_unbusy(self.game.gm_multiball.mine_shot)
+        # otherwise handle it locally
+        else:
+            self.wait_until_unbusy(self.mine_shot)
         ## -- set the last switch hit --
         ep.last_switch = "minePopper"
 
@@ -203,7 +210,6 @@ class Mine(game.Mode):
         self.game.set_tracking('mineStatus', "RUNNING")
         # reset the locked ball count
         self.game.set_tracking('ballsLocked', 0)
-        self.update_lamps()
         # start multiball!!
         self.game.modes.add(self.game.gm_multiball)
         self.game.gm_multiball.start_multiball()

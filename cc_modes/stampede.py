@@ -51,7 +51,7 @@ class Stampede(game.Mode):
 
     def start_stampede(self):
         # set the stack layer
-        self.game.set_tracking('stackLevel',True,2)
+        self.game.set_tracking('stackLevel',True,1)
         # stop the current music
         self.game.sound.stop_music()
         # set the ramp status for lights
@@ -187,7 +187,7 @@ class Stampede(game.Mode):
         # unload the mode
         self.game.modes.remove(self.game.stampede)
         # clear the stack layer
-        self.game.set_tracking('stackLevel',False,2)
+        self.game.set_tracking('stackLevel',False,1)
         # turn the main music back on
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
 
