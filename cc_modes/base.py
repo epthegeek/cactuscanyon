@@ -145,7 +145,7 @@ class BaseGameMode(game.Mode):
         # star lamps for high noon
         for lamp in range(0,5,1):
             if self.game.show_tracking('starStatus',lamp):
-                lamp.enable()
+                self.starLamps[lamp].enable()
         # center of high noon
         if False not in self.game.show_tracking('starStatus'):
             self.game.lamps.starHighNoon.schedule(0x00FF0FF)

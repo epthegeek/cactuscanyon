@@ -256,8 +256,10 @@ class GoldMine(game.Mode):
         self.game.update_lamps()
         # reset a counter
         self.counter = 0
+        myMultiplier = self.game.show_tracking('motherlodeMultiplier')
+        # play a quote based on the multiplier
         # then move on to the display
-        self.award_motherlode(self.game.show_tracking('motherlodeMultiplier'))
+        self.award_motherlode(myMultiplier)
 
     def award_motherlode(self,times):
         # tick the counter up
@@ -268,13 +270,13 @@ class GoldMine(game.Mode):
         awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
         awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         awardTextTop.set_text("MOTHERLODE " + str(self.counter) + "X")
-        awardTextBottom.set_text(ep.format_score(self.motherlodeValue * counter))
+        awardTextBottom.set_text(ep.format_score(self.motherlodeValue * self.counter))
         combined = dmd.GroupedLayer(128,32,[awardTextTop, awardTextBottom])
         self.layer = combined
         # loop through the multiplier again if times is not zero
         if times == 0:
             # award the points
-            self.game.score(self.motherlodeValue * counter)
+            self.game.score(self.motherlodeValue * self.counter)
             # and reset the motherlode value
             self.motherlodeValue = 0
             # then go back to the main display
