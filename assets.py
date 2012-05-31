@@ -330,8 +330,13 @@ class Assets():
         self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "1260-prospector-its-a-stampede.wav")
         self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "531-prospector-stampede-multiball.wav")
         self.quote_jackpot = 'quote_jackpot'
-        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "530-prospector-jackpot")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "530-prospector-jackpot.wav")
         self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "529-prospector-jakcpot-hey-hey.wav")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "2017-waitress-jackpot.wav")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "1430-drunk-jackpot-whoopie.wav")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "1433-drunk-jackpot-ill-drink-to-that.wav")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "1039-mayor-jackpot.wav")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "851-polly-jackpot.wav")
         self.quote_stampedeWiff = 'quote_stampedeWiff'
         self.game.sound.register_sound(self.quote_stampedeWiff, self.quotes_path + "1243-prospector-woo-hoo.wav")
         self.game.sound.register_sound(self.quote_stampedeWiff, self.quotes_path + "1200-prospector-woo-cough.wav")
