@@ -337,9 +337,21 @@ class Assets():
         self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "1433-drunk-jackpot-ill-drink-to-that.wav")
         self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "1039-mayor-jackpot.wav")
         self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "851-polly-jackpot.wav")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "1218-prospector-jackpot.wav")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "532-prospector-jackpot-yee-ha.wav")
         self.quote_stampedeWiff = 'quote_stampedeWiff'
         self.game.sound.register_sound(self.quote_stampedeWiff, self.quotes_path + "1243-prospector-woo-hoo.wav")
         self.game.sound.register_sound(self.quote_stampedeWiff, self.quotes_path + "1200-prospector-woo-cough.wav")
+        self.quote_motherlode = 'quote_motherlode'
+        self.game.sound.register_sound(self.quote_motherlode, self.quotes_path + "1185-mayor-motherlode.wav")
+        self.game.sound.register_sound(self.quote_motherlode, self.quotes_path + "528-prospector-motherlode-yee-hoo.wav")
+        self.game.sound.register_sound(self.quote_motherlode, self.quotes_path + "533-prospector-motherlode-yee-hoo.wav")
+        self.quote_doubleMotherlode = 'quote_doubleMotherlode'
+        self.game.sound.register_sound(self.quote_doubleMotherlode, self.quotes_path + "542-prospector-double-motherlode.wav")
+        self.quote_tripleMotherlode = 'quote_tripleMotherlode'
+        self.game.sound.register_sound(self.quote_tripleMotherlode, self.quotes_path + "543-prospector-triple-motherlode.wav")
+        self.quote_motherlodeLit = 'quote_motherlodeLit'
+        self.game.sound.register_sound(self.quote_motherlodeLit, self.quotes_path + "1227-prospector-motherlode-is-lit.wav")
 
 
         self.quote_hitBigBart = 'quote_hitBigBart'
@@ -435,6 +447,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_gasp, self.quotes_path + "878-polly-gasp.wav")
         self.quote_showdown = 'quote_showdown'
         self.game.sound.register_sound(self.quote_showdown, self.quotes_path + "1005-mayor-oh-my-a-showdown.wav")
+        self.game.sound.register_sound(self.quote_showdown, self.quotes_path + "541-prospector-showdown.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

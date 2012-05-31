@@ -171,6 +171,8 @@ class GoldMine(game.Mode):
             animLayer.hold=True
             animLayer.frame_time = 6
             self.layer = animLayer
+            # play a quote
+            self.game.sound.play(self.game.assets.quote_jackpot)
             # loop back to step 2
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         if step == 2:
@@ -216,7 +218,7 @@ class GoldMine(game.Mode):
             self.game.set_tracking('motherlodeLit',True)
             self.game.mountain.run()
             self.game.mine.update_lamps()
-            # TODO play a quote
+            self.game.sound.play(self.game.assets.quote_motherlodeLit)
 
     def check_multiplier(self):
         if True not in self.game.show_tracking("jackpotStatus"):
@@ -258,6 +260,13 @@ class GoldMine(game.Mode):
         self.counter = 0
         myMultiplier = self.game.show_tracking('motherlodeMultiplier')
         # play a quote based on the multiplier
+        if myMultiplier == 2:
+            sound = self.game.assets.quote_doubleMotherlode
+        elif myMultiplier == 3:
+            sound = self.game.assets.quote_tripleMotherlode
+        else:
+            sound = self.game.assets.quote_motherlode
+        self.game.sound.play(sound)
         # then move on to the display
         self.award_motherlode(myMultiplier)
 
