@@ -57,7 +57,7 @@ class Mine(game.Mode):
         # if multiball is running and motherload is available - flash the light in the mine and blink the lock arrow
         if status == "RUNNING" and self.game.show_tracking('motherlodeLit'):
             self.game.coils.mineFlasher.schedule(0x00010001)
-            self.game.coils.mineLock.schedule(0x00FF00FF)
+            self.game.lamps.mineLock.schedule(0x00FF00FF)
 
     def disable_lamps(self):
         self.game.lamps.extraBallLitBeacon.disable()

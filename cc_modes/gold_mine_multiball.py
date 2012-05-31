@@ -14,6 +14,7 @@ class GoldMine(game.Mode):
         self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine]
         self.motherlodeValue = 0
         self.counter = 0
+        self.multiplier = False
 
     def ball_drained(self):
     # if we're dropping down to one ball, and goldmine multiball is running - do stuff
@@ -23,31 +24,32 @@ class GoldMine(game.Mode):
     ### switches
 
     def sw_leftLoopTop_active(self,sw):
-        self.process_shot(0,self.active)
+        self.process_shot(0)
         return game.SwitchStop
 
     def sw_leftRampEnter_active(self, sw):
-        self.process_shot(1,self.active)
+        self.process_shot(1)
         return game.SwitchStop
 
     def sw_centerRampMake_active(self, sw):
-        self.process_shot(2,self.active)
+        self.process_shot(2)
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
-        self.process_shot(3,self.active)
+        self.process_shot(3)
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
-        self.process_shot(4,self.active)
+        self.process_shot(4)
         return game.SwitchStop
 
     def process_shot(self,shot):
         # we've hit a potential jackpot
+        print "JACKPOT STATUS: " + str(self.game.show_tracking('jackpotStatus',shot))
         # check to see if it was an active jackpot
         if self.game.show_tracking('jackpotStatus',shot):
             # if it was, set the flag
-            self.game.show_tracking('jackpotStatus',False,shot)
+            self.game.set_tracking('jackpotStatus',False,shot)
             # and add one to the jackpots collected
             self.game.increase_tracking('jackpotsCollected')
             # and update the lamps for that shot
@@ -113,7 +115,7 @@ class GoldMine(game.Mode):
             self.game.trough.launch_balls(total)
         # reset the jackpot status to available - just in case
         for i in range(0,5,1):
-            self.game.set_tracking('jackpotStatus',False,i)
+            self.game.set_tracking('jackpotStatus',True,i)
         # update the lamps
         for shot in self.gmShots:
             shot.update_lamps()
@@ -127,11 +129,11 @@ class GoldMine(game.Mode):
         # set up the display during multiball
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-frame.dmd').frames[0])
         # title line
-        titleLine = dmd.TextLayer(128/2, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("GOLD MINE MULTIBALL")
+        titleLine = dmd.TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("GOLD MINE MULTIBALL")
         # score line
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(64, 7, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString)
+        scoreLine = dmd.TextLayer(64, 5, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
         scoreLine.composite_op = "blacksrc"
         # motherlode line
         # if no motherlode is lit
@@ -158,9 +160,9 @@ class GoldMine(game.Mode):
             # increase the motherlode value
             self.motherlodeValue += 250000
             # see if the multiplier goes up
-            multiplier = self.check_multiplier()
+            self.multiplier = self.check_multiplier()
             # play the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'ball-two-locked.dmd')
+            anim = dmd.Animation().load(ep.DMD_PATH+'mine-car-crash.dmd')
             # TODO add the sounds to this and determine if it needs listenrs
             # calcuate the wait time to start the next part of the display
             myWait = len(anim.frames) / 10.0
@@ -168,32 +170,33 @@ class GoldMine(game.Mode):
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
             animLayer.frame_time = 6
+            self.layer = animLayer
             # loop back to step 2
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         if step == 2:
             # grab the last from of the minecart crash
-            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[9])
+            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-car-crash.dmd').frames[9])
             # and setup the text layer to say jackpot
             jackpotLine = dmd.TextLayer(128/2,4,self.game.assets.font_20px_az, "center", opaque=False).set_text("JACKPOT")
             # then do the transition
             transition = ep.EP_Transition(self,backdrop,jackpotLine,ep.EP_Transition.TYPE_CROSSFADE)
             # and loop back for step 3
-            self.delay(name="Display",delay=1,handler=self.jackpot_hit,param=3)
+            self.delay(name="Display",delay=.8,handler=self.jackpot_hit,param=3)
         if step == 3:
             # then show 'multiball jackpot' with points
             awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
             awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-            awardTextTop.set_text("MOTHERLODE JACKPOT")
-            awardTextBottom.set_text("500,000")
+            awardTextTop.set_text("MULTIBALL JACKPOT")
+            awardTextBottom.set_text("500,000",blink_frames=4)
             combined = dmd.GroupedLayer(128,32,[awardTextTop,awardTextBottom])
             self.layer = combined
             # turn on the motherlode if needed
             self.check_motherlode()
             # if multipier went up, we go there, not, it's back to main
-            if multiplier:
-                handler = self.display_multiplier()
+            if self.multiplier:
+                handler = self.display_multiplier
             else:
-                handler = self.main_display()
+                handler = self.main_display
             # go back to the main display
             self.delay(name="Display",delay=1.5,handler=handler)
 

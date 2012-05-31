@@ -46,7 +46,7 @@ class Mountain(game.Mode):
         self.delay(delay=0.03,handler=self.kick)
 
     def stop(self):
-        self.coils.mineMotor.disable()
+        self.game.coils.mineMotor.disable()
         self.inMotion = False
 
     def twitch(self):
