@@ -155,7 +155,7 @@ class Assets():
         self.sfx_outlane = 'sfx_outlane'
         self.game.sound.register_sound(self.sfx_outlane, self.sfx_path + "283-sfx-outlane.wav")
         self.sfx_mineKicker = 'sfx_mineKicker'
-        self.game.sound.register_sound(self.sfx_mineKicker, self.sfx_path + "255-sfx-mine-kicker.wav")
+        self.game.sound.register_sound(self.sfx_mineKicker, self.sfx_path + "255-sfx-mine-kicker-hit.wav")
         self.sfx_mineEntrance = 'sfx_mineEntrance'
         self.game.sound.register_sound(self.sfx_mineEntrance, self.sfx_path + "121-sfx-mine-entrance.wav")
         self.sfx_trainWhistle = 'sfx_trainWhistle'
@@ -177,7 +177,7 @@ class Assets():
         self.sfx_ebFlourish = 'sfx_ebFlourish'
         self.game.sound.register_sound(self.sfx_ebFlourish, self.sfx_path + "074-sfx-eb-flourish.wav")
         self.sfx_tiltDanger = 'sfx_tiltDanger'
-        self.game.sound.register_sound(self.sfx_tiltDanger, self.sfx_path + "0143-sfx-tilt-danger.wav")
+        self.game.sound.register_sound(self.sfx_tiltDanger, self.sfx_path + "143-sfx-tilt-danger.wav")
         self.sfx_cow1 = 'sfx_cow1'
         self.game.sound.register_sound(self.sfx_cow1, self.sfx_path + "321-sfx-cow-1.wav")
         self.sfx_cow2 = 'sfx_cow2'
@@ -191,7 +191,7 @@ class Assets():
         self.sfx_trainStop = 'sfx_trainStop'
         self.game.sound.register_sound(self.sfx_trainStop, self.sfx_path + "199-sfx-train-stops.wav")
         self.sfx_trainStopWithBrake = 'sfx_trainStopWithBrake'
-        self.game.sound.register_sound(self.sfx_trainStopWithBrake, self.sfx_path + "205-sfx-train-stops-with-brake.wav")
+        self.game.sound.register_sound(self.sfx_trainStopWithBrake, self.sfx_path + "205-sfx-train-stops-with-brake-pull.wav")
         self.sfx_lightning1 = 'sfx_lightning1'
         self.game.sound.register_sound(self.sfx_lightning1, self.sfx_path + "249-sfx-lightning-1.wav")
         self.sfx_lightning2 = 'sfx_lightning2'
@@ -331,7 +331,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "531-prospector-stampede-multiball.wav")
         self.quote_jackpot = 'quote_jackpot'
         self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "530-prospector-jackpot.wav")
-        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "529-prospector-jakcpot-hey-hey.wav")
+        self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "529-prospector-jackpot-hey-hey.wav")
         self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "2017-waitress-jackpot.wav")
         self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "1430-drunk-jackpot-whoopie.wav")
         self.game.sound.register_sound(self.quote_jackpot, self.quotes_path + "1433-drunk-jackpot-ill-drink-to-that.wav")

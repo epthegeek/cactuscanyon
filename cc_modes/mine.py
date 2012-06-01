@@ -155,6 +155,11 @@ class Mine(game.Mode):
         self.game.set_tracking('mineStatus', "LOCK")
         # clear the hits to light lock
         self.game.set_tracking('mineHits', 0)
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[0])
+        textLine = dmd.TextLayer(56, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("LOCK IS LIT")
+        composite = dmd.GroupedLayer(128,32,[backdrop,textLine])
+        self.layer = composite
+        self.delay(name="Display",delay=1.5,handler=self.clear_layer)
         # play a quote
         self.game.sound.play_voice(self.game.assets.quote_lockLit)
         print "LOCK IS LIT ... AND SO AM I"

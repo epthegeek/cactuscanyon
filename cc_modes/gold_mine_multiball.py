@@ -58,6 +58,17 @@ class GoldMine(game.Mode):
             self.jackpot_hit()
         # if it wasn't then do something else
         else:
+            if shot == 1:
+                # left ramp
+                self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+            elif shot == 2:
+                # center ramp
+                self.game.sound.play(self.game.assets.sfx_trainWhistle)
+            elif shot == 4:
+                # right ramp
+                self.game.sound.play(self.game.assets.sfx_thrownCoins)
+            else:
+                pass
             # if a jackpot is already hit, it's just points.
             self.game.score(2530)
 
@@ -176,10 +187,10 @@ class GoldMine(game.Mode):
             # loop back to step 2
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         if step == 2:
-            # grab the last from of the minecart crash
+            # grab the last frameof the minecart crash
             backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-car-crash.dmd').frames[9])
             # and setup the text layer to say jackpot
-            jackpotLine = dmd.TextLayer(128/2,4,self.game.assets.font_20px_az, "center", opaque=False).set_text("JACKPOT")
+            jackpotLine = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'jackpot.dmd').frames[0])
             # then do the transition
             transition = ep.EP_Transition(self,backdrop,jackpotLine,ep.EP_Transition.TYPE_CROSSFADE)
             # and loop back for step 3
@@ -290,6 +301,8 @@ class GoldMine(game.Mode):
             self.motherlodeValue = 0
             # then go back to the main display
             self.delay(name="Display",delay=1.5,handler=self.main_display)
+            # reset the motherlode multiplier
+            self.game.set_tracking('motherlodeMultiplier',1)
             # and kick the ball out
             self.game.mountain.kick()
         else:
