@@ -138,8 +138,6 @@ class Assets():
         self.game.sound.register_sound(self.sfx_centerRampEnter, self.sfx_path + "201-train-center-ramp-enter-chugging.wav")
         self.sfx_quickdrawHit = 'sfx_quickdrawHit'
         self.game.sound.register_sound(self.sfx_quickdrawHit, self.sfx_path + "309-sfx-quickdraw-hit.wav")
-        self.sfx_quickdrawCheer = 'sfx_quickdrawCheer'
-        self.game.sound.register_sound(self.sfx_quickdrawCheer, self.sfx_path + "165-sfx-crowd-cheer-3.wav")
         self.sfx_bountyBell = 'sfx_bountyBell'
         self.game.sound.register_sound(self.sfx_bountyBell, self.sfx_path + "113-sfx-other-bell.wav")
         self.sfx_bountyCollected = 'sfx_bountyCollected'
@@ -200,6 +198,16 @@ class Assets():
         self.game.sound.register_sound(self.sfx_lightningRumble, self.sfx_path + "295-sfx-lightning-with-rumble.wav")
         self.sfx_flyByNoise = 'sfx_flyByNoise'
         self.game.sound.register_sound(self.sfx_flyByNoise, self.sfx_path + "285-sfx-fly-by-noise.wav")
+        self.sfx_quickdrawFinale = 'sfx_quickdrawFinale'
+        self.game.sound.register_sound(self.sfx_quickdrawFinale, self.sfx_path + "020-sfx-quickdraw-finale-riff.wav")
+        self.sfx_revRicochet = 'sfx_revRicochet'
+        self.game.sound.register_sound(self.sfx_revRicochet, self.sfx_path + "147-sfx-rev-up-ricochet.wav")
+        self.sfx_punch = 'sfx_punch'
+        self.game.sound.register_sound(self.sfx_punch, self.sfx_path + "349-sfx-punch.wav")
+        self.sfx_futuristicRicochet = 'sfx_futuristicRicochet'
+        self.game.sound.register_sound(self.sfx_futuristicRicochet, self.sfx_path + "217-sfx-futuristic-ricochet-wav")
+        self.sfx_smallExplosion = 'sfx_smallExplosion'
+        self.game.sound.register_sound(self.sfx_smallExplosion, self.sfx_path + "263-sfx-explosion.wav")
 
         self.sfx_ricochetSet = 'sfx_ricochetSet'
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
@@ -207,7 +215,14 @@ class Assets():
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "111-sfx-ricochet-3.wav")
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "319-sfx-ricochet-4.wav")
 
-        # Quotes
+        self.sfx_cheers = 'sfx_cheers'
+        self.game.sound.register_sound(self.sfx_cheers, self.sfx_path + "167-sfx-crowd-cheer-3.wav")
+        self.game.sound.register_sound(self.sfx_cheers, self.sfx_path + "163-sfx-crowd-cheer-2.wav")
+        self.game.sound.register_sound(self.sfx_cheers, self.sfx_path + "161-sfx-crowd-cheer-1.wav")
+        self.game.sound.register_sound(self.sfx_cheers, self.sfx_path + "165-sfx-crowd-cheer-3.wav")
+
+
+    # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1202-prospector-welcome-to-cactus-canyon.wav")

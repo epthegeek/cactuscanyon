@@ -111,7 +111,7 @@ class Stampede(game.Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=5)
             self.layer = animLayer
             # and some sounds
-            self.game.sound.play(self.game.assets.quote_jackpot)
+            self.game.sound.play(self.game.assets.sfx_revRicochet)
             # and award points
             self.game.score(500000)
             # loop back to do the next part
@@ -122,6 +122,7 @@ class Stampede(game.Mode):
             self.scoreLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("500,000")
             self.scoreLine.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
+            self.game.sound.play(self.game.assets.quote_jackpot)
             # loop back to cleear
             self.delay(name="Display",delay=2,handler=self.jackpot_hit,param=3)
         # third pass plays the wipe

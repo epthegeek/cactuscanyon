@@ -15,6 +15,8 @@ class Tracking(game.Player):
         # load up tracking stats for the player
         self.player_stats['bonus'] = 0
 
+        self.player_stats['bumperHits'] = 0
+
         self.player_stats['extraBallsTotal'] = 0
         # allows for stacking of extra balls - if pending > 0 then extra ball is lit
         self.player_stats['extraBallsPending'] = 0

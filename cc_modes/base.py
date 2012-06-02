@@ -400,11 +400,30 @@ class BaseGameMode(game.Mode):
         self.bumper_hit('bottom')
 
     def bumper_hit(self,bumper):
-        # TODO add some more interesting purpose to the bumpers?
-        # score some points
-        self.game.score(5250)
-        # play a noise
+        hits = self.game.increase_tracking('bumperHits')
+        if hits == 75:
+            # display the super jets display
+            pass
+        elif hits == 150:
+            # display the mega jets display
+            pass
+        if hits < 75:
+            # if we're under 75 points are low
+            self.game.score(5250)
+            # and the sound is a punch
+            self.game.sound.play(self.game.assets.sfx_punch)
+        elif hits >= 75 and hits < 150:
+            # if we're in super jets the score is more
+            self.game.score(50000)
+            # and the sound is an explosion
+            self.game.sound.play(self.game.assets.sfx_smallExplosion)
+        elif hits >= 150:
+            # mega jets
+            self.game.score(500000)
+            # and the sound is the futuristic ricochet
+            self.game.sound.play(self.game.assets.sfx_futuristicRicochet)
 
+    ## TODO add the displays for shots to increase level and the various active levels
 
     ###
     ###  _____ _ _

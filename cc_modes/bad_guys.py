@@ -246,7 +246,8 @@ class BadGuys(game.Mode):
         # combine and activate
         textLayer = dmd.TextLayer(84,20, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("QUICK DRAW!")
         self.game.sound.play(self.game.assets.sfx_quickdrawHit)
-        self.game.sound.play(self.game.assets.sfx_quickdrawCheer)
+        self.game.sound.play(self.game.assets.sfx_quickdrawFinale)
+        self.game.sound.play(self.game.assets.sfx_cheers)
         self.layer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
         myWait = len(anim.frames) / 10.0 + 1
         # play a quote

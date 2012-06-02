@@ -26,6 +26,7 @@ class SavePolly(game.Mode):
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
         # center ramp pauses the train
+        self.game.sound.play(self.game.assets.sfx_trainWhistle)
         self.pause_train()
         return game.SwitchStop
 
@@ -33,6 +34,7 @@ class SavePolly(game.Mode):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
+        self.game.sound.play(self.game.assets.sfx_leftRampEnter)
         self.advance_save_polly()
         return game.SwitchStop
 
@@ -40,6 +42,7 @@ class SavePolly(game.Mode):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
+        self.game.sound.play(self.game.assets.sfx_thrownCoins)
         self.advance_save_polly()
         return game.SwitchStop
 
@@ -195,6 +198,8 @@ class SavePolly(game.Mode):
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         # turn it on
         self.layer = animLayer
+        # play the train stop noise
+        self.game.sound.play(self.game.assets.sfx_trainStop)
         # set the delay for the award
         self.delay(delay=myWait,handler=self.give_award)
 
