@@ -249,9 +249,9 @@ class BadGuys(game.Mode):
         self.game.sound.play(self.game.assets.sfx_quickdrawFinale)
         self.game.sound.play(self.game.assets.sfx_cheers)
         self.layer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
-        myWait = len(anim.frames) / 10.0 + 1
+        myWait = len(anim.frames) / 10.0 + 2
         # play a quote
-        self.game.sound.play(self.game.assets.quote_quickdrawWin)
+        self.delay(delay=0.5,handler=self.game.play_remote_sound,param=self.game.assets.quote_quickdrawWin)
         # stuff specific to winning
         # score the points
         self.game.score(self.points)
@@ -319,7 +319,7 @@ class BadGuys(game.Mode):
         # showdown comes from the end of quickdraw, so guns are already down
         print "S H O W D O W N"
         # set the layer tracking
-        self.game.set_tracking('stackLayer',True,0)
+        self.game.set_tracking('stackLevel',True,0)
         # set the showdown tracking
         self.game.set_tracking('showdownStatus', "RUNNING")
         # kill the GI
