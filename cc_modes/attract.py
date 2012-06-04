@@ -59,6 +59,8 @@ class Attract(game.Mode):
             self.game.assets.lamp_topToBottom,
             self.game.assets.lamp_bottomToTop,
             self.game.assets.lamp_bottomToTop,
+            self.game.assets.lamp_colors,
+            self.game.assets.lamp_colors,
             self.game.assets.lamp_rightToLeft,
             self.game.assets.lamp_rightToLeft,
             self.game.assets.lamp_leftToRight,

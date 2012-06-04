@@ -511,6 +511,7 @@ class Assets():
         self.lamp_starShots = "star-shots"; lampshows.append(self.lamp_starShots)
         self.lamp_sparkle = "sparkle"; lampshows.append(self.lamp_sparkle)
         self.lamp_pollyPeril = "polly-peril"; lampshows.append(self.lamp_pollyPeril)
+        self.lamp_highNoonFlash = "high-noon-flash"; lampshows.append(self.lamp_highNoonFlash)
 
         for lampshow in lampshows:
             self.game.lampctrl.register_show(lampshow,self.lampshows_path + lampshow + ".lampshow")

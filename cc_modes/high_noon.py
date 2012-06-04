@@ -51,6 +51,12 @@ class HighNoon(game.Mode):
         self.game.score(100000)
         # tick up the counter by one
         self.jackpots += 1
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_jackpot)
+        # show an image
+        self.cancel_delayed("Display")
+        self.layer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'jackpot.dmd').frames[0])
+        self.delay("Display",delay=0.5,handler=self.update_display)
 
     # bad guy targets
     def sw_badGuySW0_active(self,sw):
@@ -90,6 +96,18 @@ class HighNoon(game.Mode):
         # tally the hit
         self.killed += 1
         # TODO award some points ?
+        # a sound effect
+        self.game.sound.play(self.game.assets.sfx_gunfightShot)
+        # a video
+        anim = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd')
+        myWait = len(anim.frames) / 10.0
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+        # cancel the current display delay
+        self.cancel_delayed("Display")
+        self.layer = animLayer
+        # then go back to it when the video ends
+        self.delay(name="Display",delay=myWait,handler=self.update_display)
+
         # if that's enough, we're done
         if self.killed >= 20:
             self.won()
@@ -102,7 +120,7 @@ class HighNoon(game.Mode):
     # timer loop
     def timer(self,seconds):
         # if we're out of time, end
-        if seconds == 0:
+        if seconds <= 0:
             self.finish_up()
         else:
             seconds -= 1
@@ -133,10 +151,10 @@ class HighNoon(game.Mode):
         if step == 1 or step == 3 or step == 5 or step == 7 or step == 9:
             # burst wipe the current layer
             anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
-            myWait = len(anim.frames) / 12.0
+            myWait = len(anim.frames) / 15.0
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
-            animLayer.frame_time = 5
+            animLayer.frame_time = 4
             animLayer.composite_op = "blacksrc"
             if step == 1:
                 duration2 = self.game.sound.play(self.game.assets.music_highNoonLead)
@@ -153,17 +171,18 @@ class HighNoon(game.Mode):
                 composite = dmd.GroupedLayer(128,32,[self.luckLayer,animLayer])
             self.layer = composite
             self.game.sound.play(self.game.assets.sfx_lightning2)
-            # TODO play a lampshow here
+            # a flourish lampshow
+            self.game.lampctrl.play_show(self.game.assets.lamp_highNoonFlash, repeat=False)
             # loop back for step 2
             step += 1
             self.delay(delay=myWait,handler=self.intro,param=step)
         elif step == 2 or step == 4 or step == 6 or step == 8 or step == 10:
             # burst in the next frame
             anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe-2.dmd')
-            myWait = len(anim.frames) / 12.0 + 1.5
+            myWait = len(anim.frames) / 15.0 + 1.5
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
-            animLayer.frame_time = 5
+            animLayer.frame_time = 4
             animLayer.composite_op = "blacksrc"
             if step == 2:
                 # set up the badguy layer to expose
@@ -271,7 +290,8 @@ class HighNoon(game.Mode):
         # turn the lights off
         self.game.set_tracking('lampStatus',"OFF")
         self.game.update_lamps()
-        # TODO turn the flippers off
+        #  turn the flippers off
+        self.game.enable_flippers(False)
 
     def final_display(self,step=1):
         # the tally display after the mode
@@ -283,7 +303,8 @@ class HighNoon(game.Mode):
         # reset a ton of tracking
         self.game.set_tracking('highNoonStatus',"OPEN")
         self.game.set_tracking('stackLevel',False,3)
-        # TODO turn the flippers back on
+        # turn the flippers back on
+        self.game.enable_flippers(True)
         # turn the lights back on
         self.game.set_tracking('lampStatus',"ON")
         self.game.update_lamps()
