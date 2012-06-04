@@ -37,6 +37,13 @@ class LeftLoop(game.Mode):
         if lampStatus != "ON":
             return
 
+        ## high noon check
+        if self.game.show_tracking('highNoonStatus') == "RUNNING":
+            self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+            return
         ## goldmine check - if stack level 2 is true, it's on
         if self.game.show_tracking('mineStatus') == "RUNNING":
             # check if this jackpot shot is active

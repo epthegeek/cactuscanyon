@@ -130,7 +130,7 @@ class CCGame(game.BasicGame):
         # gold mine multiball
         self.gm_multiball = cc_modes.GoldMine(game=self,priority=88)
         # High Noon
-        #self.high_noon = cc_modes.HighNoon(game=self,priority=90)
+        self.high_noon = cc_modes.HighNoon(game=self,priority=90)
         # Interrupter Jones
         self.interrupter = cc_modes.Interrupter(game=self,priority=200)
 
@@ -156,7 +156,8 @@ class CCGame(game.BasicGame):
                          self.gm_multiball,
                          self.interrupter,
                          self.bonus_lanes,
-                         self.stampede]
+                         self.stampede,
+                         self.high_noon]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 

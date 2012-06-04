@@ -27,6 +27,14 @@ class CenterRamp(game.Mode):
         if lampStatus != "ON":
             return
 
+        ## high noon check
+        if self.game.show_tracking('highNoonStatus') == "RUNNING":
+            self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
+            self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
+            self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+            self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
+            return
+
         # check goldmine active status
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',2):

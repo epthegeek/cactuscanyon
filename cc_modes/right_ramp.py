@@ -27,6 +27,14 @@ class RightRamp(game.Mode):
         if lampStatus != "ON":
             return
 
+        ## high noon check
+        if self.game.show_tracking('highNoonStatus') == "RUNNING":
+            self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
+            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+            self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+            self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+            return
+
         # goldmine multiball check
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',4):

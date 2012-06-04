@@ -75,8 +75,8 @@ class BaseGameMode(game.Mode):
         self.game.modes.remove(self.game.bad_guys)
 
     def ball_drained(self):
-        # if that was the last ball in play need to finish up
-        if self.game.trough.num_balls_in_play == 0:
+        # if that was the last ball in play need to finish up - unless high noon is finishing up
+        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('highNoonStatus') != "FINISH":
             # turn off all the lights
             for lamp in self.game.lamps:
                 lamp.disable()

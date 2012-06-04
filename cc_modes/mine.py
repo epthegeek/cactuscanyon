@@ -68,7 +68,8 @@ class Mine(game.Mode):
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
         # stock sound for the switch
-        self.game.sound.play(self.game.assets.sfx_mineKicker)
+        if self.game.show_tracking('highNoonStatus') != "READY":
+            self.game.sound.play(self.game.assets.sfx_mineKicker)
         # if there's an extra ball waiting, collect one
         if self.game.show_tracking('extraBallsPending') > 0:
             # we'll be busy until this ends
@@ -94,31 +95,38 @@ class Mine(game.Mode):
         ep.last_switch = "mineEntrance"
 
     def mine_shot(self):
-        # first, record the mine shot in the running total
-        self.game.increase_tracking('mineShotsTotal')
-        # get the balls locked number for use
-        lockedBalls = self.game.show_tracking('ballsLockedTotal')
-        # if it's over 9, cap it back to 9
-        if lockedBalls > 9:
-            lockedBalls = 9
-        print "LOCKED BALLS: " + str(lockedBalls)
-        # check if we should lock the ball or start multiball
-        # should we start multiball?
-        # multiball itself will be a separate mode with switchstop that loads above this
-        # so we don't have to handle 'RUNNING' here
-        if self.game.show_tracking('mineStatus') == "READY":
-            ## If any level below is running, avoid multiball start
-            stackLevel = self.game.show_tracking('stackLevel')
-            if True in stackLevel[:2]:
-                self.game.mountain.kick()
-            else:
-                self.start_multiball()
-        # not start multiball? ok, lock ball perhaps?
-        elif self.game.show_tracking('mineStatus') == "LOCK":
-            self.lock_ball()
-        # still nothing? Hm. Ok, register the hit
+        # if high noon is ready, we do that
+        if self.game.show_tracking('highNoonStatus') == "READY":
+            self.game.modes.add(self.game.high_noon)
+            print "STARTING HIGH NOON"
+            self.game.high_noon.start_highNoon()
+        # otherwise it's a standard hit
         else:
-            self.mine_hit(lockedBalls)
+            # first, record the mine shot in the running total
+            self.game.increase_tracking('mineShotsTotal')
+            # get the balls locked number for use
+            lockedBalls = self.game.show_tracking('ballsLockedTotal')
+            # if it's over 9, cap it back to 9
+            if lockedBalls > 9:
+                lockedBalls = 9
+            print "LOCKED BALLS: " + str(lockedBalls)
+            # check if we should lock the ball or start multiball
+            # should we start multiball?
+            # multiball itself will be a separate mode with switchstop that loads above this
+            # so we don't have to handle 'RUNNING' here
+            if self.game.show_tracking('mineStatus') == "READY":
+                ## If any level below is running, avoid multiball start
+                stackLevel = self.game.show_tracking('stackLevel')
+                if True in stackLevel[:2]:
+                    self.game.mountain.kick()
+                else:
+                    self.start_multiball()
+            # not start multiball? ok, lock ball perhaps?
+            elif self.game.show_tracking('mineStatus') == "LOCK":
+                self.lock_ball()
+            # still nothing? Hm. Ok, register the hit
+            else:
+                self.mine_hit(lockedBalls)
 
     def mine_hit(self,lockedBalls):
         # register the hit

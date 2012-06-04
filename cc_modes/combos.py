@@ -27,12 +27,19 @@ class Combos(game.Mode):
     def update_lamps(self):
         self.disable_lamps()
         lampStatus = self.game.show_tracking('lampStatus')
+
+        # high noon check
+        if self.game.show_tracking('highNoonStatus') == "RUNNING":
+            for lamp in self.comboLights:
+                lamp.schedule(0x00FF00FF)
+            return
         # if status is multiball ...
-        if lampStatus == "GOLDMINE":
+        if self.game.show_tracking('mineStatus') == "RUNNING":
             # loop through and turn on the appropriate lights
             for i in range(0,5,1):
                 if self.game.show_tracking('jackpotStatus',i):
                     self.comboLights(i).schedule(0x0000F39C)
+            return
         ## if status is anything other than ON bail here
         if self.game.show_tracking('lampStatus') != "ON":
             return

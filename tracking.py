@@ -80,6 +80,8 @@ class Tracking(game.Player):
         self.player_stats['showdownStatus'] = "OPEN"
         self.player_stats['showdownTotal'] = 0
         self.player_stats['showdownPoints'] = 0
+        # total kills for high noon
+        self.player_stats['kills'] = 0
 
         # bartStatus: OPEN, RUNNING, LAST, DEAD
         self.player_stats['bartStatus'] = "OPEN"
@@ -92,7 +94,7 @@ class Tracking(game.Player):
         self.player_stats['gunfightStatus'] = "OPEN"
 
         # highNoonStatus = OPEN, READY, RUNNING
-        self.player_stats['highNoonStatus'] = "OPEN"
+        self.player_stats['highNoonStatus'] = "READY"
         # list to store the lit items for the star ?
         # Starts at the top of the star with 0, goes clockwise. 0 = motherlode, 1=combo, 2=barts, 3=showdown, 4=stampede
         self.player_stats['starStatus'] = [False,False,False,False,False]

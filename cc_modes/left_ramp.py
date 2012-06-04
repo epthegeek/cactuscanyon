@@ -29,6 +29,13 @@ class LeftRamp(game.Mode):
         # we bail here if the others don't match and it's not "ON"
         if lampStatus != "ON":
             return
+        ## high noon check
+        if self.game.show_tracking('highNoonStatus') == "RUNNING":
+            self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+            self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+            self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
+            return
 
         # check for goldmine multiball
         if self.game.show_tracking('mineStatus') == "RUNNING":

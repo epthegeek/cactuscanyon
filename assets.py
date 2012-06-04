@@ -208,6 +208,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_futuristicRicochet, self.sfx_path + "217-sfx-futuristic-ricochet-wav")
         self.sfx_smallExplosion = 'sfx_smallExplosion'
         self.game.sound.register_sound(self.sfx_smallExplosion, self.sfx_path + "263-sfx-explosion.wav")
+        self.sfx_woosh = 'sfx_woosh'
+        self.game.sound.register_sound(self.sfx_woosh, self.sfx_path + "229-sfx-plain-woosh.wav")
 
         self.sfx_ricochetSet = 'sfx_ricochetSet'
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "103-sfx-ricochet-1.wav")
@@ -367,7 +369,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_tripleMotherlode, self.quotes_path + "543-prospector-triple-motherlode.wav")
         self.quote_motherlodeLit = 'quote_motherlodeLit'
         self.game.sound.register_sound(self.quote_motherlodeLit, self.quotes_path + "1227-prospector-motherlode-is-lit.wav")
-
+        self.quote_highNoon = 'quote_highNoon'
+        self.game.sound.register_sound(self.quote_highNoon, self.quotes_path + "1006-mayor-oh-no-its-high-noon.wav")
 
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
@@ -491,6 +494,10 @@ class Assets():
         self.game.sound.register_music(self.music_showdown, self.music_path + "022-showdown.wav")
         self.music_stampede = 'music_stampede'
         self.game.sound.register_music(self.music_stampede, self.music_path + "003-stampede.wav")
+        self.music_highNoonLead = 'music_highNoonLead'
+        self.game.sound.register_sound(self.music_highNoonLead, self.music_path + "099-music-high-noon-lead-in.wav")
+        self.music_highNoon = 'music_highNoon'
+        self.game.sound.register_music(self.music_highNoon, self.music_path + "099-music-high-noon.wav")
 
         # lampshows
         lampshows = list()

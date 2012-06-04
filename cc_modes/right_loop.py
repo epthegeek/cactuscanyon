@@ -28,6 +28,14 @@ class RightLoop(game.Mode):
         if lampStatus != "ON":
             return
 
+        ## high noon check
+        if self.game.show_tracking('highNoonStatus') == "RUNNING":
+            self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
+            return
+
         # goldmine active check
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',3):

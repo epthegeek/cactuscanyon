@@ -162,6 +162,9 @@ class BadGuys(game.Mode):
         # set the flag to stop other gun modes
         self.game.set_tracking('stackLevel',True,0)
         self.side = side
+        # tick up the started stat
+        self.game.incrase_tracking('quickdrawsStarted')
+
         print "STARTING QUICKDRAW ON SIDE:" + str(side)
         # set the status of this side to running
         self.game.set_tracking('quickdrawStatus',"RUNNING",side)
@@ -236,6 +239,10 @@ class BadGuys(game.Mode):
     def quickdraw_won(self,target):
         # kill the mode music
         print "QUICKDRAW WON IS KILLING THE MUSIC"
+        # add one to the total dead
+        self.game.increase_tracking('kills')
+        # and tick up the quickdraw wins
+        self.game.increase_tracking('quickdrawsWon')
 
         self.game.sound.stop_music()
         # play the win animation
@@ -441,6 +448,11 @@ class BadGuys(game.Mode):
         for i in range(0,4,1):
             self.target_up(i)
 
+    def drop_targets(self):
+        # drop all teh targets
+        for i in range(0,4,1):
+            self.target_down(i)
+
     def showdown_reset_guys(self):
         # pop up all the targets
         self.setup_targets()
@@ -471,11 +483,15 @@ class BadGuys(game.Mode):
         print "KILLING GUY: " + str(target)
         # count the dead guy
         self.deathTally += 1
+        # add one to the rolling high noon total
+        self.game.increase_tracking('kills')
         # score points
         # after the 4th guy the point value goes up
         if self.deathTally > 4:
             self.showdownValue = 450000
         self.game.score(self.showdownValue)
+        # increase the running total by that amount
+        self.game.increase_tracking('showdownPoints',self.showdownValue)
 
         # swap out the appropriate layer
         shotguy = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd')
@@ -533,9 +549,8 @@ class BadGuys(game.Mode):
 
     def end_showdown(self):
         # drop all teh targets
-        for coil in self.coils:
-            coil.disable()
-            # kill the music
+        self.drop_targets()
+        # kill the music
         self.game.sound.stop_music()
         # tally some score?
         # award the badge light
@@ -569,6 +584,19 @@ class BadGuys(game.Mode):
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # turn off the level 1 flag
         self.game.set_tracking('stackLevel',False,0)
+        # setup a display frame
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-sideways-border.dmd').frames[0])
+        textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
+        textString = "SHOWDOWN: " + str(self.deathTally) + " KILLS"
+        textLine1.set_text(textString)
+        textLine1.composite_op = "blacksrc"
+        textLine2 = dmd.TextLayer(128,2,11, self.game.assets.font_12px_az, "center", opaque=False)
+        textLine2.set_text(ep.format_score(self.game.show_tracking('showdownPoints')))
+        combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+        self.layer = combined
+        self.delay(name="Display",delay=2,handler=self.clear_layer)
+        # reset the showdown points for next time
+        self.game.set_tracking('showdownPoints',0)
 
     ###
     ###   ____              __ _       _     _
