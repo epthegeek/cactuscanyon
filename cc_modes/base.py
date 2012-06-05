@@ -196,7 +196,7 @@ class BaseGameMode(game.Mode):
 
     def sw_beerMug_active(self,sw):
         # track it, because why not
-        self.game.increase_tracking('beerMugHits')
+        hits = self.game.increase_tracking('beerMugHits')
         # score points
         self.game.score(2130)
         # play a sound
@@ -205,6 +205,28 @@ class BaseGameMode(game.Mode):
         weDo = random.choice([False,True,False])
         if weDo:
             self.game.sound.play(self.game.assets.quote_beerMug)
+        # a little display action
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
+        textLine1 = dmd.TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
+        # TODO right now it takes 15 shots to light drunk multiball - change this to a config param
+        left = 15 - hits
+        if left <= 0:
+            textString = "SHOOT THE SALOON"
+            textString2 = "FOR MULTIBALL"
+            # enable the multiball
+            self.game.set_tracking('drunkMultiballStatus', "READY")
+        else:
+            textString = str(left) + " MORE HITS FOR"
+            textString2 = "DRUNKEN MULTIBALL"
+        textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
+        textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+        combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
+        # kill any previous display
+        self.cancel_delayed("Display")
+        # turn on the layer
+        self.layer = combined
+        # set a delay to clear
+        self.delay(name="Display", delay = 1, handler=self.clear_layer)
         ## -- set the last switch -- ##
         ep.last_switch = 'beerMug'
 
@@ -412,11 +434,13 @@ class BaseGameMode(game.Mode):
             self.game.score(5250)
             # and the sound is a punch
             self.game.sound.play(self.game.assets.sfx_punch)
+            self.display_bumper(hits,"SUPER")
         elif hits >= 75 and hits < 150:
             # if we're in super jets the score is more
             self.game.score(50000)
             # and the sound is an explosion
             self.game.sound.play(self.game.assets.sfx_smallExplosion)
+            self.display_bumper(hits,"MEGA")
         elif hits >= 150:
             # mega jets
             self.game.score(500000)
@@ -424,6 +448,24 @@ class BaseGameMode(game.Mode):
             self.game.sound.play(self.game.assets.sfx_futuristicRicochet)
 
     ## TODO add the displays for shots to increase level and the various active levels
+    def display_bumper(self,hits,nextup):
+        if nextup == "SUPER":
+            textString1 = "< " + str(75 - hits) + " MORE HITS >"
+            textString2 = "< FOR SUPER JETS >"
+        elif nextup == "MEGA":
+            textString1 = "<" + str(150 - hits) + " MORE HITS >"
+            textString2 = "< FOR  MEGA  JETS >"
+        textLayer1 = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString1)
+        textLayer2 = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString2)
+        textLayer1.composite_op = "blacksrc"
+        textLayer2.compoaite_op = "blacksrc"
+        self.cancel_delayed("Display")
+        self.layer = textLayer1
+        self.delay(name="Display",delay=.5,handler=self.change_layer,param=textLayer2)
+        self.delay(name="Display",delay=1,handler=self.clear_layer)
+
+    def change_layer(self,myLayer):
+        self.layer = myLayer
 
     ###
     ###  _____ _ _

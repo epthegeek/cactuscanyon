@@ -39,8 +39,13 @@ class Saloon(game.Mode):
         if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
             # set the busy flag
             self.busy = True
-            # then hit bart
-            self.hit_bart()
+            # if drunk multiball is ready, start that
+            if self.game.show_tracking('drunkMultiballStatus') == "READY":
+                self.game.modes.add(self.game.drunk_multiball)
+                self.game.drunk_multiball.start_drunk()
+            else:
+                # then hit bart
+                self.hit_bart()
         # now we check the bounty after an appropriate delay.
         self.wait_until_unbusy(self.check_bounty)
         ## -- set the last switch hit --

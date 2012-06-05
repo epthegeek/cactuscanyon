@@ -577,8 +577,6 @@ class BadGuys(game.Mode):
         for i in range (0,4,1):
             self.game.set_tracking('badGuyUp',False,i)
         self.update_lamps()
-        # tracking - turn it back to open
-        self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
         # start up the main themse again if a second level mode isn't running
         if not self.game.show_tracking('stackLevel',1):
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)

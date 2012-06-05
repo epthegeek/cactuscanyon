@@ -22,6 +22,8 @@ class Tracking(game.Player):
         self.player_stats['extraBallsPending'] = 0
 
         self.player_stats['beerMugHits'] = 0
+        # drunk multiball - OPEN, READY, RUNNING
+        self.player_stats['drunkMultiballStatus'] = "OPEN"
 
         self.player_stats['rightRampShots'] = 0
         self.player_stats['rightRampStage'] = 1

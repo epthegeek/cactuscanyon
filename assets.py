@@ -27,6 +27,8 @@ class Assets():
         self.font_5px_bold_AZ_outline.composite_op = "blacksrc"
 
         self.font_6px_az = dmd.Font(self.dmd_path + "Font_19_CactusCanyon.dmd")
+        self.font_6px_az_inverse = dmd.Font(self.dmd_path + "Font_Custom_6px.dmd")
+        self.font_6px_az_inverse.composite_op = "blacksrc"
 
         self.font_7px_alt_az = dmd.Font(self.dmd_path + "Font_1_CactusCanyon.dmd")
         self.font_7px_az = dmd.Font(self.dmd_path + "Font_2_CactusCanyon.dmd")
@@ -498,6 +500,8 @@ class Assets():
         self.game.sound.register_sound(self.music_highNoonLead, self.music_path + "099-music-high-noon-lead-in.wav")
         self.music_highNoon = 'music_highNoon'
         self.game.sound.register_music(self.music_highNoon, self.music_path + "099-music-high-noon.wav")
+        self.music_drunkMultiball = 'music_drunkMultiball'
+        self.game.sound.register_music(self.music_drunkMultiball, self.music_path + "005-not-shooter-lane-groove.wav")
 
         # lampshows
         lampshows = list()
