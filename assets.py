@@ -207,7 +207,7 @@ class Assets():
         self.sfx_punch = 'sfx_punch'
         self.game.sound.register_sound(self.sfx_punch, self.sfx_path + "349-sfx-punch.wav")
         self.sfx_futuristicRicochet = 'sfx_futuristicRicochet'
-        self.game.sound.register_sound(self.sfx_futuristicRicochet, self.sfx_path + "217-sfx-futuristic-ricochet-wav")
+        self.game.sound.register_sound(self.sfx_futuristicRicochet, self.sfx_path + "217-sfx-futuristic-ricochet.wav")
         self.sfx_smallExplosion = 'sfx_smallExplosion'
         self.game.sound.register_sound(self.sfx_smallExplosion, self.sfx_path + "263-sfx-explosion.wav")
         self.sfx_woosh = 'sfx_woosh'
