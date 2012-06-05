@@ -163,7 +163,7 @@ class BadGuys(game.Mode):
         self.game.set_tracking('stackLevel',True,0)
         self.side = side
         # tick up the started stat
-        self.game.incrase_tracking('quickdrawsStarted')
+        self.game.increase_tracking('quickdrawsStarted')
 
         print "STARTING QUICKDRAW ON SIDE:" + str(side)
         # set the status of this side to running
