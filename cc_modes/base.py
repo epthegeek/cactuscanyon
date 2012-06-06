@@ -673,27 +673,30 @@ class BaseGameMode(game.Mode):
     def reveal_bonus(self,points):
         # load up the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
-        # start the full on animation
-        myWait = len(anim.frames) / 12
-        # setup the animated layer
+        myWait = len(anim.frames) / 15.0
         animLayer = ep.EP_AnimatedLayer(anim)
-        animLayer.hold=True
-        animLayer.frame_time = 8
+        animLayer.hold = True
+        animLayer.frame_time = 4
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.finish_bonus,param=points)
 
     def finish_bonus(self,points):
         # set up the text display
+        anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe-2.dmd')
+        myWait = len(anim.frames) / 15.0 + 1.5
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold = True
+        animLayer.frame_time = 4
+        animLayer.composite_op = "blacksrc"
+
         titleString = "TOTAL BONUS:"
         titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(titleString)
         pointsLine = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(ep.format_score(points))
-        newLayer = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
-        # crossfade from previous anim
-        transition = ep.EP_Transition(self,self.layer,newLayer,ep.EP_Transition.TYPE_CROSSFADE)
+        self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
         # add the points to the score
         self.game.score(points)
         # play a final sound
         self.game.sound.play(self.game.assets.sfx_flourish6)
         # then loop back to end ball
-        self.delay(delay=1.5,handler=self.game.ball_ended)
-        self.delay(delay=1.5,handler=self.clear_layer)
+        self.delay(delay=2,handler=self.game.ball_ended)
+        self.delay(delay=2,handler=self.clear_layer)
