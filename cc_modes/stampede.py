@@ -11,6 +11,7 @@ class Stampede(game.Mode):
         self.shots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
         # which jackpot is active
         self.active = 0
+        self.jackpots = 0
         # set up the cows layer
         anim = dmd.Animation().load(ep.DMD_PATH+'cows-parading.dmd')
         self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
@@ -50,6 +51,8 @@ class Stampede(game.Mode):
         return game.SwitchStop
 
     def start_stampede(self):
+        # reset the jackpot count, just in case
+        self.jackpots = 0
         # set the stack layer
         self.game.set_tracking('stackLevel',True,1)
         # stop the current music
@@ -99,6 +102,7 @@ class Stampede(game.Mode):
          # cancel the display if any
         self.cancel_delayed("Display")
         if active == number:
+            self.jackpots += 1
             self.jackpot_hit()
         else:
             self.jackpot_wiff()
@@ -178,6 +182,20 @@ class Stampede(game.Mode):
     def end_stampede(self):
         # stop the music
         self.game.sound.stop_music()
+        # do a final display
+        # setup a display frame
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'skulls-border.dmd').frames[0])
+        textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
+        textString = "STAMPEDE: " + str(self.deathTally) + " JACKPOTS"
+        textLine1.set_text(textString)
+        textLine1.composite_op = "blacksrc"
+        textLine2 = dmd.TextLayer(128/2,11, self.game.assets.font_12px_az, "center", opaque=False)
+        totalPoints = self.jackpots * 500000
+        textLine2.set_text(ep.format_score(totalPoints))
+        combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+        self.layer = combined
+        self.delay(name="Display",delay=2,handler=self.clear_layer)
+
         # kill the timer loop that moves the jackpot
         self.cancel_delayed("Timer")
         # set some tracking?

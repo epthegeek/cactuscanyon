@@ -1,5 +1,5 @@
 ##
-## The Gold Mine Multiball
+## The High Noon Multiball
 ##
 
 from procgame import *
@@ -15,6 +15,8 @@ class HighNoon(game.Mode):
         self.killed = 0
         self.myTimer = 0
         self.jackpots = 0
+        self.grandTotal = 0
+        self.won = False
 
     def ball_drained(self):
         if self.game.show_tracking('highNoonStatus') == "RUNNING":
@@ -95,7 +97,8 @@ class HighNoon(game.Mode):
     def hit_bad_guy(self,target):
         # tally the hit
         self.killed += 1
-        # TODO award some points ?
+        # bad guys currently worth 2.5 mil
+        self.game.score(2500000)
         # a sound effect
         self.game.sound.play(self.game.assets.sfx_gunfightShot)
         # a video
@@ -115,10 +118,11 @@ class HighNoon(game.Mode):
             # pop the target back up
             self.game.bad_guys.target_up(target)
 
-    # other switches to trap: mine, saloon, bad guy toy ?
+    # todo other switches to trap: mine, saloon, bad guy toy ?
 
     # timer loop
     def timer(self,seconds):
+        ## todo add some quote stuff on certain intervals
         # if we're out of time, end
         if seconds <= 0:
             self.finish_up()
@@ -277,9 +281,8 @@ class HighNoon(game.Mode):
     # won ?
     def won(self):
         self.game.score(20000000)
+        self.won = True
         self.finish_up()
-
-    # lost ?
 
     # finish up
     # collect the balls, display the scores, then end
@@ -290,13 +293,89 @@ class HighNoon(game.Mode):
         # turn the lights off
         self.game.set_tracking('lampStatus',"OFF")
         self.game.update_lamps()
+        # throw in a 'you won' display
+        self.layer = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("YOU WON!")
         #  turn the flippers off
         self.game.enable_flippers(False)
+        # clear the saloon and mine if needed
+        if sw_minePopper_is_active():
+            self.game.mountain.kick()
+        if sw_saloonPopper_is_active():
+            self.game.saloon.kick()
+        self.final_display()
 
     def final_display(self,step=1):
         # the tally display after the mode
-        # TODO all the stuff that goes here
-        self.end_highNoon()
+        # jackpots
+        if step == 1:
+            self.tally(title="JACKPOT",amount=self.jackpots,value=100000,frame_delay=0.5,callback=self.final_display,step=2)
+        # bad guys
+        if step == 2:
+            self.tally(title="BAD GUY",amount=self.killed,value=2500000,frame_delay=0.2,callback=self.final_display,step=3)
+        # total
+        if step == 3:
+            titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
+            if self.won:
+                self.grandTotal += 20000000
+            pointsLine = dmd.TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.grandTotal))
+            combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
+            # play a sound
+            self.game.sound.play(self.game.assets.sfx_cheers)
+            self.layer = combined
+            self.delay(name="Display",delay=1.5,handler=self.end_highNoon)
+
+    def tally(self,title,amount,value,frame_delay,callback,step):
+        script = []
+        # first just the title
+        titleLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az, "center", opaque=False).set_text(title + "S")
+        script.append({"layer":titleLine,"seconds":0.5})
+        myWait = 0.5
+        # then generate frames for each level of title
+        for i in range(1,amount,1):
+            points = i * value
+            if i == 1:
+                titleString = "1 " + title
+            else:
+                titleString = str(i) + " " + title + "S"
+            titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text(titleString)
+            pointsLine = dmd.TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(points))
+            combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
+            script.append({"layer":combined,"seconds":frame_delay})
+            myWait += frame_delay
+            # set a sound for this point at the start of the wipe
+        self.delay(name="Display",delay=myWait,handler=self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
+        # employ the burst wipe
+        anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
+        animWait = len(anim.frames) / 15.0
+        myWait += animWait
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold = True
+        animLayer.frame_time = 4
+        animLayer.composite_op = "blacksrc"
+        # add the burst
+        burstLayer = dmd.GroupedLayer(128,32,[combined,animLayer])
+        script.append({"layer":burstLayer,"seconds":animWait})
+        # then a final total with the second half of the wipe
+        anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe-2.dmd')
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold = True
+        animLayer.frame_time = 4
+        animLayer.composite_op = "blacksrc"
+        # set another sound to play after the anim
+        myWait += animWait
+        self.delay(name="Display",delay=myWait,handler=self.game.play.remote_sound,param=self.game.assets.sfx_cheers)
+        titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
+        combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
+        script.append({"layer":combined,"seconds":(animWait + 1)})
+        # tack on that extra second
+        myWait += 1
+        # then set off the layer
+        self.layer = dmd.ScriptedLayer(128,32,script)
+        # add the points to the grand total
+        self.grandTotal += points
+        # and delay the comeback for step 2
+        self.delay(name="Display",delay=myWait,handler=callback,param=step)
+
 
     # end high noon
     def end_highNoon(self):
