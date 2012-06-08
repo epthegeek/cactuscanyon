@@ -89,21 +89,18 @@ class BadGuys(game.Mode):
         print "QD STATUS CHECK: " + str(self.game.show_tracking('quickdrawStatus'))
         # If there's a quickdraw running
         if "RUNNING" in self.game.show_tracking('quickdrawStatus'):
-            # kill the timer
-            self.cancel_delayed("Grace")
-            self.cancel_delayed("Timer Delay")
             # It's been won
             self.game.quickdraw.won(target)
         # Otherwise, if all badguys are dead, we're in a showdown
         elif self.game.show_tracking('showdownStatus') == "RUNNING":
             print "SHOWDOWN RUNNING OMG"
-            self.showdown.hit(target)
+            self.game.showdown.hit(target)
             # showdown stuff would go here
         elif self.game.show_tracking('ambushStatus') == "RUNNING":
-            self.ambush.hit(target)
+            self.game.ambush.hit(target)
         # option 3 is a gunfight
         else:
-            self.gunfight.won()
+            self.game.gunfight.won()
 
     def target_up(self,target):
         self.coils[target].patter(on_time=4,off_time=12,original_on_time=35)

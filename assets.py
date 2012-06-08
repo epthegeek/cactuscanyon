@@ -345,6 +345,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1317-undertaker-hope-to-see-you-soon.wav")
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1421-drunk-its-all-over-citizens.wav")
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "876-polly-come-back-soon.wav")
+        self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1010-mayor-thank-you-for-cleaning-up-cactus-canyon.wav")
         self.quote_stampedeStart = 'quote_stampedeStart'
         self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "1260-prospector-its-a-stampede.wav")
         self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "531-prospector-stampede-multiball.wav")
@@ -373,6 +374,29 @@ class Assets():
         self.game.sound.register_sound(self.quote_motherlodeLit, self.quotes_path + "1227-prospector-motherlode-is-lit.wav")
         self.quote_highNoon = 'quote_highNoon'
         self.game.sound.register_sound(self.quote_highNoon, self.quotes_path + "1006-mayor-oh-no-its-high-noon.wav")
+        self.quote_highNoonStart = 'quote_highNoonStart'
+        self.game.sound.register_sound(self.quote_highNoonStart, self.quotes_path + "1271-prospector-wanna-win-shoot-the-bad-guys.wav")
+        self.game.sound.register_sound(self.quote_highNoonStart, self.quotes_path + "1003-mayor-shoot-everything.wav")
+        self.quote_highNoonWin = 'quotehighNoonWin'
+        self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1135-mayor-a-job-well-done.wav")
+        self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1308-undertaker-oh-goody-you-shot-them-all.wav")
+
+        self.quote_hurry = 'quote_hurry'
+        self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1175-mayor-i-suggest-you-hurry-friend.wav")
+        self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1173-mayor-time-for-one-more-shot.wav")
+        self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1205-prospector-youre-runnin-outta-time.wav")
+
+        self.quote_mobStart = 'quote_mobStart'
+        self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1171-mayor-shoot-anything-that-pops-up.wav")
+        self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1259-prospector-shoot-all-the-bad-guys.wav")
+        self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1152-mayor-ive-had-about-enough-of-those-bart-boys.wav")
+        self.quote_mobTaunt = 'quote_mobTaunt'
+        self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "2020-waitress-honey-just-shoot-anything.wav")
+        self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "1165-mayor-aw-just-shoot-em.wav")
+        self.quote_mobEnd = 'quote_mobEnd'
+        self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1303-prospector-look-at-that-bodycount.wav")
+        self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1309-undertaker-a-respectable-bodycount-indeed.wav")
+
 
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")

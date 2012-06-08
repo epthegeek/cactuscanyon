@@ -15,6 +15,7 @@ class Gunfight(game.Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Gunfight, self).__init__(game,priority)
+        self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
 
     def ball_drained(self):
         if self.game.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
@@ -162,7 +163,7 @@ class Gunfight(game.Mode):
         # after a delay pass to the hands with the pop order
         self.delay(name="hands",delay=1.1,handler=self.gunfight_intro_hands,param=badGuys)
         # and drop the current one
-        self.delay(delay=1.1,handler=self.self.game.bad_guys.target_down,param=enemy)
+        self.delay(delay=1.1,handler=self.game.bad_guys.target_down,param=enemy)
 
     def gunfight_intro_hands(self,badGuys):
         # pop the second bad guy and remove it

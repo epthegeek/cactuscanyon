@@ -21,6 +21,26 @@ class SavePolly(game.Mode):
             if self.game.show_tracking("centerRampStage") == 99:
                 self.polly_finished()
 
+    # bumpers pause quickdraw
+    def sw_leftJetBumper_active(self,sw):
+        self.pause_train(True)
+
+    def sw_rightJetBumper_active(self,sw):
+        self.pause_train(True)
+
+    def sw_bottomJetBumper_active(self,sw):
+        self.pause_train(True)
+
+    # so does the mine and both pass the 'advanced' flag to avoid moo sounds
+    def sw_minePopper_active_for_400ms(self,sw):
+        self.pause_train(True)
+
+    # resume when exit
+    def sw_jetBumpersExit_active(self,sw):
+        self.cancel_delayed("Pause Timer")
+        self.pause_timer = 0
+        self.in_progress()
+
     def sw_centerRampMake_active(self,sw):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
@@ -60,7 +80,7 @@ class SavePolly(game.Mode):
         self.game.center_ramp.update_lamps()
         self.game.left_ramp.update_lamps()
 
-    # start the music
+        # start the music
         self.game.base_game_mode.music_on(self.game.assets.music_pollyPeril)
         # reset the train
         self.game.train.reset_toy()

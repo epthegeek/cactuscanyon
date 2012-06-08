@@ -114,7 +114,10 @@ class Quickdraw(game.Mode):
             # every 3 seconds, play a taunt quote
             if int(self.runtime % 3.0) == 0 and self.runtime >= 5:
                 self.game.sound.play_voice(self.game.assets.quote_quickdrawTaunt)
-                # take points off the score
+            # play a hurry quote if we're at 2 seconds.
+            if self.runtime == 2:
+                self.game.sound.play(self.game.assets.quote_hurry)
+            # take points off the score
             self.points -= self.portion
             # update the score text layer
             scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))
@@ -136,6 +139,9 @@ class Quickdraw(game.Mode):
         self.timer(self.target)
 
     def won(self,target):
+        # kill the timer
+        self.cancel_delayed("Grace")
+        self.cancel_delayed("Timer Delay")
         # kill the mode music
         print "QUICKDRAW WON IS KILLING THE MUSIC"
         # add one to the total dead

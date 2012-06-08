@@ -18,6 +18,7 @@ class Showdown(game.Mode):
         super(Showdown, self).__init__(game,priority)
         self.deathTally = 0
         self.showdownValue = 300000
+        self.tauntTimer = 0
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('showdownStatus') == "RUNNING":
@@ -53,9 +54,21 @@ class Showdown(game.Mode):
         # setup the display
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.get_going)
+        self.taunt_timer()
+
+    def taunt_timer(self):
+        # tick up by one
+        self.tauntTimer += 1
+        # if it's been long enough, play a taunt ant reset
+        if self.tauntTimer >= 9:
+            # play a taunt quote
+            self.game.sound.play(self.game.assets.quote_mobTaunt)
+            self.tauntTimer = 0
+        self.delay(name="Taunt Timer",delay=1,handler=self.taunt_timer)
 
     def get_going(self):
-        self.game.sound.play(self.game.assets.quote_showdown)
+        myWait = self.game.sound.play(self.game.assets.quote_showdown)
+        self.delay(delay=myWait,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
         # turn the GI back on
         self.game.base_game_mode.gi_toggle("ON")
         # start the music
@@ -166,6 +179,8 @@ class Showdown(game.Mode):
         self.layer = combined
 
     def hit(self,target):
+        # reset the taunt timer
+        self.tauntTimer = 0
         # handle a guy hit in a showdown
         print "KILLING GUY: " + str(target)
         # count the dead guy
@@ -276,6 +291,8 @@ class Showdown(game.Mode):
         textLine2.set_text(ep.format_score(self.game.show_tracking('showdownPoints')))
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_mobEnd)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         # reset the showdown points for next time
         self.game.set_tracking('showdownPoints',0)

@@ -248,6 +248,8 @@ class HighNoon(game.Mode):
         self.empty_trough()
         # pop up all the bad guys
         self.game.bad_guys.setup_targets()
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_highNoonStart)
         # TODO set all the shots to a status # ?
         # update the lamps
         self.game.update_lamps()
@@ -282,6 +284,8 @@ class HighNoon(game.Mode):
     def won(self):
         self.game.score(20000000)
         self.won = True
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_highNoonWin)
         self.finish_up()
 
     # finish up
