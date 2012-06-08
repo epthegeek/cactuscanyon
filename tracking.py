@@ -78,10 +78,13 @@ class Tracking(game.Player):
         self.player_stats['badGuysDead'] = [False,False,False,False]
         # these are separate because the bad guy can be dead (quickdraw) but also up (showdown/gunfight)
         self.player_stats['badGuyUp'] = [False,False,False,False]
-        # showdown status - OPEN, READY, RUNNING
+        # showdown status - OPEN, READY, RUNNING, OVER (to hold until ambush)
         self.player_stats['showdownStatus'] = "OPEN"
         self.player_stats['showdownTotal'] = 0
         self.player_stats['showdownPoints'] = 0
+        # ambush status - OPEN, READY, RUNNING, OVER (for switching between showdown and ambush)
+        self.player_stats['ambushStatus'] = "OVER"
+        self.player_stats['ambushTotal'] = 0
         # total kills for high noon
         self.player_stats['kills'] = 0
 

@@ -124,7 +124,10 @@ class CCGame(game.BasicGame):
 
         # Quickdraw battle and showdown
         self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
-        self.stampede = cc_modes.Stampede(game=self,priority=68)
+        self.quickdraw = cc_modes.Quickdraw(game=self,priority=68)
+        self.showdown = cc_modes.Showdown(game=self,priority=68)
+        self.gunfight = cc_modes.Gunfight(game=self,priority=68)
+        self.stampede = cc_modes.Stampede(game=self,priority=69)
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
         # gold mine multiball
@@ -160,7 +163,10 @@ class CCGame(game.BasicGame):
                          self.bonus_lanes,
                          self.stampede,
                          self.high_noon,
-                         self.drunk_multiball]
+                         self.drunk_multiball,
+                         self.quickdraw,
+                         self.showdown,
+                         self.gunfight]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 

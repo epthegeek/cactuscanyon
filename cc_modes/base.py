@@ -327,16 +327,17 @@ class BaseGameMode(game.Mode):
             print self.game.show_tracking('stackLevel')
         # if guns are allowed, and showdown is ready do that
         elif self.game.show_tracking('showdownStatus') == "READY":
-            self.game.bad_guys.start_showdown()
+            self.game.modes.add(self.game.showdown)
+            self.game.showdown.start_showdown()
         # if there's no showdown ready, gunfight is possible
         elif self.game.show_tracking('gunfightStatus') == "READY":
-            ## TODO - haven't written gunfight yet
-            self.game.bad_guys.start_gunfight(side)
-            pass
+            self.game.modes.add(self.game.gunfight)
+            self.game.gunfight.start_gunfight(side)
         # else if quickdraw is lit - run that passing which side started it
         elif self.game.show_tracking('quickdrawStatus',side) == "READY":
             # fire the startup
-            self.game.bad_guys.start_quickdraw(side)
+            self.game.modes.add(self.game.quickdraw)
+            self.game.quickdraw.start_quickdraw(side)
         else:
             pass
 

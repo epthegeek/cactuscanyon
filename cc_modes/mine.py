@@ -24,6 +24,7 @@ class Mine(game.Mode):
         else:
             self.hitsToLightLock = [1,1,1,2,2,2,3,3,3,4]
         self.busy = False
+        self.hold = False
 
 
     def mode_started(self):

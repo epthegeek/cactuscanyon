@@ -21,6 +21,8 @@ __all__ = [
     'stampede',
     'high_noon',
     'drunk_multiball',
+    'quickdraw',
+    'showdown',
 ]
 from base import *
 from attract import *
@@ -44,3 +46,5 @@ from trough import *
 from stampede import *
 from high_noon import *
 from drunk_multiball import *
+from quickdraw import *
+from showdown import *
