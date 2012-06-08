@@ -79,7 +79,7 @@ class LeftLoop(game.Mode):
         ## 89 is stampede
         elif stage == 89:
         ## left loop is #0 in the stampede jackpot list
-            if self.game.stampede.active == 0:
+            if self.game.stampede.active == 0 or 'leftLoop' in self.game.drunk_multiball.active:
                 self.game.lamps.leftLoopJackpot.schedule(0x000000FF)
                 self.game.lamps.leftLoopRideEm.schedule(0x0000FFFF)
                 self.game.lamps.leftLoopWildRide.schedule(0x00FFFFFF)

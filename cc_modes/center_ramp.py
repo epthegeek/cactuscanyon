@@ -78,7 +78,7 @@ class CenterRamp(game.Mode):
         # stampede
         elif stage == 89:
         ## center ramp is #2 in the stampede jackpot list
-            if self.game.stampede.active == 2:
+            if self.game.stampede.active == 2  or 'centerRamp' in self.game.drunk_multiball.active:
                 self.game.lamps.centerRampJackpot.schedule(0x000000FF)
                 self.game.lamps.centerRampSavePolly.schedule(0x0000FFFF)
                 self.game.lamps.centerRampStopTrain.schedule(0x00FFFFFF)

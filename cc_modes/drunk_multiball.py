@@ -18,13 +18,50 @@ class DrunkMultiball(game.Mode):
         super(DrunkMultiball, self).__init__(game,priority)
         anim = dmd.Animation().load(ep.DMD_PATH+'dmb-idle.dmd')
         self.overlay = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=8)
+        self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
+        self.shots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
+        self.availableJackpots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
+        self.active = []
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
         if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
             self.end_drunk()
 
-    # switches
+    ### switches
+
+    def sw_leftLoopTop_active(self,sw):
+        self.process_shot('leftLoop')
+        return game.SwitchStop
+
+    def sw_leftRampEnter_active(self, sw):
+        self.process_shot('leftRamp')
+        return game.SwitchStop
+
+    def sw_centerRampMake_active(self, sw):
+        self.process_shot('centerRamp')
+        return game.SwitchStop
+
+    def sw_rightLoopTop_active(self, sw):
+        self.process_shot('rightLoop')
+        return game.SwitchStop
+
+    def sw_rightRampMake_active(self, sw):
+        self.process_shot('rightRamp')
+        return game.SwitchStop
+
+    def process_shot(self,shot):
+        if shot in self.active:
+            # take it out of active and put it in  available
+            self.active.remove(shot)
+            self.availableJackpots.append(shot)
+            # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
+            self.game.score(500000)
+            # play a quote
+            self.game.sound.play(self.game.assets.quote_jackpot)
+        else:
+            # TODO do something here
+            self.game.score(2530)
 
     # beer mug lights jackpots
     def sw_beerMug_active(self,sw):
@@ -34,13 +71,16 @@ class DrunkMultiball(game.Mode):
     def start_drunk(self):
         print "STARTING DRUNK ASS MULTIBALL"
         # set the stack level
-        self.game.set_tracking('stackLevel',True,2)
+        self.game.set_tracking('stackLevel',True,1)
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "RUNNING")
         # disable the flippers
         self.game.enable_flippers(False)
         # enable the inverted flippers
         self.game.enable_inverted_flippers(True)
+        # set all the shots to status 89
+        for shot in self.shots:
+            self.game.set_tracking(shot,89)
         # stop the music
         self.game.sound.stop_music()
         # play the drunk multiball song
@@ -69,6 +109,15 @@ class DrunkMultiball(game.Mode):
         self.layer = combined
 
     def light_jackpot(self):
+        # pick a jackpot
+        thisOne = random.choice(self.availableJackpots)
+        # take it out of the available and make it active
+        self.availableJackpots.remove(thisOne)
+        self.active.append(thisOne)
+        # and update the lamps
+        for mode in self.shotModes:
+            mode.update_lamps()
+
         print "LIGHTING JACKPOT"
         anim = dmd.Animation().load(ep.DMD_PATH+'dmb.dmd')
         myWait = len(anim.frames) / 7.5
@@ -94,4 +143,4 @@ class DrunkMultiball(game.Mode):
         # unload the mode
         self.game.modes.remove(self.game.drunk_multiball)
         # set the stack flag back off
-        self.game.set_tracking('stackLevel',False,2)
+        self.game.set_tracking('stackLevel',False,1)

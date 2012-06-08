@@ -83,8 +83,8 @@ class LeftRamp(game.Mode):
         # stampede
         elif stage == 89:
         ## left ramp is #1 in the stampede jackpot list
-            if self.game.stampede.active == 1:
-                self.game.lamps.leftLoopJackpot.schedule(0x000000FF)
+            if self.game.stampede.active == 1 or 'leftRamp' in self.game.drunk_multiball.active:
+                self.game.lamps.leftRampJackpot.schedule(0x000000FF)
                 self.game.lamps.leftRampSavePolly.schedule(0x0000FFFF)
                 self.game.lamps.leftRampWaterfall.schedule(0x00FFFFFF)
                 self.game.lamps.leftRampWhiteWater.schedule(0xFFFFFFFF)

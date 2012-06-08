@@ -26,6 +26,7 @@ class Gunfight(game.Mode):
         self.game.set_tracking('stackLevel',True,0)
         # turn off the lights
         self.game.set_tracking('lampStatus',"OFF")
+        self.game.gi_control("OFF")
         self.game.update_lamps()
         if side == 0:
             self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
@@ -224,6 +225,7 @@ class Gunfight(game.Mode):
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
         # turn the GI back on
         self.game.set_tracking('lampStatus', "ON")
+        self.game.gi_control("ON")
         self.game.update_lamps()
         # and turn on target guy
         #self.lamps[self.enemy].enable()  ## this shouldn't be needed with the lamps in this mode now

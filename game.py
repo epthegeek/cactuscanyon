@@ -38,6 +38,11 @@ class CCGame(game.BasicGame):
         self.runLampShows = False
         self.status = None
         self.autoPlunge = False
+        # gi lamps set
+        self.giLamps = [self.game.lamps.gi01,
+                        self.game.lamps.gi02,
+                        self.game.lamps.gi03]
+
 
     def setup(self):
         """docstring for setup"""
@@ -517,3 +522,15 @@ class CCGame(game.BasicGame):
             self.enable_alphanumeric_flippers(enable)
 
         self.enable_bumpers(enable)
+
+    ## GI LAMPS
+
+    def gi_control(self,state):
+        if state == "OFF":
+            self.giState = "OFF"
+            for lamp in self.giLamps:
+                lamp.disable()
+        else:
+            self.giState = "ON"
+            for lamp in self.giLamps:
+                lamp.enable()

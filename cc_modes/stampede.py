@@ -7,10 +7,10 @@ class Stampede(game.Mode):
     """Cactus Canyon Stampede"""
     def __init__(self, game, priority):
         super(Stampede, self).__init__(game, priority)
-        self.stampShots = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
+        self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.shots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
         # which jackpot is active
-        self.active = 0
+        self.active = 9
         self.jackpots = 0
         # set up the cows layer
         anim = dmd.Animation().load(ep.DMD_PATH+'cows-parading.dmd')
@@ -174,7 +174,7 @@ class Stampede(game.Mode):
         if self.active == 5:
             self.active = 0
         # update the lamps
-        for shot in self.stampShots:
+        for shot in self.shotModes:
             shot.update_lamps()
         # then come back in 6 seconds and do it all over again
         self.delay(name="Timer",delay=6,handler=self.jackpot_shift)
@@ -196,6 +196,8 @@ class Stampede(game.Mode):
         self.layer = combined
         self.delay(name="Display",delay=2,handler=self.clear_layer)
 
+        # set the active jackpot out of range
+        self.active = 9
         # kill the timer loop that moves the jackpot
         self.cancel_delayed("Timer")
         # set some tracking?

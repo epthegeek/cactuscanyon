@@ -48,10 +48,7 @@ class Attract(game.Mode):
         self.game.lamps.startButton.schedule(schedule=0x00ff00ff, cycle_seconds=0, now=False)
 
         # Turn on the GIs
-        self.game.lamps.gi01.enable()
-        self.game.lamps.gi02.enable()
-        self.game.lamps.gi03.enable()
-        self.game.lamps.gi04.enable()
+        self.game.gi_control("ON")
 
         ## lampshows for attract mode
         lampshows = [

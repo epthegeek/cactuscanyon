@@ -24,9 +24,6 @@ class BaseGameMode(game.Mode):
                           self.game.lamps.rankDeputy,
                           self.game.lamps.rankSheriff,
                           self.game.lamps.rankMarshall]
-        self.giLamps = [self.game.lamps.gi01,
-                        self.game.lamps.gi02,
-                        self.game.lamps.gi03]
         self.starLamps = [self.game.lamps.starMotherlode,
                           self.game.lamps.starCombo,
                           self.game.lamps.starBartBrothers,
@@ -103,12 +100,6 @@ class BaseGameMode(game.Mode):
         ## if status is off, we bail here
         if status == "OFF":
             return
-        # the GI lamps
-        for lamp in self.giLamps:
-                lamp.enable()
-        # if status is GI only, we bail here
-        if status == "GIONLY":
-            return
         # left side - either the playfield light is on or blinking, or the inlane light is on
         left = self.game.show_tracking('quickdrawStatus',0)
         if left == 'OPEN':
@@ -153,8 +144,6 @@ class BaseGameMode(game.Mode):
     def disable_lamps(self):
         for lamp in self.rankLamps:
             lamp.disable()
-        for lamp in self.giLamps:
-            lamp.disable()
         for lamp in self.starLamps:
             lamp.disable()
         self.game.lamps.leftQuickdraw.disable()
@@ -162,14 +151,6 @@ class BaseGameMode(game.Mode):
         self.game.lamps.topRightQuickdraw.disable()
         self.game.lamps.leftReturnQuickdraw.disable()
         self.game.lamps.rightReturnQuickdraw.disable()
-
-    def gi_toggle(self,state):
-        if state == "OFF":
-            for lamp in self.giLamps:
-                lamp.disable()
-        else:
-            for lamp in self.giLamps:
-                lamp.enable()
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game

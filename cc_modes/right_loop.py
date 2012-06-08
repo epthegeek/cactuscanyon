@@ -70,7 +70,7 @@ class RightLoop(game.Mode):
         # stampede
         elif stage == 89:
         ## right loop is #3 in the stampede jackpot list
-            if self.game.stampede.active == 3:
+            if self.game.stampede.active == 3 or 'rightLoop' in self.game.drunk_multiball.active:
                 self.game.lamps.rightLoopJackpot.schedule(0x000000FF)
                 self.game.lamps.rightLoopMarksman.schedule(0x0000FFFF)
                 self.game.lamps.rightLoopGunslinger.schedule(0x00FFFFFF)

@@ -80,7 +80,7 @@ class RightRamp(game.Mode):
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
         elif stage == 89:
         ## right ramp is #4 in the stampede jackpot list
-            if self.game.stampede.active == 4:
+            if self.game.stampede.active == 4  or 'rightRamp' in self.game.drunk_multiball.active:
                 self.game.lamps.rightRampJackpot.schedule(0x000000FF)
                 self.game.lamps.rightRampSavePolly.schedule(0x0000FFFF)
                 self.game.lamps.rightRampShootOut.schedule(0x00FFFFFF)

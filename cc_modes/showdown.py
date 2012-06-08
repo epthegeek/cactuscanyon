@@ -31,7 +31,7 @@ class Showdown(game.Mode):
         # set the showdown tracking
         self.game.set_tracking('showdownStatus', "RUNNING")
         # kill the GI
-        self.game.base_game_mode.gi_toggle("OFF")
+        self.game.gi_control("OFF")
         # things, they go here
         self.deathTally = 0
         # kick out more ball
@@ -70,7 +70,7 @@ class Showdown(game.Mode):
         myWait = self.game.sound.play(self.game.assets.quote_showdown)
         self.delay(delay=myWait,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
         # turn the GI back on
-        self.game.base_game_mode.gi_toggle("ON")
+        self.game.game.gi_control("ON")
         # start the music
         self.game.base_game_mode.music_on(self.game.assets.music_showdown)
         #self.showdown_reset_guys()
@@ -82,7 +82,7 @@ class Showdown(game.Mode):
 
     def new_rack(self):
         # kill the GI again
-        self.game.base_game_mode.gi_toggle("OFF")
+        self.game.game.gi_control("OFF")
         # play the interstitial animation
         # load up the lightning
         anim = dmd.Animation().load(ep.DMD_PATH+'cloud-lightning.dmd')
@@ -109,7 +109,7 @@ class Showdown(game.Mode):
 
     def new_rack_pan(self):
         # turn the GI back on here
-        self.game.base_game_mode.gi_toggle("ON")
+        self.game.game.gi_control("ON")
         # setup the pan script
         script =[]
         for i in range(0,-52,-1):

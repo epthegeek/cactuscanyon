@@ -105,8 +105,8 @@ class Tracking(game.Player):
         self.player_stats['starStatus'] = [False,False,False,False,False]
 
         self.player_stats['tiltStatus'] = 0
-        # used to disable the GI in an update lamps pass
-        # lamp status modes: ON, OFF, GIONLY, ... ?
+        # used to disable the playfield lights in an update lamps pass
+        # lamp status modes: ON, OFF
         self.player_stats['lampStatus'] = "ON"
 
         # a new idea - stack level for tracking what can or can not start
