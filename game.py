@@ -39,9 +39,9 @@ class CCGame(game.BasicGame):
         self.status = None
         self.autoPlunge = False
         # gi lamps set
-        self.giLamps = [self.game.lamps.gi01,
-                        self.game.lamps.gi02,
-                        self.game.lamps.gi03]
+        self.giLamps = [self.lamps.gi01,
+                        self.lamps.gi02,
+                        self.lamps.gi03]
 
 
     def setup(self):
@@ -220,6 +220,8 @@ class CCGame(game.BasicGame):
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
         self.ballStarting = True
+        # turn on the GI
+        self.gi_control("ON")
         # launch a ball, unless there is one in the shooter lane already - but really, this shouldn't
         # happen because we're only starting if trough is full
         if not self.switches.shooterLane.is_active():
@@ -351,7 +353,7 @@ class CCGame(game.BasicGame):
         self.save_game_data()
 
     def save_game_data(self):
-        super(CCGame, self).save_game_data(self.user_game_data_path)
+        super(CCGame, self).save_game_data(user_game_data_path)
 
 
     def setup_ball_search(self):

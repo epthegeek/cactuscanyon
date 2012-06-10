@@ -21,7 +21,7 @@ class Quickdraw(game.Mode):
 
     def ball_drained(self):
         # the the ball drains, quickdraw is lost
-        if self.game.num_balls_in_play == 0 and self.game.show_tracking('quickdrawStatus',self.side) == "RUNNING":
+        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('quickdrawStatus',self.side) == "RUNNING":
             self.lost(self.side)
 
     # switches

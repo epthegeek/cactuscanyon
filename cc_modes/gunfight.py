@@ -18,7 +18,7 @@ class Gunfight(game.Mode):
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
 
     def ball_drained(self):
-        if self.game.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
+        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
             self.lost()
 
     def start_gunfight(self,side):
@@ -119,7 +119,7 @@ class Gunfight(game.Mode):
 
     def lost(self):
         # drop the bad guy
-        self.target_down(self.enemy)
+        self.game.bad_guys.target_down(self.enemy)
         print "GUNFIGHT LOST IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # play a quote
