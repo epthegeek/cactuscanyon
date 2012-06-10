@@ -70,7 +70,7 @@ class Showdown(game.Mode):
         myWait = self.game.sound.play(self.game.assets.quote_showdown)
         self.delay(delay=myWait,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
         # turn the GI back on
-        self.game.game.gi_control("ON")
+        self.game.gi_control("ON")
         # start the music
         self.game.base_game_mode.music_on(self.game.assets.music_showdown)
         #self.showdown_reset_guys()
@@ -82,7 +82,7 @@ class Showdown(game.Mode):
 
     def new_rack(self):
         # kill the GI again
-        self.game.game.gi_control("OFF")
+        self.game.gi_control("OFF")
         # play the interstitial animation
         # load up the lightning
         anim = dmd.Animation().load(ep.DMD_PATH+'cloud-lightning.dmd')
@@ -109,7 +109,7 @@ class Showdown(game.Mode):
 
     def new_rack_pan(self):
         # turn the GI back on here
-        self.game.game.gi_control("ON")
+        self.game.gi_control("ON")
         # setup the pan script
         script =[]
         for i in range(0,-52,-1):
@@ -143,11 +143,11 @@ class Showdown(game.Mode):
     def lightning(self,section):
         # set which section of the GI to flash
         if section == 'top':
-            lamp = self.game.base_game_mode.giLamps[0]
+            lamp = self.game.giLamps[0]
         elif section == 'right':
-            lamp = self.game.base_game_mode.giLamps[1]
+            lamp = self.game.giLamps[1]
         elif section == 'left':
-            lamp = self.game.base_game_mode.giLamps[2]
+            lamp = self.game.giLamps[2]
         else:
             pass
             # then flash it
@@ -287,7 +287,7 @@ class Showdown(game.Mode):
         textString = "SHOWDOWN: " + str(self.deathTally) + " KILLS"
         textLine1.set_text(textString)
         textLine1.composite_op = "blacksrc"
-        textLine2 = dmd.TextLayer(128,2,11, self.game.assets.font_12px_az, "center", opaque=False)
+        textLine2 = dmd.TextLayer(128/2,11, self.game.assets.font_12px_az, "center", opaque=False)
         textLine2.set_text(ep.format_score(self.game.show_tracking('showdownPoints')))
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined

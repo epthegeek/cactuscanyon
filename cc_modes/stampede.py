@@ -2,13 +2,14 @@ from procgame import *
 from assets import *
 import cc_modes
 import ep
+import random
 
 class Stampede(game.Mode):
     """Cactus Canyon Stampede"""
     def __init__(self, game, priority):
         super(Stampede, self).__init__(game, priority)
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
-        self.shots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
+        self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         # which jackpot is active
         self.active = 9
         self.jackpots = 0
@@ -25,7 +26,7 @@ class Stampede(game.Mode):
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
-        if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('centerRampStage') == 89:
+        if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('centerRampStage') == 89:
             self.end_stampede()
 
     ### switches
@@ -57,9 +58,18 @@ class Stampede(game.Mode):
         self.game.set_tracking('stackLevel',True,1)
         # stop the current music
         self.game.sound.stop_music()
+        # turn on a starting jackpot
+        choices = [0,1,2,3,4]
+        self.active = random.choice(choices)
         # set the ramp status for lights
         for shot in self.shots:
+            print "SETTING TRACKING FOR:" + shot
             self.game.set_tracking(shot,89)
+        # udpate the lamps
+        for shot in self.shotModes:
+            print "UPDATING LAMPS FOR STAMPEDE"
+            shot.update_lamps()
+
         # start the timer for the moving jackpot
         self.jackpot_shift()
         #play the opening anim
@@ -171,7 +181,7 @@ class Stampede(game.Mode):
         # bump up by one
         self.active += 1
         # then see if we went over
-        if self.active == 5:
+        if self.active >= 5:
             self.active = 0
         # update the lamps
         for shot in self.shotModes:
@@ -180,13 +190,14 @@ class Stampede(game.Mode):
         self.delay(name="Timer",delay=6,handler=self.jackpot_shift)
 
     def end_stampede(self):
+        print "ENDING S T A M P E D E"
         # stop the music
         self.game.sound.stop_music()
         # do a final display
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'skulls-border.dmd').frames[0])
         textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
-        textString = "STAMPEDE: " + str(self.deathTally) + " JACKPOTS"
+        textString = "STAMPEDE: " + str(self.jackpots) + " JACKPOTS"
         textLine1.set_text(textString)
         textLine1.composite_op = "blacksrc"
         textLine2 = dmd.TextLayer(128/2,11, self.game.assets.font_12px_az, "center", opaque=False)
@@ -204,6 +215,14 @@ class Stampede(game.Mode):
         # reset the ramp status
         for each in self.shots:
             self.game.set_tracking(each,1)
+        # and update the lamps
+        for mode in self.shotModes:
+            mode.update_lamps()
+        # badge light
+        self.game.set_tracking('starStatus',True,4)
+        self.game.base_game_mode.check_high_noon()
+        self.game.base_game_mode.update_lamps()
+
         # unload?
         # unload the mode
         self.game.modes.remove(self.game.stampede)

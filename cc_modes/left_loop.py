@@ -80,10 +80,10 @@ class LeftLoop(game.Mode):
         elif stage == 89:
         ## left loop is #0 in the stampede jackpot list
             if self.game.stampede.active == 0 or 'leftLoop' in self.game.drunk_multiball.active:
-                self.game.lamps.leftLoopJackpot.schedule(0x000000FF)
-                self.game.lamps.leftLoopRideEm.schedule(0x0000FFFF)
-                self.game.lamps.leftLoopWildRide.schedule(0x00FFFFFF)
-                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFFFFFF)
+                self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
+                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
@@ -121,7 +121,7 @@ class LeftLoop(game.Mode):
                 # pulse the coil to open the gate
                 self.game.coils.rightLoopGate.pulse(150)
             ## if the combo timer is on:
-            if self.game.comboTimer > 0:
+            if self.game.combos.myTimer > 0:
                 # register the combo and reset the timer
                 combo = self.game.combos.hit()
             # else the combo timer is NOT on so run award loop without the flag

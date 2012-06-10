@@ -79,10 +79,10 @@ class CenterRamp(game.Mode):
         elif stage == 89:
         ## center ramp is #2 in the stampede jackpot list
             if self.game.stampede.active == 2  or 'centerRamp' in self.game.drunk_multiball.active:
-                self.game.lamps.centerRampJackpot.schedule(0x000000FF)
-                self.game.lamps.centerRampSavePolly.schedule(0x0000FFFF)
-                self.game.lamps.centerRampStopTrain.schedule(0x00FFFFFF)
-                self.game.lamps.centerRampCatchTrain.schedule(0xFFFFFFFF)
+                self.game.lamps.centerRampJackpot.schedule(0x000F000F)
+                self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.centerRampStopTrain.schedule(0x0F0F0F0F)
+                self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
@@ -114,7 +114,7 @@ class CenterRamp(game.Mode):
 
         # hitting this switch counts as a made ramp - really
         # score the points and mess with the combo
-        if self.game.comboTimer > 0:
+        if self.game.combos.myTimer > 0:
             # register the combo and reset the timer - returns true for use later
             combo = self.game.combos.hit()
         else:

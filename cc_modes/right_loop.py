@@ -71,10 +71,10 @@ class RightLoop(game.Mode):
         elif stage == 89:
         ## right loop is #3 in the stampede jackpot list
             if self.game.stampede.active == 3 or 'rightLoop' in self.game.drunk_multiball.active:
-                self.game.lamps.rightLoopJackpot.schedule(0x000000FF)
-                self.game.lamps.rightLoopMarksman.schedule(0x0000FFFF)
-                self.game.lamps.rightLoopGunslinger.schedule(0x00FFFFFF)
-                self.game.lamps.rightLoopGoodShot.schedule(0xFFFFFFFF)
+                self.game.lamps.rightLoopJackpot.schedule(0x000F000F)
+                self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopGunslinger.schedule(0x0F0F0F0F)
+                self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
@@ -111,7 +111,7 @@ class RightLoop(game.Mode):
                 # pulse the coil to open the gate
                 self.game.coils.leftLoopGate.pulse(150)
             ## if the combo timer is on:
-            if self.game.comboTimer > 0:
+            if self.game.combos.myTimer > 0:
                 # register the combo and reset the timer
                 combo = self.game.combos.hit()
             # else the combo timer is NOT on so run award loop without the flag

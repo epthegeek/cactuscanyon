@@ -47,7 +47,7 @@ class LeftRamp(game.Mode):
             return
 
         stage = self.game.show_tracking('leftRampStage')
-
+        print "RAMP STAGE SANITY CHECK: " + str(stage)
         if stage == 1:
             # blink the first light
             self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
@@ -84,10 +84,10 @@ class LeftRamp(game.Mode):
         elif stage == 89:
         ## left ramp is #1 in the stampede jackpot list
             if self.game.stampede.active == 1 or 'leftRamp' in self.game.drunk_multiball.active:
-                self.game.lamps.leftRampJackpot.schedule(0x000000FF)
-                self.game.lamps.leftRampSavePolly.schedule(0x0000FFFF)
-                self.game.lamps.leftRampWaterfall.schedule(0x00FFFFFF)
-                self.game.lamps.leftRampWhiteWater.schedule(0xFFFFFFFF)
+                self.game.lamps.leftRampJackpot.schedule(0x000F000F)
+                self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.leftRampWaterfall.schedule(0x0F0F0F0F)
+                self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
@@ -106,7 +106,7 @@ class LeftRamp(game.Mode):
         # tick one onto the total of ramp shots
         self.game.increase_tracking('leftRampShots')
         # score the points and mess with the combo
-        if self.game.comboTimer > 0:
+        if self.game.combos.myTimer > 0:
             # register the combo and reset the timer - returns true for use later
             combo = self.game.combos.hit()
         else:

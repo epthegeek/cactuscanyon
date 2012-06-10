@@ -81,10 +81,10 @@ class RightRamp(game.Mode):
         elif stage == 89:
         ## right ramp is #4 in the stampede jackpot list
             if self.game.stampede.active == 4  or 'rightRamp' in self.game.drunk_multiball.active:
-                self.game.lamps.rightRampJackpot.schedule(0x000000FF)
-                self.game.lamps.rightRampSavePolly.schedule(0x0000FFFF)
-                self.game.lamps.rightRampShootOut.schedule(0x00FFFFFF)
-                self.game.lamps.rightRampSoundAlarm.schedule(0xFFFFFFFF)
+                self.game.lamps.rightRampJackpot.schedule(0x000F000F)
+                self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.rightRampShootOut.schedule(0x0F0F0F0F)
+                self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
@@ -112,7 +112,7 @@ class RightRamp(game.Mode):
         # tick one on to the total of player shots on the right ramp
         self.game.increase_tracking('rightRampShots')
         # score the points and mess with the combo
-        if self.game.comboTimer > 0:
+        if self.game.combos.myTimer > 0:
             # register the combo and reset the timer - returns true for use later
             combo = self.game.combos.hit()
         else:

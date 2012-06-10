@@ -201,7 +201,6 @@ class Mine(game.Mode):
         # reset the mine hits
         self.game.set_tracking('mineHits', 0)
         # play the appropriate lock animation
-
         if myBallsLocked == 1:
             self.play_ball_one_lock_anim()
         else:
@@ -228,7 +227,7 @@ class Mine(game.Mode):
         self.game.modes.add(self.game.gm_multiball)
         self.game.gm_multiball.start_multiball()
 
-    def play_ball_one_lock_anim(self):
+    def play_ball_one_lock_anim(self,passive=False):
         # stop the music
         print "one lock anim IS KILLING THE MUSIC"
         self.game.sound.stop_music()
@@ -274,8 +273,9 @@ class Mine(game.Mode):
         textLine = dmd.TextLayer(128/2, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL " + str(self.game.show_tracking('ballsLocked')) + " LOCKED")
         textLine.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[self.layer,textLine])
-        # kick the ball out and clear the layer
-        self.delay(delay=2,handler=self.game.mountain.eject)
+        # kick the ball (if there's a ball in there) out and clear the layer
+        if sw_minePopper_is_active():
+            self.delay(delay=2,handler=self.game.mountain.eject)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         self.delay(delay=2.1,handler=self.game.base_game_mode.music_on)
 
@@ -320,9 +320,9 @@ class Mine(game.Mode):
         self.game.decrease_tracking('extraBallsPending')
         self.update_lamps()
         # add one to the pending the player for use - using the framework standard for storing extra_balls
-        self.current_player().extra_balls += 1
+        self.game.current_player().extra_balls += 1
         # if they've already gotten an extra ball - it should divert to the short version
-        if self.current_player().extra_balls > 1:
+        if self.game.current_player().extra_balls > 1:
             # play the short one
             self.extra_ball_ending(isLong=False)
         # otherwise play the whole animation

@@ -26,19 +26,19 @@ class Tracking(game.Player):
         self.player_stats['drunkMultiballStatus'] = "OPEN"
 
         self.player_stats['rightRampShots'] = 0
-        self.player_stats['rightRampStage'] = 1
+        self.player_stats['rightRampStage'] = 5
 
         self.player_stats['leftRampShots'] = 0
-        self.player_stats['leftRampStage'] = 1
+        self.player_stats['leftRampStage'] = 5
 
         self.player_stats['centerRampShots'] = 0
-        self.player_stats['centerRampStage'] = 1
+        self.player_stats['centerRampStage'] = 5
 
         self.player_stats['leftLoopShots'] = 0
-        self.player_stats['leftLoopStage'] = 1
+        self.player_stats['leftLoopStage'] = 4
 
         self.player_stats['rightLoopShots'] = 0
-        self.player_stats['rightLoopStage'] = 1
+        self.player_stats['rightLoopStage'] = 2
 
         self.player_stats['fullLoops'] = 0
 

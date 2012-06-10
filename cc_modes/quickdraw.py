@@ -208,9 +208,11 @@ class Quickdraw(game.Mode):
         if False not in self.game.show_tracking('badGuysDead'):
             if self.game.show_tracking('showdownStatus') != "OVER":
                 self.game.set_tracking('showdownStatus',"READY")
+                print "SHOWDOWN STATUS IS READY"
             else:
                 self.game.set_tracking('ambushStatus',"READY")
         self.game.bad_guys.update_lamps()
+        self.game.base_game_mode.update_lamps()
         # turn the main music back on - if a second level mode isn't running
         if not self.game.show_tracking('stackLevel',1):
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)

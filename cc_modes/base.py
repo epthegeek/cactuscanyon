@@ -125,8 +125,8 @@ class BaseGameMode(game.Mode):
             pass
         ## on a second pass thorugh the returns - if showdown is ready, flash 'em
         if self.game.show_tracking('showdownStatus') == "READY":
-            self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
-            self.game.lamps.leftReturnQuickdraw.schedule(0x0F0F0F0F)
+            self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
+            self.game.lamps.leftReturnQuickdraw.schedule(0xFF00FF00)
 
         # the rank lights
         rank = self.game.show_tracking('rank')
@@ -404,6 +404,9 @@ class BaseGameMode(game.Mode):
         self.bumper_hit('bottom')
 
     def bumper_hit(self,bumper):
+        # if combos are on, award grace
+        if self.game.combos.myTimer > 0:
+            self.game.combos.myTimer = self.game.combos.default
         hits = self.game.increase_tracking('bumperHits')
         if hits == 75:
             # display the super jets display

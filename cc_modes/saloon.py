@@ -26,6 +26,7 @@ class Saloon(game.Mode):
             self.hitsToDefeatBart = [3,5,6,7,8,8]
         # hits banners list
         self.banners = ['bam','biff','ouch','pow','wham','zoink']
+        self.busy = False
 
     def mode_started(self):
         # activate the first bart if we're on the first ball
