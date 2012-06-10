@@ -274,7 +274,7 @@ class Mine(game.Mode):
         textLine.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[self.layer,textLine])
         # kick the ball (if there's a ball in there) out and clear the layer
-        if sw_minePopper_is_active():
+        if self.game.switches.minePopper.is_active():
             self.delay(delay=2,handler=self.game.mountain.eject)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         self.delay(delay=2.1,handler=self.game.base_game_mode.music_on)

@@ -311,6 +311,12 @@ class GoldMine(game.Mode):
     def end_multiball(self):
         # clear the layer
         self.layer = None
+        # kill the motherload just in case
+        # turn motherlode off
+        self.game.set_tracking('motherlodeLit', False)
+        self.game.mountain.stop()
+        # reset the motherlode multiplier just in case
+        self.game.set_tracking('motherlodeMultiplier',1)
         # set the status to open
         self.game.set_tracking('mineStatus','OPEN')
         print "MULTIBALL ENDED"

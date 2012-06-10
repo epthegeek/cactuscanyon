@@ -302,9 +302,9 @@ class HighNoon(game.Mode):
         #  turn the flippers off
         self.game.enable_flippers(False)
         # clear the saloon and mine if needed
-        if sw_minePopper_is_active():
+        if self.game.switches.minePopper.is_active():
             self.game.mountain.kick()
-        if sw_saloonPopper_is_active():
+        if self.game.switches.saloonPopper.is_active():
             self.game.saloon.kick()
         self.final_display()
 
