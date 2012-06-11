@@ -19,7 +19,7 @@ class DrunkMultiball(game.Mode):
         anim = dmd.Animation().load(ep.DMD_PATH+'dmb-idle.dmd')
         self.overlay = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=8)
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
-        self.shots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
+        self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         self.availableJackpots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
         self.active = []
 
@@ -78,11 +78,10 @@ class DrunkMultiball(game.Mode):
         self.game.enable_flippers(False)
         # enable the inverted flippers
         self.game.enable_inverted_flippers(True)
-        # set all the shots to status 89
-        for shot in self.shots:
-            self.game.set_tracking(shot,89)
         # stop the music
         self.game.sound.stop_music()
+        # turn the GI off
+        self.game.gi_control("OFF")
         # play the drunk multiball song
         self.game.base_game_mode.music_on(self.game.assets.music_drunkMultiball)
         # show some screens about the mode
@@ -114,6 +113,7 @@ class DrunkMultiball(game.Mode):
         # take it out of the available and make it active
         self.availableJackpots.remove(thisOne)
         self.active.append(thisOne)
+        print self.active
         # and update the lamps
         for mode in self.shotModes:
             mode.update_lamps()
@@ -140,6 +140,8 @@ class DrunkMultiball(game.Mode):
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # clear the layer
         self.layer = None
+        # turn the GI back on
+        self.game.gi_control("ON")
         # unload the mode
         self.game.modes.remove(self.game.drunk_multiball)
         # set the stack flag back off

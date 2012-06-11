@@ -190,7 +190,7 @@ class BaseGameMode(game.Mode):
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
         textLine1 = dmd.TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
         # TODO right now it takes 15 shots to light drunk multiball - change this to a config param
-        left = 15 - hits
+        left = 2 - hits
         if left <= 0:
             textString = "SHOOT THE SALOON"
             textString2 = "FOR MULTIBALL"

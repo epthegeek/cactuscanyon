@@ -38,11 +38,20 @@ class CenterRamp(game.Mode):
         # check goldmine active status
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',2):
-                self.game.lamps.centerRampCatchTrain.schedule(0xFFFFF39C)
-                self.game.lamps.centerRampStopTrain.schedule(0x0FFFF39C)
-                self.game.lamps.centerRampSavePolly.schedule(0x00FFF39C)
-                self.game.lamps.centerRampJackpot.schedule(0x000FF39C)
+                self.game.lamps.centerRampCatchTrain.schedule(0x000FF39C)
+                self.game.lamps.centerRampStopTrain.schedule(0x00FFF39C)
+                self.game.lamps.centerRampSavePolly.schedule(0x0FFFF39C)
+                self.game.lamps.centerRampJackpot.schedule(0xFFFFF39C)
             return
+            # drunk multiball
+        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+        ## right ramp is #4 in the stampede jackpot list
+            if 'centerRamp' in self.game.drunk_multiball.active:
+                self.game.lamps.centerRampJackpot.schedule(0x000F000F)
+                self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.centerRampStopTrain.schedule(0x0F0F0F0F)
+                self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
+                return
 
         stage = self.game.show_tracking('centerRampStage')
 
@@ -78,7 +87,7 @@ class CenterRamp(game.Mode):
         # stampede
         elif stage == 89:
         ## center ramp is #2 in the stampede jackpot list
-            if self.game.stampede.active == 2  or 'centerRamp' in self.game.drunk_multiball.active:
+            if self.game.stampede.active == 2:
                 self.game.lamps.centerRampJackpot.schedule(0x000F000F)
                 self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.centerRampStopTrain.schedule(0x0F0F0F0F)

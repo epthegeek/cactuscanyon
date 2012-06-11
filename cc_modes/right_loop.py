@@ -39,11 +39,20 @@ class RightLoop(game.Mode):
         # goldmine active check
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',3):
-                self.game.lamps.rightLoopGoodShot.schedule(0xFFFFF39C)
-                self.game.lamps.rightLoopGunslinger.schedule(0x0FFFF39C)
-                self.game.lamps.rightLoopMarksman.schedule(0x00FFF39C)
-                self.game.lamps.rightLoopJackpot.schedule(0x000FF39C)
+                self.game.lamps.rightLoopGoodShot.schedule(0x000FF39C)
+                self.game.lamps.rightLoopGunslinger.schedule(0x00FFF39C)
+                self.game.lamps.rightLoopMarksman.schedule(0x0FFFF39C)
+                self.game.lamps.rightLoopJackpot.schedule(0xFFFFF39C)
             return
+            # drunk multiball
+        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+        ## right ramp is #4 in the stampede jackpot list
+            if 'rightLoop' in self.game.drunk_multiball.active:
+                self.game.lamps.rightLoopJackpot.schedule(0x000F000F)
+                self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopGunslinger.schedule(0x0F0F0F0F)
+                self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
+                retun
 
         stage = self.game.show_tracking('rightLoopStage')
 
@@ -70,7 +79,7 @@ class RightLoop(game.Mode):
         # stampede
         elif stage == 89:
         ## right loop is #3 in the stampede jackpot list
-            if self.game.stampede.active == 3 or 'rightLoop' in self.game.drunk_multiball.active:
+            if self.game.stampede.active == 3:
                 self.game.lamps.rightLoopJackpot.schedule(0x000F000F)
                 self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
                 self.game.lamps.rightLoopGunslinger.schedule(0x0F0F0F0F)

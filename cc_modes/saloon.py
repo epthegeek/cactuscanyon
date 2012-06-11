@@ -113,6 +113,8 @@ class Saloon(game.Mode):
         if self.game.show_tracking('gunfightStatus') == 'READY':
             self.game.lamps.rightGunfightPin.enable()
             self.game.lamps.leftGunfightPin.enable()
+        if self.game.show_tracking('drunkMultiballStatus') == "READY":
+            self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
 
     def disable_lamps(self):
         self.game.lamps.saloonArrow.disable()

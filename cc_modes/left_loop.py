@@ -45,14 +45,24 @@ class LeftLoop(game.Mode):
             self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
             return
         ## goldmine check - if stack level 2 is true, it's on
-        if self.game.show_tracking('mineStatus') == "RUNNING":
+        if self.game.show_tracking('mineStatusStatus') == "RUNNING":
             # check if this jackpot shot is active
             if self.game.show_tracking('jackpotStatus',0):
-                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFFF39C)
-                self.game.lamps.leftLoopWildRide.schedule(0x0FFFF39C)
-                self.game.lamps.leftLoopRideEm.schedule(0x00FFF39C)
-                self.game.lamps.leftLoopJackpot.schedule(0x000FF39C)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0x000FF39C)
+                self.game.lamps.leftLoopWildRide.schedule(0x00FFF39C)
+                self.game.lamps.leftLoopRideEm.schedule(0x0FFFF39C)
+                self.game.lamps.leftLoopJackpot.schedule(0xFFFFF39C)
             return
+
+            # drunk multiball
+        if self.game.show_tracking('drunkMultiball') == "RUNNING":
+        ## right ramp is #4 in the stampede jackpot list
+            if 'leftLoop' in self.game.drunk_multiball.active:
+                self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
+                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
+                return
 
         stage = self.game.show_tracking('leftLoopStage')
 
@@ -79,7 +89,7 @@ class LeftLoop(game.Mode):
         ## 89 is stampede
         elif stage == 89:
         ## left loop is #0 in the stampede jackpot list
-            if self.game.stampede.active == 0 or 'leftLoop' in self.game.drunk_multiball.active:
+            if self.game.stampede.active == 0:
                 self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
                 self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
                 self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)

@@ -473,9 +473,9 @@ class CCGame(game.BasicGame):
     ### I hope
 
     def enable_inverted_flippers(self, enable):
-        #return True
-
         """Enables or disables the flippers AND bumpers."""
+
+        print "ENABLE INVERTED FLIPPERS, YO"
         for flipper in self.config['PRFlippers']:
 
             ## add the invert value

@@ -38,11 +38,21 @@ class RightRamp(game.Mode):
         # goldmine multiball check
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',4):
-                self.game.lamps.rightRampSoundAlarm.schedule(0xFFFFF39C)
-                self.game.lamps.rightRampShootOut.schedule(0x0FFFF39C)
-                self.game.lamps.rightRampSavePolly.schedule(0x00FFF39C)
-                self.game.lamps.rightRampJackpot.schedule(0x000FF39C)
+                self.game.lamps.rightRampSoundAlarm.schedule(0x000FF39C)
+                self.game.lamps.rightRampShootOut.schedule(0x00FFF39C)
+                self.game.lamps.rightRampSavePolly.schedule(0x0FFFF39C)
+                self.game.lamps.rightRampJackpot.schedule(0xFFFFF39C)
             return
+
+        # drunk multiball
+        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+        ## right ramp is #4 in the stampede jackpot list
+            if 'rightRamp' in self.game.drunk_multiball.active:
+                self.game.lamps.rightRampJackpot.schedule(0x000F000F)
+                self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.rightRampShootOut.schedule(0x0F0F0F0F)
+                self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
+                return
 
         stage = self.game.show_tracking('rightRampStage')
 
@@ -80,7 +90,7 @@ class RightRamp(game.Mode):
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
         elif stage == 89:
         ## right ramp is #4 in the stampede jackpot list
-            if self.game.stampede.active == 4  or 'rightRamp' in self.game.drunk_multiball.active:
+            if self.game.stampede.active == 4:
                 self.game.lamps.rightRampJackpot.schedule(0x000F000F)
                 self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.rightRampShootOut.schedule(0x0F0F0F0F)

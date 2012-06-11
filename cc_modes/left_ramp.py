@@ -40,11 +40,20 @@ class LeftRamp(game.Mode):
         # check for goldmine multiball
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',1):
-                self.game.lamps.leftRampWhiteWater.schedule(0xFFFFF39C)
-                self.game.lamps.leftRampWaterfall.schedule(0x0FFFF39C)
-                self.game.lamps.leftRampSavePolly.schedule(0x00FFF39C)
-                self.game.lamps.leftRampJackpot.schedule(0x000FF39C)
+                self.game.lamps.leftRampWhiteWater.schedule(0x000FF39C)
+                self.game.lamps.leftRampWaterfall.schedule(0x00FFF39C)
+                self.game.lamps.leftRampSavePolly.schedule(0x0FFFF39C)
+                self.game.lamps.leftRampJackpot.schedule(0xFFFFF39C)
             return
+            # drunk multiball
+        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+        ## right ramp is #4 in the stampede jackpot list
+            if 'leftRamp' in self.game.drunk_multiball.active:
+                self.game.lamps.leftRampJackpot.schedule(0x000F000F)
+                self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.leftRampWaterfall.schedule(0x0F0F0F0F)
+                self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+                return
 
         stage = self.game.show_tracking('leftRampStage')
         print "RAMP STAGE SANITY CHECK: " + str(stage)
@@ -83,7 +92,7 @@ class LeftRamp(game.Mode):
         # stampede
         elif stage == 89:
         ## left ramp is #1 in the stampede jackpot list
-            if self.game.stampede.active == 1 or 'leftRamp' in self.game.drunk_multiball.active:
+            if self.game.stampede.active == 1:
                 self.game.lamps.leftRampJackpot.schedule(0x000F000F)
                 self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.leftRampWaterfall.schedule(0x0F0F0F0F)
