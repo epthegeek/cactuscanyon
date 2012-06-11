@@ -225,6 +225,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cheers, self.sfx_path + "161-sfx-crowd-cheer-1.wav")
         self.game.sound.register_sound(self.sfx_cheers, self.sfx_path + "165-sfx-crowd-cheer-3.wav")
 
+        self.sfx_pour = 'sfx_pour'
+        self.game.sound.register_sound(self.sfx_pour, self.sfx_path + "00-sfx-pouring-beer.wav")
 
     # Quotes
         # this bunches the welcome strings together for play_voice()
@@ -274,7 +276,6 @@ class Assets():
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "840-polly-congratulations.wav")
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2008-waitress-amazing.wav")
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2005-waitress-ooh-what-are-you-packin.wav")
-        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1116-mayor-this-calls-for-a-drink.wav")
         self.quote_lockLit = 'quote_lockLit'
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")
@@ -492,6 +493,14 @@ class Assets():
         self.quote_showdown = 'quote_showdown'
         self.game.sound.register_sound(self.quote_showdown, self.quotes_path + "1005-mayor-oh-my-a-showdown.wav")
         self.game.sound.register_sound(self.quote_showdown, self.quotes_path + "541-prospector-showdown.wav")
+        self.quote_drunkMultiballLit = 'quote_drunkMultiballLit'
+        self.game.sound.register_sound(self.quote_drunkMultiballLit, self.quotes_path + "1116-mayor-this-calls-for-a-drink.wav")
+        self.quote_drunkNeverSeen = 'quote_drunkNeverSeen'
+        self.game.sound.register_sound(self.quote_drunkNeverSeen, self.quotes_path + "1418-drunk-ooh-i-never-seen-nothin-like-that.wav")
+        self.quote_drunkDrinkToThat = 'quote_drunkDrinkToThat'
+        self.game.sound.register_sound(self.quote_drunkDrinkToThat, self.quotes_path + "1433-drunk-ill-drink-to-that.wav")
+        self.quote_drunkJackpot = 'quote_drunkJackpot'
+        self.game.sound.register_sound(self.quote_drunkJackpot, self.quotes_path + "1430-drunk-jackpot-whoopie.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

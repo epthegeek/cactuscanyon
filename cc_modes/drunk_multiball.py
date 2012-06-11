@@ -22,6 +22,10 @@ class DrunkMultiball(game.Mode):
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         self.availableJackpots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
         self.active = []
+        # an animation for use in the intro
+        anim = dmd.Animation().load(ep.DMD_PATH+'reverse.dmd')
+        self.underLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
+
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
@@ -60,7 +64,7 @@ class DrunkMultiball(game.Mode):
             # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
             self.game.score(500000)
             # play a quote
-            self.game.sound.play(self.game.assets.quote_jackpot)
+            self.game.sound.play(self.game.assets.quote_drunkJackpot)
         else:
             # TODO do something here
             self.game.score(2530)
@@ -93,11 +97,94 @@ class DrunkMultiball(game.Mode):
         # play the drunk multiball song
         self.game.base_game_mode.music_on(self.game.assets.music_drunkMultiball)
         # show some screens about the mode
-        self.intro_display()
+        self.banner()
 
-    def intro_display(self):
+    def banner(self):
+        # setup the pour mask
+        thing1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-1.dmd').frames[0])
+        thing2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-2.dmd').frames[0])
+        thing3 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-3.dmd').frames[0])
+        thing4 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-4.dmd').frames[0])
+        thing5 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-5.dmd').frames[0])
+        thing6 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-6.dmd').frames[0])
+        thing7 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-7.dmd').frames[0])
+        thing8 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-8.dmd').frames[0])
+        thing9 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-9.dmd').frames[0])
+        thing10 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-10.dmd').frames[0])
+        thing11 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-11.dmd').frames[0])
+        thing12 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-12.dmd').frames[0])
+        thing13 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-13.dmd').frames[0])
+        script = []
+        script.append({'seconds':0.1,'layer':thing1})
+        script.append({'seconds':0.1,'layer':thing2})
+        script.append({'seconds':0.1,'layer':thing3})
+        script.append({'seconds':0.1,'layer':thing4})
+        script.append({'seconds':0.1,'layer':thing5})
+        script.append({'seconds':0.1,'layer':thing6})
+        script.append({'seconds':0.1,'layer':thing7})
+        script.append({'seconds':0.1,'layer':thing8})
+        script.append({'seconds':0.1,'layer':thing9})
+        script.append({'seconds':0.1,'layer':thing10})
+        script.append({'seconds':0.1,'layer':thing11})
+        script.append({'seconds':0.1,'layer':thing12})
+        script.append({'seconds':0.1,'layer':thing13})
+
+        pour = dmd.ScriptedLayer(128,32,script)
+        pour.composite_op = "blacksrc"
+
+        mug = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
+        mug.composite_op = "blacksrc"
+        words = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'drunk-multiball.dmd').frames[0])
+        combined = dmd.GroupedLayer(128,32,[words,pour,mug])
+        self.layer = combined
+        self.game.sound.play(self.game.assets.sfx_pour)
+        self.delay(delay=1.3,handler=self.bannerTwo)
+
+    def bannerTwo(self):
+        self.game.sound.play(self.game.assets.quote_drunkDrinkToThat)
+        mug = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
+        mug.composite_op = "blacksrc"
+        words = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'drunk-multiball.dmd').frames[0])
+        combined = dmd.GroupedLayer(128,32,[words,mug])
+        self.layer = combined
+        self.delay(delay=1,handler=self.intro_display)
+
+    def intro_display(self,step=1):
         ## show some junk about how the mode works
-        self.get_going()
+        if step == 1:
+            flippers = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'flippers1.dmd').frames[0])
+        elif step == 2 or step == 4 or step == 6 or step == 8 or step == 10:
+            flippers = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'flippers2.dmd').frames[0])
+            arrowOne = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'right-arrow-1.dmd').frames[0])
+            arrowTwo = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'right-arrow-2.dmd').frames[0])
+            arrowThree = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'right-arrow-3.dmd').frames[0])
+            arrow = dmd.ScriptedLayer(128,32,[{'seconds':0.15,'layer':arrowOne},{'seconds':0.15,'layer':arrowTwo},{'seconds':0.15,'layer':arrowThree}])
+            arrow.composite_op = "blacksrc"
+        elif step == 3 or step == 5 or step == 7 or step == 9:
+            flippers = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'flippers3.dmd').frames[0])
+            arrowOne = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'left-arrow-1.dmd').frames[0])
+            arrowTwo = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'left-arrow-2.dmd').frames[0])
+            arrowThree = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'left-arrow-3.dmd').frames[0])
+            arrow = dmd.ScriptedLayer(128,32,[{'seconds':0.15,'layer':arrowOne},{'seconds':0.15,'layer':arrowTwo},{'seconds':0.15,'layer':arrowThree}])
+            arrow.composite_op = "blacksrc"
+
+        flippers.composite_op = "blacksrc"
+
+        text = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'reverse.dmd').frames[0])
+
+        if step == 2:
+            self.game.sound.play(self.game.assets.quote_drunkNeverSeen)
+        if step == 1:
+            combined = dmd.GroupedLayer(128,32,[text,flippers])
+        elif step == 2 or step == 3:
+            combined = dmd.GroupedLayer(128,32,[text,flippers,arrow])
+        else:
+            combined = dmd.GroupedLayer(128,32,[self.underLayer,flippers,arrow])
+        self.layer=combined
+        if step <= 5:
+            self.delay(delay=1,handler=self.intro_display,param=step+1)
+        else:
+            self.delay(delay=1,handler=self.get_going)
 
     def get_going(self):
         # turn off the saloon busy flag - should process check bounty and kick the ball out
@@ -111,9 +198,15 @@ class DrunkMultiball(game.Mode):
 
     def update_display(self):
         self.overlay.composite_op = "blacksrc"
+        p = self.game.current_player()
+        scoreString = ep.format_score(p.score)
+        scoreLine = dmd.TextLayer(80, 8, self.game.assets.font_7px_az, "center", opaque=False).set_text(scoreString,blink_frames=8)
         textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("DRUNK MULTIBALL")
-        combined = dmd.GroupedLayer(128,32,[textLine1,self.overlay])
+        textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HIT BEER MUG")
+        textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("TO LIGHT JACKPOTS")
+        combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,scoreLine,self.overlay])
         self.layer = combined
+        self.delay(name="Display",delay=0.2,handler=self.update_display)
 
     def light_jackpot(self):
         # pick a jackpot
@@ -129,8 +222,13 @@ class DrunkMultiball(game.Mode):
         print "LIGHTING JACKPOT"
         anim = dmd.Animation().load(ep.DMD_PATH+'dmb.dmd')
         myWait = len(anim.frames) / 7.5
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=8)
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 8
         animLayer.composite_op = "blacksrc"
+        animLayer.add_frame_listener(3,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
+        animLayer.add_frame_listener(5,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
+
         textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOT ADDED")
         combined = dmd.GroupedLayer(128,32,[textLine1,animLayer])
         self.cancel_delayed("Display")
@@ -157,3 +255,4 @@ class DrunkMultiball(game.Mode):
         self.game.modes.remove(self.game.drunk_multiball)
         # set the stack flag back off
         self.game.set_tracking('stackLevel',False,1)
+

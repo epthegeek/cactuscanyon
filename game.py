@@ -534,3 +534,4 @@ class CCGame(game.BasicGame):
             self.giState = "ON"
             for lamp in self.giLamps:
                 lamp.enable()
+

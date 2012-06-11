@@ -182,33 +182,44 @@ class BaseGameMode(game.Mode):
         self.game.score(2130)
         # play a sound
         self.game.sound.play(self.game.assets.sfx_ricochetSet)
-        # play a quote on a random 1/3 choice
-        weDo = random.choice([False,True,False])
-        if weDo:
-            self.game.sound.play(self.game.assets.quote_beerMug)
         # a little display action
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
         textLine1 = dmd.TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
         # TODO right now it takes 15 shots to light drunk multiball - change this to a config param
         left = 2 - hits
-        if left <= 0:
-            textString = "SHOOT THE SALOON"
-            textString2 = "FOR MULTIBALL"
+        if left == 0:
             # enable the multiball
             self.game.set_tracking('drunkMultiballStatus', "READY")
             self.game.mine.update_lamps()
+            textLine1 = ep.pulse_text(self,51,1,"DRUNK")
+            textLine2 = ep.pulse_text(self,51,12,"MULTIBALL")
+            textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")
+            self.repeat_ding(4)
+            self.game.sound.play(self.game.assets.quote_drunkMultiballLit)
+        elif left < 0:
+            textString = "SHOOT THE SALOON"
+            textString2 = "FOR MULTIBALL"
+            textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString,blink_frames=8)
+            textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
         else:
             textString = str(left) + " MORE HITS FOR"
             textString2 = "DRUNKEN MULTIBALL"
-        textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
-        textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+            textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
+            textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+
+        if left != 0:
+            # play a quote on a random 1/3 choice
+            weDo = random.choice([False,True,False])
+            if weDo:
+                self.game.sound.play(self.game.assets.quote_beerMug)
+
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
         # kill any previous display
         self.cancel_delayed("Display")
         # turn on the layer
         self.layer = combined
         # set a delay to clear
-        self.delay(name="Display", delay = 1, handler=self.clear_layer)
+        self.delay(name="Display", delay = 1.6, handler=self.clear_layer)
         ## -- set the last switch -- ##
         ep.last_switch = 'beerMug'
 
@@ -229,6 +240,14 @@ class BaseGameMode(game.Mode):
 
     def clear_layer(self):
         self.layer = None
+
+    def repeat_ding(self,times):
+        self.game.sound.play(self.game.assets.sfx_bountyBell)
+        self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
+        times -= 1
+        if times > 0:
+            self.delay(delay=0.4,handler=self.repeat_ding,param=times)
+
 
     ###
     ###  _____ _ _ _
