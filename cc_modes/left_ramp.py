@@ -53,7 +53,7 @@ class LeftRamp(game.Mode):
                 self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.leftRampWaterfall.schedule(0x0F0F0F0F)
                 self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
-                return
+            return
 
         stage = self.game.show_tracking('leftRampStage')
         print "RAMP STAGE SANITY CHECK: " + str(stage)

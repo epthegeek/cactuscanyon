@@ -196,6 +196,7 @@ class BaseGameMode(game.Mode):
             textString2 = "FOR MULTIBALL"
             # enable the multiball
             self.game.set_tracking('drunkMultiballStatus', "READY")
+            self.game.mine.update_lamps()
         else:
             textString = str(left) + " MORE HITS FOR"
             textString2 = "DRUNKEN MULTIBALL"

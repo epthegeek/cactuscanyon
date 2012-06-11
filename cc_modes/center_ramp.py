@@ -51,7 +51,7 @@ class CenterRamp(game.Mode):
                 self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.centerRampStopTrain.schedule(0x0F0F0F0F)
                 self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
-                return
+            return
 
         stage = self.game.show_tracking('centerRampStage')
 

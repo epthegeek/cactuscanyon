@@ -52,7 +52,7 @@ class RightRamp(game.Mode):
                 self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.rightRampShootOut.schedule(0x0F0F0F0F)
                 self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
-                return
+            return
 
         stage = self.game.show_tracking('rightRampStage')
 

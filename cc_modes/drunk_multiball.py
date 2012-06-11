@@ -31,30 +31,32 @@ class DrunkMultiball(game.Mode):
     ### switches
 
     def sw_leftLoopTop_active(self,sw):
-        self.process_shot('leftLoop')
+        self.process_shot('leftLoop',self.shotModes[0])
         return game.SwitchStop
 
     def sw_leftRampEnter_active(self, sw):
-        self.process_shot('leftRamp')
+        self.process_shot('leftRamp',self.shotModes[2])
         return game.SwitchStop
 
     def sw_centerRampMake_active(self, sw):
-        self.process_shot('centerRamp')
+        self.process_shot('centerRamp',self.shotModes[3])
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
-        self.process_shot('rightLoop')
+        self.process_shot('rightLoop',self.shotModes[1])
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
-        self.process_shot('rightRamp')
+        self.process_shot('rightRamp',self.shotModes[4])
         return game.SwitchStop
 
-    def process_shot(self,shot):
+    def process_shot(self,shot,mode):
         if shot in self.active:
             # take it out of active and put it in  available
             self.active.remove(shot)
             self.availableJackpots.append(shot)
+            # update the lamps for the hit ramp
+            mode.update_lamps()
             # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
             self.game.score(500000)
             # play a quote
@@ -65,7 +67,10 @@ class DrunkMultiball(game.Mode):
 
     # beer mug lights jackpots
     def sw_beerMug_active(self,sw):
-        self.light_jackpot()
+        if self.availableJackpots:
+            self.light_jackpot()
+        else:
+            pass
         return game.SwitchStop
 
     def start_drunk(self):
@@ -82,6 +87,9 @@ class DrunkMultiball(game.Mode):
         self.game.sound.stop_music()
         # turn the GI off
         self.game.gi_control("OFF")
+        # update the lamps
+        for mode in self.shotModes:
+            mode.update_lamps()
         # play the drunk multiball song
         self.game.base_game_mode.music_on(self.game.assets.music_drunkMultiball)
         # show some screens about the mode
@@ -135,6 +143,9 @@ class DrunkMultiball(game.Mode):
         # reset the flippers
         self.game.enable_inverted_flippers(False)
         self.game.enable_flippers(True)
+        # reset the lamps
+        for mode in self.shotModes:
+            mode.update_lamps()
         # stop the music
         self.game.sound.stop_music()
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)

@@ -52,7 +52,7 @@ class RightLoop(game.Mode):
                 self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
                 self.game.lamps.rightLoopGunslinger.schedule(0x0F0F0F0F)
                 self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
-                retun
+            return
 
         stage = self.game.show_tracking('rightLoopStage')
 
