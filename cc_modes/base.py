@@ -168,16 +168,18 @@ class BaseGameMode(game.Mode):
         ep.last_switch = "startButton"
 
     def sw_shooterLane_open_for_1s(self,sw):
-        if self.game.ballStarting:
-            self.game.ballStarting = False
-            ball_save_time = 10
-            self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
-        else:
-            self.game.ball_save.disable()
+        if not self.game.autoPlunge:
+            if self.game.ballStarting:
+                self.game.ballStarting = False
+                ball_save_time = 10
+                self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
+            else:
+                self.game.ball_save.disable()
 
     def sw_beerMug_active(self,sw):
         # track it, because why not
         hits = self.game.increase_tracking('beerMugHits')
+        self.game.increase_tracking('beerMugHitsTotal')
         # score points
         self.game.score(2130)
         # play a sound
@@ -191,7 +193,7 @@ class BaseGameMode(game.Mode):
         if left == 0:
             # enable the multiball
             self.game.set_tracking('drunkMultiballStatus', "READY")
-            self.game.mine.update_lamps()
+            self.game.saloon.update_lamps()
             textLine1 = ep.pulse_text(self,51,1,"DRUNK")
             textLine2 = ep.pulse_text(self,51,12,"MULTIBALL")
             textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")

@@ -21,6 +21,7 @@ class Tracking(game.Player):
         # allows for stacking of extra balls - if pending > 0 then extra ball is lit
         self.player_stats['extraBallsPending'] = 0
 
+        self.player_stats['beerMugHitsTotal'] = 0
         self.player_stats['beerMugHits'] = 0
         # drunk multiball - OPEN, READY, RUNNING
         self.player_stats['drunkMultiballStatus'] = "OPEN"

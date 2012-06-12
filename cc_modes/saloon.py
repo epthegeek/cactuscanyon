@@ -102,7 +102,7 @@ class Saloon(game.Mode):
         if self.game.show_tracking('bartStatus') == 'RUNNING' or self.game.show_tracking('bartStatus') == 'LAST':
             self.game.lamps.saloonArrow.enable()
         if self.game.show_tracking('isBountyLit'):
-            self.game.lamps.bountySaloon.enable()
+            self.game.lamps.bountySaloon.schedule(0xFF00FF00)
             self.game.lamps.bountyBeacon.enable()
             beacon = True
         if self.game.show_tracking('extraBallsPending') > 0:
@@ -114,6 +114,7 @@ class Saloon(game.Mode):
             self.game.lamps.rightGunfightPin.enable()
             self.game.lamps.leftGunfightPin.enable()
         if self.game.show_tracking('drunkMultiballStatus') == "READY":
+            self.game.lamps.bountySaloon.disable()
             self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
 
     def disable_lamps(self):
@@ -137,6 +138,7 @@ class Saloon(game.Mode):
     ### |____/ \___/ \__,_|_| |_|\__|\__, |
     ###                              |___/
     ###
+    # TODO move bounty to a higher priority so it can interrupt things
     def check_bounty(self):
         print "CHECKING BOUNTY"
         # check the bounty lit status, and collect if needed
@@ -361,7 +363,7 @@ class Saloon(game.Mode):
         else:
             # he's dead waiting for a gun fight - TODO have to research what happens
             # no points - play a sound?
-            pass
+            self.busy = False
 
     def activate_bart(self):
         # set up all the strings & quotes

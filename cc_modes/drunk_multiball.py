@@ -77,6 +77,8 @@ class DrunkMultiball(game.Mode):
         self.game.set_tracking('stackLevel',True,1)
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "RUNNING")
+        # update the lamps
+        self.game.saloon.update_lamps()
         # disable the flippers
         self.game.enable_flippers(False)
         # enable the inverted flippers
@@ -273,6 +275,7 @@ class DrunkMultiball(game.Mode):
         self.end_drunk()
 
     def end_drunk(self):
+        self.cancel_delayed("Display")
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "OPEN")
         # reset the flippers
@@ -288,8 +291,11 @@ class DrunkMultiball(game.Mode):
         self.layer = None
         # turn the GI back on
         self.game.gi_control("ON")
-        # unload the mode
-        self.game.modes.remove(self.game.drunk_multiball)
+        # reset the mug hits for next time
+        self.game.set_tracking('beerMugHits',0)
         # set the stack flag back off
         self.game.set_tracking('stackLevel',False,1)
+        # unload the mode
+        self.game.modes.remove(self.game.drunk_multiball)
+
 
