@@ -187,6 +187,7 @@ class BaseGameMode(game.Mode):
         textLine1 = dmd.TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
         # TODO right now it takes 15 shots to light drunk multiball - change this to a config param
         left = 2 - hits
+        ## if we're at zero, it's lit and the display shows it
         if left == 0:
             # enable the multiball
             self.game.set_tracking('drunkMultiballStatus', "READY")
@@ -196,13 +197,18 @@ class BaseGameMode(game.Mode):
             textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")
             self.repeat_ding(4)
             self.game.sound.play(self.game.assets.quote_drunkMultiballLit)
+        ## if we're past zero then it shows a message
         elif left < 0:
             textString = "SHOOT THE SALOON"
             textString2 = "FOR MULTIBALL"
             textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString,blink_frames=8)
             textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+        ## if we're still not there yet, show how much is left
         else:
-            textString = str(left) + " MORE HITS FOR"
+            if left == 1:
+                textString = "1 MORE HIT FOR"
+            else:
+                textString = str(left) + " MORE HITS FOR"
             textString2 = "DRUNKEN MULTIBALL"
             textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
             textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)

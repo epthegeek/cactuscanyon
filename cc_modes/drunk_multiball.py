@@ -169,10 +169,14 @@ class DrunkMultiball(game.Mode):
         self.overlay.composite_op = "blacksrc"
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(80, 8, self.game.assets.font_7px_az, "center", opaque=False).set_text(scoreString,blink_frames=8)
+        scoreLine = dmd.TextLayer(80, 8, self.game.assets.font_7px_score, "center", opaque=False).set_text(scoreString,blink_frames=8)
         textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("DRUNK MULTIBALL")
-        textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HIT BEER MUG")
-        textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("TO LIGHT JACKPOTS")
+        if self.active:
+            textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOTS")
+            textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("WORTH 500,000")
+        else:
+            textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HIT BEER MUG")
+            textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("TO LIGHT JACKPOTS")
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,scoreLine,self.overlay])
         self.layer = combined
         self.delay(name="Display",delay=0.2,handler=self.update_display)
@@ -203,7 +207,7 @@ class DrunkMultiball(game.Mode):
         words = dmd.Animation().load(ep.DMD_PATH+'jackpot-added.dmd')
         myWait = len(words.frames) / 10.0
         wordsLayer = ep.EP_AnimatedLayer(words)
-        wordsLayer.add_frame_listener(10,self.game.play_remote_sound,param=self.game.assets.sfx_orchestraSet)
+        wordsLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_orchestraSet)
         wordsLayer.hold=True
         wordsLayer.frame_time = 6
         wordsLayer.opaque = True

@@ -13,6 +13,8 @@ class Interrupter(game.Mode):
     def __init__(self, game, priority):
         super(Interrupter, self).__init__(game, priority)
         self.rotator = [True,False,False,False,False]
+        self.statusDisplay = "Off"
+        self.page = 0
 
     def display_player_number(self,idle=False):
         # for when the ball is sitting in the shooter lane with nothing going on
@@ -117,3 +119,77 @@ class Interrupter(game.Mode):
         combined.composite_op = "blacksrc"
         self.layer = combined
         self.delay(name="Display",delay=1,handler=self.clear_layer)
+
+
+    ## Status section, for the HALIBUT
+"""
+    # hold a flipper for 5 seconds to start - but only turn it on if it's not already on
+    def sw_flipperLwR_active_for_5s(self,sw):
+        if self.statusDisplay == "Off":
+            self.status_on('Right')
+
+    def sw_flipperLwL_active_for_5s(self,sw):
+        if self.statusDisplay == "Off":
+            self.status_on('Left')
+
+    # releasing the flipper you started with cancels the status
+    def sw_flipperLwR_inactive(self,sw):
+        if self.statusDisplay == "Right":
+            self.status_off()
+
+    def sw_flipperLwL_inactive(self,sw):
+        if self.statusDisplay == "Left":
+            self.status_off()
+
+    # tapping a flipper should skip slides - if the other flipper has the status active
+    def sw_flipperLwL_active(self,sw):
+        if self.statusDisplay == "Right":
+            self.status()
+
+    def sw_flipperLwR_active(self,sw):
+        if self.statusDisplay == "Left":
+            self.status()
+
+    def status_on(self,side):
+        self.statusDisplay = side
+        print "STATUS GOES HERE"
+        # TODO disable the ball save
+
+    def status_off(self):
+        self.statusDisplay = "Off"
+        print "STATUS ENDING"
+        # TODO enable ball save
+        # reset the page to 0
+        self.page = 0
+
+    def status(self):
+        # cancel the delay, in case we got pushed early
+        self.cancel_delayed("Display")
+        # first, tick up the page
+        self.page += 1
+        # then show some junk based on what page we're on
+        if page == 1:
+            # hits left to light drunk multiball
+            # not accurate right now because the mode doesn't use the setting
+            left = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball'] - self.game.show_tracking('beerMugHits')
+            textString1 = str(left) + " MORE HITS"
+            textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
+            textLine2 = dmd.TextLayer(128/2, 10, self.game.assets.font_9px_az, "center", opaque=False).set_text(textString1)
+            textLine3 = dmd.TextLayer(128/2, 21, self.game.assets.font_9px_az, "center", opaque=False).set_text("FOR MULTIBALL")
+            combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
+            self.layer = combined
+        if page == 2:
+        # hits left to light drunk multiball
+            shots = self.game.show_tracking('mineShotsTotal')
+            textString1 = str(shots) + " SHOTS"
+            textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("MINE SHOTS")
+            textLine2 = dmd.TextLayer(128/2, 10, self.game.assets.font_9px_az, "center", opaque=False).set_text(textString1)
+            textLine3 = dmd.TextLayer(128/2, 21, self.game.assets.font_9px_az, "center", opaque=False).set_text("SO FAR")
+            combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
+            self.layer = combined
+        if page == 3:
+            # turn off the display and whatnot
+            self.status_off()
+        # circle back and clear the layer
+        self.delay(name="Display",delay=3,handler=self.status)
+        """
