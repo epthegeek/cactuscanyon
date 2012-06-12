@@ -203,6 +203,7 @@ class DrunkMultiball(game.Mode):
         words = dmd.Animation().load(ep.DMD_PATH+'jackpot-added.dmd')
         myWait = len(words.frames) / 10.0
         wordsLayer = ep.EP_AnimatedLayer(words)
+        wordsLayer.add_frame_listener(10,self.game.play_remote_sound,param=self.game.assets.sfx_orchestraSet)
         wordsLayer.hold=True
         wordsLayer.frame_time = 6
         wordsLayer.opaque = True
@@ -221,26 +222,37 @@ class DrunkMultiball(game.Mode):
         mode.update_lamps()
         # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
         self.game.score(500000)
-        # play a quote
-        self.game.sound.play(self.game.assets.quote_drunkJackpot)
-        # setup the pour mask
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'pour-mask.dmd')
+        anim = dmd.Animation().load(ep.DMD_PATH+'beer-slide.dmd')
         # setup the animated layer
-        pour = ep.EP_AnimatedLayer(anim)
-        pour.hold=True
-        pour.frame_time = 6
-        pour.composite_op = "blacksrc"
+        beerLayer = ep.EP_AnimatedLayer(anim)
+        beerLayer.hold=True
+        beerLayer.frame_time = 3
+        beerLayer.composite_op = "blacksrc"
 
-        mug = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
-        mug.composite_op = "blacksrc"
-        words = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dmb-jackpot.dmd').frames[0])
-        combined = dmd.GroupedLayer(128,32,[words,pour,mug])
+        anim = dmd.Animation().load(ep.DMD_PATH+'dmb-jackpot.dmd')
+        # setup the animated layer
+        wordsLayer = ep.EP_AnimatedLayer(anim)
+        wordsLayer.hold=True
+        wordsLayer.frame_time = 3
+        wordsLayer.composite_op = "blacksrc"
+
+        combined = dmd.GroupedLayer(128,32,[self.layer,wordsLayer,beerLayer])
         self.cancel_delayed("Display")
         self.layer = combined
-        self.game.sound.play(self.game.assets.sfx_pour)
-        self.delay(name="Display",delay=1.5,handler=self.update_display)
+        self.game.sound.play(self.game.assets.sfx_slide)
+        self.game.sound.play(self.game.assets.quote_drunkJackpot)
+        self.delay(name="Display",delay=1.5,handler=self.jackpot_score)
 
+    def jackpot_score(self):
+        self.game.sound.play(self.game.assets.sfx_orchestraSpike)
+        scoreString = "500,000*"
+        scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString)
+        scoreLine.composite_op = "blacksrc"
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dmb-jackpot.dmd').frames[17])
+        combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine])
+        self.layer = combined
+        self.delay(name="Display",delay=1,handler=self.update_display)
 
     def end_drunk(self):
         # update the tracking

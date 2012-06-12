@@ -155,7 +155,7 @@ class Saloon(game.Mode):
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stars-border.dmd').frames[0])
         topText = ep.pulse_text(self,64,4,"COLLECT BOUNTY")
         bottomText = ep.pulse_text(self,64,16,"IS LIT")
-        self.game.repeat_ding(4)
+        self.repeat_ding(4)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,topText,bottomText])
         # play a voice clip about the bounty being ready
         self.game.sound.play(self.game.assets.quote_bountyLit)

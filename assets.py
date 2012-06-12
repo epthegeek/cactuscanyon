@@ -227,6 +227,12 @@ class Assets():
 
         self.sfx_pour = 'sfx_pour'
         self.game.sound.register_sound(self.sfx_pour, self.sfx_path + "00-sfx-pouring-beer.wav")
+        self.sfx_slide = 'sfx_slide'
+        self.game.sound.register_sound(self.sfx_slide, self.sfx_path + "00-sfx-mug-slide.wav")
+        self.sfx_orchestraSet = 'sfx_orchestraSet'
+        self.game.sound.register_sound(self.sfx_orchestraSet, self.sfx_path + "054-sfx-orchestra-hit-set.wav")
+        self.sfx_orchestraSpike = 'sfx_orchestraSpike'
+        self.game.sound.register_sound(self.sfx_orchestraSpike, self.sfx_path + "056-sfx-orchestra-hit-spike.wav")
 
     # Quotes
         # this bunches the welcome strings together for play_voice()
