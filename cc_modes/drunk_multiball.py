@@ -56,15 +56,7 @@ class DrunkMultiball(game.Mode):
 
     def process_shot(self,shot,mode):
         if shot in self.active:
-            # take it out of active and put it in  available
-            self.active.remove(shot)
-            self.availableJackpots.append(shot)
-            # update the lamps for the hit ramp
-            mode.update_lamps()
-            # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
-            self.game.score(500000)
-            # play a quote
-            self.game.sound.play(self.game.assets.quote_drunkJackpot)
+            self.collect_jackpot(shot,mode)
         else:
             # TODO do something here
             self.game.score(2530)
@@ -101,35 +93,12 @@ class DrunkMultiball(game.Mode):
 
     def banner(self):
         # setup the pour mask
-        thing1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-1.dmd').frames[0])
-        thing2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-2.dmd').frames[0])
-        thing3 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-3.dmd').frames[0])
-        thing4 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-4.dmd').frames[0])
-        thing5 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-5.dmd').frames[0])
-        thing6 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-6.dmd').frames[0])
-        thing7 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-7.dmd').frames[0])
-        thing8 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-8.dmd').frames[0])
-        thing9 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-9.dmd').frames[0])
-        thing10 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-10.dmd').frames[0])
-        thing11 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-11.dmd').frames[0])
-        thing12 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-12.dmd').frames[0])
-        thing13 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'pour-mask-13.dmd').frames[0])
-        script = []
-        script.append({'seconds':0.1,'layer':thing1})
-        script.append({'seconds':0.1,'layer':thing2})
-        script.append({'seconds':0.1,'layer':thing3})
-        script.append({'seconds':0.1,'layer':thing4})
-        script.append({'seconds':0.1,'layer':thing5})
-        script.append({'seconds':0.1,'layer':thing6})
-        script.append({'seconds':0.1,'layer':thing7})
-        script.append({'seconds':0.1,'layer':thing8})
-        script.append({'seconds':0.1,'layer':thing9})
-        script.append({'seconds':0.1,'layer':thing10})
-        script.append({'seconds':0.1,'layer':thing11})
-        script.append({'seconds':0.1,'layer':thing12})
-        script.append({'seconds':0.1,'layer':thing13})
-
-        pour = dmd.ScriptedLayer(128,32,script)
+        # load up the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'pour-mask.dmd')
+        # setup the animated layer
+        pour = ep.EP_AnimatedLayer(anim)
+        pour.hold=True
+        pour.frame_time = 6
         pour.composite_op = "blacksrc"
 
         mug = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
@@ -209,6 +178,7 @@ class DrunkMultiball(game.Mode):
         self.delay(name="Display",delay=0.2,handler=self.update_display)
 
     def light_jackpot(self):
+        # TODO add handling for all jackpots lit !
         # pick a jackpot
         thisOne = random.choice(self.availableJackpots)
         # take it out of the available and make it active
@@ -221,19 +191,56 @@ class DrunkMultiball(game.Mode):
 
         print "LIGHTING JACKPOT"
         anim = dmd.Animation().load(ep.DMD_PATH+'dmb.dmd')
-        myWait = len(anim.frames) / 7.5
+        #myWait = len(anim.frames) / 7.5
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 8
         animLayer.composite_op = "blacksrc"
         animLayer.add_frame_listener(3,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
         animLayer.add_frame_listener(5,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
+        animLayer.opaque=False
 
-        textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOT ADDED")
-        combined = dmd.GroupedLayer(128,32,[textLine1,animLayer])
+        words = dmd.Animation().load(ep.DMD_PATH+'jackpot-added.dmd')
+        myWait = len(words.frames) / 10.0
+        wordsLayer = ep.EP_AnimatedLayer(words)
+        wordsLayer.hold=True
+        wordsLayer.frame_time = 6
+        wordsLayer.opaque = True
+
+        #textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOT ADDED")
+        combined = dmd.GroupedLayer(128,32,[wordsLayer,animLayer])
         self.cancel_delayed("Display")
         self.layer = combined
         self.delay(name="Display",delay=myWait,handler=self.update_display)
+
+    def collect_jackpot(self,shot,mode):
+        # take it out of active and put it in  available
+        self.active.remove(shot)
+        self.availableJackpots.append(shot)
+        # update the lamps for the hit ramp
+        mode.update_lamps()
+        # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
+        self.game.score(500000)
+        # play a quote
+        self.game.sound.play(self.game.assets.quote_drunkJackpot)
+        # setup the pour mask
+        # load up the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'pour-mask.dmd')
+        # setup the animated layer
+        pour = ep.EP_AnimatedLayer(anim)
+        pour.hold=True
+        pour.frame_time = 6
+        pour.composite_op = "blacksrc"
+
+        mug = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
+        mug.composite_op = "blacksrc"
+        words = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dmb-jackpot.dmd').frames[0])
+        combined = dmd.GroupedLayer(128,32,[words,pour,mug])
+        self.cancel_delayed("Display")
+        self.layer = combined
+        self.game.sound.play(self.game.assets.sfx_pour)
+        self.delay(name="Display",delay=1.5,handler=self.update_display)
+
 
     def end_drunk(self):
         # update the tracking
