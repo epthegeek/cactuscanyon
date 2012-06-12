@@ -29,7 +29,9 @@ class DrunkMultiball(game.Mode):
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
-        if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+        if self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+            self.end_save()
+        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
             self.end_drunk()
 
     ### switches
@@ -163,6 +165,8 @@ class DrunkMultiball(game.Mode):
             thisMany = 3 - self.game.trough.num_balls_in_play
             self.game.autoPlunge = True
             self.game.trough.launch_balls(thisMany)
+        # start a ball save
+        self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
         self.update_display()
 
     def update_display(self):
@@ -224,6 +228,11 @@ class DrunkMultiball(game.Mode):
         self.availableJackpots.append(shot)
         # update the lamps for the hit ramp
         mode.update_lamps()
+        # flash some lights
+        self.game.lamps.gi01.schedule(0xFF00FF00,cycle_seconds=1)
+        self.game.lamps.gi02.schedule(0x0FF00FF0,cycle_seconds=1)
+        self.game.lamps.gi03.schedule(0x00FF00FF,cycle_seconds=1)
+
         # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
         self.game.score(500000)
         # load up the animation
@@ -257,6 +266,11 @@ class DrunkMultiball(game.Mode):
         combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine])
         self.layer = combined
         self.delay(name="Display",delay=1,handler=self.update_display)
+
+    def end_save(self):
+        # a ball saver to allow for reacclimation
+        self.game.ball_save.start(num_balls_to_save=1, time=15, now=True, allow_multiple_saves=False)
+        self.end_drunk()
 
     def end_drunk(self):
         # update the tracking

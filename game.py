@@ -276,7 +276,6 @@ class CCGame(game.BasicGame):
         for mode in self.ep_modes:
             if getattr(mode, "ball_drained", None):
                 mode.ball_drained()
-        # kill the music
 
     def ball_ended(self):
         """Called by end_ball(), which is itself called by base_game_mode.trough_changed."""
