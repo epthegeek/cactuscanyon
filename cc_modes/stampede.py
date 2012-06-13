@@ -19,10 +19,14 @@ class Stampede(game.Mode):
         # set up the animations they are to alternate
         self.anims = []
         anim0 = ep.DMD_PATH + "cows-left.dmd"
-        self.anims.append({'layer':anim0,'direction':ep.EP_Transition.PARAM_WEST})
+        self.anims.append(anim0)
         anim1 = ep.DMD_PATH + "cows-right.dmd"
-        self.anims.append({'layer':anim1,'direction':ep.EP_Transition.PARAM_EAST})
-
+        self.anims.append(anim1)
+        self.banners = []
+        banner0 = ep.DMD_PATH + "stampede-banner-left.dmd"
+        self.banners.append(banner0)
+        banner1 = ep.DMD_PATH + "stampede-banner-right.dmd"
+        self.banners.append(banner1)
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
@@ -121,8 +125,8 @@ class Stampede(game.Mode):
         if step == 1:
             # play an animation
             anim = dmd.Animation().load(ep.DMD_PATH+'stampede-jackpot.dmd')
-            myWait = len(anim.frames) / 12
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=5)
+            myWait = len(anim.frames) / 15.0
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=4)
             self.layer = animLayer
             # and some sounds
             self.game.sound.play(self.game.assets.sfx_revRicochet)
@@ -142,8 +146,11 @@ class Stampede(game.Mode):
         # third pass plays the wipe
         if step == 3:
             anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
-            myWait = len(anim.frames) / 6
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=10)
+            myWait = len(anim.frames) / 15.0
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold = True
+            animLayer.frame_time = 4
+            animLayer.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine,animLayer])
             # play a sound on delay
             self.delay(name="Display",delay=myWait,handler=self.game.play_remote_sound,param=self.game.assets.sfx_explosion1)
@@ -153,29 +160,25 @@ class Stampede(game.Mode):
     def jackpot_wiff(self,step=1):
         if step == 1:
             # load the animation based on which was last played
-            self.direction = self.anims[0]['direction']
-            anim = dmd.Animation().load(self.anims[0]['layer'])
-            myWait = len(anim.frames) / 12
+            anim = dmd.Animation().load(self.anims[0])
+            banner = dmd.Animation().load(self.banners[0])
+            myWait = len(banner.frames) / 12.0
             # reverse them for next time
             self.anims.reverse()
+            self.banners.reverse()
             # play an animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=5)
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=5)
             animLayer.composite_op = "blacksrc"
-            self.layer = animLayer
-            # cow shuffle animation
+            bannerLayer = dmd.AnimatedLayer(frames=banner.frames,hold=True, opaque=False,repeat=False,frame_time=5)
+            bannerLayer.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[bannerLayer,animLayer])
+            combined.composite_op = "blacksrc"
+            self.layer = combined
             # and some sounds
             self.game.sound.play(self.game.assets.quote_stampedeWiff)
             # and award points
             self.game.score(250000)
-            # loop back to drag in the score
-            self.delay(name="Display", delay=myWait, handler=self.jackpot_wiff,param=2)
-        if step == 2:
-            # score display
-            textLine = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False).set_text("250,000")
-            # run the transition to bring in the text
-            transition = ep.EP_Transition(self,self.layer,textLine,ep.EP_Transition.TYPE_SLIDEOVER,self.direction)
-            # clear in 2 seconds
-            self.delay(name="Display",delay=2,handler=self.main_display)
+            self.delay(name="Display", delay=myWait, handler=self.main_display)
 
     def jackpot_shift(self):
         # bump up by one
