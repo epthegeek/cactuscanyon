@@ -214,7 +214,7 @@ class CCGame(game.BasicGame):
         # Don't start_ball() here, since Attract does that after calling start_game().
 
     def ball_starting(self):
-        self.log("BALL STARTING")
+        self.log("BALL STARTING - number " + str(self.ball))
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
         self.ballStarting = True
@@ -239,6 +239,7 @@ class CCGame(game.BasicGame):
         # and load the skill shot
         self.modes.add(self.skill_shot)
         # and all the other modes
+        print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
         self.base_game_mode.load_modes()
         # update the lamps
         self.update_lamps()
@@ -293,7 +294,9 @@ class CCGame(game.BasicGame):
         #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
         self.game_data['Audits']['Balls Played'] += 1
 
-        # then call the ball_ended from proc.game.BasicGame
+        print "CHECKING TRACKING ball ended LR: " + str(self.show_tracking('leftRampStage'))
+
+    # then call the ball_ended from proc.game.BasicGame
         self.end_ball()
 
     def game_ended(self):
@@ -401,6 +404,8 @@ class CCGame(game.BasicGame):
     def increase_tracking(self,item,amount=1,key="foo"):
         ## tick up a stat by a declared amount
         p = self.current_player()
+        print "CURRENT PLAYER IS : "
+        print p
         if key != "foo":
             p.player_stats[item][key] += amount
             return p.player_stats[item][key]

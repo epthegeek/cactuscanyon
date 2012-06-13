@@ -228,6 +228,7 @@ class Mine(game.Mode):
         self.game.gm_multiball.start_multiball()
 
     def play_ball_one_lock_anim(self,passive=False):
+        self.cancel_delayed("Display")
         # stop the music
         print "one lock anim IS KILLING THE MUSIC"
         self.game.sound.stop_music()
@@ -245,6 +246,7 @@ class Mine(game.Mode):
         self.delay(name="Display",delay=myWait,handler=self.lock_display_text)
 
     def play_ball_two_lock_anim(self):
+        self.cancel_delayed("Display")
         # stop the music
         print "two lock anim IS KILLING THE MUSIC"
         self.game.sound.stop_music()
@@ -310,6 +312,7 @@ class Mine(game.Mode):
         print "EXTRA BALL LIT"
 
     def collect_extra_ball(self):
+        self.cancel_delayed("Display")
         # stop the music
         print "collect_extra_ball IS KILLING THE MUSIC"
         self.game.sound.stop_music()

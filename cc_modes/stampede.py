@@ -26,7 +26,7 @@ class Stampede(game.Mode):
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
-        if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('centerRampStage') == 89:
+        if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('centerRampStage') == 89:
             self.end_stampede()
 
     ### switches

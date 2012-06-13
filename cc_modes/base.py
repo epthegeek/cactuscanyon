@@ -72,6 +72,9 @@ class BaseGameMode(game.Mode):
         self.game.modes.remove(self.game.bad_guys)
 
     def ball_drained(self):
+        print "CHECKING TRACKING ball drained LR: " + str(self.game.show_tracking('leftRampStage'))
+        print "CURRENT PLAYER: "
+        print self.game.current_player()
         # if that was the last ball in play need to finish up - unless high noon is finishing up
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('highNoonStatus') != "FINISH":
             # turn off all the lights
@@ -107,7 +110,7 @@ class BaseGameMode(game.Mode):
         elif left == 'TOP' or left == 'BOT':
             self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
         elif left == 'READY':
-            self.game.lamps.leftReturnQuickdraw.enable()
+            self.game.lamps.leftReturnQuickdraw.schedule(0x00FF00FF)
         else:
             pass
         # right has 2 lights so if unhit the light appropriate is on, or the inlane if ready
@@ -120,7 +123,7 @@ class BaseGameMode(game.Mode):
         elif right == 'BOT':
             self.game.lamps.topRightQuickdraw.enable()
         elif right == 'READY':
-            self.game.lamps.rightReturnQuickdraw.enable()
+            self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
         else:
             pass
         ## on a second pass thorugh the returns - if showdown is ready, flash 'em
@@ -626,7 +629,7 @@ class BaseGameMode(game.Mode):
     def light_quickdraw(self,side=9):
         # this is for handling a call to light quickdraw with no side favor the right
         if side == 9:
-            targets = self.game.show_tracking('quickdrawStatus')
+            target = self.game.show_tracking('quickdrawStatus')
             if target[1] == "READY":
                 side = 0
             else:

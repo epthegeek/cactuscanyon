@@ -224,6 +224,7 @@ class LeftRamp(game.Mode):
             self.game.increase_tracking('leftRampStage')
             # update the lamps
             self.update_lamps()
+            print "CHECING TRACKING Left ramp LR: " + str(self.game.show_tracking('leftRampStage'))
 
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):
