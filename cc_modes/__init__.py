@@ -24,6 +24,7 @@ __all__ = [
     'quickdraw',
     'showdown'
     'gunfight',
+    'ambush',
 ]
 from base import *
 from attract import *
@@ -50,3 +51,4 @@ from drunk_multiball import *
 from quickdraw import *
 from showdown import *
 from gunfight import *
+from ambush import *

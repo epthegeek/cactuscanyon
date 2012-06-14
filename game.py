@@ -129,6 +129,7 @@ class CCGame(game.BasicGame):
         self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
         self.quickdraw = cc_modes.Quickdraw(game=self,priority=68)
         self.showdown = cc_modes.Showdown(game=self,priority=68)
+        self.ambush = cc_modes.Ambush(game=self,priority=68)
         self.gunfight = cc_modes.Gunfight(game=self,priority=68)
         self.stampede = cc_modes.Stampede(game=self,priority=69)
         # this mode unloads when not in use
@@ -169,6 +170,7 @@ class CCGame(game.BasicGame):
                          self.drunk_multiball,
                          self.quickdraw,
                          self.showdown,
+                         self.ambush,
                          self.gunfight]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)

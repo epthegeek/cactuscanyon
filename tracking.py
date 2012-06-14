@@ -27,19 +27,19 @@ class Tracking(game.Player):
         self.player_stats['drunkMultiballStatus'] = "OPEN"
 
         self.player_stats['rightRampShots'] = 0
-        self.player_stats['rightRampStage'] = 5
+        self.player_stats['rightRampStage'] = 1
 
         self.player_stats['leftRampShots'] = 0
-        self.player_stats['leftRampStage'] = 5
+        self.player_stats['leftRampStage'] = 1
 
         self.player_stats['centerRampShots'] = 0
-        self.player_stats['centerRampStage'] = 5
+        self.player_stats['centerRampStage'] = 1
 
         self.player_stats['leftLoopShots'] = 0
-        self.player_stats['leftLoopStage'] = 2
+        self.player_stats['leftLoopStage'] = 1
 
         self.player_stats['rightLoopShots'] = 0
-        self.player_stats['rightLoopStage'] = 4
+        self.player_stats['rightLoopStage'] = 1
 
         self.player_stats['fullLoops'] = 0
 
@@ -76,16 +76,17 @@ class Tracking(game.Player):
         self.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
         self.player_stats['quickdrawsStarted'] = 0
         self.player_stats['quickdrawsWon'] = 0
-        self.player_stats['badGuysDead'] = [False,False,False,False]
+        self.player_stats['badGuysDead'] = [True,True,False,True]
         # these are separate because the bad guy can be dead (quickdraw) but also up (showdown/gunfight)
         self.player_stats['badGuyUp'] = [False,False,False,False]
         # showdown status - OPEN, READY, RUNNING, OVER (to hold until ambush)
-        self.player_stats['showdownStatus'] = "OPEN"
+        self.player_stats['showdownStatus'] = "OVER"
         self.player_stats['showdownTotal'] = 0
         self.player_stats['showdownPoints'] = 0
         # ambush status - OPEN, READY, RUNNING, OVER (for switching between showdown and ambush)
-        self.player_stats['ambushStatus'] = "OVER"
+        self.player_stats['ambushStatus'] = "OPEN"
         self.player_stats['ambushTotal'] = 0
+        self.player_stats['ambushPoints'] = 0
         # total kills for high noon
         self.player_stats['kills'] = 0
 

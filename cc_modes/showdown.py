@@ -16,6 +16,8 @@ class Showdown(game.Mode):
     """Showdown code """
     def __init__(self,game,priority):
         super(Showdown, self).__init__(game,priority)
+
+    def mode_started(self):
         self.deathTally = 0
         self.showdownValue = 300000
         self.tauntTimer = 0

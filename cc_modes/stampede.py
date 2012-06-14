@@ -10,9 +10,6 @@ class Stampede(game.Mode):
         super(Stampede, self).__init__(game, priority)
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
-        # which jackpot is active
-        self.active = 9
-        self.jackpots = 0
         # set up the cows layer
         anim = dmd.Animation().load(ep.DMD_PATH+'cows-parading.dmd')
         self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
@@ -27,6 +24,11 @@ class Stampede(game.Mode):
         self.banners.append(banner0)
         banner1 = ep.DMD_PATH + "stampede-banner-right.dmd"
         self.banners.append(banner1)
+
+    def mode_started(self):
+        # which jackpot is active
+        self.active = 9
+        self.jackpots = 0
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff

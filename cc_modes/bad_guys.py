@@ -103,7 +103,7 @@ class BadGuys(game.Mode):
             self.game.gunfight.won()
 
     def target_up(self,target):
-        self.coils[target].patter(on_time=4,off_time=12,original_on_time=35)
+        self.coils[target].patter(on_time=4,off_time=10,original_on_time=30)
         self.lamps[target].schedule(0x00FF00FF)
         self.delay(delay=0.1,handler=self.target_activate,param=target)
 

@@ -12,6 +12,8 @@ class GoldMine(game.Mode):
     def __init__(self,game,priority):
         super(GoldMine, self).__init__(game,priority)
         self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine]
+
+    def mode_started(self):
         self.motherlodeValue = 0
         self.counter = 0
         self.multiplier = False

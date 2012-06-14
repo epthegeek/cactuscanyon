@@ -341,6 +341,10 @@ class BaseGameMode(game.Mode):
         elif self.game.show_tracking('showdownStatus') == "READY":
             self.game.modes.add(self.game.showdown)
             self.game.showdown.start_showdown()
+        # if guns are allowed and ambush is ready, do that
+        elif self.game.show_tracking('ambushStatus') == "READY":
+            self.game.modes.add(self.game.ambush)
+            self.game.ambush.start_ambush()
         # if there's no showdown ready, gunfight is possible
         elif self.game.show_tracking('gunfightStatus') == "READY":
             self.game.modes.add(self.game.gunfight)
