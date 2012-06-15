@@ -327,17 +327,24 @@ class Assets():
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1038-mayor-gunfight-is-lit.wav")
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1237-prospector-gunfight-is-lit.wav")
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1306-undertaker-theres-going-to-be-a-gunfight.wav")
+        self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1867-leader-bart-time-for-a-gunfight.wav")
         self.quote_gunfightStart = 'quote_gunfightStart'
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1004-mayor-ok-son-lets-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1029-mayor-dont-move-its-a-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "2041-waitress-looks-like-a-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1233-prospector-ooh-i-smell-a-gunfight-brewin.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1871-leader-bart-lets-gunight.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1544-leader-bart-this-is-my-town-lawman.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1573-leader-bart-lawman-its-you-and-me.wav")
         self.quote_gunWin = 'quote_gunWin'
         self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1117-mayor-say-thats-a-pretty-good-eye-there.wav")
         self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1170-mayor-quite-a-knack-with-those-six-shooters-friend.wav")
         self.quote_gunFail = 'quote_gunFail'
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1198-mayor-maybe-you-better-check-the-sights-on-that-weapon.wav")
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1199-mayor-are-you-sure-that-thing-is-loaded.wav")
+        self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1505-leader-bart-better-luck-next-time.wav")
+        self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1564-leader-bart-well-im-still-standin.wav")
+        self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1563-leader-bart-aw-you-missed.wav")
         self.quote_beerMug = 'quote_beerMug'
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1408-drunk-hey-buddy-you-shot-my-drink.wav")
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1409-drunk-stop-shootin-at-my-drink.wav")
@@ -353,6 +360,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1421-drunk-its-all-over-citizens.wav")
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "876-polly-come-back-soon.wav")
         self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1010-mayor-thank-you-for-cleaning-up-cactus-canyon.wav")
+        self.game.sound.register_sound(self.quote_goodbye, self.quotes_path + "1557-leader-bart-on-to-the-next-town-boys.wav")
         self.quote_stampedeStart = 'quote_stampedeStart'
         self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "1260-prospector-its-a-stampede.wav")
         self.game.sound.register_sound(self.quote_stampedeStart, self.quotes_path + "531-prospector-stampede-multiball.wav")
@@ -400,6 +408,7 @@ class Assets():
         self.quote_mobTaunt = 'quote_mobTaunt'
         self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "2020-waitress-honey-just-shoot-anything.wav")
         self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "1165-mayor-aw-just-shoot-em.wav")
+        self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "1525-leader-bart-git-that-lawman.wav")
         self.quote_mobEnd = 'quote_mobEnd'
         self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1303-prospector-look-at-that-bodycount.wav")
         self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1309-undertaker-a-respectable-bodycount-indeed.wav")

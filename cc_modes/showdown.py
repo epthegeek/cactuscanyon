@@ -263,8 +263,6 @@ class Showdown(game.Mode):
         # if the total for this round of showdown was higher stored, store it
         if self.deathTally > bodycount:
             self.game.set_tracking('showdownTotal',self.deathTally)
-            # and reset the death tally
-        self.deathTally = 0
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # set the showdown status to over and setup ambush
         self.game.set_tracking('showdownStatus',"OVER")
@@ -298,7 +296,11 @@ class Showdown(game.Mode):
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         # reset the showdown points for next time
         self.game.set_tracking('showdownPoints',0)
+        # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # unload the mode
+        self.delay(delay=2.1,handler=self.unload)
+
+    def unload(self):
         self.game.modes.remove(self.game.showdown)
 
     def clear_layer(self):

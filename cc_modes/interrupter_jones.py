@@ -120,6 +120,20 @@ class Interrupter(game.Mode):
         self.layer = combined
         self.delay(name="Display",delay=1,handler=self.clear_layer)
 
+    def dude_escaped(self,amount):
+        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'escaped.dmd').frames[0])
+        backdrop.composite_op = "blacksrc"
+        if amount == 0:
+            textString = "THEY GOT AWAY - YOU LOSE"
+        else:
+            textString = str(amount) + " MORE AND YOU LOSE"
+        textLine2 = dmd.TextLayer(128/2, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString,blink_frames=8)
+        textLine2.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[backdrop,textLine2])
+        combined.composite_op = "blacksrc"
+        self.layer = combined
+        self.delay(name="Display",delay=1,handler=self.clear_layer)
+
 
     ## Status section, for the HALIBUT
 """

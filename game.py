@@ -406,8 +406,6 @@ class CCGame(game.BasicGame):
     def increase_tracking(self,item,amount=1,key="foo"):
         ## tick up a stat by a declared amount
         p = self.current_player()
-        print "CURRENT PLAYER IS : "
-        print p
         if key != "foo":
             p.player_stats[item][key] += amount
             return p.player_stats[item][key]
