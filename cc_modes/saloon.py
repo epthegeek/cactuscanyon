@@ -40,10 +40,15 @@ class Saloon(game.Mode):
         if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
             # set the busy flag
             self.busy = True
-            # if drunk multiball is ready, start that
+            # if drunk multiball is ready, start that, maybe
             if self.game.show_tracking('drunkMultiballStatus') == "READY":
-                self.game.modes.add(self.game.drunk_multiball)
-                self.game.drunk_multiball.start_drunk()
+            ## If any level below is running, avoid multiball start
+                stackLevel = self.game.show_tracking('stackLevel')
+                if True in stackLevel[:2]:
+                    self.hit_bart()
+                else:
+                    self.game.modes.add(self.game.drunk_multiball)
+                    self.game.drunk_multiball.start_drunk()
             else:
                 # then hit bart
                 self.hit_bart()
@@ -304,6 +309,8 @@ class Saloon(game.Mode):
             awardTextMiddle = dmd.TextLayer(76,17,self.game.assets.font_9px_az,justify="center",opaque=False)
             awardTextMiddle.set_text(prizeText)
             self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextMiddle,awardTextTop,animLayer])
+        # play a lampshow
+        self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.game.update_lamps)
         # play the quote
         self.game.sound.play_voice(self.game.assets.quote_bountyCollected)
         # then clear the layer and kick the ball out

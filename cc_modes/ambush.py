@@ -56,7 +56,7 @@ class Ambush(game.Mode):
         self.busy = False
 
     def ball_drained(self):
-        if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('ambushStatus') == "RUNNING":
+        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('ambushStatus') == "RUNNING":
             self.end_ambush()
 
     def start_ambush(self):
@@ -111,7 +111,7 @@ class Ambush(game.Mode):
         # start the music
         self.game.base_game_mode.music_on(self.game.assets.music_showdown)
         # kick out more ball
-        self.game.trough.launch_balls(1)
+        #self.game.trough.launch_balls(1)
         # add two dudes
         self.busy = True
         self.add_guys(2)
@@ -233,7 +233,7 @@ class Ambush(game.Mode):
         self.update_display(escaped=target)
         # if we're at the max misses, the mode ends - TODO make this a config option
 
-        if self.misses == LOSE:
+        if self.misses >= LOSE:
             print "AMBUSH LOST"
             # cancel any remaining timers for dudes
             for dude in range(0,4,1):

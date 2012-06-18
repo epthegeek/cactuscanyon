@@ -227,8 +227,12 @@ class RightRamp(game.Mode):
         # then tick the stage up for next time unless it's completed
         if self.game.show_tracking('rightRampStage') < 4:
             self.game.increase_tracking('rightRampStage')
+            # do a little lamp flourish
+            self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
+            self.game.lamps.rightRampShootOut.schedule(0x0FF00FF0)
+            self.game.lamps.rightRampSavePolly.schedule(0xFF00FF00)
             # update the lamps
-            self.update_lamps()
+            self.delay(delay=1,handler=self.update_lamps)
             self.game.center_ramp.update_lamps()
 
     def anim_bank_victory(self):

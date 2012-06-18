@@ -119,7 +119,9 @@ class RightLoop(game.Mode):
             if self.game.show_tracking('rightLoopStage') >= 4:
                 # pulse the coil to open the gate
                 self.game.coils.leftLoopGate.pulse(150)
-            ## if the combo timer is on:
+                # play a lampshow
+                self.game.lampctrl.play_show(self.game.assets.lamp_rightToLeft, repeat=False,callback=self.game.update_lamps)
+                ## if the combo timer is on:
             if self.game.combos.myTimer > 0:
                 # register the combo and reset the timer
                 combo = self.game.combos.hit()
@@ -204,8 +206,12 @@ class RightLoop(game.Mode):
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             newstage = self.game.increase_tracking('rightLoopStage')
+            # do a little lamp flourish
+            self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopGunslinger.schedule(0x0FF00FF0)
+            self.game.lamps.rightLoopMarksman.schedule(0xFF00FF00)
             # update the lamps
-            self.update_lamps()
+            self.delay(delay=1,handler=self.update_lamps)
             # if we're now complete, check stampede
             if newstage == 4:
                 self.game.base_game_mode.check_stampede()

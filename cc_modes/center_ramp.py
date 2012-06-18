@@ -186,7 +186,11 @@ class CenterRamp(game.Mode):
         # we're holding at 3, save polly peril will set it to 4
         if self.game.show_tracking('centerRampStage') < 3:
             self.game.increase_tracking('centerRampStage')
-            self.update_lamps()
+            # do a little lamp flourish
+            self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
+            self.game.lamps.centerRampStopTrain.schedule(0x0FF00FF0)
+            self.game.lamps.centerRampSavePolly.schedule(0xFF00FF00)
+            self.delay(delay=1,handler=self.update_lamps)
 
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):

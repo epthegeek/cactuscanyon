@@ -97,6 +97,7 @@ class BonusLanes(game.Mode):
         animLayer.hold = True
         animLayer.frame_time = 7
         animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_cactusMash)
+        animLayer.add_frame_listener(4,self.game.base_game_mode.red_flasher_flourish)
         # run the animation
         self.layer = animLayer
         # increase the bonus

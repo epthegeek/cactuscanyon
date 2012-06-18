@@ -222,8 +222,12 @@ class LeftRamp(game.Mode):
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             self.game.increase_tracking('leftRampStage')
+            # do a little lamp flourish
+            self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWaterfall.schedule(0x0FF00FF0)
+            self.game.lamps.leftRampSavePolly.schedule(0xFF00FF00)
             # update the lamps
-            self.update_lamps()
+            self.delay(delay=1,handler=self.update_lamps)
             print "CHECING TRACKING Left ramp LR: " + str(self.game.show_tracking('leftRampStage'))
 
     # for now since this doesn't blink there's just one step

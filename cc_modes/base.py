@@ -718,3 +718,17 @@ class BaseGameMode(game.Mode):
         # then loop back to end ball
         self.delay(delay=2,handler=self.game.ball_ended)
         self.delay(delay=2,handler=self.clear_layer)
+
+
+    # red flasher flourish thing
+    ## a flasher flourish
+    def red_flasher_flourish(self,foo='bar'):
+        self.flash(self.game.coils.middleRightFlasher)
+        self.delay(delay=0.03,handler=self.flash,param=self.game.coils.backRightFlasher)
+        self.delay(delay=0.06,handler=self.flash,param=self.game.coils.backLeftFlasher)
+        self.delay(delay=0.09,handler=self.flash,param=self.game.coils.middleRightFlasher)
+        self.delay(delay=0.12,handler=self.flash,param=self.game.coils.backRightFlasher)
+        self.delay(delay=0.15,handler=self.flash,param=self.game.coils.backLeftFlasher)
+
+    def flash(self,bulb):
+        bulb.pulse(30)
