@@ -13,6 +13,7 @@ from assets import *
 import ep
 import random
 
+
 class BaseGameMode(game.Mode):
     """docstring for AttractMode"""
     def __init__(self, game,priority):
@@ -30,7 +31,7 @@ class BaseGameMode(game.Mode):
                           self.game.lamps.starShowdown,
                           self.game.lamps.starStampede]
         self.current_music = self.game.assets.music_mainTheme
-
+        self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
 
     def mode_started(self):
         ## cancel the closing song delay, just in case
@@ -189,7 +190,7 @@ class BaseGameMode(game.Mode):
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
         textLine1 = dmd.TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
         # TODO right now it takes 15 shots to light drunk multiball - change this to a config param
-        left = 2 - hits
+        left = self.mug_shots - hits
         ## if we're at zero, it's lit and the display shows it
         if left == 0:
             # enable the multiball

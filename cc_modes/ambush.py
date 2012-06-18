@@ -8,11 +8,6 @@ import cc_modes
 import ep
 import random
 
-# TODO make these config options
-# number of guys that can escape before you lose
-LOSE = 3
-# how long the bad guys wait before disappearing
-SECONDS = 12
 
 class Ambush(game.Mode):
     """Showdown code """
@@ -42,7 +37,10 @@ class Ambush(game.Mode):
                       self.game.lamps.badGuyL1,
                       self.game.lamps.badGuyL2,
                       self.game.lamps.badGuyL3]
-
+        # number of guys that can escape before you lose
+        self.LOSE = self.game.user_settings['Gameplay (Feature)']['Ambush Escapes to Lose']
+        # how long the bad guys wait before disappearing
+        self.SECONDS = self.game.user_settings['Gameplay (Feature)']['Ambush Target Timer']
 
 
     def mode_started(self):
@@ -114,7 +112,9 @@ class Ambush(game.Mode):
         #self.game.trough.launch_balls(1)
         # add two dudes
         self.busy = True
-        self.add_guys(2)
+        self.add_guys(1)
+        # delay adding the second guy for 2 seconds to stagger them a bit
+        self.delay(delay=2,handler=self.add_guys,param=1)
 
     def add_guys(self,amount):
         # for adding dudes to the ambush
@@ -126,7 +126,7 @@ class Ambush(game.Mode):
         # pop that target up
         self.game.bad_guys.target_up(dude)
         # start a timer for that target
-        self.badGuyTimer[dude] = SECONDS
+        self.badGuyTimer[dude] = self.SECONDS
         self.targetTimer(dude)
         # reduce count of dudes to start by 1
         amount -= 1
@@ -192,7 +192,7 @@ class Ambush(game.Mode):
             eGuy0.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
             eGuy0.add_frame_listener(4,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
             # on any escape other than the last one, taunt the player - the last one would get stepped on by the final quote
-            if self.misses != LOSE:
+            if self.misses != self.LOSE:
                 eGuy0.add_frame_listener(5,self.game.play_remote_sound,param=self.game.assets.quote_gunFail)
             escapeLayers.append(eGuy0)
 
@@ -207,7 +207,7 @@ class Ambush(game.Mode):
             self.game.sound.play(self.game.assets.sfx_gunfightShot)
         if escaped != 99:
             activeLayers.append(escapeLayers[escaped])
-            amount = LOSE - self.misses
+            amount = self.LOSE - self.misses
             self.delay(delay=0.5,handler=self.game.interrupter.dude_escaped,param=amount)
 
         combined = dmd.GroupedLayer(128,32,activeLayers)
@@ -233,7 +233,7 @@ class Ambush(game.Mode):
         self.update_display(escaped=target)
         # if we're at the max misses, the mode ends - TODO make this a config option
 
-        if self.misses >= LOSE:
+        if self.misses >= self.LOSE:
             print "AMBUSH LOST"
             # cancel any remaining timers for dudes
             for dude in range(0,4,1):
@@ -245,7 +245,7 @@ class Ambush(game.Mode):
 
     def hit(self,target):
         # check to make sure the last guy hasn't already fled - there's a small delay while the last gunshot animation plays
-        if self.misses != LOSE:
+        if self.misses < self.LOSE:
             self.cancel_delayed("Poller")
             # reset the taunt timer
             self.tauntTimer = 0

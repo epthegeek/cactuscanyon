@@ -93,9 +93,9 @@ Gameplay (Feature):
     increments: 1
     default: 10
   'Beer Mug Hits For Multiball':
-    options: [5,20]
+    options: [2,20]
     increments: 1
-    default: 10
+    default: 5
   'Bart Brothers Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
@@ -107,6 +107,14 @@ Gameplay (Feature):
     options: [5,30]
     increments: 5
     default: 20
+  'Ambush Target Timer':
+    options: [5,30]
+    increments: 1
+    default: 12
+  'Ambush Escapes to Lose':
+    options: [3,15]
+    increments: 1
+    default: 3
   'Shots to save Polly':
     options: [2,15]
     increments: 1

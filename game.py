@@ -84,12 +84,12 @@ class CCGame(game.BasicGame):
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'ShowdownChampHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('quickdrawsWon')
+        cat.score_for_player = lambda player: self.show_tracking('showdownTotal')
         cat.titles = ['Showdown Champ']
 
         self.highscore_categories.append(cat)
 
-        ## TODO later - and combo champ
+        ## TODO later - and combo champ? ambush champ? ramp champ?
 
         for category in self.highscore_categories:
             category.load_from_game(self)
@@ -538,4 +538,5 @@ class CCGame(game.BasicGame):
             self.giState = "ON"
             for lamp in self.giLamps:
                 lamp.enable()
+
 

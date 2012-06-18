@@ -136,7 +136,7 @@ class Interrupter(game.Mode):
 
 
     ## Status section, for the HALIBUT
-"""
+
     # hold a flipper for 5 seconds to start - but only turn it on if it's not already on
     def sw_flipperLwR_active_for_5s(self,sw):
         if self.statusDisplay == "Off":
@@ -167,12 +167,19 @@ class Interrupter(game.Mode):
     def status_on(self,side):
         self.statusDisplay = side
         print "STATUS GOES HERE"
-        # TODO disable the ball save
+        # disable ball search
+        self.game.ball_search.disable()
+        # start the status display
+        self.status()
 
     def status_off(self):
         self.statusDisplay = "Off"
         print "STATUS ENDING"
-        # TODO enable ball save
+        self.cancel_delayed("Display")
+        # enable ball search
+        self.game.ball_search.enable()
+        # clear the layer
+        self.layer = None
         # reset the page to 0
         self.page = 0
 
@@ -181,29 +188,52 @@ class Interrupter(game.Mode):
         self.cancel_delayed("Display")
         # first, tick up the page
         self.page += 1
+        # roll back around if we get over the number of pages
+        if self.page > 4:
+            self.page = 1
         # then show some junk based on what page we're on
-        if page == 1:
-            # hits left to light drunk multiball
-            # not accurate right now because the mode doesn't use the setting
-            left = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball'] - self.game.show_tracking('beerMugHits')
-            textString1 = str(left) + " MORE HITS"
-            textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
-            textLine2 = dmd.TextLayer(128/2, 10, self.game.assets.font_9px_az, "center", opaque=False).set_text(textString1)
-            textLine3 = dmd.TextLayer(128/2, 21, self.game.assets.font_9px_az, "center", opaque=False).set_text("FOR MULTIBALL")
-            combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
+        if self.page == 1:
+            textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_12px_az, "center", opaque=True).set_text("CURRENT")
+            textLine2 = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az, "center", opaque=False).set_text("STATUS")
+            textLine2.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
             self.layer = combined
-        if page == 2:
+        # bonus information
+        if self.page == 2:
+            multiplier = self.game.show_tracking('bonusX')
+            textString2 = str(multiplier) + "X MULTIPLIER"
+            bonus = self.game.show_tracking('bonus')
+            textString3 = "BONUS: " + ep.format_score(bonus)
+            # default three line display
+            self.tld("BONUS INFO:", textString2, textString3)
+        if self.page == 3:
         # hits left to light drunk multiball
+            locked = self.game.show_tracking('ballsLocked')
+            if locked == 1:
+                textString2 = str(locked) + " BALL LOCKED"
+            else:
+                textString2 = str(locked) + " BALLS LOCKED"
             shots = self.game.show_tracking('mineShotsTotal')
-            textString1 = str(shots) + " SHOTS"
-            textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("MINE SHOTS")
-            textLine2 = dmd.TextLayer(128/2, 10, self.game.assets.font_9px_az, "center", opaque=False).set_text(textString1)
-            textLine3 = dmd.TextLayer(128/2, 21, self.game.assets.font_9px_az, "center", opaque=False).set_text("SO FAR")
-            combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
-            self.layer = combined
-        if page == 3:
-            # turn off the display and whatnot
-            self.status_off()
-        # circle back and clear the layer
+            textString3 = str(shots) + " MINE SHOTS TOTAL"
+            # stock three line display
+            self.tld("MINE STATUS:", textString2, textString3)
+        if self.page == 4:
+            # hits left to light drunk multiball
+            left = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball'] - self.game.show_tracking('beerMugHits')
+            if left <= 0:
+                textString2 = "DRUNK MULTIBALL"
+                textString3 = "IS LIT"
+            else:
+                textString2 = str(left) + " MORE HITS"
+                textString3 = "FOR MULTIBALL"
+                # default three line display
+            self.tld("BEER MUG:",textString2,textString3)
+            # circle back and clear the layer
         self.delay(name="Display",delay=3,handler=self.status)
-        """
+
+    def tld(self,textString1,textString2,textString3):
+        textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString1)
+        textLine2 = dmd.TextLayer(128/2, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+        textLine3 = dmd.TextLayer(128/2, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString3)
+        combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
+        self.layer = combined

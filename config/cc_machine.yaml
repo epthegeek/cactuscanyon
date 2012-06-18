@@ -27,10 +27,8 @@ PRSwitches:
     ## EOS switches?
     flipperLwR:
         number: SF2
-        type: 'NC'
     flipperLwL:
         number: SF4
-        type: 'NC'
 
     #Dedicated Grounded Swtches
     exit: 
