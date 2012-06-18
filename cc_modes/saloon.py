@@ -68,7 +68,7 @@ class Saloon(game.Mode):
     def sw_saloonGate_active(self,sw):
         # play the sound.
         # add some points
-        self.game.score(2530)
+        self.game.score_with_bonus(2530)
         # exciting!
         ## -- set the last switch hit --
         ep.last_switch = "saloonGate"
@@ -83,7 +83,7 @@ class Saloon(game.Mode):
             self.delay(delay=0.03,handler=self.light_bart)
             self.delay(delay=0.07,handler=self.move_bart)
         # score some points
-        self.game.score(2530)
+        self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "jetBumpersExit"
 

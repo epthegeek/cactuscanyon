@@ -27,7 +27,7 @@ class SkillShot(game.Mode):
             # play a random voice call from a pre-set collection
             self.delay(delay=0.3,handler=self.game.play_remote_sound,param=self.game.assets.quote_welcomes)
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
-        self.delay(delay=0.2,handler=self.music_on)
+        self.delay(delay=0.2,handler=self.game.base_game.mode.music_on,param=self.game.assets.music_shooterLaneGroove)
 
         # set up a blank list for prizes
         prizes = []
@@ -105,9 +105,7 @@ class SkillShot(game.Mode):
     # take the last prize off the string and stick it back on the front
     def sw_skillBowl_active(self, sw):
         ##
-        self.game.score(7250)
-        ## TODO add bonus points to all kinds of junk
-        self.game.add_bonus(130)
+        self.game.score_with_bonus(7250)
         # slide the prize list over
         self.game.sound.play(self.game.assets.sfx_skillShotWoosh)
         self.shift_right()
@@ -128,7 +126,7 @@ class SkillShot(game.Mode):
         ## TODO might need to move this to specific awards
         self.game.sound.play(self.game.assets.sfx_flourish7)
 
-        # award the prize - TODO these will change to real awards later
+        # award the prize -
         if self.selectedPrizes[5:] == "C":
             self.game.score(10)
             awardStringTop = "BANK ROBBERY"
@@ -284,10 +282,6 @@ class SkillShot(game.Mode):
         # unload in 2 seconds - to give
         # the award junk time to finish
         self.delay(delay=2,handler=self.shutdown)
-
-    def music_on(self):
-        print "ITS TIME TO START THE SHOOTER LANE MUSIC"
-        self.game.base_game_mode.music_on(self.game.assets.music_shooterLaneGroove)
 
     def shutdown(self):
         # unload the skill shot since it's not needed

@@ -439,6 +439,16 @@ class CCGame(game.BasicGame):
         p = self.current_player()
         p.player_stats[item].reverse()
 
+    # score with bonus
+    def score_with_bonus(self, points,percent=7):
+        """Convenience method to add *points* to the current player."""
+        p = self.current_player()
+        p.score += points
+        # divide the score by 100 to get what 1 % is (rounded), then multiply by the applied percent, then round to an even 10.
+        # why? because that's what modern pinball does. Score always ends in 0
+        bonus = points / 100 * percent / 10 * 10
+        print "ADDING BONUS - " + str(bonus)
+        p.player_stats['bonus'] += bonus
 
     ## this is for frame listeners and delays
     def play_remote_sound(self,param):
@@ -538,5 +548,4 @@ class CCGame(game.BasicGame):
             self.giState = "ON"
             for lamp in self.giLamps:
                 lamp.enable()
-
 

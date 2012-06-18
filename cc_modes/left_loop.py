@@ -112,7 +112,7 @@ class LeftLoop(game.Mode):
         # play the sound effect
         self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # score come points
-        self.game.score(2530)
+        self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "leftLoopBottom"
 
@@ -145,7 +145,7 @@ class LeftLoop(game.Mode):
             self.award_loop_score(combo)
         # if it's a roll through so just add some points
         elif ep.last_switch == 'rightLoopTop':
-            self.game.score(2530)
+            self.game.score_with_bonus(2530)
             self.game.increase_tracking('fullLoops')
         ## -- set the last switch --
         ep.last_switch = "leftLoopTop"

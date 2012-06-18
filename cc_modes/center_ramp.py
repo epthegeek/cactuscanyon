@@ -109,7 +109,7 @@ class CenterRamp(game.Mode):
         # play the switch sound
         self.game.sound.play(self.game.assets.sfx_centerRampEnter)
         # score the arbitrary and wacky points
-        self.game.score(2530)
+        self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "centerRampEnter"
 

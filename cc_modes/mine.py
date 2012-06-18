@@ -92,7 +92,7 @@ class Mine(game.Mode):
         # play the default sound
         self.game.sound.play(self.game.assets.sfx_mineEntrance)
         # award some points
-        self.game.score(2530)
+        self.game.score_with_bonus(2530)
         ep.last_switch = "mineEntrance"
 
     def mine_shot(self):

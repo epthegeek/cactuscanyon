@@ -331,7 +331,7 @@ class BaseGameMode(game.Mode):
         # play the sound
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
         # score the points
-        self.game.score(2530)
+        self.game.score_with_bonus(2530)
         # if there's a running quickdraw or showdown - pass
         if not self.guns_allowed():
             print "PASSING - Guns disabled"
@@ -386,7 +386,7 @@ class BaseGameMode(game.Mode):
 
 
     def outlane_hit(self, side):
-        self.game.score(2530)
+        self.game.score_with_bonus(2530)
         self.game.sound.play(self.game.assets.sfx_outlane)
 
     ###
@@ -442,6 +442,8 @@ class BaseGameMode(game.Mode):
         if self.game.combos.myTimer > 0:
             self.game.combos.myTimer = self.game.combos.default
         hits = self.game.increase_tracking('bumperHits')
+        # flash the back left flasher per hit
+        self.game.coils.backLeftFlasher.pulse(30)
         if hits == 75:
             # display the super jets display
             pass

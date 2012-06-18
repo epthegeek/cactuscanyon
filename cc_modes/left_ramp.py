@@ -132,7 +132,7 @@ class LeftRamp(game.Mode):
     def sw_leftRampMake_active(self,sw):
         # in general gameplay this switch has no purpose
         # but I'm sure it adds points
-        self.game.score(2530)
+        self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "leftRampMake"
 
