@@ -167,6 +167,17 @@ class SkillShot(game.Mode):
     def sw_rightRampBottom_active(self, sw):
         if not self.super:
             self.skillshot_award()
+        else:
+            if self.active == 1:
+                awardStringTop = "SHOOT LEFT LOOP"
+            elif self.active == 2:
+                awardStringTop = "SHOOT LEFT RAMP"
+            elif self.active == 3:
+                awardStringTop = "SHOOT CENTER RAMP"
+            awardStringBottom = "FOR AWARD"
+            self.game.sound.play(self.game.assets.sfx_flourish7)
+
+            self.award_display(awardStringTop,awardStringBottom,start=False)
 
     def skillshot_award(self):
         # stop the music
@@ -331,6 +342,10 @@ class SkillShot(game.Mode):
 
         # call the lamp update so the prize is shown properly
         self.game.update_lamps()
+
+        self.award_display(awardStringTop,awardStringBottom)
+
+    def award_display(self,awardStringTop,awardStringBottom,start=True):
         # the award icon
         prizeList = dmd.TextLayer(126, 1, self.game.assets.font_skillshot, "right", opaque=False).set_text(self.selectedPrizes[5:])
         # the award text
@@ -341,7 +356,7 @@ class SkillShot(game.Mode):
         # remove after 2 seconds
         self.delay(delay=2,handler=self.clear_layer)
         # if we're in a super skill shot call start gameplay
-        if self.super:
+        if self.super and start:
             self.delay(delay = 2,handler=self.start_gameplay)
 
     def shift_right(self):
