@@ -187,26 +187,20 @@ class BaseGameMode(game.Mode):
         # play a sound
         self.game.sound.play(self.game.assets.sfx_ricochetSet)
         # a little display action
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
         textLine1 = dmd.TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
         # TODO right now it takes 15 shots to light drunk multiball - change this to a config param
         left = self.mug_shots - hits
         ## if we're at zero, it's lit and the display shows it
         if left == 0:
-            # enable the multiball
-            self.game.set_tracking('drunkMultiballStatus', "READY")
-            self.game.saloon.update_lamps()
-            textLine1 = ep.pulse_text(self,51,1,"DRUNK")
-            textLine2 = ep.pulse_text(self,51,12,"MULTIBALL")
-            textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")
-            self.repeat_ding(4)
-            self.game.sound.play(self.game.assets.quote_drunkMultiballLit)
+            self.light_drunk_multiball()
         ## if we're past zero then it shows a message
         elif left < 0:
             textString = "SHOOT THE SALOON"
             textString2 = "FOR MULTIBALL"
             textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString,blink_frames=8)
             textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+            self.mug_display(textLine1,textLine2,textLine3)
+
         ## if we're still not there yet, show how much is left
         else:
             if left == 1:
@@ -216,13 +210,18 @@ class BaseGameMode(game.Mode):
             textString2 = "DRUNKEN MULTIBALL"
             textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
             textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+            self.mug_display(textLine1,textLine2,textLine3)
 
         if left != 0:
             # play a quote on a random 1/3 choice
             weDo = random.choice([False,True,False])
             if weDo:
                 self.game.sound.play(self.game.assets.quote_beerMug)
+        ## -- set the last switch -- ##
+        ep.last_switch = 'beerMug'
 
+    def mug_display(self,textLine1,textLine2,textLine3):
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
         # kill any previous display
         self.cancel_delayed("Display")
@@ -230,8 +229,22 @@ class BaseGameMode(game.Mode):
         self.layer = combined
         # set a delay to clear
         self.delay(name="Display", delay = 1.6, handler=self.clear_layer)
-        ## -- set the last switch -- ##
-        ep.last_switch = 'beerMug'
+
+    def light_drunk_multiball(self,callback = None):
+        # set the hits to the same number it takes to light - this is a catch for the super skillshot award
+        self.game.set_tracking('beerMugHits',self.mug_shots)
+        # enable the multiball
+        self.game.set_tracking('drunkMultiballStatus', "READY")
+        self.game.saloon.update_lamps()
+        textLine1 = ep.pulse_text(self,51,1,"DRUNK")
+        textLine2 = ep.pulse_text(self,51,12,"MULTIBALL")
+        textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")
+        self.repeat_ding(4)
+        self.game.sound.play(self.game.assets.quote_drunkMultiballLit)
+        self.mug_display(textLine1,textLine2,textLine3)
+        # so super can start gameplay
+        if callback:
+            self.delay(delay=1.7,handler=callback)
 
     # Allow service mode to be entered during a game.
     def sw_enter_active(self, sw):

@@ -25,6 +25,7 @@ __all__ = [
     'showdown'
     'gunfight',
     'ambush',
+    'super_filter',
 ]
 from base import *
 from attract import *
@@ -52,3 +53,4 @@ from quickdraw import *
 from showdown import *
 from gunfight import *
 from ambush import *
+from super_filter import *

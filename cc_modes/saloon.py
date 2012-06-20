@@ -541,7 +541,7 @@ class Saloon(game.Mode):
 
     ## Gunfight
 
-    def light_gunfight(self):
+    def light_gunfight(self,callback=None):
         print "GUNFIGHT IS LIT"
         # turn on the lights
         # show the display
@@ -556,4 +556,7 @@ class Saloon(game.Mode):
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
         self.update_lamps()
-        self.delay(delay=2,handler=self.clear_layer)
+        if callback:
+            self.delay(delay=2,handler=callback)
+        else:
+            self.delay(delay=2,handler=self.clear_layer)

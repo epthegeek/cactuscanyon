@@ -140,6 +140,8 @@ class CCGame(game.BasicGame):
         self.drunk_multiball = cc_modes.DrunkMultiball(game=self,priority=88)
         # High Noon
         self.high_noon = cc_modes.HighNoon(game=self,priority=90)
+        # skillshot switch filter
+        self.super_filter = cc_modes.SuperFilter(game=self,priority = 200)
         # Interrupter Jones
         self.interrupter = cc_modes.Interrupter(game=self,priority=200)
 

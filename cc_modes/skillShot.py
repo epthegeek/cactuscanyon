@@ -19,6 +19,22 @@ class SkillShot(game.Mode):
         self.mask.composite_op = "blacksrc"
         # offset for the icon layer
         self.x = 126
+        self.super = False
+        self.leftLoopLamps = [self.game.lamps.leftLoopBuckNBronco,
+                              self.game.lamps.leftLoopWildRide,
+                              self.game.lamps.leftLoopRideEm,
+                              self.game.lamps.leftLoopJackpot]
+        self.leftRampLamps = [self.game.lamps.leftRampWhiteWater,
+                              self.game.lamps.leftRampWaterfall,
+                              self.game.lamps.leftRampSavePolly,
+                              self.game.lamps.leftRampJackpot]
+        self.centerRampLamps = [self.game.lamps.centerRampCatchTrain,
+                                self.game.lamps.centerRampStopTrain,
+                                self.game.lamps.centerRampSavePolly,
+                                self.game.lamps.centerRampJackpot]
+
+        self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
+        self.active = 0
 
     def mode_started(self):
         # call the welcome quote - and start the theme song after on the first ball
@@ -27,61 +43,80 @@ class SkillShot(game.Mode):
             # play a random voice call from a pre-set collection
             self.delay(delay=0.3,handler=self.game.play_remote_sound,param=self.game.assets.quote_welcomes)
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
-        self.delay(delay=0.2,handler=self.game.base_game.mode.music_on,param=self.game.assets.music_shooterLaneGroove)
+        self.delay(delay=0.2,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_shooterLaneGroove)
+        self.generate_prizes()
 
+    def generate_prizes(self):
         # set up a blank list for prizes
         prizes = []
         # completed items are not added to the random list
         # and maybe putting specific weight on certain items to make them more rare
         # but for now, randomly select 5 items to build the prize list
+        if not self.super:
+            # right ramp complete (bank)
+            if self.game.show_tracking('rightRampStage') < 4:
+                prizes.append("C")
 
-        # right ramp complete (bank)
-        if self.game.show_tracking('rightRampStage') < 4:
-            prizes.append("C")
+            # light lock (padlock)
+            # if multiball is ready, then don't include light lock
+            if self.game.show_tracking('mineStatus') != "READY":
+                prizes.append("D")
 
-        # light lock (padlock)
-        # if multiball is ready, then don't include light lock
-        if self.game.show_tracking('mineStatus') != "READY":
-            prizes.append("D")
+            # light bounty? (money bag) don't add if bounty is already lit
+            if not self.game.show_tracking('isBountyLit'):
+                prizes.append("E")
 
-        # light bounty? (money bag) don't add if bounty is already lit
-        if not self.game.show_tracking('isBountyLit'):
-            prizes.append("E")
+            # left ramp complete (boat)
+            if self.game.show_tracking('leftRampStage') < 4:
+                prizes.append("F")
 
-        # left ramp complete (boat)
-        if self.game.show_tracking('leftRampStage') < 4:
-            prizes.append("F")
+            # right loop complete (gun)
+            if self.game.show_tracking('rightLoopStage') < 4:
+                prizes.append("G")
 
-        # right loop complete (gun)
-        if self.game.show_tracking('rightLoopStage') < 4:
-            prizes.append("G")
+            # light quick draw (gun w/ quick draw)
+            if self.game.show_tracking('quickdrawStatus',key=1) != "READY":
+                prizes.append("H")
 
-        # light quick draw (gun w/ quick draw)
-        if self.game.show_tracking('quickdrawStatus',key=1) != "READY":
-            prizes.append("H")
+            # left loop complete (horse)
+            if self.game.show_tracking('leftLoopStage') < 4:
+                prizes.append("I")
 
-        # left loop complete (horse)
-        if self.game.show_tracking('leftLoopStage') < 4:
-            prizes.append("I")
+            # extra ball (ball) don't include on ball 1 or if max extra balls is already hit
+            if self.game.ball != 1 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+                prizes.append("J")
 
-        # extra ball (ball) don't include on ball 1 or if max extra balls is already hit
-        if self.game.ball != 1 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-            prizes.append("J")
+            # increae rank (star) don't include if already at max rank
+            if self.game.show_tracking('rank') < 4:
+                prizes.append("K")
 
-        # increae rank (star) don't include if already at max rank
-        if self.game.show_tracking('rank') < 4:
-            prizes.append("K")
+            # bonus X don't include if bonus already 6x or more
+            if self.game.show_tracking('bonusX') < 6:
+                prizes.append("L")
 
-        # bonus X don't include if bonus already 6x or more
-        if self.game.show_tracking('bonusX') < 6:
-            prizes.append("L")
+            # center ramp complete (train)
+            if self.game.show_tracking('centerRampStage') < 4:
+                prizes.append("M")
 
-        # center ramp complete (train)
-        if self.game.show_tracking('centerRampStage') < 4:
-            prizes.append("M")
-
-        # 1 million points (1M) is always available
-        prizes.append("N")
+            # 1 million points (1M) is always available
+            prizes.append("N")
+        # here's the super skill shot prizes
+        else:
+            # 3 million points
+            prizes.append("O")
+            # bonus 5x
+            if self.game.show_tracking('bonusX') < 9:
+                prizes.append("P")
+            # light gunfight
+            if self.game.show_tracking('gunfightStatus') != "READY":
+                prizes.append("Q")
+            # drunk multiball
+            if self.game.show_tracking('drunkMultiballStatus') != "READY":
+                prizes.append("R")
+                # TODO this one needs an icon
+            # extra ball
+            if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+                prizes.append("J")
 
         # initialize some junk
         count = 0
@@ -94,9 +129,13 @@ class SkillShot(game.Mode):
             self.selectedPrizes = self.selectedPrizes[4:5] + self.selectedPrizes
             count += 1
 
-        self.update_layer()
+        # if we're not in the super skillshot, update the display right away
+        if not self.super:
+            self.update_layer()
 
     def update_layer(self):
+        # cancel any display delays - for the super startup anim
+        self.cancel_delayed("Display")
         # set up the text layer of prizes
         prizeList = dmd.TextLayer(self.x, 1, self.game.assets.font_skillshot, "right", opaque=True).set_text(self.selectedPrizes)
         self.layer = dmd.GroupedLayer(128, 32, [prizeList,self.mask, self.lasso])
@@ -104,6 +143,14 @@ class SkillShot(game.Mode):
     # if the ramp switch gets hit - shift the prizes over
     # take the last prize off the string and stick it back on the front
     def sw_skillBowl_active(self, sw):
+        ## if we're in super, the jackpot shot has to move
+        if self.super:
+            self.active += 1
+            # wrap back around after 3
+            if self.active == 4:
+                self.active = 1
+            self.super_update_lamps()
+            print "ACTIVE SHOT IS: " + str(self.active)
         ##
         self.game.score_with_bonus(7250)
         # slide the prize list over
@@ -118,9 +165,11 @@ class SkillShot(game.Mode):
 
     # if the ramp bottom switch gets hit - award the prize and unload the mode
     def sw_rightRampBottom_active(self, sw):
-        # kill the music
-        print "stillshot rightRampBottom IS KILLING THE MUSIC"
+        if not self.super:
+            self.skillshot_award()
 
+    def skillshot_award(self):
+        # stop the music
         self.game.sound.stop_music()
         # play the sound
         ## TODO might need to move this to specific awards
@@ -239,6 +288,44 @@ class SkillShot(game.Mode):
             self.delay(delay=1.6,handler=self.clear_layer)
             return
 
+        # super prizes
+        # three million
+        elif self.selectedPrizes[5:] == "O":
+            self.game.score(3000000)
+            # setup the wipe animation and the text layer
+            topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("THREE", blink_frames=5)
+            million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
+            anim = dmd.Animation().load(ep.DMD_PATH+'cash-wipe.dmd')
+            wipeLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            wipeLayer.composite_op = "blacksrc"
+            self.layer = dmd.GroupedLayer(128,32,[topText,million,wipeLayer])
+            self.game.sound.play(self.game.assets.sfx_thrownCoins)
+            self.game.sound.play(self.game.assets.sfx_yeeHoo)
+            self.delay(delay=1.6,handler=self.start_gameplay)
+            return
+        # bonus x
+        elif self.selectedPrizes[5:] == "P":
+            self.game.score(100)
+            awardStringTop = "BONUS X"
+            awardStringBottom = "INCREASED +5"
+            self.game.increase_tracking('bonusX',5)
+        # gunfight
+        elif self.selectedPrizes[5:] == "Q":
+            # This one is the gunfight
+            self.layer = None
+            self.game.score(50000)
+            # turn on the right quickdraw
+            self.game.saloon.light_gunfight(self.start_gameplay)
+            return
+
+        # drunk multiball
+        elif self.selectedPrizes[5:] == "R":
+            self.layer = None
+            self.game.score(50000)
+            # light the dmb
+            self.game.base_game_mode.light_drunk_multiball(self.start_gameplay())
+            return
+
         # call the lamp update so the prize is shown properly
         self.game.update_lamps()
         # the award icon
@@ -250,6 +337,9 @@ class SkillShot(game.Mode):
 
         # remove after 2 seconds
         self.delay(delay=2,handler=self.clear_layer)
+        # if we're in a super skill shot call start gameplay
+        if self.super:
+            self.delay(delay = 2,handler=self.start_gameplay)
 
     def shift_right(self):
         ## routine to slide the prize display to the right
@@ -271,10 +361,22 @@ class SkillShot(game.Mode):
         # put the scripted shift in place!
         self.layer = dmd.ScriptedLayer(128, 32, script)
 
+    def sw_flipperLwL_active_for_2s(self,sw):
+        if not self.super:
+            self.activate_super()
+
+    def sw_flipperLwR_active_for_2s(self,sw):
+        if not self.super:
+            self.activate_super()
 
     def sw_rightReturnLane_active(self,sw):
         # this is how the actual CC tracks the end of
         # the skillshot and I'm not going to argue
+        # if we're not in a super skill shot, start normal gameplay and unload
+        if not self.super:
+            self.start_gameplay()
+
+    def start_gameplay(self):
         # start the main game music
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # check if the award finished stampede
@@ -282,6 +384,86 @@ class SkillShot(game.Mode):
         # unload in 2 seconds - to give
         # the award junk time to finish
         self.delay(delay=2,handler=self.shutdown)
+
+    def activate_super(self):
+        # turn off the music
+        self.game.sound.stop_music()
+        # turn off the table lights
+        self.game.set_tracking('lampStatus',"OFF")
+        self.game.update_lamps()
+        # pick a jackpot
+        choices = [1,2,3]
+        self.active = random.choice(choices)
+        # then update the local lamps
+        self.super_update_lamps()
+        # kick the flag
+        self.super = True
+        # pick the new prizes
+        self.generate_prizes()
+        # load the switch filter
+        self.game.modes.add(self.game.super_filter)
+
+        anim1 = dmd.Animation().load(ep.DMD_PATH+'super-blink.dmd')
+        anim2 = dmd.Animation().load(ep.DMD_PATH+'super-skill-shot.dmd')
+        # math out the wait
+        myWait = len(anim2.frames) / 30.0
+        # set the animation
+        animLayer = ep.EP_AnimatedLayer(anim2)
+        animLayer.hold=True
+        animLayer.frame_time = 2
+        animLayer.add_frame_listener(16,self.game.play_remote_sound,param=self.game.assets.sfx_ropeCreak)
+        animLayer.add_frame_listener(20,self.game.play_remote_sound,param=self.game.assets.sfx_slide)
+        animLayer.composite_op = "blacksrc"
+        blinkLayer = ep.EP_AnimatedLayer(anim1)
+        blinkLayer.hold=True
+        blinkLayer.frame_time = 2
+        blinkLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_bountyBell)
+        blinkLayer.add_frame_listener(14,self.game.play_remote_sound,param=self.game.assets.sfx_bountyBell)
+
+        combined = dmd.GroupedLayer(128,32,[blinkLayer,animLayer])
+        # play a lasso throw sound
+        self.game.sound.play(self.game.assets.sfx_ropeWoosh)
+        # turn it on
+        self.layer = combined
+        self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_drumRoll)
+        # show the prizes
+        self.delay("Display",delay=myWait+1,handler=self.update_layer)
+
+    def super_hit(self,made=None):
+        # unload the switch trap
+        self.game.modes.remove(self.game.super_filter)
+        # kill the drum roll
+        self.game.sound.stop_music()
+        # turn the lights back on
+        self.game.set_tracking('lampStatus',"ON")
+        self.game.update_lamps()
+        if made:
+            # award the prize
+            self.skillshot_award()
+        else:
+            self.start_gameplay()
+
+    def super_update_lamps(self):
+        # one is the left loop
+        if self.active == 1:
+            for lamp in self.leftLoopLamps:
+                lamp.schedule(0x00FF00FF)
+        elif self.active == 2:
+            for lamp in self.leftRampLamps:
+                lamp.schedule(0x00FF00FF)
+        elif self.active == 3:
+            for lamp in self.centerRampLamps:
+                lamp.schedule(0x00FF00FF)
+        else:
+            pass
+
+    def super_disable_lamps(self):
+        for lamp in self.leftLoopLamps:
+            lamp.disable()
+        for lamp in self.leftRampLamps:
+            lamp.disable()
+        for lamp in self.centerRampLamps:
+            lamp.disable()
 
     def shutdown(self):
         # unload the skill shot since it's not needed
