@@ -251,7 +251,10 @@ class SkillShot(game.Mode):
             awardStringBottom ="IS LIT"
             # turn off the skill shot layer
             self.layer = None
-            self.game.mine.light_extra_ball()
+            callback = None
+            if self.super:
+                callback = self.start_gameplay
+            self.game.mine.light_extra_ball(callback)
             return
 
         elif self.selectedPrizes[5:] == "K":
@@ -377,6 +380,8 @@ class SkillShot(game.Mode):
             self.start_gameplay()
 
     def start_gameplay(self):
+        # clear the local layer just in case
+        self.layer = None
         # start the main game music
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # check if the award finished stampede
@@ -441,6 +446,7 @@ class SkillShot(game.Mode):
             # award the prize
             self.skillshot_award()
         else:
+            self.game.sound.play(self.game.assets.quote_superFail)
             self.start_gameplay()
 
     def super_update_lamps(self):

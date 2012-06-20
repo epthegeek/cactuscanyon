@@ -281,7 +281,7 @@ class Mine(game.Mode):
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         self.delay(delay=2.1,handler=self.game.base_game_mode.music_on)
 
-    def light_extra_ball(self):
+    def light_extra_ball(self,callback=None):
         # add the ball to the pending extra balls
         derp = self.game.increase_tracking('extraBallsPending')
         print "EXTRA BALLS PENDING: " + str(derp)
@@ -308,6 +308,9 @@ class Mine(game.Mode):
         # play a quote
         self.game.sound.play(self.game.assets.quote_extraBallLit)
         self.update_lamps()
+        # callback process for calling from skill shot
+        if callback:
+            self.delay(delay=myWait,handler=callback)
         self.delay(delay=myWait,handler=self.clear_layer)
         print "EXTRA BALL LIT"
 
