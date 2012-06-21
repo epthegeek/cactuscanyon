@@ -306,3 +306,5 @@ class Showdown(game.Mode):
     def clear_layer(self):
         self.layer = None
 
+    def mode_stopped(self):
+        self.dispatch_delayed()

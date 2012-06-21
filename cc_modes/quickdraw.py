@@ -223,4 +223,5 @@ class Quickdraw(game.Mode):
         # remove the mode
         self.game.modes.remove(self.game.quickdraw)
 
-
+    def mode_stopped(self):
+        self.dispatch_delayed()

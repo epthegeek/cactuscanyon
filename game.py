@@ -33,7 +33,6 @@ class CCGame(game.BasicGame):
         # last switch variable for tracking
         self.lastSwitch = None
         self.ballStarting = False
-        self.runLampShows = False
         self.status = None
         self.autoPlunge = False
         # gi lamps set
@@ -44,21 +43,20 @@ class CCGame(game.BasicGame):
 
     def setup(self):
         """docstring for setup"""
-        # Game data
+        # load up the game data Game data
         self.load_game_data(game_data_defaults_path, user_game_data_path)
-        # Game settings
+        # and settings Game settings
         self.load_settings(settings_defaults_path, user_settings_path)
 
         # Set the balls per game per the user settings
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']
 
-        # set up the ball search - not using this yet
+        # set up the ball search
         self.setup_ball_search()
 
         # set up the trough mode
         trough_switchnames = ['troughBallOne', 'troughBallTwo', 'troughBallThree', 'troughBallFour']
         early_save_switchnames = ['rightOutlane', 'leftOutlane']
-        # can't turn on the trough yet
         self.trough = cc_modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
         # set up ball save
         self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
@@ -486,7 +484,6 @@ class CCGame(game.BasicGame):
         super(CCGame,self).save_settings(user_settings_path)
 
     ### Flipper inversion
-    ### I hope
 
     def enable_inverted_flippers(self, enable):
         """Enables or disables the flippers AND bumpers."""

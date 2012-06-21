@@ -127,10 +127,6 @@ class Trough(Mode):
 
                 # The ball should end if all of the balls
                 # are in the trough.
-                print "temp_num_balls: " + str(temp_num_balls)
-                print "num_current_machine_balls" + str(num_current_machine_balls)
-                print "num_trough_balls_if_ball_ending" + str(num_trough_balls_if_ball_ending)
-                print "num_trough_balls_if_multiball_ending: " + str(num_trough_balls_if_multiball_ending)
                 if temp_num_balls == num_current_machine_balls or temp_num_balls == num_trough_balls_if_ball_ending:
                     self.num_balls_in_play = 0
                     if self.drain_callback:

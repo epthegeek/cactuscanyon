@@ -253,12 +253,15 @@ class SavePolly(game.Mode):
 
     # clean up and exit
     def end_save_polly(self):
-        # unload the mode
-        self.game.modes.remove(self.game.save_polly)
         # turn the level 1 stack flag back off
         self.game.set_tracking('stackLevel',False,1)
         # check to see if stampede is ready
         self.game.base_game_mode.check_stampede()
+        # unload the mode
+        self.game.modes.remove(self.game.save_polly)
 
     def clear_layer(self):
         self.layer = None
+
+    def mode_stopped(self):
+        self.dispatch_delayed()

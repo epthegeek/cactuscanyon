@@ -213,3 +213,5 @@ class Attract(game.Mode):
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
                     self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 
+    def mode_stopped(self):
+        self.dispatch_delayed()

@@ -234,3 +234,5 @@ class Gunfight(game.Mode):
         # set a named timer for gunfight lost
         self.delay(name="Gunfight Lost",delay=4,handler=self.lost)
 
+    def mode_stopped(self):
+        self.dispatch_delayed()

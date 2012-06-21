@@ -174,6 +174,8 @@ class SkillShot(game.Mode):
         if not self.super:
             self.skillshot_award()
         else:
+            # update the lamps to start the blinking
+            self.update_lamps(blink=True)
             if self.active == 1:
                 awardStringTop = "SHOOT LEFT LOOP"
             elif self.active == 2:
@@ -442,17 +444,18 @@ class SkillShot(game.Mode):
         anim1 = dmd.Animation().load(ep.DMD_PATH+'super-blink.dmd')
         anim2 = dmd.Animation().load(ep.DMD_PATH+'super-skill-shot.dmd')
         # math out the wait
-        myWait = len(anim2.frames) / 30.0
+        myWait = len(anim2.frames) / 20.0
         # set the animation
         animLayer = ep.EP_AnimatedLayer(anim2)
         animLayer.hold=True
-        animLayer.frame_time = 2
+        animLayer.frame_time = 3
         animLayer.add_frame_listener(16,self.game.play_remote_sound,param=self.game.assets.sfx_ropeCreak)
         animLayer.add_frame_listener(20,self.game.play_remote_sound,param=self.game.assets.sfx_slide)
         animLayer.composite_op = "blacksrc"
+        # and the 'super' text layer
         blinkLayer = ep.EP_AnimatedLayer(anim1)
         blinkLayer.hold=True
-        blinkLayer.frame_time = 2
+        blinkLayer.frame_time = 3
         blinkLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_bountyBell)
         blinkLayer.add_frame_listener(14,self.game.play_remote_sound,param=self.game.assets.sfx_bountyBell)
 
@@ -484,18 +487,27 @@ class SkillShot(game.Mode):
             self.game.sound.play(self.game.assets.quote_superFail)
             self.start_gameplay(0)
 
-    def super_update_lamps(self):
+    def super_update_lamps(self,blink=False):
         self.super_disable_lamps()
         # one is the left loop
         if self.active == 1:
             for lamp in self.leftLoopLamps:
-                lamp.schedule(0x0F0F0F0F)
+                if blink:
+                    lamp.schedule(0x0F0F0F0F)
+                else:
+                    lamp.enable()
         elif self.active == 2:
             for lamp in self.leftRampLamps:
-                lamp.schedule(0x0F0F0F0F)
+                if blink:
+                    lamp.schedule(0x0F0F0F0F)
+                else:
+                    lamp.enable()
         elif self.active == 3:
             for lamp in self.centerRampLamps:
-                lamp.schedule(0x0F0F0F0F)
+                if blink:
+                    lamp.schedule(0x0F0F0F0F)
+                else:
+                    lamp.enable()
         else:
             pass
 
