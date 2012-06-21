@@ -392,7 +392,7 @@ class SkillShot(game.Mode):
                 self.activate_super()
 
     def sw_flipperLwR_active_for_2s(self,sw):
-        if self.game.switches.shooterLane.is.active():
+        if self.game.switches.shooterLane.is_active():
             if not self.super:
                 print "RIGHT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
                 self.activate_super()
