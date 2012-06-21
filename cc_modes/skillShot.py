@@ -35,8 +35,11 @@ class SkillShot(game.Mode):
 
         self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
         self.active = 0
+        self.busy = False
 
     def mode_started(self):
+        # reset the super just in case
+        self.super = False
         # call the welcome quote - and start the theme song after on the first ball
         self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1:
@@ -155,6 +158,9 @@ class SkillShot(game.Mode):
         self.game.score_with_bonus(7250)
         # slide the prize list over
         self.game.sound.play(self.game.assets.sfx_skillShotWoosh)
+        # blink the flasher
+        self.game.coils.middleRightFlasher.pulse(20)
+        # shift the prizes over
         self.shift_right()
         # have to figure out some way to make this animate smoothly or something - this works for now
         # catches the first five in one variable and then the next in another and drops the far right
@@ -337,7 +343,7 @@ class SkillShot(game.Mode):
             self.layer = None
             self.game.score(50000)
             # light the dmb
-            self.game.base_game_mode.light_drunk_multiball(self.start_gameplay())
+            self.game.base_game_mode.light_drunk_multiball(self.start_gameplay)
             return
 
         # call the lamp update so the prize is shown properly
@@ -380,12 +386,16 @@ class SkillShot(game.Mode):
         self.layer = dmd.ScriptedLayer(128, 32, script)
 
     def sw_flipperLwL_active_for_2s(self,sw):
-        if not self.super:
-            self.activate_super()
+        if self.game.switches.shooterLane.is_active():
+            if not self.super:
+                print "LEFT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
+                self.activate_super()
 
     def sw_flipperLwR_active_for_2s(self,sw):
-        if not self.super:
-            self.activate_super()
+        if self.game.switches.shooterLane.is.active():
+            if not self.super:
+                print "RIGHT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
+                self.activate_super()
 
     def sw_rightReturnLane_active(self,sw):
         # this is how the actual CC tracks the end of
@@ -394,18 +404,24 @@ class SkillShot(game.Mode):
         if not self.super:
             self.start_gameplay()
 
-    def start_gameplay(self):
+    def start_gameplay(self,myDelay=2):
         # clear the local layer just in case
         self.layer = None
+        # turn off super mode
+        self.super = False
         # start the main game music
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # check if the award finished stampede
         self.game.base_game_mode.check_stampede()
         # unload in 2 seconds - to give
         # the award junk time to finish
-        self.delay(delay=2,handler=self.shutdown)
+        self.delay(delay=myDelay,handler=self.shutdown)
 
     def activate_super(self):
+        # turn on a busy flag
+        self.busy = True
+        # cancel the idle timer from interrupter jones
+        self.game.interrupter.cancel_idle()
         # turn off the music
         self.game.sound.stop_music()
         # turn off the table lights
@@ -448,6 +464,10 @@ class SkillShot(game.Mode):
         self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_drumRoll)
         # show the prizes
         self.delay("Display",delay=myWait+1,handler=self.update_layer)
+        self.delay(delay=myWait+1,handler=self.unbusy)
+
+    def unbusy(self):
+        self.busy = False
 
     def super_hit(self,made=None):
         # unload the switch trap
@@ -462,19 +482,20 @@ class SkillShot(game.Mode):
             self.skillshot_award()
         else:
             self.game.sound.play(self.game.assets.quote_superFail)
-            self.start_gameplay()
+            self.start_gameplay(0)
 
     def super_update_lamps(self):
+        self.super_disable_lamps()
         # one is the left loop
         if self.active == 1:
             for lamp in self.leftLoopLamps:
-                lamp.schedule(0x00FF00FF)
+                lamp.schedule(0x0F0F0F0F)
         elif self.active == 2:
             for lamp in self.leftRampLamps:
-                lamp.schedule(0x00FF00FF)
+                lamp.schedule(0x0F0F0F0F)
         elif self.active == 3:
             for lamp in self.centerRampLamps:
-                lamp.schedule(0x00FF00FF)
+                lamp.schedule(0x0F0F0F0F)
         else:
             pass
 

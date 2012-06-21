@@ -126,10 +126,12 @@ class BaseGameMode(game.Mode):
         else:
             pass
         ## on a second pass thorugh the returns - if showdown is ready, flash 'em
-        if self.game.show_tracking('showdownStatus') == "READY":
-            self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
-            self.game.lamps.leftReturnQuickdraw.schedule(0xFF00FF00)
-
+        if self.game.show_tracking('showdownStatus') == "READY" or self.game.show_tracking('ambushStatus') == "READY":
+            self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
+            self.game.lamps.leftReturnQuickdraw.schedule(0xF0F0F0F0)
+        # extra ball
+        if self.game.current_player().extra_balls > 0:
+            self.game.lamps.shootAgain.enable()
         # the rank lights
         rank = self.game.show_tracking('rank')
         # loop through 0 through current rank and turn the lamps on
@@ -153,6 +155,7 @@ class BaseGameMode(game.Mode):
         self.game.lamps.topRightQuickdraw.disable()
         self.game.lamps.leftReturnQuickdraw.disable()
         self.game.lamps.rightReturnQuickdraw.disable()
+        self.game.lamps.shootAgain.disable()
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game

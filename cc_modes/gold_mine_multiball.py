@@ -329,7 +329,7 @@ class GoldMine(game.Mode):
         # set the stack flag back off
         self.game.set_tracking('stackLevel',False,2)
         #refresh the mine lights
-        self.game.mine.update_lamps()
+        self.game.update_lamps()
 
     def clear_layer(self):
         self.layer = None

@@ -66,3 +66,18 @@ class SuperFilter(game.Mode):
         self.game.skill_shot.super_hit()
     def sw_rightSlingshot_active(self,sw):
         self.game.skill_shot.super_hit()
+    # bad guys
+    def sw_badGuySW0_active(self,sw):
+        self.game.skill_shot.super_hit()
+    def sw_badGuySW1_active(self,sw):
+        self.game.skill_shot.super_hit()
+    def sw_badGuySW2_active(self,sw):
+        self.game.skill_shot.super_hit()
+    def sw_badGuySW3_active(self,sw):
+        self.game.skill_shot.super_hit()
+    def sw_rightOutlane_active(self,sw):
+        self.game.skill_shot.super_hit()
+    def sw_leftOutlane_active(self,sw):
+        self.game.skill_shot.super_hit()
+    def sw_troughBallFour_active(self,sw):
+        self.game.skill_shot.super_hit()

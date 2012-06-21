@@ -35,27 +35,31 @@ class Saloon(game.Mode):
             self.setup_bart()
 
     def sw_saloonPopper_active_for_300ms(self,sw):
-        ## if we went through the gate, and missed bart or snuck in the back way
-        ## it counts as a hit so we have to do that first
-        if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
-            # set the busy flag
-            self.busy = True
-            # if drunk multiball is ready, start that, maybe
-            if self.game.show_tracking('drunkMultiballStatus') == "READY":
-            ## If any level below is running, avoid multiball start
-                stackLevel = self.game.show_tracking('stackLevel')
-                if True in stackLevel[:2]:
-                    self.hit_bart()
+        # if there's a quickdraw or ambush running, just kick teh ball back out
+        if "RUNNING" in self.game.show_tracking('quickdrawStatus') or self.game.show_tracking('ambushStatus') == "RUNNING":
+            self.kick()
+        else:
+            ## if we went through the gate, and missed bart or snuck in the back way
+            ## it counts as a hit so we have to do that first
+            if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
+                # set the busy flag
+                self.busy = True
+                # if drunk multiball is ready, start that, maybe
+                if self.game.show_tracking('drunkMultiballStatus') == "READY":
+                ## If any level below is running, avoid multiball start
+                    stackLevel = self.game.show_tracking('stackLevel')
+                    if True in stackLevel[:2]:
+                        self.hit_bart()
+                    else:
+                        self.game.modes.add(self.game.drunk_multiball)
+                        self.game.drunk_multiball.start_drunk()
                 else:
-                    self.game.modes.add(self.game.drunk_multiball)
-                    self.game.drunk_multiball.start_drunk()
-            else:
-                # then hit bart
-                self.hit_bart()
-        # now we check the bounty after an appropriate delay.
-        self.wait_until_unbusy(self.check_bounty)
-        ## -- set the last switch hit --
-        ep.last_switch = "saloonPopper"
+                    # then hit bart
+                    self.hit_bart()
+            # now we check the bounty after an appropriate delay.
+            self.wait_until_unbusy(self.check_bounty)
+            ## -- set the last switch hit --
+            ep.last_switch = "saloonPopper"
 
     def sw_saloonBart_active(self,sw):
         # set the busy flag

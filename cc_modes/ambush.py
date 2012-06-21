@@ -41,6 +41,30 @@ class Ambush(game.Mode):
         self.LOSE = self.game.user_settings['Gameplay (Feature)']['Ambush Escapes to Lose']
         # how long the bad guys wait before disappearing
         self.SECONDS = self.game.user_settings['Gameplay (Feature)']['Ambush Target Timer']
+        self.paused = False
+
+    # bumpers pause ambush
+    def sw_leftJetBumper_active(self,sw):
+            self.bumper_hit('left')
+
+    def sw_rightJetBumper_active(self,sw):
+            self.bumper_hit('right')
+
+    def sw_bottomJetBumper_active(self,sw):
+            self.bumper_hit('bottom')
+
+    # so does the mine
+    def sw_minePopper_active_for_400ms(self,sw):
+        self.pause()
+
+    # resume when exit
+    def sw_jetBumpersExit_active(self,sw):
+        if self.paused:
+            self.paused = False
+            self.resume()
+
+    def bumper_hit(self,bumper):
+        self.pause()
 
 
     def mode_started(self):
@@ -137,6 +161,30 @@ class Ambush(game.Mode):
             self.busy = False
             self.update_display()
 
+    def pause(self):
+        # if we're already paused, skip this
+        if self.paused:
+            pass
+        # if we're not - set the pause flag and cancel timers
+        else:
+            self.paused = True
+            # loop through and cancel all the target timers
+            for target in range(0,4,1):
+                if self.badGuyTimer[target] != 0 and self.badGuyTimer[target] != None:
+                    print "CANCEL TIMER: " + self.targetNames[target] + " HAD: " + str(self.badGuyTimer[target])
+                    self.cancel_delayed(self.targetNames[target])
+            textString = "< AMBUSH PAUSED >"
+            self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+
+
+    def resume(self):
+        for target in range(0,4,1):
+            # loop through and restart any timer that has value
+            if self.badGuyTimer[target] != 0 and self.badGuyTimer[target] != None:
+                print "RESTARTING TARGET: " + str(target) + " TIME: " + str(self.badGuyTimer[target])
+                self.targetTimer(target)
+        self.update_display()
+
     def targetTimer(self,target):
         # tick one off the timer for that target
         self.badGuyTimer[target] -= 1
@@ -208,6 +256,7 @@ class Ambush(game.Mode):
         if escaped != 99:
             activeLayers.append(escapeLayers[escaped])
             amount = self.LOSE - self.misses
+            self.game.base_game_mode.red_flasher_flourish()
             self.delay(delay=0.5,handler=self.game.interrupter.dude_escaped,param=amount)
 
         combined = dmd.GroupedLayer(128,32,activeLayers)
@@ -324,11 +373,11 @@ class Ambush(game.Mode):
         self.game.set_tracking('stackLevel',False,0)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-sideways-border.dmd').frames[0])
-        textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
+        textLine1 = dmd.TextLayer(76, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
         textString = "AMBUSH: " + str(self.deathTally) + " KILLS"
         textLine1.set_text(textString)
         textLine1.composite_op = "blacksrc"
-        textLine2 = dmd.TextLayer(128/2,11, self.game.assets.font_12px_az, "center", opaque=False)
+        textLine2 = dmd.TextLayer(76,11, self.game.assets.font_12px_az, "center", opaque=False)
         textLine2.set_text(ep.format_score(self.game.show_tracking('ambushPoints')))
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined

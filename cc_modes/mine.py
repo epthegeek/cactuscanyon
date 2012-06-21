@@ -377,6 +377,8 @@ class Mine(game.Mode):
         self.delay(delay=3,handler=self.clear_layer)
         self.delay(delay=3,handler=self.unbusy)
         self.delay(delay=3,handler=self.game.base_game_mode.music_on)
+        # update lamps to turn on the EB light
+        self.game.base_game_mode.update_lamps()
 
     def unbusy(self):
         self.busy = False

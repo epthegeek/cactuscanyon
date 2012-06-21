@@ -77,7 +77,7 @@ lamp:rightOutSpecial     | ..  ..  ..  ..  ..  ..  ..  ..
 ## flashers
 coil:backRightFlasher    | .         .         .
 coil:saloonFlasher       |   .         .         .
-coil:backLeftFlash       |     .         .         .
+coil:backLeftFlasher     |     .         .         .
 coil:middleRightFlasher  |       .         .         .
 coil:rightGunFlasher     |         .         .         .
 coil:leftGunFlasher      |           .         .         .

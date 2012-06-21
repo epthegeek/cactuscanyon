@@ -218,6 +218,9 @@ class Quickdraw(game.Mode):
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
             # turn the level 1 flag off
         self.game.set_tracking('stackLevel',False,0)
+        # full lamp update
+        self.game.update_lamps()
         # remove the mode
         self.game.modes.remove(self.game.quickdraw)
+
 
