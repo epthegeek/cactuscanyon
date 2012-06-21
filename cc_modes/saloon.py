@@ -194,7 +194,7 @@ class Saloon(game.Mode):
         #   3 - Light Quick Draw
         if "OPEN" in self.game.show_tracking('quickdrawStatus'):
             prizes.append('lightQuickdraw')
-        #   4 - Light Lock / Lock ball - inclue if lock is ready or lit
+        #   4 - Light Lock / Lock ball - included if lock is ready or lit
         if self.game.show_tracking('mineStatus') == "OPEN" or self.game.show_tracking('mineStatus') == "LOCK":
             prizes.append('awardLock')
         #   5 - Bonus multiplier + 5
@@ -319,7 +319,6 @@ class Saloon(game.Mode):
         self.game.sound.play_voice(self.game.assets.quote_bountyCollected)
         # then clear the layer and kick the ball out
         self.delay(delay = myWait,handler=self.finish_up)
-        # todo actually do the awarding
 
     def finish_up(self):
         self.clear_layer()

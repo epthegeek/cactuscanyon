@@ -64,8 +64,8 @@ class Ambush(game.Mode):
             self.resume()
 
     def bumper_hit(self,bumper):
-        self.pause()
-
+        if not self.paused:
+            self.pause()
 
     def mode_started(self):
         self.deathTally = 0

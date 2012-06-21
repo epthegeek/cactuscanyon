@@ -18,6 +18,7 @@ class Quickdraw(game.Mode):
         # default
         self.side = 0
         self.target = 0
+        self.paused = False
 
     def ball_drained(self):
         # the the ball drains, quickdraw is lost
@@ -42,10 +43,12 @@ class Quickdraw(game.Mode):
 
     # resume when exit
     def sw_jetBumpersExit_active(self,sw):
-        self.resume()
+        if self.paused:
+            self.resume()
 
     def bumper_hit(self,bumper):
-        self.pause()
+        if not self.paused:
+            self.pause()
 
     def start_quickdraw(self,side):
         # set the flag to stop other gun modes
@@ -129,6 +132,7 @@ class Quickdraw(game.Mode):
             self.delay("Timer Delay", delay = 0.2, handler = self.timer, param=target)
 
     def pause(self):
+        self.pause = True
         # clear the layer
         self.layer = None
         self.cancel_delayed("Timer Delay")
@@ -136,6 +140,7 @@ class Quickdraw(game.Mode):
         self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
 
     def resume(self):
+        self.pause = False
         self.timer(self.target)
 
     def won(self,target):

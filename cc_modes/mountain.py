@@ -19,7 +19,7 @@ class Mountain(game.Mode):
 
     def mode_started(self):
         # home the train
-        if not self.game.switches.trainHome.is_active():
+        if not self.game.switches.mineHome.is_active():
             self.reset_toy()
 
     def ball_drained(self):
