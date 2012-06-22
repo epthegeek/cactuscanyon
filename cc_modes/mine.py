@@ -386,6 +386,11 @@ class Mine(game.Mode):
     def clear_layer(self):
         self.layer = None
 
+    def abort_display(self):
+        self.clear_layer()
+        self.cancel_delayed("Display")
+
+
     def wait_until_unbusy(self,myHandler):
         if not self.busy:
             myHandler()

@@ -248,6 +248,7 @@ class BaseGameMode(game.Mode):
         # so super can start gameplay
         if callback:
             self.delay(delay=1.7,handler=callback)
+        self.delay(delay=1.7,handler=self.clear_layer)
 
     # Allow service mode to be entered during a game.
     def sw_enter_active(self, sw):
@@ -355,11 +356,11 @@ class BaseGameMode(game.Mode):
         # if guns are allowed, and showdown is ready do that
         elif self.game.show_tracking('showdownStatus') == "READY":
             self.game.modes.add(self.game.showdown)
-            self.game.showdown.start_showdown()
+            self.game.showdown.start_showdown(side)
         # if guns are allowed and ambush is ready, do that
         elif self.game.show_tracking('ambushStatus') == "READY":
             self.game.modes.add(self.game.ambush)
-            self.game.ambush.start_ambush()
+            self.game.ambush.start_ambush(side)
         # if there's no showdown ready, gunfight is possible
         elif self.game.show_tracking('gunfightStatus') == "READY":
             self.game.modes.add(self.game.gunfight)

@@ -51,6 +51,11 @@ class Quickdraw(game.Mode):
             self.pause()
 
     def start_quickdraw(self,side):
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
+
         # set the flag to stop other gun modes
         self.game.set_tracking('stackLevel',True,0)
         self.side = side
@@ -132,7 +137,7 @@ class Quickdraw(game.Mode):
             self.delay("Timer Delay", delay = 0.2, handler = self.timer, param=target)
 
     def pause(self):
-        self.pause = True
+        self.paused = True
         # clear the layer
         self.layer = None
         self.cancel_delayed("Timer Delay")
@@ -140,7 +145,7 @@ class Quickdraw(game.Mode):
         self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
 
     def resume(self):
-        self.pause = False
+        self.paused = False
         self.timer(self.target)
 
     def won(self,target):

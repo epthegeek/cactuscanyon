@@ -559,7 +559,7 @@ class Saloon(game.Mode):
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
         self.update_lamps()
-        if callback:
+        if callback != None:
+            print "I GOT A GUNFIGHT CALLBACK"
             self.delay(delay=2,handler=callback)
-        else:
-            self.delay(delay=2,handler=self.clear_layer)
+        self.delay(delay=2,handler=self.clear_layer)

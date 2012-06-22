@@ -175,7 +175,7 @@ class SkillShot(game.Mode):
             self.skillshot_award()
         else:
             # update the lamps to start the blinking
-            self.update_lamps(blink=True)
+            self.super_update_lamps(blink=True)
             if self.active == 1:
                 awardStringTop = "SHOOT LEFT LOOP"
             elif self.active == 2:
@@ -337,7 +337,7 @@ class SkillShot(game.Mode):
             self.layer = None
             self.game.score(50000)
             # turn on the right quickdraw
-            self.game.saloon.light_gunfight(self.start_gameplay)
+            self.game.saloon.light_gunfight(self.game.skill_shot.start_gameplay)
             return
 
         # drunk multiball
@@ -345,7 +345,7 @@ class SkillShot(game.Mode):
             self.layer = None
             self.game.score(50000)
             # light the dmb
-            self.game.base_game_mode.light_drunk_multiball(self.start_gameplay)
+            self.game.base_game_mode.light_drunk_multiball(self.game.skill_shot.start_gameplay)
             return
 
         # call the lamp update so the prize is shown properly

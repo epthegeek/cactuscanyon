@@ -16,6 +16,7 @@ class Showdown(game.Mode):
     """Showdown code """
     def __init__(self,game,priority):
         super(Showdown, self).__init__(game,priority)
+        self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
 
     def mode_started(self):
         self.deathTally = 0
@@ -26,8 +27,12 @@ class Showdown(game.Mode):
         if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('showdownStatus') == "RUNNING":
             self.end_showdown()
 
-    def start_showdown(self):
+    def start_showdown(self,side):
         print "S H O W D O W N"
+        # raise the post to hold the ball
+        self.activeSide = side
+        self.posts[self.activeSide].patter(on_time=4,off_time=12,original_on_time=30)
+
         # set the layer tracking
         self.game.set_tracking('stackLevel',True,0)
         # set the showdown tracking
@@ -77,6 +82,9 @@ class Showdown(game.Mode):
         self.game.base_game_mode.music_on(self.game.assets.music_showdown)
         #self.showdown_reset_guys()
         self.new_rack_pan()
+        # drop the post
+        self.delay(delay=1.5,handler=self.posts[self.activeSide].disable)
+
 
     def add_ball(self):
         self.game.autoPlunge = True

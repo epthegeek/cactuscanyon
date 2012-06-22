@@ -162,12 +162,12 @@ class LeftRamp(game.Mode):
             anim1 = dmd.Animation().load(ep.DMD_PATH+'blank-river.dmd')
             anim2 = dmd.Animation().load(ep.DMD_PATH+'rowboat.dmd')
             # set up the layers
-            animLayer1 = dmd.AnimatedLayer(frames=anim1.frames,hold=True,opaque=True,repeat=False,frame_time=6)
-            animLayer2 = dmd.AnimatedLayer(frames=anim2.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            animLayer1 = dmd.AnimatedLayer(frames=anim1.frames,hold=True,opaque=True,repeat=False,frame_time=5)
+            animLayer2 = dmd.AnimatedLayer(frames=anim2.frames,hold=True,opaque=False,repeat=False,frame_time=5)
             # layer 2 needs transparent
             animLayer2.composite_op = "blacksrc"
             # math out the wait
-            myWait = len(anim1.frames) / 10.0
+            myWait = len(anim1.frames) / 12.0
             # combine the 2 layers
             animLayer = dmd.GroupedLayer(128,32,[animLayer1,animLayer2])
             # turn it on
@@ -182,9 +182,9 @@ class LeftRamp(game.Mode):
             # load the animation
             anim = dmd.Animation().load(ep.DMD_PATH+'river-chase.dmd')
             # math out the wait
-            myWait = len(anim.frames) / 10.0
+            myWait = len(anim.frames) / 12.0
             # set the animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=5)
             # turn it on
             self.layer = animLayer
             # set the delay for the award

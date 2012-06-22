@@ -13,6 +13,8 @@ class Ambush(game.Mode):
     """Showdown code """
     def __init__(self,game,priority):
         super(Ambush, self).__init__(game,priority)
+        self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
+
         self.targetNames = ['Left','Left Center','Right Center','Right']
         # setup the standing guys
         self.guyLayers = []
@@ -81,7 +83,11 @@ class Ambush(game.Mode):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('ambushStatus') == "RUNNING":
             self.end_ambush()
 
-    def start_ambush(self):
+    def start_ambush(self,side):
+        # raise the post to hold the ball
+        self.activeSide = side
+        self.posts[self.activeSide].patter(on_time=4,off_time=12,original_on_time=30)
+
         print "A M B U S H"
         # kill the music
         self.game.sound.stop_music()
@@ -137,6 +143,9 @@ class Ambush(game.Mode):
         # add two dudes
         self.busy = True
         self.add_guys(1)
+        # drop the post
+        self.posts[self.activeSide].disable()
+
         # delay adding the second guy for 2 seconds to stagger them a bit
         self.delay(delay=2,handler=self.add_guys,param=1)
 

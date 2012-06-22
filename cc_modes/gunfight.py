@@ -22,6 +22,11 @@ class Gunfight(game.Mode):
             self.lost()
 
     def start_gunfight(self,side):
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
+
         # set the level 1 stack flag
         self.game.set_tracking('stackLevel',True,0)
         # turn off the lights
