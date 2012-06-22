@@ -323,6 +323,7 @@ class Ambush(game.Mode):
             self.game.score(self.showdownValue)
             # increase the running total by that amount
             self.game.increase_tracking('ambushPoints',self.showdownValue)
+            print self.game.show_tracking('ambushPoints')
 
             # remove from active
             self.activatedBadGuys.remove(target)
@@ -387,6 +388,7 @@ class Ambush(game.Mode):
         textLine1.set_text(textString)
         textLine1.composite_op = "blacksrc"
         textLine2 = dmd.TextLayer(76,11, self.game.assets.font_12px_az, "center", opaque=False)
+        print "TOTAL AMBUSH: " + str(self.game.show_tracking('ambushPoints'))
         textLine2.set_text(ep.format_score(self.game.show_tracking('ambushPoints')))
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined

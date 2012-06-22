@@ -45,7 +45,7 @@ class Mine(game.Mode):
         eb = self.game.show_tracking('extraBallsPending')
         if eb > 0:
             self.game.lamps.extraBallLitBeacon.enable()
-            self.game.lamps.extraBall.enable()
+            self.game.lamps.extraBall.schedule(0x0F0F0F0F)
         status = self.game.show_tracking('mineStatus')
         if status == "LOCK":
             self.game.lamps.mineLock.enable()

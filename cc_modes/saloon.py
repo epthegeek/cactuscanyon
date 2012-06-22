@@ -93,7 +93,8 @@ class Saloon(game.Mode):
 
     def kick(self):
         # kick the ball out
-        self.game.coils.saloonPopper.pulse(30)
+        if self.game.switches.saloonPopper_is_active():
+            self.game.coils.saloonPopper.pulse(30)
 
     def wait_until_unbusy(self,myHandler):
         if not self.busy:
@@ -271,6 +272,7 @@ class Saloon(game.Mode):
             prizeText2 = "INCREASED"
             self.prizeHandler = self.game.increase_tracking
             self.prizeParam = 'rank'
+            self.game.base_game_mode.update_lamps()
         elif self.bountyPrize == 'points250k':
             prizeText = "250,000"
             self.prizeHandler = self.game.score
@@ -441,6 +443,7 @@ class Saloon(game.Mode):
         self.delay(delay=0.03,handler=self.move_bart)
         self.delay(delay=0.06,handler=self.light_bart)
         self.delay(delay=0.1,handler=self.move_bart)
+        self.delay(delay=0.13,handler=self.light_bart)
 
         # score the points
         self.game.score(self.hitValue)
@@ -533,7 +536,7 @@ class Saloon(game.Mode):
 
     def move_bart(self):
         # pulse the bart move coil
-        self.game.coils.moveBart.pulse(20)
+        self.game.coils.moveBart.pulse(15)
 
     def move_hat(self):
         self.game.coils.moveBartHat.pulse(20)

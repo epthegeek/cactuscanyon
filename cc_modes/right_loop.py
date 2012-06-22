@@ -107,6 +107,7 @@ class RightLoop(game.Mode):
         ep.last_switch = "rightLoopBottom"
 
     def sw_rightLoopTop_active(self,sw):
+        print "RIGHT LOOP TOP HIT"
         # cancel any other displays
         for mode in self.game.ep_modes:
             if getattr(mode, "abort_display", None):

@@ -242,3 +242,10 @@ class Interrupter(game.Mode):
         textLine3 = dmd.TextLayer(128/2, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString3)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
         self.layer = combined
+
+    def shoot_again(self):
+        # shown when starting an extra ball
+        textLine1 = dmd.TextLayer(64,11, self.game.assets.font_9px_az, "center", opaque=True).set_text("SHOOT AGAIN")
+        self.layer = textLine1
+        self.delay(delay = 1,handler=self.clear_layer)
+        self.delay(delay = 1,handler=self.game.ball_starting)

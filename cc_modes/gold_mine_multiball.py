@@ -27,7 +27,6 @@ class GoldMine(game.Mode):
             self.end_multiball()
 
     ### switches
-
     def sw_leftLoopTop_active(self,sw):
         self.process_shot(0)
         return game.SwitchStop

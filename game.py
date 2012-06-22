@@ -215,8 +215,12 @@ class CCGame(game.BasicGame):
         super(CCGame, self).game_started()
         # Don't start_ball() here, since Attract does that after calling start_game().
 
+    def shoot_again(self):
+        print "STARTING EXTRA BALL"
+        self.interrupter.shoot_again()
+
     def ball_starting(self):
-        self.log("BALL STARTING - number " + str(self.ball))
+        print "BALL STARTING - number " + str(self.ball)
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
         self.ballStarting = True
@@ -254,6 +258,9 @@ class CCGame(game.BasicGame):
             # tell interrupter jones to show the ball save
             print "GAME THINKS THE BALL WAS SAVED"
             self.interrupter.ball_saved()
+            # kill the skillshot if it's running
+            if self.attract_mode in self.modes:
+                self.modes.remove(self.attract_mode)
             # if the ball was saved, we need a new one
             #self.trough.launch_balls(1)
             self.autoPlunge = True

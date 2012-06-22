@@ -58,9 +58,9 @@ class LeftLoop(game.Mode):
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
         ## right ramp is #4 in the stampede jackpot list
             if 'leftLoop' in self.game.drunk_multiball.active:
-                self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
-                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
+                self.game.lamps.leftLoopJackpot.schedule    (0x000F000F)
+                self.game.lamps.leftLoopRideEm.schedule     (0x00FF00FF)
+                self.game.lamps.leftLoopWildRide.schedule   (0x0F0F0F0F)
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             return
 
@@ -79,7 +79,7 @@ class LeftLoop(game.Mode):
             self.game.lamps.leftLoopBuckNBronco.enable()
             self.game.lamps.leftLoopWildRide.enable()
             # blink the third
-            self.game.lamps.leftLoopRideEm.schedule(0x0000FFFF)
+            self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
         # this is completed
         elif stage == 4:
             # all three on
