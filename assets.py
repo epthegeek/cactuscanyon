@@ -402,6 +402,10 @@ class Assets():
         self.quote_highNoonWin = 'quotehighNoonWin'
         self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1135-mayor-a-job-well-done.wav")
         self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1308-undertaker-oh-goody-you-shot-them-all.wav")
+        self.quote_shootAgain = 'quote_shootAgain'
+        self.game.sound.register_music(self.quote_shootAgain, self.quotes_path + "810-polly-im-so-glad-youre-back.wav")
+        self.game.sound.register_music(self.quote_shootAgain, self.quotes_path + "2012-waitress-shoot-again.wav")
+        self.game.sound.register_music(self.quote_shootAgain, self.quotes_path + "854-polly-shoot-again.wav")
 
         self.quote_hurry = 'quote_hurry'
         self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1175-mayor-i-suggest-you-hurry-friend.wav")
@@ -421,6 +425,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1309-undertaker-a-respectable-bodycount-indeed.wav")
 
 
+        self.quote_introBigBart = 'quote_introBigBart'
+        self.game.sound.register_sound(self.quote_introBigBart, self.quotes_path + "1466-big-names-big-bart-there-tough-guy.wav")
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1452-big-hit-nothin-but-a-little-hole.wav")
@@ -439,6 +445,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_defeatBigBart, self.quotes_path + "1469-big-defeat-well-thats-all-folks.wav")
         self.game.sound.register_sound(self.quote_defeatBigBart, self.quotes_path + "1470-big-defeat-i-guess-ill-just-fall-down-now.wav")
 
+        self.quote_introBandeleroBart = 'quote_introBandeleroBart'
+        self.game.sound.register_sound(self.quote_introBandeleroBart, self.quotes_path + "1805-bandelero-youre-messing-with-bandelero.wav")
         self.quote_hitBandeleroBart = 'quote_hitBandeleroBart'
         self.game.sound.register_sound(self.quote_hitBandeleroBart, self.quotes_path + "1803-bandelero-hit-oh-i-think-ive-been-hit.wav")
         self.game.sound.register_sound(self.quote_hitBandeleroBart, self.quotes_path + "1804-bandelero-hit-that-one-hurt.wav")
@@ -456,6 +464,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_defeatBandeleroBart, self.quotes_path + "1814-bandelero-defeat-say-youre-pretty-good.wav")
         self.game.sound.register_sound(self.quote_defeatBandeleroBart, self.quotes_path + "1824-bandelero-defeat-you-got-me.wav")
 
+        self.quote_introBubbaBart = 'quote_introBubbaBart'
+        self.game.sound.register_sound(self.quote_introBubbaBart, self.quotes_path + "1915-bubba-taunt-me-bubba-you-dead.wav")
         self.quote_hitBubbaBart = 'quote_hitBubbaBart'
         self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1900-bubba-hit-bubba-hit.wav")
         self.game.sound.register_sound(self.quote_hitBubbaBart, self.quotes_path + "1901-bubba-hit-bubba-mad-now.wav")
@@ -469,7 +479,6 @@ class Assets():
         self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1902-bubba-taunt-you-mess-wif-bubba-bubba-mess-wif-you.wav")
         self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1903-bubba-taunt-bubba-mess-pants.wav")
         self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1905-bubba-taunt-bubba-like-shiny-silver-ball.wav")
-        self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1915-bubba-taunt-me-bubba-you-dead.wav")
         self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1917-bubba-taunt-bubba-gonna-mess-you-up.wav")
         self.game.sound.register_sound(self.quote_tauntBubbaBart, self.quotes_path + "1919-bubba-taunt-youre-dead.wav")
         self.quote_defeatBubbaBart = 'quote_defeatBubbaBart'

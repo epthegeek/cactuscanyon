@@ -390,6 +390,9 @@ class Saloon(game.Mode):
         textLayer3.set_text("YOU")
 
         textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
+        # play the intro
+        self.game.sound.play(self.introQuote)
+        # show the transition
         transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
 
         # if there's only 1 hit to defeat this bart, set the status to last
@@ -403,6 +406,7 @@ class Saloon(game.Mode):
         hits = (self.game.assets.quote_hitBigBart, self.game.assets.quote_hitBandeleroBart,self.game.assets.quote_hitBubbaBart)
         taunts = (self.game.assets.quote_tauntBigBart, self.game.assets.quote_tauntBandeleroBart,self.game.assets.quote_tauntBubbaBart)
         defeats = (self.game.assets.quote_defeatBigBart, self.game.assets.quote_defeatBandeleroBart,self.game.assets.quote_defeatBubbaBart)
+        intros = (self.game.assets.intro_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart)
         # look up which one is current
         index = self.game.show_tracking('currentBart')
         # setting up all the bits like name for text display
@@ -417,6 +421,8 @@ class Saloon(game.Mode):
         self.tauntQuote = taunts[index]
         # death quote
         self.defeatQuote = defeats[index]
+        # intro quote
+        self.introQuote = intros[index]
         defeated = self.game.show_tracking('bartsDefeated')
         # setup the points value? 120,000 + 5,000 times the number of defeated barts
         self.hitValue = 120000 + (5000 * defeated)

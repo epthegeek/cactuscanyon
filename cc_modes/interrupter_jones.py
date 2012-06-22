@@ -245,6 +245,7 @@ class Interrupter(game.Mode):
 
     def shoot_again(self):
         # shown when starting an extra ball
+        self.game.sound.play(self.game.assets.quote_shootAgain)
         textLine1 = dmd.TextLayer(64,11, self.game.assets.font_9px_az, "center", opaque=True).set_text("SHOOT AGAIN")
         self.layer = textLine1
         self.delay(delay = 1,handler=self.clear_layer)
