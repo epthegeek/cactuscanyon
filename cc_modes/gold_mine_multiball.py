@@ -189,7 +189,7 @@ class GoldMine(game.Mode):
             # loop back to step 2
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         if step == 2:
-            # grab the last frameof the minecart crash
+            # grab the last frame of the minecart crash
             backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-car-crash.dmd').frames[9])
             # and setup the text layer to say jackpot
             jackpotLine = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'jackpot.dmd').frames[0])
@@ -256,6 +256,8 @@ class GoldMine(game.Mode):
             # and reset the jackpots
             for i in range(0,5,1):
                 self.game.set_tracking('jackpotStatus',True,i)
+            # and refresh the lamps
+            self.game.mine.update_lamps()
 
     def collect_motherlode(self):
         # clear the display

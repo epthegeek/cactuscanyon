@@ -43,7 +43,6 @@ class Ambush(game.Mode):
         self.LOSE = self.game.user_settings['Gameplay (Feature)']['Ambush Escapes to Lose']
         # how long the bad guys wait before disappearing
         self.SECONDS = self.game.user_settings['Gameplay (Feature)']['Ambush Target Timer']
-        self.paused = False
 
     # bumpers pause ambush
     def sw_leftJetBumper_active(self,sw):
@@ -78,6 +77,7 @@ class Ambush(game.Mode):
         self.misses = 0
         self.badGuyTimer = [None,None,None,None]
         self.busy = False
+        self.paused = False
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('ambushStatus') == "RUNNING":
@@ -340,11 +340,11 @@ class Ambush(game.Mode):
             lamp = self.game.giLamps[0]
         elif section == 'right':
             lamp = self.game.giLamps[1]
-        elif section == 'left':
-            lamp = self.game.giLamps[2]
         else:
-            pass
+            # the only other option is left
+            lamp = self.game.giLamps[2]
             # then flash it
+
         lamp.pulse(216)
 
 
@@ -359,11 +359,11 @@ class Ambush(game.Mode):
 
         # play a quote about bodycount
         bodycount = self.game.show_tracking('ambushTotal')
-        # if the total for this round of showdown was higher stored, store it
+        # see if the death tally beats previous/existing and store in tracking if does - for ambush champ
+        # if the total for this round of ambush was higher than the stored, store it
         if self.deathTally > bodycount:
             self.game.set_tracking('ambushTotal',self.deathTally)
-        # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
-        # set the showdown status to over and setup ambush
+        # set the ambush status to over and setup showdown
         self.game.set_tracking('showdownStatus',"OPEN")
         self.game.set_tracking('ambushStatus',"OVER")
         # turn off lights
@@ -395,8 +395,6 @@ class Ambush(game.Mode):
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         # reset the showdown points for next time
         self.game.set_tracking('ambushPoints',0)
-        # and reset the death tally
-        self.deathTally = 0
 
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)

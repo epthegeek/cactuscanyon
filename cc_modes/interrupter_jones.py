@@ -128,7 +128,7 @@ class Interrupter(game.Mode):
     def dude_escaped(self,amount):
         backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'escaped.dmd').frames[0])
         backdrop.composite_op = "blacksrc"
-        if amount == 0:
+        if amount <= 0:
             textString = "THEY GOT AWAY - YOU LOSE"
         else:
             textString = str(amount) + " MORE AND YOU LOSE"

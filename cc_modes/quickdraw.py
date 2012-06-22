@@ -18,6 +18,8 @@ class Quickdraw(game.Mode):
         # default
         self.side = 0
         self.target = 0
+
+    def mode_started(self):
         self.paused = False
 
     def ball_drained(self):
