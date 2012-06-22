@@ -38,7 +38,7 @@ class Combos(game.Mode):
             # loop through and turn on the appropriate lights
             for i in range(0,5,1):
                 if self.game.show_tracking('jackpotStatus',i):
-                    self.comboLights[i].schedule(0x0000F39C)
+                    self.comboLights[i].schedule(0x000F8E38)
             return
         ## if status is anything other than ON bail here
         if self.game.show_tracking('lampStatus') != "ON":

@@ -11,12 +11,15 @@ class GoldMine(game.Mode):
     """Mining for great justice - For the Gold Mine Multiball, and ... ? """
     def __init__(self,game,priority):
         super(GoldMine, self).__init__(game,priority)
-        self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine]
+        self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine,self.game.combos]
 
     def mode_started(self):
         self.motherlodeValue = 0
         self.counter = 0
         self.multiplier = False
+        # reset the jackpots to false to surpess lights until the mode really starts
+        for i in range(0,5,1):
+            self.game.set_tracking('jackpotStatus',False,i)
 
     def ball_drained(self):
     # if we're dropping down to one ball, and goldmine multiball is running - do stuff
@@ -256,8 +259,9 @@ class GoldMine(game.Mode):
             # and reset the jackpots
             for i in range(0,5,1):
                 self.game.set_tracking('jackpotStatus',True,i)
-            # and refresh the lamps
-            self.game.mine.update_lamps()
+            # and refresh all the lamps
+            for shot in self.gmShots:
+                shot.update_lamps()
 
     def collect_motherlode(self):
         # clear the display

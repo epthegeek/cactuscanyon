@@ -48,10 +48,10 @@ class LeftLoop(game.Mode):
         if self.game.show_tracking('mineStatus') == "RUNNING":
             # check if this jackpot shot is active
             if self.game.show_tracking('jackpotStatus',0):
-                self.game.lamps.leftLoopBuckNBronco.schedule(0x000FF39C)
-                self.game.lamps.leftLoopWildRide.schedule(0x00FFF39C)
-                self.game.lamps.leftLoopRideEm.schedule(0x0FFFF39C)
-                self.game.lamps.leftLoopJackpot.schedule(0xFFFFF39C)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFF8E38)
+                self.game.lamps.leftLoopWildRide.schedule(0x1FFF8E38)
+                self.game.lamps.leftLoopRideEm.schedule(0x03FF8E38)
+                self.game.lamps.leftLoopJackpot.schedule(0x007F8E38)
             return
 
             # drunk multiball

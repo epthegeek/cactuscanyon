@@ -38,10 +38,10 @@ class RightRamp(game.Mode):
         # goldmine multiball check
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',4):
-                self.game.lamps.rightRampSoundAlarm.schedule(0x000FF39C)
-                self.game.lamps.rightRampShootOut.schedule(0x00FFF39C)
-                self.game.lamps.rightRampSavePolly.schedule(0x0FFFF39C)
-                self.game.lamps.rightRampJackpot.schedule(0xFFFFF39C)
+                self.game.lamps.rightRampSoundAlarm.schedule(0xFFFF8E38)
+                self.game.lamps.rightRampShootOut.schedule(0x1FFF8E38)
+                self.game.lamps.rightRampSavePolly.schedule(0x03FF8E38)
+                self.game.lamps.rightRampJackpot.schedule(0x007F8E38)
             return
 
         # drunk multiball
