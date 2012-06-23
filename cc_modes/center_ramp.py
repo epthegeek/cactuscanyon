@@ -38,10 +38,10 @@ class CenterRamp(game.Mode):
         # check goldmine active status
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',2):
-                self.game.lamps.centerRampCatchTrain.schedule(0xFFFF8E38)
-                self.game.lamps.centerRampStopTrain.schedule(0x1FFF8E38)
-                self.game.lamps.centerRampSavePolly.schedule(0x03FF8E38)
-                self.game.lamps.centerRampJackpot.schedule(0x007F8E38)
+                self.game.lamps.centerRampJackpot.schedule(0x007F0F0F)
+                self.game.lamps.centerRampSavePolly.schedule(0x03FF0F0F)
+                self.game.lamps.centerRampStopTrain.schedule(0x1FFF0F0F)
+                self.game.lamps.centerRampCatchTrain.schedule(0xFFFF0F0F)
             return
             # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":

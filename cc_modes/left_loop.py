@@ -48,19 +48,19 @@ class LeftLoop(game.Mode):
         if self.game.show_tracking('mineStatus') == "RUNNING":
             # check if this jackpot shot is active
             if self.game.show_tracking('jackpotStatus',0):
-                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFF8E38)
-                self.game.lamps.leftLoopWildRide.schedule(0x1FFF8E38)
-                self.game.lamps.leftLoopRideEm.schedule(0x03FF8E38)
-                self.game.lamps.leftLoopJackpot.schedule(0x007F8E38)
+                self.game.lamps.leftLoopJackpot.schedule(0x007F0F0F)
+                self.game.lamps.leftLoopRideEm.schedule(0x03FF0F0F)
+                self.game.lamps.leftLoopWildRide.schedule(0x1FFF0F0F)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFF0F0F)
             return
 
             # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
         ## right ramp is #4 in the stampede jackpot list
             if 'leftLoop' in self.game.drunk_multiball.active:
-                self.game.lamps.leftLoopJackpot.schedule    (0x000F000F)
-                self.game.lamps.leftLoopRideEm.schedule     (0x00FF00FF)
-                self.game.lamps.leftLoopWildRide.schedule   (0x0F0F0F0F)
+                self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
+                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             return
 

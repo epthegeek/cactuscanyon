@@ -40,10 +40,10 @@ class LeftRamp(game.Mode):
         # check for goldmine multiball
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',1):
-                self.game.lamps.leftRampWhiteWater.schedule(0xFFFF8E38)
-                self.game.lamps.leftRampWaterfall.schedule(0x1FFF8E38)
-                self.game.lamps.leftRampSavePolly.schedule(0x03FF8E38)
-                self.game.lamps.leftRampJackpot.schedule(0x007F8E38)
+                self.game.lamps.leftRampJackpot.schedule(0x007F0F0F)
+                self.game.lamps.leftRampSavePolly.schedule(0x03FF0F0F)
+                self.game.lamps.leftRampWaterfall.schedule(0x1FFF0F0F)
+                self.game.lamps.leftRampWhiteWater.schedule(0xFFFF0F0F)
             return
             # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":

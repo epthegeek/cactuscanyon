@@ -84,8 +84,15 @@ class CCGame(game.BasicGame):
         cat.game_data_key = 'ShowdownChampHighScoreData'
         cat.score_for_player = lambda player: self.show_tracking('showdownTotal')
         cat.titles = ['Showdown Champ']
-
         self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'AmbushChampHighScoreData'
+        cat.score_for_player = lambda player: self.show_tracking('ambushTotal')
+        cat.titles = ['Ambush Champ']
+        self.highscore_categories.append(cat)
+
+
 
         ## TODO later - and combo champ? ambush champ? ramp champ?
 

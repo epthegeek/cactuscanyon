@@ -16,7 +16,6 @@ class Attract(game.Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Attract, self).__init__(game, priority)
-
         self.timer = 3
 
     def mode_started(self):
@@ -102,6 +101,7 @@ class Attract(game.Mode):
         # looping timer to control the animation speed of attract mode
         # can be hurried to the next step by flipper buttons
         self.timer -= 1
+        print "ATTRACT TIMER: " + str(self.timer)
         if (self.timer == 0):
             self.run_animation_loop()
             self.delay(name='slideshow_timer', event_type=None, delay=1, handler=self.timer_countdown)
@@ -213,5 +213,16 @@ class Attract(game.Mode):
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
                     self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 
+                # Generate a screen for the ambush champ
+                if category.game_data_key == 'AmbushChampHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-shoots.dmd').frames[1])
+                    backdrop.set_target_position(-49,0)
+                    title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("AMBUSH CHAMP")
+                    initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
     def mode_stopped(self):
+        print "DELETING ATTRACT DELAYS"
         self.dispatch_delayed()
