@@ -335,13 +335,13 @@ class Assets():
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1038-mayor-gunfight-is-lit.wav")
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1237-prospector-gunfight-is-lit.wav")
         self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1306-undertaker-theres-going-to-be-a-gunfight.wav")
-        self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1867-leader-bart-time-for-a-gunfight.wav")
+        self.game.sound.register_sound(self.quote_gunfightLit, self.quotes_path + "1867-leader-bart-time-for-a-gunfight-lawman.wav")
         self.quote_gunfightStart = 'quote_gunfightStart'
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1004-mayor-ok-son-lets-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1029-mayor-dont-move-its-a-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "2041-waitress-looks-like-a-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1233-prospector-ooh-i-smell-a-gunfight-brewin.wav")
-        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1871-leader-bart-lets-gunight.wav")
+        self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1871-leader-bart-lets-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1544-leader-bart-this-is-my-town-lawman.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1573-leader-bart-lawman-its-you-and-me.wav")
         self.quote_gunWin = 'quote_gunWin'
@@ -407,9 +407,9 @@ class Assets():
         self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1135-mayor-a-job-well-done.wav")
         self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1308-undertaker-oh-goody-you-shot-them-all.wav")
         self.quote_shootAgain = 'quote_shootAgain'
-        self.game.sound.register_music(self.quote_shootAgain, self.quotes_path + "810-polly-im-so-glad-youre-back.wav")
-        self.game.sound.register_music(self.quote_shootAgain, self.quotes_path + "2012-waitress-shoot-again.wav")
-        self.game.sound.register_music(self.quote_shootAgain, self.quotes_path + "854-polly-shoot-again.wav")
+        self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "810-polly-im-so-glad-youre-back.wav")
+        self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "2021-waitress-shoot-again.wav")
+        self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "854-polly-shoot-again.wav")
 
         self.quote_hurry = 'quote_hurry'
         self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1175-mayor-i-suggest-you-hurry-friend.wav")
@@ -430,7 +430,7 @@ class Assets():
 
 
         self.quote_introBigBart = 'quote_introBigBart'
-        self.game.sound.register_sound(self.quote_introBigBart, self.quotes_path + "1466-big-names-big-bart-there-tough-guy.wav")
+        self.game.sound.register_sound(self.quote_introBigBart, self.quotes_path + "1466-big-name-is-big-bart-there-tough-guy.wav")
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1452-big-hit-nothin-but-a-little-hole.wav")

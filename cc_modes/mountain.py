@@ -35,7 +35,7 @@ class Mountain(game.Mode):
             self.inMotion = False
 
     def kick(self):
-        self.game.coils.minePopper.pulse(30)
+        self.game.coils.minePopper.pulse(20)
 
     def flash(self):
         self.game.coils.mineFlasher.pulse(30)

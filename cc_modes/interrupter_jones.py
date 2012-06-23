@@ -261,7 +261,7 @@ class Interrupter(game.Mode):
             animLayer.frame_time = 6
             animLayer.opaque = True
             animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lowBoom)
-            animLayer.add_frame_listener(4,self.game.ball_starting)
+            animLayer.add_frame_listener(4,self.game.trough.launch_balls,param=1)
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.shoot_again,param=3)
         if step == 3:
@@ -272,3 +272,4 @@ class Interrupter(game.Mode):
             combined = dmd.GroupedLayer(128,32,[imageLayer,textLine1,textLine2])
             self.layer = combined
             self.delay(delay = 1.5,handler=self.clear_layer)
+            self.delay(delay = 1.5,handler=self.game.ball_starting)

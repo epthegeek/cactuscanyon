@@ -27,6 +27,7 @@ class Saloon(game.Mode):
         # hits banners list
         self.banners = ['bam','biff','ouch','pow','wham','zoink']
         self.busy = False
+        self.bartsActivated = 0
 
     def mode_started(self):
         # activate the first bart if we're on the first ball
@@ -93,7 +94,7 @@ class Saloon(game.Mode):
 
     def kick(self):
         # kick the ball out
-        if self.game.switches.saloonPopper_is_active():
+        if self.game.switches.saloonPopper.is_active():
             self.game.coils.saloonPopper.pulse(30)
 
     def wait_until_unbusy(self,myHandler):
@@ -406,7 +407,7 @@ class Saloon(game.Mode):
         hits = (self.game.assets.quote_hitBigBart, self.game.assets.quote_hitBandeleroBart,self.game.assets.quote_hitBubbaBart)
         taunts = (self.game.assets.quote_tauntBigBart, self.game.assets.quote_tauntBandeleroBart,self.game.assets.quote_tauntBubbaBart)
         defeats = (self.game.assets.quote_defeatBigBart, self.game.assets.quote_defeatBandeleroBart,self.game.assets.quote_defeatBubbaBart)
-        intros = (self.game.assets.intro_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart)
+        intros = (self.game.assets.quote_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart)
         # look up which one is current
         index = self.game.show_tracking('currentBart')
         # setting up all the bits like name for text display
