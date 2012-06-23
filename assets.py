@@ -237,6 +237,10 @@ class Assets():
         self.game.sound.register_sound(self.sfx_orchestraSet, self.sfx_path + "054-sfx-orchestra-hit-set.wav")
         self.sfx_orchestraSpike = 'sfx_orchestraSpike'
         self.game.sound.register_sound(self.sfx_orchestraSpike, self.sfx_path + "056-sfx-orchestra-hit-spike.wav")
+        self.sfx_lowBoom = 'sfx_lowBoom'
+        self.game.sound.register_sound(self.sfx_lowBoom, self.sfx_path + "209-sfx-low-boom.wav")
+        self.sfx_incoming = 'sfx_incoming'
+        self.game.sound.register_sound(self.sfx_incoming, self.sfx_path + "00-sfx-incoming.wav")
 
     # Quotes
         # this bunches the welcome strings together for play_voice()
@@ -532,6 +536,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_drunkDrinkToThat, self.quotes_path + "1433-drunk-ill-drink-to-that.wav")
         self.quote_drunkJackpot = 'quote_drunkJackpot'
         self.game.sound.register_sound(self.quote_drunkJackpot, self.quotes_path + "1430-drunk-jackpot-whoopie.wav")
+        self.quote_deepLaugh = 'quote_deepLaugh'
+        self.game.sound.register_sound(self.quote_deepLaugh, self.quotes_path + "1580-leader-bart-laugh-1.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

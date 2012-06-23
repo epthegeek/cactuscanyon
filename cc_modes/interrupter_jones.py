@@ -243,10 +243,32 @@ class Interrupter(game.Mode):
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
         self.layer = combined
 
-    def shoot_again(self):
+    def shoot_again(self,step=1):
         # shown when starting an extra ball
-        self.game.sound.play(self.game.assets.quote_shootAgain)
-        textLine1 = dmd.TextLayer(64,11, self.game.assets.font_9px_az, "center", opaque=True).set_text("SHOOT AGAIN")
-        self.layer = textLine1
-        self.delay(delay = 1,handler=self.clear_layer)
-        self.delay(delay = 1,handler=self.game.ball_starting)
+        if step == 1:
+            imageLayer = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'shoot-again.dmd').frames[0])
+            self.game.sound.play(self.game.assets.quote_deepLaugh)
+            self.game.sound.play(self.game.assets.sfx_incoming)
+            self.layer = imageLayer
+            self.delay(delay = 2,handler=self.shoot_again, param=2)
+        if step == 2:
+            anim = dmd.Animation().load(ep.DMD_PATH+'shoot-again.dmd')
+            # math out the wait
+            myWait = len(anim.frames) / 10.0
+            # set the animation
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time = 6
+            animLayer.opaque = True
+            animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lowBoom)
+            animLayer.add_frame_listener(4,self.game.ball_starting)
+            self.layer = animLayer
+            self.delay(delay=myWait,handler=self.shoot_again,param=3)
+        if step == 3:
+            imageLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'shoot-again.dmd').frames[7])
+            self.game.sound.play(self.game.assets.quote_shootAgain)
+            textLine1 = dmd.TextLayer(80,5, self.game.assets.font_9px_az, "center", opaque= False).set_text("SHOOT")
+            textLine2 = dmd.TextLayer(80,15, self.game.assets.font_9px_az, "center", opaque= False).set_text("AGAIN")
+            combined = dmd.GroupedLayer(128,32,[imageLayer,textLine1,textLine2])
+            self.layer = combined
+            self.delay(delay = 1.5,handler=self.clear_layer)
