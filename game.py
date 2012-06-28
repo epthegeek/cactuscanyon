@@ -125,6 +125,8 @@ class CCGame(game.BasicGame):
         self.right_loop = cc_modes.RightLoop(game=self,priority=15)
         self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=16)
 
+        self.match = cc_modes.Match(game=self,priority=20)
+
         # mine and saloon have to stay high so they can interrupt other displays
         self.mine = cc_modes.Mine(game=self,priority=24)
         self.saloon = cc_modes.Saloon(game=self,priority=25)
@@ -323,16 +325,21 @@ class CCGame(game.BasicGame):
         # remove the base game mode
         self.modes.remove(self.base_game_mode)
 
-        ## TODO need to add some crap here to see if there's a high score to enter - and play the lead in
-        # play the closing song
-        self.interrupter.closing_song()
+        # divert to the match before high score entry
+        self.modes.add(self.match)
+        self.match.run_match()
 
+    def run_highscore(self):
+        ## TODO need to add some crap here to see if there's a high score to enter - and play the lead in
         # High Score Stuff
         self.seq_manager = highscore.EntrySequenceManager(game=self, priority=2)
         self.seq_manager.finished_handler = self.highscore_entry_finished
         self.seq_manager.logic = highscore.CategoryLogic(game=self, categories=self.highscore_categories)
         self.seq_manager.ready_handler = self.highscore_entry_ready_to_prompt
         self.modes.add(self.seq_manager)
+
+        # play the closing song
+        self.interrupter.closing_song()
 
     def highscore_entry_ready_to_prompt(self, mode, prompt):
         banner_mode = game.Mode(game=self, priority=8)
