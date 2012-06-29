@@ -1,5 +1,6 @@
 ##
 ## The match animation routine
+## Crutched on myPinball's IJ match routine heavily.
 ##
 
 from procgame import *
@@ -12,22 +13,90 @@ class Match(game.Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Match, self).__init__(game, priority)
+        self.digitLayer = dmd.TextLayer(70,12, self.game.assets.font_9px_az, "center")
+        self.zeroLayer = dmd.TextLayer(80,12, self.game.assets.font_9px_az, "center").set_text("0")
+        self.p1Layer = dmd.TextLayer(16, 1, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p2Layer = dmd.TextLayer(16, 9, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p3Layer = dmd.TextLayer(16, 17, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p4Layer = dmd.TextLayer(16, 25, self.game.assets.font_7px_az, "right", opaque=False)
+        self.playerDigits = [0,0,0,0]
+        self.playerLayers=[self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer]
+
+    # TODO maybe set this up so it shows full scores, then they scroll off to the left for more pizazz
+
+    def mode_started(self):
+        self.winners = 0
 
     def run_match(self):
         # pick a random number
-        selection = random.choice(0,1,2,3,4,5,6,7,8,9)
+        self.selection = random.choice("0","1","2","3","4","5","6","7","8","9")
+        self.digitLayer.set_text(self.selection)
         # grab the last two digits of the scores  ... somehow?
+        self.generate_digits()
         # put up the end of the scores
         # put up the bottles
+        bottlesLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'match.dmd').frames[0])
         # put up the match number
-        # run the animation with sound
-        # award the match if hit
+        combined = dmd.GroupedLayer(128,32,[self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,bottlesLayer])
+        # this is the first display with the bottles and score endings
+        self.layer = combined
+        # hold for 2 seconds, then animate
+        self.delay(delay=2,handler=self.run_animation)
 
-        # for now just exit
-        self.finish_up()
+    def run_animation(self):
+        # run the animation with sound
+        # load up the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'match.dmd')
+        # start the full on animation
+        myWait = len(anim.frames) / 10.0 + 0.5
+        # setup the animated layer
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,animLayer])
+        # fire it up
+        self.layer = combined
+        # TODO sounds and lights go here
+
+
+        # after the animation ends, see if anybody won and run that action
+        self.delay(delay = myWait,handler=self.award_match)
+
+    def award_match(self):
+        # check the scores to see if anybody won
+        for i in range(len(self.game.players)):
+            if str(self.playerDigits[i]) == self.selection + "0":
+                # set the text on that layer to blink
+                self.playerLayers[i].set_text(self.playerDigits,blink_frames=8)
+                # and tick the winner count to true
+                self.winners += 1
+
+        # if we had any winners there's stuff to do
+        if self.winners > 0:
+            self.digitLayer.set_text(self.selection,blink_frames=8)
+            self.zeroLayer.set_text("0",blink_frames=8)
+            bottlesLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'match.dmd').frames[20])
+            combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,bottlesLayer])
+            self.layer = combined
+            # TODO play the knocker once for each winner
+            #self.game.knock(self.winners)
+
+        # Then delay for 2 seconds and shut 'er down
+        self.delay(delay=2,handler=self.finish_up)
+
+
+    def generate_digits(self):
+        #extract and display the last 2 score digits for each player
+
+        for i in range(len(self.game.players)):
+            score = self.game.players[i].score
+            digit = str(score)[-2:-1]
+            self.playerLayers[i].set_text(digit)
+            #set var for comparison
+            self.playerDigits[i]=digit
 
     def finish_up(self):
         # run the high score routine after the match
         self.game.run_highscore()
         # and remove thyself.
-        self.game.modes.remove(self.match)
+        self.game.modes.remove(self.game.match)

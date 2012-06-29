@@ -203,7 +203,10 @@ class RightLoop(game.Mode):
                 self.layer = None
                 self.game.combos.display()
             else:
-                self.show_award_text()
+                #self.show_award_text()
+                # New thing - Tumbleweed!
+                self.game.score(25000)
+                self.tumbleweed_display()
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             newstage = self.game.increase_tracking('rightLoopStage')
@@ -256,6 +259,23 @@ class RightLoop(game.Mode):
         print "TRANSITIONING WTF"
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_SOUTH)
         self.transition.callback = self.clear_layer()
+
+    def tumbleweed_display(self):
+        banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed-banner.dmd').frames[0])
+        scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("25,000",blink_frames=6)
+        # load up the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'tumbleweed.dmd')
+        # start the full on animation
+        myWait = len(anim.frames) / 15.0 + 0.5
+        # setup the animated layer
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 4
+        animLayer.opaque=False
+        animLayer.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[banner,scoreLayer,animLayer])
+        self.layer = combined
+        self.delay(name="Display",delay=myWait,handler=self.clear_layer)
 
     def clear_layer(self):
         self.layer = None
