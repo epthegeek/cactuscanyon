@@ -162,9 +162,9 @@ class Ambush(game.Mode):
         self.targetTimer(dude)
         # reduce count of dudes to start by 1
         amount -= 1
-        # if there are some left, repeat
+        # if there are some left, repeat in 1 second to avoid popping them all up at once
         if amount != 0:
-            self.add_guys(amount)
+            self.delay(name="Add Guys",delay=1,handler=self.add_guys,param=amount)
         else:
             self.busy = False
             self.update_display()
