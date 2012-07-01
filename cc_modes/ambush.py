@@ -195,6 +195,7 @@ class Ambush(game.Mode):
         self.update_display()
 
     def targetTimer(self,target):
+        print "TIMER WORKING ON TARGET: " + str(target)
         # tick one off the timer for that target
         self.badGuyTimer[target] -= 1
         # if the time is almost up change the light schedule

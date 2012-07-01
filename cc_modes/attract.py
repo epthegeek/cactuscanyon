@@ -104,9 +104,9 @@ class Attract(game.Mode):
         print "ATTRACT TIMER: " + str(self.timer)
         if (self.timer == 0):
             self.run_animation_loop()
-            self.delay(name='slideshow_timer', event_type=None, delay=1, handler=self.timer_countdown)
-        else:
-            self.delay(name='slideshow_timer', event_type=None, delay=1, handler=self.timer_countdown)
+        # come back to the timer - after cancelling any existing delay, just to be sure
+        self.cancel_delayed('slideshow_timer')
+        self.delay(name='slideshow_timer', event_type=None, delay=1, handler=self.timer_countdown)
 
 
     def sw_flipperLwL_active(self,sw):

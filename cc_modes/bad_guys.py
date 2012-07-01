@@ -31,11 +31,10 @@ class BadGuys(game.Mode):
     def ball_drained(self):
     # just in case, drop all the coils when ball ends
         if self.game.trough.num_balls_in_play == 0:
-                self.dispatch_delayed()
-                for coil in self.coils:
-                    coil.disable()
-                for coil in self.posts:
-                    coil.disable()
+            self.kill_power()
+
+    def mode_stopped(self):
+        self.kill_power()
 
     def update_lamps(self):
         # reset first
@@ -128,4 +127,12 @@ class BadGuys(game.Mode):
 
     def clear_layer(self):
         self.layer = None
+
+    def kill_power(self):
+        # stop any delays
+        self.dispatch_delayed()
+        # drop all the targets
+        self.drop_targets()
+        for coil in self.posts:
+            coil.disable()
 
