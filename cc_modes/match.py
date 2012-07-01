@@ -109,9 +109,9 @@ class Match(game.Mode):
     def fire(self,side):
         self.game.play_remote_sound(self.game.assets.sfx_explosion11)
         if side == "LEFT":
-            self.game.coils.leftGunFlasher.pulse(20)
+            self.game.coils.leftGunFlasher.pulse(30)
         if side == "RIGHT":
-            self.game.coils.rightGunFlasher.pulse(20)
+            self.game.coils.rightGunFlasher.pulse(30)
 
     def generate_digits(self):
         #extract and display the last 2 score digits for each player

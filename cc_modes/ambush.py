@@ -153,9 +153,8 @@ class Ambush(game.Mode):
         # for adding dudes to the ambush
         # pick a guy from the available targets
         dude = random.choice(self.availableBadGuys)
-        self.availableBadGuys.remove(dude)
-        # put him in the active targets
-        self.activatedBadGuys.append(dude)
+        # activate target
+        self.activate_guy(dude)
         # pop that target up
         self.game.bad_guys.target_up(dude)
         # start a timer for that target
@@ -195,9 +194,9 @@ class Ambush(game.Mode):
         self.update_display()
 
     def targetTimer(self,target):
-        print "TIMER WORKING ON TARGET: " + str(target)
         # tick one off the timer for that target
         self.badGuyTimer[target] -= 1
+        print "TIMER WORKING ON TARGET: " + str(target) + " - TIME: " + str(self.badGuyTimer[target])
         # if the time is almost up change the light schedule
         if self.badGuyTimer[target] == 1:
             self.lamps[target].schedule(0x0F0F0F0F)
@@ -281,16 +280,15 @@ class Ambush(game.Mode):
         self.game.bad_guys.target_down(target)
         # set the timer for that target to none
         self.badGuyTimer[target] = None
-        # remove from active
-        self.activatedBadGuys.remove(target)
-        # add back to available
-        self.availableBadGuys.append(target)
+        # move target from active to available
+        self.deactivate_guy(target)
+
         # play some gunshot noise and a light flash of some kind
         # add the miss
         self.misses += 1
         # update the display
         self.update_display(escaped=target)
-        # if we're at the max misses, the mode ends - TODO make this a config option
+        # if we're at the max misses, the mode ends
 
         if self.misses >= self.LOSE:
             print "AMBUSH LOST"
@@ -325,11 +323,8 @@ class Ambush(game.Mode):
             # increase the running total by that amount
             self.game.increase_tracking('ambushPoints',self.showdownValue)
             print self.game.show_tracking('ambushPoints')
-
-            # remove from active
-            self.activatedBadGuys.remove(target)
-            # put it back in available
-            self.availableBadGuys.append(target)
+            # move target from active to available
+            self.deactivate_guy(target)
             # play some sound
             # do something with lights
             # throw a display thing or whatever
@@ -399,6 +394,11 @@ class Ambush(game.Mode):
         # reset the showdown points for next time
         self.game.set_tracking('ambushPoints',0)
 
+        # award the badge light
+        self.game.set_tracking('starStatus',True,3)
+        self.game.base_game_mode.check_high_noon()
+        self.game.base_game_mode.update_lamps()
+
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)
 
@@ -410,3 +410,20 @@ class Ambush(game.Mode):
 
     def mode_stopped(self):
         self.dispatch_delayed()
+
+    def deactivate_guy(self,target):
+        print "DEACTIVATING BAD GUY: " + str(target)
+        # remove from active
+        if target in self.activatedBadGuys:
+            self.activatedBadGuys.remove(target)
+        # put it back in available
+        if target not in self.availableBadGuys:
+            self.availableBadGuys.append(target)
+
+    def activate_guy(self,dude):
+        print "ACTIVATING BAD GUY:" + str(dude)
+        if dude in self.availableBadGuys:
+            self.availableBadGuys.remove(dude)
+        # put him in the active targets
+        if dude not in self.activatedBadGuys:
+            self.activatedBadGuys.append(dude)

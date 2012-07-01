@@ -58,26 +58,26 @@ class BadGuys(game.Mode):
 
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
-        print "BAD GUY 1 HIT"
         if self.game.show_tracking('badGuyUp',0):
+            print "BAD GUY 0 HIT"
             self.hit_bad_guy(0)
 
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
-        print "BAD GUY 2 HIT"
         if self.game.show_tracking('badGuyUp',1):
+            print "BAD GUY 1 HIT"
             self.hit_bad_guy(1)
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
-        print "BAD GUY 3 HIT"
         if self.game.show_tracking('badGuyUp',2):
+            print "BAD GUY 2 HIT"
             self.hit_bad_guy(2)
 
     def sw_badGuySW3_active(self,sw):
-        print "BAD GUY 4 HIT"
         # far right bad guy target
         if self.game.show_tracking('badGuyUp',3):
+            print "BAD GUY 3 HIT"
             self.hit_bad_guy(3)
 
     def hit_bad_guy(self,target):
@@ -104,7 +104,7 @@ class BadGuys(game.Mode):
     def target_up(self,target):
         self.coils[target].patter(on_time=4,off_time=8,original_on_time=20)
         self.lamps[target].schedule(0x00FF00FF)
-        self.delay(delay=0.1,handler=self.target_activate,param=target)
+        self.delay(delay=0.05,handler=self.target_activate,param=target)
 
     def target_down(self,target):
         # kill the delay that enables switch recognition - this is for gunfights mostly

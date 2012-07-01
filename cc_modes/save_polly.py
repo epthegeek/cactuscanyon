@@ -15,6 +15,14 @@ class SavePolly(game.Mode):
         self.shotsSoFar = 0
         self.cows = [self.game.assets.sfx_cow1, self.game.assets.sfx_cow2]
         self.modeTimer = 0
+        # setup the 2 animations
+        anim = dmd.Animation().load(ep.DMD_PATH+'train-head-on.dmd')
+        self.trainLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=True,frame_time=6)
+        anim = dmd.Animation().load(ep.DMD_PATH+'cow-on-tracks.dmd')
+        self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
+        self.pollyTitle = dmd.TextLayer(34, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
+        self.awardLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("EXTRA BALL LIT")
+
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -97,13 +105,6 @@ class SavePolly(game.Mode):
         print "POLLY GET GOING"
         # set the timer for the mode
         self.modeTimer = 30
-        # setup the 2 animations
-        anim = dmd.Animation().load(ep.DMD_PATH+'train-head-on.dmd')
-        self.trainLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=True,frame_time=6)
-        anim = dmd.Animation().load(ep.DMD_PATH+'cow-on-tracks.dmd')
-        self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
-        self.pollyTitle = dmd.TextLayer(34, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
-        self.awardLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("EXTRA BALL LIT")
         # jump into the mode loop
         self.in_progress()
 
