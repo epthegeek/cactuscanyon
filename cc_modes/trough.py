@@ -201,7 +201,7 @@ class Trough(Mode):
         # shooter lane.
         if self.game.switches[self.shooter_lane_switchname].is_inactive():
             self.num_balls_to_launch -= 1
-            self.game.coils[self.eject_coilname].pulse(40)
+            self.game.coils[self.eject_coilname].pulse(30)
             print "BALL LAUNCHED"
             # Only increment num_balls_in_play if there are no more
             # stealth launches to complete.

@@ -28,8 +28,9 @@ class Match(game.Mode):
         self.winners = 0
 
     def run_match(self):
+        possiblities = ["0","1","2","3","4","5","6","7","8","9"]
         # pick a random number
-        self.selection = random.choice("0","1","2","3","4","5","6","7","8","9")
+        self.selection = random.choice(possiblities)
         self.digitLayer.set_text(self.selection)
         # grab the last two digits of the scores  ... somehow?
         self.generate_digits()
@@ -56,6 +57,7 @@ class Match(game.Mode):
         combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,animLayer])
         # fire it up
         self.layer = combined
+        self.fire("LEFT")
         # TODO sounds and lights go here
 
 
@@ -65,9 +67,9 @@ class Match(game.Mode):
     def award_match(self):
         # check the scores to see if anybody won
         for i in range(len(self.game.players)):
-            if str(self.playerDigits[i]) == self.selection + "0":
+            if str(self.playerDigits[i]) == self.selection:
                 # set the text on that layer to blink
-                self.playerLayers[i].set_text(self.playerDigits,blink_frames=8)
+                self.playerLayers[i].set_text(str(self.playerDigits) + "0",blink_frames=8)
                 # and tick the winner count to true
                 self.winners += 1
 
@@ -84,14 +86,23 @@ class Match(game.Mode):
         # Then delay for 2 seconds and shut 'er down
         self.delay(delay=2,handler=self.finish_up)
 
+    def fire(self,side):
+        self.game.play_remote_sound(self.game.assets.sfx_explosion11)
+        if side == "LEFT":
+            self.game.coils.leftGunFlasher.pulse(20)
+        if side == "RIGHT":
+            self.game.coils.rightGunFlasher.pulse(20)
 
     def generate_digits(self):
         #extract and display the last 2 score digits for each player
 
         for i in range(len(self.game.players)):
             score = self.game.players[i].score
+            print "PLAYER SCORE - " + str(score)
             digit = str(score)[-2:-1]
-            self.playerLayers[i].set_text(digit)
+            print "MATCH DIGITS - " + str(digit)
+            digitString = str(digit) + "0"
+            self.playerLayers[i].set_text(digitString)
             #set var for comparison
             self.playerDigits[i]=digit
 
