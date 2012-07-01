@@ -112,15 +112,16 @@ class RightLoop(game.Mode):
 
     def sw_rightLoopTop_active(self,sw):
         print "RIGHT LOOP TOP HIT"
-        # cancel any other displays
-        for mode in self.game.ep_modes:
-            if getattr(mode, "abort_display", None):
-                mode.abort_display()
         # by default turn off the right side loop gate when we get to this switch
         self.game.coils.rightLoopGate.disable()
         # if we aren't coming through on a full loop - it's a natural hit and it counts
         if ep.last_switch == 'rightLoopBottom':
-            # if we're complete open the gate for a full run through
+            # cancel any other displays
+            for mode in self.game.ep_modes:
+                if getattr(mode, "abort_display", None):
+                    mode.abort_display()
+                    # if we're complete open the gate for a full run through
+
             if self.game.show_tracking('rightLoopStage') >= 4:
                 # pulse the coil to open the gate
                 self.game.coils.leftLoopGate.pulse(150)
