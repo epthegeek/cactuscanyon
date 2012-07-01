@@ -99,8 +99,12 @@ class RightLoop(game.Mode):
 
     def sw_rightLoopBottom_active(self,sw):
         # low end of the loop
-        # play the sound effect
-        self.game.sound.play(self.game.assets.sfx_rightLoopEnter)
+        # play the sound effect if we're not coming from the top
+        if ep.last_switch != 'rightLoopTop':
+            stage = self.game.show_tracking('rightLoopStage')
+            if stage != 4:
+                # while working on completing, the sound plays
+                self.game.sound.play(self.game.assets.sfx_rightLoopEnter)
         # score come points
         self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
@@ -275,6 +279,7 @@ class RightLoop(game.Mode):
         animLayer.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[banner,scoreLayer,animLayer])
         self.layer = combined
+        self.game.sound.play(self.game.assets.sfx_tumbleWind)
         self.delay(name="Display",delay=myWait,handler=self.clear_layer)
 
     def clear_layer(self):

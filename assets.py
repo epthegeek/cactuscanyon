@@ -241,6 +241,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_lowBoom, self.sfx_path + "209-sfx-low-boom.wav")
         self.sfx_incoming = 'sfx_incoming'
         self.game.sound.register_sound(self.sfx_incoming, self.sfx_path + "00-sfx-incoming.wav")
+        self.sfx_tumbleWind = 'sfx_tumbleWind'
+        self.game.sound.register_sound(self.sfx_tumbleWind, self.sfx_path + "00-sfx-wind-blows.wav")
 
     # Quotes
         # this bunches the welcome strings together for play_voice()

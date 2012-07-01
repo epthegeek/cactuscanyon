@@ -109,8 +109,11 @@ class LeftLoop(game.Mode):
 
     def sw_leftLoopBottom_active(self,sw):
         # low end of the loop
-        # play the sound effect
-        self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
+        # play the sound effect if we're not coming from the top switch
+        if ep.last_switch != 'leftLoopTop':
+            stage = self.game.show_tracking('leftLoopStage')
+            if stage != 4:
+                self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # score come points
         self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
