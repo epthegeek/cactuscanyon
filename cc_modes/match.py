@@ -37,6 +37,7 @@ class Match(game.Mode):
         # put up the end of the scores
         # put up the bottles
         bottlesLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'match.dmd').frames[0])
+        bottlesLayer.composite_op = "blacksrc"
         # put up the match number
         combined = dmd.GroupedLayer(128,32,[self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,bottlesLayer])
         # this is the first display with the bottles and score endings
@@ -49,26 +50,29 @@ class Match(game.Mode):
         # load up the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'match.dmd')
         # start the full on animation
-        myWait = len(anim.frames) / 10.0 + 0.5
+        frameDelay = 8
+        frameDivisor = 7.5
+        myWait = len(anim.frames) / frameDivisor + 0.5
         # setup the animated layer
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 6
+        animLayer.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,animLayer])
         # fire it up
         self.layer = combined
         self.fire("LEFT")
-        self.delay(delay=0.1,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
-        self.delay(delay=0.4,handler=self.fire,param="RIGHT")
-        self.delay(delay=0.5,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
-        self.delay(delay=0.8,handler=self.fire,param="LEFT")
-        self.delay(delay=0.9,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
-        self.delay(delay=0.9,handler=self.fire,param="RIGHT")
-        self.delay(delay=1.0,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
-        self.delay(delay=1.3,handler=self.fire,param="LEFT")
-        self.delay(delay=1.4,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
-        self.delay(delay=1.4,handler=self.fire,param="RIGHT")
-        self.delay(delay=1.5,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=1*frameDelay,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=4*frameDelay,handler=self.fire,param="RIGHT")
+        self.delay(delay=5*frameDelay,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=8*frameDelay,handler=self.fire,param="LEFT")
+        self.delay(delay=9*frameDelay,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=9*frameDelay,handler=self.fire,param="RIGHT")
+        self.delay(delay=10*frameDelay,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=13*frameDelay,handler=self.fire,param="LEFT")
+        self.delay(delay=14*frameDelay,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=14*frameDelay,handler=self.fire,param="RIGHT")
+        self.delay(delay=15*frameDelay,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
         # TODO sounds and lights go here
 
 
@@ -89,7 +93,7 @@ class Match(game.Mode):
             self.digitLayer.set_text(self.selection,blink_frames=8)
             self.zeroLayer.set_text("0",blink_frames=8)
             bottlesLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'match.dmd').frames[20])
-            combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,bottlesLayer])
+            combined = dmd.GroupedLayer(128,32,[bottlesLayer,self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer])
             self.layer = combined
             # TODO play the knocker once for each winner
             #self.game.knock(self.winners)
