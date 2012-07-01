@@ -58,6 +58,17 @@ class Match(game.Mode):
         # fire it up
         self.layer = combined
         self.fire("LEFT")
+        self.delay(delay=0.1,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=0.4,handler=self.fire,param="RIGHT")
+        self.delay(delay=0.5,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=0.8,handler=self.fire,param="LEFT")
+        self.delay(delay=0.9,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=0.9,handler=self.fire,param="RIGHT")
+        self.delay(delay=1.0,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=1.3,handler=self.fire,param="LEFT")
+        self.delay(delay=1.4,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=1.4,handler=self.fire,param="RIGHT")
+        self.delay(delay=1.5,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
         # TODO sounds and lights go here
 
 
