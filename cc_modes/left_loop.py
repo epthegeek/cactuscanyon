@@ -48,19 +48,19 @@ class LeftLoop(game.Mode):
         if self.game.show_tracking('mineStatus') == "RUNNING":
             # check if this jackpot shot is active
             if self.game.show_tracking('jackpotStatus',0):
-                self.game.lamps.leftLoopJackpot.schedule(0x007F0F0F)
-                self.game.lamps.leftLoopRideEm.schedule(0x03FF0F0F)
-                self.game.lamps.leftLoopWildRide.schedule(0x1FFF0F0F)
-                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFF0F0F)
+                self.game.lamps.leftLoopJackpot.schedule(0x0F0F8700)
+                self.game.lamps.leftLoopRideEm.schedule(0x0F0F0C30)
+                self.game.lamps.leftLoopWildRide.schedule(0x0F0F00E1)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0x0F0F000F)
             return
 
             # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
         ## right ramp is #4 in the stampede jackpot list
             if 'leftLoop' in self.game.drunk_multiball.active:
-                self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
-                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
+                self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
+                self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
+                self.game.lamps.leftLoopWildRide.schedule(0xF0F0F0F0)
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             return
 
@@ -90,13 +90,13 @@ class LeftLoop(game.Mode):
         elif stage == 89:
         ## left loop is #0 in the stampede jackpot list
             if self.game.stampede.active == 0:
-                self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
-                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
+                self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
+                self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
+                self.game.lamps.leftLoopWildRide.schedule(0xF0F0F0F0)
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             # if not active, just turn on the jackpot light only
             else:
-                self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopJackpot.schedule(0xFF00FF00)
 
         else:
             pass
@@ -215,9 +215,15 @@ class LeftLoop(game.Mode):
 
 
         # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display
-        if stage >= 4 and combo:
-            self.layer = None
-            self.game.combos.display()
+        if stage >= 4:
+            if combo:
+                self.layer = None
+                self.game.combos.display()
+            else:
+                # New thing - Tumbleweed!
+                value = self.game.increase_tracking('tumbleweedValue',5000)
+                self.game.score_with_bonus(value)
+                self.tumbleweed_display(value)
             return
 
         # load the animation based on which was last played
@@ -258,6 +264,27 @@ class LeftLoop(game.Mode):
     def push_out(self):
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,self.anims[1]['direction'])
         self.transition.callback = self.clear_layer
+
+    def tumbleweed_display(self,value):
+        banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed-banner.dmd').frames[0])
+        scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6)
+        # load up the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'tumbleweed-right.dmd')
+        # start the full on animation
+        myWait = len(anim.frames) / 15.0 + 0.5
+        # setup the animated layer
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 4
+        animLayer.opaque=False
+        animLayer.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[banner,scoreLayer,animLayer])
+        self.layer = combined
+        self.game.sound.play(self.game.assets.sfx_tumbleWind)
+        self.delay(name="Display",delay=myWait,handler=self.clear_layer)
+
+
+
 
     def clear_layer(self):
         self.layer = None

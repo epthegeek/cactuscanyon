@@ -17,6 +17,9 @@ class Tracking(game.Player):
 
         self.player_stats['bumperHits'] = 0
 
+        # Tumbleweed increases 5000 per shot - so the first one is actually 25000 when scored
+        self.player_stats['tumbleweedValue'] = 20000
+
         self.player_stats['extraBallsTotal'] = 0
         # allows for stacking of extra balls - if pending > 0 then extra ball is lit
         self.player_stats['extraBallsPending'] = 0

@@ -27,6 +27,7 @@ __all__ = [
     'ambush',
     'super_filter',
     'match',
+    'ball_search',
 ]
 from base import *
 from attract import *
@@ -56,3 +57,4 @@ from gunfight import *
 from ambush import *
 from super_filter import *
 from match import *
+from ball_search import *

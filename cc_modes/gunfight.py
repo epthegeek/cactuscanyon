@@ -240,4 +240,5 @@ class Gunfight(game.Mode):
         self.delay(name="Gunfight Lost",delay=4,handler=self.lost)
 
     def mode_stopped(self):
+        print "GUNFIGHT IS DISPATCHING DELAYS"
         self.dispatch_delayed()
