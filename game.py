@@ -378,11 +378,10 @@ class CCGame(game.BasicGame):
     def save_game_data(self):
         super(CCGame, self).save_game_data(user_game_data_path)
 
-
     def setup_ball_search(self):
         # No special handlers in starter game.
         special_handler_modes = []
-        self.ball_search = modes.BallSearch(self, priority=100,countdown_time=30, coils=self.ballsearch_coils,reset_switches=self.ballsearch_resetSwitches,stop_switches=self.ballsearch_stopSwitches,special_handler_modes=special_handler_modes)
+        self.ball_search = cc_modes.BallSearch(self, priority=100,countdown_time=30, coils=self.ballsearch_coils,reset_switches=self.ballsearch_resetSwitches,stop_switches=self.ballsearch_stopSwitches,special_handler_modes=special_handler_modes)
 
     def schedule_lampshows(self,lampshows,repeat=True):
         self.scheduled_lampshows = lampshows

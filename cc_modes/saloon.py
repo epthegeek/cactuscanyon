@@ -374,7 +374,7 @@ class Saloon(game.Mode):
             self.defeat_bart()
         # not running? do this
         else:
-            # he's dead waiting for a gun fight - TODO have to research what happens
+            # he's dead waiting for a gun fight
             # no points - play a sound?
             self.busy = False
 
