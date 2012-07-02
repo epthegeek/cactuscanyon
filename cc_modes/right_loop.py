@@ -199,10 +199,10 @@ class RightLoop(game.Mode):
 
         # anything 4 or more is complete
         else:
-            self.awardString = "SHOTS COMPLETE"
-            self.awardPoints = "150,000"
-            self.game.score(15000)
-            self.type = ep.EP_Transition.TYPE_CROSSFADE
+            #self.awardString = "SHOTS COMPLETE"
+            #self.awardPoints = "150,000"
+            #self.game.score(15000)
+            #self.type = ep.EP_Transition.TYPE_CROSSFADE
             # if we're not on a combo  show the award - combos after stage 4 should just show the combo
             if combo:
                 self.layer = None
@@ -210,8 +210,9 @@ class RightLoop(game.Mode):
             else:
                 #self.show_award_text()
                 # New thing - Tumbleweed!
-                self.game.score(25000)
-                self.tumbleweed_display()
+                value = self.game.increase_tracking('tumbleweedValue',5000)
+                self.game.score_with_bonus(value)
+                self.tumbleweed_display(value)
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             newstage = self.game.increase_tracking('rightLoopStage')
@@ -265,9 +266,9 @@ class RightLoop(game.Mode):
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_SOUTH)
         self.transition.callback = self.clear_layer()
 
-    def tumbleweed_display(self):
+    def tumbleweed_display(self,value):
         banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed-banner.dmd').frames[0])
-        scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("25,000",blink_frames=6)
+        scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6)
         # load up the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'tumbleweed.dmd')
         # start the full on animation

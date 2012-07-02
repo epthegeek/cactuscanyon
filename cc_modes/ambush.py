@@ -140,7 +140,7 @@ class Ambush(game.Mode):
         self.game.base_game_mode.music_on(self.game.assets.music_showdown)
         # kick out more ball
         #self.game.trough.launch_balls(1)
-        # add two dudes
+        # add two dudes - one here, one later
         self.busy = True
         self.add_guys(1)
         # drop the post
@@ -162,12 +162,12 @@ class Ambush(game.Mode):
         self.targetTimer(dude)
         # reduce count of dudes to start by 1
         amount -= 1
+        self.update_display()
         # if there are some left, repeat in 1 second to avoid popping them all up at once
         if amount != 0:
-            self.delay(name="Add Guys",delay=1,handler=self.add_guys,param=amount)
+            self.delay(name="Add Guys",delay=.5,handler=self.add_guys,param=amount)
         else:
             self.busy = False
-            self.update_display()
 
     def pause(self):
         # if we're already paused, skip this
@@ -220,8 +220,8 @@ class Ambush(game.Mode):
                 amount += 1
             # we should add whatever it takes to get back to amount
             thisMany = amount - len(self.activatedBadGuys)
-            # if we need to add some, fire away
-            if thisMany != 0:
+            # if we need to add some, fire away - if we haven't lost yet
+            if thisMany != 0 and self.misses < self.LOSE:
                 # turn on the busy flag to stop the poller while adding
                 self.busy = True
                 self.add_guys(thisMany)
@@ -273,32 +273,34 @@ class Ambush(game.Mode):
         self.layer = combined
 
     def guy_escapes(self,target):
-        self.tauntTimer = 0
-        self.cancel_delayed("Poller")
-        print "BAD GUY " + str(target) + " ESCAPES"
-        # set drop the target
-        self.game.bad_guys.target_down(target)
-        # set the timer for that target to none
-        self.badGuyTimer[target] = None
-        # move target from active to available
-        self.deactivate_guy(target)
+        # only process this if we haven't already lost
+        if self.misses < self.LOSE:
+            self.tauntTimer = 0
+            self.cancel_delayed("Poller")
+            print "BAD GUY " + str(target) + " ESCAPES"
+            # set drop the target
+            self.game.bad_guys.target_down(target)
+            # set the timer for that target to none
+            self.badGuyTimer[target] = None
+            # move target from active to available
+            self.deactivate_guy(target)
 
-        # play some gunshot noise and a light flash of some kind
-        # add the miss
-        self.misses += 1
-        # update the display
-        self.update_display(escaped=target)
-        # if we're at the max misses, the mode ends
+            # play some gunshot noise and a light flash of some kind
+            # add the miss
+            self.misses += 1
+            # update the display
+            self.update_display(escaped=target)
+            # if we're at the max misses, the mode ends
 
-        if self.misses >= self.LOSE:
-            print "AMBUSH LOST"
-            # cancel any remaining timers for dudes
-            for dude in range(0,4,1):
-                self.cancel_delayed(self.targetNames[dude])
-            # then close up shop in 1.5 seconds to give the display time to finish up
-            self.delay(delay=1.5,handler=self.end_ambush)
-        else:
-            self.delay(name="Poller",delay=1.5,handler=self.poller)
+            if self.misses >= self.LOSE:
+                print "AMBUSH LOST"
+                # cancel any remaining timers for dudes
+                for dude in range(0,4,1):
+                    self.cancel_delayed(self.targetNames[dude])
+                # then close up shop in 1.5 seconds to give the display time to finish up
+                self.delay(delay=1.5,handler=self.end_ambush)
+            else:
+                self.delay(name="Poller",delay=1.5,handler=self.poller)
 
     def hit(self,target):
         # check to make sure the last guy hasn't already fled - there's a small delay while the last gunshot animation plays
@@ -379,7 +381,7 @@ class Ambush(game.Mode):
         self.game.set_tracking('stackLevel',False,0)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-sideways-border.dmd').frames[0])
-        textLine1 = dmd.TextLayer(76, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
+        textLine1 = dmd.TextLayer(76, 2, self.game.assets.font_7px_bold_az, "center", opaque=False)
         textString = "AMBUSH: " + str(self.deathTally) + " KILLS"
         textLine1.set_text(textString)
         textLine1.composite_op = "blacksrc"
