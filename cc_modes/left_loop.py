@@ -48,19 +48,19 @@ class LeftLoop(game.Mode):
         if self.game.show_tracking('mineStatus') == "RUNNING":
             # check if this jackpot shot is active
             if self.game.show_tracking('jackpotStatus',0):
-                self.game.lamps.leftLoopJackpot.schedule(0x007F0F0F)
-                self.game.lamps.leftLoopRideEm.schedule(0x03FF0F0F)
-                self.game.lamps.leftLoopWildRide.schedule(0x1FFF0F0F)
-                self.game.lamps.leftLoopBuckNBronco.schedule(0xFFFF0F0F)
+                self.game.lamps.leftLoopJackpot.schedule(0x0F0F8700)
+                self.game.lamps.leftLoopRideEm.schedule(0x0F0F0C30)
+                self.game.lamps.leftLoopWildRide.schedule(0x0F0F00E1)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0x0F0F000F)
             return
 
             # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
         ## right ramp is #4 in the stampede jackpot list
             if 'leftLoop' in self.game.drunk_multiball.active:
-                self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
-                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
+                self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
+                self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
+                self.game.lamps.leftLoopWildRide.schedule(0xF0F0F0F0)
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             return
 
@@ -90,13 +90,13 @@ class LeftLoop(game.Mode):
         elif stage == 89:
         ## left loop is #0 in the stampede jackpot list
             if self.game.stampede.active == 0:
-                self.game.lamps.leftLoopJackpot.schedule(0x000F000F)
-                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
+                self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
+                self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
+                self.game.lamps.leftLoopWildRide.schedule(0xF0F0F0F0)
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             # if not active, just turn on the jackpot light only
             else:
-                self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopJackpot.schedule(0xFF00FF00)
 
         else:
             pass

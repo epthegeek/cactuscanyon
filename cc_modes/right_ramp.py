@@ -38,19 +38,19 @@ class RightRamp(game.Mode):
         # goldmine multiball check
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',4):
-                self.game.lamps.rightRampJackpot.schedule(0x007F0F0F)
-                self.game.lamps.rightRampSavePolly.schedule(0x03FF0F0F)
-                self.game.lamps.rightRampShootOut.schedule(0x1FFF0F0F)
-                self.game.lamps.rightRampSoundAlarm.schedule(0xFFFF0F0F)
+                self.game.lamps.rightRampJackpot.schedule(0x0F0F8700)
+                self.game.lamps.rightRampSavePolly.schedule(0x0F0F0C30)
+                self.game.lamps.rightRampShootOut.schedule(0x0F0F00E1)
+                self.game.lamps.rightRampSoundAlarm.schedule(0x0F0F000F)
             return
 
         # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
         ## right ramp is #4 in the stampede jackpot list
             if 'rightRamp' in self.game.drunk_multiball.active:
-                self.game.lamps.rightRampJackpot.schedule(0x000F000F)
-                self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
-                self.game.lamps.rightRampShootOut.schedule(0x0F0F0F0F)
+                self.game.lamps.rightRampJackpot.schedule(0xF000F000)
+                self.game.lamps.rightRampSavePolly.schedule(0xFF00FF00)
+                self.game.lamps.rightRampShootOut.schedule(0xF0F0F0F0)
                 self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
             return
 
@@ -91,13 +91,13 @@ class RightRamp(game.Mode):
         elif stage == 89:
         ## right ramp is #4 in the stampede jackpot list
             if self.game.stampede.active == 4:
-                self.game.lamps.rightRampJackpot.schedule(0x000F000F)
-                self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
-                self.game.lamps.rightRampShootOut.schedule(0x0F0F0F0F)
+                self.game.lamps.rightRampJackpot.schedule(0xF000F000)
+                self.game.lamps.rightRampSavePolly.schedule(0xFF00FF00)
+                self.game.lamps.rightRampShootOut.schedule(0xF0F0F0F0)
                 self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
             # if not active, just turn on the jackpot light only
             else:
-                self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+                self.game.lamps.rightRampJackpot.schedule(0xFF00FF00)
 
         else:
             pass
