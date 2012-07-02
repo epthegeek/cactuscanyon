@@ -466,7 +466,7 @@ class SkillShot(game.Mode):
         self.layer = combined
         self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_drumRoll)
         # show the prizes
-        self.delay("Display",delay=myWait+1,handler=self.update_layer)
+        self.delay(name="Display",delay=myWait+1,handler=self.update_layer)
         self.delay(delay=myWait+1,handler=self.unbusy)
 
     def unbusy(self):

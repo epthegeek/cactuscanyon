@@ -136,7 +136,7 @@ class Quickdraw(game.Mode):
             # make it active
             self.layer = dmd.GroupedLayer(128,32,[self.animLayer,scoreLayer])
             # delay the next iteration
-            self.delay("Timer Delay", delay = 0.2, handler = self.timer, param=target)
+            self.delay(name="Timer Delay", delay = 0.2, handler = self.timer, param=target)
 
     def pause(self):
         self.paused = True
