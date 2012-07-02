@@ -236,4 +236,5 @@ class Quickdraw(game.Mode):
         self.game.modes.remove(self.game.quickdraw)
 
     def mode_stopped(self):
+        print "QUICKDRAW IS DISPATCHING DELAYS"
         self.dispatch_delayed()

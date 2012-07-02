@@ -130,6 +130,8 @@ class BadGuys(game.Mode):
 
     def kill_power(self):
         # stop any delays
+        print "BAD_GUYS IS DISPATCHING DELAYS"
+
         self.dispatch_delayed()
         # drop all the targets
         self.drop_targets()

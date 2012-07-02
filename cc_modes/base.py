@@ -34,6 +34,8 @@ class BaseGameMode(game.Mode):
         self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
 
     def mode_started(self):
+        print "INTERRUPTER IS DISPATCHING DELAYS"
+
         ## cancel the closing song delay, just in case
         self.game.interrupter.dispatch_delayed()
         # and update the lamps

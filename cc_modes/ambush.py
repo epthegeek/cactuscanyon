@@ -411,6 +411,7 @@ class Ambush(game.Mode):
         self.layer = None
 
     def mode_stopped(self):
+        print "AMBUSH IS DISPATCHING DELAYS"
         self.dispatch_delayed()
 
     def deactivate_guy(self,target):

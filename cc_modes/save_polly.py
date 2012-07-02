@@ -209,6 +209,7 @@ class SavePolly(game.Mode):
 
     # success
     def polly_saved(self):
+        self.game.train.stop()
         # sound for this is self.game.assets.sfx_trainStop
         # play the train stopping animation and some sounds
         # TODO needs sounds
@@ -225,13 +226,14 @@ class SavePolly(game.Mode):
         self.delay(delay=myWait,handler=self.give_award)
 
     def give_award(self):
-        # light extra ball?
+        # light extra ball? - #TODO this has to check against max EBs earned
         self.game.mine.light_extra_ball()
         # then after a delay, reset train
         self.polly_finished() # should delay this
 
     # fail
     def polly_died(self):
+        self.game.train.stop()
         self.polly_finished()
 
     def polly_finished(self):
@@ -254,6 +256,7 @@ class SavePolly(game.Mode):
 
     # clean up and exit
     def end_save_polly(self):
+        print "ENDING SAVE POLLY"
         # turn the level 1 stack flag back off
         self.game.set_tracking('stackLevel',False,1)
         # check to see if stampede is ready
@@ -265,4 +268,5 @@ class SavePolly(game.Mode):
         self.layer = None
 
     def mode_stopped(self):
+        print "SAVE POLLY IS DISPATCHING DELAYS"
         self.dispatch_delayed()

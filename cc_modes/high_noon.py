@@ -402,4 +402,5 @@ class HighNoon(game.Mode):
         self.layer = None
 
     def mode_stopped(self):
+        print "HIGH NOON IS DISPATCHING DELAYS"
         self.dispatch_delayed()

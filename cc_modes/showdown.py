@@ -315,4 +315,5 @@ class Showdown(game.Mode):
         self.layer = None
 
     def mode_stopped(self):
+        print "SHOWDOWN IS DISPATCHING DELAYS"
         self.dispatch_delayed()
