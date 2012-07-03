@@ -39,10 +39,10 @@ class RightLoop(game.Mode):
         # goldmine active check
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',3):
-                self.game.lamps.rightLoopJackpot.schedule(0x0F0F8700)
-                self.game.lamps.rightLoopMarksman.schedule(0x0F0F0C30)
-                self.game.lamps.rightLoopGunslinger.schedule(0x0F0F00E1)
-                self.game.lamps.rightLoopGoodShot.schedule(0x0F0F000F)
+                self.game.lamps.rightLoopJackpot.schedule(0x0F0FFE00)
+                self.game.lamps.rightLoopMarksman.schedule(0x0F0F1F30)
+                self.game.lamps.rightLoopGunslinger.schedule(0x0F0F03F1)
+                self.game.lamps.rightLoopGoodShot.schedule(0x0F0F007F)
             return
             # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
@@ -58,18 +58,18 @@ class RightLoop(game.Mode):
 
         if stage == 1:
             # blink the first light
-            self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopGoodShot.schedule(0x0F0F0F0F)
         elif stage == 2:
             # first light on
             self.game.lamps.rightLoopGoodShot.enable()
             # blink the second
-            self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopGunslinger.schedule(0x0F0F0F0F)
         elif stage == 3:
             # first two on
             self.game.lamps.rightLoopGoodShot.enable()
             self.game.lamps.rightLoopGunslinger.enable()
             # blink the third
-            self.game.lamps.rightLoopMarksman.schedule(0x0000FFFF)
+            self.game.lamps.rightLoopMarksman.schedule(0x0F0F0F0F)
         # this is completed
         elif stage == 4:
             # all three on

@@ -40,10 +40,10 @@ class LeftRamp(game.Mode):
         # check for goldmine multiball
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',1):
-                self.game.lamps.leftRampJackpot.schedule(0x0F0F8700)
-                self.game.lamps.leftRampSavePolly.schedule(0x0F0F0C30)
-                self.game.lamps.leftRampWaterfall.schedule(0x0F0F00E1)
-                self.game.lamps.leftRampWhiteWater.schedule(0x0F0F000F)
+                self.game.lamps.leftRampJackpot.schedule(0x0F0FFE00)
+                self.game.lamps.leftRampSavePolly.schedule(0x0F0F1F30)
+                self.game.lamps.leftRampWaterfall.schedule(0x0F0F03F1)
+                self.game.lamps.leftRampWhiteWater.schedule(0x0F0F007F)
             return
             # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
@@ -59,18 +59,18 @@ class LeftRamp(game.Mode):
         print "RAMP STAGE SANITY CHECK: " + str(stage)
         if stage == 1:
             # blink the first light
-            self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWhiteWater.schedule(0x0F0F0F0F)
         elif stage == 2:
             # first light on
             self.game.lamps.leftRampWhiteWater.enable()
             # blink the second
-            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWaterfall.schedule(0x0F0F0F0F)
         elif stage == 3:
             # first two on
             self.game.lamps.leftRampWhiteWater.enable()
             self.game.lamps.leftRampWaterfall.enable()
             # blink the third
-            self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+            self.game.lamps.leftRampSavePolly.schedule(0x0F0F0F0F)
         # this is completed - pulse the 3rd light
         elif stage == 4:
             # two on

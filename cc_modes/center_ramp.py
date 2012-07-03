@@ -38,10 +38,10 @@ class CenterRamp(game.Mode):
         # check goldmine active status
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',2):
-                self.game.lamps.centerRampJackpot.schedule(0x0F0F8700)
-                self.game.lamps.centerRampSavePolly.schedule(0x0F0F0C30)
-                self.game.lamps.centerRampStopTrain.schedule(0x0F0F00E1)
-                self.game.lamps.centerRampCatchTrain.schedule(0x0F0F000F)
+                self.game.lamps.centerRampJackpot.schedule(0x0F0FFE00)
+                self.game.lamps.centerRampSavePolly.schedule(0x0F0F1F30)
+                self.game.lamps.centerRampStopTrain.schedule(0x0F0F03F1)
+                self.game.lamps.centerRampCatchTrain.schedule(0x0F0F007F)
             return
             # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
@@ -57,12 +57,12 @@ class CenterRamp(game.Mode):
 
         if stage == 1:
             # blink the first light
-            self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
+            self.game.lamps.centerRampCatchTrain.schedule(0x0F0F0F0F)
         elif stage == 2:
             # first light on
             self.game.lamps.centerRampCatchTrain.enable()
             # blink the second
-            self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
+            self.game.lamps.centerRampStopTrain.schedule(0x0F0F0F0F)
         elif stage == 3:
             # first two on
             self.game.lamps.centerRampCatchTrain.enable()
@@ -70,7 +70,7 @@ class CenterRamp(game.Mode):
             # small change here - only blink the 3rd light if the other ramps are done
             if self.game.show_tracking('leftRampStage') == 4 and self.game.show_tracking('rightRampStage') == 4:
                 # blink the third
-                self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.centerRampSavePolly.schedule(0x0F0F0F0F)
 
         # this is after polly peril - all three on
         elif stage == 5:

@@ -38,10 +38,10 @@ class RightRamp(game.Mode):
         # goldmine multiball check
         if self.game.show_tracking('mineStatus') == "RUNNING":
             if self.game.show_tracking('jackpotStatus',4):
-                self.game.lamps.rightRampJackpot.schedule(0x0F0F8700)
-                self.game.lamps.rightRampSavePolly.schedule(0x0F0F0C30)
-                self.game.lamps.rightRampShootOut.schedule(0x0F0F00E1)
-                self.game.lamps.rightRampSoundAlarm.schedule(0x0F0F000F)
+                self.game.lamps.rightRampJackpot.schedule(0x0F0FFE00)
+                self.game.lamps.rightRampSavePolly.schedule(0x0F0F1F30)
+                self.game.lamps.rightRampShootOut.schedule(0x0F0F03F1)
+                self.game.lamps.rightRampSoundAlarm.schedule(0x0F0F007F)
             return
 
         # drunk multiball
@@ -58,18 +58,18 @@ class RightRamp(game.Mode):
 
         if stage == 1:
             # blink the first light
-            self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
+            self.game.lamps.rightRampSoundAlarm.schedule(0x0F0F0F0F)
         elif stage == 2:
             # first light on
             self.game.lamps.rightRampSoundAlarm.enable()
             # blink the second
-            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+            self.game.lamps.rightRampShootOut.schedule(0x0F0F0F0F)
         elif stage == 3:
             # first two on
             self.game.lamps.rightRampSoundAlarm.enable()
             self.game.lamps.rightRampShootOut.enable()
             # blink the third
-            self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+            self.game.lamps.rightRampSavePolly.schedule(0x0F0F0F0F)
         # this is completed - pulse the 3rd light
         elif stage == 4:
             # two on

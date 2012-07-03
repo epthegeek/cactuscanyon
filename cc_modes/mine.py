@@ -51,14 +51,14 @@ class Mine(game.Mode):
             self.game.lamps.mineLock.enable()
         # if there is an active 0 or 1 mode, we don't allow multiball to start, so skip the light
         elif status == "READY" and True not in stackLevel[:2]:
-            self.game.lamps.mineLock.schedule(0x00FF00FF)
+            self.game.lamps.mineLock.schedule(0x0F0F0F0F)
         # if there's an extra ball waiting, and the mine status multiball is not running, flash the light
         if eb > 0 and status != "RUNNING":
             self.game.coils.mineFlasher.schedule(0x00100000)
         # if multiball is running and motherload is available - flash the light in the mine and blink the lock arrow
         if status == "RUNNING" and self.game.show_tracking('motherlodeLit'):
             self.game.coils.mineFlasher.schedule(0x00010001)
-            self.game.lamps.mineLock.schedule(0x00FF00FF)
+            self.game.lamps.mineLock.schedule(0x0F0F0F0F)
 
     def disable_lamps(self):
         self.game.lamps.extraBallLitBeacon.disable()
