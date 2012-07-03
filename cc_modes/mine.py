@@ -328,7 +328,9 @@ class Mine(game.Mode):
         # add one to the pending the player for use - using the framework standard for storing extra_balls
         self.game.current_player().extra_balls += 1
         # if they've already gotten an extra ball - it should divert to the short version
-        if self.game.current_player().extra_balls > 1:
+        # or if anything above stack level 1 is running
+        stack = self.game.show_tracking('stackLevel')
+        if self.game.current_player().extra_balls > 1 or True in stack[1:]:
             # play the short one
             self.extra_ball_ending(isLong=False)
         # otherwise play the whole animation

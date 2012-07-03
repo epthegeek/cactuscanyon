@@ -36,10 +36,8 @@ class Saloon(game.Mode):
             self.setup_bart()
 
     def sw_saloonPopper_active_for_300ms(self,sw):
-        # if there's a quickdraw or ambush running, just kick teh ball back out
-        if "RUNNING" in self.game.show_tracking('quickdrawStatus') \
-        or self.game.show_tracking('ambushStatus') == "RUNNING" \
-        or self.game.show_tracking('centerRampStage') == 99:
+        # if there's a mode running, just kick the ball back out
+        if True in self.game.show_tracking('stackLevel'):
             self.kick()
         else:
             ## if we went through the gate, and missed bart or snuck in the back way
