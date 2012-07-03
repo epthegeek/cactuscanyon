@@ -27,6 +27,7 @@ class SavePolly(game.Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
             if self.game.show_tracking("centerRampStage") == 99:
+                self.game.train.stop()
                 self.polly_finished()
 
     # bumpers pause quickdraw
@@ -46,7 +47,6 @@ class SavePolly(game.Mode):
     # resume when exit
     def sw_jetBumpersExit_active(self,sw):
         self.cancel_delayed("Pause Timer")
-        self.pause_timer = 0
         self.in_progress()
 
     def sw_centerRampMake_active(self,sw):

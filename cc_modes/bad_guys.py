@@ -102,12 +102,11 @@ class BadGuys(game.Mode):
             self.game.gunfight.won()
 
     def target_up(self,target):
-        self.coils[target].patter(on_time=4,off_time=8,original_on_time=20)
+        self.coils[target].patter(on_time=4,off_time=8,original_on_time=25)
         self.lamps[target].schedule(0x00FF00FF)
         self.delay(delay=0.05,handler=self.target_activate,param=target)
 
     def target_down(self,target):
-        # kill the delay that enables switch recognition - this is for gunfights mostly
         self.game.set_tracking('badGuyUp',False,target)
         self.coils[target].disable()
         self.lamps[target].disable()
