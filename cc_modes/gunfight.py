@@ -56,6 +56,8 @@ class Gunfight(game.Mode):
         random.shuffle(badGuys)
         # pull out the enemey
         print "ENEMY: " + str(enemy)
+        # save the final target
+        self.gunfighter = enemy
         print badGuys
         badGuys.remove(enemy)
         # and tag them on the end

@@ -80,6 +80,7 @@ class BadGuys(game.Mode):
             print "BAD GUY 3 HIT"
             self.hit_bad_guy(3)
 
+
     def hit_bad_guy(self,target):
         # stop the timer
         # kill the coil to the drop target based on position
@@ -102,16 +103,21 @@ class BadGuys(game.Mode):
             self.game.gunfight.won()
 
     def target_up(self,target):
-        self.coils[target].patter(on_time=4,off_time=8,original_on_time=25)
+        print "TARGET RAISED " + str(target)
+        print self.game.show_tracking('badGuyUp')
+        self.coils[target].patter(on_time=4,off_time=8,original_on_time=20)
         self.lamps[target].schedule(0x00FF00FF)
-        self.delay(delay=0.05,handler=self.target_activate,param=target)
+        self.delay(delay=0.1,handler=self.target_activate,param=target)
 
     def target_down(self,target):
+        print "DEACTIVATING TARGET " + str(target)
+        # we'll still deactivate when the coil goes off, just to maintain sync
         self.game.set_tracking('badGuyUp',False,target)
-        self.coils[target].disable()
         self.lamps[target].disable()
+        self.delay(delay=0.02,handler=self.coils[target].disable)
 
     def target_activate(self,target):
+        print "ACTIVATING TARGET " + str(target)
         self.game.set_tracking('badGuyUp',True,target)
 
     def setup_targets(self):
