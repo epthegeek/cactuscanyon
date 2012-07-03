@@ -202,6 +202,7 @@ class SkillShot(game.Mode):
             # set the bank ramp to completed
             self.game.set_tracking('rightRampStage',4)
             self.game.score(250000)
+            self.game.add_bonus(100000)
 
         elif self.selectedPrizes[5:] == "D":
             self.game.score(20)
@@ -242,6 +243,7 @@ class SkillShot(game.Mode):
             awardStringBottom = "COMPLETE"
             self.game.set_tracking('leftRampStage',4)
             self.game.score(250000)
+            self.game.add_bonus(100000)
 
         elif self.selectedPrizes[5:] == "G":
             # This one is the right loop
@@ -249,12 +251,14 @@ class SkillShot(game.Mode):
             awardStringBottom = "COMPLETE"
             self.game.set_tracking('rightLoopStage',4)
             self.game.score(250000)
+            self.game.add_bonus(100000)
 
         elif self.selectedPrizes[5:] == "H":
             # This one is the quickdraw
             awardStringTop = "QUICK DRAW"
             awardStringBottom ="IS LIT"
             self.game.score(10000)
+            self.game.add_bonus(2000)
             # turn on the right quickdraw
             self.game.base_game_mode.light_quickdraw(1)
 
@@ -264,6 +268,7 @@ class SkillShot(game.Mode):
             awardStringBottom ="COMPLETE"
             self.game.set_tracking('leftLoopStage',4)
             self.game.score(250000)
+            self.game.add_bonus(100000)
 
         elif self.selectedPrizes[5:] == "J":
             awardStringTop = "EXTRA BALL"
@@ -284,7 +289,7 @@ class SkillShot(game.Mode):
             awardStringBottom = "TO " + ranks[self.game.show_tracking('rank')]
 
         elif self.selectedPrizes[5:] == "L":
-            self.game.score(100)
+            self.game.score_with_bonus(1000)
             awardStringTop = "BONUS X"
             awardStringBottom = "INCREASED +3"
             self.game.increase_tracking('bonusX',3)
@@ -295,9 +300,11 @@ class SkillShot(game.Mode):
             awardStringBottom = "COMPLETE"
             self.game.set_tracking('centerRampStage',3)
             self.game.score(250000)
+            self.game.add_bonus(100000)
 
         elif self.selectedPrizes[5:] == "N":
             self.game.score(1000000)
+            self.game.add_bonus(2370)
             # setup the wipe animation and the text layer
             topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("ONE", blink_frames=5)
             million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
@@ -314,6 +321,7 @@ class SkillShot(game.Mode):
         # three million
         elif self.selectedPrizes[5:] == "O":
             self.game.score(3000000)
+            self.game.add_bonus(6930)
             # setup the wipe animation and the text layer
             topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("THREE", blink_frames=5)
             million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
@@ -327,7 +335,7 @@ class SkillShot(game.Mode):
             return
         # bonus x
         elif self.selectedPrizes[5:] == "P":
-            self.game.score(100)
+            self.game.score_with_bonus(1000)
             awardStringTop = "BONUS X"
             awardStringBottom = "INCREASED +5"
             self.game.increase_tracking('bonusX',5)
@@ -336,6 +344,7 @@ class SkillShot(game.Mode):
             # This one is the gunfight
             self.layer = None
             self.game.score(50000)
+            self.game.add_bonus(1200)
             # turn on the right quickdraw
             self.game.saloon.light_gunfight(self.game.skill_shot.start_gameplay)
             return
@@ -344,6 +353,7 @@ class SkillShot(game.Mode):
         elif self.selectedPrizes[5:] == "R":
             self.layer = None
             self.game.score(50000)
+            self.game.add_bonus(1200)
             # light the dmb
             self.game.base_game_mode.light_drunk_multiball(self.game.skill_shot.start_gameplay)
             return

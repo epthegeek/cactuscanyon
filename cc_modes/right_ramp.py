@@ -149,7 +149,7 @@ class RightRamp(game.Mode):
             ## set the text lines for the display later
             self.awardString = "SOUND ALARM"
             self.awardPoints = "125,000*"
-            self.game.score(125000)
+            self.game.score_with_bonus(125000)
             # load the animation
             anim = dmd.Animation().load(ep.DMD_PATH+'bank-explodes.dmd')
             # calcuate the wait time to start the next part of the display
@@ -173,7 +173,7 @@ class RightRamp(game.Mode):
             # set the text lines for the display
             self.awardString = "SHOOT OUT"
             self.awardPoints = "150,000*"
-            self.game.score(150000)
+            self.game.score_with_bonus(150000)
             # load the animation
             anim = dmd.Animation().load(ep.DMD_PATH+'bank-sherrif-arrives.dmd')
             # calculate the wait time
@@ -197,7 +197,7 @@ class RightRamp(game.Mode):
         elif stage == 3:
             self.awardString = "ROBBERY FOILED"
             self.awardPoints = "175,000*"
-            self.game.score(175000)
+            self.game.score_with_bonus(175000)
             anim = dmd.Animation().load(ep.DMD_PATH+'sheriff-pan.dmd')
             # waith for the pan up to finish
             myWait = 1.14
@@ -212,8 +212,9 @@ class RightRamp(game.Mode):
         ## for now, anything above 3 is 'complete'
         else:
             self.awardString = "ROBBERY FOILED"
-            self.awardPoints = "150,000*"
-            self.game.score(150000)
+            value = self.game.increase_tracking('adventureCompleteValue')
+            self.awardPoints = str(ep.format_score(value)) + "*"
+            self.game.score_with_bonus(value)
             # play sounds
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
             self.game.sound.play_voice(self.game.assets.quote_victory)

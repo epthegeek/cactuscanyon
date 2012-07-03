@@ -166,7 +166,7 @@ class LeftLoop(game.Mode):
         if stage == 1:
             self.awardString = "BUCK N BRONCO"
             self.awardPoints = "125,000"
-            self.game.score(125000)
+            self.game.score_with_bonus(125000)
             self.game.sound.play_voice(self.game.assets.quote_leftLoop1)
             # set the item to use, frame time to use, and amount to divide my wait by
             thisOne = 1
@@ -175,7 +175,7 @@ class LeftLoop(game.Mode):
         elif stage == 2:
             self.awardString = "WILD RIDE"
             self.awardPoints = "150,000"
-            self.game.score(15000)
+            self.game.score_with_bonus(15000)
             thisOne = 1
             frame_time = 6
             divisor = 10.0
@@ -184,7 +184,7 @@ class LeftLoop(game.Mode):
         elif stage == 3:
             self.awardString = "RIDE EM COWBOY"
             self.awardPoints = "175,000"
-            self.game.score(175000)
+            self.game.score_with_bonus(175000)
             self.game.sound.play_voice(self.game.assets.quote_leftLoop2)
             thisOne = 0
             frame_time = 4
@@ -193,8 +193,6 @@ class LeftLoop(game.Mode):
         else:
             self.awardString = "BRONCO LOOPS COMPLETE"
             self.awardPoints = "150,000"
-            self.game.score(15000)
-            self.game.sound.play_voice(self.game.assets.quote_leftLoop2)
             thisOne = 0
             frame_time = 4
             divisor = 15

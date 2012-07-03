@@ -21,7 +21,12 @@ class SavePolly(game.Mode):
         anim = dmd.Animation().load(ep.DMD_PATH+'cow-on-tracks.dmd')
         self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
         self.pollyTitle = dmd.TextLayer(34, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
-        self.awardLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("EXTRA BALL LIT")
+        # if we haven't maxed extra balls, the prize is an extra ball light - otherwise, 5 mil
+        if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            reward = "EXTRA BALL LIT"
+        else:
+            reward = "5,000,000"
+        self.awardLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(reward)
 
 
     def ball_drained(self):
@@ -226,8 +231,12 @@ class SavePolly(game.Mode):
         self.delay(delay=myWait,handler=self.give_award)
 
     def give_award(self):
-        # light extra ball? - #TODO this has to check against max EBs earned
-        self.game.mine.light_extra_ball()
+        if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            # light extra ball if not maxxed out
+            self.game.mine.light_extra_ball()
+        else:
+            # if maxxed out, give 5 million points instead
+            self.game.score(5000000)
         # then after a delay, reset train
         self.polly_finished() # should delay this
 

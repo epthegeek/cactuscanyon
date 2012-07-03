@@ -144,7 +144,7 @@ class CenterRamp(game.Mode):
         if stage == 1:
             self.awardString = "CATCH TRAIN"
             self.awardPoints = "125,000"
-            self.game.score(125000)
+            self.game.score_with_bonus(125000)
             self.game.sound.play(self.game.assets.quote_centerRamp1)
             self.game.sound.play(self.game.assets.sfx_trainChugShort)
             self.game.sound.play(self.game.assets.sfx_leftLoopEnter) # same sound used on left loop so the name is funny
@@ -159,7 +159,7 @@ class CenterRamp(game.Mode):
             self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 2:
-            self.train_stage_two(score=150000)
+            self.train_stage_two_with_bonus(score=150000)
 
         ## TODO this should kick into polly peril I guess - don't want to start it with the side ramps
         ## TODO maybe provide a bonus for having them lit first - shots worth more points or something
@@ -171,7 +171,7 @@ class CenterRamp(game.Mode):
                 self.game.modes.add(self.game.save_polly)
                 self.game.save_polly.start_save_polly()
             else:
-                self.train_stage_two(score=175000)
+                self.train_stage_two_with_bonus(score=175000)
         # complete - after polly peril
         # after polly is saved, before high noon, show the pull brakes animation
         # and 'polly saved'
@@ -232,8 +232,9 @@ class CenterRamp(game.Mode):
 
     def train_victory(self):
         self.awardString = "POLLY SAVED"
-        self.awardPoints = "150,000"
-        self.game.score(150000)
+        value = self.game.increase_tracking('adventureCompleteValue',5000)
+        self.awardPoints = str(ep.format_score(value))
+        self.game.score_with_bonus(value)
         # load up the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'train-brake-pull.dmd')
         # start the full on animation

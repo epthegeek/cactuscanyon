@@ -154,7 +154,7 @@ class RightLoop(game.Mode):
         if stage == 1:
             self.awardString = "GOOD SHOT"
             self.awardPoints = "125,000"
-            self.game.score(125000)
+            self.game.score_with_bonus(125000)
             # load the animation
             anim = dmd.Animation().load(ep.DMD_PATH+'shot-bottles-animation.dmd')
             # calculate a wait
@@ -178,7 +178,7 @@ class RightLoop(game.Mode):
         elif stage == 2:
             self.awardString = "GUNSLINGER"
             self.awardPoints = "150,000"
-            self.game.score(15000)
+            self.game.score_with_bonus(150000)
             # play the animation and such
             anim = dmd.Animation().load(ep.DMD_PATH+'shot-candles-animation.dmd')
             myWait = len(anim.frames) / 10.0
@@ -189,7 +189,7 @@ class RightLoop(game.Mode):
         elif stage == 3:
             self.awardString = "MARKSMAN"
             self.awardPoints = "175,000"
-            self.game.score(175000)
+            self.game.score_with_bonus(175000)
             #self.show_award_text()
             anim = dmd.Animation().load(ep.DMD_PATH+'shot-card-animation.dmd')
             myWait = len(anim.frames) / 10.0

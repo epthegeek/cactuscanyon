@@ -156,7 +156,7 @@ class LeftRamp(game.Mode):
         if stage == 1:
             self.awardString = "WHITE WATER"
             self.awardPoints = "125,000"
-            self.game.score(125000)
+            self.game.score_with_bonus(125000)
             self.game.sound.play_voice(self.game.assets.quote_leftRamp1)
             # load the 2 animations
             anim1 = dmd.Animation().load(ep.DMD_PATH+'blank-river.dmd')
@@ -177,7 +177,7 @@ class LeftRamp(game.Mode):
         elif stage == 2:
             self.awardString = "WATER FALL"
             self.awardPoints = "150,000"
-            self.game.score(150000)
+            self.game.score_with_bonus(150000)
             self.game.sound.play_voice(self.game.assets.quote_leftRamp2)
             # load the animation
             anim = dmd.Animation().load(ep.DMD_PATH+'river-chase.dmd')
@@ -193,7 +193,7 @@ class LeftRamp(game.Mode):
         elif stage == 3:
             self.awardString = "ADVENTURE COMPLETE"
             self.awardPoints = "175,000"
-            self.game.score(175000)
+            self.game.score_with_bonus(175000)
             anim = dmd.Animation().load(ep.DMD_PATH+'sheriff-pan.dmd')
             # waith for the pan up to finish
             myWait = 1.14
@@ -207,8 +207,9 @@ class LeftRamp(game.Mode):
             self.delay(name="Display",delay=myWait,handler=self.anim_river_victory)
         else:
             self.awardString = "ADVENTURE COMPLETE"
-            self.awardPoints = "150,000"
-            self.game.score(150000)
+            value = self.game.increase_tracking('adventureCompleteValue',5000)
+            self.awardPoints = str(ep.format_score(value))
+            self.game.score_with_bonus(value)
             # play sounds
             # play the river ramp sound
             self.game.sound.play_voice(self.game.assets.quote_victory)
