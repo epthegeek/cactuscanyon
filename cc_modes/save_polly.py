@@ -12,6 +12,8 @@ class SavePolly(game.Mode):
     def __init__(self,game,priority):
         super(SavePolly, self).__init__(game,priority)
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Shots to save Polly']
+
+    def mode_started(self):
         self.shotsSoFar = 0
         self.cows = [self.game.assets.sfx_cow1, self.game.assets.sfx_cow2]
         self.modeTimer = 0
@@ -27,7 +29,13 @@ class SavePolly(game.Mode):
         else:
             reward = "5,000,000"
         self.awardLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(reward)
-
+        # calculate the shot value
+        self.shotValue = 250000
+        # extra 250k for each ramp done
+        if self.game.show_tracking('leftRampStage') == 4:
+            self.shotValue += 250000
+        if self.game.show_tracking('rightRampStage') == 4:
+            self.shotValue += 250000
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -58,6 +66,8 @@ class SavePolly(game.Mode):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
+        # score points
+        self.game.score(self.shotValue)
         # center ramp pauses the train
         self.game.sound.play(self.game.assets.sfx_trainWhistle)
         self.pause_train()
@@ -67,6 +77,8 @@ class SavePolly(game.Mode):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
+        # score points
+        self.game.score(self.shotValue)
         self.game.sound.play(self.game.assets.sfx_leftRampEnter)
         self.advance_save_polly()
         return game.SwitchStop
@@ -75,6 +87,8 @@ class SavePolly(game.Mode):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
+        # score points
+        self.game.score(self.shotValue)
         self.game.sound.play(self.game.assets.sfx_thrownCoins)
         self.advance_save_polly()
         return game.SwitchStop
@@ -85,9 +99,7 @@ class SavePolly(game.Mode):
         # clear any running music
         print "start_save_polly IS KILLING THE MUSIC"
         self.game.sound.stop_music()
-        # set the ramps to crazy stage
-        self.game.set_tracking('leftRampStage',99)
-        self.game.set_tracking('rightRampStage',99)
+        # set the center to crazy stage
         self.game.set_tracking('centerRampStage',99)
         self.game.right_ramp.update_lamps()
         self.game.center_ramp.update_lamps()
@@ -128,9 +140,24 @@ class SavePolly(game.Mode):
         timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString)
         textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
         awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+        # alternate lines for the bottom
+        script[]
+        shotsLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2).set_text("SHOTS WORTH:")
+        shotsLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
+        # group layer of the award lines
+        page1 = dmd.GroupedLayer(128,32,[awardLine1,self.awardLine2])
+        page1.composite_op = "blacksrc"
+        script.append({'layer':page1,'seconds':2})
+        # group layer of the shot value info lines
+        page2 = dmd.GroupedLayer(128,32,[shotsLine1,shotsLine2])
+        page2.composite_op = "blacksrc"
+        script.append({'layer':page2,'seconds':2})
+        # scripted layer alternating between the info and award lines
+        infoLayer = dmd.ScriptedLayer(128,32,[script])
+        infoLayer.composite_op = "blacksrc"
 
         # stick together the animation and static text with the dynamic text
-        composite = dmd.GroupedLayer(128,32,[self.trainLayer,self.pollyTitle,scoreLine,awardLine1,self.awardLine2,timeLine])
+        composite = dmd.GroupedLayer(128,32,[self.trainLayer,self.pollyTitle,scoreLine,infoLayer,timeLine])
         self.layer = composite
         ## tick down the timer
         self.modeTimer -= 1
@@ -257,8 +284,7 @@ class SavePolly(game.Mode):
         self.layer = None
         # set the tracking on the ramps
         # this is mostly for the lights
-        self.game.set_tracking('leftRampStage',5)
-        self.game.set_tracking('rightRampStage',5)
+        self.running = False
         self.game.set_tracking('centerRampStage',5)
         self.game.update_lamps()
         self.end_save_polly()

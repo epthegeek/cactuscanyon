@@ -29,6 +29,10 @@ class Stampede(game.Mode):
         # which jackpot is active
         self.active = 9
         self.jackpots = 0
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff

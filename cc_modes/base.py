@@ -560,7 +560,9 @@ class BaseGameMode(game.Mode):
         # if both loops are done and the save polly is finished, then it's time to stampede
         if self.game.show_tracking('leftLoopStage') == 4 and \
             self.game.show_tracking('rightLoopStage') == 4 and \
-            self.game.show_tracking('centerRampStage') == 5:
+            self.game.show_tracking('centerRampStage') == 5 and \
+            self.game.show_tracking('leftRampStage') == 4 and \
+            self.game.show_tracking('rightRampStage') == 4:
 
             self.game.modes.add(self.game.stampede)
             self.game.stampede.start_stampede()

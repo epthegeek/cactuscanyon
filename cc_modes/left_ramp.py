@@ -54,6 +54,13 @@ class LeftRamp(game.Mode):
                 self.game.lamps.leftRampWaterfall.schedule(0xF0F0F0F0)
                 self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
             return
+        # save polly
+        if self.game.save_polly.running:
+            self.game.lamps.leftRampJackpot.schedule(0xFF00FF00)
+            self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
+            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+            return
 
         stage = self.game.show_tracking('leftRampStage')
         print "RAMP STAGE SANITY CHECK: " + str(stage)
@@ -76,19 +83,7 @@ class LeftRamp(game.Mode):
             # two on
             self.game.lamps.leftRampWhiteWater.enable()
             self.game.lamps.leftRampWaterfall.enable()
-            # the pulse idea didn't really work - so we'll just turn it on
             self.game.lamps.leftRampSavePolly.enable()
-        # after polly, before stampede all three stay on
-        elif stage == 5:
-            self.game.lamps.leftRampWhiteWater.enable()
-            self.game.lamps.leftRampWaterfall.enable()
-            self.game.lamps.leftRampSavePolly.enable()
-        # save polly
-        elif stage == 99:
-            self.game.lamps.leftRampJackpot.schedule(0xFF00FF00)
-            self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
-            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
-            self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
         # stampede
         elif stage == 89:
         ## left ramp is #1 in the stampede jackpot list
@@ -205,6 +200,7 @@ class LeftRamp(game.Mode):
             # play animation
             self.layer = animLayer
             self.delay(name="Display",delay=myWait,handler=self.anim_river_victory)
+            self.game.base_game_mode.check_stampede()
         else:
             self.awardString = "ADVENTURE COMPLETE"
             value = self.game.increase_tracking('adventureCompleteValue',5000)

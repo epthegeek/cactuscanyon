@@ -54,6 +54,15 @@ class RightRamp(game.Mode):
                 self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
             return
 
+        # save polly
+        if self.game.save_polly.running:
+            self.game.lamps.leftRampJackpot.schedule(0xFF00FF00)
+            self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
+            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+            return
+
+
         stage = self.game.show_tracking('rightRampStage')
 
         if stage == 1:
@@ -72,22 +81,10 @@ class RightRamp(game.Mode):
             self.game.lamps.rightRampSavePolly.schedule(0x0F0F0F0F)
         # this is completed - pulse the 3rd light
         elif stage == 4:
-            # two on
-            self.game.lamps.rightRampSoundAlarm.enable()
-            self.game.lamps.rightRampShootOut.enable()
-            # the pulse idea didn't really work so we'll just turn it on
-            self.game.lamps.rightRampSavePolly.enable()
-        # after polly, before stampede all three stay on
-        elif stage == 5:
+            # three on
             self.game.lamps.rightRampSoundAlarm.enable()
             self.game.lamps.rightRampShootOut.enable()
             self.game.lamps.rightRampSavePolly.enable()
-        # save polly
-        elif stage == 99:
-            self.game.lamps.rightRampJackpot.schedule(0xFF00FF00)
-            self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
-            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
-            self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
         elif stage == 89:
         ## right ramp is #4 in the stampede jackpot list
             if self.game.stampede.active == 4:
@@ -208,6 +205,7 @@ class RightRamp(game.Mode):
             # play animation
             self.layer = animLayer
             self.delay(name="Display",delay=myWait,handler=self.anim_bank_victory)
+            self.game.base_game_mode.check_stampede()
 
         ## for now, anything above 3 is 'complete'
         else:

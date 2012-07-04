@@ -12,6 +12,8 @@ class CenterRamp(game.Mode):
     def __init__(self, game, priority):
         super(CenterRamp, self).__init__(game, priority)
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
+        self.running = False
+
 
     def mode_started(self):
         self.update_lamps()
@@ -67,10 +69,8 @@ class CenterRamp(game.Mode):
             # first two on
             self.game.lamps.centerRampCatchTrain.enable()
             self.game.lamps.centerRampStopTrain.enable()
-            # small change here - only blink the 3rd light if the other ramps are done
-            if self.game.show_tracking('leftRampStage') == 4 and self.game.show_tracking('rightRampStage') == 4:
-                # blink the third
-                self.game.lamps.centerRampSavePolly.schedule(0x0F0F0F0F)
+            # blink the third
+            self.game.lamps.centerRampSavePolly.schedule(0x0F0F0F0F)
 
         # this is after polly peril - all three on
         elif stage == 5:
@@ -163,15 +163,11 @@ class CenterRamp(game.Mode):
 
         ## TODO this should kick into polly peril I guess - don't want to start it with the side ramps
         ## TODO maybe provide a bonus for having them lit first - shots worth more points or something
-        ## we're going to hold at stage 3 on the train ramp unless the other 2 are ready to start polly
-        ## if the train gets hit again before the other two are ready, it's a repeat of stage 2
+        ## stage three starts save polly peril train toy mode
         elif stage == 3:
-            if self.game.show_tracking('rightRampStage') >= 4 and self.game.show_tracking('leftRampStage') >= 4:
                 self.game.increase_tracking('centerRampStage')
                 self.game.modes.add(self.game.save_polly)
                 self.game.save_polly.start_save_polly()
-            else:
-                self.train_stage_two_with_bonus(score=175000)
         # complete - after polly peril
         # after polly is saved, before high noon, show the pull brakes animation
         # and 'polly saved'
