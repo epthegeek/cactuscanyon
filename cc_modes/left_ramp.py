@@ -56,7 +56,6 @@ class LeftRamp(game.Mode):
             return
         # save polly
         if self.game.save_polly.running:
-            self.game.lamps.leftRampJackpot.schedule(0xFF00FF00)
             self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)

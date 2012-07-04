@@ -78,7 +78,6 @@ class CenterRamp(game.Mode):
             self.game.lamps.centerRampSavePolly.enable()
         # save polly
         elif stage == 99:
-            self.game.lamps.centerRampJackpot.schedule(0xFFFF0000)
             self.game.lamps.centerRampSavePolly.schedule(0x00FFFF00)
             self.game.lamps.centerRampStopTrain.schedule(0x0000FFFF)
             self.game.lamps.centerRampCatchTrain.schedule(0xFF0000FF)

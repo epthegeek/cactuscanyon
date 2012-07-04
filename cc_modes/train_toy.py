@@ -32,11 +32,8 @@ class Train(game.Mode):
     def sw_rightReturnLane_active(self,sw):
         self.stop()
 
-        # for moving the train forward - since we'll have to delay call it
     def move(self):
         self.game.coils.trainForward.patter(on_time=3,off_time=8)
-        ## For now, not moving the train
-        pass
 
     def stop(self):
         # turn off the moving train solenoid
