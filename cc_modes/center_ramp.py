@@ -12,8 +12,6 @@ class CenterRamp(game.Mode):
     def __init__(self, game, priority):
         super(CenterRamp, self).__init__(game, priority)
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
-        self.running = False
-
 
     def mode_started(self):
         self.update_lamps()
@@ -159,7 +157,7 @@ class CenterRamp(game.Mode):
             self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 2:
-            self.train_stage_two_with_bonus(score=150000)
+            self.train_stage_two(score=150000)
 
         ## TODO this should kick into polly peril I guess - don't want to start it with the side ramps
         ## TODO maybe provide a bonus for having them lit first - shots worth more points or something

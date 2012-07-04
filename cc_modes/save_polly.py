@@ -12,6 +12,7 @@ class SavePolly(game.Mode):
     def __init__(self,game,priority):
         super(SavePolly, self).__init__(game,priority)
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Shots to save Polly']
+        self.running = False
 
     def mode_started(self):
         self.shotsSoFar = 0
@@ -96,6 +97,8 @@ class SavePolly(game.Mode):
     def start_save_polly(self):
         # set the level 1 stack flag
         self.game.set_tracking('stackLevel',True,1)
+        # set the running flag
+        self.running = True
         # clear any running music
         print "start_save_polly IS KILLING THE MUSIC"
         self.game.sound.stop_music()
@@ -122,6 +125,25 @@ class SavePolly(game.Mode):
         print "POLLY GET GOING"
         # set the timer for the mode
         self.modeTimer = 30
+        # setup some layers
+        # alternate lines for the bottom
+        script = []
+        shotsLine1 = dmd.TextLayer(34, 11, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOTS WORTH:")
+        shotsLine2 = dmd.TextLayer(34, 17, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
+        # group layer of the award lines
+        textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
+        awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+        page1 = dmd.GroupedLayer(128,32,[awardLine1,self.awardLine2])
+        page1.composite_op = "blacksrc"
+        script.append({"seconds":2,"layer":page1})
+        # group layer of the shot value info lines
+        page2 = dmd.GroupedLayer(128,32,[shotsLine1,shotsLine2])
+        page2.composite_op = "blacksrc"
+        script.append({"seconds":2,"layer":page2})
+        # scripted layer alternating between the info and award lines
+        self.infoLayer = dmd.ScriptedLayer(128,32,script)
+        self.infoLayer.composite_op = "blacksrc"
+
         # jump into the mode loop
         self.in_progress()
 
@@ -138,26 +160,9 @@ class SavePolly(game.Mode):
         scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
         timeString = "TIME: " + str(self.modeTimer)
         timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString)
-        textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
-        awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
-        # alternate lines for the bottom
-        script[]
-        shotsLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2).set_text("SHOTS WORTH:")
-        shotsLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
-        # group layer of the award lines
-        page1 = dmd.GroupedLayer(128,32,[awardLine1,self.awardLine2])
-        page1.composite_op = "blacksrc"
-        script.append({'layer':page1,'seconds':2})
-        # group layer of the shot value info lines
-        page2 = dmd.GroupedLayer(128,32,[shotsLine1,shotsLine2])
-        page2.composite_op = "blacksrc"
-        script.append({'layer':page2,'seconds':2})
-        # scripted layer alternating between the info and award lines
-        infoLayer = dmd.ScriptedLayer(128,32,[script])
-        infoLayer.composite_op = "blacksrc"
 
         # stick together the animation and static text with the dynamic text
-        composite = dmd.GroupedLayer(128,32,[self.trainLayer,self.pollyTitle,scoreLine,infoLayer,timeLine])
+        composite = dmd.GroupedLayer(128,32,[self.trainLayer,self.pollyTitle,scoreLine,self.infoLayer,timeLine])
         self.layer = composite
         ## tick down the timer
         self.modeTimer -= 1
