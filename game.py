@@ -131,6 +131,7 @@ class CCGame(game.BasicGame):
         # mine and saloon have to stay high so they can interrupt other displays
         self.mine = cc_modes.Mine(game=self,priority=24)
         self.saloon = cc_modes.Saloon(game=self,priority=25)
+        self.bart = cc_modes.Bart(game=self,priority=25)
 
 
         # Quickdraw battle and showdown
@@ -185,7 +186,8 @@ class CCGame(game.BasicGame):
                          self.ambush,
                          self.gunfight,
                          self.badge,
-                         self.bionic]
+                         self.bionic,
+                         self.bart]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 

@@ -22,6 +22,7 @@ class Badge(game.Mode):
         ## if status is off, we bail here
         if status == "OFF":
             return
+
         # star lamps for high noon
         for lamp in range(0,5,1):
             if self.game.show_tracking('starStatus',lamp):

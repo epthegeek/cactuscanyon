@@ -60,6 +60,7 @@ class BaseGameMode(game.Mode):
         self.game.modes.add(self.game.right_loop)
         self.game.modes.add(self.game.mine)
         self.game.modes.add(self.game.saloon)
+        self.game.modes.add(self.game.bart)
         self.game.modes.add(self.game.bad_guys)
 
     def remove_modes(self):
@@ -71,6 +72,7 @@ class BaseGameMode(game.Mode):
         self.game.modes.remove(self.game.left_loop)
         self.game.modes.remove(self.game.right_loop)
         self.game.modes.remove(self.game.mine)
+        self.game.modes.remove(self.game.bart)
         self.game.modes.remove(self.game.saloon)
         self.game.modes.remove(self.game.bad_guys)
 

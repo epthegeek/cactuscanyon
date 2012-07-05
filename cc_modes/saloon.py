@@ -13,26 +13,7 @@ class Saloon(game.Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(Saloon, self).__init__(game, priority)
-        # set up the number of barts required
-        self.bartsForStar = self.game.user_settings['Gameplay (Feature)']['Bart Brothers for Star']
-        # setup the difficulty
-        difficulty = self.game.user_settings['Gameplay (Feature)']['Bart Brothers Difficulty']
-        # Easy version
-        print "Difficulty is set to - " + difficulty
-        if difficulty == 'Easy':
-            self.hitsToDefeatBart = [2,4,5,6,7,8]
-        # Hard version
-        else:
-            self.hitsToDefeatBart = [3,5,6,7,8,8]
-        # hits banners list
-        self.banners = ['bam','biff','ouch','pow','wham','zoink']
         self.busy = False
-
-    def mode_started(self):
-        # activate the first bart if we're on the first ball
-        if self.game.ball == 1:
-            self.game.set_tracking('bartStatus',"RUNNING")
-            self.setup_bart()
 
     def sw_saloonPopper_active_for_300ms(self,sw):
         # if there's a mode running, just kick the ball back out
@@ -49,13 +30,13 @@ class Saloon(game.Mode):
                 ## If any level below is running, avoid multiball start
                     stackLevel = self.game.show_tracking('stackLevel')
                     if True in stackLevel[:2]:
-                        self.hit_bart()
+                        self.game.bart.hit()
                     else:
                         self.game.modes.add(self.game.drunk_multiball)
                         self.game.drunk_multiball.start_drunk()
                 else:
                     # then hit bart
-                    self.hit_bart()
+                    self.game.bart.hit()
             # now we check the bounty after an appropriate delay.
             self.wait_until_unbusy(self.check_bounty)
             ## -- set the last switch hit --
@@ -65,7 +46,7 @@ class Saloon(game.Mode):
         # set the busy flag
         self.busy = True
         # a direct smack to el barto
-        self.hit_bart()
+        self.game.bart.hit()
         ## -- set the last switch hit --
         ep.last_switch = "saloonBart"
 
@@ -83,9 +64,9 @@ class Saloon(game.Mode):
         if self.game.show_tracking('bartStatus') == "RUNNING":
             self.game.sound.play_voice(self.tauntQuote)
             # and move the bart
-            self.move_bart()
-            self.delay(delay=0.03,handler=self.light_bart)
-            self.delay(delay=0.07,handler=self.move_bart)
+            self.game.bart.move()
+            self.delay(delay=0.03,handler=self.game.bart.light)
+            self.delay(delay=0.07,handler=self.game.bart.move)
         # score some points
         self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
@@ -152,7 +133,7 @@ class Saloon(game.Mode):
     ### |____/ \___/ \__,_|_| |_|\__|\__, |
     ###                              |___/
     ###
-    # TODO move bounty to a higher priority so it can interrupt things
+    # TODO move bounty to a higher priority so it can interrupt things?
     def check_bounty(self):
         print "CHECKING BOUNTY"
         # check the bounty lit status, and collect if needed
@@ -346,213 +327,6 @@ class Saloon(game.Mode):
         times -= 1
         if times > 0:
             self.delay(delay=0.4,handler=self.repeat_ding,param=times)
-
-    ###
-    ###  ____             _     ____            _   _
-    ### | __ )  __ _ _ __| |_  | __ ) _ __ ___ | |_| |__   ___ _ __ ___
-    ### |  _ \ / _` | '__| __| |  _ \| '__/ _ \| __| '_ \ / _ \ '__/ __|
-    ### | |_) | (_| | |  | |_  | |_) | | | (_) | |_| | | |  __/ |  \__\
-    ### |____/ \__,_|_|   \__| |____/|_|  \___/ \__|_| |_|\___|_|  |___/
-    ###
-
-    def hit_bart(self):
-        # pick a random banner to use
-        banner = random.choice(self.banners)
-        # set up the banner layer
-        self.bannerLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+banner+'-banner.dmd').frames[0])
-
-        # lookup the status
-        status = self.game.show_tracking('bartStatus')
-        print "BART STATUS: " + status
-        print "CURRENT BART: " + str(self.game.show_tracking('currentBart'))
-        # if no bart is currently running, a new challenger appears
-        if status == "OPEN":
-            self.game.set_tracking('bartStatus',"RUNNING")
-            self.activate_bart()
-        # else, register the hit
-        elif status == "RUNNING":
-            self.damage_bart()
-        # if there is one active and it's the last hit, defeat
-        elif status == "LAST":
-            self.defeat_bart()
-        # not running? do this
-        else:
-            # he's dead waiting for a gun fight
-            # no points - play a sound?
-            self.busy = False
-
-    def activate_bart(self):
-        # set up all the strings & quotes
-        self.setup_bart()
-        # show the 'challenges you' display
-        # clear the banner layer
-        textLayer1 = dmd.TextLayer(42,2,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
-        textLayer1.set_text(self.nameLine)
-        textLayer2 = dmd.TextLayer(42,16,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
-        textLayer2.set_text("CHALLENGES")
-        textLayer3 = dmd.TextLayer(42,24,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
-        textLayer3.set_text("YOU")
-
-        textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
-        # play the intro
-        self.game.sound.play(self.introQuote)
-        # show the transition
-        transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
-
-        # if there's only 1 hit to defeat this bart, set the status to last
-        if self.hitsThisBart == 1:
-            self.game.set_tracking('bartStatus',"LAST")
-        self.delay(delay=1.5,handler=self.clear_layer)
-
-    def setup_bart(self):
-        # our cast of characters
-        names = ('big','bandelero','bubba')
-        hits = (self.game.assets.quote_hitBigBart, self.game.assets.quote_hitBandeleroBart,self.game.assets.quote_hitBubbaBart)
-        taunts = (self.game.assets.quote_tauntBigBart, self.game.assets.quote_tauntBandeleroBart,self.game.assets.quote_tauntBubbaBart)
-        defeats = (self.game.assets.quote_defeatBigBart, self.game.assets.quote_defeatBandeleroBart,self.game.assets.quote_defeatBubbaBart)
-        intros = (self.game.assets.quote_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart)
-        # look up which one is current
-        index = self.game.show_tracking('currentBart')
-        # setting up all the bits like name for text display
-        self.brother = names[index].upper()
-        # wanted poster
-        self.wantedFrameA = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'wanted-'+ self.brother +'-A.dmd').frames[0])
-        self.wantedFrameA.composite_op = "blacksrc"
-        self.wantedFrameB = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'wanted-'+ self.brother +'-B.dmd').frames[0])
-        # hit quotes
-        self.hitQuote = hits[index]
-        # taunt quotes
-        self.tauntQuote = taunts[index]
-        # death quote
-        self.defeatQuote = defeats[index]
-        # intro quote
-        self.introQuote = intros[index]
-        defeated = self.game.show_tracking('bartsDefeated')
-        # setup the points value? 120,000 + 5,000 times the number of defeated barts
-        self.hitValue = 120000 + (5000 * defeated)
-        self.hitString = locale.format("%d", self.hitValue, True) # Add commas
-        # setup the defeat value 150,000 for first + 50,000 times the number of defeated barts
-        self.defeatValue = 150000 + (50000 * defeated)
-        self.defeatString = locale.format("%d", self.defeatValue, True) # Add commas
-        # setup the hits needed to defeat this bart
-        self.hitsThisBart = self.hitsToDefeatBart[index]
-        # set up the name line for the cards
-        print self.brother + " IS THE BROTHER"
-        if self.brother != "BANDELERO":
-            self.nameLine = self.brother.upper() + " BART"
-        else:
-            self.nameLine = self.brother
-
-
-    def damage_bart(self,saloonHit=False):
-        print "DAMAGE BART"
-        # play a quote appropriate to the current bart
-        self.game.sound.play_voice(self.hitQuote)
-        # move bart
-        self.move_hat()
-        self.delay(delay=0.03,handler=self.move_bart)
-        self.delay(delay=0.06,handler=self.light_bart)
-        self.delay(delay=0.1,handler=self.move_bart)
-        self.delay(delay=0.13,handler=self.light_bart)
-
-        # score the points
-        self.game.score(self.hitValue)
-        # flash the light and move the dude
-        # a flourish lampshow
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.game.update_lamps)
-        # display the info
-        # register the hit
-        # increase the hits on bart - and store the new amount
-        currentHits = self.game.increase_tracking('bartHits')
-        # check to see if we're on the last hit now - meaning, our hit total is one less than defeat
-        # math the remaining hits
-        print "HITS FOR THIS BART: " + str(self.hitsThisBart)
-        print "CURRENT HITS: " + str(currentHits)
-        hitsLeft = self.hitsThisBart - currentHits
-        if hitsLeft <= 1:
-            # if it is, set the status to last
-            self.game.set_tracking('bartStatus',"LAST")
-        theText = str(hitsLeft) + " MORE HITS"
-        textLayer1 = dmd.TextLayer(42,1,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(self.nameLine)
-        textLayer2 = dmd.TextLayer(42,9,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(str(self.hitString))
-        textLayer3 = dmd.TextLayer(42,17,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText)
-        textLayer4 = dmd.TextLayer(42,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text("TO COLLECT")
-        self.textLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3,textLayer4])
-        self.textLayer.composite_op = "blacksrc"
-        # play a fancy lamp show
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
-        self.display_damage_one()
-
-    def defeat_bart(self):
-        print "DEFEATING BART"
-        # add to the defeated barts
-        currentTotal = self.game.increase_tracking('bartsDefeated')
-        # tick up the global count as well
-        self.game.increase_tracking('bartsDefeatedTotal')
-        # move bart
-        self.move_hat()
-        self.delay(delay=0.03,handler=self.move_bart)
-        self.delay(delay=0.06,handler=self.light_bart)
-        self.delay(delay=0.1,handler=self.move_bart)
-
-        # play a defeated quote
-        myWait = self.game.sound.play_voice(self.defeatQuote)
-        # set the status to dead - gunfight has to set it back to open
-        self.game.set_tracking('bartStatus',"DEAD")
-        # if we're at the end of the line, reset to 0
-        if self.game.show_tracking('currentBart') == 2:
-            self.game.set_tracking('currentBart',0)
-        # if not tick up the current bart for next time
-        else:
-            self.game.increase_tracking('currentBart')
-        # score some points
-        self.game.score(self.defeatValue)
-        # reset the hits on bart
-        self.game.set_tracking('bartHits',0)
-        # play a fancy lampshow
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
-        # setup the display
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'weave-border.dmd').frames[0])
-        textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
-        textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
-        if currentTotal < self.bartsForStar:
-            thetext = str(self.bartsForStar - currentTotal) + " MORE FOR BADGE"
-        elif currentTotal == self.bartsForStar:
-            thetext = "BADGE COLLECTED!"
-            # actually collect the badge - barts defeated is 2
-            self.game.badge.check_bionic_bart(2)
-        else:
-            thetext = str(currentTotal) + " DEFEATED!"
-        textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)
-        self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
-
-        # light gunfight?
-        self.delay(delay=myWait,handler=self.light_gunfight)
-
-    def display_damage_one(self):
-        print "MADE IT TO DAMAGE ONE"
-        # set up the top layer
-        layerOne = dmd.GroupedLayer(128,32,[self.bannerLayer,self.wantedFrameA])
-        # activate it
-        self.layer = layerOne
-        self.delay(delay=0.2,handler=self.display_damage_two,param=layerOne)
-
-    def display_damage_two(self,layerOne):
-        # set up the second layer
-        layerTwo = dmd.GroupedLayer(128,32,[self.wantedFrameB,self.textLayer])
-        transition = ep.EP_Transition(self,layerOne,layerTwo,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
-        self.delay(delay = 1.5,handler=self.clear_layer)
-
-    def move_bart(self):
-        # pulse the bart move coil
-        self.game.coils.moveBart.pulse(15)
-
-    def move_hat(self):
-        self.game.coils.moveBartHat.pulse(20)
-
-    def light_bart(self):
-        # pulse the flasher light
-        self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
 
     ## Gunfight
 

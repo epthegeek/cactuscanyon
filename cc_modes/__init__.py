@@ -30,6 +30,7 @@ __all__ = [
     'ball_search',
     'bionic_bart',
     'badge',
+    'bart',
 ]
 from base import *
 from attract import *
@@ -62,3 +63,4 @@ from match import *
 from ball_search import *
 from bionic_bart import *
 from badge import *
+from bart import *
