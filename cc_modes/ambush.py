@@ -396,10 +396,8 @@ class Ambush(game.Mode):
         # reset the showdown points for next time
         self.game.set_tracking('ambushPoints',0)
 
-        # award the badge light
-        self.game.set_tracking('starStatus',True,3)
-        self.game.base_game_mode.check_high_noon()
-        self.game.base_game_mode.update_lamps()
+        # award the badge light - showdown/ambush is 3
+        self.game.badge.update(3)
 
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)

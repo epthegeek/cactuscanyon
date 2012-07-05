@@ -227,10 +227,8 @@ class Stampede(game.Mode):
         # and update the lamps
         for mode in self.shotModes:
             mode.update_lamps()
-        # badge light
-        self.game.set_tracking('starStatus',True,4)
-        self.game.base_game_mode.check_high_noon()
-        self.game.base_game_mode.update_lamps()
+        # badge light - stampede is 4
+        self.game.badge.update(4)
 
         # unload?
         # unload the mode

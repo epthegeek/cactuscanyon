@@ -139,18 +139,9 @@ class BaseGameMode(game.Mode):
         # loop through 0 through current rank and turn the lamps on
         for lamp in range(0,(rank +1),1):
             self.rankLamps[lamp].enable()
-        # star lamps for high noon
-        for lamp in range(0,5,1):
-            if self.game.show_tracking('starStatus',lamp):
-                self.starLamps[lamp].enable()
-        # center of high noon
-        if False not in self.game.show_tracking('starStatus'):
-            self.game.lamps.starHighNoon.schedule(0x00FF0FF)
 
     def disable_lamps(self):
         for lamp in self.rankLamps:
-            lamp.disable()
-        for lamp in self.starLamps:
             lamp.disable()
         self.game.lamps.leftQuickdraw.disable()
         self.game.lamps.bottomRightQuickdraw.disable()
@@ -568,18 +559,6 @@ class BaseGameMode(game.Mode):
             self.game.stampede.start_stampede()
         else:
             pass
-
-    ### High noon
-
-    def check_high_noon(self):
-        # if all the lights are on, it's high noon time
-        if False not in self.game.show_tracking('starStatus'):
-            self.light_high_noon()
-
-    def light_high_noon(self):
-        # display?
-        # quotes?
-        self.game.set_tracking('highNoonStatus', "READY")
 
     ###
     ###   ___        _      _       _

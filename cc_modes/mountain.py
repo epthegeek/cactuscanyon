@@ -41,9 +41,10 @@ class Mountain(game.Mode):
         self.game.coils.mineFlasher.pulse(30)
 
     def eject(self):
-        # flash the light and then kick out
-        self.flash()
-        self.delay(delay=0.03,handler=self.kick)
+        # flash the light and then kick out if there's a ball in there
+        if self.game.switches.minePopper.is_active():
+            self.flash()
+            self.delay(delay=0.03,handler=self.kick)
 
     def stop(self):
         self.game.coils.mineMotor.disable()

@@ -261,10 +261,8 @@ class Showdown(game.Mode):
         # kill the music
         self.game.sound.stop_music()
         # tally some score?
-        # award the badge light
-        self.game.set_tracking('starStatus',True,3)
-        self.game.base_game_mode.check_high_noon()
-        self.game.base_game_mode.update_lamps()
+        # award the badge light - showdown/ambush is 3
+        self.game.badge.update(3)
 
         # play a quote about bodycount
         bodycount = self.game.show_tracking('showdownTotal')

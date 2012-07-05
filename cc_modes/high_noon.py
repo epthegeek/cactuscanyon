@@ -385,6 +385,9 @@ class HighNoon(game.Mode):
     def end_highNoon(self):
         # reset a ton of tracking
         self.game.set_tracking('highNoonStatus',"OPEN")
+        # reset the bage
+        self.game.badge.reset()
+        # clear the stack level
         self.game.set_tracking('stackLevel',False,3)
         # turn the flippers back on
         self.game.enable_flippers(True)

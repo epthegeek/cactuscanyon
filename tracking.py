@@ -75,6 +75,8 @@ class Tracking(game.Player):
 
         self.player_stats['rank'] = 0
         self.player_stats['combos'] = 0
+        # needed for being able to reset the star
+        self.player_stats['combosTotal'] = 0
 
         # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING-- 0 is left, 1 is right
         self.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
@@ -98,6 +100,7 @@ class Tracking(game.Player):
         self.player_stats['bartStatus'] = "OPEN"
         self.player_stats['bartHits'] = 0
         self.player_stats['bartsDefeated'] = 0
+        self.player_stats['bartsDefeatedTotal'] = 0
         self.player_stats['currentBart'] = 0
         self.player_stats['gunfightsStarted'] = 0
         self.player_stats['gunfightsWon'] = 0
@@ -109,6 +112,8 @@ class Tracking(game.Player):
         # list to store the lit items for the star ?
         # Starts at the top of the star with 0, goes clockwise. 0 = motherlode, 1=combo, 2=barts, 3=showdown, 4=stampede
         self.player_stats['starStatus'] = [False,False,False,False,False]
+        # Bionic Bart - OPEN / READY / RUNNING / DEAD
+        self.player_stats['bionicStatus'] = "OPEN"
 
         self.player_stats['tiltStatus'] = 0
         # used to disable the playfield lights in an update lamps pass

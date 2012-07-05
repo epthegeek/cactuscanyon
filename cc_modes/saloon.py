@@ -27,7 +27,6 @@ class Saloon(game.Mode):
         # hits banners list
         self.banners = ['bam','biff','ouch','pow','wham','zoink']
         self.busy = False
-        self.bartsActivated = 0
 
     def mode_started(self):
         # activate the first bart if we're on the first ball
@@ -108,6 +107,10 @@ class Saloon(game.Mode):
         ## if status is off, we bail here
         if self.game.show_tracking('lampStatus') == "OFF":
             return
+
+        # flash the saloon arrow if bionic bart is ready
+        if self.game.show_tracking('bionicStatus') == "READY":
+            self.game.lamps.saloonArrow.schedule(0xF0F0F0F0)
 
         beacon = False
         if self.game.show_tracking('bartStatus') == 'RUNNING' or self.game.show_tracking('bartStatus') == 'LAST':
@@ -484,6 +487,8 @@ class Saloon(game.Mode):
         print "DEFEATING BART"
         # add to the defeated barts
         currentTotal = self.game.increase_tracking('bartsDefeated')
+        # tick up the global count as well
+        self.game.increase_tracking('bartsDefeatedTotal')
         # move bart
         self.move_hat()
         self.delay(delay=0.03,handler=self.move_bart)
@@ -514,11 +519,8 @@ class Saloon(game.Mode):
             thetext = str(self.bartsForStar - currentTotal) + " MORE FOR BADGE"
         elif currentTotal == self.bartsForStar:
             thetext = "BADGE COLLECTED!"
-            # actually collect the badge
-            self.game.set_tracking('starStatus',True,2)
-            # then see if it's high noon time
-            self.game.base_game_mode.check_high_noon()
-            self.game.base_game_mode.update_lamps()
+            # actually collect the badge - barts defeated is 2
+            self.game.badge.check_bionic_bart(2)
         else:
             thetext = str(currentTotal) + " DEFEATED!"
         textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)

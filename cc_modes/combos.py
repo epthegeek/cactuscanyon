@@ -95,17 +95,16 @@ class Combos(game.Mode):
         # add one to the combo total and reset the timer
         self.myTimer = self.default
         comboTotal = self.game.increase_tracking('combos')
+        # also tick up the global total
+        self.game.increase_tracking('combosTotal')
         print "COMBOS: " + str(comboTotal)
         # show a display at this level? have the higher modes turn off their deisplay?
         # or do the display in the other modes? HMM
         # points? # TODO investigate points awarded for combos
         # if we've got enough combos to light the badge, do that
         if comboTotal == self.game.user_settings['Gameplay (Feature)']['Combos for Star']:
-            ## actually award the badge
-            self.game.set_tracking('starStatus',True,1)
-            # Then run the check to see if it's high noon time
-            self.game.base_game_mode.check_high_noon()
-            self.game.base_game_mode.update_lamps()
+            ## actually award the badge - combos is # 1
+            self.game.badge.update(1)
             # loop back to the timer
         self.delay(name="Combo Timer",delay=1,handler=self.timer)
         # send this back to what called it for use in determining if in a combo or not

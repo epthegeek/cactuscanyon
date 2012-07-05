@@ -114,6 +114,7 @@ class CCGame(game.BasicGame):
         self.attract_mode = cc_modes.Attract(game=self,priority=5)
         self.train = cc_modes.Train(game=self,priority=6)
         self.mountain = cc_modes.Mountain(game=self,priority = 7)
+        self.badge = cc_modes.Badge(game=self,priority = 7)
 
         self.combos = cc_modes.Combos(game=self,priority=9)
         self.right_ramp = cc_modes.RightRamp(game=self,priority=10)
@@ -145,6 +146,8 @@ class CCGame(game.BasicGame):
         self.gm_multiball = cc_modes.GoldMine(game=self,priority=88)
         # drunk multiball
         self.drunk_multiball = cc_modes.DrunkMultiball(game=self,priority=88)
+        # bionic bart
+        self.bionic = cc_modes.BionicBart(game=self,priority=90)
         # High Noon
         self.high_noon = cc_modes.HighNoon(game=self,priority=90)
         # skillshot switch filter
@@ -180,7 +183,9 @@ class CCGame(game.BasicGame):
                          self.quickdraw,
                          self.showdown,
                          self.ambush,
-                         self.gunfight]
+                         self.gunfight,
+                         self.badge,
+                         self.bionic]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
@@ -191,6 +196,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.attract_mode)
         self.modes.add(self.train)
         self.modes.add(self.mountain)
+        self.modes.add(self.badge)
         self.modes.add(self.interrupter)
 
     def start_game(self):

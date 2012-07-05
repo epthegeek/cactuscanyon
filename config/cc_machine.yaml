@@ -369,6 +369,13 @@ PRBallSave:
         leftOutlane: open
         rightReturnLane: open
         leftReturnLane: open
+        rightRampMake: open
+        leftRampEnter: open
+        centerRampMake: open
+        leftLoopBottom: open
+        rightLoopBottom: open
+        mineEntrance: open
+        saloonGate: open
     stopSwitches:
         shooterLane: closed
         minePopper: active

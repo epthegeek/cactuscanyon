@@ -28,6 +28,8 @@ __all__ = [
     'super_filter',
     'match',
     'ball_search',
+    'bionic_bart',
+    'badge',
 ]
 from base import *
 from attract import *
@@ -58,3 +60,5 @@ from ambush import *
 from super_filter import *
 from match import *
 from ball_search import *
+from bionic_bart import *
+from badge import *

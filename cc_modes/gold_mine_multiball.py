@@ -268,8 +268,8 @@ class GoldMine(game.Mode):
         # turn motherlode off
         self.game.set_tracking('motherlodeLit', False)
         self.game.mountain.stop()
-        # set the star flag for motherlode
-        self.game.set_tracking('starStatus',True,0)
+        # set the star flag for motherlode - it's 0
+        self.game.badge.update(0)
         # add one to the motherlodes collected
         self.game.increase_tracking('motherlodesCollected')
         # update the lamps
