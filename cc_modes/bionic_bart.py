@@ -7,7 +7,10 @@ class BionicBart(game.Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(BionicBart, self).__init__(game,priority)
+        self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
+        self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
 
+    # TODO - need a taunt timer, display updater, switch handling, yadda yadda
 
     def ball_drained(self):
         # if we lose all the balls the battle is lost
@@ -35,10 +38,51 @@ class BionicBart(game.Mode):
         self.title2 = dmd.TextLayer(46,20, self.game.assets.font_6px_az, "center", opaque=False).set_text("CHALLENGES YOU!")
         self.title2.composite_op = "blacksrc"
 
+        # intialize some layers
+        self.set_bart_layer(self.idleLayer)
+        self.set_action_line()
+        self.set_status_line()
+
+        self.loaded = False
+        self.shots = 0
+        self.shotsToLoad = 1
+        self.hits = 0
+
     # switches
-     # ramps
-     # loops
-    # process - bart hits here? seems like a lot of redundant
+    def sw_leftLoopTop_active(self,sw):
+        self.process_shot(0)
+        return game.SwitchStop
+
+    def sw_leftRampEnter_active(self, sw):
+        self.process_shot(1)
+        return game.SwitchStop
+
+    def sw_centerRampMake_active(self, sw):
+        self.process_shot(2)
+        return game.SwitchStop
+
+    def sw_rightLoopTop_active(self, sw):
+        self.process_shot(3)
+        return game.SwitchStop
+
+    def sw_rightRampMake_active(self, sw):
+        self.process_shot(4)
+        return game.SwitchStop
+
+    def process_shot(self,shot):
+        if self.loaded == False:
+            self.shots += 1
+            # if we're up to the required shots, load the weapon
+            if self.shots >= self.shotsToLoad:
+                self.load_weapon()
+            # otherwise tick up the shots and update the status
+            else:
+                amount = self.shotsToLoad - self.shots
+                self.set_status_line(amount,"LOAD")
+        # if we're already loaded, then what?
+        else:
+            # todo something needs to go here
+            pass
 
     def start_bionic(self):
         # kill the music
@@ -96,7 +140,59 @@ class BionicBart(game.Mode):
         if step == 6:
             # start the music
             self.game.base_game_mode.music_on(self.game.assets.music_bionicBart)
+            self.update_display()
 
+    def update_display(self):
+        # set up the display during multiball
+        # whateve the current bart layer is, default is idle
+        backdrop = self.bartLayer
+        # title line
+        titleLine = dmd.TextLayer(46, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("BIONIC BART")
+        # score line
+        p = self.game.current_player()
+        scoreString = ep.format_score(p.score)
+        scoreLine = dmd.TextLayer(46, 5, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
+        scoreLine.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,scoreLine,self.actionLine,self.statusLine])
+        self.layer = combined
+        # loop back in .2 to update
+        self.delay(name="Display",delay=0.2,handler=self.update_display)
+
+    def set_bart_layer(self,layer):
+        self.bartLayer = layer
+
+    def set_action_line(self,string="LOAD THE WEAPON"):
+        self.actionLine = dmd.TextLayer(46, 16, self.game.assets.font_7px_az, "center", opaque=False).set_text(string)
+        self.actionLine.composite_op = "blacksrc"
+
+    def set_status_line(self,amount=1,style="LOAD"):
+        if amount > 1:
+            shotWord = "SHOTS"
+            hitWord = "HITS"
+        else:
+            shotWord = "SHOT"
+            hitWord = "HIT"
+        if style == "LOAD":
+            theWord = shotWord
+            theEnd = "LOAD"
+        else:
+            theWord = hitWord
+            theEnd = "DEFEAT"
+        string = str(amount) + " " + theWord + " TO " + theEnd
+        self.statusLine = dmd.TextLayer(46, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(string)
+
+    def load_weapon(self):
+        amount = self.hitsToDefeat - self.hits
+        self.set_status_line(amount, "HIT")
+        self.set_action_line("HIT BIONIC BART")
+        # set the flag
+        self.loaded = True
+        # update lamps
+        self.game.saloon.update_lamps()
+        for shot in self.shotModes:
+            shot.update_lamps()
+        # next round takes more hits
+        self.shotsToLoad += 1
 
     def bionic_defeated(self):
         # VICTOLY!

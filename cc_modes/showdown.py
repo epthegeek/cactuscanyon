@@ -104,14 +104,14 @@ class Showdown(game.Mode):
         animLayer.frame_time = 6
         # keyframe sounds
         animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
-        animLayer.add_frame_listener(2,self.lightning,param="top")
-        animLayer.add_frame_listener(3,self.lightning,param="left")
+        animLayer.add_frame_listener(2,self.game.lightning,param="top")
+        animLayer.add_frame_listener(3,self.game.lightning,param="left")
         animLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
-        animLayer.add_frame_listener(6,self.lightning,param="top")
-        animLayer.add_frame_listener(7,self.lightning,param="left")
+        animLayer.add_frame_listener(6,self.game.lightning,param="top")
+        animLayer.add_frame_listener(7,self.game.lightning,param="left")
         animLayer.add_frame_listener(10,self.game.play_remote_sound,param=self.game.assets.sfx_lightningRumble)
-        animLayer.add_frame_listener(10,self.lightning,param="top")
-        animLayer.add_frame_listener(11,self.lightning,param="right")
+        animLayer.add_frame_listener(10,self.game.lightning,param="top")
+        animLayer.add_frame_listener(11,self.game.lightning,param="right")
         # turn it on
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.new_rack_pan)
@@ -149,19 +149,6 @@ class Showdown(game.Mode):
     def new_rack_finish(self):
     # reset the dudes
         self.showdown_reset_guys()
-
-    def lightning(self,section):
-        # set which section of the GI to flash
-        if section == 'top':
-            lamp = self.game.giLamps[0]
-        elif section == 'right':
-            lamp = self.game.giLamps[1]
-        elif section == 'left':
-            lamp = self.game.giLamps[2]
-        else:
-            pass
-            # then flash it
-        lamp.pulse(216)
 
     def showdown_reset_guys(self):
         # pop up all the targets

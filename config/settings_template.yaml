@@ -119,6 +119,10 @@ Gameplay (Feature):
     options: [2,15]
     increments: 1
     default: 5
+  'Shots to defeat Bionic Bart':
+    options: [3,10]
+    increments: 1
+    default: 4
   'Quickdraws Lit Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'

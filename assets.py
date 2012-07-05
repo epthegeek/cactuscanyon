@@ -500,6 +500,30 @@ class Assets():
         self.quote_introBionicBart = 'quote_introBionicBart'
         self.game.sound.register_sound(self.quote_introBionicBart, self.quotes_path + "2100-bionic-bart-i-am-a-bionic-bart-unit.wav")
 
+        self.quote_tauntBionicBart = 'quote_tauntBionicBart'
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2122-bionic-bart-eat-my-tire-treads-cowpoke.wav")
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2120-bionic-bart-puny-carbon-unit.wav")
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2119-bionic-bart-steel-balls-do-not-phase-me.wav")
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2118-bionic-bart-i-am-the-new-sheriff-in-town.wav")
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2115-bionic-bart-i-am-not-through-with-you-yet.wav")
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2102-bionic-bart-prepare-for-annihilation-cowboy.wav")
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2104-bionic-bart-time-for-payback-lawman.wav")
+
+        self.quote_defeatBionicBart = 'quote_defeatBionicBart'
+        self.game.sound.register_sound(self.quote_defeatBionicBart, self.quotes_path + "2124-bionic-bart-game-over.wav")
+        self.game.sound.register_sound(self.quote_defeatBionicBart, self.quotes_path + "2116-bionic-bart-please-send-me-to.wav")
+        self.game.sound.register_sound(self.quote_defeatBionicBart, self.quotes_path + "2105-bionic-bart-my-systems-are-shutting-down.wav")
+        self.game.sound.register_sound(self.quote_defeatBionicBart, self.quotes_path + "2101-bionic-bart-hasta-la-vista.wav")
+
+        self.quote_hitBionicBart = 'quote_hitBionicBart'
+        self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2109-bionic-bart-ow.wav")
+        self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2110-bionic-bart-ouch-that-one-hurt.wav")
+        self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2108-bionic-bart-you-put-a-hole-in-my-machinery.wav")
+        self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2107-bionic-bart-that-does-not-feel-good.wav")
+        self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2106-bionic-bart-you-are-scrambling-my-memory-banks.wav")
+        self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2104-bionic-bart-you-have-dented-my-armor.wav")
+
+
         self.quote_pollyHelp = 'quote_pollyHelp'
         self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
         self.quote_pollyThankYou = 'quote_pollyThankYou'
