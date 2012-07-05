@@ -59,3 +59,4 @@ def pulse_text(self,x,y,text,sequence=False,align="center",myOpaque=False,size="
     scriptLayer  = dmd.ScriptedLayer(128,32,script)
     scriptLayer.composite_op = "blacksrc"
     return scriptLayer
+

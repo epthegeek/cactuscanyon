@@ -19,6 +19,13 @@ class Saloon(game.Mode):
         # if there's a mode running, just kick the ball back out
         if True in self.game.show_tracking('stackLevel'):
             self.kick()
+        # Divert here for bionic bart if ready
+        elif self.game.show_tracking('bionicStatus') == "READY":
+            self.game.modes.add(self.game.bionic)
+            self.game.bionic.start_bionic()
+            # then break out of the rest of this action
+            return
+
         else:
             ## if we went through the gate, and missed bart or snuck in the back way
             ## it counts as a hit so we have to do that first

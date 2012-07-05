@@ -576,3 +576,16 @@ class CCGame(game.BasicGame):
             for lamp in self.giLamps:
                 lamp.enable()
 
+
+    def lightning(self,section):
+        # set which section of the GI to flash
+        if section == 'top':
+            lamp = self.giLamps[0]
+        elif section == 'right':
+            lamp = self.giLamps[1]
+        elif section == 'left':
+            lamp = self.giLamps[2]
+        else:
+            pass
+        # then flash it
+        lamp.pulse(216)

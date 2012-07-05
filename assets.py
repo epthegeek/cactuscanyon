@@ -56,6 +56,8 @@ class Assets():
 
         self.font_15px_az = dmd.Font(self.dmd_path + "Font_17_CactusCanyon.dmd")
 
+        self.font_15px_bionic = dmd.Font(self.dmd_path + "Font_Custom_15px.dmd")
+
         self.font_15px_az_outline = dmd.Font(self.dmd_path + "Font_17_mask_CactusCanyon.dmd")
         self.font_15px_az_outline.tracking = -1
         self.font_15px_az_outline.composite_op = "blacksrc"
@@ -70,6 +72,7 @@ class Assets():
         self.font_20px_az = dmd.Font(self.dmd_path + "Font_18_CactusCanyon.dmd")
 
         self.font_skillshot = dmd.Font(self.dmd_path + "Font_20_CactusCanyon.dmd")
+
 
 
         # CC Sounds
@@ -491,6 +494,12 @@ class Assets():
         self.game.sound.register_sound(self.quote_defeatBubbaBart, self.quotes_path + "1904-bubba-defeat-bubba-take-dirt-nap.wav")
         self.game.sound.register_sound(self.quote_defeatBubbaBart, self.quotes_path + "1916-bubba-defeat-nite-nite-bubba-go-to-sleep-now.wav")
 
+        self.quote_bionicIntroQuote = 'quote_bionicIntroQuote'
+        self.game.sound.register_sound(self.quote_bionicIntroQuote, self.quotes_path + "1569-leader-bart-alright-tough-guy-deal-with-this.wav")
+
+        self.quote_introBionicBart = 'quote_introBionicBart'
+        self.game.sound.register_sound(self.quote_introBionicBart, self.quotes_path + "2100-bionic-bart-i-am-a-bionic-bart-unit.wav")
+
         self.quote_pollyHelp = 'quote_pollyHelp'
         self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
         self.quote_pollyThankYou = 'quote_pollyThankYou'
@@ -574,6 +583,10 @@ class Assets():
         self.game.sound.register_music(self.music_highNoon, self.music_path + "099-music-high-noon.wav")
         self.music_drunkMultiball = 'music_drunkMultiball'
         self.game.sound.register_music(self.music_drunkMultiball, self.music_path + "005-not-shooter-lane-groove.wav")
+        self.music_bionicBartIntro = 'music_bionicBartIntro'
+        self.game.sound.register_sound(self.music_bionicBartIntro, self.music_path + "042-intro-bionic-bart.wav")
+        self.music_bionicBart = 'music_bionicBart'
+        self.game.sound.register_music(self.music_bionicBart, self.music_path + "042-bionic-bart.wav")
 
         # lampshows
         lampshows = list()
