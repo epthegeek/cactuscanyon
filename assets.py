@@ -236,6 +236,10 @@ class Assets():
         self.game.sound.register_sound(self.sfx_pour, self.sfx_path + "00-sfx-pouring-beer.wav")
         self.sfx_slide = 'sfx_slide'
         self.game.sound.register_sound(self.sfx_slide, self.sfx_path + "00-sfx-mug-slide.wav")
+        self.sfx_orchestraBump1 = 'sfx_orchestraBump1'
+        self.game.sound.register_sound(self.sfx_orchestraBump1, self.sfx_path + "050-sfx-orchestra-hit-bump1.wav")
+        self.sfx_orchestraBump2 = 'sfx_orchestraBump2'
+        self.game.sound.register_sound(self.sfx_orchestraBump2, self.sfx_path + "052-sfx-orchestra-hit-bump2.wav")
         self.sfx_orchestraSet = 'sfx_orchestraSet'
         self.game.sound.register_sound(self.sfx_orchestraSet, self.sfx_path + "054-sfx-orchestra-hit-set.wav")
         self.sfx_orchestraSpike = 'sfx_orchestraSpike'
@@ -299,6 +303,12 @@ class Assets():
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "840-polly-congratulations.wav")
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2008-waitress-amazing.wav")
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2005-waitress-ooh-what-are-you-packin.wav")
+        self.quote_bionicUrge = 'quote_bionicUrge'
+        self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "1151-mayor-shoot-the-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "1277-prospector-the-bad-guy-shoot-the-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "2042-waitress-hit-that-bad-guy.wav")
+        self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "1416-drunk-shoot-that-bad-guy.wav")
+
         self.quote_lockLit = 'quote_lockLit'
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")

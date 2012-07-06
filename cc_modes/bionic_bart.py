@@ -86,6 +86,7 @@ class BionicBart(game.Mode):
 
     def process_shot(self,shot):
         self.cancel_delayed("Display")
+        self.game.squelch_music()
         if self.loaded == False:
             self.shots += 1
             # if we're up to the required shots, load the weapon
@@ -96,7 +97,7 @@ class BionicBart(game.Mode):
                 self.loading()
         # if we're already loaded, then what?
         else:
-            self.load_weapon(True)
+            self.weapon_loaded(prompt=True)
 
     def start_bionic(self):
         # kill the music
@@ -196,35 +197,78 @@ class BionicBart(game.Mode):
         string = str(amount) + " " + theWord + " TO " + theEnd
         self.statusLine = dmd.TextLayer(46, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(string)
 
-    def load_weapon(self,LOADED=False):
-        if not LOADED:
-            amount = self.hitsToDefeat - self.hits
-            self.set_status_line(amount, "HIT")
-            self.set_action_line("HIT BIONIC BART")
-            # set the flag
-            self.loaded = True
+    def load_weapon(self):
+        amount = self.hitsToDefeat - self.hits
+        self.set_status_line(amount, "HIT")
+        self.set_action_line("HIT BIONIC BART")
+        # set the flag
+        self.loaded = True
+        # update lamps
+        self.game.saloon.update_lamps()
+        for shot in self.shotModes:
+            shot.update_lamps()
+        # next round takes more hits - max at 4
+        if self.shotsToLoad < 4:
+            self.shotsToLoad += 1
+        anim = dmd.Animation().load(ep.DMD_PATH+'gun-close.dmd')
+        myWait = len(anim.frames) / 10.0
+        # set the animation
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        self.layer = animLayer
+        self.game.sound.play(self.game.assets.sfx_gunCock)
+        self.delay(name="Display",delay=0.6,handler=self.weapon_loaded)
+
+    def weapon_loaded(self,prompt=False):
         # show some display
         line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("LOADED")
         line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT BIONIC BART")
         combined = dmd.GroupedLayer(128,32,[line1,line2])
         self.layer = combined
-        if not LOADED:
-            # update lamps
-            self.game.saloon.update_lamps()
-            for shot in self.shotModes:
-                shot.update_lamps()
-            # next round takes more hits
-            self.shotsToLoad += 1
+        if prompt:
+            duration = self.game.sound.play(self.game.assets.quote_bionicUrge)
+        else:
+            duration = self.game.sound.play(self.game.assets.sfx_orchestraSpike)
         self.delay(name="Display",delay=1.5,handler=self.update_display)
+        if duration < 1.5:
+            duration = 1.5
+        self.delay(delay=duration,handler=self.game.restore_music)
 
     def loading(self):
         amount = self.shotsToLoad - self.shots
         self.set_status_line(amount,"LOAD")
-        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("LOADING")
-        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NOT READY YET")
-        combined = dmd.GroupedLayer(128,32,[line1,line2])
+        if amount == 1:
+            anim = dmd.Animation().load(ep.DMD_PATH+'gun-load.dmd')
+            string = "NEW AMMO"
+            sound = self.game.assets.sfx_orchestraSet
+        if amount == 2:
+            anim = dmd.Animation().load(ep.DMD_PATH+'gun-unload.dmd')
+            string = "UNLOADED"
+            sound = self.game.assets.sfx_orchestraBump2
+        if amount == 3:
+            anim = dmd.Animation().load(ep.DMD_PATH+'gun-open.dmd')
+            string = "GUN OPEN"
+            sound = self.game.assets.sfx_orchestraBump1
+        myWait = len(anim.frames) / 10.0
+        # set the animation
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        textLine = dmd.TextLayer(127,1,self.game.assets.font_15px_bionic,"right", opaque=False).set_text(string)
+        textLine.composite_op = "blacksrc"
+        string = "<" + str(amount) + " MORE>"
+        textLine2 = dmd.TextLayer(127,18,self.game.assets.font_6px_az_inverse,"right",opaque=False).set_text(string)
+        combined = dmd.GroupedLayer(128,32,[animLayer,textLine,textLine2])
         self.layer = combined
+        self.game.sound.play(sound)
+        #line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("LOADING")
+        #line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NOT READY YET")
+        #combined = dmd.GroupedLayer(128,32,[line1,line2])
+        #self.layer = combined
         self.delay(name="Display",delay=1.5,handler=self.update_display)
+        self.delay(delay=1.5,handler=self.game.restore_music)
+
 
     def hit(self,step=1):
         if step == 1:
@@ -257,11 +301,13 @@ class BionicBart(game.Mode):
             self.update_display()
             self.delay(delay=0.8,handler=self.hit,param=4)
         if step == 4:
+            self.game.squelch_music()
             self.set_bart_layer(self.whineLayer)
             self.update_display()
             duration = self.game.sound.play(self.game.assets.quote_hitBionicBart)
             self.delay(delay=duration,handler=self.hit,param=5)
         if step == 5:
+            self.game.restore_music()
             self.set_bart_layer(self.idleLayer)
             self.shots = 0
             self.set_action_line()

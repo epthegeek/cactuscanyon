@@ -8,6 +8,7 @@ import pinproc
 import tracking
 from assets import *
 import ep
+import pygame
 
 ## Define the config file locations
 user_game_data_path = "config/game_data.yaml"
@@ -39,7 +40,8 @@ class CCGame(game.BasicGame):
         self.giLamps = [self.lamps.gi01,
                         self.lamps.gi02,
                         self.lamps.gi03]
-
+        self.squelched = False
+        self.previousVolume = 0
 
     def setup(self):
         """docstring for setup"""
@@ -589,3 +591,15 @@ class CCGame(game.BasicGame):
             pass
         # then flash it
         lamp.pulse(216)
+
+    def squelch_music(self):
+        if not self.squelched:
+            self.squelched = True
+            self.previousVolume = pygame.mixer.music.get_volume()
+            volume = self.previousVolume / 6
+            pygame.mixer.music.set_volume(volume)
+
+    def restore_music(self):
+        if self.squelched:
+            self.squelched = False
+            pygame.mixer.music.set_volume(self.previousVolume)
