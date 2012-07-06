@@ -134,12 +134,12 @@ class Ambush(game.Mode):
 
     def get_going(self):
         myWait = self.game.sound.play(self.game.assets.quote_ambush)
-        self.delay(delay=myWait+0.5,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
 
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
-        self.game.base_game_mode.music_on(self.game.assets.music_showdown)
+        self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_showdown)
+        self.delay(delay=myWait+0.5,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
         # kick out more ball
         #self.game.trough.launch_balls(1)
         # add two dudes - one here, one later
