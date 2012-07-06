@@ -25,15 +25,15 @@ class BionicBart(game.Mode):
         self.idleLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[0])
         script = []
         talkLayer1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[1])
-        script.append({'layer':talkLayer1,'seconds':0.2})
+        script.append({'layer':talkLayer1,'seconds':0.16})
         talkLayer2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[2])
-        script.append({'layer':talkLayer2,'seconds':0.2})
+        script.append({'layer':talkLayer2,'seconds':0.16})
         self.talkingLayer = dmd.ScriptedLayer(128,32,script)
         script = []
         hurtLayer1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[3])
-        script.append({'layer':hurtLayer1,'seconds':0.2})
+        script.append({'layer':hurtLayer1,'seconds':0.16})
         hurtLayer2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[4])
-        script.append({'layer':hurtLayer2,'seconds':0.2})
+        script.append({'layer':hurtLayer2,'seconds':0.16})
         self.whineLayer = dmd.ScriptedLayer(128,32,script)
         self.title = dmd.TextLayer(46, 3, self.game.assets.font_15px_bionic, "center", opaque=False).set_text("BIONIC BART")
         self.title2 = dmd.TextLayer(46,20, self.game.assets.font_6px_az, "center", opaque=False).set_text("CHALLENGES YOU!")
@@ -93,7 +93,7 @@ class BionicBart(game.Mode):
                 self.load_weapon()
             # otherwise tick up the shots and update the status
             else:
-                self.charging()
+                self.loading()
         # if we're already loaded, then what?
         else:
             self.load_weapon(True)
@@ -176,39 +176,39 @@ class BionicBart(game.Mode):
     def set_bart_layer(self,layer):
         self.bartLayer = layer
 
-    def set_action_line(self,string="CHARGE WEAPON"):
+    def set_action_line(self,string="LOAD WEAPON"):
         self.actionLine = dmd.TextLayer(46, 16, self.game.assets.font_7px_az, "center", opaque=False).set_text(string)
         self.actionLine.composite_op = "blacksrc"
 
-    def set_status_line(self,amount=1,style="CHARGE"):
+    def set_status_line(self,amount=1,style="LOAD"):
         if amount > 1:
             shotWord = "SHOTS"
             hitWord = "HITS"
         else:
             shotWord = "SHOT"
             hitWord = "HIT"
-        if style == "CHARGE":
+        if style == "LOAD":
             theWord = shotWord
-            theEnd = "CHARGE"
+            theEnd = "LOAD"
         else:
             theWord = hitWord
             theEnd = "DEFEAT"
         string = str(amount) + " " + theWord + " TO " + theEnd
         self.statusLine = dmd.TextLayer(46, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(string)
 
-    def load_weapon(self,charged=False):
-        if not charged:
+    def load_weapon(self,LOADED=False):
+        if not LOADED:
             amount = self.hitsToDefeat - self.hits
             self.set_status_line(amount, "HIT")
             self.set_action_line("HIT BIONIC BART")
             # set the flag
             self.loaded = True
         # show some display
-        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("CHARGED")
+        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("LOADED")
         line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT BIONIC BART")
         combined = dmd.GroupedLayer(128,32,[line1,line2])
         self.layer = combined
-        if not charged:
+        if not LOADED:
             # update lamps
             self.game.saloon.update_lamps()
             for shot in self.shotModes:
@@ -217,11 +217,11 @@ class BionicBart(game.Mode):
             self.shotsToLoad += 1
         self.delay(name="Display",delay=1.5,handler=self.update_display)
 
-    def charging(self):
+    def loading(self):
         amount = self.shotsToLoad - self.shots
-        self.set_status_line(amount,"CHARGE")
-        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("CHARGING")
-        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NEEDS MORE POWER")
+        self.set_status_line(amount,"LOAD")
+        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("LOADING")
+        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NOT READY YET")
         combined = dmd.GroupedLayer(128,32,[line1,line2])
         self.layer = combined
         self.delay(name="Display",delay=1.5,handler=self.update_display)
@@ -234,7 +234,7 @@ class BionicBart(game.Mode):
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
             animLayer.frame_time = 4
-            self.game.sound.play(self.game.assets.sfx_fireWeapon)
+            self.game.sound.play(self.game.assets.sfx_explosion11)
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.hit,param=2)
         if step == 2:
