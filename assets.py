@@ -247,6 +247,10 @@ class Assets():
         self.sfx_tumbleWind = 'sfx_tumbleWind'
         self.game.sound.register_sound(self.sfx_tumbleWind, self.sfx_path + "00-sfx-wind-blows.wav")
 
+        self.sfx_hitBionicBart = 'sfx_hitBionicBart'
+        self.game.sound.register_sound(self.sfx_hitBionicBart, self.sfx_path + "310-sfx-hit-bionic-bart.wav")
+        self.sfx_fireWeapon = 'sfx_fireWeapon'
+        self.game.sound.register_sound(self.sfx_fireWeapon, self.sfx_path + "00-sfx-weapon-fire.wav")
     # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'

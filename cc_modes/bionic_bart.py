@@ -9,6 +9,7 @@ class BionicBart(game.Mode):
         super(BionicBart, self).__init__(game,priority)
         self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
+        self.banners = ['bam','biff','ouch','pow','wham','zoink']
 
     # TODO - need a taunt timer, display updater, switch handling, yadda yadda
 
@@ -37,6 +38,12 @@ class BionicBart(game.Mode):
         self.title = dmd.TextLayer(46, 3, self.game.assets.font_15px_bionic, "center", opaque=False).set_text("BIONIC BART")
         self.title2 = dmd.TextLayer(46,20, self.game.assets.font_6px_az, "center", opaque=False).set_text("CHALLENGES YOU!")
         self.title2.composite_op = "blacksrc"
+        # bart hit layer
+        anim = dmd.Animation().load(ep.DMD_PATH+'bionic-hit.dmd')
+        self.stunnedLayer = ep.EP_AnimatedLayer(anim)
+        self.stunnedLayer.hold=False
+        self.stunnedLayer.repeat=True
+        self.stunnedLayer.frame_time = 6
 
         # intialize some layers
         self.set_bart_layer(self.idleLayer)
@@ -69,7 +76,16 @@ class BionicBart(game.Mode):
         self.process_shot(4)
         return game.SwitchStop
 
+    def sw_saloonPopper_active_for_300ms(self,sw):
+        self.cancel_delayed("Display")
+        if self.loaded:
+            self.hit()
+        else:
+            self.miss()
+        return game.SwitchStop
+
     def process_shot(self,shot):
+        self.cancel_delayed("Display")
         if self.loaded == False:
             self.shots += 1
             # if we're up to the required shots, load the weapon
@@ -77,12 +93,10 @@ class BionicBart(game.Mode):
                 self.load_weapon()
             # otherwise tick up the shots and update the status
             else:
-                amount = self.shotsToLoad - self.shots
-                self.set_status_line(amount,"LOAD")
+                self.charging()
         # if we're already loaded, then what?
         else:
-            # todo something needs to go here
-            pass
+            self.load_weapon(True)
 
     def start_bionic(self):
         # kill the music
@@ -143,6 +157,7 @@ class BionicBart(game.Mode):
             self.update_display()
 
     def update_display(self):
+        self.cancel_delayed("Display")
         # set up the display during multiball
         # whateve the current bart layer is, default is idle
         backdrop = self.bartLayer
@@ -161,38 +176,109 @@ class BionicBart(game.Mode):
     def set_bart_layer(self,layer):
         self.bartLayer = layer
 
-    def set_action_line(self,string="LOAD THE WEAPON"):
+    def set_action_line(self,string="CHARGE WEAPON"):
         self.actionLine = dmd.TextLayer(46, 16, self.game.assets.font_7px_az, "center", opaque=False).set_text(string)
         self.actionLine.composite_op = "blacksrc"
 
-    def set_status_line(self,amount=1,style="LOAD"):
+    def set_status_line(self,amount=1,style="CHARGE"):
         if amount > 1:
             shotWord = "SHOTS"
             hitWord = "HITS"
         else:
             shotWord = "SHOT"
             hitWord = "HIT"
-        if style == "LOAD":
+        if style == "CHARGE":
             theWord = shotWord
-            theEnd = "LOAD"
+            theEnd = "CHARGE"
         else:
             theWord = hitWord
             theEnd = "DEFEAT"
         string = str(amount) + " " + theWord + " TO " + theEnd
         self.statusLine = dmd.TextLayer(46, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(string)
 
-    def load_weapon(self):
-        amount = self.hitsToDefeat - self.hits
-        self.set_status_line(amount, "HIT")
-        self.set_action_line("HIT BIONIC BART")
-        # set the flag
-        self.loaded = True
-        # update lamps
-        self.game.saloon.update_lamps()
-        for shot in self.shotModes:
-            shot.update_lamps()
-        # next round takes more hits
-        self.shotsToLoad += 1
+    def load_weapon(self,charged=False):
+        if not charged:
+            amount = self.hitsToDefeat - self.hits
+            self.set_status_line(amount, "HIT")
+            self.set_action_line("HIT BIONIC BART")
+            # set the flag
+            self.loaded = True
+        # show some display
+        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("CHARGED")
+        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT BIONIC BART")
+        combined = dmd.GroupedLayer(128,32,[line1,line2])
+        self.layer = combined
+        if not charged:
+            # update lamps
+            self.game.saloon.update_lamps()
+            for shot in self.shotModes:
+                shot.update_lamps()
+            # next round takes more hits
+            self.shotsToLoad += 1
+        self.delay(name="Display",delay=1.5,handler=self.update_display)
+
+    def charging(self):
+        amount = self.shotsToLoad - self.shots
+        self.set_status_line(amount,"CHARGE")
+        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("CHARGING")
+        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NEEDS MORE POWER")
+        combined = dmd.GroupedLayer(128,32,[line1,line2])
+        self.layer = combined
+        self.delay(name="Display",delay=1.5,handler=self.update_display)
+
+    def hit(self,step=1):
+        if step == 1:
+            anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
+            myWait = len(anim.frames) / 14.0
+            # set the animation
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time = 4
+            self.game.sound.play(self.game.assets.sfx_fireWeapon)
+            self.layer = animLayer
+            self.delay(delay=myWait,handler=self.hit,param=2)
+        if step == 2:
+            # pick a random banner to use
+            banner = random.choice(self.banners)
+            # set up the banner layer
+            bannerLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+banner+'-banner.dmd').frames[0])
+            bannerLayer.composite_op = "blacksrc"
+            fadeTo = dmd.GroupedLayer(128,32,[self.stunnedLayer,bannerLayer])
+            self.game.sound.play(self.game.assets.sfx_hitBionicBart)
+            transition = ep.EP_Transition(self,self.layer,fadeTo,ep.EP_Transition.TYPE_CROSSFADE)
+            # tick up the hits
+            self.hits +=1
+            if self.hits >= self.hitsToDefeat:
+                self.bionic_defeated()
+            else:
+                self.delay(delay=0.8,handler=self.hit,param=3)
+        if step == 3:
+            self.set_bart_layer(self.stunnedLayer)
+            self.update_display()
+            self.delay(delay=0.8,handler=self.hit,param=4)
+        if step == 4:
+            self.set_bart_layer(self.whineLayer)
+            self.update_display()
+            duration = self.game.sound.play(self.game.assets.quote_hitBionicBart)
+            self.delay(delay=duration,handler=self.hit,param=5)
+        if step == 5:
+            self.set_bart_layer(self.idleLayer)
+            self.shots = 0
+            self.set_action_line()
+            self.set_status_line(self.shotsToLoad)
+            self.update_display()
+            self.loaded = False
+
+    def miss(self,step=1):
+        if step == 1:
+            self.set_bart_layer(self.talkingLayer)
+            self.update_display()
+            duration = self.game.sound.play(self.game.assets.quote_tauntBionicBart)
+            self.delay(delay=duration,handler=self.miss,param=2)
+        if step == 2:
+            self.set_bart_layer(self.idleLayer)
+            self.update_display()
+            self.game.saloon.kick()
 
     def bionic_defeated(self):
         # VICTOLY!
