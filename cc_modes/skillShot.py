@@ -178,12 +178,16 @@ class SkillShot(game.Mode):
             self.super_update_lamps(blink=True)
             if self.active == 1:
                 awardStringTop = "SHOOT LEFT LOOP"
+                quote = self.game.assets.quote_leftLoopSS
             elif self.active == 2:
                 awardStringTop = "SHOOT LEFT RAMP"
+                quote = self.game.assets.quote_leftRampSS
             elif self.active == 3:
                 awardStringTop = "SHOOT CENTER RAMP"
+                quote = self.game.assets.centerRampSS
             awardStringBottom = "FOR AWARD"
-            self.game.sound.play(self.game.assets.sfx_flourish7)
+            #self.game.sound.play(self.game.assets.sfx_flourish7)
+            self.game.sound.play(quote)
 
             self.award_display(awardStringTop,awardStringBottom,start=False)
 
@@ -474,6 +478,7 @@ class SkillShot(game.Mode):
         self.game.sound.play(self.game.assets.sfx_ropeWoosh)
         # turn it on
         self.layer = combined
+        self.game.sound.play(self.game.assets.quote_superSkillShot)
         self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_drumRoll)
         # show the prizes
         self.delay(name="Display",delay=myWait+1,handler=self.update_layer)

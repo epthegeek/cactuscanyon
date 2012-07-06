@@ -133,7 +133,9 @@ class Ambush(game.Mode):
         self.delay(name="Taunt Timer",delay=1,handler=self.taunt_timer)
 
     def get_going(self):
-        self.game.play_remote_sound(self.game.assets.quote_mobStart)
+        myWait = self.game.sound.play(self.game.assets.quote_ambush)
+        self.delay(delay=myWait+0.5,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
+
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
@@ -197,9 +199,19 @@ class Ambush(game.Mode):
         # tick one off the timer for that target
         self.badGuyTimer[target] -= 1
         print "TIMER WORKING ON TARGET: " + str(target) + " - TIME: " + str(self.badGuyTimer[target])
+        # if we're down to 2 seconds speed the light up and maybe play a quote
+        if self.badGuyTimer[target] == 2:
+            self.lamps[target].schedule(0x0F0F0F0F)
+            odds = [False,True,False]
+            decision = random.choice(odds)
+            # if the 1/3 hit comes up, play a quote if the taunt timer didn't just play - and reset the taunt timer
+            if decision and self.tauntTimer > 3 :
+                self.tauntTimer = 0
+                self.game.sound.play(self.game.assets.quote_ambushUrge)
+
         # if the time is almost up change the light schedule
         if self.badGuyTimer[target] == 1:
-            self.lamps[target].schedule(0x0F0F0F0F)
+            self.lamps[target].schedule(0xCCCCCCCC)
         # if he's out of time, he shoots back and goes away
         if self.badGuyTimer[target] <= 0:
             self.guy_escapes(target)

@@ -577,6 +577,12 @@ class Assets():
         self.quote_showdown = 'quote_showdown'
         self.game.sound.register_sound(self.quote_showdown, self.quotes_path + "1005-mayor-oh-my-a-showdown.wav")
         self.game.sound.register_sound(self.quote_showdown, self.quotes_path + "541-prospector-showdown.wav")
+        self.quote_ambush = 'quote_ambush'
+        self.game.sound.register_sound(self.quote_ambush, self.quotes_path + "00-mayor-look-out-sheriff-its-an-ambush.wav")
+        self.game.sound.register_sound(self.quote_ambush, self.quotes_path + "00-mayor-oh-no-its-an-ambush.wav")
+        self.quote_ambushUrge = 'quote_ambushUrge'
+        self.game.sound.register_sound(self.quote_ambushUrge, self.quotes_path + "00-mayor-dont-let-em-get-away.wav")
+        self.game.sound.register_sound(self.quote_ambushUrge, self.quotes_path + "00-mayor-shoot-the-bad-guys-before-they-get-away.wav")
         self.quote_drunkMultiballLit = 'quote_drunkMultiballLit'
         self.game.sound.register_sound(self.quote_drunkMultiballLit, self.quotes_path + "1116-mayor-this-calls-for-a-drink.wav")
         self.quote_drunkNeverSeen = 'quote_drunkNeverSeen'
@@ -587,6 +593,14 @@ class Assets():
         self.game.sound.register_sound(self.quote_drunkJackpot, self.quotes_path + "1430-drunk-jackpot-whoopie.wav")
         self.quote_deepLaugh = 'quote_deepLaugh'
         self.game.sound.register_sound(self.quote_deepLaugh, self.quotes_path + "1580-leader-bart-laugh-1.wav")
+        self.quote_superSkillShot = 'quote_SuperSKillShot'
+        self.game.sound.register_sound(self.quote_superSkillShot, self.quotes_path + "00-Mayor-SuperSkillShot.wav")
+        self.quote_leftLoopSS = 'quote_leftLoopSS'
+        self.game.sound.register_sound(self.quote_leftLoopSS, self.quotes_path + "00-Mayor-LeftLoop.wav")
+        self.quote_leftRampSS = 'quote_leftRampSS'
+        self.game.sound.register_sound(self.quote_leftRampSS, self.quotes_path + "1118-mayor-that-left-ramp-is-wiiide-open.wav")
+        self.quote_centerRampSS = 'quote_centerRampSS'
+        self.game.sound.register_sound(self.quote_centerRampSS, self.quotes_path + "1167-mayor-head-up-the-center-ramp-sir.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'
