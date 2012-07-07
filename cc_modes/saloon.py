@@ -97,8 +97,15 @@ class Saloon(game.Mode):
             return
 
         # flash the saloon arrow if bionic bart is ready
-        if self.game.show_tracking('bionicStatus') == "READY":
+        bionicStatus = self.game.show_tracking('bionicStatus')
+        if bionicStatus == "READY":
             self.game.lamps.saloonArrow.schedule(0xF0F0F0F0)
+        # flash bount and arrow if running and loaded
+        elif bionicStatus == "RUNNING":
+            if self.game.bionic.loaded:
+                self.game.lamps.saloonArrow.schedule(0x00FF00FF)
+                self.game.lamps.bountySaloon.schedule(0x00FF00FF)
+            return
 
         beacon = False
         if self.game.show_tracking('bartStatus') == 'RUNNING' or self.game.show_tracking('bartStatus') == 'LAST':

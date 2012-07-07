@@ -61,6 +61,14 @@ class RightRamp(game.Mode):
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
             return
 
+        if self.game.show_tracking('bionicStatus') == "RUNNING":
+            if 3 in self.game.bionic.activeShots:
+                self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
+                self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+                self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+            return
+
 
         stage = self.game.show_tracking('rightRampStage')
 

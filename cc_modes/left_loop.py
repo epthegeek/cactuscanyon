@@ -64,6 +64,14 @@ class LeftLoop(game.Mode):
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             return
 
+        if self.game.show_tracking('bionicStatus') == "RUNNING":
+            if 0 in self.game.bionic.activeShots:
+                self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+            return
+
         stage = self.game.show_tracking('leftLoopStage')
 
         if stage == 1:

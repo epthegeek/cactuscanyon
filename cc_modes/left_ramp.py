@@ -61,7 +61,16 @@ class LeftRamp(game.Mode):
             self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
             return
 
+        if self.game.show_tracking('bionicStatus') == "RUNNING":
+            if 1 in self.game.bionic.activeShots:
+                self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+                self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+                self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
+            return
+
         stage = self.game.show_tracking('leftRampStage')
+
         print "RAMP STAGE SANITY CHECK: " + str(stage)
         if stage == 1:
             # blink the first light

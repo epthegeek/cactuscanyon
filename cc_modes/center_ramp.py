@@ -53,6 +53,14 @@ class CenterRamp(game.Mode):
                 self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
             return
 
+        if self.game.show_tracking('bionicStatus') == "RUNNING":
+            if 2 in self.game.bionic.activeShots:
+                self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
+                self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
+                self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
+            return
+
         stage = self.game.show_tracking('centerRampStage')
 
         if stage == 1:

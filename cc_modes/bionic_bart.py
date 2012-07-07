@@ -8,8 +8,9 @@ class BionicBart(game.Mode):
     def __init__(self,game,priority):
         super(BionicBart, self).__init__(game,priority)
         self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
-        self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
+        self.shotModes = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp,self.game.right_loop,self.game.saloon]
         self.banners = ['bam','biff','ouch','pow','wham','zoink']
+
 
     # TODO - need a taunt timer, display updater, switch handling, yadda yadda
 
@@ -22,7 +23,15 @@ class BionicBart(game.Mode):
         # set the stack level
         self.game.set_tracking('stackLevel',True,3)
         # set up the standard display stuff
-        self.idleLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[0])
+        script = []
+        idleLayer1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[0])
+        script.append({'layer':idleLayer1,'seconds':11})
+        idleLayer2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[5])
+        script.append({'layer':idleLayer2,'seconds':0.1})
+        idleLayer3 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[6])
+        script.append({'layer':idleLayer3,'seconds':0.1})
+        script.append({'layer':idleLayer2,'seconds':0.1})
+        self.idleLayer = dmd.ScriptedLayer(128,32,script)
         script = []
         talkLayer1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[1])
         script.append({'layer':talkLayer1,'seconds':0.16})
@@ -54,6 +63,8 @@ class BionicBart(game.Mode):
         self.shots = 0
         self.shotsToLoad = 1
         self.hits = 0
+        self.hitValue = 500000
+        self.activeShots = []
 
     # switches
     def sw_leftLoopTop_active(self,sw):
@@ -84,20 +95,68 @@ class BionicBart(game.Mode):
             self.miss()
         return game.SwitchStop
 
+    # jet bumpers exit - trapping for bionic bart
+    def sw_jetBumpersExit_active(self,sw):
+        self.game.score(2530)
+        return game.SwitchStop
+
+    # mine - trapping for bionic bart
+    def sw_minePopper_active_for_400ms(self,sw):
+        self.score(2530)
+        self.miss()
+        # kick the ball
+        self.game.mountain.eject()
+        return game.SwitchStop
+
     def process_shot(self,shot):
         self.cancel_delayed("Display")
         self.game.squelch_music()
-        if self.loaded == False:
-            self.shots += 1
-            # if we're up to the required shots, load the weapon
-            if self.shots >= self.shotsToLoad:
-                self.load_weapon()
-            # otherwise tick up the shots and update the status
+        # if the shot is active, register it as such
+        if shot in self.activeShots:
+            if self.loaded == False:
+                self.shots += 1
+                # if we're up to the required shots, load the weapon
+                if self.shots >= self.shotsToLoad:
+                    # score points for loaded
+                    self.game.score(53370)
+                    self.load_weapon()
+                # otherwise tick up the shots and update the status
+                else:
+                    # score points for loading
+                    self.game.score(25730)
+                    self.loading()
+            # if we're already loaded, then what? - this might be moot now
             else:
-                self.loading()
-        # if we're already loaded, then what?
+                # score points for already loaded
+                self.game.score(2530)
+                self.weapon_loaded(prompt=True)
+        # if it's not an active shot, it's a miss
         else:
-            self.weapon_loaded(prompt=True)
+            self.game.score(2530)
+            # but if the gun is loaded, urge player to shoot the bad guy
+            if self.loaded:
+                print "WEAPON IS LOADED THIS IS A MISS"
+                self.weapon_loaded(prompt=True)
+            else:
+                print "WEAPON IS NOT LOADED THIS IS A MISS"
+                self.miss()
+
+    def activate_shots(self,amount):
+        # pick the active shot
+        if amount == 0:
+            self.activeShots = []
+        if amount == 1:
+            self.activeShots = [2]
+        if amount == 3 or amount == 2:
+            self.activeShots = [0,3]
+        if amount == 4:
+            self.activeShots = [1,4]
+        # update the lamps
+        self.update_shot_lamps()
+
+    def update_shot_lamps(self):
+        for mode in self.shotModes:
+            mode.update_lamps()
 
     def start_bionic(self):
         # kill the music
@@ -109,6 +168,11 @@ class BionicBart(game.Mode):
         # initial display/sound
         # step 1
         if step == 1:
+            # kill the lights!
+            for lamp in self.game.lamps:
+                lamp.disable()
+            # kill the GI
+            self.game.gi_control("OFF")
             # play the 'deal with this' quote
             duration = self.game.sound.play(self.game.assets.quote_bionicIntroQuote)
             self.delay(delay=duration,handler=self.intro,param=2)
@@ -135,6 +199,8 @@ class BionicBart(game.Mode):
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.intro,param=3)
         if step == 3:
+            # turn the GI back on
+            self.game.gi_control("ON")
             combined = dmd.GroupedLayer(128,32,[self.idleLayer,self.title,self.title2])
             self.layer = combined
             self.delay(delay=1,handler=self.intro,param=4)
@@ -156,6 +222,12 @@ class BionicBart(game.Mode):
             # start the music
             self.game.base_game_mode.music_on(self.game.assets.music_bionicBart)
             self.update_display()
+            # set the active shots
+            self.activate_shots(1)
+            # update the lamps to turn the rest back on
+            self.game.update_lamps()
+            # kick the ball out
+            self.game.saloon.kick()
 
     def update_display(self):
         self.cancel_delayed("Display")
@@ -194,12 +266,15 @@ class BionicBart(game.Mode):
         else:
             theWord = hitWord
             theEnd = "DEFEAT"
-        string = str(amount) + " " + theWord + " TO " + theEnd
+        if style == "HIT":
+            string = "NICE SHOT!"
+        else:
+            string = str(amount) + " " + theWord + " TO " + theEnd
         self.statusLine = dmd.TextLayer(46, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(string)
 
     def load_weapon(self):
         amount = self.hitsToDefeat - self.hits
-        self.set_status_line(amount, "HIT")
+        self.set_status_line(amount, "SHOOT")
         self.set_action_line("HIT BIONIC BART")
         # set the flag
         self.loaded = True
@@ -218,6 +293,8 @@ class BionicBart(game.Mode):
         animLayer.frame_time = 6
         self.layer = animLayer
         self.game.sound.play(self.game.assets.sfx_gunCock)
+        # kill the active shots and activate the bart lamp
+        self.activate_shots(0)
         self.delay(name="Display",delay=0.6,handler=self.weapon_loaded)
 
     def weapon_loaded(self,prompt=False):
@@ -262,10 +339,8 @@ class BionicBart(game.Mode):
         combined = dmd.GroupedLayer(128,32,[animLayer,textLine,textLine2])
         self.layer = combined
         self.game.sound.play(sound)
-        #line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("LOADING")
-        #line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NOT READY YET")
-        #combined = dmd.GroupedLayer(128,32,[line1,line2])
-        #self.layer = combined
+        # activate the current shots
+        self.activate_shots(amount)
         self.delay(name="Display",delay=1.5,handler=self.update_display)
         self.delay(delay=1.5,handler=self.game.restore_music)
 
@@ -298,6 +373,11 @@ class BionicBart(game.Mode):
                 self.delay(delay=0.8,handler=self.hit,param=3)
         if step == 3:
             self.set_bart_layer(self.stunnedLayer)
+            self.game.score_with_bonus(self.hitValue)
+            self.set_action_line(str(ep.format_score(self.hitValue)))
+            self.set_status_line(style="HIT")
+            # increase the hit value for next time
+            self.hitValue += 250000
             self.update_display()
             self.delay(delay=0.8,handler=self.hit,param=4)
         if step == 4:
@@ -314,6 +394,10 @@ class BionicBart(game.Mode):
             self.set_status_line(self.shotsToLoad)
             self.update_display()
             self.loaded = False
+            # activate the current shots
+            self.activate_shots(self.hitsToDefeat - self.hits)
+            # kick the ball
+            self.game.saloon.kick()
 
     def miss(self,step=1):
         if step == 1:
@@ -328,6 +412,12 @@ class BionicBart(game.Mode):
 
     def bionic_defeated(self):
         # VICTOLY!
+        # stop the music
+        self.game.sound.stop_music()
+        # play the quote
+        duration = self.game.sound.play(self.game.assets.quote_defeatBionicBart)
+        # score points
+        self.game.score(1000000)
         # set bart flag to dead
         self.game.set_tracking('bionicStatus', "DEAD")
         # light high noon
@@ -335,16 +425,27 @@ class BionicBart(game.Mode):
 
         # TODO - lots. points? final display? WAT?
 
-        self.finish_up()
+        self.delay(delay=duration,handler=self.leader_final_quote,param="win")
 
     def bionic_failed(self):
         # Lose the balls during a bionic fight and you lose
+        # play the fail quote
+        duration = self.game.sound.play(self.game.assets.quote_failBionicBart)
         # reset all the star status
         self.game.badge.reset()
         # set bionic
         self.game.set_tracking('bionicStatus',"OPEN")
 
-        self.finish_up()
+        self.delay(delay=duration,handler=self.leader_final_quote,param="fail")
+
+    def leader_final_quote(self,condition):
+        if condition == "win":
+            duration = self.game.sound.play(self.game.assets.quote_leaderWinBionic)
+        elif condition == "fail":
+            duration = self.game.sound.play(self.game.assets.quote_leaderFailBionic)
+        else:
+            duration = 0
+        self.delay(delay=duration,handler=self.finish_up)
 
     def finish_up(self):
         # as is tradition

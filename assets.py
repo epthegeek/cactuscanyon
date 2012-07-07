@@ -264,6 +264,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "2002-waitress-come-in-and-take-a-load-off-stranger.wav")
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1100-mayor-welcome-to-cactus-canyon-stranger.wav")
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "803-polly-welcome-to-town-stranger.wav")
+        self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1851-leader-bart-well-lookie-here-sheriff-of-the-week.wav")
         self.quote_bountyLit = 'quote_bountyLit'
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1012-mayor-theres-a-bounty-just-waitin-for-ya.wav")
         self.game.sound.register_sound(self.quote_bountyLit, self.quotes_path + "1013-mayor-bounty-is-lit.wav")
@@ -425,6 +426,7 @@ class Assets():
         self.quote_highNoonWin = 'quotehighNoonWin'
         self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1135-mayor-a-job-well-done.wav")
         self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1308-undertaker-oh-goody-you-shot-them-all.wav")
+        self.game.sound.register_sound(self.quote_highNoonWin, self.quotes_path + "1562-leader-bart-aw-you-shot-everybody.wav")
         self.quote_shootAgain = 'quote_shootAgain'
         self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "810-polly-im-so-glad-youre-back.wav")
         self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "2021-waitress-shoot-again.wav")
@@ -510,6 +512,9 @@ class Assets():
 
         self.quote_bionicIntroQuote = 'quote_bionicIntroQuote'
         self.game.sound.register_sound(self.quote_bionicIntroQuote, self.quotes_path + "1569-leader-bart-alright-tough-guy-deal-with-this.wav")
+        self.game.sound.register_sound(self.quote_bionicIntroQuote, self.quotes_path + "1568-leader-bart-my-secret-weapon.wav")
+        self.game.sound.register_sound(self.quote_bionicIntroQuote, self.quotes_path + "1583-leader-bart-prepare-for-pain-lawman.wav")
+        self.game.sound.register_sound(self.quote_bionicIntroQuote, self.quotes_path + "1586-leader-bart-alright-ive-had-it.wav")
 
         self.quote_introBionicBart = 'quote_introBionicBart'
         self.game.sound.register_sound(self.quote_introBionicBart, self.quotes_path + "2100-bionic-bart-i-am-a-bionic-bart-unit.wav")
@@ -519,9 +524,11 @@ class Assets():
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2120-bionic-bart-puny-carbon-unit.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2119-bionic-bart-steel-balls-do-not-phase-me.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2118-bionic-bart-i-am-the-new-sheriff-in-town.wav")
-        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2115-bionic-bart-i-am-not-through-with-you-yet.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2102-bionic-bart-prepare-for-annihilation-cowboy.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2104-bionic-bart-time-for-payback-lawman.wav")
+
+        self.quote_failBionicBart = 'quote_failBionicBart'
+        self.game.sound.register_sound(self.quote_failBionicBart, self.quotes_path + "2115-bionic-bart-i-am-not-through-with-you-yet.wav")
 
         self.quote_defeatBionicBart = 'quote_defeatBionicBart'
         self.game.sound.register_sound(self.quote_defeatBionicBart, self.quotes_path + "2124-bionic-bart-game-over.wav")
@@ -536,6 +543,18 @@ class Assets():
         self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2107-bionic-bart-that-does-not-feel-good.wav")
         self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2106-bionic-bart-you-are-scrambling-my-memory-banks.wav")
         self.game.sound.register_sound(self.quote_hitBionicBart, self.quotes_path + "2104-bionic-bart-you-have-dented-my-armor.wav")
+
+        self.quote_leaderFailBionic = 'quote_leaderFailBionic'
+        self.game.sound.register_sound(self.quote_leaderFailBionic, self.quotes_path + "1505-leader-bart-better-luck-next-time.wav")
+        self.game.sound.register_sound(self.quote_leaderFailBionic, self.quotes_path + "1506-leader-bart-well-be-back-lawman.wav")
+        self.game.sound.register_sound(self.quote_leaderFailBionic, self.quotes_path + "1579-leader-bart-laugh-2.wav")
+
+        self.quote_leaderWinBionic = 'quote_leaderWinBionic'
+        self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1533-leader-bart-you-broke-my-favorite-toy.wav")
+        self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1570-leader-bart-oh-i-just-bought-that-thing.wav")
+        self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1571-leader-bart-you-broke-my-toy.wav")
+        self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1572-leader-bart-they-dont-make-em.wav")
+        self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1585-leader-bart-im-gonna-get-my-money-back.wav")
 
 
         self.quote_pollyHelp = 'quote_pollyHelp'

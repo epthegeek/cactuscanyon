@@ -54,6 +54,14 @@ class RightLoop(game.Mode):
                 self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
             return
 
+        if self.game.show_tracking('bionicStatus') == "RUNNING":
+            if 4 in self.game.bionic.activeShots:
+                self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
+            return
+
         stage = self.game.show_tracking('rightLoopStage')
 
         if stage == 1:
