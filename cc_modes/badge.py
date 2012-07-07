@@ -47,7 +47,7 @@ class Badge(game.Mode):
         # reset the badge progress
         # set all 5 points to false
         for i in range(0,5,1):
-            self.game.set_tracking('starStatus',i,"False")
+            self.game.set_tracking('starStatus',"False",i)
         # reset the combos
         self.game.set_tracking('combos',0)
         # reset the barts defeated

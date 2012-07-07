@@ -184,7 +184,7 @@ class SkillShot(game.Mode):
                 quote = self.game.assets.quote_leftRampSS
             elif self.active == 3:
                 awardStringTop = "SHOOT CENTER RAMP"
-                quote = self.game.assets.centerRampSS
+                quote = self.game.assets.quote_centerRampSS
             awardStringBottom = "FOR AWARD"
             #self.game.sound.play(self.game.assets.sfx_flourish7)
             self.game.sound.play(quote)

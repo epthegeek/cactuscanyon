@@ -62,7 +62,7 @@ class RightRamp(game.Mode):
             return
 
         if self.game.show_tracking('bionicStatus') == "RUNNING":
-            if 3 in self.game.bionic.activeShots:
+            if 4 in self.game.bionic.activeShots:
                 self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
                 self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
                 self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)

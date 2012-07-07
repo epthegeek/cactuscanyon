@@ -32,6 +32,7 @@ class BaseGameMode(game.Mode):
                           self.game.lamps.starStampede]
         self.current_music = self.game.assets.music_mainTheme
         self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
+        self.busy = False
 
     def mode_started(self):
         print "INTERRUPTER IS DISPATCHING DELAYS"
@@ -94,7 +95,8 @@ class BaseGameMode(game.Mode):
             self.remove_modes()
             if self.game.show_tracking('tiltStatus') != 3:
                 # go check the bonus - after that we'll finish the ball
-                self.check_bonus()
+                # delay 1 second to give other modes time too set the busy if needed
+                self.delay(delay=1,handler=self.check_bonus)
             else:
                 self.layer = None
                 self.game.ball_ended()
@@ -269,6 +271,12 @@ class BaseGameMode(game.Mode):
         times -= 1
         if times > 0:
             self.delay(delay=0.4,handler=self.repeat_ding,param=times)
+
+    def wait_until_unbusy(self,myHandler):
+        if not self.busy:
+            myHandler()
+        else:
+            self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
 
 
     ###
@@ -662,6 +670,10 @@ class BaseGameMode(game.Mode):
     ###
 
     def check_bonus(self):
+        # we have to wait until other things finish
+        self.wait_until_unbusy(self.do_bonus)
+
+    def do_bonus(self):
         # get the bonus multiplier
         times = self.game.show_tracking('bonusX')
         print "BONUS TIMES: " + str(times)

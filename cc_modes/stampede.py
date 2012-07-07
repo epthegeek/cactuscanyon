@@ -37,6 +37,7 @@ class Stampede(game.Mode):
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
         if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('centerRampStage') == 89:
+            self.game.base_game_mode.busy = True
             self.end_stampede()
 
     ### switches
@@ -229,14 +230,14 @@ class Stampede(game.Mode):
             mode.update_lamps()
         # badge light - stampede is 4
         self.game.badge.update(4)
-
-        # unload?
-        # unload the mode
-        self.game.modes.remove(self.game.stampede)
+        # unset the base busy flag
+        self.game.base_game_mode.busy = True
         # clear the stack layer
         self.game.set_tracking('stackLevel',False,1)
         # turn the main music back on
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        # unload the mode
+        self.game.modes.remove(self.game.stampede)
 
     def clear_layer(self):
         self.layer=None

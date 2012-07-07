@@ -24,6 +24,7 @@ class GoldMine(game.Mode):
     def ball_drained(self):
     # if we're dropping down to one ball, and goldmine multiball is running - do stuff
         if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('mineStatus') == "RUNNING":
+            self.game.base_game_mode.busy = True
             self.end_multiball()
 
     ### switches
@@ -329,12 +330,14 @@ class GoldMine(game.Mode):
         print "MULTIBALL ENDED"
         # start the music back up
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
-        # unload the mode
-        self.game.modes.remove(self.game.gm_multiball)
+        # unset the busy flag
+        self.game.base_game_mode.busy = False
         # set the stack flag back off
         self.game.set_tracking('stackLevel',False,2)
         #refresh the mine lights
         self.game.update_lamps()
+        # unload the mode
+        self.game.modes.remove(self.game.gm_multiball)
 
     def clear_layer(self):
         self.layer = None

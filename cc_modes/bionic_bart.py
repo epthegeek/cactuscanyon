@@ -8,7 +8,7 @@ class BionicBart(game.Mode):
     def __init__(self,game,priority):
         super(BionicBart, self).__init__(game,priority)
         self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
-        self.shotModes = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp,self.game.right_loop,self.game.saloon]
+        self.shotModes = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.saloon]
         self.banners = ['bam','biff','ouch','pow','wham','zoink']
 
 
@@ -17,6 +17,8 @@ class BionicBart(game.Mode):
     def ball_drained(self):
         # if we lose all the balls the battle is lost
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('bionicStatus') == "RUNNING":
+            self.cancel_delayed("Display")
+            self.game.base_game_mode.busy = True
             self.bionic_failed()
 
     def mode_started(self):
@@ -142,6 +144,7 @@ class BionicBart(game.Mode):
                 self.miss()
 
     def activate_shots(self,amount):
+        print "ACTIVATING SHOTS - VALUE: " + str(amount)
         # pick the active shot
         if amount == 0:
             self.activeShots = []
@@ -349,6 +352,9 @@ class BionicBart(game.Mode):
 
     def hit(self,step=1):
         if step == 1:
+            # turn off loaded and the lights
+            self.loaded = False
+            self.game.saloon.update_lamps()
             anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
             myWait = len(anim.frames) / 14.0
             # set the animation
@@ -395,9 +401,8 @@ class BionicBart(game.Mode):
             self.set_action_line()
             self.set_status_line(self.shotsToLoad)
             self.update_display()
-            self.loaded = False
             # activate the current shots
-            self.activate_shots(self.hitsToDefeat - self.hits)
+            self.activate_shots(self.shotsToLoad - self.shots)
             # kick the ball
             self.game.saloon.kick()
 
@@ -432,6 +437,12 @@ class BionicBart(game.Mode):
 
     def bionic_failed(self):
         # Lose the balls during a bionic fight and you lose
+        # show some display
+        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("FAILED")
+        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("BIONIC BART ESCAPED!")
+        combined = dmd.GroupedLayer(128,32,[line1,line2])
+        self.layer = combined
+
         # play the fail quote
         duration = self.game.sound.play(self.game.assets.quote_failBionicBart)
         # reset all the star status
@@ -452,10 +463,17 @@ class BionicBart(game.Mode):
 
     def finish_up(self):
         # as is tradition
+        self.layer = None
         # clear the stack level
         self.game.set_tracking('stackLevel',False,3)
+        # Turn the lights back on
+        self.game.update_lamps()
         # turn the main music back on
         self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        # kick the ball if it's held
+        self.game.saloon.kick()
+        # unset the base busy flag
+        self.game.base_game_mode.busy = False
         # unload the mode
         self.game.modes.remove(self.game.bionic)
 

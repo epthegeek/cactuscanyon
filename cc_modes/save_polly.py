@@ -42,10 +42,8 @@ class SavePolly(game.Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
             if self.game.show_tracking("centerRampStage") == 99:
-                self.running = False
-                self.game.train.stop()
-                self.dispatch_delayed()
-                self.polly_finished()
+                self.game.base_game_mode.busy = True
+                self.polly_died()
 
     # bumpers pause quickdraw
     def sw_leftJetBumper_active(self,sw):
@@ -313,8 +311,11 @@ class SavePolly(game.Mode):
         print "ENDING SAVE POLLY"
         # turn the level 1 stack flag back off
         self.game.set_tracking('stackLevel',False,1)
-        # check to see if stampede is ready
-        self.game.base_game_mode.check_stampede()
+        # check to see if stampede is ready - if we're not ending due to ball fail
+        if self.game.trough.num_balls_in_play != 0:
+            self.game.base_game_mode.check_stampede()
+        # unset the busy flag
+        self.game.base_game_mode.busy = False
         # unload the mode
         self.game.modes.remove(self.game.save_polly)
 

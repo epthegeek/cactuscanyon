@@ -25,6 +25,7 @@ class Showdown(game.Mode):
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('showdownStatus') == "RUNNING":
+            self.game.base_game_mode.busy = True
             self.end_showdown()
 
     def start_showdown(self,side):
@@ -290,6 +291,9 @@ class Showdown(game.Mode):
         # reset the showdown points for next time
         self.game.set_tracking('showdownPoints',0)
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
+        # unset the base busy flag
+        self.game.base_game_mode.busy = False
+
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)
 

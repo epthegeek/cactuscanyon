@@ -16,6 +16,9 @@ class Saloon(game.Mode):
         self.busy = False
 
     def sw_saloonPopper_active_for_300ms(self,sw):
+        # if bionic bart is running don't do anything
+        if self.game.show_tracking('bionicStatus') == "RUNNING":
+            return
         # if there's a mode running, just kick the ball back out
         if True in self.game.show_tracking('stackLevel'):
             self.kick()
