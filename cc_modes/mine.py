@@ -37,7 +37,7 @@ class Mine(game.Mode):
         self.disable_lamps()
         ## if status is off, we bail here
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus != "ON":
+        if lampStatus != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING":
             return
 
         stackLevel = self.game.show_tracking('stackLevel')
@@ -68,6 +68,9 @@ class Mine(game.Mode):
 
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
+        if self.game.show_tracking('bionicStatus') == "RUNNING":
+            print "WAIT, HOW DID I GET HERE"
+            return
         # stock sound for the switch
         if self.game.show_tracking('highNoonStatus') != "READY":
             self.game.sound.play(self.game.assets.sfx_mineKicker)

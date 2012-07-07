@@ -37,10 +37,15 @@ class BadGuys(game.Mode):
         self.kill_power()
 
     def update_lamps(self):
+        # bail immediately if showdown or ambush is running
+        if self.game.show_tracking('showdownStatus') == "RUNNING" or\
+           self.game.show_tracking('ambushStatus') == "RUNNING":
+            return
         # reset first
         self.disable_lamps()
+        # bail if lights are off
         status = self.game.show_tracking('lampStatus')
-        if status != "ON":
+        if status != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING":
             return
         # bad guy lights hopefully this sets any lamp that returns true to be on
         for lamp in range(0,4,1):

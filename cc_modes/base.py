@@ -104,7 +104,7 @@ class BaseGameMode(game.Mode):
         self.disable_lamps()
         status = self.game.show_tracking('lampStatus')
         ## if status is off, we bail here
-        if status == "OFF":
+        if status != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING":
             return
         # left side - either the playfield light is on or blinking, or the inlane light is on
         left = self.game.show_tracking('quickdrawStatus',0)
@@ -602,8 +602,11 @@ class BaseGameMode(game.Mode):
         # lookup the status of the side, and difficulty
         stat = self.game.show_tracking('quickdrawStatus',side)
         difficulty = self.game.user_settings['Gameplay (Feature)']['Multiball Locks Difficulty']
-        # if quickdraw is running or lit on the side hit, or position matches stat
-        if "RUNNING" in self.game.show_tracking('quickdrawStatus') or stat == "READY" or stat == position:
+        # if quickdraw is running or lit on the side hit, or position matches stat, or bionic bart is running
+        if "RUNNING" in self.game.show_tracking('quickdrawStatus') or \
+          stat == "READY" or  \
+          stat == position or \
+          self.game.show_tracking('bionicStatus') == "RUNNING":
             print "QUICKDRAW IS RUNNING OR LIT"
             # register a lit hit
             self.quickdraw_lit_hit()

@@ -48,6 +48,9 @@ class Bart(game.Mode):
         print "BART STATUS: " + status
         print "CURRENT BART: " + str(self.game.show_tracking('currentBart'))
         # if no bart is currently running, a new challenger appears
+        bionic = self.game.show_tracking('bionicStatus')
+        if bionic == "READY" or bionic == "RUNNING":
+            self.game.saloon.busy = False
         if status == "OPEN":
             self.game.set_tracking('bartStatus',"RUNNING")
             self.activate()

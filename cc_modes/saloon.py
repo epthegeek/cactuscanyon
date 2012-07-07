@@ -69,7 +69,7 @@ class Saloon(game.Mode):
     def sw_jetBumpersExit_active(self,sw):
         # if there's an active bart, play a quote
         if self.game.show_tracking('bartStatus') == "RUNNING":
-            self.game.sound.play_voice(self.tauntQuote)
+            self.game.sound.play_voice(self.game.bart.tauntQuote)
             # and move the bart
             self.game.bart.move()
             self.delay(delay=0.03,handler=self.game.bart.light)
@@ -100,6 +100,7 @@ class Saloon(game.Mode):
         bionicStatus = self.game.show_tracking('bionicStatus')
         if bionicStatus == "READY":
             self.game.lamps.saloonArrow.schedule(0xF0F0F0F0)
+            self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
         # flash bount and arrow if running and loaded
         elif bionicStatus == "RUNNING":
             if self.game.bionic.loaded:
@@ -109,7 +110,8 @@ class Saloon(game.Mode):
 
         beacon = False
         if self.game.show_tracking('bartStatus') == 'RUNNING' or self.game.show_tracking('bartStatus') == 'LAST':
-            self.game.lamps.saloonArrow.enable()
+            if bionicStatus != "READY" and bionicStatus != "RUNNING":
+                self.game.lamps.saloonArrow.enable()
         if self.game.show_tracking('isBountyLit'):
             self.game.lamps.bountySaloon.schedule(0xFF00FF00)
             self.game.lamps.bountyBeacon.enable()

@@ -101,8 +101,8 @@ class BionicBart(game.Mode):
         return game.SwitchStop
 
     # mine - trapping for bionic bart
-    def sw_minePopper_active_for_400ms(self,sw):
-        self.score(2530)
+    def sw_minePopper_active_for_390ms(self,sw):
+        self.game.score(2530)
         self.miss()
         # kick the ball
         self.game.mountain.eject()
@@ -161,6 +161,8 @@ class BionicBart(game.Mode):
     def start_bionic(self):
         # kill the music
         self.game.sound.stop_music()
+        # set bionic to running
+        self.game.set_tracking('bionicStatus',"RUNNING")
         # kick off the intro
         self.intro(1)
 
@@ -408,6 +410,7 @@ class BionicBart(game.Mode):
         if step == 2:
             self.set_bart_layer(self.idleLayer)
             self.update_display()
+            self.game.restore_music()
             self.game.saloon.kick()
 
     def bionic_defeated(self):
