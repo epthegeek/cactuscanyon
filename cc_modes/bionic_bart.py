@@ -228,7 +228,7 @@ class BionicBart(game.Mode):
             self.game.base_game_mode.music_on(self.game.assets.music_bionicBart)
             self.update_display()
             # set the active shots
-            self.activate_shots(1)
+            self.activate_shots(2)
             # update the lamps to turn the rest back on
             self.game.update_lamps()
             # kick the ball out
@@ -287,8 +287,8 @@ class BionicBart(game.Mode):
         self.game.saloon.update_lamps()
         for shot in self.shotModes:
             shot.update_lamps()
-        # next round takes more hits - max at 4
-        if self.shotsToLoad < 4:
+        # next round takes more hits - max at 3 for now - have animations for 4
+        if self.shotsToLoad < 3:
             self.shotsToLoad += 1
         anim = dmd.Animation().load(ep.DMD_PATH+'gun-close.dmd')
         myWait = len(anim.frames) / 10.0
