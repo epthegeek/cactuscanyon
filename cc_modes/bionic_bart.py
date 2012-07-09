@@ -363,6 +363,9 @@ class BionicBart(game.Mode):
             animLayer.frame_time = 4
             self.game.sound.play(self.game.assets.sfx_explosion11)
             self.layer = animLayer
+            # move the hat and bart
+            self.game.bart.hat()
+            self.game.bart.move()
             # tick up the hits
             self.hits +=1
             if self.hits >= self.hitsToDefeat:
@@ -391,10 +394,12 @@ class BionicBart(game.Mode):
         if step == 4:
             self.game.squelch_music()
             self.set_bart_layer(self.whineLayer)
+            self.flash()
             self.update_display()
             duration = self.game.sound.play(self.game.assets.quote_hitBionicBart)
             self.delay(delay=duration,handler=self.hit,param=5)
         if step == 5:
+            self.cancel_delayed("Flashing")
             self.game.restore_music()
             self.set_bart_layer(self.idleLayer)
             self.shots = 0
@@ -412,11 +417,17 @@ class BionicBart(game.Mode):
             self.update_display()
             duration = self.game.sound.play(self.game.assets.quote_tauntBionicBart)
             self.delay(delay=duration,handler=self.miss,param=2)
+            self.flash()
         if step == 2:
+            self.cancel_delayed("Flashing")
             self.set_bart_layer(self.idleLayer)
             self.update_display()
             self.game.restore_music()
             self.game.saloon.kick()
+
+    def flash(self):
+        self.game.coils.saloonFlasher.pulse(20)
+        self.delay(name="Flashing",delay=0.2,handler=self.flash)
 
     def bionic_defeated(self,step=1):
         # VICTOLY!
@@ -443,12 +454,14 @@ class BionicBart(game.Mode):
             blank = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
             # play the death quote over the whine bot
             self.whineLayer.set_target_position(-43,0)
+            self.flash()
             combined = dmd.GroupedLayer(128,32,[blank,self.whineLayer])
             self.layer = combined
             # play the quote
             duration = self.game.sound.play(self.game.assets.quote_defeatBionicBart)
             self.delay(delay=duration,handler=self.bionic_defeated,param=4)
         if step == 4:
+            self.cancel_delayed("Flashing")
             # this is the part where we blow up
             anim = dmd.Animation().load(ep.DMD_PATH+'bionic-explode.dmd')
             # set the animation
@@ -501,9 +514,26 @@ class BionicBart(game.Mode):
             duration2 = self.game.sound.play(self.game.assets.quote_leaderWinBionic)
             if duration2 > duration:
                 duration = duration2
+            self.delay(delay=duration,handler=self.high_noon_lit)
         elif condition == "fail":
             duration = self.game.sound.play(self.game.assets.quote_leaderFailBionic)
-        self.delay(delay=duration,handler=self.finish_up)
+            self.delay(delay=duration,handler=self.finish_up)
+
+    def high_noon_lit(self):
+        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("HIGH NOON LIT")
+        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT THE MINE!")
+        combined = dmd.GroupedLayer(128,32,[line1,line2])
+        self.layer = combined
+        self.repeat_ding(3)
+        self.delay(delay=1.2,handler=self.finish_up)
+
+    def repeat_ding(self,times):
+        self.game.sound.play(self.game.assets.sfx_bountyBell)
+        self.game.coils.mineFlasher.pulse(30)
+        times -= 1
+        if times > 0:
+            self.delay(delay=0.4,handler=self.repeat_ding,param=times)
+
 
     def finish_up(self):
         # as is tradition
