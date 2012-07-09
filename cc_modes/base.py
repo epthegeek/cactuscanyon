@@ -25,11 +25,6 @@ class BaseGameMode(game.Mode):
                           self.game.lamps.rankDeputy,
                           self.game.lamps.rankSheriff,
                           self.game.lamps.rankMarshall]
-        self.starLamps = [self.game.lamps.starMotherlode,
-                          self.game.lamps.starCombo,
-                          self.game.lamps.starBartBrothers,
-                          self.game.lamps.starShowdown,
-                          self.game.lamps.starStampede]
         self.current_music = self.game.assets.music_mainTheme
         self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
         self.busy = False

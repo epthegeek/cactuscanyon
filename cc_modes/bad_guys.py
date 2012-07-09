@@ -68,7 +68,7 @@ class BadGuys(game.Mode):
             self.hit_bad_guy(0)
 
     def sw_badGuySW0_inactive_for_500ms(self,sw):
-        self.activate_bad_guy(0)
+        self.target_activate(0)
 
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
@@ -77,7 +77,7 @@ class BadGuys(game.Mode):
             self.hit_bad_guy(1)
 
     def sw_badGuySW1_inactive_for_500ms(self,sw):
-        self.activate_bad_guy(1)
+        self.target_activate(1)
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
@@ -86,7 +86,7 @@ class BadGuys(game.Mode):
             self.hit_bad_guy(2)
 
     def sw_badGuySW2_inactive_for_500ms(self,sw):
-        self.activate_bad_guy(2)
+        self.target_activate(2)
 
     def sw_badGuySW3_active(self,sw):
         # far right bad guy target
@@ -95,7 +95,7 @@ class BadGuys(game.Mode):
             self.hit_bad_guy(3)
 
     def sw_badGuySW3_inactive_for_500ms(self,sw):
-        self.activate_bad_guy(3)
+        self.target_activate(3)
 
 
 

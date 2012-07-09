@@ -19,6 +19,7 @@ class BionicBart(game.Mode):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('bionicStatus') == "RUNNING":
             self.cancel_delayed("Display")
             self.game.base_game_mode.busy = True
+            print "BALL DRAINED - BIONIC IS ENDING"
             self.bionic_failed()
 
     def mode_started(self):
@@ -544,7 +545,8 @@ class BionicBart(game.Mode):
         # Turn the lights back on
         self.game.update_lamps()
         # turn the main music back on
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        if self.game.trough.num_balls_in_play != 0:
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # kick the ball if it's held
         self.game.saloon.kick()
         # unset the base busy flag
