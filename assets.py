@@ -255,6 +255,10 @@ class Assets():
         self.game.sound.register_sound(self.sfx_hitBionicBart, self.sfx_path + "310-sfx-hit-bionic-bart.wav")
         self.sfx_fireWeapon = 'sfx_fireWeapon'
         self.game.sound.register_sound(self.sfx_fireWeapon, self.sfx_path + "00-sfx-weapon-fire.wav")
+        self.sfx_dieBionicBart = 'sfx_dieBionicBart'
+        self.game.sound.register_sound(self.sfx_dieBionicBart, self.sfx_path + "125-sfx-bionic-critical-hit.wav")
+        self.sfx_heavyExplosion = 'sfx_heavyExplosion'
+        self.game.sound.register_sound(self.sfx_heavyExplosion, self.sfx_path + "247-sfx-heavy-explosion.wav")
     # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
@@ -435,7 +439,7 @@ class Assets():
         self.quote_hurry = 'quote_hurry'
         self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1175-mayor-i-suggest-you-hurry-friend.wav")
         self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1173-mayor-time-for-one-more-shot.wav")
-        self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1205-prospector-youre-runnin-outta-time.wav")
+        self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1205-prospector-hurry-youre-runnin-outta-time.wav")
 
         self.quote_mobStart = 'quote_mobStart'
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1171-mayor-shoot-anything-that-pops-up.wav")
@@ -444,14 +448,14 @@ class Assets():
         self.quote_mobTaunt = 'quote_mobTaunt'
         self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "2020-waitress-honey-just-shoot-anything.wav")
         self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "1165-mayor-aw-just-shoot-em.wav")
-        self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "1525-leader-bart-git-that-lawman.wav")
+        self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "1525-leader-bart-git-that-law-man.wav")
         self.quote_mobEnd = 'quote_mobEnd'
         self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1303-prospector-look-at-that-bodycount.wav")
         self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1309-undertaker-a-respectable-bodycount-indeed.wav")
 
 
         self.quote_introBigBart = 'quote_introBigBart'
-        self.game.sound.register_sound(self.quote_introBigBart, self.quotes_path + "1466-big-name-is-big-bart-there-tough-guy.wav")
+        self.game.sound.register_sound(self.quote_introBigBart, self.quotes_path + "1466-big-name-is-big-bart-tough-guy.wav")
         self.quote_hitBigBart = 'quote_hitBigBart'
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1451-big-hit-that-hurt-a-little.wav")
         self.game.sound.register_sound(self.quote_hitBigBart, self.quotes_path + "1452-big-hit-nothin-but-a-little-hole.wav")
@@ -525,7 +529,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2119-bionic-bart-steel-balls-do-not-phase-me.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2118-bionic-bart-i-am-the-new-sheriff-in-town.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2102-bionic-bart-prepare-for-annihilation-cowboy.wav")
-        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2104-bionic-bart-time-for-payback-lawman.wav")
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2103-bionic-bart-time-for-payback-lawman.wav")
 
         self.quote_failBionicBart = 'quote_failBionicBart'
         self.game.sound.register_sound(self.quote_failBionicBart, self.quotes_path + "2115-bionic-bart-i-am-not-through-with-you-yet.wav")
@@ -553,7 +557,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1533-leader-bart-you-broke-my-favorite-toy.wav")
         self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1570-leader-bart-oh-i-just-bought-that-thing.wav")
         self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1571-leader-bart-you-broke-my-toy.wav")
-        self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1572-leader-bart-they-dont-make-em.wav")
+        self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1572-leader-bart-boy-they-dont-make-em.wav")
         self.game.sound.register_sound(self.quote_leaderWinBionic, self.quotes_path + "1585-leader-bart-im-gonna-get-my-money-back.wav")
 
 
