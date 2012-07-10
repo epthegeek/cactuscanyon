@@ -107,6 +107,7 @@ class Showdown(game.Mode):
         animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
         animLayer.add_frame_listener(2,self.game.lightning,param="top")
         animLayer.add_frame_listener(3,self.game.lightning,param="left")
+        animLayer.add_frame_listener(3,self.game.lightning,param="right")
         animLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
         animLayer.add_frame_listener(6,self.game.lightning,param="top")
         animLayer.add_frame_listener(7,self.game.lightning,param="left")

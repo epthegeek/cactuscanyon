@@ -56,12 +56,12 @@ class Saloon(game.Mode):
         bionic = self.game.show_tracking('bionicStatus')
         if bionic == "READY":
             # play a laugh sound and flash the light and return
-            self.game.sound.play(self.game.assets.sfx_ricochetSet)
+            self.game.sound.play(self.game.assets.quote_leaderLaugh)
             self.game.coils.saloonFlasher.pulse(30)
             return
         elif bionic == "RUNNING":
             # play a ricochet and flash the light and return
-            self.game.sound.play(self.game.assets.quote_leaderLaugh)
+            self.game.sound.play(self.game.assets.sfx_ricochetSet)
             self.game.coils.saloonFlasher.pulse(30)
             return
         # set the busy flag
