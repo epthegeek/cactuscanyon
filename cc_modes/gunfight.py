@@ -141,7 +141,7 @@ class Gunfight(game.Mode):
         self.game.set_tracking('gunfightStatus',"OPEN")
         self.game.set_tracking('bartStatus',"OPEN")
         # turn the main game music back on if a second level mode isn't running
-        if not self.game.show_tracking('stackLevel',1):
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
             # turn off the level one flag
         self.game.set_tracking('stackLevel',False,0)

@@ -235,7 +235,8 @@ class Stampede(game.Mode):
         # clear the stack layer
         self.game.set_tracking('stackLevel',False,1)
         # turn the main music back on
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        if self.game.trough.num_balls_in_play != 0:
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # unload the mode
         self.game.modes.remove(self.game.stampede)
 

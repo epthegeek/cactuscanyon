@@ -329,7 +329,8 @@ class GoldMine(game.Mode):
         self.game.set_tracking('mineStatus','OPEN')
         print "MULTIBALL ENDED"
         # start the music back up
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        if self.game.trough.num_balls_in_play != 0:
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # unset the busy flag
         self.game.base_game_mode.busy = False
         # set the stack flag back off

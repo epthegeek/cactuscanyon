@@ -226,7 +226,7 @@ class Quickdraw(game.Mode):
         self.game.bad_guys.update_lamps()
         self.game.base_game_mode.update_lamps()
         # turn the main music back on - if a second level mode isn't running
-        if not self.game.show_tracking('stackLevel',1):
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
             # turn the level 1 flag off
         self.game.set_tracking('stackLevel',False,0)
