@@ -54,6 +54,8 @@ class Badge(ep.EP_Mode):
         self.game.set_tracking('combos',0)
         # reset the barts defeated
         self.game.set_tracking('bartsDefeated',0)
+        # reset the motherlodes count
+        self.game.set_tracking('motherlodesCollected',0)
         self.update_lamps()
 
     def update(self,point):

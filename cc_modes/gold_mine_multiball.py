@@ -272,6 +272,8 @@ class GoldMine(ep.EP_Mode):
         self.game.mountain.stop()
         # add one to the motherlodes collected
         motherlodes = self.game.increase_tracking('motherlodesCollected')
+        # and one to the total motherlodes for good measure
+        self.game.increase_tracking('motherlodesCollectedTotal')
         myMultiplier = self.game.show_tracking('motherlodeMultiplier')
         # if we've collected 3 regular motherlodes, or any motherload with a multiplier, then light the badge
         if motherlodes >= 3 or myMultiplier > 1:
