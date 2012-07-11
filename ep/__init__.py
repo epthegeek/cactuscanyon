@@ -27,6 +27,14 @@ def set_last_switch(self,value):
     self.game.lastSwitch = value
 
 last_switch = property(get_last_switch,set_last_switch)
+# set up a property for last ramp tracking for combos
+def get_last_shot(self):
+    return self.game.lastShot
+
+def set_last_shot(self,value):
+    self.game.lastShot = value
+
+last_shot = property(get_last_shot, set_last_shot)
 
 def format_score(score):
     """Returns a string representation of the given score value.

@@ -214,6 +214,9 @@ class BaseGameMode(game.Mode):
                 self.game.sound.play(self.game.assets.quote_beerMug)
         ## -- set the last switch -- ##
         ep.last_switch = 'beerMug'
+        ## kill the combo shot chain
+        ep.last_shot = None
+
 
     def mug_display(self,textLine1,textLine2,textLine3):
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
@@ -580,25 +583,29 @@ class BaseGameMode(game.Mode):
         self.quickdraw_hit('TOP',0)
         ## -- set the last switch hit --
         ep.last_switch = "topLeftStandup"
-
+        ## kill the combo shot chain
+        ep.last_shot = None
 
     def sw_bottomLeftStandUp_active(self,sw):
         self.quickdraw_hit('BOT',0)
         ## -- set the last switch hit --
         ep.last_switch = "bottomLeftStandup"
-
+        ## kill the combo shot chain
+        ep.last_shot = None
 
     def sw_topRightStandUp_active(self, sw):
         self.quickdraw_hit('TOP',1)
         ## -- set the last switch hit --
         ep.last_switch = "topRightStandup"
-
+        ## kill the combo shot chain
+        ep.last_shot = None
 
     def sw_bottomRightStandUp_active(self,sw):
         self.quickdraw_hit('BOT',1)
         ## -- set the last switch hit --
         ep.last_switch = "bottomRightStandup"
-
+        ## kill the combo shot chain
+        ep.last_shot = None
 
 
     def quickdraw_hit(self, position,side):

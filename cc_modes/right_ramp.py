@@ -125,6 +125,14 @@ class RightRamp(game.Mode):
         # so I don't either
         # tick one on to the total of player shots on the right ramp
         self.game.increase_tracking('rightRampShots')
+        # check the chain status
+        if ep.last_shot == "left":
+            # if we're coming from the left ramp, increase the chain
+            self.game.combos.chain += 1
+        else:
+            # if not, set it back to one
+            self.game.combos.chain = 1
+
         # score the points and mess with the combo
         if self.game.combos.myTimer > 0:
             # register the combo and reset the timer - returns true for use later
@@ -135,6 +143,8 @@ class RightRamp(game.Mode):
         self.award_ramp_score(combo)
         ## -- set the last switch hit --
         ep.last_switch = "rightRampMake"
+        ep.last_shot = "right"
+
 
     def sw_rightRampBottom_active(self,sw):
         self.game.score_with_bonus(2530)
@@ -266,6 +276,9 @@ class RightRamp(game.Mode):
         self.build_award_text()
         # turn it off in 1 seconds
         self.delay(name="Display",delay=1,handler=self.clear_layer)
+        # show combo display if the chain is high enough
+        if self.game.combos.chain > 1:
+            self.delay(name="Display",delay=2,handler=self.game.combos.display)
 
     def build_award_text(self,blink=None):
         # create the two text lines

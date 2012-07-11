@@ -97,6 +97,9 @@ class Mine(game.Mode):
         # award some points
         self.game.score_with_bonus(2530)
         ep.last_switch = "mineEntrance"
+        ## kill the combo shot chain
+        ep.last_shot = None
+
 
     def mine_shot(self):
         # if high noon is ready, we do that

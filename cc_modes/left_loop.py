@@ -126,6 +126,8 @@ class LeftLoop(game.Mode):
         self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "leftLoopBottom"
+        ## kill the combo shot chain
+        ep.last_shot = None
 
     def sw_leftLoopTop_active(self,sw):
         # turn off the left loop gate by default

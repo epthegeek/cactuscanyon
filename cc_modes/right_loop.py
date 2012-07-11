@@ -117,6 +117,8 @@ class RightLoop(game.Mode):
         self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "rightLoopBottom"
+        ## kill the combo shot chain
+        ep.last_shot = None
 
     def sw_rightLoopTop_active(self,sw):
         print "RIGHT LOOP TOP HIT"

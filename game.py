@@ -33,6 +33,9 @@ class CCGame(game.BasicGame):
 
         # last switch variable for tracking
         self.lastSwitch = None
+        # last ramp for combo tracking
+        self.lastRamp = None
+
         self.ballStarting = False
         self.status = None
         self.autoPlunge = False
@@ -632,3 +635,4 @@ class CCGame(game.BasicGame):
         if self.squelched:
             self.squelched = False
             pygame.mixer.music.set_volume(self.previousVolume)
+

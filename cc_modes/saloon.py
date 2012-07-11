@@ -78,7 +78,8 @@ class Saloon(game.Mode):
         # exciting!
         ## -- set the last switch hit --
         ep.last_switch = "saloonGate"
-
+        ## kill the combo shot chain
+        ep.last_shot = None
 
     def sw_jetBumpersExit_active(self,sw):
         # if there's an active bart, play a quote
