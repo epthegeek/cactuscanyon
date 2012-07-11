@@ -61,6 +61,7 @@ class Tracking(game.Player):
         self.player_stats['jackpotsCollected'] = 0
         self.player_stats['motherlodeMultiplier'] = 1
         self.player_stats['motherlodesCollected'] = 0
+        self.player_stats['motherlodeValue'] = 0
         self.player_stats['motherlodeLit'] = False
 
         # lit status for jackpots: Left Loop, Left Ramp, Center Ramp, Right Loop, Right Ramp

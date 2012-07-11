@@ -305,6 +305,9 @@ class GoldMine(game.Mode):
         if times == 0:
             # award the points
             self.game.score(self.motherlodeValue * self.counter)
+            # track highest shot for motherlode champ
+            if self.motherlodeValue > self.game.show_tracking('motherlodeValue'):
+                self.game.set_tracking('motherlodeValue', self.motherlodeValue)
             # and reset the motherlode value
             self.motherlodeValue = 0
             # then go back to the main display

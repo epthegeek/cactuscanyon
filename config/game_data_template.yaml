@@ -27,3 +27,13 @@ ShowdownChampHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
 AmbushChampHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
+TownDrunkHighScoreData:
+- {date: 'Sun Oct  3 22:05:01 2010', inits: JCT, score: 2}
+TumbleweedChampHighScoreData:
+- {date: 'Sun Oct  3 22:05:01 2010', inits: ABI, score: 2}
+UndertakerHighScoreData:
+- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
+BountyHunterHighScoreData:
+- {date: 'Sun Oct  3 22:05:01 2010', inits: ABI, score: 3}
+MotherlodeChampHighScoreData:
+- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 250000}

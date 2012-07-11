@@ -94,6 +94,35 @@ class CCGame(game.BasicGame):
         cat.titles = ['Ambush Champ']
         self.highscore_categories.append(cat)
 
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'TownDrunkHighScoreData'
+        cat.score_for_player = lambda player: self.show_tracking('beerMugHitsTotal')
+        cat.titles = ['Town Drunk']
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'TumbleweedChampHighScoreData'
+        cat.score_for_player = lambda player: self.show_tracking('fullLoops')
+        cat.titles = ['Tumbleweed Champ']
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'UndertakerHighScoreData'
+        cat.score_for_player = lambda player: self.show_tracking('kills')
+        cat.titles = ['Undertaker']
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'BountyHunterHighScoreData'
+        cat.score_for_player = lambda player: self.show_tracking('bartsDefeated')
+        cat.titles = ['Bounty Hunter']
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'MotherlodeChampHighScoreData'
+        cat.score_for_player = lambda player: self.show_tracking('motherlodeValue')
+        cat.titles = ['Motherlode Champ']
+        self.highscore_categories.append(cat)
 
 
         ## TODO later - and combo champ? ambush champ? ramp champ?
