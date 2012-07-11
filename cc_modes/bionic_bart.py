@@ -91,7 +91,8 @@ class BionicBart(game.Mode):
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
-        self.process_shot(3)
+        if not self.game.bart.moving:
+            self.process_shot(3)
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
@@ -374,8 +375,7 @@ class BionicBart(game.Mode):
             self.game.sound.play(self.game.assets.sfx_explosion11)
             self.layer = animLayer
             # move the hat and bart
-            self.game.bart.hat()
-            self.game.bart.move()
+            self.game.bart.animate(3)
             # tick up the hits
             self.hits +=1
             if self.hits >= self.hitsToDefeat:

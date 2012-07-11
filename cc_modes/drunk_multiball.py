@@ -49,7 +49,8 @@ class DrunkMultiball(game.Mode):
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
-        self.process_shot('rightLoop',self.shotModes[1])
+        if not self.game.bart.moving:
+            self.process_shot('rightLoop',self.shotModes[1])
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):

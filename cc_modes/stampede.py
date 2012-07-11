@@ -55,7 +55,8 @@ class Stampede(game.Mode):
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
-        self.process_shot(3,self.active)
+        if not self.game.bart.moving:
+            self.process_shot(3,self.active)
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):

@@ -86,9 +86,7 @@ class Saloon(game.Mode):
         if self.game.show_tracking('bartStatus') == "RUNNING":
             self.game.sound.play_voice(self.game.bart.tauntQuote)
             # and move the bart
-            self.game.bart.move()
-            self.delay(delay=0.03,handler=self.game.bart.light)
-            self.delay(delay=0.07,handler=self.game.bart.move)
+            self.game.bart.animate(2)
         # score some points
         self.game.score_with_bonus(2530)
         ## -- set the last switch hit --

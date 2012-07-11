@@ -17,6 +17,7 @@ class Train(game.Mode):
         # home the train
         if not self.game.switches.trainHome.is_active():
             self.reset_toy()
+        self.trainProgress = 0
 
     def sw_trainHome_active(self,sw):
         if self.trainReset:
