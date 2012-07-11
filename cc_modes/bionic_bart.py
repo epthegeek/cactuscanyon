@@ -1,3 +1,11 @@
+##
+##  ____  _             _        ____             _
+## | __ )(_) ___  _ __ (_) ___  | __ )  __ _ _ __| |_
+## |  _ \| |/ _ \| '_ \| |/ __| |  _ \ / _` | '__| __|
+## | |_) | | (_) | | | | | (__  | |_) | (_| | |  | |_
+## |____/|_|\___/|_| |_|_|\___| |____/ \__,_|_|   \__|
+##
+
 from procgame import *
 import cc_modes
 import ep
@@ -19,6 +27,7 @@ class BionicBart(game.Mode):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('bionicStatus') == "RUNNING":
             self.cancel_delayed("Display")
             self.game.base_game_mode.busy = True
+            print "BALL DRAINED - BIONIC IS ENDING"
             self.bionic_failed()
 
     def mode_started(self):
@@ -63,7 +72,7 @@ class BionicBart(game.Mode):
 
         self.loaded = False
         self.shots = 0
-        self.shotsToLoad = 1
+        self.shotsToLoad = 2
         self.hits = 0
         self.hitValue = 500000
         self.activeShots = []
@@ -150,9 +159,9 @@ class BionicBart(game.Mode):
             self.activeShots = []
         if amount == 1:
             self.activeShots = [2]
-        if amount == 3 or amount == 2:
+        if amount == 2:
             self.activeShots = [0,3]
-        if amount == 4:
+        if amount == 3:
             self.activeShots = [1,4]
         # update the lamps
         self.update_shot_lamps()
@@ -194,6 +203,7 @@ class BionicBart(game.Mode):
             animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
             animLayer.add_frame_listener(2,self.game.lightning,param="top")
             animLayer.add_frame_listener(3,self.game.lightning,param="left")
+            animLayer.add_frame_listener(3,self.game.lightning,param="right")
             animLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
             animLayer.add_frame_listener(6,self.game.lightning,param="top")
             animLayer.add_frame_listener(7,self.game.lightning,param="left")
@@ -258,7 +268,7 @@ class BionicBart(game.Mode):
         self.actionLine = dmd.TextLayer(46, 16, self.game.assets.font_7px_az, "center", opaque=False).set_text(string)
         self.actionLine.composite_op = "blacksrc"
 
-    def set_status_line(self,amount=1,style="LOAD"):
+    def set_status_line(self,amount=2,style="LOAD"):
         if amount > 1:
             shotWord = "SHOTS"
             hitWord = "HITS"
@@ -287,7 +297,7 @@ class BionicBart(game.Mode):
         self.game.saloon.update_lamps()
         for shot in self.shotModes:
             shot.update_lamps()
-        # next round takes more hits - max at 3 for now - have animations for 4
+        # next round takes more hits - max at 3 for now
         if self.shotsToLoad < 3:
             self.shotsToLoad += 1
         anim = dmd.Animation().load(ep.DMD_PATH+'gun-close.dmd')
@@ -363,7 +373,15 @@ class BionicBart(game.Mode):
             animLayer.frame_time = 4
             self.game.sound.play(self.game.assets.sfx_explosion11)
             self.layer = animLayer
-            self.delay(delay=myWait,handler=self.hit,param=2)
+            # move the hat and bart
+            self.game.bart.hat()
+            self.game.bart.move()
+            # tick up the hits
+            self.hits +=1
+            if self.hits >= self.hitsToDefeat:
+                self.bionic_defeated()
+            else:
+                self.delay(delay=myWait,handler=self.hit,param=2)
         if step == 2:
             # pick a random banner to use
             banner = random.choice(self.banners)
@@ -373,12 +391,7 @@ class BionicBart(game.Mode):
             fadeTo = dmd.GroupedLayer(128,32,[self.stunnedLayer,bannerLayer])
             self.game.sound.play(self.game.assets.sfx_hitBionicBart)
             transition = ep.EP_Transition(self,self.layer,fadeTo,ep.EP_Transition.TYPE_CROSSFADE)
-            # tick up the hits
-            self.hits +=1
-            if self.hits >= self.hitsToDefeat:
-                self.bionic_defeated()
-            else:
-                self.delay(delay=0.8,handler=self.hit,param=3)
+            self.delay(delay=0.8,handler=self.hit,param=3)
         if step == 3:
             self.set_bart_layer(self.stunnedLayer)
             self.game.score_with_bonus(self.hitValue)
@@ -391,10 +404,12 @@ class BionicBart(game.Mode):
         if step == 4:
             self.game.squelch_music()
             self.set_bart_layer(self.whineLayer)
+            self.flash()
             self.update_display()
             duration = self.game.sound.play(self.game.assets.quote_hitBionicBart)
             self.delay(delay=duration,handler=self.hit,param=5)
         if step == 5:
+            self.cancel_delayed("Flashing")
             self.game.restore_music()
             self.set_bart_layer(self.idleLayer)
             self.shots = 0
@@ -412,28 +427,79 @@ class BionicBart(game.Mode):
             self.update_display()
             duration = self.game.sound.play(self.game.assets.quote_tauntBionicBart)
             self.delay(delay=duration,handler=self.miss,param=2)
+            self.flash()
         if step == 2:
+            self.cancel_delayed("Flashing")
             self.set_bart_layer(self.idleLayer)
             self.update_display()
             self.game.restore_music()
             self.game.saloon.kick()
 
-    def bionic_defeated(self):
+    def flash(self):
+        self.game.coils.saloonFlasher.pulse(20)
+        self.delay(name="Flashing",delay=0.2,handler=self.flash)
+
+    def bionic_defeated(self,step=1):
         # VICTOLY!
-        # stop the music
-        self.game.sound.stop_music()
-        # play the quote
-        duration = self.game.sound.play(self.game.assets.quote_defeatBionicBart)
-        # score points
-        self.game.score(1000000)
-        # set bart flag to dead
-        self.game.set_tracking('bionicStatus', "DEAD")
-        # light high noon
-        self.game.badge.light_high_noon()
+        if step == 1:
+            # stop the music
+            self.game.sound.stop_music()
+            # load up the defeated animation
+            anim = dmd.Animation().load(ep.DMD_PATH+'bionic-death.dmd')
+            # set the animation
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=False
+            animLayer.repeat=True
+            animLayer.frame_time = 6
+            fadeTo = animLayer
+            transition = ep.EP_Transition(self,self.layer,fadeTo,ep.EP_Transition.TYPE_CROSSFADE)
+            duration = self.game.sound.play(self.game.assets.sfx_hitBionicBart)
+            self.delay(delay=duration,handler=self.bionic_defeated,param=2)
+        if step == 2:
+            # play the beeping noise
+            duration = self.game.sound.play(self.game.assets.sfx_dieBionicBart)
+            self.delay(delay=duration,handler=self.bionic_defeated,param=3)
+        if step == 3:
+            # load a black layer to cover the score
+            blank = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
+            # play the death quote over the whine bot
+            self.whineLayer.set_target_position(-43,0)
+            self.flash()
+            combined = dmd.GroupedLayer(128,32,[blank,self.whineLayer])
+            self.layer = combined
+            # play the quote
+            duration = self.game.sound.play(self.game.assets.quote_defeatBionicBart)
+            self.delay(delay=duration,handler=self.bionic_defeated,param=4)
+        if step == 4:
+            self.cancel_delayed("Flashing")
+            # this is the part where we blow up
+            anim = dmd.Animation().load(ep.DMD_PATH+'bionic-explode.dmd')
+            # set the animation
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time = 6
+            myWait = len(anim.frames) / 10.0
+            self.layer = animLayer
+            # play the explosion
+            self.game.sound.play(self.game.assets.sfx_heavyExplosion)
+            self.delay(delay=myWait,handler=self.bionic_defeated,param=5)
+        if step == 5:
+            # reset the whine layer target in case it comes back up in this game
+            self.whineLayer.set_target_position(0,0)
+            # then do the text display
+            line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("DEFEATED!")
+            line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("5,000,000 POINTS",blink_frames=8)
+            combined = dmd.GroupedLayer(128,32,[line1,line2])
+            self.layer = combined
 
-        # TODO - lots. points? final display? WAT?
+            # score points
+            self.game.score(5000000)
+            # set bart flag to dead
+            self.game.set_tracking('bionicStatus', "DEAD")
+            # light high noon
+            self.game.badge.light_high_noon()
 
-        self.delay(delay=duration,handler=self.leader_final_quote,param="win")
+            self.leader_final_quote("win")
 
     def bionic_failed(self):
         # Lose the balls during a bionic fight and you lose
@@ -454,12 +520,30 @@ class BionicBart(game.Mode):
 
     def leader_final_quote(self,condition):
         if condition == "win":
-            duration = self.game.sound.play(self.game.assets.quote_leaderWinBionic)
+            duration = self.game.sound.play(self.game.assets.sfx_cheers)
+            duration2 = self.game.sound.play(self.game.assets.quote_leaderWinBionic)
+            if duration2 > duration:
+                duration = duration2
+            self.delay(delay=duration,handler=self.high_noon_lit)
         elif condition == "fail":
             duration = self.game.sound.play(self.game.assets.quote_leaderFailBionic)
-        else:
-            duration = 0
-        self.delay(delay=duration,handler=self.finish_up)
+            self.delay(delay=duration,handler=self.finish_up)
+
+    def high_noon_lit(self):
+        line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("HIGH NOON LIT")
+        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT THE MINE!")
+        combined = dmd.GroupedLayer(128,32,[line1,line2])
+        self.layer = combined
+        self.repeat_ding(3)
+        self.delay(delay=1.2,handler=self.finish_up)
+
+    def repeat_ding(self,times):
+        self.game.sound.play(self.game.assets.sfx_bountyBell)
+        self.game.coils.mineFlasher.pulse(30)
+        times -= 1
+        if times > 0:
+            self.delay(delay=0.4,handler=self.repeat_ding,param=times)
+
 
     def finish_up(self):
         # as is tradition
@@ -469,7 +553,8 @@ class BionicBart(game.Mode):
         # Turn the lights back on
         self.game.update_lamps()
         # turn the main music back on
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        if self.game.trough.num_balls_in_play != 0:
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # kick the ball if it's held
         self.game.saloon.kick()
         # unset the base busy flag

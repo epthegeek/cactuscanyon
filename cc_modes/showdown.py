@@ -107,6 +107,7 @@ class Showdown(game.Mode):
         animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
         animLayer.add_frame_listener(2,self.game.lightning,param="top")
         animLayer.add_frame_listener(3,self.game.lightning,param="left")
+        animLayer.add_frame_listener(3,self.game.lightning,param="right")
         animLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
         animLayer.add_frame_listener(6,self.game.lightning,param="top")
         animLayer.add_frame_listener(7,self.game.lightning,param="left")
@@ -271,7 +272,7 @@ class Showdown(game.Mode):
             self.game.set_tracking('badGuyUp',False,i)
         self.game.bad_guys.update_lamps()
         # start up the main themse again if a second level mode isn't running
-        if not self.game.show_tracking('stackLevel',1):
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
             # turn off the level 1 flag
         self.game.set_tracking('stackLevel',False,0)

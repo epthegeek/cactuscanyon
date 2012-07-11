@@ -111,7 +111,7 @@ class Tracking(game.Player):
         self.player_stats['highNoonStatus'] = "OPEN"
         # list to store the lit items for the star ?
         # Starts at the top of the star with 0, goes clockwise. 0 = motherlode, 1=combo, 2=barts, 3=showdown, 4=stampede
-        self.player_stats['starStatus'] = [False,False,False,False,False]
+        self.player_stats['starStatus'] = [True,True,True,True,True]
         # Bionic Bart - OPEN / READY / RUNNING / DEAD
         self.player_stats['bionicStatus'] = "READY"
 

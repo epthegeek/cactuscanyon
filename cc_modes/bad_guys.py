@@ -1,5 +1,11 @@
 ##
-##  Bad guy Targets and their lamps
+##  ____            _    ____
+## | __ )  __ _  __| |  / ___|_   _ _   _ ___
+## |  _ \ / _` |/ _` | | |  _| | | | | | / __|
+## | |_) | (_| | (_| | | |_| | |_| | |_| \__\
+## |____/ \__,_|\__,_|  \____|\__,_|\__, |___/
+##                                  |___/
+## Bad guy Targets and their lamps
 ##
 ##  Drop Target info:
 ##  Left to right - 0,1,2,3
@@ -67,11 +73,17 @@ class BadGuys(game.Mode):
             print "BAD GUY 0 HIT"
             self.hit_bad_guy(0)
 
+    def sw_badGuySW0_inactive_for_500ms(self,sw):
+        self.target_activate(0)
+
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
         if self.game.show_tracking('badGuyUp',1):
             print "BAD GUY 1 HIT"
             self.hit_bad_guy(1)
+
+    def sw_badGuySW1_inactive_for_500ms(self,sw):
+        self.target_activate(1)
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
@@ -79,11 +91,18 @@ class BadGuys(game.Mode):
             print "BAD GUY 2 HIT"
             self.hit_bad_guy(2)
 
+    def sw_badGuySW2_inactive_for_500ms(self,sw):
+        self.target_activate(2)
+
     def sw_badGuySW3_active(self,sw):
         # far right bad guy target
         if self.game.show_tracking('badGuyUp',3):
             print "BAD GUY 3 HIT"
             self.hit_bad_guy(3)
+
+    def sw_badGuySW3_inactive_for_500ms(self,sw):
+        self.target_activate(3)
+
 
 
     def hit_bad_guy(self,target):
@@ -112,7 +131,8 @@ class BadGuys(game.Mode):
         print self.game.show_tracking('badGuyUp')
         self.coils[target].patter(on_time=4,off_time=8,original_on_time=20)
         self.lamps[target].schedule(0x00FF00FF)
-        self.delay(delay=0.1,handler=self.target_activate,param=target)
+        # trying a new way to activate
+        #self.delay(delay=0.1,handler=self.target_activate,param=target)
 
     def target_down(self,target):
         print "DEACTIVATING TARGET " + str(target)
@@ -122,13 +142,17 @@ class BadGuys(game.Mode):
         self.delay(delay=0.02,handler=self.coils[target].disable)
 
     def target_activate(self,target):
-        print "ACTIVATING TARGET " + str(target)
-        self.game.set_tracking('badGuyUp',True,target)
+        if self.game.show_tracking('badguyUp',target) == False:
+            print "ACTIVATING TARGET " + str(target)
+            self.game.set_tracking('badGuyUp',True,target)
 
     def setup_targets(self):
         # pop up the targets
+        delayTime = 0
         for i in range(0,4,1):
-            self.target_up(i)
+            # adding some delay to keep them from all being slammed at once
+            self.delay(delay=delayTime,handler=self.target_up,param=i)
+            delayTime += 0.03
 
     def drop_targets(self):
         # drop all teh targets

@@ -1,5 +1,9 @@
 ###
-### Ambush
+###     _              _               _
+###    / \   _ __ ___ | |__  _   _ ___| |__
+###   / _ \ | '_ ` _ \| '_ \| | | / __| '_ \
+###  / ___ \| | | | | | |_) | |_| \__ \ | | |
+### /_/   \_\_| |_| |_|_.__/ \__,_|___/_| |_|
 ###
 
 
@@ -388,7 +392,7 @@ class Ambush(game.Mode):
             self.game.set_tracking('badGuyUp',False,i)
         self.game.bad_guys.update_lamps()
         # start up the main theme again if a second level mode isn't running
-        if not self.game.show_tracking('stackLevel',1):
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
             # turn off the level 1 flag
         self.game.set_tracking('stackLevel',False,0)

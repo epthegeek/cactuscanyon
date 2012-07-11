@@ -25,7 +25,8 @@ class Badge(game.Mode):
 
         # star lamps for high noon
         for lamp in range(0,5,1):
-            if self.game.show_tracking('starStatus',lamp):
+            if self.game.show_tracking('starStatus',lamp) == True:
+                print "STAR LAMP " + str(lamp) + "IS" + str(self.game.show_tracking('starStatus',lamp))
                 self.starLamps[lamp].enable()
         # bionic bart ready chases the lights
         if self.game.show_tracking('bionicStatus') == "READY":
@@ -46,12 +47,14 @@ class Badge(game.Mode):
     def reset(self):
         # reset the badge progress
         # set all 5 points to false
+        print "RESETTING BADGE STATUS"
         for i in range(0,5,1):
             self.game.set_tracking('starStatus',"False",i)
         # reset the combos
         self.game.set_tracking('combos',0)
         # reset the barts defeated
         self.game.set_tracking('bartsDefeated',0)
+        self.update_lamps()
 
     def update(self,point):
         # update for the new award

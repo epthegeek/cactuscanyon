@@ -25,11 +25,6 @@ class BaseGameMode(game.Mode):
                           self.game.lamps.rankDeputy,
                           self.game.lamps.rankSheriff,
                           self.game.lamps.rankMarshall]
-        self.starLamps = [self.game.lamps.starMotherlode,
-                          self.game.lamps.starCombo,
-                          self.game.lamps.starBartBrothers,
-                          self.game.lamps.starShowdown,
-                          self.game.lamps.starStampede]
         self.current_music = self.game.assets.music_mainTheme
         self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
         self.busy = False
@@ -686,7 +681,11 @@ class BaseGameMode(game.Mode):
         self.game.set_tracking('bonus',0)
         # and clear the running total
         self.runningTotal = 0
-        self.display_bonus(times)
+        # throw up a  layer that says bonus as an interstitial
+        textLine = dmd.TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("BONUS")
+        self.layer = textLine
+        # then 1.5 seconds later, move on
+        self.delay(delay=1.5,handler=self.display_bonus,param=times)
 
     def display_bonus(self,times):
         background = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-border.dmd').frames[0])
