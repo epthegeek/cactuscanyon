@@ -125,6 +125,8 @@ class CenterRamp(game.Mode):
         self.game.increase_tracking('centerRampShots')
         ## -- set the last switch hit --
         ep.last_switch = "centerRampMake"
+        ## -- set the last shot for combos
+        ep.last_shot = "center"
 
         # hitting this switch counts as a made ramp - really
         # score the points and mess with the combo

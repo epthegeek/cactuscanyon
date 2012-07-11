@@ -269,15 +269,17 @@ class GoldMine(game.Mode):
         # turn motherlode off
         self.game.set_tracking('motherlodeLit', False)
         self.game.mountain.stop()
-        # set the star flag for motherlode - it's 0
-        self.game.badge.update(0)
         # add one to the motherlodes collected
-        self.game.increase_tracking('motherlodesCollected')
+        motherlodes = self.game.increase_tracking('motherlodesCollected')
+        myMultiplier = self.game.show_tracking('motherlodeMultiplier')
+        # if we've collected 3 regular motherlodes, or any motherload with a multiplier, then light the badge
+        if motherlodes >= 3 or myMultiplier > 1:
+            # set the star flag for motherlode - it's 0
+            self.game.badge.update(0)
         # update the lamps
         self.game.update_lamps()
         # reset a counter
         self.counter = 0
-        myMultiplier = self.game.show_tracking('motherlodeMultiplier')
         # play a quote based on the multiplier
         if myMultiplier == 2:
             sound = self.game.assets.quote_doubleMotherlode
