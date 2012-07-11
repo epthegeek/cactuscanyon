@@ -78,6 +78,7 @@ class Tracking(game.Player):
         self.player_stats['combos'] = 0
         # needed for being able to reset the star
         self.player_stats['combosTotal'] = 0
+        self.player_stats['bigChain'] = 0
 
         # Quickdraw status - OPEN, TOP/BOT (for hard difficulty), READY, RUNNING-- 0 is left, 1 is right
         self.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]

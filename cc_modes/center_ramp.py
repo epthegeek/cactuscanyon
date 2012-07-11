@@ -123,10 +123,15 @@ class CenterRamp(ep.EP_Mode):
         # so I don't either
         # tick one on to the total of player shots on the right ramp
         self.game.increase_tracking('centerRampShots')
-        ## -- set the last switch hit --
-        ep.last_switch = "centerRampMake"
-        ## -- set the last shot for combos
-        ep.last_shot = "center"
+        # check the chain status
+        if ep.last_shot == "left" or ep.last_shot == "right":
+            # if there have been at least 2 combo chain shots before, we take action
+            if self.game.combos.chain >= 2:
+            #  and that action is, increase the chain increase the chain
+                self.game.combos.increase_chain()
+        else:
+            # if not, set it back to one
+            self.game.combos.chain = 1
 
         # hitting this switch counts as a made ramp - really
         # score the points and mess with the combo
@@ -137,6 +142,11 @@ class CenterRamp(ep.EP_Mode):
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
         self.award_ramp_score(combo)
+
+        ## -- set the last switch hit --
+        ep.last_switch = "centerRampMake"
+        ## -- set the last shot for combos
+        ep.last_shot = "center"
 
     def award_ramp_score(self,combo):
         # cancel any other displays
@@ -215,6 +225,9 @@ class CenterRamp(ep.EP_Mode):
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         # clear in 3 seconds
         self.delay(name="Display",delay=2,handler=self.clear_layer)
+        # show combo display if the chain is high enough
+        if self.game.combos.chain > 2:
+            self.delay(name="Display",delay=2,handler=self.game.combos.display)
 
     def train_stage_two(self,score):
         self.awardString = "STOP TRAIN"

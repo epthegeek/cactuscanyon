@@ -126,10 +126,14 @@ class Combos(ep.EP_Mode):
         # if we've got a chain going, that affects display
         print "CHAIN VALUE: " + str(self.chain)
         if self.chain > 1:
-            textString = str(self.chain) + "-WAY COMBO"
-            points = 50000
+            if ep.last_shot == "center":
+                textString = str(self.chain) + "-WAY SUPER COMBO"
+                points = 25000 * self.chain
+            else:
+                textString = str(self.chain) + "-WAY COMBO"
+                points = 50000
             textString2 = str(ep.format_score(points)) + " POINTS"
-            self.game.score(50000)
+            self.game.score(points)
         else:
             textString = "COMBO AWARDED"
             textString2 = str(combos) + " COMBOS"
@@ -154,3 +158,10 @@ class Combos(ep.EP_Mode):
     def abort_display(self):
         self.clear_layer()
         self.cancel_delayed("Display")
+
+    def increase_chain(self):
+        # up the count
+        self.chain += 1
+        # check it against the tracking and set the new if it's high - to be used for combo champ
+        if self.chain > self.game.show_tracking('bigChain'):
+            self.game.set_tracking('bigChain')

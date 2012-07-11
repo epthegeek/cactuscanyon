@@ -127,6 +127,11 @@ class CCGame(game.BasicGame):
         cat.titles = ['Motherlode Champ']
         self.highscore_categories.append(cat)
 
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'ComboChampHighScoreData'
+        cat.score_for_player = lambda player: self.show_tracking('bigChain')
+        cat.titles = ['Combo Champ']
+        self.highscore_categories.append(cat)
 
         ## TODO later - and combo champ? ambush champ? ramp champ?
 

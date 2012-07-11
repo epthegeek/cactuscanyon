@@ -120,7 +120,7 @@ class LeftRamp(ep.EP_Mode):
         # check the chain status
         if ep.last_shot == "right":
             # if we're coming from the right ramp, chain goes up
-            self.game.combos.chain += 1
+            self.game.combos.increase_chain()
         else:
             # if we're not, reset the chain to one
             self.game.combos.chain = 1

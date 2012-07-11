@@ -128,7 +128,7 @@ class RightRamp(ep.EP_Mode):
         # check the chain status
         if ep.last_shot == "left":
             # if we're coming from the left ramp, increase the chain
-            self.game.combos.chain += 1
+            self.game.combos.increase_chain()
         else:
             # if not, set it back to one
             self.game.combos.chain = 1
@@ -278,7 +278,7 @@ class RightRamp(ep.EP_Mode):
         self.delay(name="Display",delay=1,handler=self.clear_layer)
         # show combo display if the chain is high enough
         if self.game.combos.chain > 1:
-            self.delay(name="Display",delay=2,handler=self.game.combos.display)
+            self.delay(name="Display",delay=1,handler=self.game.combos.display)
 
     def build_award_text(self,blink=None):
         # create the two text lines

@@ -262,6 +262,14 @@ class Attract(ep.EP_Mode):
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
                     self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 
+                # Generate a screen for the Combo Champ
+                if category.game_data_key == 'ComboChampHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stars-border.dmd').frames[0])
+                    title = dmd.TextLayer(64, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("COMBO CHAMP")
+                    initLine1 = dmd.TextLayer(64, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + "-WAY COMBO")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 
                 # Generate a screen for the motherlode champ
                 if category.game_data_key == 'MotherlodeChampHighScoreData':
