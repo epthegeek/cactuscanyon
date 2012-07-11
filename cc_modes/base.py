@@ -14,7 +14,7 @@ import ep
 import random
 
 
-class BaseGameMode(game.Mode):
+class BaseGameMode(ep.EP_Mode):
     """docstring for AttractMode"""
     def __init__(self, game,priority):
         super(BaseGameMode, self).__init__(game, priority)
@@ -27,7 +27,7 @@ class BaseGameMode(game.Mode):
                           self.game.lamps.rankMarshall]
         self.current_music = self.game.assets.music_mainTheme
         self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
-        self.busy = False
+        self.unbusy()
 
     def mode_started(self):
         print "INTERRUPTER IS DISPATCHING DELAYS"
@@ -260,22 +260,12 @@ class BaseGameMode(game.Mode):
     def delayed_music_on(self,wait,song=None):
         self.delay(delay=wait, handler=self.music_on,param=song)
 
-    def clear_layer(self):
-        self.layer = None
-
     def repeat_ding(self,times):
         self.game.sound.play(self.game.assets.sfx_bountyBell)
         self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
         times -= 1
         if times > 0:
             self.delay(delay=0.4,handler=self.repeat_ding,param=times)
-
-    def wait_until_unbusy(self,myHandler):
-        if not self.busy:
-            myHandler()
-        else:
-            self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
-
 
     ###
     ###  _____ _ _ _

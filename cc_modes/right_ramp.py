@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class RightRamp(game.Mode):
+class RightRamp(ep.EP_Mode):
     """Cactus Canyon Right Ramp Mode"""
     def __init__(self, game, priority):
         super(RightRamp, self).__init__(game, priority)
@@ -299,10 +299,6 @@ class RightRamp(game.Mode):
         completeFrame = dmd.GroupedLayer(128, 32, [self.layer,awardTextTop,awardTextBottom])
         # swap in the new layer
         self.layer = completeFrame
-
-
-    def clear_layer(self):
-        self.layer = None
 
     def abort_display(self):
         self.clear_layer()

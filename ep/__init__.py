@@ -1,9 +1,11 @@
 __all__ = [
     'ep_layers',
-    'ep_transition'
+    'ep_transition',
+    'ep_mode'
 ]
 from ep_layers import *
 from ep_transition import *
+from ep_mode import *
 
 import locale
 

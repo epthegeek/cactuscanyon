@@ -5,7 +5,7 @@ import cc_modes
 import ep
 import random
 
-class Badge(game.Mode):
+class Badge(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Badge, self).__init__(game,priority)

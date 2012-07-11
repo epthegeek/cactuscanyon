@@ -11,16 +11,13 @@ import cc_modes
 import ep
 import random
 
-class BionicBart(game.Mode):
+class BionicBart(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(BionicBart, self).__init__(game,priority)
         self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
         self.shotModes = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.saloon]
         self.banners = ['bam','biff','ouch','pow','wham','zoink']
-
-
-    # TODO - need a taunt timer, display updater, switch handling, yadda yadda
 
     def ball_drained(self):
         # if we lose all the balls the battle is lost
@@ -560,7 +557,4 @@ class BionicBart(game.Mode):
         # unset the base busy flag
         self.game.base_game_mode.busy = False
         # unload the mode
-        self.game.modes.remove(self.game.bionic)
-
-    def clear_layer(self):
-        self.layer = None
+        self.unload()

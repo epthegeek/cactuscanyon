@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class LeftLoop(game.Mode):
+class LeftLoop(ep.EP_Mode):
     """Cactus Canyon Left Loop"""
     def __init__(self, game, priority):
         super(LeftLoop, self).__init__(game, priority)
@@ -21,7 +21,6 @@ class LeftLoop(game.Mode):
         self.anims.append({'layer':anim2,'direction':ep.EP_Transition.PARAM_EAST})
         anim3 = ep.DMD_PATH + "horse-run-right.dmd"
         self.anims.append({'layer':anim3,'direction':ep.EP_Transition.PARAM_EAST})
-
 
     def mode_started(self):
         self.update_lamps()
@@ -290,12 +289,6 @@ class LeftLoop(game.Mode):
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_tumbleWind)
         self.delay(name="Display",delay=myWait,handler=self.clear_layer)
-
-
-
-
-    def clear_layer(self):
-        self.layer = None
 
     def abort_display(self):
         self.clear_layer()

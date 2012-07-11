@@ -8,7 +8,7 @@ from assets import *
 import cc_modes
 import ep
 
-class Interrupter(game.Mode):
+class Interrupter(ep.EP_Mode):
     """Cactus Canyon Interrupter Jones"""
     def __init__(self, game, priority):
         super(Interrupter, self).__init__(game, priority)
@@ -50,9 +50,6 @@ class Interrupter(game.Mode):
     def abort_player_number(self):
         self.cancel_delayed("clearInterrupter")
         self.cancel_delayed("idle")
-        self.layer = None
-
-    def clear_layer(self):
         self.layer = None
 
     def tilt_danger(self,status):

@@ -9,11 +9,13 @@ import ep
 import random
 import locale
 
-class Saloon(game.Mode):
+class Saloon(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(Saloon, self).__init__(game, priority)
-        self.busy = False
+
+    def mode_started(self):
+        self.unbusy()
 
     def sw_saloonPopper_active_for_300ms(self,sw):
         # if bionic bart is running don't do anything
@@ -34,7 +36,7 @@ class Saloon(game.Mode):
             ## it counts as a hit so we have to do that first
             if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
                 # set the busy flag
-                self.busy = True
+                self.busy()
                 # if drunk multiball is ready, start that, maybe
                 if self.game.show_tracking('drunkMultiballStatus') == "READY":
                 ## If any level below is running, avoid multiball start
@@ -65,7 +67,7 @@ class Saloon(game.Mode):
             self.game.coils.saloonFlasher.pulse(30)
             return
         # set the busy flag
-        self.busy = True
+        self.busy()
         # a direct smack to el barto
         self.game.bart.hit()
         ## -- set the last switch hit --
@@ -152,7 +154,7 @@ class Saloon(game.Mode):
 
     def clear_layer(self):
         self.layer = None
-        self.busy = False
+        self.unbusy()
 
     ###
     ###  ____                    _

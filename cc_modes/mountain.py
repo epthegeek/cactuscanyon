@@ -6,7 +6,7 @@ from assets import *
 import cc_modes
 import ep
 
-class Mountain(game.Mode):
+class Mountain(ep.EP_Mode):
     """Cactus Canyon Interrupter Jones"""
     def __init__(self, game, priority):
         super(Mountain, self).__init__(game, priority)

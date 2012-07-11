@@ -7,7 +7,7 @@ import cc_modes
 import ep
 import random
 
-class GoldMine(game.Mode):
+class GoldMine(ep.EP_Mode):
     """Mining for great justice - For the Gold Mine Multiball, and ... ? """
     def __init__(self,game,priority):
         super(GoldMine, self).__init__(game,priority)
@@ -344,10 +344,7 @@ class GoldMine(game.Mode):
         #refresh the mine lights
         self.game.update_lamps()
         # unload the mode
-        self.game.modes.remove(self.game.gm_multiball)
-
-    def clear_layer(self):
-        self.layer = None
+        self.unload()
 
     def abort_display(self):
         self.cancel_delayed("Display")

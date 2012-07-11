@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class CenterRamp(game.Mode):
+class CenterRamp(ep.EP_Mode):
     """Cactus Canyon Center Ramp Mode"""
     def __init__(self, game, priority):
         super(CenterRamp, self).__init__(game, priority)
@@ -253,9 +253,6 @@ class CenterRamp(game.Mode):
         # turn on the animation
         self.layer = animLayer
         self.delay(name="Display",delay=myWait,handler=self.show_award_text)
-
-    def clear_layer(self):
-        self.layer = None
 
     def abort_display(self):
         self.clear_layer()

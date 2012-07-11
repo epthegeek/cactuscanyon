@@ -12,7 +12,7 @@ import cc_modes
 import ep
 import random
 
-class DrunkMultiball(game.Mode):
+class DrunkMultiball(ep.EP_Mode):
     """Mining for great justice - For the Gold Mine Multiball, and ... ? """
     def __init__(self,game,priority):
         super(DrunkMultiball, self).__init__(game,priority)
@@ -297,6 +297,6 @@ class DrunkMultiball(game.Mode):
         # set the stack flag back off
         self.game.set_tracking('stackLevel',False,1)
         # unload the mode
-        self.game.modes.remove(self.game.drunk_multiball)
+        self.unload()
 
 

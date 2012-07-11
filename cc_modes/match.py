@@ -9,7 +9,7 @@ import cc_modes
 import random
 import ep
 
-class Match(game.Mode):
+class Match(ep.EP_Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Match, self).__init__(game, priority)
@@ -130,4 +130,4 @@ class Match(game.Mode):
         # run the high score routine after the match
         self.game.run_highscore()
         # and remove thyself.
-        self.game.modes.remove(self.game.match)
+        self.unload()

@@ -13,7 +13,7 @@ import ep
 import random
 import locale
 
-class Bart(game.Mode):
+class Bart(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Bart, self).__init__(game,priority)

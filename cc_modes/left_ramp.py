@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class LeftRamp(game.Mode):
+class LeftRamp(ep.EP_Mode):
     """Cactus Canyon Right Ramp Mode"""
     def __init__(self, game, priority):
         super(LeftRamp, self).__init__(game, priority)
@@ -287,9 +287,6 @@ class LeftRamp(game.Mode):
         blank.composite_op = "blacksrc"
         transition = ep.EP_Transition(self,self.layer,blank,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         transition.callback = self.clear_layer
-
-    def clear_layer(self):
-        self.layer = None
 
     def abort_display(self):
         self.clear_layer()

@@ -12,8 +12,7 @@ import cc_modes
 import ep
 import random
 
-
-class Ambush(game.Mode):
+class Ambush(ep.EP_Mode):
     """Showdown code """
     def __init__(self,game,priority):
         super(Ambush, self).__init__(game,priority)
@@ -80,7 +79,7 @@ class Ambush(game.Mode):
         self.activatedBadGuys = []
         self.misses = 0
         self.badGuyTimer = [None,None,None,None]
-        self.busy = False
+        self.unbusy()
         self.paused = False
 
     def ball_drained(self):
@@ -148,7 +147,7 @@ class Ambush(game.Mode):
         # kick out more ball
         #self.game.trough.launch_balls(1)
         # add two dudes - one here, one later
-        self.busy = True
+        self.busy()
         self.add_guys(1)
         # drop the post
         self.posts[self.activeSide].disable()
@@ -174,7 +173,7 @@ class Ambush(game.Mode):
         if amount != 0:
             self.delay(name="Add Guys",delay=.5,handler=self.add_guys,param=amount)
         else:
-            self.busy = False
+            self.unbusy()
 
     def pause(self):
         # if we're already paused, skip this
@@ -240,7 +239,7 @@ class Ambush(game.Mode):
             # if we need to add some, fire away - if we haven't lost yet
             if thisMany != 0 and self.misses < self.LOSE:
                 # turn on the busy flag to stop the poller while adding
-                self.busy = True
+                self.busy()
                 self.add_guys(thisMany)
 
     def update_display(self,killed=99,escaped=99):
@@ -420,12 +419,6 @@ class Ambush(game.Mode):
 
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)
-
-    def unload(self):
-        self.game.modes.remove(self.game.ambush)
-
-    def clear_layer(self):
-        self.layer = None
 
     def mode_stopped(self):
         print "AMBUSH IS DISPATCHING DELAYS"

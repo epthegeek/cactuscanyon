@@ -12,7 +12,7 @@ import locale
 
 locale.setlocale(locale.LC_ALL, "")
 
-class Attract(game.Mode):
+class Attract(ep.EP_Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Attract, self).__init__(game, priority)

@@ -11,7 +11,7 @@ from assets import *
 import cc_modes
 import ep
 
-class Combos(game.Mode):
+class Combos(ep.EP_Mode):
     """Cactus Canyon Combos"""
     def __init__(self, game, priority):
         super(Combos, self).__init__(game, priority)
@@ -154,6 +154,3 @@ class Combos(game.Mode):
     def abort_display(self):
         self.clear_layer()
         self.cancel_delayed("Display")
-
-    def clear_layer(self):
-        self.layer = None

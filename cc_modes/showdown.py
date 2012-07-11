@@ -12,7 +12,7 @@ import cc_modes
 import ep
 import random
 
-class Showdown(game.Mode):
+class Showdown(ep.EP_Mode):
     """Showdown code """
     def __init__(self,game,priority):
         super(Showdown, self).__init__(game,priority)
@@ -297,12 +297,6 @@ class Showdown(game.Mode):
 
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)
-
-    def unload(self):
-        self.game.modes.remove(self.game.showdown)
-
-    def clear_layer(self):
-        self.layer = None
 
     def mode_stopped(self):
         print "SHOWDOWN IS DISPATCHING DELAYS"

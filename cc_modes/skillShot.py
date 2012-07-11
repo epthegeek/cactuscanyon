@@ -8,7 +8,7 @@ import random
 import ep
 
 
-class SkillShot(game.Mode):
+class SkillShot(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(SkillShot, self).__init__(game, priority)
@@ -35,7 +35,6 @@ class SkillShot(game.Mode):
 
         self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
         self.active = 0
-        self.busy = False
 
     def mode_started(self):
         # reset the super just in case
@@ -431,11 +430,11 @@ class SkillShot(game.Mode):
         self.game.base_game_mode.check_stampede()
         # unload in 2 seconds - to give
         # the award junk time to finish
-        self.delay(delay=myDelay,handler=self.shutdown)
+        self.delay(delay=myDelay,handler=self.unload)
 
     def activate_super(self):
         # turn on a busy flag
-        self.busy = True
+        self.busy()
         # cancel the idle timer from interrupter jones
         self.game.interrupter.cancel_idle()
         # turn off the music
@@ -484,9 +483,6 @@ class SkillShot(game.Mode):
         self.delay(name="Display",delay=myWait+1,handler=self.update_layer)
         self.delay(delay=myWait+1,handler=self.unbusy)
 
-    def unbusy(self):
-        self.busy = False
-
     def super_hit(self,made=None):
         # unload the switch trap
         self.game.modes.remove(self.game.super_filter)
@@ -533,12 +529,4 @@ class SkillShot(game.Mode):
             lamp.disable()
         for lamp in self.centerRampLamps:
             lamp.disable()
-
-    def shutdown(self):
-        # unload the skill shot since it's not needed
-        # once the game is in play
-        self.game.modes.remove(self.game.skill_shot)
-
-    def clear_layer(self):
-        self.layer = None
 

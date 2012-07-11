@@ -11,7 +11,7 @@ import cc_modes
 import ep
 import random
 
-class Quickdraw(game.Mode):
+class Quickdraw(ep.EP_Mode):
     """Quickdraw code """
     def __init__(self,game,priority):
         super(Quickdraw, self).__init__(game,priority)
@@ -233,7 +233,7 @@ class Quickdraw(game.Mode):
         # full lamp update
         self.game.update_lamps()
         # remove the mode
-        self.game.modes.remove(self.game.quickdraw)
+        self.unload()
 
     def mode_stopped(self):
         print "QUICKDRAW IS DISPATCHING DELAYS"
