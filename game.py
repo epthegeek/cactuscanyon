@@ -46,6 +46,9 @@ class CCGame(game.BasicGame):
         self.squelched = False
         self.previousVolume = 0
 
+        self.POSTS = [self.coils.leftGunFightPost,self.coils.rightGunFightPost]
+
+
     def setup(self):
         """docstring for setup"""
         # load up the game data Game data
@@ -190,6 +193,8 @@ class CCGame(game.BasicGame):
         self.bionic = cc_modes.BionicBart(game=self,priority=90)
         # High Noon
         self.high_noon = cc_modes.HighNoon(game=self,priority=90)
+        # move your train
+        self.move_your_train = cc_modes.MoveYourTrain(game=self,priority=90)
         # skillshot switch filter
         self.super_filter = cc_modes.SuperFilter(game=self,priority = 200)
         # Interrupter Jones
@@ -226,7 +231,8 @@ class CCGame(game.BasicGame):
                          self.gunfight,
                          self.badge,
                          self.bionic,
-                         self.bart]
+                         self.bart,
+                         self.move_your_train]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 

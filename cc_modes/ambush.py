@@ -147,7 +147,7 @@ class Ambush(ep.EP_Mode):
         # kick out more ball
         #self.game.trough.launch_balls(1)
         # add two dudes - one here, one later
-        self.busy()
+        self.is_busy()
         self.add_guys(1)
         # drop the post
         self.posts[self.activeSide].disable()
@@ -239,7 +239,7 @@ class Ambush(ep.EP_Mode):
             # if we need to add some, fire away - if we haven't lost yet
             if thisMany != 0 and self.misses < self.LOSE:
                 # turn on the busy flag to stop the poller while adding
-                self.busy()
+                self.is_busy()
                 self.add_guys(thisMany)
 
     def update_display(self,killed=99,escaped=99):

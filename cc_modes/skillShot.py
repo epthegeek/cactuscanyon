@@ -48,6 +48,7 @@ class SkillShot(ep.EP_Mode):
         self.delay(delay=0.2,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
 
+
     def generate_prizes(self):
         # set up a blank list for prizes
         prizes = []
@@ -105,20 +106,21 @@ class SkillShot(ep.EP_Mode):
         # here's the super skill shot prizes
         else:
             # 3 million points
-            prizes.append("O")
+           # prizes.append("O")
             # bonus 5x
-            if self.game.show_tracking('bonusX') < 9:
-                prizes.append("P")
+           # if self.game.show_tracking('bonusX') < 9:
+           #     prizes.append("P")
             # light gunfight
-            if self.game.show_tracking('gunfightStatus') != "READY":
-                prizes.append("Q")
+           # if self.game.show_tracking('gunfightStatus') != "READY":
+           #     prizes.append("Q")
             # drunk multiball
-            if self.game.show_tracking('drunkMultiballStatus') != "READY":
-                prizes.append("R")
-                # TODO this one needs an icon
+           # if self.game.show_tracking('drunkMultiballStatus') != "READY":
+           #     prizes.append("R")
             # extra ball
-            if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-                prizes.append("J")
+           # if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+           #     prizes.append("J")
+            # move your train
+            prizes.append("S")
 
         # initialize some junk
         count = 0
@@ -361,6 +363,13 @@ class SkillShot(ep.EP_Mode):
             self.game.base_game_mode.light_drunk_multiball(self.game.skill_shot.start_gameplay)
             return
 
+        # move your train
+        elif self.selectedPrizes[5:] == "S":
+            awardStringTop = "MOVE"
+            awardStringBottom = "YOUR TRAIN"
+            # load the mode so the train starts moving
+            self.game.modes.add(self.game.move_your_train)
+
         # call the lamp update so the prize is shown properly
         self.game.update_lamps()
 
@@ -434,7 +443,7 @@ class SkillShot(ep.EP_Mode):
 
     def activate_super(self):
         # turn on a busy flag
-        self.busy()
+        self.is_busy()
         # cancel the idle timer from interrupter jones
         self.game.interrupter.cancel_idle()
         # turn off the music

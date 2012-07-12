@@ -31,6 +31,7 @@ __all__ = [
     'bionic_bart',
     'badge',
     'bart',
+    'move_your_train',
 ]
 from base import *
 from attract import *
@@ -64,3 +65,4 @@ from ball_search import *
 from bionic_bart import *
 from badge import *
 from bart import *
+from move_your_train import *

@@ -344,6 +344,10 @@ class BaseGameMode(ep.EP_Mode):
         if not self.guns_allowed():
             print "PASSING - Guns disabled"
             print self.game.show_tracking('stackLevel')
+        # move your train
+        elif self.game.show_tracking('mytStatus') == "READY":
+            # if MYT is ready, start it and raise the post to catch the ball
+            self.game.move_your_train.start(True,side)
         # if guns are allowed, and showdown is ready do that
         elif self.game.show_tracking('showdownStatus') == "READY":
             self.game.modes.add(self.game.showdown)

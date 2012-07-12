@@ -294,8 +294,8 @@ class SavePolly(ep.EP_Mode):
         # stop the polly music
         print "polly_finished IS KILLING THE MUSIC"
         self.game.sound.stop_music()
-        # turn the main game music back on if showdown isn't running
-        if self.game.show_tracking('showdownStatus') != "RUNNING" and self.game.trough.num_balls_in_play != 0:
+        # start up the main theme again if a second level mode isn't running
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         self.game.train.reset_toy()
         # turn off the polly display

@@ -118,6 +118,9 @@ class Tracking(game.Player):
         # Bionic Bart - OPEN / READY / RUNNING / DEAD
         self.player_stats['bionicStatus'] = "READY"
 
+        # Move your train - OPEN / READY / RUNNING
+        self.player_stats['mytStatus'] = "OPEN"
+
         self.player_stats['tiltStatus'] = 0
         # used to disable the playfield lights in an update lamps pass
         # lamp status modes: ON, OFF
