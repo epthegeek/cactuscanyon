@@ -164,4 +164,4 @@ class Combos(ep.EP_Mode):
         self.chain += 1
         # check it against the tracking and set the new if it's high - to be used for combo champ
         if self.chain > self.game.show_tracking('bigChain'):
-            self.game.set_tracking('bigChain')
+            self.game.set_tracking('bigChain',self.chain)

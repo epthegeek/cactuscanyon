@@ -197,8 +197,12 @@ class CenterRamp(ep.EP_Mode):
                 self.train_victory()
         # then tick the stage up for next time unless it's completed
         # we're holding at 3, save polly peril will set it to 4
-        if self.game.show_tracking('centerRampStage') < 3:
-            self.game.increase_tracking('centerRampStage')
+        if stage < 3:
+            # if we're at stage 2 and MYT is running, don't increase - stay at two
+            if stage == 2 and self.game.move_your_train.running:
+                pass
+            else:
+                self.game.increase_tracking('centerRampStage')
             # do a little lamp flourish
             self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
             self.game.lamps.centerRampStopTrain.schedule(0x0FF00FF0)

@@ -8,7 +8,7 @@ class EP_Mode(game.Mode):
         self.busy = False
 
     # busy flag set and unset
-    def busy(self):
+    def is_busy(self):
         self.busy = True
 
     def unbusy(self):

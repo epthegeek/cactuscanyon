@@ -123,6 +123,10 @@ Gameplay (Feature):
     options: [2,10]
     increments: 1
     default: 3
+  'Move Your Train Timer':
+    options: [15,60]
+    increments: 5
+    default: 30
   'Quickdraws Lit Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'

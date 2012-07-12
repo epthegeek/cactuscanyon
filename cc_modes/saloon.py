@@ -36,7 +36,7 @@ class Saloon(ep.EP_Mode):
             ## it counts as a hit so we have to do that first
             if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
                 # set the busy flag
-                self.busy()
+                self.is_busy()
                 # if drunk multiball is ready, start that, maybe
                 if self.game.show_tracking('drunkMultiballStatus') == "READY":
                 ## If any level below is running, avoid multiball start
@@ -67,7 +67,7 @@ class Saloon(ep.EP_Mode):
             self.game.coils.saloonFlasher.pulse(30)
             return
         # set the busy flag
-        self.busy()
+        self.is_busy()
         # a direct smack to el barto
         self.game.bart.hit()
         ## -- set the last switch hit --

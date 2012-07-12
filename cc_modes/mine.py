@@ -75,7 +75,7 @@ class Mine(ep.EP_Mode):
         # if there's an extra ball waiting, collect one
         if self.game.show_tracking('extraBallsPending') > 0:
             # we'll be busy until this ends
-            self.busy()
+            self.is_busy()
             self.collect_extra_ball()
         # then register the mine shot
         # if we're in a GM multiball, let that mode take it
