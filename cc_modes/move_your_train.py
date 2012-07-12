@@ -106,8 +106,6 @@ class MoveYourTrain(ep.EP_Mode):
     def get_going(self):
         # update the display
         self.main_display()
-        # start the timer
-        self.mode_timer(self.timeLimit)
         # drop the post and/or kick the ball
         self.game.coils.rightGunFightPost.disable()
         self.game.saloon.kick()
@@ -190,29 +188,7 @@ class MoveYourTrain(ep.EP_Mode):
         # for setting the offset for the train layers
         self.trainOffset = value
 
-    def mode_timer(self,seconds):
-        if seconds <= 0:
-            # fail
-            self.end()
-        else:
-            seconds -= 1
-            self.timeLimit = seconds
-            self.delay(name="Timer",delay=1,handler=self.mode_timer,param=self.timeLimit)
-
-    def pause(self):
-        self.paused = True
-        self.cancel_delayed("Timer")
-        textString = "< TRAIN PAUSED >"
-        self.banner = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
-
-    def resume(self):
-        self.paused = False
-        self.mode_timer(self.timeLimit)
-        # update the display
-        self.main_display()
-
     def win(self):
-
         self.game.sound.play(self.game.assets.sfx_trainWhistle)
         self.game.sound.play(self.game.assets.sfx_cheers)
         textString = "TRAIN MOVED IN " + str(self.shots) + " SHOTS"

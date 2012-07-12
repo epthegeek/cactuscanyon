@@ -66,9 +66,6 @@ class Saloon(ep.EP_Mode):
             self.game.sound.play(self.game.assets.sfx_ricochetSet)
             self.game.coils.saloonFlasher.pulse(30)
             return
-        if self.game.move_your_train.running == True:
-            self.kick()
-            return
         # set the busy flag
         self.is_busy()
         # a direct smack to el barto
@@ -98,9 +95,6 @@ class Saloon(ep.EP_Mode):
         ep.last_switch = "jetBumpersExit"
 
     def kick(self):
-        # if the MYT is paused, resume
-        if self.game.move_your_train.paused:
-            self.game.move_your_train.resume()
         # kick the ball out
         if self.game.switches.saloonPopper.is_active():
             self.game.coils.saloonPopper.pulse(30)

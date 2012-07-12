@@ -69,9 +69,6 @@ class Mine(ep.EP_Mode):
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             print "WAIT, HOW DID I GET HERE"
             return
-        # if MYT is running just kick the ball
-        if self.game.move_your_train.running == True:
-            self.kick()
         # stock sound for the switch
         if self.game.show_tracking('highNoonStatus') != "READY":
             self.game.sound.play(self.game.assets.sfx_mineKicker)
