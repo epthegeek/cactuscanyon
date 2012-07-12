@@ -138,7 +138,7 @@ class MoveYourTrain(ep.EP_Mode):
         print "TRAIN OFFSET: " + str(self.trainOffset)
         # four movements in one direction is win
         if self.trainOffset == 80 or self.trainOffset == -80:
-            self.win()
+            self.delay(delay=self.animWait,handler=self.win)
         else:
             # set a delay to go back to idle for all other cases
             self.delay(name="Display",delay=self.animWait,handler=self.idle_display)
