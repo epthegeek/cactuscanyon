@@ -11,7 +11,7 @@ from assets import *
 import cc_modes
 import ep
 
-class BonusLanes(game.Mode):
+class BonusLanes(ep.EP_Mode):
     """Cactus Canyon Bonus Lanes"""
     def __init__(self, game, priority):
         super(BonusLanes, self).__init__(game, priority)
@@ -125,8 +125,6 @@ class BonusLanes(game.Mode):
 
     def play_sfx_cactusMash(self):
         self.game.sound.play(self.game.assets.sfx_cactusMash)
-
-    def clear_layer(self):
         self.layer = None
 
     def abort_display(self):

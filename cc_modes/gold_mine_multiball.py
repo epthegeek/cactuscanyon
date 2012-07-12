@@ -7,7 +7,7 @@ import cc_modes
 import ep
 import random
 
-class GoldMine(game.Mode):
+class GoldMine(ep.EP_Mode):
     """Mining for great justice - For the Gold Mine Multiball, and ... ? """
     def __init__(self,game,priority):
         super(GoldMine, self).__init__(game,priority)
@@ -41,7 +41,8 @@ class GoldMine(game.Mode):
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
-        self.process_shot(3)
+        if not self.game.bart.moving:
+            self.process_shot(3)
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
@@ -269,15 +270,19 @@ class GoldMine(game.Mode):
         # turn motherlode off
         self.game.set_tracking('motherlodeLit', False)
         self.game.mountain.stop()
-        # set the star flag for motherlode - it's 0
-        self.game.badge.update(0)
         # add one to the motherlodes collected
-        self.game.increase_tracking('motherlodesCollected')
+        motherlodes = self.game.increase_tracking('motherlodesCollected')
+        # and one to the total motherlodes for good measure
+        self.game.increase_tracking('motherlodesCollectedTotal')
+        myMultiplier = self.game.show_tracking('motherlodeMultiplier')
+        # if we've collected 3 regular motherlodes, or any motherload with a multiplier, then light the badge
+        if motherlodes >= 3 or myMultiplier > 1:
+            # set the star flag for motherlode - it's 0
+            self.game.badge.update(0)
         # update the lamps
         self.game.update_lamps()
         # reset a counter
         self.counter = 0
-        myMultiplier = self.game.show_tracking('motherlodeMultiplier')
         # play a quote based on the multiplier
         if myMultiplier == 2:
             sound = self.game.assets.quote_doubleMotherlode
@@ -305,6 +310,9 @@ class GoldMine(game.Mode):
         if times == 0:
             # award the points
             self.game.score(self.motherlodeValue * self.counter)
+            # track highest shot for motherlode champ
+            if self.motherlodeValue > self.game.show_tracking('motherlodeValue'):
+                self.game.set_tracking('motherlodeValue', self.motherlodeValue)
             # and reset the motherlode value
             self.motherlodeValue = 0
             # then go back to the main display
@@ -338,10 +346,7 @@ class GoldMine(game.Mode):
         #refresh the mine lights
         self.game.update_lamps()
         # unload the mode
-        self.game.modes.remove(self.game.gm_multiball)
-
-    def clear_layer(self):
-        self.layer = None
+        self.unload()
 
     def abort_display(self):
         self.cancel_delayed("Display")

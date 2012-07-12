@@ -9,11 +9,13 @@ import ep
 import random
 import locale
 
-class Saloon(game.Mode):
+class Saloon(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(Saloon, self).__init__(game, priority)
-        self.busy = False
+
+    def mode_started(self):
+        self.unbusy()
 
     def sw_saloonPopper_active_for_300ms(self,sw):
         # if bionic bart is running don't do anything
@@ -34,7 +36,7 @@ class Saloon(game.Mode):
             ## it counts as a hit so we have to do that first
             if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
                 # set the busy flag
-                self.busy = True
+                self.busy()
                 # if drunk multiball is ready, start that, maybe
                 if self.game.show_tracking('drunkMultiballStatus') == "READY":
                 ## If any level below is running, avoid multiball start
@@ -65,7 +67,7 @@ class Saloon(game.Mode):
             self.game.coils.saloonFlasher.pulse(30)
             return
         # set the busy flag
-        self.busy = True
+        self.busy()
         # a direct smack to el barto
         self.game.bart.hit()
         ## -- set the last switch hit --
@@ -78,16 +80,15 @@ class Saloon(game.Mode):
         # exciting!
         ## -- set the last switch hit --
         ep.last_switch = "saloonGate"
-
+        ## kill the combo shot chain
+        ep.last_shot = None
 
     def sw_jetBumpersExit_active(self,sw):
         # if there's an active bart, play a quote
         if self.game.show_tracking('bartStatus') == "RUNNING":
             self.game.sound.play_voice(self.game.bart.tauntQuote)
             # and move the bart
-            self.game.bart.move()
-            self.delay(delay=0.03,handler=self.game.bart.light)
-            self.delay(delay=0.07,handler=self.game.bart.move)
+            self.game.bart.animate(2)
         # score some points
         self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
@@ -153,7 +154,7 @@ class Saloon(game.Mode):
 
     def clear_layer(self):
         self.layer = None
-        self.busy = False
+        self.unbusy()
 
     ###
     ###  ____                    _

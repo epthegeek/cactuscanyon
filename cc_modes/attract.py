@@ -12,7 +12,7 @@ import locale
 
 locale.setlocale(locale.LC_ALL, "")
 
-class Attract(game.Mode):
+class Attract(ep.EP_Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Attract, self).__init__(game, priority)
@@ -48,6 +48,7 @@ class Attract(game.Mode):
 
         # Turn on the GIs
         self.game.gi_control("ON")
+
 
         ## lampshows for attract mode
         lampshows = [
@@ -88,6 +89,7 @@ class Attract(game.Mode):
         indexB = self.myIndex
         frameA = self.layers[indexA]
         frameB = self.layers[indexB]
+
         # two versions of the transition creation to cover if a direction is needed or not
         if frameB['direction'] != False:
             self.transition = ep.EP_Transition(self,frameA['layer'],frameB['layer'],frameB['type'],frameB['direction'])
@@ -220,6 +222,61 @@ class Attract(game.Mode):
                     title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("AMBUSH CHAMP")
                     initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
+                # Generate a screen for the Tumbleweed Rustler
+                if category.game_data_key == 'TumbleweedChampHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed.dmd').frames[7])
+                    backdrop.set_target_position(32,0)
+                    title = dmd.TextLayer(51, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("TUMBLEWEED RUSTLER")
+                    initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(44, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " WEEDS")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop,title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
+                # Generate a screen for the Town Drunk
+                if category.game_data_key == 'TownDrunkHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dmb-idle.dmd').frames[1])
+                    title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("TOWN DRUNK")
+                    initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " BEERS")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
+                # Generate a screen for the Town Drunk
+                if category.game_data_key == 'UndertakerHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tombstone.dmd').frames[0])
+                    title = dmd.TextLayer(44, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("UNDERTAKER")
+                    initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(44, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
+                # Generate a screen for the Bounty Hunter
+                if category.game_data_key == 'BountyHunterHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'wanted-poster-3.dmd').frames[0])
+                    title = dmd.TextLayer(64, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("BOUNTY HUNTER")
+                    initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(44, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " BARTS")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
+                # Generate a screen for the Combo Champ
+                if category.game_data_key == 'ComboChampHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stars-border.dmd').frames[0])
+                    title = dmd.TextLayer(64, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("COMBO CHAMP")
+                    initLine1 = dmd.TextLayer(64, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + "-WAY COMBO")
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
+                # Generate a screen for the motherlode champ
+                if category.game_data_key == 'MotherlodeChampHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-frame.dmd').frames[0])
+                    title = dmd.TextLayer(64, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("MOTHERLODE CHAMP")
+                    initLine1 = dmd.TextLayer(64, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str)
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
                     self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 

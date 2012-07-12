@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class Mine(game.Mode):
+class Mine(ep.EP_Mode):
     """Game mode for controlling the mine and such"""
     def __init__(self, game,priority):
         super(Mine, self).__init__(game, priority)
@@ -23,9 +23,7 @@ class Mine(game.Mode):
         # Hard version
         else:
             self.hitsToLightLock = [1,1,1,2,2,2,3,3,3,4]
-        self.busy = False
         self.hold = False
-
 
     def mode_started(self):
         self.update_lamps()
@@ -77,7 +75,7 @@ class Mine(game.Mode):
         # if there's an extra ball waiting, collect one
         if self.game.show_tracking('extraBallsPending') > 0:
             # we'll be busy until this ends
-            self.busy = True
+            self.busy()
             self.collect_extra_ball()
         # then register the mine shot
         # if we're in a GM multiball, let that mode take it
@@ -97,6 +95,9 @@ class Mine(game.Mode):
         # award some points
         self.game.score_with_bonus(2530)
         ep.last_switch = "mineEntrance"
+        ## kill the combo shot chain
+        ep.last_shot = None
+
 
     def mine_shot(self):
         # if high noon is ready, we do that
@@ -385,22 +386,9 @@ class Mine(game.Mode):
         # update lamps to turn on the EB light
         self.game.base_game_mode.update_lamps()
 
-    def unbusy(self):
-        self.busy = False
-
-    def clear_layer(self):
-        self.layer = None
-
     def abort_display(self):
         self.clear_layer()
         self.cancel_delayed("Display")
-
-
-    def wait_until_unbusy(self,myHandler):
-        if not self.busy:
-            myHandler()
-        else:
-            self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
 
 
 

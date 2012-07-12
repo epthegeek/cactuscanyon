@@ -13,7 +13,7 @@ import ep
 import random
 import locale
 
-class Bart(game.Mode):
+class Bart(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Bart, self).__init__(game,priority)
@@ -30,6 +30,8 @@ class Bart(game.Mode):
             self.hitsToDefeatBart = [3,5,6,7,8,8]
             # hits banners list
         self.banners = ['bam','biff','ouch','pow','wham','zoink']
+        # a flag for when bart is in motion
+        self.moving = False
 
     def mode_started(self):
         # activate the first bart if we're on the first ball
@@ -134,11 +136,7 @@ class Bart(game.Mode):
         # play a quote appropriate to the current bart
         self.game.sound.play_voice(self.hitQuote)
         # move bart
-        self.hat()
-        self.delay(delay=0.03,handler=self.move)
-        self.delay(delay=0.06,handler=self.light)
-        self.delay(delay=0.1,handler=self.move)
-        self.delay(delay=0.13,handler=self.light)
+        self.animate(1)
 
         # score the points
         self.game.score(self.hitValue)
@@ -175,10 +173,7 @@ class Bart(game.Mode):
         # tick up the global count as well
         self.game.increase_tracking('bartsDefeatedTotal')
         # move bart
-        self.hat()
-        self.delay(delay=0.03,handler=self.move)
-        self.delay(delay=0.06,handler=self.light)
-        self.delay(delay=0.1,handler=self.move)
+        self.animate(1)
 
         # play a defeated quote
         myWait = self.game.sound.play_voice(self.defeatQuote)
@@ -230,10 +225,32 @@ class Bart(game.Mode):
 
     def move(self):
         # pulse the bart move coil
-        self.game.coils.moveBart.pulse(15)
+        self.game.coils.moveBart.pulse(25)
 
     def hat(self):
-        self.game.coils.moveBartHat.pulse(20)
+        self.game.coils.moveBartHat.pulse(30)
+
+    def animate(self,version = 1):
+        # a collection of coils and whatnot for a standard bart hit
+        self.moving = True
+        if version == 1:
+            self.hat()
+            self.game.coils.moveBart.schedule(0x0000000A,cycle_seconds=1)
+            self.game.coils.saloonFlasher.schedule(0x00000555,cycle_seconds=1)
+            self.delay(delay=0.15,handler=self.not_moving)
+        # this one is for just talking - for the taunts
+        if version == 2:
+            self.game.coils.moveBart.schedule(0x0000000A,cycle_seconds=1)
+            self.game.coils.saloonFlasher.schedule(0x00000555,cycle_seconds=1)
+            self.delay(delay=0.15,handler=self.not_moving)
+        # this one is just the hat and the shaking with no light for bionic bart
+        if version == 3:
+            self.hat()
+            self.game.coils.moveBart.schedule(0x0000000A,cycle_seconds=1)
+            self.delay(delay=0.15,handler=self.not_moving)
+
+    def not_moving(self):
+        self.moving = False
 
     def light(self):
         # pulse the flasher light

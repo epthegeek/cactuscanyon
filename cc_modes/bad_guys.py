@@ -19,7 +19,7 @@ import ep
 import random
 import procgame
 
-class BadGuys(game.Mode):
+class BadGuys(ep.EP_Mode):
     """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """
     def __init__(self,game,priority):
         super(BadGuys, self).__init__(game,priority)
@@ -158,9 +158,6 @@ class BadGuys(game.Mode):
         # drop all teh targets
         for i in range(0,4,1):
             self.target_down(i)
-
-    def clear_layer(self):
-        self.layer = None
 
     def kill_power(self):
         # stop any delays

@@ -11,7 +11,7 @@ import cc_modes
 import ep
 import random
 
-class Gunfight(game.Mode):
+class Gunfight(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Gunfight, self).__init__(game,priority)
@@ -146,7 +146,7 @@ class Gunfight(game.Mode):
             # turn off the level one flag
         self.game.set_tracking('stackLevel',False,0)
         # unload
-        self.game.modes.remove(self.game.gunfight)
+        self.unload()
 
     def gunfight_pan(self,badGuys):
         # the intro animation

@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class LeftRamp(game.Mode):
+class LeftRamp(ep.EP_Mode):
     """Cactus Canyon Right Ramp Mode"""
     def __init__(self, game, priority):
         super(LeftRamp, self).__init__(game, priority)
@@ -117,6 +117,13 @@ class LeftRamp(game.Mode):
         # hitting this switch counts as a made ramp - really
         # tick one onto the total of ramp shots
         self.game.increase_tracking('leftRampShots')
+        # check the chain status
+        if ep.last_shot == "right":
+            # if we're coming from the right ramp, chain goes up
+            self.game.combos.increase_chain()
+        else:
+            # if we're not, reset the chain to one
+            self.game.combos.chain = 1
         # score the points and mess with the combo
         if self.game.combos.myTimer > 0:
             # register the combo and reset the timer - returns true for use later
@@ -130,6 +137,7 @@ class LeftRamp(game.Mode):
         self.award_ramp_score(combo)
         ## -- set the last switch hit --
         ep.last_switch = "leftRampEnter"
+        ep.last_shot = "left"
 
 
     def sw_leftRampMake_active(self,sw):
@@ -252,8 +260,11 @@ class LeftRamp(game.Mode):
         # swap in the new layer
         #self.layer = completeFrame
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
-        # clear in 3 seconds
+        # clear in 2 seconds
         self.delay(name="ClearLeftRamp",delay=2,handler=self.clear_layer)
+        # show combo display if the chain is high enough
+        if self.game.combos.chain > 1:
+            self.delay(name="Display",delay=2,handler=self.game.combos.display)
 
     def anim_river_victory(self):
         print "RIVER VICTORY"
@@ -276,9 +287,6 @@ class LeftRamp(game.Mode):
         blank.composite_op = "blacksrc"
         transition = ep.EP_Transition(self,self.layer,blank,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         transition.callback = self.clear_layer
-
-    def clear_layer(self):
-        self.layer = None
 
     def abort_display(self):
         self.clear_layer()

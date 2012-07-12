@@ -6,7 +6,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class RightLoop(game.Mode):
+class RightLoop(ep.EP_Mode):
     """Cactus Canyon Left Loop"""
     def __init__(self, game, priority):
         super(RightLoop, self).__init__(game, priority)
@@ -117,41 +117,45 @@ class RightLoop(game.Mode):
         self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "rightLoopBottom"
+        ## kill the combo shot chain
+        ep.last_shot = None
 
     def sw_rightLoopTop_active(self,sw):
-        print "RIGHT LOOP TOP HIT"
-        # by default turn off the right side loop gate when we get to this switch
-        self.game.coils.rightLoopGate.disable()
-        # if we aren't coming through on a full loop - it's a natural hit and it counts
-        if ep.last_switch == 'rightLoopBottom':
-            # cancel any other displays
-            for mode in self.game.ep_modes:
-                if getattr(mode, "abort_display", None):
-                    mode.abort_display()
-                    # if we're complete open the gate for a full run through
+        # this switch only matters if bart isn't moving - he trips it sometimes
+        if not self.game.bart.moving:
+            print "RIGHT LOOP TOP HIT"
+            # by default turn off the right side loop gate when we get to this switch
+            self.game.coils.rightLoopGate.disable()
+            # if we aren't coming through on a full loop - it's a natural hit and it counts
+            if ep.last_switch == 'rightLoopBottom':
+                # cancel any other displays
+                for mode in self.game.ep_modes:
+                    if getattr(mode, "abort_display", None):
+                        mode.abort_display()
+                        # if we're complete open the gate for a full run through
 
-            if self.game.show_tracking('rightLoopStage') >= 4:
-                # pulse the coil to open the gate
-                self.game.coils.leftLoopGate.pulse(150)
-                # play a lampshow
-                self.game.lampctrl.play_show(self.game.assets.lamp_rightToLeft, repeat=False,callback=self.game.update_lamps)
-                ## if the combo timer is on:
-            if self.game.combos.myTimer > 0:
-                # register the combo and reset the timer
-                combo = self.game.combos.hit()
-            # else the combo timer is NOT on so run award loop without the flag
-            else:
-                # and turn on the combo timer
-                combo = self.game.combos.start()
+                if self.game.show_tracking('rightLoopStage') >= 4:
+                    # pulse the coil to open the gate
+                    self.game.coils.leftLoopGate.pulse(150)
+                    # play a lampshow
+                    self.game.lampctrl.play_show(self.game.assets.lamp_rightToLeft, repeat=False,callback=self.game.update_lamps)
+                    ## if the combo timer is on:
+                if self.game.combos.myTimer > 0:
+                    # register the combo and reset the timer
+                    combo = self.game.combos.hit()
+                # else the combo timer is NOT on so run award loop without the flag
+                else:
+                    # and turn on the combo timer
+                    combo = self.game.combos.start()
 
-            # award the loop reward
-            self.award_loop_score(combo)
-        # if it's a roll through so just add some points
-        elif  ep.last_switch == "leftLoopTop":
-            self.game.score_with_bonus(2530)
-            self.game.increase_tracking('fullLoops')
-        ## -- set the last switch hit --
-        ep.last_switch = "rightLoopTop"
+                # award the loop reward
+                self.award_loop_score(combo)
+            # if it's a roll through so just add some points
+            elif  ep.last_switch == "leftLoopTop":
+                self.game.score_with_bonus(2530)
+                self.game.increase_tracking('fullLoops')
+            ## -- set the last switch hit --
+            ep.last_switch = "rightLoopTop"
 
     def award_loop_score(self,combo=False):
         # cancel the "Clear" delay if there is one
@@ -291,10 +295,6 @@ class RightLoop(game.Mode):
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_tumbleWind)
         self.delay(name="Display",delay=myWait,handler=self.clear_layer)
-
-    def clear_layer(self):
-        self.layer = None
-        return True
 
     def abort_display(self):
         self.clear_layer()

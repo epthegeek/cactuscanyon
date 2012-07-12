@@ -7,7 +7,7 @@ import cc_modes
 import ep
 import random
 
-class HighNoon(game.Mode):
+class HighNoon(ep.EP_Mode):
     """Ooooh no, it's HIIIIIIGH Noon """
     def __init__(self,game,priority):
         super(HighNoon, self).__init__(game,priority)
@@ -40,7 +40,8 @@ class HighNoon(game.Mode):
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
-        self.process_shot(3)
+        if not self.game.bart.moving:
+            self.process_shot(3)
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
@@ -399,10 +400,7 @@ class HighNoon(game.Mode):
         # load the skillshot
         self.game.modes.add(self.skill_shot)
         # unload the mode
-        self.modes.remove(self.game.high_noon)
-
-    def clear_layer(self):
-        self.layer = None
+        self.modes.unload(self.game.high_noon)
 
     def mode_stopped(self):
         print "HIGH NOON IS DISPATCHING DELAYS"

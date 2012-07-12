@@ -5,7 +5,7 @@ import cc_modes
 import ep
 import random
 
-class Badge(game.Mode):
+class Badge(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Badge, self).__init__(game,priority)
@@ -54,6 +54,8 @@ class Badge(game.Mode):
         self.game.set_tracking('combos',0)
         # reset the barts defeated
         self.game.set_tracking('bartsDefeated',0)
+        # reset the motherlodes count
+        self.game.set_tracking('motherlodesCollected',0)
         self.update_lamps()
 
     def update(self,point):

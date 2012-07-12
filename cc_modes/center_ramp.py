@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class CenterRamp(game.Mode):
+class CenterRamp(ep.EP_Mode):
     """Cactus Canyon Center Ramp Mode"""
     def __init__(self, game, priority):
         super(CenterRamp, self).__init__(game, priority)
@@ -123,8 +123,15 @@ class CenterRamp(game.Mode):
         # so I don't either
         # tick one on to the total of player shots on the right ramp
         self.game.increase_tracking('centerRampShots')
-        ## -- set the last switch hit --
-        ep.last_switch = "centerRampMake"
+        # check the chain status
+        if ep.last_shot == "left" or ep.last_shot == "right":
+            # if there have been at least 2 combo chain shots before, we take action
+            if self.game.combos.chain >= 2:
+            #  and that action is, increase the chain increase the chain
+                self.game.combos.increase_chain()
+        else:
+            # if not, set it back to one
+            self.game.combos.chain = 1
 
         # hitting this switch counts as a made ramp - really
         # score the points and mess with the combo
@@ -135,6 +142,11 @@ class CenterRamp(game.Mode):
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
         self.award_ramp_score(combo)
+
+        ## -- set the last switch hit --
+        ep.last_switch = "centerRampMake"
+        ## -- set the last shot for combos
+        ep.last_shot = "center"
 
     def award_ramp_score(self,combo):
         # cancel any other displays
@@ -213,6 +225,9 @@ class CenterRamp(game.Mode):
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         # clear in 3 seconds
         self.delay(name="Display",delay=2,handler=self.clear_layer)
+        # show combo display if the chain is high enough
+        if self.game.combos.chain > 2:
+            self.delay(name="Display",delay=2,handler=self.game.combos.display)
 
     def train_stage_two(self,score):
         self.awardString = "STOP TRAIN"
@@ -251,9 +266,6 @@ class CenterRamp(game.Mode):
         # turn on the animation
         self.layer = animLayer
         self.delay(name="Display",delay=myWait,handler=self.show_award_text)
-
-    def clear_layer(self):
-        self.layer = None
 
     def abort_display(self):
         self.clear_layer()

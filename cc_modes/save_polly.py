@@ -7,7 +7,7 @@ from procgame import *
 import cc_modes
 import ep
 
-class SavePolly(game.Mode):
+class SavePolly(ep.EP_Mode):
     """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """
     def __init__(self,game,priority):
         super(SavePolly, self).__init__(game,priority)
@@ -317,10 +317,7 @@ class SavePolly(game.Mode):
         # unset the busy flag
         self.game.base_game_mode.busy = False
         # unload the mode
-        self.game.modes.remove(self.game.save_polly)
-
-    def clear_layer(self):
-        self.layer = None
+        self.unload()
 
     def mode_stopped(self):
         print "SAVE POLLY IS DISPATCHING DELAYS"

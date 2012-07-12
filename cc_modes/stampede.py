@@ -4,7 +4,7 @@ import cc_modes
 import ep
 import random
 
-class Stampede(game.Mode):
+class Stampede(ep.EP_Mode):
     """Cactus Canyon Stampede"""
     def __init__(self, game, priority):
         super(Stampede, self).__init__(game, priority)
@@ -55,7 +55,8 @@ class Stampede(game.Mode):
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
-        self.process_shot(3,self.active)
+        if not self.game.bart.moving:
+            self.process_shot(3,self.active)
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
@@ -238,10 +239,7 @@ class Stampede(game.Mode):
         if self.game.trough.num_balls_in_play != 0:
             self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # unload the mode
-        self.game.modes.remove(self.game.stampede)
-
-    def clear_layer(self):
-        self.layer=None
+        self.unload()
 
     def abort_display(self):
         self.cancel_delayed('Display')
