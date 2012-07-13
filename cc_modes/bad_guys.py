@@ -142,7 +142,7 @@ class BadGuys(ep.EP_Mode):
         self.delay(delay=0.02,handler=self.coils[target].disable)
 
     def target_activate(self,target):
-        if self.game.show_tracking('badguyUp',target) == False:
+        if self.game.show_tracking('badGuyUp',target) == False:
             print "ACTIVATING TARGET " + str(target)
             self.game.set_tracking('badGuyUp',True,target)
 
