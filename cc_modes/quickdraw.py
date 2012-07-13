@@ -159,7 +159,7 @@ class Quickdraw(ep.EP_Mode):
         # add one to the total dead
         self.game.increase_tracking('kills')
         # and tick up the quickdraw wins
-        self.game.increase_tracking('quickdrawsWon')
+        dudesDead = self.game.increase_tracking('quickdrawsWon')
 
         self.game.sound.stop_music()
         # play the win animation
@@ -182,8 +182,13 @@ class Quickdraw(ep.EP_Mode):
         # update the bad guys
         self.game.set_tracking('badGuysDead',"True",target)
         self.game.bad_guys.update_lamps()
-        # end the quickdraw after the animation bit - and maybe pad for sound
-        self.delay(delay=myWait,handler=self.check_bounty)
+        # if this is the 4th one , and we're not at the EB max, then light extra ball
+        if dudesDead == 4 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            # call the extra ball lit with a callback to the check bounty routine after
+            self.delay(delay=myWait,handler=self.game.mine.light_extra_ball,param=self.game.quickdraw.check_bounty)
+        # any other case, just go to check bounty
+        else:
+            self.delay(delay=myWait,handler=self.check_bounty)
 
     def check_bounty(self):
         # if the bounty isn't lit, light bounty - should these stack?
