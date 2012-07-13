@@ -91,16 +91,16 @@ class MoveYourTrain(ep.EP_Mode):
 
     def intro_display(self,step = 1):
         if step == 1:
-            text = dmd.TextLayer(64, 7, self.game.assets.font_15px_az, "center", opaque=True).set_text("MOVE")
-            self.layer = text
+            moveLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'move-banner.dmd').frames[0])
+            self.layer = moveLayer
             self.delay(delay=1,handler=self.intro_display,param=2)
         if step == 2:
-            text = dmd.TextLayer(64, 7, self.game.assets.font_15px_az, "center", opaque=True).set_text("YOUR")
-            self.layer = text
+            yourLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'your-banner.dmd').frames[0])
+            self.layer = yourLayer
             self.delay(delay=1,handler=self.intro_display,param=3)
         if step == 3:
-            text = dmd.TextLayer(64, 7, self.game.assets.font_15px_az, "center", opaque=True).set_text("TRAIN")
-            self.layer = text
+            trainLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'train-banner.dmd').frames[0])
+            self.layer = trainLayer
             self.delay(delay=1,handler=self.get_going)
 
     def get_going(self):
