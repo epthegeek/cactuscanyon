@@ -196,8 +196,8 @@ class MoveYourTrain(ep.EP_Mode):
         # calculate the score
         # four shots is a perfect score - so we take off 4 shots
         self.shots -= 4
-        # a perfect score is 1 million - every additional shot costs 200,000 - with a floor of 200,000
-        score = 1000000 - (200000 * self.shots)
+        # a perfect score is 1 million - every additional shot costs 50,000, which makes a 100,000 loss for each due to the 2x nature of it - with a floor of 200,000
+        score = 1000000 - (50000 * self.shots)
         if score <= 0:
             score = 200000
         pointsLine = dmd.TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(score)),blink_frames = 8)
