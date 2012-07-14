@@ -251,6 +251,10 @@ class Assets():
         self.sfx_tumbleWind = 'sfx_tumbleWind'
         self.game.sound.register_sound(self.sfx_tumbleWind, self.sfx_path + "00-sfx-wind-blows.wav")
 
+        self.sfx_deadBartHit = 'sfx_deadBartHit'
+        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "297-sfx-dead-bart-hit-1.wav")
+        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "299-sfx-dead-bart-hit-2.wav")
+        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "301-sfx-dead-bart-hit-3.wav")
         self.sfx_hitBionicBart = 'sfx_hitBionicBart'
         self.game.sound.register_sound(self.sfx_hitBionicBart, self.sfx_path + "310-sfx-hit-bionic-bart.wav")
         self.sfx_fireWeapon = 'sfx_fireWeapon'
@@ -628,7 +632,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_leaderLaugh, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.game.sound.register_sound(self.quote_leaderLaugh, self.quotes_path + "1579-leader-bart-laugh-2.wav")
         self.game.sound.register_sound(self.quote_leaderLaugh, self.quotes_path + "1581-leader-bart-laugh-3.wav")
-
+        self.quote_nobodysHome = 'quote_nobodysHome'
+        self.game.sound.register_sound(self.quote_nobodysHome, self.quotes_path + "1853-leader-bart-nobodys-home.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

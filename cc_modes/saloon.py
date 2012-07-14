@@ -48,7 +48,7 @@ class Saloon(ep.EP_Mode):
                         self.game.drunk_multiball.start_drunk()
                 else:
                     # then hit bart
-                    self.game.bart.hit()
+                    self.game.bart.hit(True)
             # now we check the bounty after an appropriate delay.
             self.wait_until_unbusy(self.check_bounty)
             ## -- set the last switch hit --
@@ -372,6 +372,7 @@ class Saloon(ep.EP_Mode):
         textLayer2 = ep.pulse_text(self,77,15,textString2,size="12px")
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
         # play a quote
+        self.game.sound.play(self.game.assets.sfx_flourish6)
         self.game.sound.play_voice(self.game.assets.quote_gunfightLit)
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")

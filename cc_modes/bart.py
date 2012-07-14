@@ -39,7 +39,9 @@ class Bart(ep.EP_Mode):
             self.game.set_tracking('bartStatus',"RUNNING")
             self.setup()
 
-    def hit(self):
+    def hit(self,Saloon=False):
+        # intialize this to zero to use later
+        duration = 0
         # pick a random banner to use
         banner = random.choice(self.banners)
         # set up the banner layer
@@ -65,8 +67,20 @@ class Bart(ep.EP_Mode):
         # not running? do this
         else:
             # he's dead waiting for a gun fight
-            # no points - play a sound?
-            self.game.saloon.busy = False
+            # no points - play a sound if hit directly
+            if not Saloon:
+                self.game.sound.play(self.game.assets.sfx_deadBartHit)
+            else:
+                odds = [False,False,True,False,False]
+                choice = random.choice(odds)
+                if choice:
+                    duration = self.game.sound.play(self.game.assets.quote_nobodysHome)
+            # if we're waiting for a sound effect delay the busy release
+            if duration > 0:
+                self.delay(delay=duration,handler=self.game.saloon.unbusy)
+            # otherwise do it now
+            else:
+                self.game.saloon.unbusy()
 
     def activate(self):
         # set up all the strings & quotes
