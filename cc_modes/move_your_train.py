@@ -21,11 +21,13 @@ class MoveYourTrain(ep.EP_Mode):
         self.emptyTrackLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'empty-track.dmd').frames[0])
         self.emptyTrackLayer.composite_op = "blacksrc"
         self.trainOffset = 0
+        self.running = False
 
     def mode_started(self):
+        self.postUse = False
         # move the train to the middle of the track
         # set a stop point for the encoder
-        self.game.train.stopAt = 45
+        self.game.train.stopAt = 100
         # move the train forward
         self.game.train.fast_forward()
         # set the horizontal offset to starting point
@@ -34,7 +36,6 @@ class MoveYourTrain(ep.EP_Mode):
         self.timeLimit = self.game.user_settings['Gameplay (Feature)']['Move Your Train Timer']
         # set the status to ready
         self.game.set_tracking("mytStatus", "READY")
-        self.paused = False
         self.shots = 0
 
     def ball_drained(self):
@@ -53,12 +54,12 @@ class MoveYourTrain(ep.EP_Mode):
 
     def sw_minePopper_active_for_390ms(self,sw):
         self.move_train("left")
-        # pause the train, yo
-        self.pause()
 
     # right shots
     def sw_rightLoopTop_active(self,sw):
-        self.move_train("right")
+        # this only counts if bart is not moving.  stupid bart.
+        if not self.game.bart.moving:
+            self.move_train("right")
 
     def sw_rightRampMake_active(self,sw):
         self.move_train("right")
@@ -70,26 +71,18 @@ class MoveYourTrain(ep.EP_Mode):
     def sw_centerRampMake_active(self,sw):
         self.move_train("center")
 
-    # jet bumpers exit - for resume
-    def sw_jetBumpersExit_active(self,sw):
-        if self.paused:
-            self.resume()
-
-    # salooon popper for pause
-    def sw_saloonPopper_active_for_390ms(self,sw):
-        self.pause()
-
-    def start(self,post = False,side=0):
-        if post:
+    def start(self,postTrap = False,side=0):
+        if postTrap:
+            self.postUse = True
             # raise the right post to hold the ball - to trap the ball after the skillshot win
-            self.game.POSTS[side].patter(on_time=4,off_time=12,original_on_time=30)
+            self.POSTS[side].patter(on_time=4,off_time=12,original_on_time=30)
         # set the running flag
         self.running = True
         # set the status
         self.game.set_tracking("mytStatus", "RUNNING")
-        self.intro_display(1)
+        self.intro_display(1,side)
 
-    def intro_display(self,step = 1):
+    def intro_display(self,step = 1,side =0):
         if step == 1:
             moveLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'move-banner.dmd').frames[0])
             self.layer = moveLayer
@@ -101,14 +94,17 @@ class MoveYourTrain(ep.EP_Mode):
         if step == 3:
             trainLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'train-banner.dmd').frames[0])
             self.layer = trainLayer
-            self.delay(delay=1,handler=self.get_going)
+            self.delay(delay=1,handler=self.get_going,param=side)
 
-    def get_going(self):
+    def get_going(self,side):
         # update the display
         self.main_display()
         # drop the post and/or kick the ball
-        self.game.coils.rightGunFightPost.disable()
-        self.game.saloon.kick()
+        self.POSTS[side].disable()
+        if not self.postUse:
+            self.game.saloon.kick()
+        else:
+            self.postUse = False
 
     def main_display(self):
         # flush any queued display updates
@@ -148,13 +144,13 @@ class MoveYourTrain(ep.EP_Mode):
 #       TODO this can't be on unless the real hardware is running it
         # increase the shots taken
         self.shots += 1
-        self.game.train.stopAt = 10
+        self.game.train.stopAt = 20
         if direction == "left":
             self.move_display("left")
-            self.game.train.forward()
+            self.game.train.fast_forward()
         if direction == "right":
             self.move_display("right")
-            self.game.train.reverse()
+            self.game.train.fast_reverse()
         if direction == "center":
             if self.trainOffset > 0:
                 self.move_display("left")
@@ -211,9 +207,9 @@ class MoveYourTrain(ep.EP_Mode):
         self.clear_layer()
         # turn off the running flag
         self.running = False
+        # reset the train
+        self.game.train.reset_toy()
         # turn the status to off
         self.game.set_tracking("mytStatus", "OPEN")
-        # kill the pause, just to be sure
-        self.paused = False
         # unload
         self.unload()

@@ -58,6 +58,10 @@ class Train(game.Mode):
         # TODO need to tweak this out for speed later
         self.game.coils.trainForward.patter(on_time=6,off_time=6)
 
+    def fast_reverse(self):
+        self.inMotion = True
+        self.game.coils.trainReverse.enable()
+
     def reverse(self):
         self.inMotion = True
         # TODO need to tweak this for speed later

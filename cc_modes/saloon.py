@@ -226,6 +226,8 @@ class Saloon(ep.EP_Mode):
         prizes.append('points500k')
         #   9 - + 1 Million Bonus
         prizes.append('points1Mil')
+        # 10 - Move your train
+        prizes.append('moveYourTrain')
         # so as of this point we have a prizes list to use
         # and pick one of those at random
         self.bountyPrize = random.choice(prizes)
@@ -301,6 +303,11 @@ class Saloon(ep.EP_Mode):
             prizeText = "1,000,000"
             self.prizeHandler = self.game.score
             self.prizeParam = 1000000
+        elif self.bountyPrize == 'moveYourTrain':
+            prizeText = "MOVE"
+            prizeText2 = "YOUR TRAIN"
+            self.game.modes.add(self.game.move_your_train)
+            self.prizeHandler = self.game.move_your_train.start
         else:
             prizeText = "WTF"
             print "WTF BOUNTY: " + self.bountyPrize
@@ -347,9 +354,11 @@ class Saloon(ep.EP_Mode):
             self.prizeHandler(self.prizeParam)
         else:
             self.prizeHandler()
-        # then kick out
+        # update lamps
         self.update_lamps()
-        self.kick()
+        # for anything other than move your train, kick the ball out
+        if self.bountyPrize != "moveYourTrain":
+            self.kick()
         self.game.base_game_mode.music_on()
 
     def repeat_ding(self,times):

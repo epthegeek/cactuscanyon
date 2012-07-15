@@ -13,6 +13,7 @@ class SavePolly(ep.EP_Mode):
         super(SavePolly, self).__init__(game,priority)
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Shots to save Polly']
         self.running = False
+        self.halted = False
 
     def mode_started(self):
         self.shotsSoFar = 0
@@ -45,24 +46,40 @@ class SavePolly(ep.EP_Mode):
                 self.game.base_game_mode.busy = True
                 self.polly_died()
 
+    # bonus lanes pause save polly
+    def sw_leftBonusLane_active(self,sw):
+        if not self.halted:
+            self.halt_train()
+
+    def sw_rightBonusLane_active(self,sw):
+        if not self.halted:
+            self.halt_train()
+
     # bumpers pause quickdraw
     def sw_leftJetBumper_active(self,sw):
-        self.pause_train(True)
+        if not self.halted:
+            self.halt_train()
 
     def sw_rightJetBumper_active(self,sw):
-        self.pause_train(True)
+        if not self.halted:
+            self.halt_train()
 
     def sw_bottomJetBumper_active(self,sw):
-        self.pause_train(True)
+        if not self.halted:
+            self.halt_train()
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
-    def sw_minePopper_active_for_400ms(self,sw):
-        self.pause_train(True)
+    def sw_minePopper_active_for_390ms(self,sw):
+        if not self.halted:
+            self.halt_train()
 
     # resume when exit
     def sw_jetBumpersExit_active(self,sw):
-        self.cancel_delayed("Pause Timer")
-        if self.running:
+        if self.running and self.halted:
+            # kill the halt flag
+            self.halted = False
+            # give back 1 second grace
+            self.modeTimer += 1
             self.in_progress()
 
     def sw_centerRampMake_active(self,sw):
@@ -156,7 +173,7 @@ class SavePolly(ep.EP_Mode):
     ## due to going in and out of pause
     def in_progress(self):
         if self.running:
-            print "POLLY IN PROGRESS"
+            print "POLLY IN PROGRESS - TIME:" + str(self.modeTimer)
             # start the train moving
             self.game.train.move()
             # setup the mode screen with the animated train
@@ -183,12 +200,19 @@ class SavePolly(ep.EP_Mode):
                 self.delay(name="Mode Timer",delay=1,handler=self.in_progress)
 
     # for a ramp hit - time and if advanced or not are conditional for side vs center ramps
-    def pause_train(self,advanced=False, time=5):
+    def pause_train(self,advanced=False):
         if self.running:
             print "PAUSE TRAIN"
+            # kill the in progress timer
+            self.cancel_delayed("Mode Timer")
             # stop the train from moving
             self.game.train.stop()
+            # if the thing that sent us here advanced save polly, we pause for 3 seconds
+            if advanced:
+                time = 3
+            # if we're not advancing, there's more to do
             if not advanced:
+                time = 5
                 # play the pause display
                 self.delay(delay=1.5,handler=self.game.play_remote_sound,param=self.cows[0])
                 # swap for the next shot
@@ -208,25 +232,42 @@ class SavePolly(ep.EP_Mode):
     def pause_timer(self,time):
         # if the timer is at 0 start the train up again
         if time <= 0:
+            print "RESUMING POLLY"
+            self.modeTimer += 1
             self.in_progress()
         else:
+            print "POLLY PAUSED: " + str(time)
             # set up the display
-            p = self.game.current_player()
-            scoreString = ep.format_score(p.score)
-            scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
-            timeString = "TIME: PAUSED"
-            timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString,blink_frames=10)
-            textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
-            awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
-
-            # stick together the animation and static text with the dynamic text
-            composite = dmd.GroupedLayer(128,32,[self.cowLayer,self.pollyTitle,scoreLine,awardLine1,self.awardLine2,timeLine])
-            self.layer = composite
-
+            self.pause_display()
             # if not, tick off one
             time -= 1
             # then reschedule 1 second later with the new time
             self.delay(name="Pause Timer",delay=1,handler=self.pause_timer,param=time)
+
+    def halt_train(self):
+        print "HALTING TRAIN IN BUMPERS/MINE"
+        # cancel delays
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Pause Timer")
+        # stop the train
+        self.game.train.stop()
+        # set the flag
+        self.halted = True
+
+    def pause_display(self):
+        # set up the display
+        p = self.game.current_player()
+        scoreString = ep.format_score(p.score)
+        scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
+        timeString = "TIME: PAUSED"
+        timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString,blink_frames=10)
+        textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
+        awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+
+        # stick together the animation and static text with the dynamic text
+        composite = dmd.GroupedLayer(128,32,[self.cowLayer,self.pollyTitle,scoreLine,awardLine1,self.awardLine2,timeLine])
+        self.layer = composite
+
 
         # for a side ramp hit
     def advance_save_polly(self):
@@ -248,7 +289,7 @@ class SavePolly(ep.EP_Mode):
             completeFrame = dmd.GroupedLayer(128,32,[border,pollyTitle,scoreLine,awardLine1,self.awardLine2b])
             transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
             # pause the train briefly
-            self.delay(name="Pause Timer",delay=1.5,handler=self.pause_timer,param=2)
+            self.delay(name="Pause Timer",delay=1.5,handler=self.pause_timer,param=True)
 
 
     # success

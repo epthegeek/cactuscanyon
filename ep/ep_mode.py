@@ -6,6 +6,7 @@ class EP_Mode(game.Mode):
     def __init__(self, game, priority):
         super(EP_Mode, self).__init__(game, priority)
         self.busy = False
+        self.POSTS = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
 
     # busy flag set and unset
     def is_busy(self):

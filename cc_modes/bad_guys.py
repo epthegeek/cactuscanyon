@@ -129,7 +129,7 @@ class BadGuys(ep.EP_Mode):
     def target_up(self,target):
         print "TARGET RAISED " + str(target)
         print self.game.show_tracking('badGuyUp')
-        self.coils[target].patter(on_time=4,off_time=8,original_on_time=20)
+        self.coils[target].patter(on_time=10,off_time=8,original_on_time=20)
         self.lamps[target].schedule(0x00FF00FF)
         # trying a new way to activate
         #self.delay(delay=0.1,handler=self.target_activate,param=target)

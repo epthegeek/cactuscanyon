@@ -364,6 +364,11 @@ class Ambush(ep.EP_Mode):
 
 
     def end_ambush(self):
+        # kill the taunt timer
+        self.cance_delayed("Taunt Timer")
+        # Kill the target timers
+        for i in range(0,4,1):
+            self.cancel_delayed(self.targetNames[i])
         # clear the layer
         self.clear_layer()
         # drop all the targets

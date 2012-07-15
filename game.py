@@ -46,8 +46,6 @@ class CCGame(game.BasicGame):
         self.squelched = False
         self.previousVolume = 0
 
-        self.POSTS = [self.coils.leftGunFightPost,self.coils.rightGunFightPost]
-
 
     def setup(self):
         """docstring for setup"""

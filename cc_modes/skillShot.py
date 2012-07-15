@@ -106,19 +106,19 @@ class SkillShot(ep.EP_Mode):
         # here's the super skill shot prizes
         else:
             # 3 million points
-           # prizes.append("O")
+            prizes.append("O")
             # bonus 5x
-           # if self.game.show_tracking('bonusX') < 9:
-           #     prizes.append("P")
+            if self.game.show_tracking('bonusX') < 9:
+                prizes.append("P")
             # light gunfight
-           # if self.game.show_tracking('gunfightStatus') != "READY":
-           #     prizes.append("Q")
+            if self.game.show_tracking('gunfightStatus') != "READY":
+                prizes.append("Q")
             # drunk multiball
-           # if self.game.show_tracking('drunkMultiballStatus') != "READY":
-           #     prizes.append("R")
+            if self.game.show_tracking('drunkMultiballStatus') != "READY":
+                prizes.append("R")
             # extra ball
-           # if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-           #     prizes.append("J")
+            if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+                prizes.append("J")
             # move your train
             prizes.append("S")
 
