@@ -249,7 +249,7 @@ class Bart(ep.EP_Mode):
         self.moving = True
         if version == 1:
             self.hat()
-            self.game.coils.moveBart.schedule(0x0000000A,cycle_seconds=1)
+            self.game.coils.moveBart.schedule(0x10010001,cycle_seconds=1)
             self.game.coils.saloonFlasher.schedule(0x00000555,cycle_seconds=1)
             self.delay(delay=0.15,handler=self.not_moving)
         # this one is for just talking - for the taunts

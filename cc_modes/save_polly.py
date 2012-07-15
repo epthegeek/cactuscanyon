@@ -78,8 +78,6 @@ class SavePolly(ep.EP_Mode):
         if self.running and self.halted:
             # kill the halt flag
             self.halted = False
-            # give back 1 second grace
-            self.modeTimer += 1
             self.in_progress()
 
     def sw_centerRampMake_active(self,sw):
@@ -181,23 +179,23 @@ class SavePolly(ep.EP_Mode):
             p = self.game.current_player()
             scoreString = ep.format_score(p.score)
             scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
-            timeString = "TIME: " + str(self.modeTimer)
+            timeString = "TIME: " + str(self.modeTimer / 1)
             timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString)
 
             # stick together the animation and static text with the dynamic text
             composite = dmd.GroupedLayer(128,32,[self.trainLayer,self.pollyTitle,scoreLine,self.infoLayer,timeLine])
             self.layer = composite
             ## tick down the timer
-            self.modeTimer -= 1
+            self.modeTimer -= 0.1
             ## TODO play some hurry quote at 5 seconds?
             # if we've run out of time
-            if self.modeTimer == 0:
+            if self.modeTimer <= 0:
                 # go to a grace period
                 self.polly_died()
             # otherwise ...
             else:
                 # set up a delay to come back in 1 second with the lowered time
-                self.delay(name="Mode Timer",delay=1,handler=self.in_progress)
+                self.delay(name="Mode Timer",delay=0.1,handler=self.in_progress)
 
     # for a ramp hit - time and if advanced or not are conditional for side vs center ramps
     def pause_train(self,advanced=False):
@@ -233,7 +231,6 @@ class SavePolly(ep.EP_Mode):
         # if the timer is at 0 start the train up again
         if time <= 0:
             print "RESUMING POLLY"
-            self.modeTimer += 1
             self.in_progress()
         else:
             print "POLLY PAUSED: " + str(time)

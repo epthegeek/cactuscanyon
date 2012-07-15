@@ -142,8 +142,10 @@ PRSwitches:
         number: S75
     mineHome:
         number: S77
+        type: 'NC'
     mineEncoder:
         number: S78
+        type: 'NC'
     centerRampEnter:
         number: S82
     leftRampMake:
