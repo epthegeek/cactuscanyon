@@ -306,8 +306,12 @@ class Saloon(ep.EP_Mode):
         elif self.bountyPrize == 'moveYourTrain':
             prizeText = "MOVE"
             prizeText2 = "YOUR TRAIN"
+            # load the MYT mode to move the train and set up
             self.game.modes.add(self.game.move_your_train)
+            # set the handler to the start of MYT
             self.prizeHandler = self.game.move_your_train.start
+            # null the param flag
+            self.prizeParam = False
         else:
             prizeText = "WTF"
             print "WTF BOUNTY: " + self.bountyPrize
