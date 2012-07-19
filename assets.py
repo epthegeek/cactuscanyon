@@ -163,6 +163,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_mineEntrance, self.sfx_path + "121-sfx-mine-entrance.wav")
         self.sfx_trainWhistle = 'sfx_trainWhistle'
         self.game.sound.register_sound(self.sfx_trainWhistle, self.sfx_path + "271-sfx-train-whistle.wav")
+        self.sfx_longTrainWhistle = 'sfx_longTrainWhistle'
+        self.game.sound.register_sound(self.sfx_longTrainWhistle, self.sfx_path + "00-sfx-long-train-whistle.wav")
         self.sfx_trainChugShort = 'sfx_trainChugShort'
         self.game.sound.register_sound(self.sfx_trainChugShort, self.sfx_path + "203-sfx-train-chug-short.wav")
         self.sfx_ebMusic = 'sfx_ebMusic'

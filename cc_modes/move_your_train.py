@@ -185,7 +185,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.trainOffset = value
 
     def win(self):
-        self.game.sound.play(self.game.assets.sfx_trainWhistle)
+        self.game.sound.play(self.game.assets.sfx_longTrainWhistle)
         self.game.sound.play(self.game.assets.sfx_cheers)
         textString = "TRAIN MOVED IN " + str(self.shots) + " SHOTS"
         textLine = dmd.TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString)
