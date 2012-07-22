@@ -1,3 +1,18 @@
+##   ____           _                ____
+##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
+## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
+## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
+##  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
+##                                                   |___/
+##           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
+##          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
+##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
+##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
+##
+## A P-ROC Project by Eric Priepke
+## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
+## Original Cactus Canyon software by Matt Coriale
+##
 ##
 ## This is original Koen from dutchpinball.com's Transition helper
 ## I'm not using the bulk of his extensions, so I copied this one into my own subset of
