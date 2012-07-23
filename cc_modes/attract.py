@@ -73,7 +73,7 @@ class Attract(ep.EP_Mode):
         self.generate_score_frames()
 
         # add a game over at the end
-        gameOver = ep.EP_Showcase().make_string(3,3,0,text="GAME OVER",condensed=True)
+        gameOver = ep.EP_Showcase().make_thin_string(3,text="GAME OVER")
         self.layers.append({'layer':gameOver,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
 
         # Blink the start button to notify player about starting a game.

@@ -73,6 +73,23 @@ class EP_Showcase(object):
             FILL_FONT[fill].tracking = 0
         return myLayer
 
+    def make_thin_string(self,fill,x=64,y=0,align="center",isOpaque=False,text="",isTransparent=False,condensed=False):
+        # set the spacing
+        FILL_FONT[fill].tracking = -2
+        # if condensed, make it even bigger
+        if condensed:
+            FILL_FONT[fill].tracking = -3
+        # make the string
+        myLayer = dmd.TextLayer(x, y, FILL_FONT[fill], align, opaque=False).set_text(text)
+        # unset the tracking
+        FILL_FONT[fill].tracking = 0
+        if isTransparent:
+            myLayer.composite_op = "blacksrc"
+        # set the opaque as requested
+        myLayer.opaque = isOpaque
+        # return the layer
+        return myLayer
+
     def chase_outline(self,outline_start,outline_fin,fill,speed,x=64,y=0,align="center",isOpaque=False,text="",isTransparent=False,condensed=False,hold=0):
         # emtpy script
         script = []
