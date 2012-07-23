@@ -38,25 +38,43 @@ class Attract(ep.EP_Mode):
         ## Set up the layers to use
         ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bally-banner.dmd').frames[0])
 
-        presentsText = dmd.TextLayer(128/2, 7, self.game.assets.font_jazz18, "center", opaque=False).set_text("  PRESENTS")
-        gecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gecko-border.dmd').frames[0])
-        presents = dmd.GroupedLayer(128, 32, [gecko, presentsText])
+        textLayer1 = dmd.TextLayer(76, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("ORIGINALLY")
+        textLayer1.composite_op = "blacksrc"
+        textLayer2 = dmd.TextLayer(76, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("BY")
+        textLayer2.composite_op = "blacksrc"
+        leftGecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gecko-border.dmd').frames[0])
+        original = dmd.GroupedLayer(128, 32, [leftGecko, textLayer1,textLayer2])
 
-        proc_banner = dmd.TextLayer(128/2, 7, self.game.assets.font_jazz18, "center", opaque=False).set_text("pyprocgame")
+        textLayer1 = dmd.TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("EXPANDED")
+        textLayer1.composite_op = "blacksrc"
+        textLayer2 = dmd.TextLayer(58, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("WITH")
+        textLayer2.composite_op = "blacksrc"
+        rightGecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'right-gecko-border.dmd').frames[0])
+        expanded = dmd.GroupedLayer(128, 32, [rightGecko, textLayer1,textLayer2])
+
+        proc_banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load('shared/dmd/splash.dmd').frames[0])
 
         splash = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-canyon-banner.dmd').frames[0])
+        continuedBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'ccc-banner.dmd').frames[0])
         self.myIndex = 0
+
 
         # adding a blank layer
         blanker = self.game.score_display.layer
 
         self.layers = [ {'layer':blanker,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH},
-                        {'layer':ballyBanner,'type':ep.EP_Transition.TYPE_PUSH, 'direction':ep.EP_Transition.PARAM_WEST},
-                        {'layer':presents,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
                         {'layer':splash,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
+                        {'layer':continuedBanner,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST},
+                        {'layer':original,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_EAST},
+                        {'layer':ballyBanner,'type':ep.EP_Transition.TYPE_CROSSFADE, 'direction':False},
+                        {'layer':expanded,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
                         {'layer':proc_banner,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False}]
 
         self.generate_score_frames()
+
+        # add a game over at the end
+        gameOver = ep.EP_Showcase().make_string(3,3,0,text="GAME OVER",condensed=True)
+        self.layers.append({'layer':gameOver,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
 
         # Blink the start button to notify player about starting a game.
         self.game.lamps.startButton.schedule(schedule=0x00ff00ff, cycle_seconds=0, now=False)

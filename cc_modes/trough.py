@@ -13,6 +13,9 @@
 ## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
 ## Original Cactus Canyon software by Matt Coriale
 ##
+## This is basically the stock PyProc trough - I just added a bunch of "print"s to
+## Help me understand what it was doing
+
 from procgame.game import Mode
 
 class Trough(Mode):
