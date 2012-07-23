@@ -45,7 +45,7 @@ class Attract(ep.EP_Mode):
         leftGecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gecko-border.dmd').frames[0])
         original = dmd.GroupedLayer(128, 32, [leftGecko, textLayer1,textLayer2])
 
-        textLayer1 = dmd.TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("EXPANDED")
+        textLayer1 = dmd.TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("CONTINUED")
         textLayer1.composite_op = "blacksrc"
         textLayer2 = dmd.TextLayer(58, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("WITH")
         textLayer2.composite_op = "blacksrc"
