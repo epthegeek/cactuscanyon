@@ -165,9 +165,7 @@ class BadGuys(ep.EP_Mode):
         # pop up the targets
         delayTime = 0
         for i in range(0,4,1):
-            # adding some delay to keep them from all being slammed at once
-            self.delay(delay=delayTime,handler=self.target_up,param=i)
-            delayTime += 0.03
+            self.target_up(i)
 
     def drop_targets(self):
         # drop all teh targets
