@@ -73,6 +73,8 @@ class Tracking(game.Player):
         self.player_stats['mineShotsTotal'] = 0
         # mine status - OPEN, LOCK, READY, (RUNNING == Gold mine multiball)
         self.player_stats['mineStatus'] = "OPEN"
+        self.player_stats['goldMineStarted'] = 0
+        self.player_stats['banditAttacks'] = 0
         # used for progression to lock
         self.player_stats['mineHits'] = 0
         # balls currently locked

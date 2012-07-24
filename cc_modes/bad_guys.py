@@ -137,6 +137,9 @@ class BadGuys(ep.EP_Mode):
             # showdown stuff would go here
         elif self.game.show_tracking('ambushStatus') == "RUNNING":
             self.game.ambush.hit(target)
+        # bandits in goldmine
+        elif self.game.show_tracking('mineStatus') == "RUNNING":
+            self.game.gold_mine_multiball.hit_bandit(target)
         # option 3 is a gunfight
         else:
             self.game.gunfight.won()

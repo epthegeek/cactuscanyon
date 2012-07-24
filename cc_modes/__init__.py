@@ -33,7 +33,7 @@ __all__ = [
     'mountain',
     'bonus_lanes',
     'combos',
-    'trough'
+    'trough',
     'stampede',
     'high_noon',
     'drunk_multiball',

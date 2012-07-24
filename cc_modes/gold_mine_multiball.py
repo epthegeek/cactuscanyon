@@ -32,7 +32,10 @@ class GoldMine(ep.EP_Mode):
         self.motherlodeValue = 0
         self.counter = 0
         self.multiplier = False
-        # reset the jackpots to false to surpess lights until the mode really starts
+        self.bandits = False
+        self.banditTimer = 0
+        self.banditsUp = 0
+        # reset the jackpots to false to prevent lights until the mode really starts
         for i in range(0,5,1):
             self.game.set_tracking('jackpotStatus',False,i)
 
@@ -67,8 +70,8 @@ class GoldMine(ep.EP_Mode):
     def process_shot(self,shot):
         # we've hit a potential jackpot
         print "JACKPOT STATUS: " + str(self.game.show_tracking('jackpotStatus',shot))
-        # check to see if it was an active jackpot
-        if self.game.show_tracking('jackpotStatus',shot):
+        # check to see if it was an active jackpot - if bandits aren't about
+        if self.game.show_tracking('jackpotStatus',shot) and not self.bandits:
             # if it was, set the flag
             self.game.set_tracking('jackpotStatus',False,shot)
             # and add one to the jackpots collected
@@ -96,8 +99,6 @@ class GoldMine(ep.EP_Mode):
     def start_multiball(self):
         # set the stack level flag - since right now only GM Multiball is on stack 2
         self.game.set_tracking('stackLevel',True,2)
-
-        # for now we'll just print a thing
         print "MULTIBALL STARTING"
         # kill the music
         print "start multiball IS KILLING THE MUSIC"
@@ -171,12 +172,18 @@ class GoldMine(ep.EP_Mode):
         # if no motherlode is lit
         if self.game.show_tracking('motherlodeLit'):
             textString = "MOTHERLODE " + ep.format_score(self.motherlodeValue) + " X " + str(self.game.show_tracking('motherlodeMultiplier'))
+        # if the bandits showed up
+        elif self.bandits:
+            textString = "SHOOT THE BANDITS!"
         else:
             textString = "JACKPOTS LIGHT MOTHERLODE"
 
         motherLine = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString)
         # jackpot value line
-        jackString = "JACKPOTS = 500,000"
+        if self.bandits:
+            jackString = "TIME REMAINING: " + str(self.banditTimer)
+        else:
+            jackString = "JACKPOTS = 500,000"
         jackpotLine = dmd.TextLayer(128/2,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(jackString)
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,scoreLine,motherLine,jackpotLine])
         self.layer = combined
@@ -236,8 +243,10 @@ class GoldMine(ep.EP_Mode):
 
     def mine_shot(self):
         if self.game.show_tracking('motherlodeLit'):
-            # if motherlode is lit, collect it
-            self.collect_motherlode()
+            # if motherlode is lit, collect it on the first multiball, otherwise divert to the bandits
+            if self.game.show_tracking('goldMineStarted') >= 2:
+                self.bandits = True
+            self.motherlode_hit()
         else:
             # if no motherlode, score some points and kick the ball out
             self.game.score(2530)
@@ -279,12 +288,86 @@ class GoldMine(ep.EP_Mode):
             for shot in self.gmShots:
                 shot.update_lamps()
 
-    def collect_motherlode(self):
+    def motherlode_hit(self):
+        # stop the mountain
+        self.game.mountain.stop()
+        # turn off the flasher
+        self.game.coils.mountainFlasher.disable()
+        # if the bandits attack, divert there
+        if self.bandits:
+            self.bandits_arrive()
+        else:
+            self.collect_motherlode()
+
+    def bandits_arrive(self):
         # clear the display
         self.abort_display()
+        # tick up the number of bandit attacks
+        attack = self.game.increase_tracking('banditAttacks')
+        # show some display
+        self.layer = ep.EP_Showcase().make_string(1,2,3,text="BANDITS")
+        # pop up some targets
+        available = [0,1,2,3]
+        # the first few attacks are less than 4 guys
+        if attack <= 4:
+            # the first 2 times is 2 guys
+            if attack <= 2:
+                myRange = 2
+            # the next 2 are 3 guys
+            else:
+                myRange = 1
+            # remove the selected number of bad guys from the choices
+            for i in range(0,myRange,1):
+                choice = random.choice(available)
+                available.remove(choice)
+        # raise the available guys at this points
+        for i in available:
+            self.game.bad_guys.target_up(i)
+        # set a counter for how many are up
+        self.banditsUp = len(available)
+        # kick the ball out
+        self.game.mountain.kick()
+        # set the timer
+        self.banditTimer = 31
+        # and start it
+        self.bandit_timer()
+        # update the main display
+        self.main_display()
+
+    def bandit_timer(self):
+        self.banditTimer -= 1
+        if self.banditTimer == 0:
+            self.end_bandits(False)
+        else:
+            self.delay(name="Bandit Timer", delay=1,handler=self.bandit_timer)
+
+    def hit_bandit(self):
+        # tick down the bandits up number
+        self.banditsUp -= 1
+        # play a hit sound
+        self.game.sound.play(self.game.assets.sfx_quickdrawHit)
+        # if they're all down, end with a win
+        if self.banditsUp == 0:
+            self.end_bandits()
+
+    def end_bandits(self,win=True):
+        # if it's a win, collect the motherlode
+        if win:
+            # cancel the timer
+            self.cancel_delayed("Bandit Timer")
+            self.collect_motherlode()
+        # if it's not, just turn motherlode off
+        else:
+            self.game.set_tracking('motherlodeLit', False)
+        # and turn off the bandits flag
+        self.bandits = False
+        self.update_lamps()
+
+    def collect_motherlode(self):
         # turn motherlode off
         self.game.set_tracking('motherlodeLit', False)
-        self.game.mountain.stop()
+        # clear the display
+        self.abort_display()
         # add one to the motherlodes collected
         motherlodes = self.game.increase_tracking('motherlodesCollected')
         # and one to the total motherlodes for good measure
@@ -360,6 +443,10 @@ class GoldMine(ep.EP_Mode):
         self.game.set_tracking('stackLevel',False,2)
         #refresh the mine lights
         self.game.update_lamps()
+        # reset some junk
+        self.banditTimer = 0
+        self.banditsUp = 0
+        self.bandits = False
         # unload the mode
         self.unload()
 

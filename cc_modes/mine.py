@@ -240,6 +240,8 @@ class Mine(ep.EP_Mode):
         self.game.increase_tracking('ballsLockedTotal')
         # set the status
         self.game.set_tracking('mineStatus', "RUNNING")
+        # tick up the count of times GoldMine Started
+        self.game.increase_tracking('goldMineStarted')
         # reset the locked ball count
         self.game.set_tracking('ballsLocked', 0)
         # start multiball!!
