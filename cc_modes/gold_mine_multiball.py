@@ -447,6 +447,7 @@ class GoldMine(ep.EP_Mode):
         self.banditTimer = 0
         self.banditsUp = 0
         self.bandits = False
+        self.game.bad_guys.drop_targets()
         # unload the mode
         self.unload()
 
