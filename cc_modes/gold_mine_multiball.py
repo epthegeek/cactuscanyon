@@ -336,8 +336,10 @@ class GoldMine(ep.EP_Mode):
 
     def bandit_timer(self):
         self.banditTimer -= 1
+        # if we get to zero, player lost
         if self.banditTimer == 0:
             self.end_bandits(False)
+        # if we're not at zero yet, loop back around
         else:
             self.delay(name="Bandit Timer", delay=1,handler=self.bandit_timer)
 
@@ -359,8 +361,8 @@ class GoldMine(ep.EP_Mode):
         # if it's not, just turn motherlode off
         else:
             self.game.set_tracking('motherlodeLit', False)
-        # and turn off the bandits flag
-        self.bandits = False
+            # and turn off the bandits flag here
+            self.bandits = False
         self.update_lamps()
 
     def collect_motherlode(self):
@@ -419,6 +421,8 @@ class GoldMine(ep.EP_Mode):
             self.game.set_tracking('motherlodeMultiplier',1)
             # and kick the ball out
             self.game.mountain.kick()
+            # false the bandits flag in case it's on
+            self.bandits = False
         else:
             self.delay(delay=1,handler=self.award_motherlode,param=times)
 
