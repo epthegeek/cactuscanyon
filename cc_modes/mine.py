@@ -172,11 +172,17 @@ class Mine(ep.EP_Mode):
 
     def mine_update(self,hitStatus):
         # award some points ?
-        # TODO fancy this up
         print str(hitStatus) + " shots left to light lock"
         # display a "shots left to light lock type thing
+        textLine = str(hitStatus) + " MORE TO LIGHT LOCK"
+        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[0])
+        textLine = dmd.TextLayer(56, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(textLine)
+        composite = dmd.GroupedLayer(128,32,[backdrop,textLine])
+        self.layer = composite
         # then kick the ball
         self.game.mountain.eject()
+        # clear layer in 2
+        self.delay(name="Display",delay = 2, handler=self.clear_layer)
 
     def light_lock(self):
         # set the lock status
@@ -250,11 +256,9 @@ class Mine(ep.EP_Mode):
 
     def play_ball_one_lock_anim(self,passive=False):
         self.cancel_delayed("Display")
-        # stop the music
-        print "one lock anim IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
+        # quiet the music
+        self.game.squelch_music()
         anim = dmd.Animation().load(ep.DMD_PATH+'ball-one-locked.dmd')
-        # TODO add the sounds to this and determine if it needs listenrs
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
         # play the first sound
@@ -268,11 +272,9 @@ class Mine(ep.EP_Mode):
 
     def play_ball_two_lock_anim(self):
         self.cancel_delayed("Display")
-        # stop the music
-        print "two lock anim IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
+        # quiet the music
+        self.game.squelch_music()
         anim = dmd.Animation().load(ep.DMD_PATH+'ball-two-locked.dmd')
-        # TODO add the sounds to this and determine if it needs listenrs
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
         # set the animation
@@ -300,7 +302,7 @@ class Mine(ep.EP_Mode):
         if self.game.switches.minePopper.is_active():
             self.delay(delay=2,handler=self.game.mountain.eject)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
-        self.delay(delay=2.1,handler=self.game.base_game_mode.music_on)
+        self.delay(delay=2.1,handler=self.game.restore_music)
 
     def light_extra_ball(self,callback=None):
         # add the ball to the pending extra balls
@@ -338,8 +340,7 @@ class Mine(ep.EP_Mode):
     def collect_extra_ball(self):
         self.cancel_delayed("Display")
         # stop the music
-        print "collect_extra_ball IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
+        self.game.squelch_music()
         # turn off the mine flasher
         # add one to the total of extra balls
         self.game.increase_tracking('extraBallsTotal')
@@ -399,7 +400,7 @@ class Mine(ep.EP_Mode):
         self.layer = myLayer
         self.delay(delay=3,handler=self.clear_layer)
         self.delay(delay=3,handler=self.unbusy)
-        self.delay(delay=3,handler=self.game.base_game_mode.music_on)
+        self.delay(delay=3,handler=self.game.restore_music)
         # update lamps to turn on the EB light
         self.game.base_game_mode.update_lamps()
 

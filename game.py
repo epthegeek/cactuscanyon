@@ -41,6 +41,7 @@ class CCGame(game.BasicGame):
     def __init__(self,machineType, fakePinProc = False):
         if (fakePinProc):
             config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
+            self.fakePinProc = True
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
@@ -409,19 +410,26 @@ class CCGame(game.BasicGame):
         self.seq_manager.ready_handler = self.highscore_entry_ready_to_prompt
         self.modes.add(self.seq_manager)
 
-        # play the closing song
-        self.interrupter.closing_song()
-
     def highscore_entry_ready_to_prompt(self, mode, prompt):
         banner_mode = game.Mode(game=self, priority=8)
         markup = dmd.MarkupFrameGenerator()
         markup.font_plain = self.assets.font_tiny7
         markup.font_bold = self.assets.font_tiny7
         text = '\n[GREAT JOB]\n#%s#\n' % (prompt.left.upper()) # we know that the left is the player name
-        frame = markup.frame_for_markup(markup=text, y_offset=0)
-        banner_mode.layer = dmd.ScriptedLayer(width=128, height=32, script=[{'seconds':2.0, 'layer':dmd.FrameLayer(frame=frame)}])
+        textLine1 = "GREAT JOB"
+        textLine2 = (prompt.left.upper())
+        textLayer1 = dmd.TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(textLine1)
+        textLayer1.composite_op = "blacksrc"
+        textLayer2 = dmd.TextLayer(58, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(textLine2)
+        textLayer2.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
+        banner_mode.layer = combined
         banner_mode.layer.on_complete = lambda: self.highscore_banner_complete(banner_mode=banner_mode, highscore_entry_mode=mode)
         self.modes.add(banner_mode)
+        # play the music
+        duration = self.sound.play(self.assets.music_highScoreLead)
+        # follow up with the music
+        self.delay(delay=duration,handler=self.base_game_mode.music_on,param=self.game.assets.music_goldmineMultiball)
 
     def highscore_banner_complete(self, banner_mode, highscore_entry_mode):
         self.modes.remove(banner_mode)
@@ -433,7 +441,7 @@ class CCGame(game.BasicGame):
         # re-add the attract mode
         self.modes.add(self.attract_mode)
         # play a quote
-        self.sound.play(self.assets.quote_goodbye)
+        duration = self.sound.play(self.assets.quote_goodbye)
         # tally up the some audit data
         # Handle stats for last ball here
         #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
@@ -445,6 +453,9 @@ class CCGame(game.BasicGame):
             self.game_data['Audits']['Games Played'] += 1
         # save the game data
         self.save_game_data()
+
+        # play the closing song
+        self.delay(delay=duration+1,handler=self.interrupter.closing_song)
 
     def save_game_data(self):
         super(CCGame, self).save_game_data(user_game_data_path)

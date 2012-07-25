@@ -99,15 +99,15 @@ class MoveYourTrain(ep.EP_Mode):
 
     def intro_display(self,step = 1,side =0):
         if step == 1:
-            moveLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'move-banner.dmd').frames[0])
+            moveLayer = ep.EP_Showcase().make_string(1,3,0,text="MOVE")
             self.layer = moveLayer
             self.delay(delay=1,handler=self.intro_display,param=2)
         if step == 2:
-            yourLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'your-banner.dmd').frames[0])
+            yourLayer = ep.EP_Showcase().make_string(1,3,0,text="YOUR")
             self.layer = yourLayer
             self.delay(delay=1,handler=self.intro_display,param=3)
         if step == 3:
-            trainLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'train-banner.dmd').frames[0])
+            trainLayer = ep.EP_Showcase().make_string(1,3,0,text="TRAIN")
             self.layer = trainLayer
             self.delay(delay=1,handler=self.get_going,param=side)
 
@@ -154,25 +154,24 @@ class MoveYourTrain(ep.EP_Mode):
 
     def move_train(self,direction):
         print "TRAIN STATUS:" + str(self.game.train.inMotion)
-        # if we're not currently moving, then we can move again
-#        if not self.game.train.inMotion:
-#       TODO this can't be on unless the real hardware is running it
-        # increase the shots taken
-        self.shots += 1
-        self.game.train.stopAt = 20
-        if direction == "left":
-            self.move_display("left")
-            self.game.train.fast_forward()
-        if direction == "right":
-            self.move_display("right")
-            self.game.train.fast_reverse()
-        if direction == "center":
-            if self.trainOffset > 0:
+        # if we're not currently moving, then we can move again - tweak for running in fakepinproc?
+        if not self.game.train.inMotion or self.game.fakePinProc:
+            # increase the shots taken
+            self.shots += 1
+            self.game.train.stopAt = 20
+            if direction == "left":
                 self.move_display("left")
-            elif self.trainOffset < 0:
+                self.game.train.fast_forward()
+            if direction == "right":
                 self.move_display("right")
-            else:
-                self.game.sound.play(self.game.assets.sfx_trainWhistle)
+                self.game.train.fast_reverse()
+            if direction == "center":
+                if self.trainOffset > 0:
+                    self.move_display("left")
+                elif self.trainOffset < 0:
+                    self.move_display("right")
+                else:
+                    self.game.sound.play(self.game.assets.sfx_trainWhistle)
 
 
     def idle_display(self):
@@ -200,8 +199,8 @@ class MoveYourTrain(ep.EP_Mode):
         self.trainOffset = value
 
     def win(self):
-        self.game.sound.play(self.game.assets.sfx_longTrainWhistle)
-        self.game.sound.play(self.game.assets.sfx_cheers)
+        duration = self.game.sound.play(self.game.assets.sfx_longTrainWhistle)
+        self.delay(delay = duration,handler=self.game.play_remote_sound,param=self.game.assets.sfx_cheers)
         textString = "TRAIN MOVED IN " + str(self.shots) + " SHOTS"
         textLine = dmd.TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString)
         # calculate the score

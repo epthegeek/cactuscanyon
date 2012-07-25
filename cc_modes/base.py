@@ -198,7 +198,6 @@ class BaseGameMode(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_ricochetSet)
         # a little display action
         textLine1 = dmd.TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
-        # TODO right now it takes 15 shots to light drunk multiball - change this to a config param
         left = self.mug_shots - hits
         ## if we're at zero, it's lit and the display shows it
         if left == 0:

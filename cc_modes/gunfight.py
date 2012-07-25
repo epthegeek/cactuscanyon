@@ -241,7 +241,6 @@ class Gunfight(ep.EP_Mode):
     def gunfight_release(self):
         # play the draw quote
         self.game.sound.play(self.game.assets.quote_gunfightDraw)
-        # relase the post - hm. no way to know which one is up Oops. # todo fix that later
         text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
@@ -249,8 +248,6 @@ class Gunfight(ep.EP_Mode):
         self.game.set_tracking('lampStatus', "ON")
         self.game.gi_control("ON")
         self.game.update_lamps()
-        # and turn on target guy
-        #self.lamps[self.enemy].enable()  ## this shouldn't be needed with the lamps in this mode now
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost

@@ -193,8 +193,6 @@ class CenterRamp(ep.EP_Mode):
         elif stage == 2:
             self.train_stage_two(score=150000)
 
-        ## TODO this should kick into polly peril I guess - don't want to start it with the side ramps
-        ## TODO maybe provide a bonus for having them lit first - shots worth more points or something
         ## stage three starts save polly peril train toy mode
         elif stage == 3:
                 self.game.increase_tracking('centerRampStage')

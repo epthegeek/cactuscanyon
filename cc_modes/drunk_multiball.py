@@ -76,7 +76,6 @@ class DrunkMultiball(ep.EP_Mode):
         if shot in self.active:
             self.collect_jackpot(shot,mode)
         else:
-            # TODO do something here
             self.game.score(2530)
 
     # beer mug lights jackpots

@@ -116,7 +116,6 @@ class GoldMine(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 6
-        # TODO add these quotes to assets
         animLayer.add_frame_listener(12,self.game.play_remote_sound,param=self.game.assets.quote_gold)
         animLayer.add_frame_listener(24,self.game.play_remote_sound,param=self.game.assets.quote_mine)
         # turn it on
@@ -170,7 +169,7 @@ class GoldMine(ep.EP_Mode):
         scoreLine.composite_op = "blacksrc"
         # motherlode line
         # if no motherlode is lit
-        if self.game.show_tracking('motherlodeLit'):
+        if self.game.show_tracking('motherlodeLit') and not self.bandits:
             textString = "MOTHERLODE " + ep.format_score(self.motherlodeValue) + " X " + str(self.game.show_tracking('motherlodeMultiplier'))
         # if the bandits showed up
         elif self.bandits:
@@ -325,14 +324,19 @@ class GoldMine(ep.EP_Mode):
             self.game.bad_guys.target_up(i)
         # set a counter for how many are up
         self.banditsUp = len(available)
-        # kick the ball out
-        self.game.mountain.kick()
         # set the timer
         self.banditTimer = 31
+        # delay a bit for the display and whatnot, then move on
+        self.delay(delay=1.5,handler=self.bandits_begin)
+
+    def bandits_begin(self):
+        # kick the ball out
+        self.game.mountain.kick()
         # and start it
         self.bandit_timer()
         # update the main display
         self.main_display()
+
 
     def bandit_timer(self):
         self.banditTimer -= 1

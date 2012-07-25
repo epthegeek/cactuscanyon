@@ -209,9 +209,7 @@ class Saloon(ep.EP_Mode):
 
     def collect_bounty(self):
         # shutup the music
-        print "collect_bounty IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
-        # TODO award the prize
+        self.game.squelch_music()
         # turn off the tracking
         self.game.set_tracking('isBountyLit', False)
         # select an award
@@ -378,7 +376,7 @@ class Saloon(ep.EP_Mode):
         # for anything other than move your train, kick the ball out
         if self.bountyPrize != "moveYourTrain":
             self.kick()
-        self.game.base_game_mode.music_on()
+        self.game.restore_music()
 
     def repeat_ding(self,times):
         self.game.sound.play(self.game.assets.sfx_bountyBell)

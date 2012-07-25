@@ -92,7 +92,6 @@ class Match(ep.EP_Mode):
         self.delay(delay=1.75,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
         self.delay(delay=1.75,handler=self.fire,param="RIGHT")
         self.delay(delay=1.875,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
-        # TODO sounds and lights go here
 
 
         # after the animation ends, see if anybody won and run that action
