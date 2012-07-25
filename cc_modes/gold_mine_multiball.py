@@ -292,7 +292,7 @@ class GoldMine(ep.EP_Mode):
         # stop the mountain
         self.game.mountain.stop()
         # turn off the flasher
-        self.game.coils.mountainFlasher.disable()
+        self.game.coils.mineFlasher.disable()
         # if the bandits attack, divert there
         if self.bandits:
             self.bandits_arrive()
@@ -343,7 +343,7 @@ class GoldMine(ep.EP_Mode):
         else:
             self.delay(name="Bandit Timer", delay=1,handler=self.bandit_timer)
 
-    def hit_bandit(self):
+    def hit_bandit(self,target):
         # tick down the bandits up number
         self.banditsUp -= 1
         # play a hit sound

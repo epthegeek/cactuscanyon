@@ -139,7 +139,7 @@ class BadGuys(ep.EP_Mode):
             self.game.ambush.hit(target)
         # bandits in goldmine
         elif self.game.show_tracking('mineStatus') == "RUNNING":
-            self.game.gold_mine_multiball.hit_bandit(target)
+            self.game.gm_multiball.hit_bandit(target)
         # option 3 is a gunfight
         else:
             self.game.gunfight.won()
@@ -147,7 +147,7 @@ class BadGuys(ep.EP_Mode):
     def target_up(self,target):
         print "TARGET RAISED " + str(target)
         print self.game.show_tracking('badGuyUp')
-        self.coils[target].patter(on_time=10,off_time=8,original_on_time=20)
+        self.coils[target].patter(on_time=10,off_time=10,original_on_time=18)
         self.lamps[target].schedule(0x00FF00FF)
         # trying a new way to activate
         #self.delay(delay=0.1,handler=self.target_activate,param=target)
