@@ -89,7 +89,9 @@ class BadGuys(ep.EP_Mode):
             self.hit_bad_guy(0)
 
     def sw_badGuySW0_inactive_for_500ms(self,sw):
-        self.target_activate(0)
+        # allowance for running in fakepinproc
+        if not self.game.fakePinProc:
+            self.target_activate(0)
 
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
@@ -98,7 +100,9 @@ class BadGuys(ep.EP_Mode):
             self.hit_bad_guy(1)
 
     def sw_badGuySW1_inactive_for_500ms(self,sw):
-        self.target_activate(1)
+        # allowance for running in fakepinproc
+        if not self.game.fakePinProc:
+            self.target_activate(1)
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
@@ -107,7 +111,9 @@ class BadGuys(ep.EP_Mode):
             self.hit_bad_guy(2)
 
     def sw_badGuySW2_inactive_for_500ms(self,sw):
-        self.target_activate(2)
+        # allowance for running in fakepinproc
+        if not self.game.fakePinProc:
+            self.target_activate(2)
 
     def sw_badGuySW3_active(self,sw):
         # far right bad guy target
@@ -116,7 +122,9 @@ class BadGuys(ep.EP_Mode):
             self.hit_bad_guy(3)
 
     def sw_badGuySW3_inactive_for_500ms(self,sw):
-        self.target_activate(3)
+        # allowance for running in fakepinproc
+        if not self.game.fakePinProc:
+            self.target_activate(3)
 
 
 
@@ -151,6 +159,9 @@ class BadGuys(ep.EP_Mode):
         self.lamps[target].schedule(0x00FF00FF)
         # trying a new way to activate
         #self.delay(delay=0.1,handler=self.target_activate,param=target)
+        # If fakepinproc is true, activate the target right away
+        if self.game.fakePinProc:
+            self.target_activate(target)
 
     def target_down(self,target):
         print "DEACTIVATING TARGET " + str(target)

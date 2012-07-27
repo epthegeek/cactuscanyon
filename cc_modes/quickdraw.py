@@ -189,21 +189,25 @@ class Quickdraw(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_cheers)
         self.layer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
         myWait = len(anim.frames) / 10.0 + 2
-        # play a quote
-        self.delay(delay=0.5,handler=self.game.play_remote_sound,param=self.game.assets.quote_quickdrawWin)
         # stuff specific to winning
         # score the points
         self.game.score(self.points)
         # update the bad guys
         self.game.set_tracking('badGuysDead',"True",target)
         self.game.bad_guys.update_lamps()
+        # stall a bit, then do the rest of the winning
+        self.delay(delay=0.5,handler=self.finish_win,param=dudesDead)
+
+    def finish_win(self,dudesDead):
+        # play a quote
+        duration = self.game.sound.play(self.game.assets.quote_quickdrawWin)
         # if this is the 4th one , and we're not at the EB max, then light extra ball
         if dudesDead == 4 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             # call the extra ball lit with a callback to the check bounty routine after
-            self.delay(delay=myWait,handler=self.game.mine.light_extra_ball,param=self.game.quickdraw.check_bounty)
+            self.delay(delay=duration,handler=self.game.mine.light_extra_ball,param=self.game.quickdraw.check_bounty)
         # any other case, just go to check bounty
         else:
-            self.delay(delay=myWait,handler=self.check_bounty)
+            self.delay(delay=duration,handler=self.check_bounty)
 
     def check_bounty(self):
         # if the bounty isn't lit, light bounty - should these stack?
