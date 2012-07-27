@@ -51,6 +51,11 @@ class SkillShot(ep.EP_Mode):
         self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
         self.active = 0
 
+    def ball_drained(self):
+        # if somehow all the balls go away and this crap is still running, it should unload. SRSLY.
+        if self.game.trough.num_balls_in_play == 0:
+            self.unload()
+
     def mode_started(self):
         # reset the super just in case
         self.super = False
