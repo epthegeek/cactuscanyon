@@ -128,3 +128,20 @@ class EP_Showcase(object):
 
         ## and return the layer
         return myLayer
+
+    def blink_fill(self,ll,ur,fill_bright,fill_dark,speed,x=64,y=0,align="center",isOpaque=False,text="",isTransparent=False,condensed=False):
+        script = []
+        # dark layer
+        darkLayer = self.make_string(ll,ur,fill_dark,x,y,align,False,text,True,condensed)
+        script.append({'seconds':speed,'layer':darkLayer})
+        # bright Layer
+        brightLayer = self.make_string(ll,ur,fill_bright,x,y,align,False,text,True,condensed)
+        script.append({'seconds':speed,'layer':brightLayer})
+        # make the script layer
+        myLayer = dmd.ScriptedLayer(128,32,script)
+        if isTransparent:
+            myLayer.composite_op = "blacksrc"
+        if isOpaque:
+            myLayer.opaque = True
+        # and return the layer
+        return myLayer
