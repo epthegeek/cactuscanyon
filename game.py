@@ -42,6 +42,8 @@ class CCGame(game.BasicGame):
         if (fakePinProc):
             config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
             self.fakePinProc = True
+        else:
+            self.fakePinProc = False
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
