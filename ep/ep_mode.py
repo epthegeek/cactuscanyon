@@ -36,7 +36,7 @@ class EP_Mode(game.Mode):
         if not self.busy:
             myHandler()
         else:
-            self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
+            self.delay(delay=0.02,handler=self.wait_until_unbusy,param=myHandler)
 
     # standard clear layer
     def clear_layer(self):
