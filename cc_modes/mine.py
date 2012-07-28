@@ -39,6 +39,7 @@ class Mine(ep.EP_Mode):
         else:
             self.hitsToLightLock = [1,1,1,2,2,2,3,3,3,4]
         self.hold = False
+        self.callback = None
 
     def mode_started(self):
         self.update_lamps()
@@ -216,7 +217,10 @@ class Mine(ep.EP_Mode):
         self.game.mountain.eject()
 
 
-    def lock_ball(self):
+    def lock_ball(self,myCallback):
+        # if we got a callback, set that self so we can use it later
+        if myCallback:
+            self.callback = myCallback
         # tick up the total balls locked because we just locked one
         myBallsLockedTotal = self.game.increase_tracking('ballsLockedTotal')
         # add one to the count of balls currently locked
@@ -303,6 +307,11 @@ class Mine(ep.EP_Mode):
             self.delay(delay=2,handler=self.game.mountain.eject)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         self.delay(delay=2.1,handler=self.game.restore_music)
+        #if we had a callback, process that - it's for the skillshot ending
+        if self.callback:
+            self.delay(delay=2,handler=self.callback)
+            # then clear the callback
+            self.callback = None
 
     def light_extra_ball(self,callback=None):
         # add the ball to the pending extra balls

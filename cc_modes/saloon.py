@@ -191,7 +191,7 @@ class Saloon(ep.EP_Mode):
             # TODO kick the ball out here
             self.kick()
 
-    def light_bounty(self):
+    def light_bounty(self,callback=None):
         # set the tracking
         self.game.set_tracking('isBountyLit', True)
         # show something on the screen
@@ -205,6 +205,9 @@ class Saloon(ep.EP_Mode):
         # lights and whatnot
         self.update_lamps()
         self.delay(delay=1.6,handler=self.clear_layer)
+        # if we got a callback - do that - its for skillshot ending
+        if callback:
+            self.delay(delay=1.6,handler=callback)
 
 
     def collect_bounty(self):

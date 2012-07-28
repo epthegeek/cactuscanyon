@@ -238,7 +238,7 @@ class SkillShot(ep.EP_Mode):
                 # turn off the skillshot layer
                 self.layer = None
                 # run the lock ball routine
-                self.game.mine.lock_ball()
+                self.game.mine.lock_ball(self.start_gameplay)
                 return
             #  Otherwise we have to check some things
             # if it's not lit, are two balls locked
@@ -260,7 +260,7 @@ class SkillShot(ep.EP_Mode):
         elif self.selectedPrizes[5:] == "E":
             # this one is the bounty
             self.layer = None
-            self.game.saloon.light_bounty()
+            self.game.saloon.light_bounty(self.start_gameplay)
             return
 
         elif self.selectedPrizes[5:] == "F":
@@ -300,10 +300,10 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom ="IS LIT"
             # turn off the skill shot layer
             self.layer = None
-            callback = None
-            if self.super:
-                callback = self.start_gameplay
-            self.game.mine.light_extra_ball(callback)
+          #  callback = None
+          #  if self.super:
+          #      callback = self.start_gameplay
+            self.game.mine.light_extra_ball(self.start_gameplay)
             return
 
         elif self.selectedPrizes[5:] == "K":
@@ -340,6 +340,8 @@ class SkillShot(ep.EP_Mode):
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
             self.game.sound.play(self.game.assets.sfx_yeeHoo)
             self.delay(delay=1.6,handler=self.clear_layer)
+            # start gameplay after the delay
+            self.delay(delay=1.6,handler=self.start_gameplay)
             return
 
         # super prizes
@@ -408,6 +410,9 @@ class SkillShot(ep.EP_Mode):
         # if we're in a super skill shot call start gameplay
         if self.super and start:
             self.delay(delay = 2,handler=self.start_gameplay)
+        # if we're not in a super, start gameplay now
+        else:
+            self.delay(delay = 2,handler=self.start_gameplay)
 
     def shift_right(self):
         ## routine to slide the prize display to the right
@@ -445,8 +450,9 @@ class SkillShot(ep.EP_Mode):
         # this is how the actual CC tracks the end of
         # the skillshot and I'm not going to argue
         # if we're not in a super skill shot, start normal gameplay and unload
-        if not self.super:
-            self.start_gameplay()
+      #  if not self.super:
+      #      self.start_gameplay()
+        pass
 
     def start_gameplay(self,myDelay=2):
         # clear the local layer just in case
