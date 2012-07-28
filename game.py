@@ -353,22 +353,24 @@ class CCGame(game.BasicGame):
     # Empty callback just incase a ball drains into the trough before another
      # drain_callback can be installed by a gameplay mode.
     def ball_drained(self):
-        # Tell every mode a ball has drained by calling the ball_drained function if it exists
-        if self.trough.num_balls_in_play == 0:
-            # turn off the lights
-            for lamp in self.lamps:
-                lamp.disable()
-            # kill all the display layers
-            for mode in self.ep_modes:
-                if getattr(mode, "clear_layer", None):
-                    mode.clear_layer()
-            print "BALL DRAINED IS KILLING THE MUSIC"
-            self.sound.stop_music()
+        # if we're not ejecting a new ball, then it really drained
+        if not self.game.trough.launch_in_progress:
+            # Tell every mode a ball has drained by calling the ball_drained function if it exists
+            if self.trough.num_balls_in_play == 0:
+                # turn off the lights
+                for lamp in self.lamps:
+                    lamp.disable()
+                # kill all the display layers
+                for mode in self.ep_modes:
+                    if getattr(mode, "clear_layer", None):
+                        mode.clear_layer()
+                print "BALL DRAINED IS KILLING THE MUSIC"
+                self.sound.stop_music()
 
-        ## and tell all the modes the ball drained no matter what
-        for mode in self.ep_modes:
-            if getattr(mode, "ball_drained", None):
-                mode.ball_drained()
+            ## and tell all the modes the ball drained no matter what
+            for mode in self.ep_modes:
+                if getattr(mode, "ball_drained", None):
+                    mode.ball_drained()
 
     def ball_ended(self):
         """Called by end_ball(), which is itself called by base_game_mode.trough_changed."""
