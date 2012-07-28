@@ -94,6 +94,8 @@ class Assets():
 
         # CC Sounds
         # Sound Effects
+        self.sfx_ballEnd = 'sfx_ballEnd'
+        self.game.sound.register_sound(self.sfx_ballEnd,self.sfx_path + "006-sfx-ball-end.wav")
         self.sfx_ballOneLock = 'sfx_ballOneLock'
         self.game.sound.register_sound(self.sfx_ballOneLock, self.sfx_path + "241-sfx-ball-one-lock.wav")
         self.sfx_banjoTrillUp = 'sfx_banjoTrillUp'

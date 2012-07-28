@@ -433,7 +433,7 @@ class CCGame(game.BasicGame):
         # play the music
         duration = self.sound.play(self.assets.music_highScoreLead)
         # follow up with the music
-        self.delay(delay=duration,handler=self.base_game_mode.music_on,param=self.assets.music_goldmineMultiball)
+        self.base_game_mode.delayed_music_on(wait=duration,song=self.assets.music_goldMineMultiball)
 
     def highscore_banner_complete(self, banner_mode, highscore_entry_mode):
         self.modes.remove(banner_mode)

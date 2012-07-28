@@ -697,9 +697,9 @@ class BaseGameMode(ep.EP_Mode):
         # and clear the running total
         self.runningTotal = 0
         # throw up a  layer that says bonus as an interstitial
-      #  textLine = dmd.TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=True).set_text("BONUS")
-      #  self.layer = textLine
         self.layer = ep.EP_Showcase().blink_fill(2,2,3,1,0.3,isOpaque=True,text="BONUS")
+        # play the ball end riff
+        self.game.sound.play(self.game.assets.sfx_ballEnd)
         # then 1.5 seconds later, move on
         self.delay(delay=1.5,handler=self.display_bonus,param=times)
 

@@ -217,7 +217,7 @@ class Mine(ep.EP_Mode):
         self.game.mountain.eject()
 
 
-    def lock_ball(self,myCallback):
+    def lock_ball(self,myCallback=None):
         # if we got a callback, set that self so we can use it later
         if myCallback:
             self.callback = myCallback
