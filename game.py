@@ -354,7 +354,7 @@ class CCGame(game.BasicGame):
      # drain_callback can be installed by a gameplay mode.
     def ball_drained(self):
         # if we're not ejecting a new ball, then it really drained
-        if not self.game.trough.launch_in_progress:
+        if not self.trough.launch_in_progress:
             # Tell every mode a ball has drained by calling the ball_drained function if it exists
             if self.trough.num_balls_in_play == 0:
                 # turn off the lights
@@ -422,9 +422,9 @@ class CCGame(game.BasicGame):
         text = '\n[GREAT JOB]\n#%s#\n' % (prompt.left.upper()) # we know that the left is the player name
         textLine1 = "GREAT JOB"
         textLine2 = (prompt.left.upper())
-        textLayer1 = dmd.TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(textLine1)
+        textLayer1 = dmd.TextLayer(58, 5, self.assets.font_10px_AZ, "center", opaque=False).set_text(textLine1)
         textLayer1.composite_op = "blacksrc"
-        textLayer2 = dmd.TextLayer(58, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(textLine2)
+        textLayer2 = dmd.TextLayer(58, 18, self.assets.font_10px_AZ, "center", opaque=False).set_text(textLine2)
         textLayer2.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
         banner_mode.layer = combined
@@ -433,7 +433,7 @@ class CCGame(game.BasicGame):
         # play the music
         duration = self.sound.play(self.assets.music_highScoreLead)
         # follow up with the music
-        self.delay(delay=duration,handler=self.base_game_mode.music_on,param=self.game.assets.music_goldmineMultiball)
+        self.delay(delay=duration,handler=self.base_game_mode.music_on,param=self.assets.music_goldmineMultiball)
 
     def highscore_banner_complete(self, banner_mode, highscore_entry_mode):
         self.modes.remove(banner_mode)

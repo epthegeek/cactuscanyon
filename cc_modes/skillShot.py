@@ -341,7 +341,7 @@ class SkillShot(ep.EP_Mode):
             self.game.sound.play(self.game.assets.sfx_yeeHoo)
             self.delay(delay=1.6,handler=self.clear_layer)
             # start gameplay after the delay
-            self.delay(delay=1.6,handler=self.start_gameplay)
+            self.delay("Gameplay Start",delay=1.6,handler=self.start_gameplay)
             return
 
         # super prizes
@@ -358,7 +358,7 @@ class SkillShot(ep.EP_Mode):
             self.layer = dmd.GroupedLayer(128,32,[topText,million,wipeLayer])
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
             self.game.sound.play(self.game.assets.sfx_yeeHoo)
-            self.delay(delay=1.6,handler=self.start_gameplay)
+            self.delay("Gameplay Start",delay=1.6,handler=self.start_gameplay)
             return
         # bonus x
         elif self.selectedPrizes[5:] == "P":
@@ -412,7 +412,7 @@ class SkillShot(ep.EP_Mode):
             self.delay(delay = 2,handler=self.start_gameplay)
         # if we're not in a super, start gameplay now
         else:
-            self.delay(delay = 2,handler=self.start_gameplay)
+            self.delay("Gameplay Start",delay = 2,handler=self.start_gameplay)
 
     def shift_right(self):
         ## routine to slide the prize display to the right
@@ -454,13 +454,14 @@ class SkillShot(ep.EP_Mode):
       #      self.start_gameplay()
         pass
 
-    def start_gameplay(self,myDelay=2):
+    def start_gameplay(self,myDelay=2,music=True):
         # clear the local layer just in case
         self.layer = None
         # turn off super mode
         self.super = False
         # start the main game music
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        if self.game.show_tracking('gunfightStatus') != "RUNNING":
+            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
         # check if the award finished stampede
         self.game.base_game_mode.check_stampede()
         # unload in 2 seconds - to give

@@ -699,7 +699,7 @@ class BaseGameMode(ep.EP_Mode):
         # throw up a  layer that says bonus as an interstitial
       #  textLine = dmd.TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=True).set_text("BONUS")
       #  self.layer = textLine
-        self.layer = ep.EP_Showcase().blink_fill(self,2,2,3,1,0.3,isOpaque=True,text="BONUS")
+        self.layer = ep.EP_Showcase().blink_fill(2,2,3,1,0.3,isOpaque=True,text="BONUS")
         # then 1.5 seconds later, move on
         self.delay(delay=1.5,handler=self.display_bonus,param=times)
 
