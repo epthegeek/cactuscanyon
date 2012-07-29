@@ -418,7 +418,7 @@ class CCGame(game.BasicGame):
         textLayer2 = dmd.TextLayer(58, 18, self.assets.font_10px_AZ, "center", opaque=False).set_text(textLine2)
         textLayer2.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
-        banner_mode.layer = combined
+        banner_mode.layer = dmd.ScriptedLayer(width=128, height=32, script=[{'seconds':2.0, 'layer':combined}])
         banner_mode.layer.on_complete = lambda: self.highscore_banner_complete(banner_mode=banner_mode, highscore_entry_mode=mode)
         self.modes.add(banner_mode)
         # play the music
