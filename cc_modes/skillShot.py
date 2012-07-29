@@ -59,6 +59,7 @@ class SkillShot(ep.EP_Mode):
     def mode_started(self):
         # reset the super just in case
         self.super = False
+        print "THOOPER ITH FAHLTH"
         # call the welcome quote - and start the theme song after on the first ball
         self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1:
@@ -68,8 +69,8 @@ class SkillShot(ep.EP_Mode):
         self.delay(delay=0.2,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
 
-
     def generate_prizes(self):
+        print "SKILLSHOT GENERATE PRIZES"
         # set up a blank list for prizes
         prizes = []
         # completed items are not added to the random list
@@ -155,6 +156,7 @@ class SkillShot(ep.EP_Mode):
 
         # if we're not in the super skillshot, update the display right away
         if not self.super:
+            print "UPDATING LAYER AFTER PRIZE GENERATE"
             self.update_layer()
 
     def update_layer(self):
@@ -408,10 +410,10 @@ class SkillShot(ep.EP_Mode):
         # remove after 2 seconds
         self.delay(delay=2,handler=self.clear_layer)
         # if we're in a super skill shot call start gameplay
-        if self.super and start:
-            self.delay(delay = 2,handler=self.start_gameplay)
+        #if self.super and start:
+        #    self.delay(delay = 2,handler=self.start_gameplay)
         # if we're not in a super, start gameplay now
-        else:
+        if start:
             self.delay("Gameplay Start",delay = 2,handler=self.start_gameplay)
 
     def shift_right(self):
@@ -531,8 +533,8 @@ class SkillShot(ep.EP_Mode):
             # award the prize
             self.skillshot_award()
         else:
-            self.game.sound.play(self.game.assets.quote_superFail)
-            self.start_gameplay(0)
+            duration = self.game.sound.play(self.game.assets.quote_superFail)
+            self.start_gameplay(duration)
 
     def super_update_lamps(self,blink=False):
         self.super_disable_lamps()

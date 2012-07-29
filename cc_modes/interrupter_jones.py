@@ -109,8 +109,8 @@ class Interrupter(ep.EP_Mode):
         self.layer = combined
         self.delay(delay=1,handler=self.clear_layer)
 
-    def closing_song(self):
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+    def closing_song(self,duration):
+        self.delay(delay=duration+1,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_mainTheme)
         # and set a delay to fade it out after 2 minutes
         self.delay(delay=60,handler=self.game.sound.fadeout_music)
 

@@ -459,7 +459,7 @@ class CCGame(game.BasicGame):
         self.save_game_data()
 
         # play the closing song
-        self.delay(delay=duration+1,handler=self.interrupter.closing_song)
+        self.interrupter.closing_song(duration)
 
     def save_game_data(self):
         super(CCGame, self).save_game_data(user_game_data_path)

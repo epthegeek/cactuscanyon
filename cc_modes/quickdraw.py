@@ -175,8 +175,9 @@ class Quickdraw(ep.EP_Mode):
         self.game.increase_tracking('kills')
         # and tick up the quickdraw wins
         dudesDead = self.game.increase_tracking('quickdrawsWon')
-
-        self.game.sound.stop_music()
+        # only kill the music if there's not a higher level running
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         # play the win animation
         anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-hit.dmd')
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
@@ -225,7 +226,8 @@ class Quickdraw(ep.EP_Mode):
     def lost(self,target):
         # kill the mode music
         print "QUICKDRAW LOST IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         # stuff specific to losing
         # drop the coil and kill the lamp
         self.game.bad_guys.target_down(target)

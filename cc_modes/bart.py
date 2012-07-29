@@ -237,6 +237,8 @@ class Bart(ep.EP_Mode):
 
         # light gunfight?
         self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
+        # clear the layer
+        self.delay(delay=myWait,handler=self.clear_layer)
 
     def display_damage_one(self):
         print "MADE IT TO DAMAGE ONE"

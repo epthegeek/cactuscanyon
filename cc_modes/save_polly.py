@@ -152,12 +152,7 @@ class SavePolly(ep.EP_Mode):
         myWait = len(anim.frames) / 30 + 2
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
         self.layer = animLayer
-        # then hand off to the main loop
-        self.delay(delay=myWait,handler=self.get_going)
 
-    # start the music, set up the static text lines an animations
-    def get_going(self):
-        print "POLLY GET GOING"
         # set the timer for the mode
         self.modeTimer = 30
         # setup some layers
@@ -180,7 +175,7 @@ class SavePolly(ep.EP_Mode):
         self.infoLayer.composite_op = "blacksrc"
 
         # jump into the mode loop
-        self.in_progress()
+        self.delay("Get Going",delay=myWait,handler=self.in_progress)
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause
@@ -261,6 +256,8 @@ class SavePolly(ep.EP_Mode):
         # cancel delays
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
+        # this is the initial delay - have to include it in case of a straight shot to the mine off the ramp
+        self.cancel_delayed("Get Going")
         # stop the train
         self.game.train.stop()
         # set the flag

@@ -17,6 +17,7 @@
 from procgame import *
 import ep
 import locale
+import inspect
 
 class EP_Mode(game.Mode):
     def __init__(self, game, priority):

@@ -138,8 +138,7 @@ class Ambush(ep.EP_Mode):
         animLayer.add_frame_listener(11,self.lightning,param="left")
         # setup the display
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.get_going)
-        self.taunt_timer()
+        self.delay(delay=myWait,handler=self.intro_quote)
 
     def taunt_timer(self):
         # tick up by one
@@ -151,16 +150,16 @@ class Ambush(ep.EP_Mode):
             self.tauntTimer = 0
         self.delay(name="Taunt Timer",delay=1,handler=self.taunt_timer)
 
-    def get_going(self):
+    def intro_quote(self):
         myWait = self.game.sound.play(self.game.assets.quote_ambush)
+        self.delay(delay=myWait,handler=self.get_going)
 
+    def get_going(self):
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
-        self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_showdown)
-        self.delay(delay=myWait+0.5,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
-        # kick out more ball
-        #self.game.trough.launch_balls(1)
+        self.game.base_game_mode.music_on(self.game.assets.music_showdown)
+        self.delay(delay=0.5,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
         # add two dudes - one here, one later
         self.is_busy()
         self.add_guys(1)
@@ -169,6 +168,7 @@ class Ambush(ep.EP_Mode):
 
         # delay adding the second guy for 2 seconds to stagger them a bit
         self.delay(delay=2,handler=self.add_guys,param=1)
+        self.delay(delay=2,handler=self.taunt_timer)
 
     def add_guys(self,amount):
         # for adding dudes to the ambush

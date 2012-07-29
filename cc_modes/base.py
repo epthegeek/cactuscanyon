@@ -90,7 +90,7 @@ class BaseGameMode(ep.EP_Mode):
     def ball_drained(self):
         print "CHECKING TRACKING ball drained LR: " + str(self.game.show_tracking('leftRampStage'))
         # if that was the last ball in play need to finish up - unless high noon is finishing up
-        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('highNoonStatus') != "FINISH":
+        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('highNoonStatus'):
             # turn off all the lights
             for lamp in self.game.lamps:
                 lamp.disable()
