@@ -411,10 +411,6 @@ class CCGame(game.BasicGame):
 
     def highscore_entry_ready_to_prompt(self, mode, prompt):
         banner_mode = game.Mode(game=self, priority=8)
-        markup = dmd.MarkupFrameGenerator()
-        markup.font_plain = self.assets.font_tiny7
-        markup.font_bold = self.assets.font_tiny7
-        text = '\n[GREAT JOB]\n#%s#\n' % (prompt.left.upper()) # we know that the left is the player name
         textLine1 = "GREAT JOB"
         textLine2 = (prompt.left.upper())
         textLayer1 = dmd.TextLayer(58, 5, self.assets.font_10px_AZ, "center", opaque=False).set_text(textLine1)
@@ -428,7 +424,7 @@ class CCGame(game.BasicGame):
         # play the music
         duration = self.sound.play(self.assets.music_highScoreLead)
         # follow up with the music
-        self.base_game_mode.delayed_music_on(wait=duration,song=self.assets.music_goldMineMultiball)
+        self.interrupter.delayed_music_on(wait=duration,song=self.assets.music_goldmineMultiball)
 
     def highscore_banner_complete(self, banner_mode, highscore_entry_mode):
         self.modes.remove(banner_mode)

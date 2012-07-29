@@ -285,3 +285,15 @@ class Interrupter(ep.EP_Mode):
             self.layer = combined
             self.delay(delay = 1.5,handler=self.clear_layer)
             self.delay(delay = 1.5,handler=self.game.ball_starting)
+
+
+    # delayed music on used by highscore
+    def delayed_music_on(self,wait,song=None):
+        self.delay(delay=wait, handler=self.music_on,param=song)
+
+    def music_on(self,song=None):
+        # if a song is passed, set that to the active song
+        # if not, just re-activate the current
+        if song:
+            self.current_music = song
+        self.game.sound.play_music(self.current_music, loops=-1)

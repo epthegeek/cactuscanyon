@@ -168,7 +168,8 @@ class BadGuys(ep.EP_Mode):
         # we'll still deactivate when the coil goes off, just to maintain sync
         self.game.set_tracking('badGuyUp',False,target)
         self.lamps[target].disable()
-        self.delay(delay=0.02,handler=self.coils[target].disable)
+        #self.delay(delay=0.02,handler=self.coils[target].disable)
+        self.coils[target].disable()
 
     def target_activate(self,target):
         if self.game.show_tracking('badGuyUp',target) == False:
