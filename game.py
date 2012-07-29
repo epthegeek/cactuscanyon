@@ -61,7 +61,6 @@ class CCGame(game.BasicGame):
 
         self.ballStarting = False
         self.status = None
-        self.autoPlunge = False
         # gi lamps set
         self.giLamps = [self.lamps.gi01,
                         self.lamps.gi02,
@@ -342,13 +341,10 @@ class CCGame(game.BasicGame):
             print "GAME THINKS THE BALL WAS SAVED"
             self.interrupter.ball_saved()
             # kill the skillshot if it's running
-            if self.attract_mode in self.modes:
-                self.modes.remove(self.attract_mode)
+            if self.skill_shot in self.modes:
+                self.modes.remove(self.skill_shot)
             # if the ball was saved, we need a new one
             #self.trough.launch_balls(1)
-            self.autoPlunge = True
-            self.ball_save.disable()
-
 
     # Empty callback just incase a ball drains into the trough before another
      # drain_callback can be installed by a gameplay mode.
@@ -383,7 +379,6 @@ class CCGame(game.BasicGame):
         self.sound.stop_music()
         # unload the base add on modes
         self.base_game_mode.remove_modes()
-        print "Auto Plunge STATE: " + str(self.autoPlunge)
 
         #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
         self.game_data['Audits']['Balls Played'] += 1

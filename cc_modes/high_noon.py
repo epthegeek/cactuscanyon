@@ -275,7 +275,7 @@ class HighNoon(ep.EP_Mode):
         if self.game.trough.num_balls_in_play != 4:
             thisMany = 4 - self.game.trough.num_balls_in_play
             # turn on autoplunge and launch balls
-            self.game.autoPlunge = True
+            self.game.trough.balls_to_autoplunge = thisMany
             self.game.trough.launch_balls(thisMany)
 
     def update_display(self):

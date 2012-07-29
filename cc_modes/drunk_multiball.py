@@ -180,7 +180,7 @@ class DrunkMultiball(ep.EP_Mode):
         # eject more ball
         if self.game.trough.num_balls_in_play < 3:
             thisMany = 3 - self.game.trough.num_balls_in_play
-            self.game.autoPlunge = True
+            self.game.trough.balls_to_autoplunge = thisMany
             self.game.trough.launch_balls(thisMany)
         # start a ball save
         self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)

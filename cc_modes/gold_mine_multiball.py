@@ -143,7 +143,7 @@ class GoldMine(ep.EP_Mode):
         if self.game.trough.num_balls_in_play < 3:
             total = 3 - self.game.trough.num_balls_in_play
             # turn on the autoplunge
-            self.game.autoPlunge = True
+            self.game.trough.balls_to_autoplunge = total
             self.game.trough.launch_balls(total)
         # reset the jackpot status to available - just in case
         for i in range(0,5,1):

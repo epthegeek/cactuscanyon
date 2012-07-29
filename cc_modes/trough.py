@@ -76,6 +76,8 @@ class Trough(Mode):
 
         self.launch_callback = None
 
+        self.balls_to_autoplunge = 0
+
     #self.debug()
 
     def debug(self):
@@ -84,7 +86,7 @@ class Trough(Mode):
 
     def enable_ball_save(self, enable=True):
         """Used to enable/disable ball save logic."""
-        print "SETING ball_save_active to " + str(enable)
+        print "SETTING ball_save_active to " + str(enable)
         self.ball_save_active = enable
 
     def early_save_switch_handler(self, sw):
@@ -92,6 +94,7 @@ class Trough(Mode):
             # Only do an early ball save if a ball is ready to be launched.
             # Otherwise, let the trough switches take care of it.
             if self.game.switches[self.eject_switchname].is_active():
+                self.balls_to_autoplunge += 1
                 self.launch_balls(1, self.ball_save_callback,stealth=True)
 
     def mode_stopped(self):
@@ -129,6 +132,8 @@ class Trough(Mode):
 
                 if (temp_num_balls - self.num_balls_to_launch) >= balls_in_trough:
                     print "CHECK SWITCHES THINKS THE BALL WAS SAVED"
+                    # tick up the autoplunge
+                    self.balls_to_autoplunge += 1
                     self.launch_balls(1, self.ball_save_callback,stealth=True)
                 else:
                     # If there are too few balls in the trough.

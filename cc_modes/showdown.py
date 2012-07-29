@@ -103,7 +103,7 @@ class Showdown(ep.EP_Mode):
 
 
     def add_ball(self):
-        self.game.autoPlunge = True
+        self.game.autoPlunge += 1
         self.game.trough.launch_balls(1)
 
     def new_rack(self):

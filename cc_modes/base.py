@@ -180,13 +180,10 @@ class BaseGameMode(ep.EP_Mode):
         ep.last_switch = "startButton"
 
     def sw_shooterLane_open_for_1s(self,sw):
-        if not self.game.autoPlunge:
-            if self.game.ballStarting:
-                self.game.ballStarting = False
-                ball_save_time = 10
-                self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
-            else:
-                self.game.ball_save.disable()
+        if self.game.ballStarting:
+            self.game.ballStarting = False
+            ball_save_time = 10
+            self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
 
     def sw_beerMug_active(self,sw):
         # track it, because why not
@@ -536,9 +533,9 @@ class BaseGameMode(ep.EP_Mode):
 
     def sw_shooterLane_active_for_300ms(self,sw):
         # if we're dealing with a saved ball, plunge like the wind
-        print "checking ball saved"
-        if self.game.autoPlunge == True:
+        if self.game.trough.balls_to_autoplunge > 0:
             print "AUTOPLUNGE, MF"
+            self.game.trough.balls_to_autoplunge -= 1
             self.game.coils.autoPlunger.pulse(40)
 
 
@@ -551,16 +548,6 @@ class BaseGameMode(ep.EP_Mode):
     def sw_shooterLane_active_for_5s(self,sw):
         # if the ball sits in the shooter lane, flash the player number
         self.game.interrupter.display_player_number(idle=True)
-
-    def sw_skillBowl_active(self,sw):
-        if self.game.autoPlunge:
-            self.cancel_delayed("Stop Autoplunge")
-            # delay cancelling auto punge for 3 seconds in case more balls are coming
-            self.delay(name="Stop Autoplunge",delay=3,handler=self.disable_auto_plunge)
-
-    def disable_auto_plunge(self):
-        print "TURNING OFF AUTOPLUNGE"
-        self.game.autoPlunge = False
 
     ### stampede
     def check_stampede(self):
