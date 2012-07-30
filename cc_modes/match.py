@@ -43,6 +43,7 @@ class Match(ep.EP_Mode):
         self.winners = 0
 
     def run_match(self):
+        self.game.sound.play(self.game.assets.sfx_ragtimePiano)
         possiblities = ["0","1","2","3","4","5","6","7","8","9"]
         # pick a random number
         self.selection = random.choice(possiblities)
@@ -102,7 +103,7 @@ class Match(ep.EP_Mode):
         for i in range(len(self.game.players)):
             if str(self.playerDigits[i]) == self.selection:
                 # set the text on that layer to blink
-                self.playerLayers[i].set_text(str(self.playerDigits) + "0",blink_frames=8)
+                self.playerLayers[i].set_text(str(self.playerDigits[i]) + "0",blink_frames=8)
                 # and tick the winner count to true
                 self.winners += 1
 

@@ -432,7 +432,8 @@ class CCGame(game.BasicGame):
 
     def highscore_entry_finished(self, mode):
         self.modes.remove(mode)
-
+        # Stop the music
+        self.sound.stop_music()
         # re-add the attract mode
         self.modes.add(self.attract_mode)
         # play a quote

@@ -284,6 +284,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_dieBionicBart, self.sfx_path + "125-sfx-bionic-critical-hit.wav")
         self.sfx_heavyExplosion = 'sfx_heavyExplosion'
         self.game.sound.register_sound(self.sfx_heavyExplosion, self.sfx_path + "247-sfx-heavy-explosion.wav")
+        self.sfx_ragtimePiano = 'sfx_ragtimePiano'
+        self.game.sound.register_sound(self.sfx_ragtimePiano, self.sfx_path + "00-sfx-ragtime-piano.wav")
     # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
