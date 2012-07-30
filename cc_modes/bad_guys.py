@@ -88,7 +88,7 @@ class BadGuys(ep.EP_Mode):
             print "BAD GUY 0 HIT"
             self.hit_bad_guy(0)
 
-    def sw_badGuySW0_inactive_for_500ms(self,sw):
+    def sw_badGuySW0_inactive_for_200ms(self,sw):
         # allowance for running in fakepinproc
         if not self.game.fakePinProc:
             self.target_activate(0)
@@ -99,7 +99,7 @@ class BadGuys(ep.EP_Mode):
             print "BAD GUY 1 HIT"
             self.hit_bad_guy(1)
 
-    def sw_badGuySW1_inactive_for_500ms(self,sw):
+    def sw_badGuySW1_inactive_for_200ms(self,sw):
         # allowance for running in fakepinproc
         if not self.game.fakePinProc:
             self.target_activate(1)
@@ -110,7 +110,7 @@ class BadGuys(ep.EP_Mode):
             print "BAD GUY 2 HIT"
             self.hit_bad_guy(2)
 
-    def sw_badGuySW2_inactive_for_500ms(self,sw):
+    def sw_badGuySW2_inactive_for_200ms(self,sw):
         # allowance for running in fakepinproc
         if not self.game.fakePinProc:
             self.target_activate(2)
@@ -121,7 +121,7 @@ class BadGuys(ep.EP_Mode):
             print "BAD GUY 3 HIT"
             self.hit_bad_guy(3)
 
-    def sw_badGuySW3_inactive_for_500ms(self,sw):
+    def sw_badGuySW3_inactive_for_200ms(self,sw):
         # allowance for running in fakepinproc
         if not self.game.fakePinProc:
             self.target_activate(3)
@@ -155,7 +155,9 @@ class BadGuys(ep.EP_Mode):
     def target_up(self,target):
         print "TARGET RAISED " + str(target)
         print self.game.show_tracking('badGuyUp')
-        self.coils[target].patter(on_time=10,off_time=10,original_on_time=18)
+       # self.coils[target].patter(on_time=10,off_time=10,original_on_time=18)
+        # new coil raise based on research with on o-scope by jim (jvspin)
+        self.coils[target].patter(on_time=2,off_time=2)
         self.lamps[target].schedule(0x00FF00FF)
         # trying a new way to activate
         #self.delay(delay=0.1,handler=self.target_activate,param=target)
@@ -174,6 +176,8 @@ class BadGuys(ep.EP_Mode):
     def target_activate(self,target):
         if self.game.show_tracking('badGuyUp',target) == False:
             print "ACTIVATING TARGET " + str(target)
+            # switch to new alternate patter for holding target
+            self.coils[target].patter(on_time=2,off_time=10)
             self.game.set_tracking('badGuyUp',True,target)
 
     def setup_targets(self):
