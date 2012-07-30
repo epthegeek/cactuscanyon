@@ -672,3 +672,11 @@ class CCGame(game.BasicGame):
             self.squelched = False
             pygame.mixer.music.set_volume(self.previousVolume)
 
+
+    def priority_voice(self,quote):
+        # cancel any other voice quote
+        for key in self.sound.sounds:
+            if key.startswith("quote_"):
+                self.sound.stop(key)
+        # then play the quote
+        self.sound.play_voice(quote)
