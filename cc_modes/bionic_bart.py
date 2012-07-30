@@ -473,12 +473,20 @@ class BionicBart(ep.EP_Mode):
             self.delay(delay=duration,handler=self.bionic_defeated,param=3)
         if step == 3:
             # load a black layer to cover the score
-            blank = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
-            # play the death quote over the whine bot
-            self.whineLayer.set_target_position(-43,0)
+          #  blank = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
+          #  # play the death quote over the whine bot
+          #  self.whineLayer.set_target_position(-43,0)
             self.flash()
-            combined = dmd.GroupedLayer(128,32,[blank,self.whineLayer])
-            self.layer = combined
+          #  combined = dmd.GroupedLayer(128,32,[blank,self.whineLayer])
+            # load up the defeated animation
+            anim = dmd.Animation().load(ep.DMD_PATH+'bionic-death-talking.dmd')
+            # set the animation
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=False
+            animLayer.repeat=True
+            animLayer.frame_time = 6
+
+            self.layer = animLayer
             # play the quote
             duration = self.game.sound.play(self.game.assets.quote_defeatBionicBart)
             self.delay(delay=duration,handler=self.bionic_defeated,param=4)
