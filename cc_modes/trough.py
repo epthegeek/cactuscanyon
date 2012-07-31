@@ -228,6 +228,9 @@ class Trough(Mode):
             # if after 2 seconds the shooter lane hasn't been hit we should try again
             if not self.game.fakePinProc:
                 self.delay("Bounce Delay",delay=2,handler=self.fallback_loop)
+            # if we are under fakepinproc, proceed immediately to ball in play
+            else:
+                self.finish_launch()
 
         # Otherwise, wait 1 second before trying again.
         else:
@@ -239,27 +242,30 @@ class Trough(Mode):
         print "LAUNCH FAILED? TRYING AGAIN"
         self.common_launch_code()
 
+    def finish_launch(self):
+        # tick down the balls to launch
+        self.num_balls_to_launch -= 1
+        print "BALL LAUNCHED"
+        # Only increment num_balls_in_play if there are no more
+        # stealth launches to complete.
+        if self.num_balls_to_stealth_launch > 0:
+            self.num_balls_to_stealth_launch -= 1
+        else:
+            self.num_balls_in_play += 1
+            print "IN PLAY: " + str(self.num_balls_in_play)
+            # If more balls need to be launched, delay 1 second
+        if self.num_balls_to_launch > 0:
+            self.delay(name='launch', event_type=None, delay=1.0,\
+                handler=self.common_launch_code)
+        else:
+            self.launch_in_progress = False
+            if self.launch_callback:
+                print "FUCK YOUR CALLBACK"
+                self.launch_callback()
+
     def sw_shooterLane_active(self,sw):
         # if we're ejecting - process the launch
         if self.launch_in_progress:
             # kill the fallback loop
             self.cancel_delayed("Bounce Delay")
-            # tick down the balls to launch
-            self.num_balls_to_launch -= 1
-            print "BALL LAUNCHED"
-            # Only increment num_balls_in_play if there are no more
-            # stealth launches to complete.
-            if self.num_balls_to_stealth_launch > 0:
-                self.num_balls_to_stealth_launch -= 1
-            else:
-                self.num_balls_in_play += 1
-                print "IN PLAY: " + str(self.num_balls_in_play)
-                # If more balls need to be launched, delay 1 second
-            if self.num_balls_to_launch > 0:
-                self.delay(name='launch', event_type=None, delay=1.0,\
-                    handler=self.common_launch_code)
-            else:
-                self.launch_in_progress = False
-                if self.launch_callback:
-                    print "FUCK YOUR CALLBACK"
-                    self.launch_callback()
+            self.finish_launch()
