@@ -41,7 +41,7 @@ class Gunfight(ep.EP_Mode):
         # pop up the post
         print "RAISE POST ON SIDE: " + str(side)
         self.activeSide = side
-        self.posts[self.activeSide].patter(on_time=2,off_time=10,original_on_time=30)
+        self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
         # cancel any other displays
         for mode in self.game.ep_modes:
             if getattr(mode, "abort_display", None):
