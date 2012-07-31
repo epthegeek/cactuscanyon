@@ -175,10 +175,13 @@ class Mine(ep.EP_Mode):
         # award some points ?
         print str(hitStatus) + " shots left to light lock"
         # display a "shots left to light lock type thing
-        textLine = str(hitStatus) + " MORE TO LIGHT LOCK"
+        textLine = str(hitStatus) + " MORE TO"
+        textLine2 = "LIGHT LOCK"
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[0])
-        textLine = dmd.TextLayer(56, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(textLine)
-        composite = dmd.GroupedLayer(128,32,[backdrop,textLine])
+        textLayer = dmd.TextLayer(56, 2, self.game.assets.font_9px_az, "center", opaque=False).set_text(textLine)
+        textLayer2 = dmd.TextLayer(56, 13, self.game.assets.font_9px_az, "center", opaque=False).set_text(textLine2)
+        textLayer2.composite_op = "blacksrc"
+        composite = dmd.GroupedLayer(128,32,[backdrop,textLayer,textLayer2])
         self.layer = composite
         # then kick the ball
         self.game.mountain.eject()

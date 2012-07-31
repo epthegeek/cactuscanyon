@@ -97,6 +97,8 @@ class BaseGameMode(ep.EP_Mode):
             # stop the music
             print "game.ball_drained IS KILLING THE MUSIC"
             self.game.sound.stop_music()
+            # play the ball end riff
+            self.game.sound.play(self.game.assets.sfx_ballEnd)
             # turn off ball save
             self.game.ball_search.disable()
             # turn off the flippers
@@ -221,6 +223,9 @@ class BaseGameMode(ep.EP_Mode):
         if left != 0:
             # play a quote on a random 1/3 choice
             weDo = random.choice([False,True,False])
+            # if super skill shot is running, don't use a quote here
+            if self.game.skill_shot.super:
+                weDo = False
             if weDo:
                 self.game.sound.play(self.game.assets.quote_beerMug)
         ## -- set the last switch -- ##
@@ -685,8 +690,6 @@ class BaseGameMode(ep.EP_Mode):
         self.runningTotal = 0
         # throw up a  layer that says bonus as an interstitial
         self.layer = ep.EP_Showcase().blink_fill(2,2,3,1,0.3,isOpaque=True,text="BONUS")
-        # play the ball end riff
-        self.game.sound.play(self.game.assets.sfx_ballEnd)
         # then 1.5 seconds later, move on
         self.delay(delay=1.5,handler=self.display_bonus,param=times)
 
