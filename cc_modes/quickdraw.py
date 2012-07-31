@@ -201,7 +201,7 @@ class Quickdraw(ep.EP_Mode):
 
     def finish_win(self,dudesDead):
         # play a quote
-        duration = self.game.base.play_quote(self.game.assets.quote_quickdrawWin)
+        duration = self.game.base.priority_quote(self.game.assets.quote_quickdrawWin)
         # if this is the 4th one , and we're not at the EB max, then light extra ball
         if dudesDead == 4 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             # call the extra ball lit with a callback to the check bounty routine after
@@ -252,6 +252,7 @@ class Quickdraw(ep.EP_Mode):
         self.game.bad_guys.update_lamps()
         self.game.base.update_lamps()
         # turn the main music back on - if a second level mode isn't running
+        print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn the level 1 flag off
