@@ -172,7 +172,7 @@ class CCGame(game.BasicGame):
         super(CCGame,self).reset()
 
         # Create the objects for the basic modes
-        self.base_game_mode = cc_modes.BaseGameMode(game=self,priority=4)
+        self.base = cc_modes.BaseGameMode(game=self,priority=4)
         self.attract_mode = cc_modes.Attract(game=self,priority=5)
         self.train = cc_modes.Train(game=self,priority=6)
         self.mountain = cc_modes.Mountain(game=self,priority = 7)
@@ -227,7 +227,7 @@ class CCGame(game.BasicGame):
         self.service_mode = service.ServiceMode(self,100,self.assets.font_tiny7,[])
 
         # set up an array of the modes
-        self.ep_modes = [self.base_game_mode,
+        self.ep_modes = [self.base,
                          self.attract_mode,
                          self.right_ramp,
                          self.right_loop,
@@ -279,7 +279,7 @@ class CCGame(game.BasicGame):
         # Add the first player
         self.add_player()
         # load the base game mode
-        self.modes.add(self.base_game_mode)
+        self.modes.add(self.base)
         # Start the ball.  This includes ejecting a ball from the trough.
         self.start_ball()
 
@@ -328,7 +328,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.skill_shot)
         # and all the other modes
         print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
-        self.base_game_mode.load_modes()
+        self.base.load_modes()
         # update the lamps
         self.update_lamps()
 
@@ -369,7 +369,7 @@ class CCGame(game.BasicGame):
                     mode.ball_drained()
 
     def ball_ended(self):
-        """Called by end_ball(), which is itself called by base_game_mode.trough_changed."""
+        """Called by end_ball(), which is itself called by base.trough_changed."""
         self.log("BALL ENDED")
         # reset the tilt
         self.set_tracking('tiltStatus',0)
@@ -378,7 +378,7 @@ class CCGame(game.BasicGame):
 
         self.sound.stop_music()
         # unload the base add on modes
-        self.base_game_mode.remove_modes()
+        self.base.remove_modes()
 
         #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
         self.game_data['Audits']['Balls Played'] += 1
@@ -394,7 +394,7 @@ class CCGame(game.BasicGame):
         super(CCGame, self).game_ended()
 
         # remove the base game mode
-        self.modes.remove(self.base_game_mode)
+        self.modes.remove(self.base)
 
         # divert to the match before high score entry
         self.modes.add(self.match)
@@ -548,11 +548,6 @@ class CCGame(game.BasicGame):
         print "ADDING BONUS - " + str(bonus)
         p.player_stats['bonus'] += bonus
 
-    ## this is for frame listeners and delays
-    def play_remote_sound(self,param):
-        print param
-        self.sound.play(param)
-
     ## bonus stuff
 
     # extra method for adding bonus to make it shorter when used
@@ -660,6 +655,8 @@ class CCGame(game.BasicGame):
         # then flash it
         lamp.pulse(216)
 
+    # controls for music volume
+
     def squelch_music(self):
         if not self.squelched:
             self.squelched = True
@@ -671,12 +668,3 @@ class CCGame(game.BasicGame):
         if self.squelched:
             self.squelched = False
             pygame.mixer.music.set_volume(self.previousVolume)
-
-
-    def priority_voice(self,quote):
-        # cancel any other voice quote
-        for key in self.sound.sounds:
-            if key.startswith("quote_"):
-                self.sound.stop(key)
-        # then play the quote
-        self.sound.play_voice(quote)

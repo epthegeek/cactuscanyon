@@ -191,9 +191,9 @@ class RightLoop(ep.EP_Mode):
             animLayer.hold=True
             animLayer.frame_time=6
             animLayer.opaque=True
-            animLayer.add_frame_listener(4,self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
-            animLayer.add_frame_listener(7,self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
-            animLayer.add_frame_listener(13,self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass2)
+            animLayer.add_frame_listener(4,self.game.sound.play,param=self.game.assets.sfx_breakingGlass1)
+            animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_breakingGlass1)
+            animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_breakingGlass2)
 
             # put it in place
             self.layer = animLayer
@@ -251,7 +251,7 @@ class RightLoop(ep.EP_Mode):
             self.delay(delay=1,handler=self.update_lamps)
             # if we're now complete, check stampede
             if newstage == 4:
-                self.game.base_game_mode.check_stampede()
+                self.game.base.check_stampede()
 
 
     def show_marksman_award(self):

@@ -40,7 +40,7 @@ class Showdown(ep.EP_Mode):
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('showdownStatus') == "RUNNING":
-            self.game.base_game_mode.busy = True
+            self.game.base.busy = True
             self.end_showdown()
 
     def start_showdown(self,side):
@@ -66,11 +66,11 @@ class Showdown(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 6
         # keyframe sounds
-        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
+        animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lightning1)
         animLayer.add_frame_listener(2,self.game.lightning,param="top")
         animLayer.add_frame_listener(4,self.game.lightning,param="top")
         animLayer.add_frame_listener(5,self.game.lightning,param="left")
-        animLayer.add_frame_listener(8,self.game.play_remote_sound,param=self.game.assets.sfx_lightningRumble)
+        animLayer.add_frame_listener(8,self.game.sound.play,param=self.game.assets.sfx_lightningRumble)
         animLayer.add_frame_listener(8,self.game.lightning,param="top")
         animLayer.add_frame_listener(10,self.game.lightning,param="top")
         animLayer.add_frame_listener(11,self.game.lightning,param="left")
@@ -85,17 +85,17 @@ class Showdown(ep.EP_Mode):
         # if it's been long enough, play a taunt ant reset
         if self.tauntTimer >= 9:
             # play a taunt quote
-            self.game.sound.play(self.game.assets.quote_mobTaunt)
+            self.game.base.play_quote(self.game.assets.quote_mobTaunt)
             self.tauntTimer = 0
         self.delay(name="Taunt Timer",delay=1,handler=self.taunt_timer)
 
     def get_going(self):
-        myWait = self.game.sound.play(self.game.assets.quote_showdown)
-        self.delay(delay=myWait,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
+        myWait = self.game.base.play_quote(self.game.assets.quote_showdown)
+        self.delay(delay=myWait,handler=self.game.base.play_quote,param=self.game.assets.quote_mobStart)
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
-        self.game.base_game_mode.music_on(self.game.assets.music_showdown)
+        self.game.base.music_on(self.game.assets.music_showdown)
         #self.showdown_reset_guys()
         self.new_rack_pan()
         # drop the post
@@ -119,14 +119,14 @@ class Showdown(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 6
         # keyframe sounds
-        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
+        animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lightning1)
         animLayer.add_frame_listener(2,self.game.lightning,param="top")
         animLayer.add_frame_listener(3,self.game.lightning,param="left")
         animLayer.add_frame_listener(3,self.game.lightning,param="right")
-        animLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
+        animLayer.add_frame_listener(6,self.game.sound.play,param=self.game.assets.sfx_lightning2)
         animLayer.add_frame_listener(6,self.game.lightning,param="top")
         animLayer.add_frame_listener(7,self.game.lightning,param="left")
-        animLayer.add_frame_listener(10,self.game.play_remote_sound,param=self.game.assets.sfx_lightningRumble)
+        animLayer.add_frame_listener(10,self.game.sound.play,param=self.game.assets.sfx_lightningRumble)
         animLayer.add_frame_listener(10,self.game.lightning,param="top")
         animLayer.add_frame_listener(11,self.game.lightning,param="right")
         # turn it on
@@ -288,7 +288,7 @@ class Showdown(ep.EP_Mode):
         self.game.bad_guys.update_lamps()
         # start up the main themse again if a second level mode isn't running
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn off the level 1 flag
         self.game.set_tracking('stackLevel',False,0)
         # setup a display frame
@@ -302,13 +302,13 @@ class Showdown(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
         # play a quote
-        self.game.sound.play(self.game.assets.quote_mobEnd)
+        self.game.base.play_quote(self.game.assets.quote_mobEnd)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         # reset the showdown points for next time
         self.game.set_tracking('showdownPoints',0)
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # unset the base busy flag
-        self.game.base_game_mode.busy = False
+        self.game.base.busy = False
 
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)

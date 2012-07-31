@@ -200,7 +200,7 @@ class MoveYourTrain(ep.EP_Mode):
 
     def win(self):
         duration = self.game.sound.play(self.game.assets.sfx_longTrainWhistle)
-        self.delay(delay = duration,handler=self.game.play_remote_sound,param=self.game.assets.sfx_cheers)
+        self.delay(delay = duration,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
         textString = "TRAIN MOVED IN " + str(self.shots) + " SHOTS"
         textLine = dmd.TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString)
         # calculate the score

@@ -42,7 +42,7 @@ class GoldMine(ep.EP_Mode):
     def ball_drained(self):
     # if we're dropping down to one ball, and goldmine multiball is running - do stuff
         if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('mineStatus') == "RUNNING":
-            self.game.base_game_mode.busy = True
+            self.game.base.busy = True
             self.end_multiball()
 
     ### switches
@@ -104,7 +104,7 @@ class GoldMine(ep.EP_Mode):
         print "start multiball IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # play the multiball intro music
-        self.game.base_game_mode.music_on(self.game.assets.music_multiball_intro)
+        self.game.base.music_on(self.game.assets.music_multiball_intro)
         self.intro_animation()
 
     def intro_animation(self):
@@ -116,8 +116,8 @@ class GoldMine(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 6
-        animLayer.add_frame_listener(12,self.game.play_remote_sound,param=self.game.assets.quote_gold)
-        animLayer.add_frame_listener(24,self.game.play_remote_sound,param=self.game.assets.quote_mine)
+        animLayer.add_frame_listener(12,self.game.base.play_quote,param=self.game.assets.quote_gold)
+        animLayer.add_frame_listener(24,self.game.base.play_quote,param=self.game.assets.quote_mine)
         # turn it on
         self.layer = animLayer
         # when the animation is over go to the next step
@@ -125,7 +125,7 @@ class GoldMine(ep.EP_Mode):
 
     def intro_banner(self):
         # play the sound
-        self.game.sound.play(self.game.assets.quote_multiball)
+        self.game.base.play_quote(self.game.assets.quote_multiball)
         # generate a flashing thing
         inverse = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner-inverse.dmd').frames[0])
         normal = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner.dmd').frames[0])
@@ -153,7 +153,7 @@ class GoldMine(ep.EP_Mode):
             shot.update_lamps()
         # kill the intro music and start the multiball music
         self.game.sound.stop_music()
-        self.game.base_game_mode.music_on(self.game.assets.music_goldmineMultiball)
+        self.game.base.music_on(self.game.assets.music_goldmineMultiball)
         # kick into the MB display
         self.main_display()
 
@@ -210,7 +210,7 @@ class GoldMine(ep.EP_Mode):
             animLayer.frame_time = 6
             self.layer = animLayer
             # play a quote
-            self.game.sound.play(self.game.assets.quote_jackpot)
+            self.game.base.play_quote(self.game.assets.quote_jackpot)
             # loop back to step 2
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         if step == 2:
@@ -258,7 +258,7 @@ class GoldMine(ep.EP_Mode):
             self.game.set_tracking('motherlodeLit',True)
             self.game.mountain.run()
             self.game.mine.update_lamps()
-            self.game.sound.play(self.game.assets.quote_motherlodeLit)
+            self.game.base.play_quote(self.game.assets.quote_motherlodeLit)
 
     def check_multiplier(self):
         if True not in self.game.show_tracking("jackpotStatus"):
@@ -394,7 +394,7 @@ class GoldMine(ep.EP_Mode):
             sound = self.game.assets.quote_tripleMotherlode
         else:
             sound = self.game.assets.quote_motherlode
-        self.game.sound.play(sound)
+        self.game.base.play_quote(sound)
         # then move on to the display
         self.award_motherlode(myMultiplier)
 
@@ -444,9 +444,9 @@ class GoldMine(ep.EP_Mode):
         print "MULTIBALL ENDED"
         # start the music back up
         if self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
         # unset the busy flag
-        self.game.base_game_mode.busy = False
+        self.game.base.busy = False
         # set the stack flag back off
         self.game.set_tracking('stackLevel',False,2)
         #refresh the mine lights

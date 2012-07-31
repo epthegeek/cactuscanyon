@@ -177,7 +177,7 @@ class CenterRamp(ep.EP_Mode):
             self.awardString = "CATCH TRAIN"
             self.awardPoints = "125,000"
             self.game.score_with_bonus(125000)
-            self.game.sound.play(self.game.assets.quote_centerRamp1)
+            self.game.base.play_quote(self.game.assets.quote_centerRamp1)
             self.game.sound.play(self.game.assets.sfx_trainChugShort)
             self.game.sound.play(self.game.assets.sfx_leftLoopEnter) # same sound used on left loop so the name is funny
             anim = dmd.Animation().load(ep.DMD_PATH+'train-boarding.dmd')
@@ -250,7 +250,7 @@ class CenterRamp(ep.EP_Mode):
         self.awardString = "STOP TRAIN"
         self.awardPoints = str(ep.format_score(score))
         self.game.score(score)
-        self.game.sound.play(self.game.assets.quote_centerRamp2)
+        self.game.base.play_quote(self.game.assets.quote_centerRamp2)
         self.game.sound.play(self.game.assets.sfx_trainChugShort)
         self.game.sound.play(self.game.assets.sfx_trainWhistle)
         anim = dmd.Animation().load(ep.DMD_PATH+'train-running-on-top.dmd')
@@ -277,7 +277,7 @@ class CenterRamp(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 7
         # keyframe sounds
-        animLayer.add_frame_listener(13,self.game.play_remote_sound,param=self.game.assets.sfx_trainStopWithBrake)
+        animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_trainStopWithBrake)
         # play the short chug
         self.game.sound.play(self.game.assets.sfx_trainChugShort)
         # turn on the animation

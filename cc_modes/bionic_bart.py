@@ -38,7 +38,7 @@ class BionicBart(ep.EP_Mode):
         # if we lose all the balls the battle is lost
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('bionicStatus') == "RUNNING":
             self.cancel_delayed("Display")
-            self.game.base_game_mode.busy = True
+            self.game.base.busy = True
             print "BALL DRAINED - BIONIC IS ENDING"
             self.bionic_failed()
 
@@ -201,7 +201,7 @@ class BionicBart(ep.EP_Mode):
             # kill the GI
             self.game.gi_control("OFF")
             # play the 'deal with this' quote
-            duration = self.game.sound.play(self.game.assets.quote_bionicIntroQuote)
+            duration = self.game.base.play_quote(self.game.assets.quote_bionicIntroQuote)
             self.delay(delay=duration,handler=self.intro,param=2)
         if step == 2:
         # load up the lightning
@@ -213,14 +213,14 @@ class BionicBart(ep.EP_Mode):
             animLayer.hold=True
             animLayer.frame_time = 6
             # keyframe sounds
-            animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
+            animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lightning1)
             animLayer.add_frame_listener(2,self.game.lightning,param="top")
             animLayer.add_frame_listener(3,self.game.lightning,param="left")
             animLayer.add_frame_listener(3,self.game.lightning,param="right")
-            animLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
+            animLayer.add_frame_listener(6,self.game.sound.play,param=self.game.assets.sfx_lightning2)
             animLayer.add_frame_listener(6,self.game.lightning,param="top")
             animLayer.add_frame_listener(7,self.game.lightning,param="left")
-            animLayer.add_frame_listener(10,self.game.play_remote_sound,param=self.game.assets.sfx_lightningRumble)
+            animLayer.add_frame_listener(10,self.game.sound.play,param=self.game.assets.sfx_lightningRumble)
             animLayer.add_frame_listener(10,self.game.lightning,param="top")
             animLayer.add_frame_listener(11,self.game.lightning,param="right")
             # turn it on
@@ -234,7 +234,7 @@ class BionicBart(ep.EP_Mode):
             self.delay(delay=1,handler=self.intro,param=4)
         if step == 4:
             # play the intro quote
-            duration = self.game.sound.play(self.game.assets.quote_introBionicBart)
+            duration = self.game.base.play_quote(self.game.assets.quote_introBionicBart)
             # show the talking layer
             combined = dmd.GroupedLayer(128,32,[self.talkingLayer,self.title,self.title2])
             self.layer = combined
@@ -248,7 +248,7 @@ class BionicBart(ep.EP_Mode):
             self.delay(delay = duration, handler=self.intro,param=6)
         if step == 6:
             # start the music
-            self.game.base_game_mode.music_on(self.game.assets.music_bionicBart)
+            self.game.base.music_on(self.game.assets.music_bionicBart)
             self.update_display()
             # set the active shots
             self.activate_shots(2)
@@ -332,7 +332,7 @@ class BionicBart(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[line1,line2])
         self.layer = combined
         if prompt:
-            duration = self.game.sound.play(self.game.assets.quote_bionicUrge)
+            duration = self.game.base.play_quote(self.game.assets.quote_bionicUrge)
         else:
             duration = self.game.sound.play(self.game.assets.sfx_orchestraSpike)
         self.delay(name="Display",delay=1.5,handler=self.update_display)
@@ -418,7 +418,7 @@ class BionicBart(ep.EP_Mode):
             self.set_bart_layer(self.whineLayer)
             self.flash()
             self.update_display()
-            duration = self.game.sound.play(self.game.assets.quote_hitBionicBart)
+            duration = self.game.base.play_quote(self.game.assets.quote_hitBionicBart)
             self.delay(delay=duration,handler=self.hit,param=5)
         if step == 5:
             self.cancel_delayed("Flashing")
@@ -437,7 +437,7 @@ class BionicBart(ep.EP_Mode):
         if step == 1:
             self.set_bart_layer(self.talkingLayer)
             self.update_display()
-            duration = self.game.sound.play(self.game.assets.quote_tauntBionicBart)
+            duration = self.game.base.play_quote(self.game.assets.quote_tauntBionicBart)
             self.delay(delay=duration,handler=self.miss,param=2)
             self.flash()
         if step == 2:
@@ -488,7 +488,7 @@ class BionicBart(ep.EP_Mode):
 
             self.layer = animLayer
             # play the quote
-            duration = self.game.sound.play(self.game.assets.quote_defeatBionicBart)
+            duration = self.game.base.play_quote(self.game.assets.quote_defeatBionicBart)
             self.delay(delay=duration,handler=self.bionic_defeated,param=4)
         if step == 4:
             self.cancel_delayed("Flashing")
@@ -530,7 +530,7 @@ class BionicBart(ep.EP_Mode):
         self.layer = combined
 
         # play the fail quote
-        duration = self.game.sound.play(self.game.assets.quote_failBionicBart)
+        duration = self.game.base.play_quote(self.game.assets.quote_failBionicBart)
         # reset all the star status
         self.game.badge.reset()
         # set bionic
@@ -541,12 +541,12 @@ class BionicBart(ep.EP_Mode):
     def leader_final_quote(self,condition):
         if condition == "win":
             duration = self.game.sound.play(self.game.assets.sfx_cheers)
-            duration2 = self.game.sound.play(self.game.assets.quote_leaderWinBionic)
+            duration2 = self.game.base.play_quote(self.game.assets.quote_leaderWinBionic)
             if duration2 > duration:
                 duration = duration2
             self.delay(delay=duration,handler=self.high_noon_lit)
         elif condition == "fail":
-            duration = self.game.sound.play(self.game.assets.quote_leaderFailBionic)
+            duration = self.game.base.play_quote(self.game.assets.quote_leaderFailBionic)
             self.delay(delay=duration,handler=self.finish_up)
 
     def high_noon_lit(self):
@@ -574,10 +574,10 @@ class BionicBart(ep.EP_Mode):
         self.game.update_lamps()
         # turn the main music back on
         if self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
         # kick the ball if it's held
         self.game.saloon.kick()
         # unset the base busy flag
-        self.game.base_game_mode.busy = False
+        self.game.base.busy = False
         # unload the mode
         self.unload()

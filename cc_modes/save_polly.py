@@ -58,7 +58,7 @@ class SavePolly(ep.EP_Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
             if self.game.show_tracking("centerRampStage") == 99:
-                self.game.base_game_mode.busy = True
+                self.game.base.busy = True
                 self.polly_died()
 
     # bonus lanes pause save polly
@@ -144,7 +144,7 @@ class SavePolly(ep.EP_Mode):
         self.game.left_ramp.update_lamps()
 
         # start the music
-        self.game.base_game_mode.music_on(self.game.assets.music_pollyPeril)
+        self.game.base.music_on(self.game.assets.music_pollyPeril)
         # reset the train
         self.game.train.reset_toy()
         # run the animation
@@ -222,7 +222,7 @@ class SavePolly(ep.EP_Mode):
             if not advanced:
                 time = 5
                 # play the pause display
-                self.delay(delay=1.5,handler=self.game.play_remote_sound,param=self.cows[0])
+                self.delay(delay=1.5,handler=self.game.sound.play,param=self.cows[0])
                 # swap for the next shot
                 self.cows.reverse()
                 # setup the display
@@ -346,7 +346,7 @@ class SavePolly(ep.EP_Mode):
         self.game.sound.stop_music()
         # start up the main theme again if a second level mode isn't running
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
         self.game.train.reset_toy()
         # turn off the polly display
         self.layer = None
@@ -363,9 +363,9 @@ class SavePolly(ep.EP_Mode):
         self.game.set_tracking('stackLevel',False,1)
         # check to see if stampede is ready - if we're not ending due to ball fail
         if self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.check_stampede()
+            self.game.base.check_stampede()
         # unset the busy flag
-        self.game.base_game_mode.busy = False
+        self.game.base.busy = False
         # unload the mode
         self.unload()
 

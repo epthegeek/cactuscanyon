@@ -82,17 +82,17 @@ class Match(ep.EP_Mode):
         # fire it up
         self.layer = combined
         self.fire("LEFT")
-        self.delay(delay=0.125,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=0.125,handler=self.game.sound.play,param=self.game.assets.sfx_breakingGlass1)
         self.delay(delay=0.5,handler=self.fire,param="RIGHT")
-        self.delay(delay=0.625,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=0.625,handler=self.game.sound.play,param=self.game.assets.sfx_breakingGlass1)
         self.delay(delay=1,handler=self.fire,param="LEFT")
-        self.delay(delay=1.125,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=1.125,handler=self.game.sound.play,param=self.game.assets.sfx_breakingGlass1)
         self.delay(delay=1.125,handler=self.fire,param="RIGHT")
-        self.delay(delay=1.250,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=1.250,handler=self.game.sound.play,param=self.game.assets.sfx_breakingGlass1)
         self.delay(delay=1.625,handler=self.fire,param="LEFT")
-        self.delay(delay=1.75,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=1.75,handler=self.game.sound.play,param=self.game.assets.sfx_breakingGlass1)
         self.delay(delay=1.75,handler=self.fire,param="RIGHT")
-        self.delay(delay=1.875,handler=self.game.play_remote_sound,param=self.game.assets.sfx_breakingGlass1)
+        self.delay(delay=1.875,handler=self.game.sound.play,param=self.game.assets.sfx_breakingGlass1)
 
 
         # after the animation ends, see if anybody won and run that action
@@ -122,7 +122,7 @@ class Match(ep.EP_Mode):
         self.delay(delay=2,handler=self.finish_up)
 
     def fire(self,side):
-        self.game.play_remote_sound(self.game.assets.sfx_explosion11)
+        self.game.sound.play(self.game.assets.sfx_explosion11)
         if side == "LEFT":
             self.game.coils.leftGunFlasher.pulse(30)
         if side == "RIGHT":

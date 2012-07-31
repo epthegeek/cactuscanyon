@@ -85,9 +85,9 @@ class Gunfight(ep.EP_Mode):
         # play the intro riff
         myWait = self.game.sound.play(self.game.assets.music_gunfightIntro)
         # delayed play the drum roll
-        self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_drumRoll)
+        self.delay(delay=myWait,handler=self.game.base.music_on,param=self.game.assets.music_drumRoll)
         # play a quote
-        self.game.sound.play_voice(self.game.assets.quote_gunfightStart)
+        self.game.base.play_quote(self.game.assets.quote_gunfightStart)
         # display the clouds with gunfight text
         title = dmd.TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight")
         title.composite_op = "blacksrc"
@@ -105,8 +105,8 @@ class Gunfight(ep.EP_Mode):
         self.cancel_delayed("Gunfight Lost")
         # play a quote
         self.game.sound.play(self.game.assets.sfx_gunfightShot)
-        self.delay(delay=0.2,handler=self.game.play_remote_sound,param=self.game.assets.sfx_gunfightFlourish)
-        self.delay(delay=0.3,handler=self.game.play_remote_sound,param=self.game.assets.quote_gunWin)
+        self.delay(delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
+        self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_gunWin)
         # play the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-shoulders-up.dmd')
         myWait = len(anim.frames) / 10.0
@@ -145,7 +145,7 @@ class Gunfight(ep.EP_Mode):
         print "GUNFIGHT LOST IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         # play a quote
-        self.game.sound.play_voice(self.game.assets.quote_gunFail)
+        self.game.base.play_quote(self.game.assets.quote_gunFail)
         # shut things down
         self.end_gunfight()
 
@@ -157,7 +157,7 @@ class Gunfight(ep.EP_Mode):
         self.game.set_tracking('bartStatus',"OPEN")
         # turn the main game music back on if a second level mode isn't running
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn off the level one flag
         self.game.set_tracking('stackLevel',False,0)
         # unload
@@ -193,7 +193,7 @@ class Gunfight(ep.EP_Mode):
         enemy = badGuys.pop(0)
         print "POP ENEMY: " + str(enemy)
         self.game.bad_guys.target_up(enemy)
-        self.game.sound.play(self.game.assets.quote_gunfightReady)
+        self.game.base.play_quote(self.game.assets.quote_gunfightReady)
         # play the second orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit2)
         # show the hands animation
@@ -210,7 +210,7 @@ class Gunfight(ep.EP_Mode):
         enemy = badGuys.pop(0)
         print "POP ENEMY: " + str(enemy)
         self.game.bad_guys.target_up(enemy)
-        self.game.sound.play(self.game.assets.quote_gunfightSet)
+        self.game.base.play_quote(self.game.assets.quote_gunfightSet)
         # play the orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit3)
         # show the boots
@@ -229,7 +229,7 @@ class Gunfight(ep.EP_Mode):
         self.game.bad_guys.target_up(enemy)
         # play the 4 bells
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
-        self.delay(delay=0.6,handler=self.game.play_remote_sound,param=self.game.assets.sfx_gunCock)
+        self.delay(delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
         # run the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd')
         myWait = len(anim.frames) / 10.0
@@ -240,7 +240,7 @@ class Gunfight(ep.EP_Mode):
 
     def gunfight_release(self):
         # play the draw quote
-        self.game.sound.play(self.game.assets.quote_gunfightDraw)
+        self.game.base.play_quote(self.game.assets.quote_gunfightDraw)
         text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
         backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])

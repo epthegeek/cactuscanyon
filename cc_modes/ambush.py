@@ -99,7 +99,7 @@ class Ambush(ep.EP_Mode):
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('ambushStatus') == "RUNNING":
-            self.game.base_game_mode.busy = True
+            self.game.base.busy = True
             self.end_ambush()
 
     def start_ambush(self,side):
@@ -128,11 +128,11 @@ class Ambush(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 6
         # keyframe sounds
-        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
+        animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lightning1)
         animLayer.add_frame_listener(2,self.lightning,param="top")
         animLayer.add_frame_listener(4,self.lightning,param="top")
         animLayer.add_frame_listener(5,self.lightning,param="left")
-        animLayer.add_frame_listener(8,self.game.play_remote_sound,param=self.game.assets.sfx_lightningRumble)
+        animLayer.add_frame_listener(8,self.game.sound.play,param=self.game.assets.sfx_lightningRumble)
         animLayer.add_frame_listener(8,self.lightning,param="top")
         animLayer.add_frame_listener(10,self.lightning,param="top")
         animLayer.add_frame_listener(11,self.lightning,param="left")
@@ -146,20 +146,20 @@ class Ambush(ep.EP_Mode):
         # if it's been long enough, play a taunt ant reset
         if self.tauntTimer >= 9:
             # play a taunt quote
-            self.game.sound.play(self.game.assets.quote_mobTaunt)
+            self.game.base.play_quote(self.game.assets.quote_mobTaunt)
             self.tauntTimer = 0
         self.delay(name="Taunt Timer",delay=1,handler=self.taunt_timer)
 
     def intro_quote(self):
-        myWait = self.game.sound.play(self.game.assets.quote_ambush)
+        myWait = self.game.base.play_quote(self.game.assets.quote_ambush)
         self.delay(delay=myWait,handler=self.get_going)
 
     def get_going(self):
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
-        self.game.base_game_mode.music_on(self.game.assets.music_showdown)
-        self.delay(delay=0.5,handler=self.game.play_remote_sound,param=self.game.assets.quote_mobStart)
+        self.game.base.music_on(self.game.assets.music_showdown)
+        self.delay(delay=0.5,handler=self.game.base.play_quote,param=self.game.assets.quote_mobStart)
         # add two dudes - one here, one later
         self.is_busy()
         self.add_guys(1)
@@ -226,7 +226,7 @@ class Ambush(ep.EP_Mode):
             # if the 1/3 hit comes up, play a quote if the taunt timer didn't just play - and reset the taunt timer
             if decision and self.tauntTimer > 3 :
                 self.tauntTimer = 0
-                self.game.sound.play(self.game.assets.quote_ambushUrge)
+                self.game.base.play_quote(self.game.assets.quote_ambushUrge)
 
         # if the time is almost up change the light schedule
         if self.badGuyTimer[target] == 1:
@@ -277,11 +277,11 @@ class Ambush(ep.EP_Mode):
             eGuy0.frame_time=6
             eGuy0.set_target_position(position,0)
             eGuy0.composite_op = "blacksrc"
-            eGuy0.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
-            eGuy0.add_frame_listener(4,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
+            eGuy0.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_explosion11)
+            eGuy0.add_frame_listener(4,self.game.sound.play,param=self.game.assets.sfx_explosion11)
             # on any escape other than the last one, taunt the player - the last one would get stepped on by the final quote
             if self.misses != self.LOSE:
-                eGuy0.add_frame_listener(5,self.game.play_remote_sound,param=self.game.assets.quote_gunFail)
+                eGuy0.add_frame_listener(5,self.game.base.play_quote,param=self.game.assets.quote_gunFail)
             escapeLayers.append(eGuy0)
 
         # loop through the up bad guys and add them to the display
@@ -296,7 +296,7 @@ class Ambush(ep.EP_Mode):
         if escaped != 99:
             activeLayers.append(escapeLayers[escaped])
             amount = self.LOSE - self.misses
-            self.game.base_game_mode.red_flasher_flourish()
+            self.game.base.red_flasher_flourish()
             self.delay(delay=0.5,handler=self.game.interrupter.dude_escaped,param=amount)
 
         combined = dmd.GroupedLayer(128,32,activeLayers)
@@ -412,7 +412,7 @@ class Ambush(ep.EP_Mode):
         self.game.bad_guys.update_lamps()
         # start up the main theme again if a second level mode isn't running
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn off the level 1 flag
         self.game.set_tracking('stackLevel',False,0)
         # setup a display frame
@@ -427,7 +427,7 @@ class Ambush(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
         # play a quote
-        self.game.sound.play(self.game.assets.quote_mobEnd)
+        self.game.base.play_quote(self.game.assets.quote_mobEnd)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         # reset the showdown points for next time
         self.game.set_tracking('ambushPoints',0)
@@ -435,7 +435,7 @@ class Ambush(ep.EP_Mode):
         # award the badge light - showdown/ambush is 3
         self.game.badge.update(3)
         # unset the base busy flag
-        self.game.base_game_mode.busy = False
+        self.game.base.busy = False
 
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)

@@ -101,9 +101,9 @@ class Quickdraw(ep.EP_Mode):
         self.game.sound.stop_music()
         # start the mode music
         self.game.sound.play(self.game.assets.music_quickdrawBumper)
-        self.delay(name="quickdraw music",delay=1.3,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_quickdraw)
+        self.delay(name="quickdraw music",delay=1.3,handler=self.game.base.music_on,param=self.game.assets.music_quickdraw)
         # play a quote
-        self.game.sound.play_voice(self.game.assets.quote_quickdrawStart)
+        self.game.base.play_quote(self.game.assets.quote_quickdrawStart)
         # pop that sucker up
         self.game.bad_guys.target_up(self.target)
         # Set up the display
@@ -138,10 +138,10 @@ class Quickdraw(ep.EP_Mode):
         else:
             # every 3 seconds, play a taunt quote
             if int(self.runtime % 3.0) == 0 and self.runtime >= 5:
-                self.game.sound.play_voice(self.game.assets.quote_quickdrawTaunt)
+                self.game.base.play_quote(self.game.assets.quote_quickdrawTaunt)
             # play a hurry quote if we're at 2 seconds.
             if self.runtime == 2:
-                self.game.sound.play(self.game.assets.quote_hurry)
+                self.game.base.play_quote(self.game.assets.quote_hurry)
             # take points off the score
             self.points -= self.portion
             # update the score text layer
@@ -201,7 +201,7 @@ class Quickdraw(ep.EP_Mode):
 
     def finish_win(self,dudesDead):
         # play a quote
-        duration = self.game.sound.play(self.game.assets.quote_quickdrawWin)
+        duration = self.game.base.play_quote(self.game.assets.quote_quickdrawWin)
         # if this is the 4th one , and we're not at the EB max, then light extra ball
         if dudesDead == 4 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             # call the extra ball lit with a callback to the check bounty routine after
@@ -250,10 +250,10 @@ class Quickdraw(ep.EP_Mode):
             else:
                 self.game.set_tracking('ambushStatus',"READY")
         self.game.bad_guys.update_lamps()
-        self.game.base_game_mode.update_lamps()
+        self.game.base.update_lamps()
         # turn the main music back on - if a second level mode isn't running
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn the level 1 flag off
         self.game.set_tracking('stackLevel',False,0)
         # full lamp update

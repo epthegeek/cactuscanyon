@@ -70,7 +70,7 @@ class HighNoon(ep.EP_Mode):
         # tick up the counter by one
         self.jackpots += 1
         # play a quote
-        self.game.sound.play(self.game.assets.quote_jackpot)
+        self.game.base.play_quote(self.game.assets.quote_jackpot)
         # show an image
         self.cancel_delayed("Display")
         self.layer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'jackpot.dmd').frames[0])
@@ -161,7 +161,7 @@ class HighNoon(ep.EP_Mode):
         self.banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'high-noon.dmd').frames[0])
         self.layer = self.banner
         # play the opening quote
-        duration = self.game.sound.play(self.game.assets.quote_highNoon)
+        duration = self.game.base.play_quote(self.game.assets.quote_highNoon)
         # after the quote, start the intro
         self.delay(delay=duration,handler=self.intro)
 
@@ -178,7 +178,7 @@ class HighNoon(ep.EP_Mode):
             animLayer.composite_op = "blacksrc"
             if step == 1:
                 duration2 = self.game.sound.play(self.game.assets.music_highNoonLead)
-                self.delay(delay=duration2,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_highNoon)
+                self.delay(delay=duration2,handler=self.game.base.music_on,param=self.game.assets.music_highNoon)
 
                 composite = dmd.GroupedLayer(128,32,[self.banner,animLayer])
             if step == 3:
@@ -265,7 +265,7 @@ class HighNoon(ep.EP_Mode):
         # pop up all the bad guys
         self.game.bad_guys.setup_targets()
         # play a quote
-        self.game.sound.play(self.game.assets.quote_highNoonStart)
+        self.game.base.play_quote(self.game.assets.quote_highNoonStart)
         # TODO set all the shots to a status # ?
         # update the lamps
         self.game.update_lamps()
@@ -301,7 +301,7 @@ class HighNoon(ep.EP_Mode):
         self.game.score(20000000)
         self.won = True
         # play a quote
-        self.game.sound.play(self.game.assets.quote_highNoonWin)
+        self.game.base.play_quote(self.game.assets.quote_highNoonWin)
         self.finish_up()
 
     # finish up
@@ -363,7 +363,7 @@ class HighNoon(ep.EP_Mode):
             script.append({"layer":combined,"seconds":frame_delay})
             myWait += frame_delay
             # set a sound for this point at the start of the wipe
-        self.delay(name="Display",delay=myWait,handler=self.game.play_remote_sound,param=self.game.assets.sfx_lightning2)
+        self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_lightning2)
         # employ the burst wipe
         anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
         animWait = len(anim.frames) / 15.0

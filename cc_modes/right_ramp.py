@@ -185,14 +185,14 @@ class RightRamp(ep.EP_Mode):
             myWait = len(anim.frames) / 8.57
             # play the first sound
             self.game.sound.play(self.game.assets.sfx_explosion1)
-            self.game.sound.play_voice(self.game.assets.quote_rightRamp1)
+            self.game.base.play_quote(self.game.assets.quote_rightRamp1)
             # set the animation
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
             animLayer.frame_time = 7
 
             # added a frame listener for the second sound effect
-            animLayer.add_frame_listener(5, self.game.play_remote_sound,param=self.game.assets.sfx_fallAndCrash1)
+            animLayer.add_frame_listener(5, self.game.sound.play,param=self.game.assets.sfx_fallAndCrash1)
             # play the animation
             self.layer = animLayer
             # add some score
@@ -213,11 +213,11 @@ class RightRamp(ep.EP_Mode):
             animLayer.frame_time = 7
 
             # add listener frames
-            animLayer.add_frame_listener(15,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
-            animLayer.add_frame_listener(17,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
-            animLayer.add_frame_listener(19,self.game.play_remote_sound,param=self.game.assets.sfx_explosion11)
+            animLayer.add_frame_listener(15,self.game.sound.play,param=self.game.assets.sfx_explosion11)
+            animLayer.add_frame_listener(17,self.game.sound.play,param=self.game.assets.sfx_explosion11)
+            animLayer.add_frame_listener(19,self.game.sound.play,param=self.game.assets.sfx_explosion11)
             # play the start sound
-            self.game.sound.play_voice(self.game.assets.quote_rightRamp2)
+            self.game.base.play_quote(self.game.assets.quote_rightRamp2)
             # play the animation
             self.layer = animLayer
             # apply the delay
@@ -233,11 +233,11 @@ class RightRamp(ep.EP_Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
             # play sounds
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
-            self.game.sound.play(self.game.assets.quote_pollyThankYou)
+            self.game.base.play_quote(self.game.assets.quote_pollyThankYou)
             # play animation
             self.layer = animLayer
             self.delay(name="Display",delay=myWait,handler=self.anim_bank_victory)
-            self.game.base_game_mode.check_stampede()
+            self.game.base.check_stampede()
 
         ## for now, anything above 3 is 'complete'
         else:
@@ -247,7 +247,7 @@ class RightRamp(ep.EP_Mode):
             self.game.score_with_bonus(value)
             # play sounds
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
-            self.game.sound.play_voice(self.game.assets.quote_victory)
+            self.game.base.play_quote(self.game.assets.quote_victory)
             # play animation
             if combo:
                 self.layer = None
@@ -274,8 +274,8 @@ class RightRamp(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 7
 
-        animLayer.add_frame_listener(7,self.game.play_remote_sound,param=self.game.assets.sfx_blow)
-        animLayer.add_frame_listener(14,self.game.play_remote_sound,param=self.game.assets.sfx_grinDing)
+        animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
+        animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)
         # play animation
         self.layer = animLayer
         self.delay(name="Display",delay=myWait,handler=self.blink_award_text)

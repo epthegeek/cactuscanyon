@@ -49,7 +49,7 @@ class Interrupter(ep.EP_Mode):
             self.layer = display
             # every fifth time razz them
             if self.rotator[0]:
-                self.game.sound.play(self.game.assets.quote_dontJustStandThere)
+                self.game.base.play_quote(self.game.assets.quote_dontJustStandThere)
             # then stick the current value on the end
             foo = self.rotator.pop(0)
             self.rotator.append(foo)
@@ -100,7 +100,7 @@ class Interrupter(ep.EP_Mode):
 
     def ball_saved(self):
         # play a quote
-        self.game.sound.play(self.game.assets.quote_dontMove)
+        self.game.base.play_quote(self.game.assets.quote_dontMove)
         # show some display
         backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'skyline.dmd').frames[0])
         myLayer = dmd.TextLayer(128/2,14, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("BALL SAVED")
@@ -110,7 +110,7 @@ class Interrupter(ep.EP_Mode):
         self.delay(delay=1,handler=self.clear_layer)
 
     def closing_song(self,duration):
-        self.delay(delay=duration+1,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_mainTheme)
+        self.delay(delay=duration+1,handler=self.game.base.music_on,param=self.game.assets.music_mainTheme)
         # and set a delay to fade it out after 2 minutes
         self.delay(delay=60,handler=self.game.sound.fadeout_music)
 
@@ -259,7 +259,7 @@ class Interrupter(ep.EP_Mode):
         # shown when starting an extra ball
         if step == 1:
             imageLayer = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'shoot-again.dmd').frames[0])
-            self.game.sound.play(self.game.assets.quote_deepLaugh)
+            self.game.base.play_quote(self.game.assets.quote_deepLaugh)
             self.game.sound.play(self.game.assets.sfx_incoming)
             self.layer = imageLayer
             self.delay(delay = 2,handler=self.shoot_again, param=2)
@@ -272,13 +272,13 @@ class Interrupter(ep.EP_Mode):
             animLayer.hold=True
             animLayer.frame_time = 6
             animLayer.opaque = True
-            animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lowBoom)
+            animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lowBoom)
             animLayer.add_frame_listener(4,self.game.trough.launch_balls,param=1)
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.shoot_again,param=3)
         if step == 3:
             imageLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'shoot-again.dmd').frames[7])
-            self.game.sound.play(self.game.assets.quote_shootAgain)
+            self.game.base.play_quote(self.game.assets.quote_shootAgain)
             textLine1 = dmd.TextLayer(80,5, self.game.assets.font_9px_az, "center", opaque= False).set_text("SHOOT")
             textLine2 = dmd.TextLayer(80,15, self.game.assets.font_9px_az, "center", opaque= False).set_text("AGAIN")
             combined = dmd.GroupedLayer(128,32,[imageLayer,textLine1,textLine2])

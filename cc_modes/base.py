@@ -27,6 +27,7 @@ from procgame import *
 from assets import *
 import ep
 import random
+import time
 
 
 class BaseGameMode(ep.EP_Mode):
@@ -43,6 +44,7 @@ class BaseGameMode(ep.EP_Mode):
         self.current_music = self.game.assets.music_mainTheme
         self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
         self.unbusy()
+        self.active_quotes = []
 
     def mode_started(self):
         print "INTERRUPTER IS DISPATCHING DELAYS"
@@ -173,11 +175,11 @@ class BaseGameMode(ep.EP_Mode):
             self.game.add_player()
             # and play a soundbyte
             if len(self.game.players) == 2:
-                self.game.sound.play(self.game.assets.quote_playerTwo)
+                self.game.base.play_quote(self.game.assets.quote_playerTwo)
             elif len(self.game.players) == 3:
-                self.game.sound.play(self.game.assets.quote_playerThree)
+                self.game.base.play_quote(self.game.assets.quote_playerThree)
             elif len(self.game.players) == 4:
-                self.game.sound.play(self.game.assets.quote_playerFour)
+                self.game.base.play_quote(self.game.assets.quote_playerFour)
         ## -- set the last switch hit --
         ep.last_switch = "startButton"
 
@@ -227,7 +229,7 @@ class BaseGameMode(ep.EP_Mode):
             if self.game.skill_shot.super:
                 weDo = False
             if weDo:
-                self.game.sound.play(self.game.assets.quote_beerMug)
+                self.game.base.play_quote(self.game.assets.quote_beerMug)
         ## -- set the last switch -- ##
         ep.last_switch = 'beerMug'
         ## kill the combo shot chain
@@ -254,7 +256,7 @@ class BaseGameMode(ep.EP_Mode):
         textLine2 = ep.pulse_text(self,51,12,"MULTIBALL")
         textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")
         self.repeat_ding(4)
-        self.game.sound.play(self.game.assets.quote_drunkMultiballLit)
+        self.game.base.play_quote(self.game.assets.quote_drunkMultiballLit)
         self.mug_display(textLine1,textLine2,textLine3)
         # so super can start gameplay
         if callback:
@@ -276,12 +278,46 @@ class BaseGameMode(ep.EP_Mode):
     def delayed_music_on(self,wait,song=None):
         self.delay(delay=wait, handler=self.music_on,param=song)
 
+    def play_quote(self,key, loops=0, max_time=0, fade_ms=0,override=False):
+        if not self.game.sound.enabled:
+            return 0
+        current_time = time.time()
+        # Make sure previous voice call is finished. unless override
+        if not override:
+            if current_time < self.game.sound.voice_end_time: return 0
+        # if the key exists, stuff happens
+        if key in self.game.sound.sounds:
+            # store the key in a list
+            self.active_quotes.append(key)
+            if len(self.game.sound.sounds[key]) > 0:
+                random.shuffle(self.game.sound.sounds[key])
+            self.game.sound.sounds[key][0].play(loops,max_time,fade_ms)
+            duration = self.game.sound.sounds[key][0].get_length() * (loops+1)
+            self.game.sound.voice_end_time = current_time + duration
+            # delay a removal of the active quote from the list
+            self.delay(delay=duration,handler=self.end_quote,param=key)
+            return duration
+        # if not, return zilch
+        else:
+            return 0
+
+    def end_quote(self,key):
+        self.active_quotes.remove(key)
+
+    def priority_quote(self,quote):
+        # cancel any other voice quote
+        for key in self.active_quotes:
+            self.game.sound.stop(key)
+        # then play the quote - overriding the voice delay timer
+        self.play_quote(quote,override=True)
+
     def repeat_ding(self,times):
         self.game.sound.play(self.game.assets.sfx_bountyBell)
         self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
         times -= 1
         if times > 0:
             self.delay(delay=0.4,handler=self.repeat_ding,param=times)
+
 
     ###
     ###  _____ _ _ _
@@ -658,7 +694,7 @@ class BaseGameMode(ep.EP_Mode):
         self.game.score(12500)
         # turn on the quickdraw light
         # play a quote from the stack
-        self.game.sound.play_voice(self.game.assets.quote_quickdrawLit)
+        self.game.base.play_quote(self.game.assets.quote_quickdrawLit)
         # set the status for the hit side to READY
         self.game.set_tracking('quickdrawStatus',"READY",side)
         self.update_lamps()

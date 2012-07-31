@@ -199,7 +199,7 @@ class Mine(ep.EP_Mode):
         self.layer = composite
         self.delay(name="Display",delay=1.5,handler=self.clear_layer)
         # play a quote
-        self.game.sound.play_voice(self.game.assets.quote_lockLit)
+        self.game.base.play_quote(self.game.assets.quote_lockLit)
         print "LOCK IS LIT ... AND SO AM I"
         ## then kick the ball
         self.update_lamps()
@@ -278,7 +278,7 @@ class Mine(ep.EP_Mode):
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         # play the animation
         self.layer = animLayer
-        self.delay(delay=1,handler=self.game.play_remote_sound,param=self.game.assets.quote_pollyHelp)
+        self.delay(delay=1,handler=self.game.base.play_quote,param=self.game.assets.quote_pollyHelp)
         self.delay(name="Display",delay=myWait,handler=self.lock_display_text)
 
     def play_ball_two_lock_anim(self):
@@ -293,9 +293,9 @@ class Mine(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 6
         # keyframe some sounds
-        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.quote_gasp)
-        animLayer.add_frame_listener(15,self.game.play_remote_sound,param=self.game.assets.sfx_lockTwoMinecart)
-        animLayer.add_frame_listener(32,self.game.play_remote_sound,param=self.game.assets.sfx_lockTwoExplosion)
+        animLayer.add_frame_listener(2,self.game.base.play_quote,param=self.game.assets.quote_gasp)
+        animLayer.add_frame_listener(15,self.game.sound.play,param=self.game.assets.sfx_lockTwoMinecart)
+        animLayer.add_frame_listener(32,self.game.sound.play,param=self.game.assets.sfx_lockTwoExplosion)
 
         # play the animation
         self.layer = animLayer
@@ -345,7 +345,7 @@ class Mine(ep.EP_Mode):
         # with a sound effect
         self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # play a quote
-        self.game.sound.play(self.game.assets.quote_extraBallLit)
+        self.game.base.play_quote(self.game.assets.quote_extraBallLit)
         self.update_lamps()
         # callback process for calling from skill shot
         if callback:
@@ -382,17 +382,17 @@ class Mine(ep.EP_Mode):
             animLayer.hold=True
             animLayer.frame_time = 8
             # keyframe a bunch of sounds
-            animLayer.add_frame_listener(13,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
-            animLayer.add_frame_listener(15,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
-            animLayer.add_frame_listener(17,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
-            animLayer.add_frame_listener(23,self.game.play_remote_sound,param=self.game.assets.quote_whatThe)
-            animLayer.add_frame_listener(25,self.game.play_remote_sound,param=self.game.assets.sfx_ebGunfire)
-            animLayer.add_frame_listener(41,self.game.play_remote_sound,param=self.game.assets.sfx_ebLookRight)
-            animLayer.add_frame_listener(45,self.game.play_remote_sound,param=self.game.assets.sfx_ebLookLeft)
-            animLayer.add_frame_listener(46,self.game.play_remote_sound,param=self.game.assets.sfx_ebFallAndCrash)
+            animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_ebDrink)
+            animLayer.add_frame_listener(15,self.game.sound.play,param=self.game.assets.sfx_ebDrink)
+            animLayer.add_frame_listener(17,self.game.sound.play,param=self.game.assets.sfx_ebDrink)
+            animLayer.add_frame_listener(23,self.game.base.play_quote,param=self.game.assets.quote_whatThe)
+            animLayer.add_frame_listener(25,self.game.sound.play,param=self.game.assets.sfx_ebGunfire)
+            animLayer.add_frame_listener(41,self.game.sound.play,param=self.game.assets.sfx_ebLookRight)
+            animLayer.add_frame_listener(45,self.game.sound.play,param=self.game.assets.sfx_ebLookLeft)
+            animLayer.add_frame_listener(46,self.game.sound.play,param=self.game.assets.sfx_ebFallAndCrash)
             # play the intro sounds
             self.game.sound.play(self.game.assets.sfx_ebMusic)
-            self.game.sound.play(self.game.assets.quote_thirsty)
+            self.game.base.play_quote(self.game.assets.quote_thirsty)
             # turn that sucker on
             self.layer = animLayer
             # after a delay, play the ending
@@ -402,10 +402,10 @@ class Mine(ep.EP_Mode):
         # play a quote
         if isLong:
             # play this quote
-            self.game.sound.play(self.game.assets.quote_extraBallGuy)
+            self.game.base.play_quote(self.game.assets.quote_extraBallGuy)
         else:
             # play this other quote
-            self.game.sound.play(self.game.assets.quote_extraBallSet)
+            self.game.base.play_quote(self.game.assets.quote_extraBallSet)
         # play a music riff
         self.game.sound.play(self.game.assets.sfx_ebFlourish)
         # setup the backdrop
@@ -418,7 +418,7 @@ class Mine(ep.EP_Mode):
         self.delay(delay=3,handler=self.unbusy)
         self.delay(delay=3,handler=self.game.restore_music)
         # update lamps to turn on the EB light
-        self.game.base_game_mode.update_lamps()
+        self.game.base.update_lamps()
 
     def abort_display(self):
         self.clear_layer()

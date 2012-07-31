@@ -73,7 +73,7 @@ class Saloon(ep.EP_Mode):
         bionic = self.game.show_tracking('bionicStatus')
         if bionic == "READY":
             # play a laugh sound and flash the light and return
-            self.game.sound.play(self.game.assets.quote_leaderLaugh)
+            self.game.base.play_quote(self.game.assets.quote_leaderLaugh)
             self.game.coils.saloonFlasher.pulse(30)
             return
         elif bionic == "RUNNING":
@@ -101,7 +101,7 @@ class Saloon(ep.EP_Mode):
     def sw_jetBumpersExit_active(self,sw):
         # if there's an active bart, play a quote
         if self.game.show_tracking('bartStatus') == "RUNNING":
-            self.game.sound.play_voice(self.game.bart.tauntQuote)
+            self.game.base.play_quote(self.game.bart.tauntQuote)
             # and move the bart
             self.game.bart.animate(2)
         # score some points
@@ -201,7 +201,7 @@ class Saloon(ep.EP_Mode):
         self.repeat_ding(4)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,topText,bottomText])
         # play a voice clip about the bounty being ready
-        self.game.sound.play(self.game.assets.quote_bountyLit)
+        self.game.base.play_quote(self.game.assets.quote_bountyLit)
         # lights and whatnot
         self.update_lamps()
         self.delay(delay=1.6,handler=self.clear_layer)
@@ -283,7 +283,7 @@ class Saloon(ep.EP_Mode):
         elif self.bountyPrize == 'lightQuickdraw':
             prizeText = "QUICKDRAW"
             prizeText2 = "IS LIT"
-            self.prizeHandler = self.game.base_game_mode.light_quickdraw
+            self.prizeHandler = self.game.base.light_quickdraw
             # have to figure out which quickdraw to light
             if self.game.show_tracking('quickdrawStatus',0) != "READY":
                 self.prizeParam = 0
@@ -306,7 +306,7 @@ class Saloon(ep.EP_Mode):
             prizeText2 = "INCREASED"
             self.prizeHandler = self.game.increase_tracking
             self.prizeParam = 'rank'
-            self.game.base_game_mode.update_lamps()
+            self.game.base.update_lamps()
         elif self.bountyPrize == 'points250k':
             prizeText = "250,000"
             self.prizeHandler = self.game.score
@@ -361,7 +361,7 @@ class Saloon(ep.EP_Mode):
         # play a lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.game.update_lamps)
         # play the quote
-        self.game.sound.play_voice(self.game.assets.quote_bountyCollected)
+        self.game.base.play_quote(self.game.assets.quote_bountyCollected)
         # then clear the layer and kick the ball out
         self.delay(delay = myWait,handler=self.finish_up)
 
@@ -402,7 +402,7 @@ class Saloon(ep.EP_Mode):
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
         # play a quote
         self.game.sound.play(self.game.assets.sfx_flourish6)
-        self.game.sound.play_voice(self.game.assets.quote_gunfightLit)
+        self.game.base.play_quote(self.game.assets.quote_gunfightLit)
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
         self.update_lamps()

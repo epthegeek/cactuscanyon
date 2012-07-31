@@ -111,8 +111,8 @@ class BonusLanes(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold = True
         animLayer.frame_time = 7
-        animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_cactusMash)
-        animLayer.add_frame_listener(4,self.game.base_game_mode.red_flasher_flourish)
+        animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_cactusMash)
+        animLayer.add_frame_listener(4,self.game.base.red_flasher_flourish)
         # run the animation
         self.layer = animLayer
         # increase the bonus
@@ -137,10 +137,6 @@ class BonusLanes(ep.EP_Mode):
         # then 1.5 seconds later, shut it off
         self.delay(name="Display",delay=1.5,handler=self.clear_layer)
         self.delay(delay=1.5,handler=self.update_lamps)
-
-    def play_sfx_cactusMash(self):
-        self.game.sound.play(self.game.assets.sfx_cactusMash)
-        self.layer = None
 
     def abort_display(self):
         self.clear_layer()

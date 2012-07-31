@@ -106,7 +106,7 @@ class DrunkMultiball(ep.EP_Mode):
         for mode in self.shotModes:
             mode.update_lamps()
         # play the drunk multiball song
-        self.game.base_game_mode.music_on(self.game.assets.music_drunkMultiball)
+        self.game.base.music_on(self.game.assets.music_drunkMultiball)
         # show some screens about the mode
         self.banner()
 
@@ -129,7 +129,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.delay(delay=1.3,handler=self.bannerTwo)
 
     def bannerTwo(self):
-        self.game.sound.play(self.game.assets.quote_drunkDrinkToThat)
+        self.game.base.play_quote(self.game.assets.quote_drunkDrinkToThat)
         mug = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
         mug.composite_op = "blacksrc"
         words = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'drunk-multiball.dmd').frames[0])
@@ -161,7 +161,7 @@ class DrunkMultiball(ep.EP_Mode):
         text = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'reverse.dmd').frames[0])
 
         if step == 2:
-            self.game.sound.play(self.game.assets.quote_drunkNeverSeen)
+            self.game.base.play_quote(self.game.assets.quote_drunkNeverSeen)
         if step == 1:
             combined = dmd.GroupedLayer(128,32,[text,flippers])
         elif step == 2 or step == 3:
@@ -221,14 +221,14 @@ class DrunkMultiball(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 8
         animLayer.composite_op = "blacksrc"
-        animLayer.add_frame_listener(3,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
-        animLayer.add_frame_listener(5,self.game.play_remote_sound,param=self.game.assets.sfx_ebDrink)
+        animLayer.add_frame_listener(3,self.game.sound.play,param=self.game.assets.sfx_ebDrink)
+        animLayer.add_frame_listener(5,self.game.sound.play,param=self.game.assets.sfx_ebDrink)
         animLayer.opaque=False
 
         words = dmd.Animation().load(ep.DMD_PATH+'jackpot-added.dmd')
         myWait = len(words.frames) / 10.0
         wordsLayer = ep.EP_AnimatedLayer(words)
-        wordsLayer.add_frame_listener(6,self.game.play_remote_sound,param=self.game.assets.sfx_orchestraSet)
+        wordsLayer.add_frame_listener(6,self.game.sound.play,param=self.game.assets.sfx_orchestraSet)
         wordsLayer.hold=True
         wordsLayer.frame_time = 6
         wordsLayer.opaque = True
@@ -271,7 +271,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.cancel_delayed("Display")
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_slide)
-        self.game.sound.play(self.game.assets.quote_drunkJackpot)
+        self.game.base.play_quote(self.game.assets.quote_drunkJackpot)
         self.delay(name="Display",delay=1.5,handler=self.jackpot_score)
 
     def jackpot_score(self):
@@ -301,7 +301,7 @@ class DrunkMultiball(ep.EP_Mode):
             mode.update_lamps()
         # stop the music
         self.game.sound.stop_music()
-        self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+        self.game.base.music_on(self.game.assets.music_mainTheme)
         # clear the layer
         self.layer = None
         # turn the GI back on

@@ -89,7 +89,7 @@ class Bart(ep.EP_Mode):
                 odds = [False,False,True,False,False]
                 choice = random.choice(odds)
                 if choice:
-                    duration = self.game.sound.play(self.game.assets.quote_nobodysHome)
+                    duration = self.game.base.play_quote(self.game.assets.quote_nobodysHome)
             # if we're waiting for a sound effect delay the busy release
             if duration > 0:
                 self.delay(delay=duration,handler=self.game.saloon.unbusy)
@@ -111,7 +111,7 @@ class Bart(ep.EP_Mode):
 
         textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
         # play the intro
-        self.game.sound.play(self.introQuote)
+        self.game.base.play_quote(self.introQuote)
         # show the transition
         transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
 
@@ -163,7 +163,7 @@ class Bart(ep.EP_Mode):
     def damage(self,saloonHit=False):
         print "DAMAGE BART"
         # play a quote appropriate to the current bart
-        self.game.sound.play_voice(self.hitQuote)
+        self.game.base.play_quote(self.hitQuote)
         # move bart
         self.animate(1)
 
@@ -205,7 +205,7 @@ class Bart(ep.EP_Mode):
         self.animate(1)
 
         # play a defeated quote
-        myWait = self.game.sound.play_voice(self.defeatQuote)
+        myWait = self.game.base.play_quote(self.defeatQuote)
         # set the status to dead - gunfight has to set it back to open
         self.game.set_tracking('bartStatus',"DEAD")
         # if we're at the end of the line, reset to 0

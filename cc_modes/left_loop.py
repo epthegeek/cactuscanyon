@@ -191,7 +191,7 @@ class LeftLoop(ep.EP_Mode):
             self.awardString = "BUCK N BRONCO"
             self.awardPoints = "125,000"
             self.game.score_with_bonus(125000)
-            self.game.sound.play_voice(self.game.assets.quote_leftLoop1)
+            self.game.base.play_quote(self.game.assets.quote_leftLoop1)
             # set the item to use, frame time to use, and amount to divide my wait by
             thisOne = 1
             frame_time = 6
@@ -204,12 +204,12 @@ class LeftLoop(ep.EP_Mode):
             frame_time = 6
             divisor = 10.0
             # play the sound
-            self.game.sound.play_voice(self.game.assets.quote_leftLoop1)
+            self.game.base.play_quote(self.game.assets.quote_leftLoop1)
         elif stage == 3:
             self.awardString = "RIDE EM COWBOY"
             self.awardPoints = "175,000"
             self.game.score_with_bonus(175000)
-            self.game.sound.play_voice(self.game.assets.quote_leftLoop2)
+            self.game.base.play_quote(self.game.assets.quote_leftLoop2)
             thisOne = 0
             frame_time = 4
             divisor = 15
@@ -233,7 +233,7 @@ class LeftLoop(ep.EP_Mode):
             self.game.center_ramp.update_lamps()
             # if we're complete, check the stampede tally
             if newstage == 4:
-                self.game.base_game_mode.check_stampede()
+                self.game.base.check_stampede()
 
 
         # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display

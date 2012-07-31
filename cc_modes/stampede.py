@@ -52,7 +52,7 @@ class Stampede(ep.EP_Mode):
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
         if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('centerRampStage') == 89:
-            self.game.base_game_mode.busy = True
+            self.game.base.busy = True
             self.end_stampede()
 
     ### switches
@@ -107,9 +107,9 @@ class Stampede(ep.EP_Mode):
         # toss to the main display after the animation
         self.delay(name="Display",delay=myWait,handler=self.main_display)
         # play a quote
-        self.game.sound.play(self.game.assets.quote_stampedeStart)
+        self.game.base.play_quote(self.game.assets.quote_stampedeStart)
         # start the music for stampede
-        self.game.base_game_mode.music_on(self.game.assets.music_stampede)
+        self.game.base.music_on(self.game.assets.music_stampede)
         # launch some more balls
         if self.game.trough.num_balls_in_play < 3:
             total = 3 - self.game.trough.num_balls_in_play
@@ -163,7 +163,7 @@ class Stampede(ep.EP_Mode):
             self.scoreLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("500,000")
             self.scoreLine.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
-            self.game.sound.play(self.game.assets.quote_jackpot)
+            self.game.base.play_quote(self.game.assets.quote_jackpot)
             # loop back to cleear
             self.delay(name="Display",delay=2,handler=self.jackpot_hit,param=3)
         # third pass plays the wipe
@@ -176,7 +176,7 @@ class Stampede(ep.EP_Mode):
             animLayer.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine,animLayer])
             # play a sound on delay
-            self.delay(name="Display",delay=myWait,handler=self.game.play_remote_sound,param=self.game.assets.sfx_explosion1)
+            self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_explosion1)
             # then do the main display
             self.delay(name="Display",delay=myWait,handler=self.main_display)
 
@@ -198,7 +198,7 @@ class Stampede(ep.EP_Mode):
             combined.composite_op = "blacksrc"
             self.layer = combined
             # and some sounds
-            self.game.sound.play(self.game.assets.quote_stampedeWiff)
+            self.game.base.play_quote(self.game.assets.quote_stampedeWiff)
             # and award points
             self.game.score(250000)
             self.delay(name="Display", delay=myWait, handler=self.main_display)
@@ -247,12 +247,12 @@ class Stampede(ep.EP_Mode):
         # badge light - stampede is 4
         self.game.badge.update(4)
         # unset the base busy flag
-        self.game.base_game_mode.busy = True
+        self.game.base.busy = True
         # clear the stack layer
         self.game.set_tracking('stackLevel',False,1)
         # turn the main music back on
         if self.game.trough.num_balls_in_play != 0:
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
         # unload the mode
         self.unload()
 

@@ -64,9 +64,9 @@ class SkillShot(ep.EP_Mode):
         self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1 and self.game.show_tracking('extraBallsTotal') == 0:
             # play a random voice call from a pre-set collection
-            self.delay(delay=0.3,handler=self.game.play_remote_sound,param=self.game.assets.quote_welcomes)
+            self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_welcomes)
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
-        self.delay(delay=0.2,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_shooterLaneGroove)
+        self.delay(delay=0.2,handler=self.game.base.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
 
     def generate_prizes(self):
@@ -210,7 +210,7 @@ class SkillShot(ep.EP_Mode):
                 quote = self.game.assets.quote_centerRampSS
             awardStringBottom = "FOR AWARD"
             #self.game.sound.play(self.game.assets.sfx_flourish7)
-            self.game.sound.play(quote)
+            self.game.base.play_quote(quote)
 
             self.award_display(awardStringTop,awardStringBottom,start=False)
 
@@ -287,7 +287,7 @@ class SkillShot(ep.EP_Mode):
             self.game.score(10000)
             self.game.add_bonus(2000)
             # turn on the right quickdraw
-            self.game.base_game_mode.light_quickdraw(1)
+            self.game.base.light_quickdraw(1)
 
         elif self.selectedPrizes[5:] == "I":
             # this one is the left loop
@@ -384,7 +384,7 @@ class SkillShot(ep.EP_Mode):
             self.game.score(50000)
             self.game.add_bonus(1200)
             # light the dmb
-            self.game.base_game_mode.light_drunk_multiball(self.game.skill_shot.start_gameplay)
+            self.game.base.light_drunk_multiball(self.game.skill_shot.start_gameplay)
             return
 
         # move your train
@@ -463,9 +463,9 @@ class SkillShot(ep.EP_Mode):
         self.super = False
         # start the main game music
         if self.game.show_tracking('gunfightStatus') != "RUNNING":
-            self.game.base_game_mode.music_on(self.game.assets.music_mainTheme)
+            self.game.base.music_on(self.game.assets.music_mainTheme)
         # check if the award finished stampede
-        self.game.base_game_mode.check_stampede()
+        self.game.base.check_stampede()
         # unload in 2 seconds - to give
         # the award junk time to finish
         self.delay(delay=myDelay,handler=self.unload)
@@ -500,23 +500,23 @@ class SkillShot(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim2)
         animLayer.hold=True
         animLayer.frame_time = 3
-        animLayer.add_frame_listener(16,self.game.play_remote_sound,param=self.game.assets.sfx_ropeCreak)
-        animLayer.add_frame_listener(20,self.game.play_remote_sound,param=self.game.assets.sfx_slide)
+        animLayer.add_frame_listener(16,self.game.sound.play,param=self.game.assets.sfx_ropeCreak)
+        animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_slide)
         animLayer.composite_op = "blacksrc"
         # and the 'super' text layer
         blinkLayer = ep.EP_AnimatedLayer(anim1)
         blinkLayer.hold=True
         blinkLayer.frame_time = 3
-        blinkLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_bountyBell)
-        blinkLayer.add_frame_listener(14,self.game.play_remote_sound,param=self.game.assets.sfx_bountyBell)
+        blinkLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_bountyBell)
+        blinkLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_bountyBell)
 
         combined = dmd.GroupedLayer(128,32,[blinkLayer,animLayer])
         # play a lasso throw sound
         self.game.sound.play(self.game.assets.sfx_ropeWoosh)
         # turn it on
         self.layer = combined
-        self.game.sound.play(self.game.assets.quote_superSkillShot)
-        self.delay(delay=myWait,handler=self.game.base_game_mode.music_on,param=self.game.assets.music_drumRoll)
+        self.game.base.play_quote(self.game.assets.quote_superSkillShot)
+        self.delay(delay=myWait,handler=self.game.base.music_on,param=self.game.assets.music_drumRoll)
         # show the prizes
         self.delay(name="Display",delay=myWait+1,handler=self.update_layer)
         self.delay(delay=myWait+1,handler=self.unbusy)
@@ -533,7 +533,7 @@ class SkillShot(ep.EP_Mode):
             # award the prize
             self.skillshot_award()
         else:
-            duration = self.game.sound.play(self.game.assets.quote_superFail)
+            duration = self.game.base.play_quote(self.game.assets.quote_superFail)
             self.start_gameplay(duration)
 
     def super_update_lamps(self,blink=False):

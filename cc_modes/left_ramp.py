@@ -183,7 +183,7 @@ class LeftRamp(ep.EP_Mode):
             self.awardString = "WHITE WATER"
             self.awardPoints = "125,000"
             self.game.score_with_bonus(125000)
-            self.game.sound.play_voice(self.game.assets.quote_leftRamp1)
+            self.game.base.play_quote(self.game.assets.quote_leftRamp1)
             # load the 2 animations
             anim1 = dmd.Animation().load(ep.DMD_PATH+'blank-river.dmd')
             anim2 = dmd.Animation().load(ep.DMD_PATH+'rowboat.dmd')
@@ -204,7 +204,7 @@ class LeftRamp(ep.EP_Mode):
             self.awardString = "WATER FALL"
             self.awardPoints = "150,000"
             self.game.score_with_bonus(150000)
-            self.game.sound.play_voice(self.game.assets.quote_leftRamp2)
+            self.game.base.play_quote(self.game.assets.quote_leftRamp2)
             # load the animation
             anim = dmd.Animation().load(ep.DMD_PATH+'river-chase.dmd')
             # math out the wait
@@ -227,11 +227,11 @@ class LeftRamp(ep.EP_Mode):
             # play sounds
             # play the river ramp sound
             self.game.sound.play(self.game.assets.sfx_leftRampEnter)
-            self.game.sound.play(self.game.assets.quote_pollyThankYou)
+            self.game.base.play_quote(self.game.assets.quote_pollyThankYou)
             # play animation
             self.layer = animLayer
             self.delay(name="Display",delay=myWait,handler=self.anim_river_victory)
-            self.game.base_game_mode.check_stampede()
+            self.game.base.check_stampede()
         else:
             self.awardString = "ADVENTURE COMPLETE"
             value = self.game.increase_tracking('adventureCompleteValue',5000)
@@ -239,7 +239,7 @@ class LeftRamp(ep.EP_Mode):
             self.game.score_with_bonus(value)
             # play sounds
             # play the river ramp sound
-            self.game.sound.play_voice(self.game.assets.quote_victory)
+            self.game.base.play_quote(self.game.assets.quote_victory)
             # play animation if we're not in a combo after level 4
             if combo:
                 self.layer = None
@@ -289,8 +289,8 @@ class LeftRamp(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 7
 
-        animLayer.add_frame_listener(7,self.game.play_remote_sound,param=self.game.assets.sfx_blow)
-        animLayer.add_frame_listener(14,self.game.play_remote_sound,param=self.game.assets.sfx_grinDing)
+        animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
+        animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)
         # play animation
         self.layer = animLayer
         self.game.sound.play(self.game.assets.sfx_leftRampEnter)
