@@ -67,13 +67,13 @@ class Showdown(ep.EP_Mode):
         animLayer.frame_time = 6
         # keyframe sounds
         animLayer.add_frame_listener(2,self.game.play_remote_sound,param=self.game.assets.sfx_lightning1)
-        animLayer.add_frame_listener(2,self.lightning,param="top")
-        animLayer.add_frame_listener(4,self.lightning,param="top")
-        animLayer.add_frame_listener(5,self.lightning,param="left")
+        animLayer.add_frame_listener(2,self.game.lightning,param="top")
+        animLayer.add_frame_listener(4,self.game.lightning,param="top")
+        animLayer.add_frame_listener(5,self.game.lightning,param="left")
         animLayer.add_frame_listener(8,self.game.play_remote_sound,param=self.game.assets.sfx_lightningRumble)
-        animLayer.add_frame_listener(8,self.lightning,param="top")
-        animLayer.add_frame_listener(10,self.lightning,param="top")
-        animLayer.add_frame_listener(11,self.lightning,param="left")
+        animLayer.add_frame_listener(8,self.game.lightning,param="top")
+        animLayer.add_frame_listener(10,self.game.lightning,param="top")
+        animLayer.add_frame_listener(11,self.game.lightning,param="left")
         # setup the display
         self.layer = animLayer
         self.delay(delay=myWait,handler=self.get_going)
