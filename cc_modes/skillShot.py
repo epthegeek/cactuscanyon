@@ -62,7 +62,7 @@ class SkillShot(ep.EP_Mode):
         print "THOOPER ITH FAHLTH"
         # call the welcome quote - and start the theme song after on the first ball
         self.game.sound.play(self.game.assets.music_drumRiff)
-        if self.game.ball == 1:
+        if self.game.ball == 1 and self.game.show_tracking('extraBallsTotal') == 0:
             # play a random voice call from a pre-set collection
             self.delay(delay=0.3,handler=self.game.play_remote_sound,param=self.game.assets.quote_welcomes)
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
