@@ -314,12 +314,14 @@ class BaseGameMode(ep.EP_Mode):
     def end_quote(self,key):
         self.active_quotes.remove(key)
 
-    def priority_quote(self,quote):
+    def priority_quote(self,quote,loops=0, max_time=0, fade_ms=0):
         # cancel any other voice quote
         for key in self.active_quotes:
+            print "STOPPING " + str(key)
             self.game.sound.stop(key)
         # then play the quote - overriding the voice delay timer
-        self.play_quote(quote,override=True)
+        duration = self.play_quote(quote,loops,max_time,fade_ms,override=True)
+        return duration
 
     def repeat_ding(self,times):
         self.game.sound.play(self.game.assets.sfx_bountyBell)
