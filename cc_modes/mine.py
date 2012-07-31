@@ -246,6 +246,10 @@ class Mine(ep.EP_Mode):
                 self.game.set_tracking('mineStatus', "READY")
             else:
                 self.game.set_tracking('mineStatus',"LOCK")
+        ## if there's more than one shot needed to lock the next ball, home the mountain
+        else:
+            self.game.mountain.reset_toy()
+
         self.update_lamps()
 
     def start_multiball(self):
