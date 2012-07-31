@@ -153,7 +153,7 @@ class Trough(Mode):
                 if temp_num_balls == num_current_machine_balls or temp_num_balls == num_trough_balls_if_ball_ending:
                     self.num_balls_in_play = 0
                     if self.drain_callback:
-                        print "THE GODDAMN TROUGH THINKS IT DRAINED"
+                        print "THE TROUGH THINKS IT DRAINED"
                         self.drain_callback()
                 # Multiball is ending if all but 1 ball are in the trough.
                 # Shouldn't need this, but it fixes situations where
@@ -162,7 +162,7 @@ class Trough(Mode):
                 elif temp_num_balls == num_trough_balls_if_multiball_ending:
                     self.num_balls_in_play = 1
                     if self.drain_callback:
-                        print "THE GODDAMN TROUGH THINKS MULTIBALL IS ENDING"
+                        print "THE TROUGH THINKS MULTIBALL IS ENDING"
                         self.drain_callback()
                 # Otherwise, another ball from multiball is draining
                 # if the trough gets one more than it would have if
@@ -260,7 +260,6 @@ class Trough(Mode):
         else:
             self.launch_in_progress = False
             if self.launch_callback:
-                print "FUCK YOUR CALLBACK"
                 self.launch_callback()
 
     def sw_shooterLane_active(self,sw):
