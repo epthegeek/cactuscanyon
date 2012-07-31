@@ -268,6 +268,14 @@ class BaseGameMode(ep.EP_Mode):
         self.game.modes.add(self.game.service_mode)
         return True
 
+###
+###     _             _ _         ____  _ _
+###    / \  _   _  __| (_) ___   | __ )(_) |_ ___
+###   / _ \| | | |/ _` | |/ _ \  |  _ \| | __/ __|
+###  / ___ \ |_| | (_| | | (_) | | |_) | | |_\__ \
+### /_/   \_\__,_|\__,_|_|\___/  |____/|_|\__|___/
+###
+
     def music_on(self,song=None):
             # if a song is passed, set that to the active song
             # if not, just re-activate the current
@@ -278,6 +286,8 @@ class BaseGameMode(ep.EP_Mode):
     def delayed_music_on(self,wait,song=None):
         self.delay(delay=wait, handler=self.music_on,param=song)
 
+    # modified version of play voice from procgame.sound that stores a list of active quotes
+    # even though more than one shouldn't be possible given the time checking
     def play_quote(self,key, loops=0, max_time=0, fade_ms=0,override=False):
         if not self.game.sound.enabled:
             return 0
