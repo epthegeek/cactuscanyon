@@ -37,6 +37,11 @@ class Gunfight(ep.EP_Mode):
             self.lost()
 
     def start_gunfight(self,side):
+        print "GUNFIGHT GOES HERE"
+        # pop up the post
+        print "RAISE POST ON SIDE: " + str(side)
+        self.activeSide = side
+        self.posts[self.activeSide].patter(on_time=2,off_time=10,original_on_time=30)
         # cancel any other displays
         for mode in self.game.ep_modes:
             if getattr(mode, "abort_display", None):
@@ -53,11 +58,6 @@ class Gunfight(ep.EP_Mode):
         else:
             self.game.lamps.rightGunfightPin.schedule(0x00FF00FF)
         self.game.increase_tracking('gunfightsStarted')
-        print "GUNFIGHT GOES HERE"
-        # pop up the post
-        print "RAISE POST ON SIDE: " + str(side)
-        self.activeSide = side
-        self.posts[self.activeSide].patter(on_time=4,off_time=12,original_on_time=30)
         # set the bad guy pop order accounting for the side it started on
         badGuys = [0,1,2,3]
         # select our eventual target

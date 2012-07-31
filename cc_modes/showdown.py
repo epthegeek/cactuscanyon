@@ -47,7 +47,7 @@ class Showdown(ep.EP_Mode):
         print "S H O W D O W N"
         # raise the post to hold the ball
         self.activeSide = side
-        self.posts[self.activeSide].patter(on_time=4,off_time=12,original_on_time=30)
+        self.posts[self.activeSide].patter(on_time=2,off_time=10,original_on_time=30)
 
         # set the layer tracking
         self.game.set_tracking('stackLevel',True,0)

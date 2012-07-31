@@ -105,7 +105,7 @@ class Ambush(ep.EP_Mode):
     def start_ambush(self,side):
         # raise the post to hold the ball
         self.activeSide = side
-        self.posts[self.activeSide].patter(on_time=4,off_time=12,original_on_time=30)
+        self.posts[self.activeSide].patter(on_time=2,off_time=10,original_on_time=30)
 
         print "A M B U S H"
         # kill the music
