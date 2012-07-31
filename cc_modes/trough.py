@@ -226,7 +226,8 @@ class Trough(Mode):
             self.game.coils[self.eject_coilname].pulse(30)
             # go to a hold pattern to wait for the shooter lane
             # if after 2 seconds the shooter lane hasn't been hit we should try again
-            self.delay("Bounce Delay",delay=2,handler=self.fallback_loop)
+            if not self.game.fakePinProc:
+                self.delay("Bounce Delay",delay=2,handler=self.fallback_loop)
 
         # Otherwise, wait 1 second before trying again.
         else:
