@@ -86,6 +86,14 @@ class DrunkMultiball(ep.EP_Mode):
             pass
         return game.SwitchStop
 
+    # if it lands in the mine, just kick it out
+    def sw_minePopper_active_for_390ms(self,sw):
+        self.game.score(2530)
+        # kick the ball
+        self.game.mountain.eject()
+        return game.SwitchStop
+
+
     def start_drunk(self):
         print "STARTING DRUNK ASS MULTIBALL"
         # set the stack level

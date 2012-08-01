@@ -82,7 +82,7 @@ class Mine(ep.EP_Mode):
 
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
-        if self.game.show_tracking('bionicStatus') == "RUNNING":
+        if self.game.show_tracking('bionicStatus') == "RUNNING" or self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
             print "WAIT, HOW DID I GET HERE"
             return
         # stock sound for the switch
