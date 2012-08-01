@@ -106,7 +106,7 @@ class Gunfight(ep.EP_Mode):
         # play a quote
         self.game.sound.play(self.game.assets.sfx_gunfightShot)
         self.delay(delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
-        self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_gunWin)
+        self.delay(delay=0.3,handler=self.game.base.priority_quote,param=self.game.assets.quote_gunWin)
         # play the animation
         anim = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-shoulders-up.dmd')
         myWait = len(anim.frames) / 10.0
