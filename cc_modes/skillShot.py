@@ -515,7 +515,7 @@ class SkillShot(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_ropeWoosh)
         # turn it on
         self.layer = combined
-        self.game.base.play_quote(self.game.assets.quote_superSkillShot)
+        self.game.base.priority_quote(self.game.assets.quote_superSkillShot)
         self.delay(delay=myWait,handler=self.game.base.music_on,param=self.game.assets.music_drumRoll)
         # show the prizes
         self.delay(name="Display",delay=myWait+1,handler=self.update_layer)
@@ -533,7 +533,7 @@ class SkillShot(ep.EP_Mode):
             # award the prize
             self.skillshot_award()
         else:
-            duration = self.game.base.play_quote(self.game.assets.quote_superFail)
+            duration = self.game.base.priority_quote(self.game.assets.quote_superFail)
             self.start_gameplay(duration)
 
     def super_update_lamps(self,blink=False):

@@ -383,7 +383,7 @@ class HighNoon(ep.EP_Mode):
         animLayer.composite_op = "blacksrc"
         # set another sound to play after the anim
         myWait += animWait
-        self.delay(name="Display",delay=myWait,handler=self.game.play.remote_sound,param=self.game.assets.sfx_cheers)
+        self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
         titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
         combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
         script.append({"layer":combined,"seconds":(animWait + 1)})

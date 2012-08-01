@@ -273,13 +273,11 @@ class Assets():
         self.game.sound.register_sound(self.sfx_tumbleWind, self.sfx_path + "00-sfx-wind-blows.wav")
 
         self.sfx_deadBartHit = 'sfx_deadBartHit'
-        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "297-sfx-dead-bart-hit-1.wav")
-        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "299-sfx-dead-bart-hit-2.wav")
-        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "301-sfx-dead-bart-hit-3.wav")
+        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "297-sfx-dead-bart--1.wav")
+        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "299-sfx-dead-bart-2.wav")
+        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "301-sfx-dead-bart-3.wav")
         self.sfx_hitBionicBart = 'sfx_hitBionicBart'
         self.game.sound.register_sound(self.sfx_hitBionicBart, self.sfx_path + "310-sfx-hit-bionic-bart.wav")
-        self.sfx_fireWeapon = 'sfx_fireWeapon'
-        self.game.sound.register_sound(self.sfx_fireWeapon, self.sfx_path + "00-sfx-weapon-fire.wav")
         self.sfx_dieBionicBart = 'sfx_dieBionicBart'
         self.game.sound.register_sound(self.sfx_dieBionicBart, self.sfx_path + "125-sfx-bionic-critical-hit.wav")
         self.sfx_heavyExplosion = 'sfx_heavyExplosion'
@@ -555,7 +553,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2120-bionic-bart-puny-carbon-unit.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2119-bionic-bart-steel-balls-do-not-phase-me.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2118-bionic-bart-i-am-the-new-sheriff-in-town.wav")
-        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2102-bionic-bart-prepare-for-annihilation-cowboy.wav")
+        self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2102-bionic-bart-prepare-for-anhiliation-cowboy.wav")
         self.game.sound.register_sound(self.quote_tauntBionicBart, self.quotes_path + "2103-bionic-bart-time-for-payback-lawman.wav")
 
         self.quote_failBionicBart = 'quote_failBionicBart'

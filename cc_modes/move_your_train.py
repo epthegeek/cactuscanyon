@@ -115,7 +115,8 @@ class MoveYourTrain(ep.EP_Mode):
         # update the display
         self.main_display()
         # drop the post and/or kick the ball
-        self.POSTS[side].disable()
+        for post in self.POSTS:
+            post.disable()
         if not self.postUse:
             self.game.saloon.kick()
         else:
