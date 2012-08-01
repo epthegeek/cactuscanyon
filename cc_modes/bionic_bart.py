@@ -95,6 +95,8 @@ class BionicBart(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_leftRampEnter_active(self, sw):
+        # pulse the coil to open the gate
+        self.game.coils.rightLoopGate.pulse(150)
         self.process_shot(1)
         return game.SwitchStop
 
@@ -104,6 +106,8 @@ class BionicBart(ep.EP_Mode):
 
     def sw_rightLoopTop_active(self, sw):
         if not self.game.bart.moving:
+            # pulse the coil to open the gate
+            self.game.coils.leftLoopGate.pulse(150)
             self.process_shot(3)
         return game.SwitchStop
 
@@ -139,7 +143,27 @@ class BionicBart(ep.EP_Mode):
         if shot in self.activeShots:
             if self.loaded == False:
                 self.shots += 1
-                # if we're up to the required shots, load the weapon
+                # play a lamp show based on shot number
+                # left loop
+                if shot == 0:
+                # play a lamp show
+                    show = self.game.assets.lamp_leftToRight
+                # left ramp
+                elif shot == 1:
+                    show = self.game.assets.lamp_rightToLeft
+                # center ramp
+                elif shot == 2:
+                    show = self.game.assets.lamp_bottomToTop
+                # right loop
+                elif shot == 3:
+                    show = self.game.assets.lamp_rightToLeft
+                # right ramp
+                elif shot == 4:
+                    show = self.game.assets.lamp_leftToRight
+
+                self.game.lampctrl.play_show(show, repeat=False,callback=self.game.update_lamps)
+
+               # if we're up to the required shots, load the weapon
                 if self.shots >= self.shotsToLoad:
                     # score points for loaded
                     self.game.score(53370)
