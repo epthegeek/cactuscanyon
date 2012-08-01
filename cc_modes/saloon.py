@@ -36,8 +36,10 @@ class Saloon(ep.EP_Mode):
         # if bionic bart is running don't do anything
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             return
-        # if there's a mode running, just kick the ball back out
-        if True in self.game.show_tracking('stackLevel'):
+        # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
+        if not self.game.save_polly.running and \
+           "RUNNING" not in self.game.show_tracking('quickdrawStatus') and \
+           True in self.game.show_tracking('stackLevel'):
             self.kick()
         # Divert here for bionic bart if ready
         elif self.game.show_tracking('bionicStatus') == "READY":

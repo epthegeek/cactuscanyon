@@ -63,6 +63,15 @@ class Quickdraw(ep.EP_Mode):
         if self.paused:
             self.resume()
 
+    # saloon pauses the quickdraw
+    def sw_saloonPopper_active_for_290ms(self,sw):
+        self.pause()
+
+    # resume when inactive
+    def sw_saloonPopper_inactive(self,sw):
+        if self.paused:
+            self.resume()
+
     def bumper_hit(self,bumper):
         if not self.paused:
             self.pause()
