@@ -23,7 +23,7 @@ import cc_modes
 import ep
 
 class SavePolly(ep.EP_Mode):
-    """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """
+    """Polly Peril - Tied to the Tracks"""
     def __init__(self,game,priority):
         super(SavePolly, self).__init__(game,priority)
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Shots to save Polly']
@@ -138,59 +138,66 @@ class SavePolly(ep.EP_Mode):
             self.advance_save_polly()
         return game.SwitchStop
 
-    def start_save_polly(self):
-        # set the level 1 stack flag
-        self.game.set_tracking('stackLevel',True,1)
-        # set the running flag
-        self.running = True
-        # clear any running music
-        print "start_save_polly IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
-        # set the center to crazy stage
-        self.game.set_tracking('centerRampStage',99)
-        self.game.right_ramp.update_lamps()
-        self.game.center_ramp.update_lamps()
-        self.game.left_ramp.update_lamps()
+    def start_save_polly(self,step=1):
+        if step == 1:
+            # set the level 1 stack flag
+            self.game.set_tracking('stackLevel',True,1)
+            # set the running flag
+            self.running = True
+            # clear any running music
+            print "start_save_polly IS KILLING THE MUSIC"
+            self.game.sound.stop_music()
+            # set the center to crazy stage
+            self.game.set_tracking('centerRampStage',99)
+            self.game.right_ramp.update_lamps()
+            self.game.center_ramp.update_lamps()
+            self.game.left_ramp.update_lamps()
 
-        # start the music
-        self.game.base.music_on(self.game.assets.music_pollyPeril)
-        # reset the train
-        self.game.train.reset_toy()
-        # run the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'polly-peril.dmd')
-        myWait = len(anim.frames) / 30 + 2
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
-        self.layer = animLayer
+            # start the music
+            self.game.base.music_on(self.game.assets.music_pollyPeril)
+            # reset the train
+            self.game.train.reset_toy()
+            # run the animation
+            anim = dmd.Animation().load(ep.DMD_PATH+'polly-peril.dmd')
+            myWait = len(anim.frames) / 30
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
+            self.layer = animLayer
 
-        # set the timer for the mode
-        self.modeTimer = 30
-        # setup some layers
-        # alternate lines for the bottom
-        script = []
-        shotsLine1 = dmd.TextLayer(34, 11, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOTS WORTH:")
-        shotsLine2 = dmd.TextLayer(34, 17, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
-        # group layer of the award lines
-        textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
-        awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
-        page1 = dmd.GroupedLayer(128,32,[awardLine1,self.awardLine2])
-        page1.composite_op = "blacksrc"
-        script.append({"seconds":2,"layer":page1})
-        # group layer of the shot value info lines
-        page2 = dmd.GroupedLayer(128,32,[shotsLine1,shotsLine2])
-        page2.composite_op = "blacksrc"
-        script.append({"seconds":2,"layer":page2})
-        # scripted layer alternating between the info and award lines
-        self.infoLayer = dmd.ScriptedLayer(128,32,script)
-        self.infoLayer.composite_op = "blacksrc"
+            # set the timer for the mode
+            self.modeTimer = 30
+            # setup some layers
+            # alternate lines for the bottom
+            script = []
+            shotsLine1 = dmd.TextLayer(34, 11, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOTS WORTH:")
+            shotsLine2 = dmd.TextLayer(34, 17, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
+            # group layer of the award lines
+            textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
+            awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+            page1 = dmd.GroupedLayer(128,32,[awardLine1,self.awardLine2])
+            page1.composite_op = "blacksrc"
+            script.append({"seconds":2,"layer":page1})
+            # group layer of the shot value info lines
+            page2 = dmd.GroupedLayer(128,32,[shotsLine1,shotsLine2])
+            page2.composite_op = "blacksrc"
+            script.append({"seconds":2,"layer":page2})
+            # scripted layer alternating between the info and award lines
+            self.infoLayer = dmd.ScriptedLayer(128,32,script)
+            self.infoLayer.composite_op = "blacksrc"
 
-        # jump into the mode loop
-        self.delay("Get Going",delay=myWait,handler=self.in_progress)
+            # loop back for the title card
+            self.delay(delay=myWait,handler=self.start_save_polly,param=2)
+        if step == 2:
+            # set up the title card
+            titleCard = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'polly-peril-tttt.dmd').frames[0])
+            # transition to the title card
+            self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
+            # delay the start process
+            self.delay("Get Going",delay=2,handler=self.in_progress)
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause
     def in_progress(self):
         if self.running:
-            print "POLLY IN PROGRESS - TIME:" + str(self.modeTimer)
             # start the train moving
             self.game.train.move()
             # setup the mode screen with the animated train
@@ -198,7 +205,7 @@ class SavePolly(ep.EP_Mode):
             p = self.game.current_player()
             scoreString = ep.format_score(p.score)
             scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
-            timeString = "TIME: " + str(self.modeTimer / 1)
+            timeString = "TIME: " + str(int(self.modeTimer))
             timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString)
 
             # stick together the animation and static text with the dynamic text
@@ -206,8 +213,10 @@ class SavePolly(ep.EP_Mode):
             self.layer = composite
             ## tick down the timer
             self.modeTimer -= 0.1
-            ## TODO play some hurry quote at 5 seconds?
-            # if we've run out of time
+            ## hurry quote at 5 seconds
+#            if self.fullSeconds == 5.0 and self.increment == 0:
+            if abs(self.modeTimer - 5) < 0.00000001:
+                self.game.base.play_quote(self.game.assets.quote_hurry)
             if self.modeTimer <= 0:
                 # go to a grace period
                 self.polly_died()
@@ -343,10 +352,14 @@ class SavePolly(ep.EP_Mode):
 
     # fail
     def polly_died(self):
-        # this is mostly for the lights
+        print "OMG POLLY IS DEAD"
+        # turn off the running flag
         self.running = False
+        # stop the train
         self.game.train.stop()
+        # clear delays
         self.dispatch_delayed()
+        # close up shop
         self.polly_finished()
 
     def polly_finished(self):
@@ -375,6 +388,9 @@ class SavePolly(ep.EP_Mode):
             self.game.base.check_stampede()
         # unset the busy flag
         self.game.base.busy = False
+        # turn the music back on
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+            self.game.base.music_on(self.game.assets.music_mainTheme)
         # unload the mode
         self.unload()
 
