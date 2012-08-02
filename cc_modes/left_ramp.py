@@ -75,6 +75,21 @@ class LeftRamp(ep.EP_Mode):
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
             return
+        # river chase
+        if self.game.river_chase.running:
+            # all three shots are equal in river chase
+            self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
+            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+            return
+        # bank robbery
+        if self.game.bank_robbery.running:
+            if self.game.bank_robbery.isActive[0]:
+                self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
+                self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+                self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+            return
+
 
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             if 1 in self.game.bionic.activeShots:
@@ -102,7 +117,7 @@ class LeftRamp(ep.EP_Mode):
             # blink the third
             self.game.lamps.leftRampSavePolly.schedule(0x0F0F0F0F)
         # this is completed - pulse the 3rd light
-        elif stage == 4:
+        elif stage == 5:
             # two on
             self.game.lamps.leftRampWhiteWater.enable()
             self.game.lamps.leftRampWaterfall.enable()
@@ -217,24 +232,20 @@ class LeftRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 3:
-            self.awardString = "ADVENTURE COMPLETE"
-            self.awardPoints = "175,000"
-            self.game.score_with_bonus(175000)
-            anim = dmd.Animation().load(ep.DMD_PATH+'sheriff-pan.dmd')
-            # waith for the pan up to finish
-            myWait = 1.14
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
-            # play sounds
-            # play the river ramp sound
-            self.game.sound.play(self.game.assets.sfx_leftRampEnter)
-            self.game.base.play_quote(self.game.assets.quote_pollyThankYou)
-            # play animation
-            self.layer = animLayer
-            self.delay(name="Display",delay=myWait,handler=self.anim_river_victory)
-            self.game.base.check_stampede()
+            # stage 3 now starts river chase
+            self.game.increase_tracking('leftRampStage')
+            self.game.modes.add(self.game.river_chase)
+            self.game.river_chase.start_river_chase()
+
         else:
-            self.awardString = "ADVENTURE COMPLETE"
-            value = self.game.increase_tracking('adventureCompleteValue',5000)
+            start_value = self.game.increase_tracking('adventureCompleteValue',5000)
+            if self.game.river_chase.won:
+                self.awardString = "POLLY SAVED"
+                self.game.base.play_quote(self.game.assets.quote_victory)
+                value = start_value
+            else:
+                self.awardString = "POLLY KIDNAPPED"
+                value = start_value / 10
             self.awardPoints = str(ep.format_score(value))
             self.game.score_with_bonus(value)
             # play sounds
@@ -248,7 +259,7 @@ class LeftRamp(ep.EP_Mode):
                 self.anim_river_victory()
 
         # then tick the stage up for next time unless it's completed
-        if stage < 4:
+        if stage < 3:
             self.game.increase_tracking('leftRampStage')
             # do a little lamp flourish
             self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)

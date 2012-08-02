@@ -110,6 +110,7 @@ class Combos(ep.EP_Mode):
         return False
     
     def hit(self):
+        print "COMBO HIT"
         # cancel the current combo_timer delay
         self.cancel_delayed("Combo Timer")
         # add one to the combo total and reset the timer

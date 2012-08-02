@@ -76,6 +76,21 @@ class CenterRamp(ep.EP_Mode):
                 self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
             return
 
+        # river chase
+        if self.game.river_chase.running:
+            self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
+            self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
+            self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
+            return
+
+        # bank robbery
+        if self.game.bank_robbery.running:
+            if self.game.bank_robbery.isActive[2]:
+                self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
+                self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
+                self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
+            return
+
         stage = self.game.show_tracking('centerRampStage')
 
         if stage == 1:
@@ -170,8 +185,7 @@ class CenterRamp(ep.EP_Mode):
                 mode.abort_display()
 
         ## ramp award is determined by stage - starts at 1
-        ## completed is CURRENTLY 4 - to reset the awards
-        ## reset the leftRampStage
+        ## completed is CURRENTLY 4
         stage = self.game.show_tracking('centerRampStage')
         if stage == 1:
             self.awardString = "CATCH TRAIN"
@@ -264,8 +278,14 @@ class CenterRamp(ep.EP_Mode):
         self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
     def train_victory(self):
-        self.awardString = "POLLY SAVED"
-        value = self.game.increase_tracking('adventureCompleteValue',5000)
+        start_value = self.game.increase_tracking('adventureCompleteValue',5000)
+        if self.game.save_polly.won:
+            self.awardString = "POLLY SAVED"
+            value = start_value
+        else:
+            self.awardString = "POLLY DIED"
+            value = start_value / 10
+
         self.awardPoints = str(ep.format_score(value))
         self.game.score_with_bonus(value)
         # load up the animation

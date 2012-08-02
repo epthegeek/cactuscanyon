@@ -29,6 +29,7 @@ class SavePolly(ep.EP_Mode):
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Shots to save Polly']
         self.running = False
         self.halted = False
+        self.won = False
 
     def mode_started(self):
         self.shotsSoFar = 0
@@ -50,10 +51,15 @@ class SavePolly(ep.EP_Mode):
         # calculate the shot value
         self.shotValue = 250000
         # extra 250k for each ramp done
-        if self.game.show_tracking('leftRampStage') == 4:
-            self.shotValue += 250000
-        if self.game.show_tracking('rightRampStage') == 4:
-            self.shotValue += 250000
+        if self.game.show_tracking('leftRampStage') == 5:
+            self.shotValue += 50000
+        if self.game.river_chase.won:
+            self.shotValue += 200000
+        if self.game.show_tracking('rightRampStage') == 5:
+            self.shotValue += 50000
+        if self.game.bank_robbery.won:
+            self.shotValue += 200000
+        self.won = False
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -366,9 +372,6 @@ class SavePolly(ep.EP_Mode):
         # stop the polly music
         print "polly_finished IS KILLING THE MUSIC"
         self.game.sound.stop_music()
-        # start up the main theme again if a second level mode isn't running
-        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
         self.game.train.reset_toy()
         # turn off the polly display
         self.layer = None
@@ -376,6 +379,7 @@ class SavePolly(ep.EP_Mode):
         # this is mostly for the lights
         self.game.set_tracking('centerRampStage',5)
         self.game.update_lamps()
+        self.won = True
         self.end_save_polly()
 
     # clean up and exit

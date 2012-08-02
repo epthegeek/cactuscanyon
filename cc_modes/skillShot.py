@@ -78,7 +78,7 @@ class SkillShot(ep.EP_Mode):
         # but for now, randomly select 5 items to build the prize list
         if not self.super:
             # right ramp complete (bank)
-            if self.game.show_tracking('rightRampStage') < 4:
+            if self.game.show_tracking('rightRampStage') < 3:
                 prizes.append("C")
 
             # light lock (padlock)
@@ -91,7 +91,7 @@ class SkillShot(ep.EP_Mode):
                 prizes.append("E")
 
             # left ramp complete (boat)
-            if self.game.show_tracking('leftRampStage') < 4:
+            if self.game.show_tracking('leftRampStage') < 3:
                 prizes.append("F")
 
             # right loop complete (gun)
@@ -119,7 +119,7 @@ class SkillShot(ep.EP_Mode):
                 prizes.append("L")
 
             # center ramp complete (train)
-            if self.game.show_tracking('centerRampStage') < 4:
+            if self.game.show_tracking('centerRampStage') < 3:
                 prizes.append("M")
 
             # 1 million points (1M) is always available
@@ -225,9 +225,9 @@ class SkillShot(ep.EP_Mode):
         if self.selectedPrizes[5:] == "C":
             self.game.score(10)
             awardStringTop = "BANK ROBBERY"
-            awardStringBottom = "FOILED"
+            awardStringBottom = "BOOST"
             # set the bank ramp to completed
-            self.game.set_tracking('rightRampStage',4)
+            self.game.set_tracking('rightRampStage',3)
             self.game.score(250000)
             self.game.add_bonus(100000)
 
@@ -267,8 +267,8 @@ class SkillShot(ep.EP_Mode):
 
         elif self.selectedPrizes[5:] == "F":
             awardStringTop = "RIVER RESCUE"
-            awardStringBottom = "COMPLETE"
-            self.game.set_tracking('leftRampStage',4)
+            awardStringBottom = "BOOST"
+            self.game.set_tracking('leftRampStage',3)
             self.game.score(250000)
             self.game.add_bonus(100000)
 
@@ -324,7 +324,7 @@ class SkillShot(ep.EP_Mode):
         # TODO need to ajust this perhaps - for handling polly peril
         elif self.selectedPrizes[5:] == "M":
             awardStringTop = "TRAIN RESCUE"
-            awardStringBottom = "COMPLETE"
+            awardStringBottom = "BOOST"
             self.game.set_tracking('centerRampStage',3)
             self.game.score(250000)
             self.game.add_bonus(100000)

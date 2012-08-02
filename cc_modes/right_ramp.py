@@ -75,6 +75,19 @@ class RightRamp(ep.EP_Mode):
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
             return
+        # river chase
+        if self.game.river_chase.running:
+            self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
+            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+            self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
+            return
+        # bank robbery
+        if self.game.bank_robbery.running:
+            if self.game.bank_robbery.isActive[2]:
+                self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
+                self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+                self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
+            return
 
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             if 4 in self.game.bionic.activeShots:
@@ -224,30 +237,26 @@ class RightRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
 
         elif stage == 3:
-            self.awardString = "ROBBERY FOILED"
-            self.awardPoints = "175,000*"
-            self.game.score_with_bonus(175000)
-            anim = dmd.Animation().load(ep.DMD_PATH+'sheriff-pan.dmd')
-            # waith for the pan up to finish
-            myWait = 1.14
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
-            # play sounds
-            self.game.sound.play(self.game.assets.sfx_thrownCoins)
-            self.game.base.play_quote(self.game.assets.quote_pollyThankYou)
-            # play animation
-            self.layer = animLayer
-            self.delay(name="Display",delay=myWait,handler=self.anim_bank_victory)
-            self.game.base.check_stampede()
+            self.game.increase_tracking('leftRampStage')
+            self.game.modes.add(self.game.bank_robbery)
+            self.game.bank_robbery.start_bank_robbery()
 
-        ## for now, anything above 3 is 'complete'
+
+    ## for now, anything above 3 is 'complete'
         else:
-            self.awardString = "ROBBERY FOILED"
-            value = self.game.increase_tracking('adventureCompleteValue')
+            start_value = self.game.increase_tracking('adventureCompleteValue',5000)
+            # vary the prize based on win/lose
+            if self.game.bank_robbery.won:
+                self.awardString = "ROBBERY FOILED"
+                self.game.base.play_quote(self.game.assets.quote_victory)
+                value = start_value
+            else:
+                self.awardString = "BANK ROBBED"
+                value = start_value / 10
             self.awardPoints = str(ep.format_score(value)) + "*"
             self.game.score_with_bonus(value)
             # play sounds
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
-            self.game.base.play_quote(self.game.assets.quote_victory)
             # play animation
             if combo:
                 self.layer = None
@@ -256,7 +265,7 @@ class RightRamp(ep.EP_Mode):
                 self.anim_bank_victory()
 
         # then tick the stage up for next time unless it's completed
-        if self.game.show_tracking('rightRampStage') < 4:
+        if self.game.show_tracking('rightRampStage') < 3:
             self.game.increase_tracking('rightRampStage')
             # do a little lamp flourish
             self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)

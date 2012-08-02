@@ -41,7 +41,7 @@ class EP_Transition(object):
 	
 	LENGTH_IN_FRAMES = 25.0
 		
-	def __init__(self, mode, layerA=None, layerB=None, transitionType=TYPE_PUSH, transitionParameter=None, lengthInFrames=LENGTH_IN_FRAMES):
+	def __init__(self, mode, layerA=None, layerB=None, transitionType=TYPE_PUSH, transitionParameter=None, lengthInFrames=LENGTH_IN_FRAMES,callback = None):
 		self.mode = mode
 		if layerA == None: layerA = dmd.FrameLayer(False,dmd.Frame(128,32))
 		self.layerA = layerA

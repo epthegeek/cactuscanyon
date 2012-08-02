@@ -134,6 +134,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_leftRampEnter, self.sfx_path + "407-sfx-river-ramp-splash.wav")
         self.sfx_leftLoopEnter = 'sfx_leftLoopEnter'
         self.game.sound.register_sound(self.sfx_leftLoopEnter, self.sfx_path + "179-woosh-with-horse-running.wav")
+        self.sfx_horse = 'sfx_horse'
+        self.game.sound.register_sound(self.sfx_horse,self.sfx_path + "179b-horse-running.wav")
         self.sfx_orchestraRiff = 'sfx_orchestraRiff'
         self.game.sound.register_sound(self.sfx_orchestraRiff, self.sfx_path + "041-orchestra-riff.wav")
         self.sfx_quickdrawOff = 'sfx_quickdrawOff'
@@ -352,12 +354,13 @@ class Assets():
         self.game.sound.register_sound(self.quote_leftRamp2, self.quotes_path + "830-polly-were-going-over-the-falls.wav")
         self.game.sound.register_sound(self.quote_leftRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.quote_rightRamp1 = 'quote_rightRamp1'
-        self.game.sound.register_sound(self.quote_rightRamp1, self.quotes_path + "1307-undertaker-oh-good-mayhem-at-the-bank.wav")
         self.game.sound.register_sound(self.quote_rightRamp1, self.quotes_path + "1134-mayor-well-do-somethin-my-moneys-in-there.wav")
         self.game.sound.register_sound(self.quote_rightRamp1, self.quotes_path + "1189-mayor-those-bart-boys-are-robbin-the-bank.wav")
         self.quote_rightRamp2 = 'quote_rightRamp2'
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "850-polly-ooh-how-brave.wav")
+        self.quote_mayhemBank = 'quote_mayhemBank'
+        self.game.sound.register_sound(self.quote_mayhemBank, self.quotes_path + "1307-undertaker-oh-good-mayhem-at-the-bank.wav")
         self.quote_centerRamp1 = 'quote_centerRamp1'
         self.game.sound.register_sound(self.quote_centerRamp1, self.quotes_path + "1579-leader-bart-laugh-2.wav")
         self.game.sound.register_sound(self.quote_centerRamp1, self.quotes_path + "1576-leader-bart-you-cant-stop-this-train.wav")
@@ -655,8 +658,11 @@ class Assets():
         self.game.sound.register_sound(self.quote_leaderLaugh, self.quotes_path + "1581-leader-bart-laugh-3.wav")
         self.quote_nobodysHome = 'quote_nobodysHome'
         self.game.sound.register_sound(self.quote_nobodysHome, self.quotes_path + "1853-leader-bart-nobodys-home.wav")
+        self.quote_catchGuy = 'quote_catchGuy'
+        self.game.sound.register_sound(self.quote_catchGuy, self.quotes_path + "00-mayor-dont-let-em-get-away.wav")
 
-        # Music
+
+    # Music
         self.music_drumRiff = 'music_drumRiff'
         self.game.sound.register_sound(self.music_drumRiff, self.music_path + "001-drum-lead-in.wav")
         self.music_shooterLaneGroove = 'music_shooterLaneGroove'

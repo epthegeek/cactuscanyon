@@ -184,6 +184,9 @@ class CCGame(game.BasicGame):
         self.center_ramp = cc_modes.CenterRamp(game=self,priority=12)
         # save polly rides above the ramps, but below the loops
         self.save_polly = cc_modes.SavePolly(game=self,priority=13)
+        # two new save polly modes
+        self.river_chase = cc_modes.RiverChase(game=self,priority=13)
+        self.bank_robbery = cc_modes.BankRobbery(game=self,priority=13)
         self.left_loop = cc_modes.LeftLoop(game=self,priority=14)
         self.right_loop = cc_modes.RightLoop(game=self,priority=15)
         self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=16)
@@ -252,7 +255,9 @@ class CCGame(game.BasicGame):
                          self.badge,
                          self.bionic,
                          self.bart,
-                         self.move_your_train]
+                         self.move_your_train,
+                         self.bank_robbery,
+                         self.river_chase]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
