@@ -273,7 +273,7 @@ class Assets():
         self.game.sound.register_sound(self.sfx_tumbleWind, self.sfx_path + "00-sfx-wind-blows.wav")
 
         self.sfx_deadBartHit = 'sfx_deadBartHit'
-        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "297-sfx-dead-bart--1.wav")
+        self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "297-sfx-dead-bart-1.wav")
         self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "299-sfx-dead-bart-2.wav")
         self.game.sound.register_sound(self.sfx_deadBartHit, self.sfx_path + "301-sfx-dead-bart-3.wav")
         self.sfx_hitBionicBart = 'sfx_hitBionicBart'
@@ -693,6 +693,12 @@ class Assets():
         self.game.sound.register_sound(self.music_bionicBartIntro, self.music_path + "042-intro-bionic-bart.wav")
         self.music_bionicBart = 'music_bionicBart'
         self.game.sound.register_music(self.music_bionicBart, self.music_path + "042-bionic-bart.wav")
+        self.music_tensePiano1 = 'music_tensePiano1'
+        self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
+        self.music_tensePiano2 = 'music_tensePiano2'
+        self.game.sound.register_music(self.music_tensePiano2, self.music_path + "096-tense-piano-2.wav")
+        self.music_tensePiano3 = 'music_tensePiano3'
+        self.game.sound.register_music(self.music_tensePiano3, self.music_path + "095-tense-piano-3.wav")
 
         # lampshows
         lampshows = list()
