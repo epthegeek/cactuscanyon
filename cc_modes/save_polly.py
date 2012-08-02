@@ -26,7 +26,7 @@ class SavePolly(ep.EP_Mode):
     """Polly Peril - Tied to the Tracks"""
     def __init__(self,game,priority):
         super(SavePolly, self).__init__(game,priority)
-        self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Shots to save Polly']
+        self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Save Polly Shots - Train']
         self.running = False
         self.halted = False
         self.won = False

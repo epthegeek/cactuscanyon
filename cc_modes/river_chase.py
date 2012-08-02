@@ -26,12 +26,12 @@ class RiverChase(ep.EP_Mode):
     """Polly Peril - Rescue on the River"""
     def __init__(self,game,priority):
         super(RiverChase, self).__init__(game,priority)
-        self.shotsToWin = 3
+        self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Save Polly Shots - River']
         self.shotsSoFar = 0
         self.running = False
         self.halted = False
         self.won = False
-
+        self.distance_value = int(30.0 / self.shotsToWin)
     def mode_started(self):
         self.modeTimer = 0
         self.shotsSoFar = 0
@@ -148,7 +148,8 @@ class RiverChase(ep.EP_Mode):
             # score points
             self.game.score(self.shotValue)
             # set the distance to move
-            self.distance += 10
+            print "MOVING HORSE " + str(self.distance_value)
+            self.distance += self.distance_value
 
     def start_river_chase(self,step=1):
         if step == 1:

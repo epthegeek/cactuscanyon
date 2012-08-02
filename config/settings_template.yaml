@@ -130,10 +130,14 @@ Gameplay (Feature):
     options: [3,15]
     increments: 1
     default: 3
-  'Shots to save Polly':
+  'Save Polly Shots - Train':
     options: [2,15]
     increments: 1
     default: 5
+  'Save Polly Shots - River':
+    options: [2,15]
+    increments: 1
+    default: 3
   'Shots to defeat Bionic Bart':
     options: [2,10]
     increments: 1
