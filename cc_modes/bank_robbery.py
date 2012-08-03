@@ -20,6 +20,7 @@
 
 from procgame import *
 import cc_modes
+import random
 import ep
 
 class BankRobbery(ep.EP_Mode):
@@ -42,6 +43,12 @@ class BankRobbery(ep.EP_Mode):
         self.won = False
         self.have_won = False
         self.banner = False
+        # stuff for the random shootering
+        self.shotTimer = 0
+        self.shotTarget = 0
+        self.shooting = False
+        self.shooter = 0
+        self.shotWait = 0
 
         # set up the dude standing layers
         self.dude0 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH + 'dude-shoots-bank.dmd').frames[0])
@@ -190,6 +197,8 @@ class BankRobbery(ep.EP_Mode):
             # loop back for the title card
             self.delay(delay=myWait,handler=self.start_bank_robbery,param=2)
         if step == 2:
+            # pick a shoot delay
+            self.set_shot_target()
             # set up the title card
             titleCard = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'polly-peril-hatb.dmd').frames[0])
             # transition to the title card
@@ -202,7 +211,8 @@ class BankRobbery(ep.EP_Mode):
     ## due to going in and out of pause
     def in_progress(self):
         if self.running:
-            print "IN PROGRESS " + str(self.modeTimer)
+            #print "IN PROGRESS " + str(self.modeTimer)
+            #print "Shooter info: Target - " + str(self.shotTarget) + " Timer - " + str(self.shotTimer)
             # and all the text
             p = self.game.current_player()
             scoreString = ep.format_score(p.score)
@@ -214,6 +224,13 @@ class BankRobbery(ep.EP_Mode):
             composite = dmd.GroupedLayer(128,32,[self.dude0Layer,self.dude1Layer,self.dude2Layer,self.foreground,self.timeLine])
             self.layer = composite
 
+            # increment the shot timer
+            self.shotTimer += 1
+            # check if time to shoot
+            if self.shotTimer == self.shotTarget:
+                # if it is that time, generate a firing guy
+                self.dude_shoots()
+
             # did we just kill the last guy?
             if self.have_won:
                 self.have_won = False
@@ -224,6 +241,11 @@ class BankRobbery(ep.EP_Mode):
                 self.banner = False
                 # if we need to show a dude killed banner, do that
                 self.delay(delay=self.deathWait,handler=self.banner_display)
+            # is a guy shooting?
+            if self.shooting:
+                self.shooting = False
+                # set a delay to put the plain guy back after
+                self.delay(delay=self.shotWait,handler=self.end_shot_sequence)
             # both of those bail before ticking down the timer and looping back
 
             ## tick down the timer
@@ -240,6 +262,13 @@ class BankRobbery(ep.EP_Mode):
                 self.delay(name="Mode Timer",delay=0.1,handler=self.in_progress)
 
     def kill_dude(self,shot):
+        # if the guy died was about to shot, that should be stopped
+        if shot == self.shooter and self.shooting:
+            # turn the flag off
+            self.shooting = False
+            # and get a new time/guy
+            self.set_shot_target()
+
         # killing the get going delay just in case a guy is shot before we're started
         if self.modeTimer > 29:
             self.cancel_delayed("Get Going")
@@ -249,7 +278,6 @@ class BankRobbery(ep.EP_Mode):
         # set the target position based on the shot
         animLayer.set_target_position(self.position[shot],self.y_pos)
         # set the layer
-#        self.layers[shot] = animLayer
         if shot == 0:
             self.dude0Layer = animLayer
         elif shot == 1:
@@ -298,7 +326,7 @@ class BankRobbery(ep.EP_Mode):
             self.game.base.play_quote(self.game.assets.quote_victory)
             # frame layer of the dead guy
             self.layer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'our-hero.dmd').frames[0])
-            self.delay("Display",delay=1,handler=self.win_display,param=2)
+            self.delay("Display",delay=0.5,handler=self.win_display,param=2)
         if step == 2:
             # the pan up
             anim = dmd.Animation().load(ep.DMD_PATH+'our-hero.dmd')
@@ -392,6 +420,57 @@ class BankRobbery(ep.EP_Mode):
             self.game.base.music_on(self.game.assets.music_mainTheme)
             # unload the mode
         self.unload()
+
+    def set_shot_target(self):
+        # pick a random target time
+        self.shotTarget = random.randrange(35, 50, 1)
+        # reset the counter
+        self.shotTimer = 0
+
+    def dude_shoots(self):
+        # load the animation
+        anim = dmd.Animation().load(ep.DMD_PATH+'dude-shoots-bank.dmd')
+        # math out the wait
+        self.shotWait = len(anim.frames) / 10.0
+        # the shoots back animation
+        eGuy0 = ep.EP_AnimatedLayer(anim)
+        eGuy0.hold=True
+        eGuy0.frame_time=6
+        eGuy0.composite_op = "blacksrc"
+        eGuy0.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_explosion11)
+        eGuy0.add_frame_listener(4,self.game.sound.play,param=self.game.assets.sfx_explosion11)
+
+        # get the available bad guys into a list
+        dudes = []
+        if self.isActive[0]: dudes.append(0)
+        if self.isActive[1]: dudes.append(1)
+        if self.isActive[2]: dudes.append(2)
+        print "DUDES:"
+        print dudes
+        # pick a random guy to shoot
+        self.shooter = random.choice(dudes)
+        print "THE SHOOTER IS: " + str(self.shooter)
+        # set the position of the layer based on choice
+        eGuy0.set_target_position(self.position[self.shooter],self.y_pos)
+        # assign the layer to the positon of the shooter
+        if self.shooter == 0:
+            self.dude0Layer = eGuy0
+        elif self.shooter == 1:
+            self.dude1Layer = eGuy0
+        elif self.shooter == 2:
+            self.dude2Layer = eGuy0
+            # set a flag
+        self.shooting = True
+
+    def end_shot_sequence(self):
+        if self.shooter == 0:
+            self.dude0Layer = self.dude0
+        elif self.shooter == 1:
+            self.dude1Layer = self.dude1
+        elif self.shooter == 2:
+            self.dude2Layer = self.dude2
+        # assign a new dude
+        self.set_shot_target()
 
     def abort_display(self):
         # if we're done, we should quit

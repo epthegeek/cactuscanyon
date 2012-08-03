@@ -252,7 +252,7 @@ class RiverChase(ep.EP_Mode):
             self.game.base.play_quote(self.game.assets.quote_victory)
             # frame layer of the dead guy
             self.layer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'our-hero.dmd').frames[0])
-            self.delay("Display",delay=1,handler=self.win_display,param=2)
+            self.delay("Display",delay=0.5,handler=self.win_display,param=2)
         if step == 2:
             # the pan up
             anim = dmd.Animation().load(ep.DMD_PATH+'our-hero.dmd')
