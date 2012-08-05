@@ -38,6 +38,9 @@ class HighNoon(ep.EP_Mode):
         if self.game.show_tracking('highNoonStatus') == "RUNNING":
         # if a ball drains, we put it back in play as long as the mode is running
             self.empty_trough()
+        # if all the balls drain, and we're finishing up, unflag busy
+        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('highNoonStatus') == "FINISH":
+            self.busy = False
 
     # jackpot shots
     def sw_leftLoopTop_active(self,sw):
@@ -158,24 +161,37 @@ class HighNoon(ep.EP_Mode):
             self.delay(name="Timer",delay = 1, handler=self.timer,param=seconds)
 
     # start high noon
-    def start_highNoon(self):
-        # turn off ball search because this takes a while
-        self.game.ball_search.disable()
-        # kill the music
-        self.game.sound.stop_music()
-        # turn off the lights
-        self.game.set_tracking('lampStatus', "OFF")
-        self.game.update_lamps()
+    def start_highNoon(self,step=1):
+        if step == 1:
+            # turn off ball search because this takes a while
+            self.game.ball_search.disable()
+            # kill the music
+            self.game.sound.stop_music()
+            # turn off the lights
+            self.game.set_tracking('lampStatus', "OFF")
+            self.game.update_lamps()
 
-        self.game.set_tracking('stackLevel',True,3)
-        self.game.set_tracking('highNoonStatus',"RUNNING")
-        # show a 'high noon' banner or animation
-        self.banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'high-noon.dmd').frames[0])
-        self.layer = self.banner
-        # play the opening quote
-        duration = self.game.base.play_quote(self.game.assets.quote_highNoon)
-        # after the quote, start the intro
-        self.delay(delay=duration,handler=self.intro)
+            self.game.set_tracking('stackLevel',True,3)
+            self.game.set_tracking('highNoonStatus',"RUNNING")
+            # church bell
+            anim = dmd.Animation().load(ep.DMD_PATH+'bell-ring.dmd')
+            myWait = len(anim.frames) / 10.0
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold = True
+            animLayer.frame_time = 6
+            # ding the bell on frame 5
+            animLayer.add_frame_listener(5,self.church_bell,param=12)
+            self.layer = animLayer
+            # loop back to step 2
+            self.delay(delay=myWait,handler=self.start_highNoon,param = 2)
+        if step == 2:
+            # show a 'high noon' banner or animation
+            self.banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'high-noon.dmd').frames[0])
+            self.layer = self.banner
+            # play the opening quote
+            duration = self.game.base.play_quote(self.game.assets.quote_highNoon)
+            # after the quote, start the intro
+            self.delay(delay=duration,handler=self.intro)
 
 
     # intro sequence
@@ -332,10 +348,14 @@ class HighNoon(ep.EP_Mode):
         self.game.bad_guys.drop_targets()
         # turn the lights off
         self.game.set_tracking('lampStatus',"OFF")
-
         self.game.update_lamps()
+        # kill the GI
+        self.game.gi_control("OFF")
+        # lampshow down wipe
+        self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False)
         # throw in a 'you won' display
-        self.layer = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("YOU WON!")
+        if self.won:
+           self.layer = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("YOU WON!")
         #  turn the flippers off
         self.game.enable_flippers(False)
         # clear the saloon and mine if needed
@@ -343,7 +363,13 @@ class HighNoon(ep.EP_Mode):
             self.game.mountain.kick()
         if self.game.switches.saloonPopper.is_active():
             self.game.saloon.kick()
-        self.final_display()
+        # clear the shooter lane if needed
+        if self.game.switches.shooterLane.is_active():
+            self.game.coils.shooterLane.pulse(30)
+        # if there are balls on the field, delay the final display
+        if self.game.trough.num_balls_in_play > 0:
+            self.busy = True
+        self.wait_until_unbusy(self.final_display)
 
     def final_display(self,step=1):
         # the tally display after the mode
@@ -442,6 +468,17 @@ class HighNoon(ep.EP_Mode):
         self.game.modes.add(self.game.skill_shot)
         # unload the mode
         self.unload()
+
+    def church_bell(self,rings=12):
+        print "RINGS :"
+        print rings
+        print type(rings)
+        # rin the bell mon
+        duration = self.game.sound.play(self.game.assets.sfx_churchBell)
+        # delay coming back to ring again if there are more left
+        rings -= 1
+        if rings > 0:
+            self.delay(delay=duration,handler=self.church_bell,param=rings)
 
     def mode_stopped(self):
         print "HIGH NOON IS DISPATCHING DELAYS"
