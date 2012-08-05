@@ -79,7 +79,7 @@ class HighNoon(ep.EP_Mode):
     # bad guy targets
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
-        print "BAD GUY 1 HIT"
+        print "BAD GUY 0 HIT"
         if self.game.show_tracking('badGuyUp',0):
             self.game.bad_guys.target_down(0)
             self.hit_bad_guy(0)
@@ -87,7 +87,7 @@ class HighNoon(ep.EP_Mode):
 
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
-        print "BAD GUY 2 HIT"
+        print "BAD GUY 1 HIT"
         if self.game.show_tracking('badGuyUp',1):
             self.game.bad_guys.target_down(1)
             self.hit_bad_guy(1)
@@ -95,14 +95,14 @@ class HighNoon(ep.EP_Mode):
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
-        print "BAD GUY 3 HIT"
+        print "BAD GUY 2 HIT"
         if self.game.show_tracking('badGuyUp',2):
             self.game.bad_guys.target_down(2)
             self.hit_bad_guy(2)
         return game.SwitchStop
 
     def sw_badGuySW3_active(self,sw):
-        print "BAD GUY 4 HIT"
+        print "BAD GUY 3 HIT"
         # far right bad guy target
         if self.game.show_tracking('badGuyUp',3):
             self.game.bad_guys.target_down(3)
@@ -132,7 +132,8 @@ class HighNoon(ep.EP_Mode):
             self.won()
         else:
             # pop the target back up
-            self.game.bad_guys.target_up(target)
+            print "HIGH NOON: reactivate target " + str(target)
+            self.delay(delay=0.6,handler=self.game.bad_guys.target_up,param=target)
 
     # todo other switches to trap: mine, saloon, bad guy toy ?
 
@@ -149,6 +150,8 @@ class HighNoon(ep.EP_Mode):
 
     # start high noon
     def start_highNoon(self):
+        # turn off ball search because this takes a while
+        self.game.ball_search.disable()
         # kill the music
         self.game.sound.stop_music()
         # turn off the lights
@@ -269,13 +272,15 @@ class HighNoon(ep.EP_Mode):
         # TODO set all the shots to a status # ?
         # update the lamps
         self.game.update_lamps()
+        # turn the ball search back on
+        self.game.ball_search.disable()
 
     def empty_trough(self):
         # launch more balls
         if self.game.trough.num_balls_in_play != 4:
             thisMany = 4 - self.game.trough.num_balls_in_play
             # turn on autoplunge and launch balls
-            self.game.trough.balls_to_autoplunge = thisMany
+            self.game.trough.balls_to_autoplunge = 4
             self.game.trough.launch_balls(thisMany)
 
     def update_display(self):
@@ -307,6 +312,10 @@ class HighNoon(ep.EP_Mode):
     # finish up
     # collect the balls, display the scores, then end
     def finish_up(self):
+        # cancel the main display loop
+        self.cancel_delayed("Display")
+        # reset the autoplunge, just in case
+        self.game.trough.balls_to_autoplunge = 0
         self.game.set_tracking('highNoonStatus',"FINISH")
         # drop the bad guys
         self.game.bad_guys.drop_targets()
@@ -351,7 +360,7 @@ class HighNoon(ep.EP_Mode):
         script.append({"layer":titleLine,"seconds":0.5})
         myWait = 0.5
         # then generate frames for each level of title
-        for i in range(1,amount,1):
+        for i in range(0,amount,1):
             points = i * value
             if i == 1:
                 titleString = "1 " + title
@@ -413,9 +422,9 @@ class HighNoon(ep.EP_Mode):
         # launch a ball
         self.game.trough.launch_balls(1)
         # load the skillshot
-        self.game.modes.add(self.skill_shot)
+        self.game.modes.add(self.game.skill_shot)
         # unload the mode
-        self.modes.unload(self.game.high_noon)
+        self.game.modes.unload(self.game.high_noon)
 
     def mode_stopped(self):
         print "HIGH NOON IS DISPATCHING DELAYS"

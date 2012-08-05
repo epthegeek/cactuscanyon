@@ -68,6 +68,13 @@ class BadGuys(ep.EP_Mode):
         status = self.game.show_tracking('lampStatus')
         if status != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING":
             return
+        # high noon
+        status = self.game.show_tracking('highNoonStatus')
+        if status == "RUNNING":
+            print "HIGH NOON IS RUNNING -- FLASH ALL THE THINGS"
+            for lamp in range(0,4,1):
+                self.lamps[lamp].schedule(0x0F0F0F0F)
+            return
         # bad guy lights hopefully this sets any lamp that returns true to be on
         for lamp in range(0,4,1):
             status = self.game.show_tracking('badGuysDead',lamp)
@@ -168,8 +175,10 @@ class BadGuys(ep.EP_Mode):
     def target_down(self,target):
         print "DEACTIVATING TARGET " + str(target)
         # we'll still deactivate when the coil goes off, just to maintain sync
-        self.game.set_tracking('badGuyUp',False,target)
-        self.lamps[target].disable()
+        status = self.game.show_tracking('highNoonStatus')
+        if status != "RUNNING":
+            self.game.set_tracking('badGuyUp',False,target)
+            self.lamps[target].disable()
         #self.delay(delay=0.02,handler=self.coils[target].disable)
         self.coils[target].disable()
 

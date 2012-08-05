@@ -76,6 +76,7 @@ class BionicBart(ep.EP_Mode):
         self.stunnedLayer.hold=False
         self.stunnedLayer.repeat=True
         self.stunnedLayer.frame_time = 6
+        self.defeatLamps = 0
 
         # intialize some layers
         self.set_bart_layer(self.idleLayer)
@@ -417,6 +418,8 @@ class BionicBart(ep.EP_Mode):
             if self.hits >= self.hitsToDefeat:
                 self.bionic_defeated()
             else:
+                # a flourish lampshow
+                self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.game.update_lamps)
                 self.delay(delay=myWait,handler=self.hit,param=2)
         if step == 2:
             # pick a random banner to use
@@ -489,6 +492,8 @@ class BionicBart(ep.EP_Mode):
             animLayer.frame_time = 6
             fadeTo = animLayer
             transition = ep.EP_Transition(self,self.layer,fadeTo,ep.EP_Transition.TYPE_CROSSFADE)
+            # run a lamp set
+            self.defeat_lamps()
             duration = self.game.sound.play(self.game.assets.sfx_hitBionicBart)
             self.delay(delay=duration,handler=self.bionic_defeated,param=2)
         if step == 2:
@@ -545,6 +550,19 @@ class BionicBart(ep.EP_Mode):
 
             self.leader_final_quote("win")
 
+    def defeat_lamps(self):
+        if self.defeatLamps <= 2:
+        # a flourish lampshow
+            self.defeatLamps +=1
+            self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.defeat_lamps)
+            return
+
+        else:
+        # a flourish lampshow
+            self.game.gi_control("OFF")
+            self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.game.update_lamps)
+
+
     def bionic_failed(self):
         # Lose the balls during a bionic fight and you lose
         # show some display
@@ -590,6 +608,8 @@ class BionicBart(ep.EP_Mode):
 
 
     def finish_up(self):
+        # turn the gi back on
+        self.game.gi_control("ON")
         # as is tradition
         self.layer = None
         # clear the stack level
