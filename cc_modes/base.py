@@ -605,6 +605,10 @@ class BaseGameMode(ep.EP_Mode):
         self.game.interrupter.abort_player_number()
 
     def sw_shooterLane_active_for_5s(self,sw):
+        status = self.game.show_tracking('highNoonStatus')
+        if status == "RUNNING" or status == "FINISH":
+            # do nothing and bail
+            return
         # if the ball sits in the shooter lane, flash the player number
         self.game.interrupter.display_player_number(idle=True)
 

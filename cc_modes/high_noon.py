@@ -32,14 +32,12 @@ class HighNoon(ep.EP_Mode):
         self.jackpots = 0
         self.grandTotal = 0
         self.won = False
+        self.starting = False
 
     def ball_drained(self):
         if self.game.show_tracking('highNoonStatus') == "RUNNING":
         # if a ball drains, we put it back in play as long as the mode is running
             self.empty_trough()
-        # if the last ball drains and we're finishing up - show the final display
-        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('highNoonStatus') == "FINISH":
-            self.final_display()
 
     # jackpot shots
     def sw_leftLoopTop_active(self,sw):
@@ -62,6 +60,18 @@ class HighNoon(ep.EP_Mode):
     def sw_rightRampMake_active(self, sw):
         self.process_shot(4)
         return game.SwitchStop
+
+    # timer doesn't start until the ball exits the jets, or the return lane is hit
+    def sw_jetBumpersExit_active(self,sw):
+        if self.starting:
+            self.starting = False
+            # delay if starting from the jets to allow the ball to roll down
+            self.delay(delay = 1,handler=self.timer,param = self.myTimer)
+
+    def sw_rightReturnLane_active(self,sw):
+        if self.starting:
+            self.starting = False
+            self.timer(self.myTimer)
 
     # jackpot hit
     def process_shot(self,shot):
@@ -139,7 +149,6 @@ class HighNoon(ep.EP_Mode):
 
     # timer loop
     def timer(self,seconds):
-        ## todo add some quote stuff on certain intervals
         # if we're out of time, end
         if seconds <= 0:
             self.finish_up()
@@ -257,8 +266,8 @@ class HighNoon(ep.EP_Mode):
     def get_going(self):
         # turn the lights back on
         self.game.set_tracking('lampStatus', "ON")
-        # start the timer
-        self.timer(self.myTimer)
+        # instead of starting the timer, set a flag to start the timer when balls are available
+        self.starting = True
         # and the display loop
         self.update_display()
         # kick out the mine ball
@@ -273,7 +282,7 @@ class HighNoon(ep.EP_Mode):
         # update the lamps
         self.game.update_lamps()
         # turn the ball search back on
-        self.game.ball_search.disable()
+        self.game.ball_search.enable()
 
     def empty_trough(self):
         # launch more balls
@@ -305,6 +314,8 @@ class HighNoon(ep.EP_Mode):
     def won(self):
         self.game.score(20000000)
         self.won = True
+        # cancel the mode timer
+        self.cancel_delayed("Timer")
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_highNoonWin)
         self.finish_up()
@@ -321,6 +332,7 @@ class HighNoon(ep.EP_Mode):
         self.game.bad_guys.drop_targets()
         # turn the lights off
         self.game.set_tracking('lampStatus',"OFF")
+
         self.game.update_lamps()
         # throw in a 'you won' display
         self.layer = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("YOU WON!")
@@ -335,14 +347,18 @@ class HighNoon(ep.EP_Mode):
 
     def final_display(self,step=1):
         # the tally display after the mode
+        print "HIGH NOON FINAL DISPLAY - STEP " + str(step)
         # jackpots
         if step == 1:
+            print "HIGH NOON JACKPOT TALLY"
             self.tally(title="JACKPOT",amount=self.jackpots,value=100000,frame_delay=0.5,callback=self.final_display,step=2)
         # bad guys
         if step == 2:
+            print "HIGH NOON BAD GUY TALLY"
             self.tally(title="BAD GUY",amount=self.killed,value=2500000,frame_delay=0.2,callback=self.final_display,step=3)
         # total
         if step == 3:
+            print "HIGH NOON TOTAL"
             titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
             if self.won:
                 self.grandTotal += 20000000
@@ -403,6 +419,7 @@ class HighNoon(ep.EP_Mode):
         # add the points to the grand total
         self.grandTotal += points
         # and delay the comeback for step 2
+        print "TALLY LOOP STEP " + str(step)
         self.delay(name="Display",delay=myWait,handler=callback,param=step)
 
 
@@ -424,7 +441,7 @@ class HighNoon(ep.EP_Mode):
         # load the skillshot
         self.game.modes.add(self.game.skill_shot)
         # unload the mode
-        self.game.modes.unload(self.game.high_noon)
+        self.unload()
 
     def mode_stopped(self):
         print "HIGH NOON IS DISPATCHING DELAYS"
