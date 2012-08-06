@@ -355,9 +355,9 @@ class HighNoon(ep.EP_Mode):
         self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False)
         # throw in a 'you won' display
         if self.hasWon:
-           self.layer = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("YOU WON!")
+           self.layer = dmd.TextLayer(64,10,self.game.assets.font_7px_az, "center", opaque=True).set_text("YOU WON!")
         else:
-            self.layer = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("THEY ESCAPED!")
+            self.layer = dmd.TextLayer(64,10,self.game.assets.font_7px_az, "center", opaque=True).set_text("THEY ESCAPED!")
         #  turn the flippers off
         self.game.enable_flippers(False)
         # clear the saloon and mine if needed
@@ -402,10 +402,10 @@ class HighNoon(ep.EP_Mode):
         # set the backdrop and offsets
         if title == "JACKPOT":
             backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-right.dmd').frames[0])
-            x_offset = 40
+            x_offset = 50
         elif title == "BAD GUY":
             backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cowboy-border-right.dmd').frames[0])
-            x_offset = 40
+            x_offset = 50
         else:
             backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
             x_offset = 64
@@ -423,7 +423,7 @@ class HighNoon(ep.EP_Mode):
                 titleString = str(i) + " " + title + "S"
             titleLine = dmd.TextLayer(x_offset,1,self.game.assets.font_7px_az, "center", opaque=False).set_text(titleString)
             pointsLine = dmd.TextLayer(x_offset, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(points))
-            combined = dmd.GroupedLayer(128,32,[backrop,titleLine,pointsLine])
+            combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,pointsLine])
             script.append({"layer":combined,"seconds":frame_delay})
             myWait += frame_delay
             # set a sound for this point at the start of the wipe
@@ -478,7 +478,7 @@ class HighNoon(ep.EP_Mode):
         # launch a ball
         self.game.trough.launch_balls(1)
         # load the skillshot
-        self.game.modes.add(self.game.skill_shot)
+        #self.game.modes.add(self.game.skill_shot)
         # unload the mode
         self.unload()
 
