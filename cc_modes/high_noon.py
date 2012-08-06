@@ -250,7 +250,7 @@ class HighNoon(ep.EP_Mode):
                 textLayer1 = dmd.TextLayer(64, 1, self.game.assets.font_6px_az, "center", opaque=False).set_text("30 SECONDS +")
                 textLayer2 = dmd.TextLayer(64, 8, self.game.assets.font_6px_az, "center", opaque=False)
                 kills = self.game.show_tracking('kills')
-                textLayer2.set_text(str(kills) + " BAD GUYS =")
+                textLayer2.set_text(str(kills) + " KILLS =")
                 # set up the timer while we've got kills hand
                 self.myTimer = 30 + kills
                 textLayer3 = dmd.TextLayer(64, 15, self.game.assets.font_12px_az, "center", opaque=False)
@@ -319,7 +319,7 @@ class HighNoon(ep.EP_Mode):
     def display(self):
         ## this is the main mode display, returns a built layer
         textString1 = str(self.myTimer)
-        textLayer1 = dmd.TextLayer(108, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString1)
+        textLayer1 = dmd.TextLayer(105, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString1)
         remain = 20 - self.killed
         textString2 = str(remain)
         textLayer2 = dmd.TextLayer(24, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString2)
@@ -399,9 +399,20 @@ class HighNoon(ep.EP_Mode):
 
     def tally(self,title,amount,value,frame_delay,callback,step):
         script = []
+        # set the backdrop and offsets
+        if title == "JACKPOT":
+            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-right.dmd').frames[0])
+            x_offset = 40
+        elif title == "BAD GUY":
+            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cowboy-border-right.dmd').frames[0])
+            x_offset = 40
+        else:
+            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
+            x_offset = 64
         # first just the title
-        titleLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az, "center", opaque=False).set_text(title + "S")
-        script.append({"layer":titleLine,"seconds":0.5})
+        titleLine = dmd.TextLayer(x_offset, 10, self.game.assets.font_12px_az, "center", opaque=False).set_text(title + "S")
+        combined = dmd.GroupedLayer(128,32,[backdrop,titleLine])
+        script.append({"layer":combined,"seconds":0.5})
         myWait = 0.5
         # then generate frames for each level of title
         for i in range(0,amount,1):
@@ -410,9 +421,9 @@ class HighNoon(ep.EP_Mode):
                 titleString = "1 " + title
             else:
                 titleString = str(i) + " " + title + "S"
-            titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text(titleString)
-            pointsLine = dmd.TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(points))
-            combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
+            titleLine = dmd.TextLayer(x_offset,1,self.game.assets.font_7px_az, "center", opaque=False).set_text(titleString)
+            pointsLine = dmd.TextLayer(x_offset, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(points))
+            combined = dmd.GroupedLayer(128,32,[backrop,titleLine,pointsLine])
             script.append({"layer":combined,"seconds":frame_delay})
             myWait += frame_delay
             # set a sound for this point at the start of the wipe
@@ -437,8 +448,8 @@ class HighNoon(ep.EP_Mode):
         # set another sound to play after the anim
         myWait += animWait
         self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
-        titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
-        combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
+        titleLine = dmd.TextLayer(x_offset,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
+        combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,pointsLine,animLayer])
         script.append({"layer":combined,"seconds":(animWait + 1)})
         # tack on that extra second
         myWait += 1
