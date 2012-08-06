@@ -31,8 +31,10 @@ class HighNoon(ep.EP_Mode):
         self.myTimer = 0
         self.jackpots = 0
         self.grandTotal = 0
-        self.won = False
+        self.hasWon = False
         self.starting = False
+        # backdrop
+        self.backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'high-noon-backdrop.dmd').frames[0])
 
     def ball_drained(self):
         if self.game.show_tracking('highNoonStatus') == "RUNNING":
@@ -316,20 +318,18 @@ class HighNoon(ep.EP_Mode):
 
     def display(self):
         ## this is the main mode display, returns a built layer
-        textLayer1 = dmd.TextLayer(64, 1, self.game.assets.font_7px_az, "center", opaque=False).set_text("HIGH NOON")
-        textLayer2 = dmd.TextLayer(64, 9, self.game.assets.font_7px_az, "center", opaque=False)
-        textString = str(self.myTimer) + " SECONDS"
-        textLayer2.set_text(textString)
+        textString1 = str(self.myTimer)
+        textLayer1 = dmd.TextLayer(108, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString1)
         remain = 20 - self.killed
-        textString = str(remain) + " BAD GUYS LEFT"
-        textLayer3 = dmd.TextLayer(64, 20, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
-        display = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3])
+        textString2 = str(remain)
+        textLayer2 = dmd.TextLayer(24, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString2)
+        display = dmd.GroupedLayer(128,32,[self.backdrop,textLayer1,textLayer2])
         return display
 
     # won ?
     def won(self):
         self.game.score(20000000)
-        self.won = True
+        self.hasWon = True
         # cancel the mode timer
         self.cancel_delayed("Timer")
         # play a quote
@@ -354,8 +354,10 @@ class HighNoon(ep.EP_Mode):
         # lampshow down wipe
         self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False)
         # throw in a 'you won' display
-        if self.won:
+        if self.hasWon:
            self.layer = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("YOU WON!")
+        else:
+            self.layer = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("THEY ESCAPED!")
         #  turn the flippers off
         self.game.enable_flippers(False)
         # clear the saloon and mine if needed
@@ -386,7 +388,7 @@ class HighNoon(ep.EP_Mode):
         if step == 3:
             print "HIGH NOON TOTAL"
             titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
-            if self.won:
+            if self.hasWon:
                 self.grandTotal += 20000000
             pointsLine = dmd.TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.grandTotal))
             combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
