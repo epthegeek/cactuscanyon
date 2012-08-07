@@ -403,7 +403,7 @@ class HighNoon(ep.EP_Mode):
         if self.hasWon:
             # if we won, the animation is playing, so it may take a while and the balls may drain first
             # so we have to bounce through a helper
-            self.delay(delay=myWait,handler=self.final_display_pause)
+            self.delay(delay=myWait+1,handler=self.final_display_pause)
         else:
             # loop through final display which checks for balls on the field
             self.final_display_pause()
@@ -424,23 +424,41 @@ class HighNoon(ep.EP_Mode):
         # jackpots
         if step == 1:
             print "HIGH NOON JACKPOT TALLY"
-            self.tally(title="JACKPOT",amount=self.jackpots,value=100000,frame_delay=0.5,callback=self.final_display,step=2)
+            # start the drum roll
+            self.game.base.music_on(self.game.assets.music_drumRoll)
+            myDelay = 0.2
+            self.tally(title="JACKPOT",amount=self.jackpots,value=100000,frame_delay=myDelay,callback=self.final_display,step=2)
+            musicWait = myDelay * self.jackpots + 1
+            # kill the drum roll and play the riff
+            self.delay(delay=musicWait,handler=self.game.sound.stop_music)
+            self.delay(name="Display",delay=musicWait,handler=self.game.sound.play,param=self.game.assets.sfx_lightning2)
+            self.delay(delay=musicWait+0.2,handler=self.game.sound.play,param=self.game.assets.sfx_orchestraBump2)
         # bad guys
         if step == 2:
             print "HIGH NOON BAD GUY TALLY"
-            self.tally(title="BAD GUY",amount=self.killed,value=2500000,frame_delay=0.2,callback=self.final_display,step=3)
+            # start the drum roll
+            self.game.base.music_on(self.game.assets.music_drumRoll)
+            myDelay = 0.2
+            self.tally(title="BAD GUY",amount=self.killed,value=2500000,frame_delay=myDelay,callback=self.final_display,step=3)
+            musicWait = myDelay * self.killed + 1
+            # kill the drum roll and play the riff
+            self.delay(delay=musicWait,handler=self.game.sound.stop_music)
+            self.delay(name="Display",delay=musicWait,handler=self.game.sound.play,param=self.game.assets.sfx_lightning2)
+            self.delay(delay=musicWait+0.2,handler=self.game.sound.play,param=self.game.assets.sfx_orchestraSet)
+
         # total
         if step == 3:
             print "HIGH NOON TOTAL"
-            titleLine = dmd.TextLayer(64,1,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
+            titleLine = dmd.TextLayer(64,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
             if self.hasWon:
                 self.grandTotal += 20000000
             pointsLine = dmd.TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.grandTotal))
             combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
             # play a sound
-            self.game.sound.play(self.game.assets.sfx_cheers)
+            duration = self.game.sound.play(self.game.assets.sfx_orchestraSpike)
+            self.delay(delay=duration,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
             self.layer = combined
-            self.delay(name="Display",delay=1.5,handler=self.end_high_noon)
+            self.delay(name="Display",delay=2,handler=self.end_high_noon)
 
     def tally(self,title,amount,value,frame_delay,callback,step):
         script = []
@@ -467,7 +485,7 @@ class HighNoon(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,pointsLine])
         script.append({"layer":combined,"seconds":frame_delay})
         # then generate frames for each level of title
-        for i in range(1,amount,1):
+        for i in range(1,amount+1,1):
             points = i * value
             if i == 1:
                 titleString = "1 " + title
@@ -479,7 +497,7 @@ class HighNoon(ep.EP_Mode):
             script.append({"layer":combined,"seconds":frame_delay})
             myWait += frame_delay
             # set a sound for this point at the start of the wipe
-        self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_lightning2)
+        #self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_lightning2)
         # employ the burst wipe
         anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
         animWait = len(anim.frames) / 15.0
@@ -499,10 +517,10 @@ class HighNoon(ep.EP_Mode):
         animLayer.composite_op = "blacksrc"
         # set another sound to play after the anim
         myWait += animWait
-        self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
+        #self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
         titleLine = dmd.TextLayer(x_offset,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,pointsLine,animLayer])
-        script.append({"layer":combined,"seconds":(animWait + 1)})
+        script.append({"layer":combined,"seconds":(animWait + 2)})
         # tack on that extra second
         myWait += 1
         # then set off the layer

@@ -463,6 +463,7 @@ class BankRobbery(ep.EP_Mode):
         self.shooting = True
 
     def end_shot_sequence(self):
+        # if the guy who was shooting is still alive, reset their layer
         if self.shooter == 0 and self.isActive[0]:
             self.dude0Layer = self.dude0
         elif self.shooter == 1 and self.isActive[1]:
