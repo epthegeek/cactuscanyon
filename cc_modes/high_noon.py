@@ -521,6 +521,12 @@ class HighNoon(ep.EP_Mode):
         self.game.set_tracking('highNoonStatus',"OPEN")
         # reset the bage
         self.game.badge.reset()
+        # reset all the ramps progress
+        self.game.set_tracking('leftRampStatus',1)
+        self.game.set_tracking('centerRampStatus',1)
+        self.game.set_tracking('rightRampStatus',1)
+        self.game.set_tracking('leftLoopStatus',1)
+        self.game.set_tracking('rightLoopStatus',1)
         # clear the stack level
         self.game.set_tracking('stackLevel',False,3)
         # turn the flippers back on
