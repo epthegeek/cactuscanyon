@@ -286,6 +286,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_heavyExplosion, self.sfx_path + "247-sfx-heavy-explosion.wav")
         self.sfx_ragtimePiano = 'sfx_ragtimePiano'
         self.game.sound.register_sound(self.sfx_ragtimePiano, self.sfx_path + "00-sfx-ragtime-piano.wav")
+        self.sfx_churchBell = 'sfx_churchBell'
+        self.game.sound.register_sound(self.sfx_churchBell, self.sfx_path + "00-sfx-church-bell.wav")
     # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
@@ -699,12 +701,12 @@ class Assets():
         self.game.sound.register_sound(self.music_bionicBartIntro, self.music_path + "042-intro-bionic-bart.wav")
         self.music_bionicBart = 'music_bionicBart'
         self.game.sound.register_music(self.music_bionicBart, self.music_path + "042-bionic-bart.wav")
-        self.music_tensePiano1 = 'music_tensePiano1'
-        self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
-        self.music_tensePiano2 = 'music_tensePiano2'
-        self.game.sound.register_music(self.music_tensePiano2, self.music_path + "096-tense-piano-2.wav")
-        self.music_tensePiano3 = 'music_tensePiano3'
-        self.game.sound.register_music(self.music_tensePiano3, self.music_path + "095-tense-piano-3.wav")
+        #self.music_tensePiano1 = 'music_tensePiano1'
+        #self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
+        #self.music_tensePiano2 = 'music_tensePiano2'
+        #self.game.sound.register_music(self.music_tensePiano2, self.music_path + "096-tense-piano-2.wav")
+        #self.music_tensePiano3 = 'music_tensePiano3'
+        #self.game.sound.register_music(self.music_tensePiano3, self.music_path + "095-tense-piano-3.wav")
 
         # lampshows
         lampshows = list()

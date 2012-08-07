@@ -60,6 +60,11 @@ class Mine(ep.EP_Mode):
         if eb > 0:
             self.game.lamps.extraBallLitBeacon.enable()
             self.game.lamps.extraBall.schedule(0x0F0F0F0F)
+        status = self.game.show_tracking('highNoonStatus')
+        if status == "READY":
+            self.game.lamps.mineLock.schedule(0x00FF00FF)
+            self.game.coils.mineFlasher.schedule(0x00010001)
+            return
         status = self.game.show_tracking('mineStatus')
         if status == "LOCK":
             self.game.lamps.mineLock.enable()
