@@ -288,7 +288,14 @@ class Assets():
         self.game.sound.register_sound(self.sfx_ragtimePiano, self.sfx_path + "00-sfx-ragtime-piano.wav")
         self.sfx_churchBell = 'sfx_churchBell'
         self.game.sound.register_sound(self.sfx_churchBell, self.sfx_path + "00-sfx-church-bell.wav")
-    # Quotes
+
+        self.sfx_fireworks1 = 'sfx_fireworks1'
+        self.game.sound.register_sound(self.sfx_fireworks1, self.sfx_path + "317-sfx-fireworks-1.wav")
+        self.sfx_fireworks2 = 'sfx_fireworks2'
+        self.game.sound.register_sound(self.sfx_fireworks2, self.sfx_path + "315-sfx-fireworks-2.wav")
+        self.sfx_fireworks3 = 'sfx_fireworks3'
+        self.game.sound.register_sound(self.sfx_fireworks3, self.sfx_path + "311-sfx-fireworks-3.wav")
+        # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
         self.game.sound.register_sound(self.quote_welcomes, self.quotes_path + "1202-prospector-welcome-to-cactus-canyon.wav")
