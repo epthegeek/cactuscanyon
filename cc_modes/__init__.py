@@ -49,7 +49,7 @@ __all__ = [
     'bart',
     'move_your_train',
     'river_chase',
-    'bank_robbery',
+    'bank_robbery'
 ]
 from base import *
 from attract import *

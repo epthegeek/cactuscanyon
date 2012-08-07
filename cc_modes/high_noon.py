@@ -88,8 +88,14 @@ class HighNoon(ep.EP_Mode):
         self.game.base.play_quote(self.game.assets.quote_jackpot)
         # show an image
         self.cancel_delayed("Display")
-        self.layer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'jackpot.dmd').frames[0])
-        self.delay("Display",delay=0.5,handler=self.update_display)
+        thisOne = random.choice(["A","B","C"])
+        if thisOne == "A":
+            self.layer = ep.EP_Showcase().punch_out(0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False,hold=2)
+        elif thisOne == "B":
+            self.layer = ep.EP_Showcase().blink_fill(2,2,1,3,0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False)
+        else:
+            self.layer = ep.EP_Showcase().chase_outline(3,2,1,0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False,hold=2)
+        self.delay("Display",delay=1.5,handler=self.update_display)
 
     # bad guy targets
     def sw_badGuySW0_active(self,sw):
@@ -273,7 +279,7 @@ class HighNoon(ep.EP_Mode):
             if step == 6:
                 backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-border.dmd').frames[0])
                 textLayer1 = dmd.TextLayer(80, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("JACKPOTS WORTH")
-                textLayer2 = dmd.TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text("100,000")
+                textLayer2 = dmd.TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text("250,000")
                 self.jackpotLayer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
                 # combine with burst
                 composite = dmd.GroupedLayer(128,32,[self.jackpotLayer,animLayer])
@@ -340,7 +346,7 @@ class HighNoon(ep.EP_Mode):
 
     # won ?
     def won(self):
-        self.game.score(20000000)
+        self.game.score(10000000)
         self.hasWon = True
         # cancel the mode timer
         self.cancel_delayed("Timer")
@@ -427,7 +433,7 @@ class HighNoon(ep.EP_Mode):
             # start the drum roll
             self.game.base.music_on(self.game.assets.music_drumRoll)
             myDelay = 0.2
-            self.tally(title="JACKPOT",amount=self.jackpots,value=100000,frame_delay=myDelay,callback=self.final_display,step=2)
+            self.tally(title="JACKPOT",amount=self.jackpots,value=250000,frame_delay=myDelay,callback=self.final_display,step=2)
             musicWait = myDelay * self.jackpots + 1
             # kill the drum roll and play the riff
             self.delay(delay=musicWait,handler=self.game.sound.stop_music)
@@ -439,7 +445,7 @@ class HighNoon(ep.EP_Mode):
             # start the drum roll
             self.game.base.music_on(self.game.assets.music_drumRoll)
             myDelay = 0.2
-            self.tally(title="BAD GUY",amount=self.killed,value=2500000,frame_delay=myDelay,callback=self.final_display,step=3)
+            self.tally(title="BAD GUY",amount=self.killed,value=500000,frame_delay=myDelay,callback=self.final_display,step=3)
             musicWait = myDelay * self.killed + 1
             # kill the drum roll and play the riff
             self.delay(delay=musicWait,handler=self.game.sound.stop_music)
@@ -451,7 +457,7 @@ class HighNoon(ep.EP_Mode):
             print "HIGH NOON TOTAL"
             titleLine = dmd.TextLayer(64,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
             if self.hasWon:
-                self.grandTotal += 20000000
+                self.grandTotal += 10000000
             pointsLine = dmd.TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.grandTotal))
             combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
             # play a sound
