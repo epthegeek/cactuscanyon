@@ -35,6 +35,8 @@ class Tracking(game.Player):
 
         # load up tracking stats for the player
         self.player_stats['bonus'] = 0
+        self.player_stats['greeted'] = False
+        self.player_stats['bozoBall'] = False
 
         self.player_stats['bumperHits'] = 0
 

@@ -373,7 +373,7 @@ class Mine(ep.EP_Mode):
         # if they've already gotten an extra ball - it should divert to the short version
         # or if anything above stack level 1 is running
         stack = self.game.show_tracking('stackLevel')
-        if self.game.current_player().extra_balls > 1 or True in stack[1:]:
+        if self.game.current_player().extra_balls > 1 or True in stack[1:] or self.game.show_tracking('bozoBall'):
             # play the short one
             self.extra_ball_ending(isLong=False)
         # otherwise play the whole animation

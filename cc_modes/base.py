@@ -163,6 +163,10 @@ class BaseGameMode(ep.EP_Mode):
         # loop through 0 through current rank and turn the lamps on
         for lamp in range(0,(rank +1),1):
             self.rankLamps[lamp].enable()
+        # if the bozo ball is on, flash the outlanes
+        if self.game.show_tracking('bozoBall'):
+            self.game.lamps.rightOutSpecial.schedule(0x0F0F0F0F)
+            self.game.lamps.leftOutGunfight.schedule(0x0F0F0F0F)
 
     def disable_lamps(self):
         for lamp in self.rankLamps:
@@ -173,6 +177,8 @@ class BaseGameMode(ep.EP_Mode):
         self.game.lamps.leftReturnQuickdraw.disable()
         self.game.lamps.rightReturnQuickdraw.disable()
         self.game.lamps.shootAgain.disable()
+        self.game.lamps.rightOutSpecial.disable()
+        self.game.lamps.leftOutGunfight.disable()
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
@@ -469,7 +475,12 @@ class BaseGameMode(ep.EP_Mode):
 
     def outlane_hit(self, side):
         self.game.score_with_bonus(2530)
-        self.game.sound.play(self.game.assets.sfx_outlane)
+        if self.game.show_tracking('bozoBall'):
+            # if bozo ball flag is on, award that
+            self.collect_bozo_ball()
+        else:
+            # otherwise just play the noise
+            self.game.sound.play(self.game.assets.sfx_outlane)
 
     ###
     ###  ____  _ _                 _           _
@@ -802,6 +813,20 @@ class BaseGameMode(ep.EP_Mode):
         self.delay(delay=2,handler=self.game.ball_ended)
         self.delay(delay=2,handler=self.clear_layer)
 
+    # bozo ball action
+    def enable_bozo_ball(self):
+        self.game.set_tracking('bozoBall',True)
+
+    def collect_bozo_ball(self):
+        self.is_busy()
+        # add a fake pending extra ball
+        self.game.increase_tracking('extraBallsPending')
+        # and then collect it
+        self.game.mine.collect_extra_ball()
+        # and turn off the bozo ball flag
+        self.game.set_tracking('bozoBall', False)
+        # unbusy in 3 seconds to allow bonus to play after
+        self.delay(delay=3,handler=self.unbusy)
 
     # red flasher flourish thing
     ## a flasher flourish
