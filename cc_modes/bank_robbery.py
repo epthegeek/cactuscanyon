@@ -463,11 +463,11 @@ class BankRobbery(ep.EP_Mode):
         self.shooting = True
 
     def end_shot_sequence(self):
-        if self.shooter == 0:
+        if self.shooter == 0 and self.isActive[0]:
             self.dude0Layer = self.dude0
-        elif self.shooter == 1:
+        elif self.shooter == 1 and self.isActive[1]:
             self.dude1Layer = self.dude1
-        elif self.shooter == 2:
+        elif self.shooter == 2 and self.isActive[2]:
             self.dude2Layer = self.dude2
         # assign a new dude
         self.set_shot_target()
