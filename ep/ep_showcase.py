@@ -129,6 +129,44 @@ class EP_Showcase(object):
         ## and return the layer
         return myLayer
 
+    def punch_out(self,speed,x=64,y=0,align="center",isOpaque=False,text="",isTransparent=False,condensed=False,hold=0):
+        # empty script
+        script=[]
+        alt = str.lower(text)
+        # make the first frame
+        layer = self.make_string(3,1,2,x,y,align,False,text,True,condensed)
+        script.append({'seconds':speed,'layer':layer})
+        # loop through to change
+        for i in range(0,len(text),1):
+            string1 = text[:i] + alt[i:]
+            string2 = alt[:i] + text[i:]
+            # generate the 2 lines
+            layer1 = self.make_string(1,2,3,x,y,align,False,string1,True,condensed)
+            layer2 = self.make_string(3,1,2,x,y,align,False,string2,True,condensed)
+            # make a grouped layer
+            combined = dmd.GroupedLayer(128,32,[layer1,layer2])
+            # add it to the script
+            script.append({'seconds':speed,'layer':combined})
+            # then after the loop generate the final frame
+        layer = self.make_string(1,2,3,x,y,align,False,text,True,condensed)
+        # check if it's held or not
+        if hold == 0:
+            hold = speed
+            # and add that to the script
+        script.append({'seconds':hold,'layer':layer})
+        # then make the scripted layer
+        myLayer = dmd.ScriptedLayer(128,32,script)
+        # set blacksrc if called for
+        if isTransparent:
+            myLayer.composite_op = "blacksrc"
+            # if it's opaque, set that
+        if isOpaque:
+            myLayer.opaque = True
+
+        ## and return the layer
+        return myLayer
+
+
     def blink_fill(self,ll,ur,fill_bright,fill_dark,speed,x=64,y=0,align="center",isOpaque=False,text="",isTransparent=False,condensed=False):
         script = []
         # dark layer
