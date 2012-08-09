@@ -420,6 +420,10 @@ class BaseGameMode(ep.EP_Mode):
         if not self.guns_allowed():
             print "PASSING - Guns disabled"
             print self.game.show_tracking('stackLevel')
+        # cva
+        elif self.game.show_tracking('cvaStatus') == "READY":
+            self.game.modes.add(self.game.cva)
+            self.game.cva.intro()
         # move your train
         elif self.game.show_tracking('mytStatus') == "READY":
             # if MYT is ready, start it and raise the post to catch the ball

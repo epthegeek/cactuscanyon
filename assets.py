@@ -295,6 +295,9 @@ class Assets():
         self.game.sound.register_sound(self.sfx_fireworks2, self.sfx_path + "315-sfx-fireworks-2.wav")
         self.sfx_fireworks3 = 'sfx_fireworks3'
         self.game.sound.register_sound(self.sfx_fireworks3, self.sfx_path + "311-sfx-fireworks-3.wav")
+
+        self.sfx_cvaYell = 'sfx_cvaYell'
+        self.game.sound.register_sound(self.sfx_cvaYell, self.sfx_path + "bangarang-yell.wav")
         # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'
@@ -708,6 +711,10 @@ class Assets():
         self.game.sound.register_sound(self.music_bionicBartIntro, self.music_path + "042-intro-bionic-bart.wav")
         self.music_bionicBart = 'music_bionicBart'
         self.game.sound.register_music(self.music_bionicBart, self.music_path + "042-bionic-bart.wav")
+        self.music_cvaIntro = 'music_cvaIntro'
+        self.game.sound.register_sound(self.music_cvaIntro, self.music_path + "bangarang-intro.wav")
+        self.music_cvaLoop = 'music_cvaLoop'
+        self.game.sound.register_music(self.music_cvaLoop, self.music_path + "bangarang-loop.wav")
         #self.music_tensePiano1 = 'music_tensePiano1'
         #self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
         #self.music_tensePiano2 = 'music_tensePiano2'

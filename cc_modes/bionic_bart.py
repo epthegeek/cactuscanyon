@@ -27,7 +27,7 @@ import ep
 import random
 
 class BionicBart(ep.EP_Mode):
-    """Gunfight code """
+    """Bionic Bart code """
     def __init__(self,game,priority):
         super(BionicBart, self).__init__(game,priority)
         self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
