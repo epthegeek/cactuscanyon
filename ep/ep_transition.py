@@ -47,7 +47,6 @@ class EP_Transition(object):
         self.layerA = layerA
         if layerB == None: layerB = dmd.FrameLayer(False,dmd.Frame(128,32))
         self.layerB = layerB
-        print "CALLBACK: " + str(callback)
         self.callback = callback
 
         transition_class = self.get_class("procgame.dmd.transitions." + transitionType)
