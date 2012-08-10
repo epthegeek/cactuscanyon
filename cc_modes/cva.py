@@ -69,23 +69,85 @@ class CvA(ep.EP_Mode):
 
 
     def mode_started(self):
+        # set the stack level
+        self.game.set_tracking('stackLevel',True,3)
+
         # resetting defaults
         # the transitions fail if they're too close together - this is for putting a 1 second delay in between
         self.beat = 0
         # saucer postion - starts off to the right
         self.saucerX = 104
+        self.teleportX = 0
         # which shot is active
         self.activeShot = 9
         self.saucerHits = 0
+        self.aliensKilled = 0
+        self.aliensKilledRound = 0
         # set the mode
         self.mode = "SHIP"
         self.saucerMoving = False
-
+        # starting saucer value
+        self.saucerValue = 1000000
+        self.saucerIncrement = 250000
+        # starting alien value
+        self.alienValue = 50000
+        self.alienIncrement = 5000
+        self.activeAliens = []
+        self.teleporting = False
+        self.teleportingAliens = []
         # cancel any other displays
         for mode in self.game.ep_modes:
             if getattr(mode, "abort_display", None):
                 mode.abort_display()
 
+    def update_mode_lamps(self):
+        # update the lamps
+        for mode in self.shotModes:
+            mode.update_lamps()
+
+    ### switches
+
+    def sw_leftLoopTop_active(self,sw):
+        self.process_shot(0,self.activeShot)
+        return game.SwitchStop
+
+    def sw_leftRampEnter_active(self, sw):
+        self.process_shot(1,self.activeShot)
+        return game.SwitchStop
+
+    def sw_centerRampMake_active(self, sw):
+        self.process_shot(2,self.activeShot)
+        return game.SwitchStop
+
+    def sw_rightLoopTop_active(self, sw):
+        if not self.game.bart.moving:
+            self.process_shot(3,self.activeShot)
+        return game.SwitchStop
+
+    def sw_rightRampMake_active(self, sw):
+        self.process_shot(4,self.activeShot)
+        return game.SwitchStop
+
+    # decide if this was a jackpot hit or a miss
+    def process_shot(self,number,active):
+        if active == number:
+            # turn off moving, just in case
+            self.saucerMoving = False
+            # null the active shot
+            self.activeShot = 9
+            # update the lamps to turn them off
+            self.update_mode_lamps()
+            # count the hit
+            self.saucerHits += 1
+            # cancel the move timer
+            self.cancel_delayed("Sacuer Timer")
+            # cancel the display loop
+            self.cancel_delayed("Display")
+            # score the value
+            points = self.point_value("SAUCER")
+            self.game.score(points)
+            # register the saucer hit
+            self.saucer_hit_display()
 
     def intro(self,step=1):
         if step == 1:
@@ -153,7 +215,7 @@ class CvA(ep.EP_Mode):
 
     def clear_ship(self):
         shipLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cva_large_ship.dmd').frames[0])
-        self.transition = ep.EP_Transition(self,self.staticShip,shipLayer,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_SOUTH,callback=self.one_beat)
+        self.transition = ep.EP_Transition(self,self.staticShip,shipLayer,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_WEST,callback=self.one_beat)
 
     def static_to_ship(self):
         # transition to the ship
@@ -166,20 +228,29 @@ class CvA(ep.EP_Mode):
         self.staticShip = animLayer
         self.transition = ep.EP_Transition(self,self.staticLayer,animLayer,ep.EP_Transition.TYPE_CROSSFADE,callback=self.one_beat)
 
-
     def get_going(self):
+        # set the running flag
+        self.game.set_tracking("cvaStatus", "RUNNING")
         # start the saucer in motion
         self.saucerMoving = True
         # first saucer stop is position 4
         self.position = 5
         self.stopAt = self.positions[self.position]
         # update the lamps
+        self.update_mode_lamps()
         # position the space ship
         # delay a move to the next spot
+        # reassign the blank layer for later use
+        self.blankLayer = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
         # update the display
         self.update_display()
 
-    def update_display(self):
+    def update_display(self,once=False):
+        # score line
+        p = self.game.current_player()
+        scoreString = ep.format_score(p.score)
+        scoreLayer = dmd.TextLayer(64, 17, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=6)
+
         # if we're in ship mode, draw a combined layer of the ship and desert
         if self.mode == "SHIP":
             # if the saucer is moving - change it's position for the next pass if we haven't reached the target yet
@@ -204,6 +275,7 @@ class CvA(ep.EP_Mode):
                     # off screen to the right
                     if self.stopAt == self.positions[6]:
                         self.switch_modes("ALIEN")
+                        return
                     # right ramp
                     elif self.stopAt == self.positions[5]:
                         self.activate_shot(4)
@@ -222,20 +294,48 @@ class CvA(ep.EP_Mode):
                     # off screen to the left
                     elif self.stopAt == self.positions[0]:
                         self.switch_modes("ALIEN")
+                        return
                     else:
                         print "WAT?"
 
                 # set the position of the ship
             self.smallShip.set_target_position(self.saucerX,0)
-            # set a text line showing the current offset
-            string = "STOP " + str(self.stopAt) + " POS " + str(self.position) + " X " + str(self.saucerX)
-            textLayer1 = dmd.TextLayer(64, 15, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(string)
             # then build and show the layer
-            combined = dmd.GroupedLayer(128,32,[self.smallShip,self.desert,textLayer1])
+            combined = dmd.GroupedLayer(128,32,[self.smallShip,self.desert,scoreLayer])
             self.layer = combined
+        if self.mode == "ALIEN":
+            layers = []
+            # blackout layer
+            layers.append(self.blankLayer)
+            # add the backdrop
+            layers.append(self.desert)
+            # and teh score
+            layers.append(scoreLayer)
+            # add teleporting aliens
+            if self.teleporting:
+                for x in self.teleportingAliens:
+                    layers.append(x)
+            else:
+                #  add any standing aliens
+                for x in self.activeAliens:
+                    layers.append(self.alienLayers[x])
+            combined = dmd.GroupedLayer(128,32,layers)
+            self.layer = combined
+
         # if we're in aliens mode draw the combined aliens and desert
         # loop back in 0.1 to update the display again
-        self.delay("Display",delay=0.1,handler=self.update_display)
+        if not once:
+            self.delay("Display",delay=0.1,handler=self.update_display)
+
+    def sw_leftBonusLane_active(self,sw):
+        self.teleportX += 1
+        self.update_display()
+        return game.SwitchStop
+
+    def sw_rightBonusLane_active(self,sw):
+        self.teleportX -= 1
+        self.update_display()
+        return game.SwitchStop
 
 
     def activate_shot(self,shot):
@@ -244,8 +344,7 @@ class CvA(ep.EP_Mode):
         # set the next stop at
         self.stopAt = self.positions[self.position]
         # update the lamps
-        for mode in self.shotModes:
-            mode.update_lamps()
+        self.update_mode_lamps()
         # start a timer to move the ship again
         self.ship_timer(4)
 
@@ -264,23 +363,184 @@ class CvA(ep.EP_Mode):
             self.mode = "ALIEN"
             # turn off the active shot
             self.activeShot = 9
-            # flip the direction of the ship
-            self.direction.reverse()
-            # set the starting position of the ship
-            if self.direction[0] == "LEFT":
-                self.position = 6
-                self.saucerX = self.positions[self.position]
-                self.position -= 1
-                self.stopAt = self.positions[self.position]
-            else:
-                self.position = 0
-                self.saucerX = self.positions[self.position]
-                self.position += 1
-                self.stopAt = self.positions[self.position]
-            ## TEMPORARY LOOP
-            self.switch_modes("SHIP")
+            # and update the lamps
+            self.update_mode_lamps()
+            # set up the next saucer
+            self.next_saucer()
+            # reset the round count of aliens
+            self.aliensKilledRound = 0
+            # and send 'em down TA ERF
+            self.teleport_aliens(1)
         if mode == "SHIP":
             # change the mode type
             self.mode = "SHIP"
             # set the ship in motion
             self.saucerMoving = True
+            self.update_display()
+
+    def next_saucer(self,go=False):
+        # flip the direction of the ship
+        self.direction.reverse()
+        # set the starting position of the ship
+        if self.direction[0] == "LEFT":
+            self.position = 6
+            self.saucerX = self.positions[self.position]
+            self.position -= 1
+            self.stopAt = self.positions[self.position]
+        else:
+            self.position = 0
+            self.saucerX = self.positions[self.position]
+            self.position += 1
+            self.stopAt = self.positions[self.position]
+        if go:
+            self.saucerMoving = True
+
+    def teleport_aliens(self,wave):
+        # a bunch of  bother just to make it so that the aliens don't come up the exact same every time
+        print "TELEPORT DIRECTION - " + str(self.direction[0])
+        if wave == 1:
+            if self.direction[0] == "LEFT":
+                aliens = ["Zero","Two"]
+            else:
+                aliens = ["One","Three"]
+        else:
+            if self.direction[0] == "LEFT":
+                aliens = ["One","Three"]
+            else:
+                aliens = ["Zero","Two"]
+        anim = dmd.Animation().load(ep.DMD_PATH+'cva_teleport.dmd')
+        myWait = len(anim.frames) / 10.0
+        # setup the first teleporting alien
+        teleport1 = ep.EP_AnimatedLayer(anim)
+        teleport1.hold=True
+        teleport1.frame_time = 6
+        teleport1.composite_op = "blacksrc"
+        # setup the second teleporting layer
+        teleport2 = ep.EP_AnimatedLayer(anim)
+        teleport2.hold=True
+        teleport2.frame_time = 6
+        teleport2.composite_op = "blacksrc"
+        # adjust their positions
+        if aliens[0] == "Zero":
+            print "ALIEN 0 - " + str(aliens[0])
+            teleport1.set_target_position(-4,0)
+        else:
+            print "ALIEN 0 - " + str(aliens[0])
+            teleport1.set_target_position(28,0)
+        if aliens[1] == "Two":
+            teleport2.set_target_position(60,0)
+        else:
+            teleport2.set_target_position(92,0)
+        # add them to the list
+        self.teleportingAliens.append(teleport1)
+        self.teleportingAliens.append(teleport2)
+        # turn on the display flag
+        self.teleporting = True
+        # update the display
+        self.update_display()
+        # delay the actual activation of the targets
+        self.delay(delay=myWait,handler=self.activate_aliens,param=aliens)
+
+    def activate_aliens(self,aliens):
+        # cancel the display delay
+        self.cancel_delayed("Display")
+        # remove the teleporting aliens
+        self.teleportingAliens = []
+        # raise the targets
+        for target in aliens:
+            if target == "Zero":
+                target = 0
+            elif target == "One":
+                target = 1
+            elif target == "Two":
+                target = 2
+            else:
+                target = 3
+            self.activeAliens.append(target)
+            self.game.bad_guys.target_up(target)
+        # turn off the teleporting flag
+        self.teleporting = False
+        # update the bad guy lamps
+        self.game.bad_guys.update_lamps()
+        self.update_display()
+
+    def hit_alien(self,target):
+        # cancel the display
+        self.cancel_delayed("Display")
+        # remove the dead alien
+        print "REMOVE ALIEN - " + str(target)
+        self.activeAliens.remove(target)
+        # count the kill
+        self.aliensKilled += 1
+        # and count it for the round
+        self.aliensKilledRound += 1
+        # do the display of the dying
+        anim = dmd.Animation().load(ep.DMD_PATH+'cva_shot.dmd')
+        myWait = len(anim.frames) / 10.0
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        animLayer.composite_op = "blacksrc"
+        myString = self.point_value("ALIEN")
+        self.game.score(myString)
+        titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("ALIEN KILLED")
+        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
+        combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
+        self.layer = combined
+        # delay the normal display and next saucer
+        theDelay = myWait + 1.5
+        # if all 4 are dead, we change modes to the ship
+        if self.aliensKilledRound == 4:
+            self.delay(delay=theDelay,handler=self.switch_modes,param="SHIP")
+        elif self.aliensKilledRound == 2:
+            print "WAVE 2 NOW"
+            self.delay(delay=theDelay,handler=self.teleport_aliens,param=2)
+        else:
+            self.delay("Display",delay=theDelay,handler=self.update_display)
+
+
+    def point_value(self,type):
+        if type == "SAUCER":
+            points = self.saucerValue
+            # first saucer is worth the base, every additional adds some
+            for i in range(1,self.saucerHits,1):
+                points += self.saucerIncrement
+        else:
+            points = self.alienValue
+            for i in range(1,self.aliensKilled,1):
+                points += self.alienIncrement
+        return points
+
+    def saucer_hit_display(self):
+        anim = dmd.Animation().load(ep.DMD_PATH+'cva_large_ship_explodes.dmd')
+        myWait = len(anim.frames) / 10.0
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        animLayer.composite_op = "blacksrc"
+        myString = self.point_value("SAUCER")
+        titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("SAUCER DESTROYED")
+        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
+        combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
+        self.layer = combined
+        # delay the normal display and next saucer
+        theDelay = myWait + 1.5
+        self.delay(delay=theDelay+0.1,handler=self.update_display)
+        self.delay(delay=theDelay,handler=self.next_saucer,param=True)
+
+    def end_cva(self):
+        # do the final display
+        self.finish_up()
+
+    def finish_up(self):
+        # set the stack level
+        self.game.set_tracking('stackLevel',False,3)
+        # turn off the running flag
+        self.game.set_tracking("cvaStatus","OPEN")
+        # turn off the base busy
+        self.game.base.busy = False
+        # turn the music back on if appropriate
+
+
+        # and then unload
+        self.unload()

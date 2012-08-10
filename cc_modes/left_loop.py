@@ -78,8 +78,18 @@ class LeftLoop(ep.EP_Mode):
                 self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
             return
 
+        # bionic bart
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             if 0 in self.game.bionic.activeShots:
+                self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+            return
+
+        # cva
+        if self.game.show_tracking('cvaStatus') == "RUNNING":
+            if self.game.cva.activeShot == 0:
                 self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
                 self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
                 self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)

@@ -90,9 +90,18 @@ class LeftRamp(ep.EP_Mode):
                 self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
             return
 
-
+        # bionic bart
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             if 1 in self.game.bionic.activeShots:
+                self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+                self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+                self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
+            return
+
+        # cva
+        if self.game.show_tracking('cvaStatus') == "RUNNING":
+            if self.game.cva.activeShot == 1:
                 self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
                 self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
                 self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)

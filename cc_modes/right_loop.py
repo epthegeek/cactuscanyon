@@ -69,6 +69,7 @@ class RightLoop(ep.EP_Mode):
                 self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
             return
 
+        # bionic bart
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             if 3 in self.game.bionic.activeShots:
                 self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
@@ -76,6 +77,16 @@ class RightLoop(ep.EP_Mode):
                 self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
                 self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
             return
+
+        # cva
+        if self.game.show_tracking('cvaStatus') == "RUNNING":
+            if self.game.cva.activeShot == 3:
+                self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
+            return
+
 
         stage = self.game.show_tracking('rightLoopStage')
 
