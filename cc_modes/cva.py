@@ -302,6 +302,7 @@ class CvA(ep.EP_Mode):
             duration = self.game.sound.play(self.game.assets.music_cvaIntro)
             # main loop
             self.delay(delay=duration,handler=self.game.base.music_on,param=self.game.assets.music_cvaLoop)
+            self.delay(delay=duration,handler=self.gi_bloom,param=duration)
             self.delay(delay=duration,handler=self.intro,param=3)
             # load a blank frame to fade in from
             self.blankLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
@@ -317,6 +318,9 @@ class CvA(ep.EP_Mode):
             self.layer = self.blankLayer
             # transition to static with a callback to a transition to the
             self.score_to_static()
+            # blink/kill the GI
+            self.gi_flutter()
+
         if step == 2:
             print "STEP 2"
             anim = dmd.Animation().load(ep.DMD_PATH+'cva_intro.dmd')
@@ -342,8 +346,10 @@ class CvA(ep.EP_Mode):
     def one_beat(self):
         self.beat += 1
         if self.beat == 1:
+            self.game.gi_control("ON")
             self.delay(delay=1,handler=self.static_to_score)
         if self.beat == 2:
+            self.gi_flutter()
             self.delay(delay=1,handler=self.score_to_static)
         if self.beat == 3:
             self.delay(delay=1,handler=self.static_to_ship)
@@ -622,6 +628,8 @@ class CvA(ep.EP_Mode):
         self.update_display()
 
     def hit_alien(self,target):
+        # flasher flourish
+        self.game.base.red_flasher_flourish()
         # cancel the display
         self.cancel_delayed("Display")
         # remove the dead alien
@@ -670,6 +678,8 @@ class CvA(ep.EP_Mode):
         return points
 
     def saucer_hit_display(self):
+        # lampshow
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.game.update_lamps)
         anim = dmd.Animation().load(ep.DMD_PATH+'cva_large_ship_explodes.dmd')
         myWait = len(anim.frames) / 10.0
         animLayer = ep.EP_AnimatedLayer(anim)
@@ -706,3 +716,15 @@ class CvA(ep.EP_Mode):
 
         # and then unload
         self.unload()
+
+    def gi_flutter(self):
+        self.game.gi_control("OFF")
+        self.game.lamps.gi01.schedule(0x000C0F0F,cycle_seconds=1)
+        self.game.lamps.gi02.schedule(0x000C0F0F,cycle_seconds=1)
+        self.game.lamps.gi03.schedule(0x000C0F0F,cycle_seconds=1)
+
+    def gi_bloom(self,duration):
+        self.delay("Bloom",delay=duration,handler=self.gi_bloom,param=duration)
+        self.game.lamps.gi01.schedule(0x00000FFF,cycle_seconds=1)
+        self.game.lamps.gi01.schedule(0x00000FFF,cycle_seconds=1)
+        self.game.lamps.gi01.schedule(0x00000FFF,cycle_seconds=1)
