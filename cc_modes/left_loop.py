@@ -167,7 +167,7 @@ class LeftLoop(ep.EP_Mode):
             # if we're "complete" open the full loop
             if self.game.show_tracking('leftLoopStage') >= 4:
                 # pulse the coil to open the gate
-                self.game.coils.rightLoopGate.pulse(150)
+                self.game.coils.rightLoopGate.pulse(240)
                 # play a lampshow
                 self.game.lampctrl.play_show(self.game.assets.lamp_leftToRight, repeat=False,callback=self.game.update_lamps)
             ## if the combo timer is on:
