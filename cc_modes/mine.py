@@ -87,7 +87,9 @@ class Mine(ep.EP_Mode):
 
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
-        if self.game.show_tracking('bionicStatus') == "RUNNING" or self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+        if self.game.show_tracking('bionicStatus') == "RUNNING" or \
+           self.game.show_tracking('drunkMultiballStatus') == "RUNNING" or \
+           self.game.show_tracking('cvaStatus') == "RUNNING":
             print "WAIT, HOW DID I GET HERE"
             return
         # stock sound for the switch
@@ -119,8 +121,12 @@ class Mine(ep.EP_Mode):
         ## kill the combo shot chain
         ep.last_shot = None
 
-
     def mine_shot(self):
+        # if cva is ready, we do that
+        if self.game.show_tracking('cvaStatus') == "READY":
+            self.game.modes.add(self.game.cva)
+            self.game.cva.intro(entry = "mine")
+            return
         # if high noon is ready, we do that
         if self.game.show_tracking('highNoonStatus') == "READY":
             self.game.modes.add(self.game.high_noon)

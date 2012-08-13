@@ -29,6 +29,7 @@ class CvA(ep.EP_Mode):
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         self.positions = [-58,-31,-4,23,50,77,104]
         self.direction = ["LEFT","RIGHT"]
+        self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
 
         self.targetNames = ['Left','Left Center','Right Center','Right']
         # setup the standing aliens
@@ -105,27 +106,42 @@ class CvA(ep.EP_Mode):
         for mode in self.shotModes:
             mode.update_lamps()
 
-    ### switches
+    ### Jackpot switches
 
     def sw_leftLoopTop_active(self,sw):
         self.process_shot(0,self.activeShot)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftLoopTop"
+
         return game.SwitchStop
 
     def sw_leftRampEnter_active(self, sw):
         self.process_shot(1,self.activeShot)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftRampEnter"
+
         return game.SwitchStop
 
     def sw_centerRampMake_active(self, sw):
         self.process_shot(2,self.activeShot)
+        ## -- set the last switch hit --
+        ep.last_switch = "centerRampMake"
+
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
         if not self.game.bart.moving:
             self.process_shot(3,self.activeShot)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightLoopTop"
+
         return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
         self.process_shot(4,self.activeShot)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightRampMake"
+
         return game.SwitchStop
 
     # decide if this was a jackpot hit or a miss
@@ -149,8 +165,137 @@ class CvA(ep.EP_Mode):
             # register the saucer hit
             self.saucer_hit_display()
 
-    def intro(self,step=1):
+    # Other switches
+    # Ramp/Loop Entrances
+    def sw_leftLoopBottom_active(self,sw):
+        # play the sound effect if we're not coming from the top switch
+        if ep.last_switch != 'leftLoopTop' and ep.last_switch != 'leftLoopBottom':
+            stage = self.game.show_tracking('leftLoopStage')
+            if stage != 4:
+                self.game.sound.play(self.game.assets.sfx_cvsWoosh)
+            # score come points
+        self.game.score_with_bonus(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftLoopBottom"
+        return game.SwitchStop
+
+    def sw_centerRampEnter_active(self,sw):
+        # play the switch sound
+        self.game.sound.play(self.game.assets.sfx_cvaWoosh)
+        # score the arbitrary and wacky points
+        self.game.score_with_bonus(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "centerRampEnter"
+        return game.SwitchStop
+
+    def sw_rightLoopBottom_active(self,sw):
+        # low end of the loop
+        # play the sound effect if we're not coming from the top
+        if ep.last_switch != 'rightLoopTop' and ep.last_switch != 'rightLoopBottom':
+            stage = self.game.show_tracking('rightLoopStage')
+            if stage != 4:
+                # while working on completing, the sound plays
+                self.game.sound.play(self.game.assets.sfx_cvaWoosh)
+            # score come points
+        self.game.score_with_bonus(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightLoopBottom"
+        return game.SwitchStop
+
+    def sw_rightRampEnter_active(self,sw):
+        # play the switch sound
+        self.game.sound.play(self.game.assets.sfx_cvaWoosh)
+        # score the arbitrary and wacky points
+        self.game.score_with_bonus(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightRampEnter"
+        return game.SwitchStop
+    # quickdraws
+
+    def sw_topLeftStandUp_active(self, sw):
+        self.quickdraw_hit('TOP',0)
+        ## -- set the last switch hit --
+        ep.last_switch = "topLeftStandup"
+        ## kill the combo shot chain
+        ep.last_shot = None
+        return game.SwitchStop
+
+    def sw_bottomLeftStandUp_active(self,sw):
+        self.quickdraw_hit('BOT',0)
+        ## -- set the last switch hit --
+        ep.last_switch = "bottomLeftStandup"
+        ## kill the combo shot chain
+        ep.last_shot = None
+        return game.SwitchStop
+
+    def sw_topRightStandUp_active(self, sw):
+        self.quickdraw_hit('TOP',1)
+        ## -- set the last switch hit --
+        ep.last_switch = "topRightStandup"
+        ## kill the combo shot chain
+        ep.last_shot = None
+        return game.SwitchStop
+
+    def sw_bottomRightStandUp_active(self,sw):
+        self.quickdraw_hit('BOT',1)
+        ## -- set the last switch hit --
+        ep.last_switch = "bottomRightStandup"
+        ## kill the combo shot chain
+        ep.last_shot = None
+        return game.SwitchStop
+
+    def quickdraw_hit(self,position,side):
+        pass
+
+    # beer mug
+    def sw_beerMug_active(self,sw):
+        self.game.score_with_bonus(2130)
+        # play a sound
+        #self.game.sound.play(self.game.assets.sfx_ricochetSet)
+        ## -- set the last switch -- ##
+        ep.last_switch = 'beerMug'
+        ## kill the combo shot chain
+        return game.SwitchStop
+
+    # the mine
+    def sw_minePopper_active_for_390ms(self,sw):
+        self.game.score_with_bonus(2530)
+        # kick the ball
+        self.game.mountain.eject()
+        return game.SwitchStop
+
+    # the saloon
+    def sw_saloonPopper_active_for_290ms(self,sw):
+        self.game.score_with_bonus(2530)
+        return game.SwitchStop
+
+    def sw_saloonBart_active(self,sw):
+        self.game.score_with_bonus(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "saloonBart"
+        return game.SwitchStop
+
+    def sw_saloonGate_active(self,sw):
+        self.game.score_with_bonus(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "saloonGate"
+        return game.SwitchStop
+
+    def sw_jetBumpersExit_active(self,sw):
+        self.game.score_with_bonus(2530)
+        ## -- set the last switch hit --
+        ep.last_switch = "jetBumpersExit"
+        return game.SwitchStop
+
+
+    def intro(self,step=1,entry="inlane",onSide = 0):
         if step == 1:
+            # trap the ball if needed
+            if entry == "inlane":
+                self.posts[onSide].patter(on_time=2,off_time=6,original_on_time=30)
+            # then save the entry method and side for later
+            self.entry = entry
+            self.side = onSide
             # start the music
             self.game.sound.stop_music()
             # intro section
@@ -244,6 +389,17 @@ class CvA(ep.EP_Mode):
         self.blankLayer = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
         # update the display
         self.update_display()
+        # launch 2 more balls
+        self.game.trough.balls_to_autoplunge = 2
+        self.game.trough.launch_balls(2)
+        # release the main ball
+        if self.entry == "inlane":
+            self.posts[self.side].disabled()
+        elif self.entry == "mine":
+            self.game.mountain.eject()
+        elif self.entry == "saloon":
+            self.game.saloon.kick()
+
 
     def update_display(self,once=False):
         # score line
@@ -534,7 +690,6 @@ class CvA(ep.EP_Mode):
 
     def end_cva(self):
         # stop the music
-        self.cancel_delayed("Music")
         self.game.sound.stop_music()
         # do the final display
         self.finish_up()

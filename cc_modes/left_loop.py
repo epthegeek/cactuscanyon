@@ -254,6 +254,10 @@ class LeftLoop(ep.EP_Mode):
             else:
                 # New thing - Tumbleweed!
                 value = self.game.increase_tracking('tumbleweedValue',5000)
+                if value == 3:
+                    # enable cva
+                    self.game.set.tracking('cvaStatus',"READY")
+
                 self.game.score_with_bonus(value)
                 self.tumbleweed_display(value)
             return

@@ -28,6 +28,7 @@ class RightLoop(ep.EP_Mode):
         # set up a frame layer with the guns border on it
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'guns-border.dmd').frames[0])
         self.layer = None
+        self.weedsForCvA = 3
 
     def mode_started(self):
         self.update_lamps()
@@ -249,6 +250,9 @@ class RightLoop(ep.EP_Mode):
                 #self.show_award_text()
                 # New thing - Tumbleweed!
                 value = self.game.increase_tracking('tumbleweedValue',5000)
+                if value == 3:
+                    # enable cva
+                    self.game.set.tracking('cvaStatus',"READY")
                 self.game.score_with_bonus(value)
                 self.tumbleweed_display(value)
         # then tick the stage up for next time unless it's completed

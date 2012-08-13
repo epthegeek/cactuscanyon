@@ -33,8 +33,14 @@ class Saloon(ep.EP_Mode):
         self.unbusy()
 
     def sw_saloonPopper_active_for_300ms(self,sw):
+        # if cva is ready, we do that
+        if self.game.show_tracking('cvaStatus') == "READY":
+            self.game.modes.add(self.game.cva)
+            self.game.cva.intro(entry = "saloon")
+            return
         # if bionic bart is running don't do anything
-        if self.game.show_tracking('bionicStatus') == "RUNNING":
+        if self.game.show_tracking('bionicStatus') == "RUNNING" or \
+           self.game.show_tracking('cvaStatus') == "RUNNING":
             return
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
         if not self.game.save_polly.running and \
