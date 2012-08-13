@@ -63,10 +63,11 @@ class CvA(ep.EP_Mode):
 
     def ball_drained(self):
         # if we lose all but one the ball the mode ends
-        if self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('cvaStatus') == "RUNNING":
-            self.cancel_delayed("Display")
-            self.game.base.busy = True
-            self.end_cva()
+        if self.game.trough.num_balls_in_play == 1 or self.game.trough_num_balls_in_play:
+            if self.game.show_tracking('cvaStatus') == "RUNNING":
+                self.cancel_delayed("Display")
+                self.game.base.busy = True
+                self.end_cva()
 
 
     def mode_started(self):
@@ -708,7 +709,56 @@ class CvA(ep.EP_Mode):
         # stop the music
         self.game.sound.stop_music()
         # do the final display
-        self.finish_up()
+        # ship frame and alien frame
+        shipBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva-ships-border.dmd').frames[0])
+        alienBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva-aliens-border.dmd').frames[0])
+        # blank script
+        script = []
+        # math out the ship points total
+        shipPoints = 0
+        for i in range(0,self.saucerHits,1):
+            # one mill per saucer
+            shipPoints += 1000000
+            # 250,000 bonus boost per saucer starting with 2
+            shipPoints += 250000 * (i - 1)
+        # math out the alien points total
+        alienPoints = 0
+        for i in range(0,self.aliensKilled,1):
+            # 50,000 per alien
+            alienPoints += 50000
+            # 5000 point boost per alien starting with 2
+            alienPoints += 5000 * (i -1)
+        # set the saucer title line
+        if self.saucerHits == 1:
+            textString = "1 SAUCER DESTROYED"
+        else:
+            textString = str(self.saucerHits) + " SAUCERS DESTROYED"
+        titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False)
+        titleLayer.set_text(textString)
+        # set the saucer score line
+        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(shipPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+        # build the layer
+        page = dmd.GroupedLayer(128,32,[shipBorder,titleLayer,scoreLayer])
+        # add it to the script
+        script.append({'layer':page,'seconds':1.5})
+        # set the aliens title line
+        if self.aliensKilled == 0:
+            textString = "1 ALIEN KILLED"
+        else:
+            textString = str(self.aliensKilled) + " ALIENS KILLED"
+        titleLayer.set_text(textString)
+        # set the aliens score line
+        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(alienPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+        # build the layer
+        page = dmd.GroupedLayer(128,32,[alienBorder,titleLayer,scoreLayer])
+        # add it to the script
+        script.append({'layer':page,'seconds':1.5})
+        # setup the script layer
+        summary = dmd.ScriptedLayer(128,32,script)
+        # and activate
+        self.layer = summary
+        # finish up after 3 seconds
+        self.delay(delay = 3,handler=self.finish_up)
 
     def finish_up(self):
         # set the stack level
@@ -718,7 +768,9 @@ class CvA(ep.EP_Mode):
         # turn off the base busy
         self.game.base.busy = False
         # turn the music back on if appropriate
-
+        # turn the music back on
+        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+            self.game.base.music_on(self.game.assets.music_mainTheme)
 
         # and then unload
         self.unload()
