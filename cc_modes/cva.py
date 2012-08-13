@@ -109,6 +109,9 @@ class CvA(ep.EP_Mode):
     ### Jackpot switches
 
     def sw_leftLoopTop_active(self,sw):
+        # pulse the coil to open the gate
+        self.game.coils.rightLoopGate.pulse(240)
+
         self.process_shot(0,self.activeShot)
         ## -- set the last switch hit --
         ep.last_switch = "leftLoopTop"
@@ -131,9 +134,12 @@ class CvA(ep.EP_Mode):
 
     def sw_rightLoopTop_active(self, sw):
         if not self.game.bart.moving:
+            # pulse the coil to open the gate
+            self.game.coils.leftLoopGate.pulse(240)
+
             self.process_shot(3,self.activeShot)
-        ## -- set the last switch hit --
-        ep.last_switch = "rightLoopTop"
+            ## -- set the last switch hit --
+            ep.last_switch = "rightLoopTop"
 
         return game.SwitchStop
 
