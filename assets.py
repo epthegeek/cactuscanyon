@@ -298,6 +298,17 @@ class Assets():
 
         self.sfx_cvaYell = 'sfx_cvaYell'
         self.game.sound.register_sound(self.sfx_cvaYell, self.sfx_path + "bangarang-yell.wav")
+        self.sfx_cvaExplosion = 'sfx_cvaExplosion'
+        self.game.sound.register_sound(self.sfx_cvaExplosion, self.sfx_path + "208-afm-explosion.wav")
+        self.sfx_cvaTeleport = 'sfx_cvaTeleport'
+        self.game.sound.register_sound(self.sfx_cvaTeleport, self.sfx_path + "294-afm-teleport.wav")
+        self.sfx_cvaWoosh = 'sfx_cvaWoosh'
+        self.game.sound.register_sound(self.sfx_cvaWoosh, self.sfx_path + "246-afm-woosh.wav")
+        self.sfx_cvaGroan = 'sfx_cvaGroan'
+        self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-1.wav")
+        self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-2.wav")
+        self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-3.wav")
+
         # Quotes
         # this bunches the welcome strings together for play_voice()
         self.quote_welcomes = 'quote_welcomes'

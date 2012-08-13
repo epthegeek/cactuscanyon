@@ -438,6 +438,7 @@ class CvA(ep.EP_Mode):
         self.teleporting = True
         # update the display
         self.update_display()
+        self.game.sound.play(self.game.assets.sfx_cvaTeleport)
         # delay the actual activation of the targets
         self.delay(delay=myWait,handler=self.activate_aliens,param=aliens)
 
@@ -487,6 +488,7 @@ class CvA(ep.EP_Mode):
         scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
         combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
         self.layer = combined
+        self.game.sound.play(self.game.assets.sfx_cvaGroan)
         # delay the normal display and next saucer
         theDelay = myWait + 1.5
         # if all 4 are dead, we change modes to the ship
@@ -523,12 +525,17 @@ class CvA(ep.EP_Mode):
         scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
         combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
         self.layer = combined
+        # play the boom
+        self.game.sound.play(self.game.assets.sfx_cvaExplosion)
         # delay the normal display and next saucer
         theDelay = myWait + 1.5
         self.delay(delay=theDelay+0.1,handler=self.update_display)
         self.delay(delay=theDelay,handler=self.next_saucer,param=True)
 
     def end_cva(self):
+        # stop the music
+        self.cancel_delayed("Music")
+        self.game.sound.stop_music()
         # do the final display
         self.finish_up()
 
