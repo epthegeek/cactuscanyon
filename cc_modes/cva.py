@@ -407,7 +407,7 @@ class CvA(ep.EP_Mode):
         self.game.trough.launch_balls(2)
         # release the main ball
         if self.entry == "inlane":
-            self.posts[self.side].disabled()
+            self.posts[self.side].disable()
         elif self.entry == "mine":
             self.game.mountain.eject()
         elif self.entry == "saloon":
