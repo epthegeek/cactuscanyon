@@ -481,6 +481,9 @@ class BionicBart(ep.EP_Mode):
     def bionic_defeated(self,step=1):
         # VICTOLY!
         if step == 1:
+            # set bart flag to dead
+            self.game.set_tracking('bionicStatus', "DEAD")
+
             # stop the music
             self.game.sound.stop_music()
             # load up the defeated animation
@@ -543,8 +546,6 @@ class BionicBart(ep.EP_Mode):
 
             # score points
             self.game.score(5000000)
-            # set bart flag to dead
-            self.game.set_tracking('bionicStatus', "DEAD")
             # light high noon
             self.game.badge.light_high_noon()
 
