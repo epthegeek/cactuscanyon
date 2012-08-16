@@ -334,7 +334,8 @@ class RiverChase(ep.EP_Mode):
             # unset the busy flag
         self.game.base.busy = False
         # turn the music back on
-        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
             # unload the mode
         self.unload()
