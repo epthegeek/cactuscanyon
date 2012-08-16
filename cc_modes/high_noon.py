@@ -564,6 +564,8 @@ class HighNoon(ep.EP_Mode):
         # load the skillshot
         print "END HIGH NOON LOAD SKILLSHOT GOES HERE"
         self.game.modes.add(self.game.skill_shot)
+        # turn the GI back on
+        self.game.gi_control("ON")
         # unload the mode
         self.unload()
 
