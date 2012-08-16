@@ -472,7 +472,7 @@ class SkillShot(ep.EP_Mode):
         # turn off super mode
         self.super = False
         # start the main game music
-        if self.game.show_tracking('gunfightStatus') != "RUNNING":
+        if self.game.show_tracking('gunfightStatus') != "RUNNING" and self.game.show_tracking('cvaStatus') != "RUNNING":
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # check if the award finished stampede
         self.game.base.check_stampede()
