@@ -259,7 +259,8 @@ class CCGame(game.BasicGame):
                          self.bart,
                          self.move_your_train,
                          self.bank_robbery,
-                         self.river_chase]
+                         self.river_chase,
+                         self.cva]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 

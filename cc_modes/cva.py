@@ -63,7 +63,7 @@ class CvA(ep.EP_Mode):
 
     def ball_drained(self):
         # if we lose all but one the ball the mode ends
-        if self.game.trough.num_balls_in_play == 1 or self.game.trough_num_balls_in_play == 0:
+        if self.game.trough.num_balls_in_play == 1 or self.game.trough.num_balls_in_play == 0:
             if self.game.show_tracking('cvaStatus') == "RUNNING":
                 self.cancel_delayed("Display")
                 self.game.base.busy = True
@@ -76,7 +76,6 @@ class CvA(ep.EP_Mode):
         # resetting defaults
         # the transitions fail if they're too close together - this is for putting a 1 second delay in between
         self.beat = 0
-        # saucer postion - starts off to the right
         self.saucerX = 104
         self.teleportX = 0
         # which shot is active
@@ -176,11 +175,9 @@ class CvA(ep.EP_Mode):
     def sw_leftLoopBottom_active(self,sw):
         # play the sound effect if we're not coming from the top switch
         if ep.last_switch != 'leftLoopTop' and ep.last_switch != 'leftLoopBottom':
-            stage = self.game.show_tracking('leftLoopStage')
-            if stage != 4:
-                self.game.sound.play(self.game.assets.sfx_cvsWoosh)
+            self.game.sound.play(self.game.assets.sfx_cvaWoosh)
             # score come points
-        self.game.score_with_bonus(2530)
+            self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "leftLoopBottom"
         return game.SwitchStop
@@ -198,12 +195,9 @@ class CvA(ep.EP_Mode):
         # low end of the loop
         # play the sound effect if we're not coming from the top
         if ep.last_switch != 'rightLoopTop' and ep.last_switch != 'rightLoopBottom':
-            stage = self.game.show_tracking('rightLoopStage')
-            if stage != 4:
-                # while working on completing, the sound plays
-                self.game.sound.play(self.game.assets.sfx_cvaWoosh)
+            self.game.sound.play(self.game.assets.sfx_cvaWoosh)
             # score come points
-        self.game.score_with_bonus(2530)
+            self.game.score_with_bonus(2530)
         ## -- set the last switch hit --
         ep.last_switch = "rightLoopBottom"
         return game.SwitchStop
@@ -367,12 +361,12 @@ class CvA(ep.EP_Mode):
     def one_beat(self):
         self.beat += 1
         if self.beat == 1:
-            self.game.gi_control("ON")
             self.delay(delay=1,handler=self.static_to_score)
         if self.beat == 2:
-            self.gi_flutter()
+            self.game.gi_control("ON")
             self.delay(delay=1,handler=self.score_to_static)
         if self.beat == 3:
+            self.gi_flutter()
             self.delay(delay=1,handler=self.static_to_ship)
         if self.beat == 4:
             self.delay(delay=1,handler=self.clear_ship)
@@ -611,7 +605,7 @@ class CvA(ep.EP_Mode):
         self.update_display()
         self.game.sound.play(self.game.assets.sfx_cvaTeleport)
         # delay the actual activation of the targets
-        self.delay(delay=myWait,handler=self.activate_aliens,param=aliens)
+        self.delay("Aliens",delay=myWait,handler=self.activate_aliens,param=aliens)
 
     def activate_aliens(self,aliens):
         # cancel the display delay
@@ -632,8 +626,6 @@ class CvA(ep.EP_Mode):
             self.game.bad_guys.target_up(target)
         # turn off the teleporting flag
         self.teleporting = False
-        # update the bad guy lamps
-        self.game.bad_guys.update_lamps()
         self.update_display()
 
     def hit_alien(self,target):
@@ -708,28 +700,40 @@ class CvA(ep.EP_Mode):
         self.delay(delay=theDelay,handler=self.next_saucer,param=True)
 
     def end_cva(self):
+        # kill the alien delay if there is one
+        self.cancel_delayed("Aliens")
+        # and the display delay
+        self.cancel_delayed("Display")
         # stop the music
         self.game.sound.stop_music()
+        # kill the drop targets
+        self.game.bad_guys.kill_power()
         # do the final display
         # ship frame and alien frame
-        shipBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva-ships-border.dmd').frames[0])
-        alienBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva-aliens-border.dmd').frames[0])
+        shipBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva_ships_border.dmd').frames[0])
+        alienBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva_aliens_border.dmd').frames[0])
         # blank script
         script = []
         # math out the ship points total
         shipPoints = 0
-        for i in range(0,self.saucerHits,1):
-            # one mill per saucer
-            shipPoints += 1000000
-            # 250,000 bonus boost per saucer starting with 2
-            shipPoints += 250000 * (i - 1)
+        if self.saucerHits == 0:
+            shipPoints = 0
+        else:
+            for i in range(0,self.saucerHits,1):
+                # one mill per saucer
+                shipPoints += 1000000
+                # 250,000 bonus boost per saucer starting with 2
+                shipPoints += 250000 * (i - 1)
         # math out the alien points total
         alienPoints = 0
-        for i in range(0,self.aliensKilled,1):
-            # 50,000 per alien
-            alienPoints += 50000
-            # 5000 point boost per alien starting with 2
-            alienPoints += 5000 * (i -1)
+        if self.aliensKilled == 0:
+            alienPoints = 0
+        else:
+            for i in range(0,self.aliensKilled,1):
+                # 50,000 per alien
+                alienPoints += 50000
+                # 5000 point boost per alien starting with 2
+                alienPoints += 5000 * (i -1)
         # set the saucer title line
         if self.saucerHits == 1:
             textString = "1 SAUCER DESTROYED"
@@ -740,9 +744,9 @@ class CvA(ep.EP_Mode):
         # set the saucer score line
         scoreLayer = ep.pulse_text(self,64,14,ep.format_score(shipPoints),align="center",myOpaque=True,size="12px",timing=0.1)
         # build the layer
-        page = dmd.GroupedLayer(128,32,[shipBorder,titleLayer,scoreLayer])
+        pageOne = dmd.GroupedLayer(128,32,[shipBorder,titleLayer,scoreLayer])
         # add it to the script
-        script.append({'layer':page,'seconds':1.5})
+        script.append({'layer':pageOne,'seconds':1.5})
         # set the aliens title line
         if self.aliensKilled == 0:
             textString = "1 ALIEN KILLED"
@@ -759,16 +763,24 @@ class CvA(ep.EP_Mode):
         summary = dmd.ScriptedLayer(128,32,script)
         # and activate
         self.layer = summary
+        # play a cheer noise
+        self.game.sound.play(self.game.assets.sfx_cheers)
+        # and delay the second one
+        self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
         # finish up after 3 seconds
         self.delay(delay = 3,handler=self.finish_up)
 
     def finish_up(self):
+        # turn the GI back on
+        self.game.gi_control("ON")
         # set the stack level
         self.game.set_tracking('stackLevel',False,3)
         # turn off the running flag
         self.game.set_tracking("cvaStatus","OPEN")
         # turn off the base busy
         self.game.base.busy = False
+        # put the lights back to normal
+        self.game.update_lamps()
         # turn the music back on if appropriate
         # turn the music back on
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:

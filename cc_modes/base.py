@@ -551,7 +551,7 @@ class BaseGameMode(ep.EP_Mode):
             pass
         if self.game.show_tracking('cvaStatus') == "RUNNING":
             self.game.score(5250)
-            self.game.sound.play(self.game.assets.sfx_cvaBumper)
+            self.game.base.play_quote(self.game.assets.sfx_cvaBumper)
 
         if hits < 75:
             # if we're under 75 points are low

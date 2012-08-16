@@ -308,6 +308,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-1.wav")
         self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-2.wav")
         self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-3.wav")
+        self.sfx_cvaBumper = 'sfx_cvaBumper'
+        self.game.sound.register_sound(self.sfx_cvaBumper, self.sfx_path + "bangarang-bwoip-noise.wav")
 
         # Quotes
         # this bunches the welcome strings together for play_voice()
