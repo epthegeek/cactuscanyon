@@ -88,7 +88,7 @@ class RightRamp(ep.EP_Mode):
                 self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
                 self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
             return
-
+        # bionic bart
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             if 4 in self.game.bionic.activeShots:
                 self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
@@ -97,6 +97,14 @@ class RightRamp(ep.EP_Mode):
                 self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
             return
 
+        # cva
+        if self.game.show_tracking('cvaStatus') == "RUNNING":
+            if self.game.cva.activeShot == 4:
+                self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
+                self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+                self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+            return
 
         stage = self.game.show_tracking('rightRampStage')
 

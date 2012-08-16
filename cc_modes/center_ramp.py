@@ -58,7 +58,8 @@ class CenterRamp(ep.EP_Mode):
                 self.game.lamps.centerRampStopTrain.schedule(0x0F0F03F1)
                 self.game.lamps.centerRampCatchTrain.schedule(0x0F0F007F)
             return
-            # drunk multiball
+
+        # drunk multiball
         if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
         ## right ramp is #4 in the stampede jackpot list
             if 'centerRamp' in self.game.drunk_multiball.active:
@@ -68,6 +69,7 @@ class CenterRamp(ep.EP_Mode):
                 self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
             return
 
+        # bionic bart
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             if 2 in self.game.bionic.activeShots:
                 self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
@@ -76,7 +78,16 @@ class CenterRamp(ep.EP_Mode):
                 self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
             return
 
-        # river chase
+        # cva
+        if self.game.show_tracking('cvaStatus') == "RUNNING":
+            if self.game.cva.activeShot == 2:
+                self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
+                self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
+                self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+                self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
+            return
+
+            # river chase
         if self.game.river_chase.running:
             self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)

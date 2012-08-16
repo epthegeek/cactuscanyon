@@ -28,6 +28,7 @@ class RightLoop(ep.EP_Mode):
         # set up a frame layer with the guns border on it
         self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'guns-border.dmd').frames[0])
         self.layer = None
+        self.weedsForCvA = 3
 
     def mode_started(self):
         self.update_lamps()
@@ -69,6 +70,7 @@ class RightLoop(ep.EP_Mode):
                 self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
             return
 
+        # bionic bart
         if self.game.show_tracking('bionicStatus') == "RUNNING":
             if 3 in self.game.bionic.activeShots:
                 self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
@@ -76,6 +78,16 @@ class RightLoop(ep.EP_Mode):
                 self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
                 self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
             return
+
+        # cva
+        if self.game.show_tracking('cvaStatus') == "RUNNING":
+            if self.game.cva.activeShot == 3:
+                self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+                self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
+            return
+
 
         stage = self.game.show_tracking('rightLoopStage')
 
@@ -151,7 +163,7 @@ class RightLoop(ep.EP_Mode):
 
                 if self.game.show_tracking('rightLoopStage') >= 4:
                     # pulse the coil to open the gate
-                    self.game.coils.leftLoopGate.pulse(150)
+                    self.game.coils.leftLoopGate.pulse(240)
                     # play a lampshow
                     self.game.lampctrl.play_show(self.game.assets.lamp_rightToLeft, repeat=False,callback=self.game.update_lamps)
                     ## if the combo timer is on:
@@ -238,6 +250,9 @@ class RightLoop(ep.EP_Mode):
                 #self.show_award_text()
                 # New thing - Tumbleweed!
                 value = self.game.increase_tracking('tumbleweedValue',5000)
+                if value == 3:
+                    # enable cva
+                    self.game.set.tracking('cvaStatus',"READY")
                 self.game.score_with_bonus(value)
                 self.tumbleweed_display(value)
         # then tick the stage up for next time unless it's completed

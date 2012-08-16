@@ -27,7 +27,7 @@ import ep
 import random
 
 class BionicBart(ep.EP_Mode):
-    """Gunfight code """
+    """Bionic Bart code """
     def __init__(self,game,priority):
         super(BionicBart, self).__init__(game,priority)
         self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
@@ -97,7 +97,7 @@ class BionicBart(ep.EP_Mode):
 
     def sw_leftRampEnter_active(self, sw):
         # pulse the coil to open the gate
-        self.game.coils.rightLoopGate.pulse(150)
+        self.game.coils.rightLoopGate.pulse(240)
         self.process_shot(1)
         return game.SwitchStop
 
@@ -108,7 +108,7 @@ class BionicBart(ep.EP_Mode):
     def sw_rightLoopTop_active(self, sw):
         if not self.game.bart.moving:
             # pulse the coil to open the gate
-            self.game.coils.leftLoopGate.pulse(150)
+            self.game.coils.leftLoopGate.pulse(240)
             self.process_shot(3)
         return game.SwitchStop
 

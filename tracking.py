@@ -158,3 +158,5 @@ class Tracking(game.Player):
         # Level 3 is high noon
         self.player_stats['stackLevel'] = [False,False,False,False]
 
+        # cva OPEN, READY, RUNNING
+        self.player_stats['cvaStatus'] = "READY"

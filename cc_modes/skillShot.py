@@ -144,6 +144,8 @@ class SkillShot(ep.EP_Mode):
                 prizes.append("J")
             # move your train
             prizes.append("S")
+            # cva
+            prizes.append("T")
 
         # initialize some junk
         count = 0
@@ -395,6 +397,12 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom = "YOUR TRAIN"
             # load the mode so the train starts moving
             self.game.modes.add(self.game.move_your_train)
+
+        # cva
+        elif self.selectedPrizes[5:] == "T":
+            awardStringTop = "COWBOYS"
+            awardStringBottom = "VS ALIENS"
+            self.game.set_tracking("cvaStatus", "READY")
 
         # call the lamp update so the prize is shown properly
         self.game.update_lamps()

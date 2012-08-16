@@ -133,8 +133,6 @@ class BadGuys(ep.EP_Mode):
         if not self.game.fakePinProc:
             self.target_activate(3)
 
-
-
     def hit_bad_guy(self,target):
         # stop the timer
         # kill the coil to the drop target based on position
@@ -155,6 +153,9 @@ class BadGuys(ep.EP_Mode):
         # bandits in goldmine
         elif self.game.show_tracking('mineStatus') == "RUNNING":
             self.game.gm_multiball.hit_bandit(target)
+        # cva
+        elif self.game.show_tracking('cvaStatus') == "RUNNING":
+            self.game.cva.hit_alien(target)
         # option 3 is a gunfight
         else:
             self.game.gunfight.won()

@@ -420,6 +420,10 @@ class BaseGameMode(ep.EP_Mode):
         if not self.guns_allowed():
             print "PASSING - Guns disabled"
             print self.game.show_tracking('stackLevel')
+        # cva
+        elif self.game.show_tracking('cvaStatus') == "READY":
+            self.game.modes.add(self.game.cva)
+            self.game.cva.intro(entry="inlane",onSide = side)
         # move your train
         elif self.game.show_tracking('mytStatus') == "READY":
             # if MYT is ready, start it and raise the post to catch the ball
@@ -543,6 +547,10 @@ class BaseGameMode(ep.EP_Mode):
         elif hits == 150:
             # display the mega jets display
             pass
+        if self.game.show_tracking('cvaStatus') == "RUNNING":
+            self.game.score(5250)
+            self.game.sound.play(self.game.assets.sfx_cvaBumper)
+
         if hits < 75:
             # if we're under 75 points are low
             self.game.score(5250)
