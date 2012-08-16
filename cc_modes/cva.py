@@ -89,9 +89,11 @@ class CvA(ep.EP_Mode):
         # starting saucer value
         self.saucerValue = 1000000
         self.saucerIncrement = 250000
+        self.saucerPoints = 0
         # starting alien value
         self.alienValue = 50000
         self.alienIncrement = 5000
+        self.alienPoints = 0
         self.activeAliens = []
         self.teleporting = False
         self.teleportingAliens = []
@@ -649,6 +651,8 @@ class CvA(ep.EP_Mode):
         animLayer.composite_op = "blacksrc"
         myString = self.point_value("ALIEN")
         self.game.score(myString)
+        # add the points to the running total
+        self.alienPoints += myString
         titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("ALIEN KILLED")
         scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
         combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
@@ -688,6 +692,8 @@ class CvA(ep.EP_Mode):
         animLayer.frame_time = 6
         animLayer.composite_op = "blacksrc"
         myString = self.point_value("SAUCER")
+        # add the points to the running total
+        self.saucerPoints += myString
         titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("SAUCER DESTROYED")
         scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
         combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
@@ -714,51 +720,32 @@ class CvA(ep.EP_Mode):
         alienBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva_aliens_border.dmd').frames[0])
         # blank script
         script = []
-        # math out the ship points total
-        shipPoints = 0
-        if self.saucerHits == 0:
-            shipPoints = 0
-        else:
-            for i in range(0,self.saucerHits,1):
-                # one mill per saucer
-                shipPoints += 1000000
-                # 250,000 bonus boost per saucer starting with 2
-                shipPoints += 250000 * (i - 1)
-        # math out the alien points total
-        alienPoints = 0
-        if self.aliensKilled == 0:
-            alienPoints = 0
-        else:
-            for i in range(0,self.aliensKilled,1):
-                # 50,000 per alien
-                alienPoints += 50000
-                # 5000 point boost per alien starting with 2
-                alienPoints += 5000 * (i -1)
         # set the saucer title line
         if self.saucerHits == 1:
-            textString = "1 SAUCER DESTROYED"
+            textStringOne = "1 SAUCER DESTROYED"
         else:
-            textString = str(self.saucerHits) + " SAUCERS DESTROYED"
-        titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False)
-        titleLayer.set_text(textString)
+            textStringOne = str(self.saucerHits) + " SAUCERS DESTROYED"
+        titleLayerOne = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
+        titleLayerOne.set_text(textStringOne)
         # set the saucer score line
-        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(shipPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+        scoreLayerOne = ep.pulse_text(self,64,15,ep.format_score(self.saucerPoints),align="center",myOpaque=True,size="12px",timing=0.1)
         # build the layer
-        pageOne = dmd.GroupedLayer(128,32,[shipBorder,titleLayer,scoreLayer])
+        pageOne = dmd.GroupedLayer(128,32,[shipBorder,titleLayerOne,scoreLayerOne])
         # add it to the script
         script.append({'layer':pageOne,'seconds':1.5})
         # set the aliens title line
         if self.aliensKilled == 0:
-            textString = "1 ALIEN KILLED"
+            textStringTwo = "1 ALIEN KILLED"
         else:
-            textString = str(self.aliensKilled) + " ALIENS KILLED"
-        titleLayer.set_text(textString)
+            textStringTwo = str(self.aliensKilled) + " ALIENS KILLED"
+        titleLayerTwo = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
+        titleLayerTwo.set_text(textStringTwo)
         # set the aliens score line
-        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(alienPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+        scoreLayerTwo = ep.pulse_text(self,64,15,ep.format_score(self.alienPoints),align="center",myOpaque=True,size="12px",timing=0.1)
         # build the layer
-        page = dmd.GroupedLayer(128,32,[alienBorder,titleLayer,scoreLayer])
+        pageTwo = dmd.GroupedLayer(128,32,[alienBorder,titleLayerTwo,scoreLayerTwo])
         # add it to the script
-        script.append({'layer':page,'seconds':1.5})
+        script.append({'layer':pageTwo,'seconds':1.5})
         # setup the script layer
         summary = dmd.ScriptedLayer(128,32,script)
         # and activate
