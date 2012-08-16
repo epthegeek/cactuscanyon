@@ -63,7 +63,7 @@ class CvA(ep.EP_Mode):
 
     def ball_drained(self):
         # if we lose all but one the ball the mode ends
-        if self.game.trough.num_balls_in_play == 1 or self.game.trough_num_balls_in_play:
+        if self.game.trough.num_balls_in_play == 1 or self.game.trough_num_balls_in_play == 0:
             if self.game.show_tracking('cvaStatus') == "RUNNING":
                 self.cancel_delayed("Display")
                 self.game.base.busy = True
@@ -73,7 +73,6 @@ class CvA(ep.EP_Mode):
     def mode_started(self):
         # set the stack level
         self.game.set_tracking('stackLevel',True,3)
-
         # resetting defaults
         # the transitions fail if they're too close together - this is for putting a 1 second delay in between
         self.beat = 0
@@ -274,6 +273,7 @@ class CvA(ep.EP_Mode):
     # the saloon
     def sw_saloonPopper_active_for_290ms(self,sw):
         self.game.score_with_bonus(2530)
+        self.game.saloon.kick()
         return game.SwitchStop
 
     def sw_saloonBart_active(self,sw):
@@ -297,6 +297,9 @@ class CvA(ep.EP_Mode):
 
     def intro(self,step=1,entry="inlane",onSide = 0):
         if step == 1:
+            # set the running flag
+            self.game.set_tracking("cvaStatus", "RUNNING")
+            self.game.update_lamps()
             # trap the ball if needed
             if entry == "inlane":
                 self.posts[onSide].patter(on_time=2,off_time=6,original_on_time=30)
@@ -309,7 +312,7 @@ class CvA(ep.EP_Mode):
             duration = self.game.sound.play(self.game.assets.music_cvaIntro)
             # main loop
             self.delay(delay=duration,handler=self.game.base.music_on,param=self.game.assets.music_cvaLoop)
-            self.delay(delay=duration,handler=self.gi_bloom,param=duration)
+            self.delay(delay=duration,handler=self.gi_bloom,param=4.34811782837)
             self.delay(delay=duration,handler=self.intro,param=3)
             # load a blank frame to fade in from
             self.blankLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
@@ -348,6 +351,17 @@ class CvA(ep.EP_Mode):
             self.desert.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[self.desert,animLayer])
             self.layer = combined
+            # launch 2 more balls
+            self.game.trough.balls_to_autoplunge = 2
+            self.game.trough.launch_balls(2)
+            # release the main ball
+            if self.entry == "inlane":
+                self.posts[self.side].disable()
+            elif self.entry == "mine":
+                self.game.mountain.eject()
+            elif self.entry == "saloon":
+                self.game.saloon.kick()
+
             self.delay(delay=myWait,handler = self.get_going)
 
     def one_beat(self):
@@ -387,8 +401,6 @@ class CvA(ep.EP_Mode):
         self.transition = ep.EP_Transition(self,self.staticLayer,animLayer,ep.EP_Transition.TYPE_CROSSFADE,callback=self.one_beat)
 
     def get_going(self):
-        # set the running flag
-        self.game.set_tracking("cvaStatus", "RUNNING")
         # start the saucer in motion
         self.saucerMoving = True
         # first saucer stop is position 4
@@ -402,16 +414,6 @@ class CvA(ep.EP_Mode):
         self.blankLayer = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
         # update the display
         self.update_display()
-        # launch 2 more balls
-        self.game.trough.balls_to_autoplunge = 2
-        self.game.trough.launch_balls(2)
-        # release the main ball
-        if self.entry == "inlane":
-            self.posts[self.side].disable()
-        elif self.entry == "mine":
-            self.game.mountain.eject()
-        elif self.entry == "saloon":
-            self.game.saloon.kick()
 
 
     def update_display(self,once=False):
@@ -776,13 +778,14 @@ class CvA(ep.EP_Mode):
         self.unload()
 
     def gi_flutter(self):
-        self.game.gi_control("OFF")
+        print "GI FLUTTER"
         self.game.lamps.gi01.schedule(0x000C0F0F,cycle_seconds=1)
         self.game.lamps.gi02.schedule(0x000C0F0F,cycle_seconds=1)
         self.game.lamps.gi03.schedule(0x000C0F0F,cycle_seconds=1)
 
     def gi_bloom(self,duration):
+        print "GI BLOOM"
         self.delay("Bloom",delay=duration,handler=self.gi_bloom,param=duration)
         self.game.lamps.gi01.schedule(0x00000FFF,cycle_seconds=1)
-        self.game.lamps.gi01.schedule(0x00000FFF,cycle_seconds=1)
-        self.game.lamps.gi01.schedule(0x00000FFF,cycle_seconds=1)
+        self.game.lamps.gi02.schedule(0x00000FFF,cycle_seconds=1)
+        self.game.lamps.gi03.schedule(0x00000FFF,cycle_seconds=1)

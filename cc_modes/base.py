@@ -126,7 +126,9 @@ class BaseGameMode(ep.EP_Mode):
         self.disable_lamps()
         status = self.game.show_tracking('lampStatus')
         ## if status is off, we bail here
-        if status != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING":
+        if status != "ON" or \
+           self.game.show_tracking('bionicStatus') == "RUNNING" or \
+           self.game.show_tracking('cvaStatus') == "RUNNING":
             return
         # left side - either the playfield light is on or blinking, or the inlane light is on
         left = self.game.show_tracking('quickdrawStatus',0)

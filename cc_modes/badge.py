@@ -35,7 +35,7 @@ class Badge(ep.EP_Mode):
         self.disable_lamps()
         status = self.game.show_tracking('lampStatus')
         ## if status is off, we bail here
-        if status == "OFF":
+        if status == "OFF" or self.game.show_tracking('cvaStatus') == "RUNNING":
             return
 
         # star lamps for high noon

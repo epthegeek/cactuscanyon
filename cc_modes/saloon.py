@@ -131,7 +131,8 @@ class Saloon(ep.EP_Mode):
     def update_lamps(self):
         self.disable_lamps()
         ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') == "OFF":
+        if self.game.show_tracking('lampStatus') == "OFF" or \
+            self.game.show_tracking('cvaStatus') == "RUNNING":
             return
 
         # flash the saloon arrow if bionic bart is ready

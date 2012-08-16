@@ -58,12 +58,13 @@ class BadGuys(ep.EP_Mode):
         self.kill_power()
 
     def update_lamps(self):
+        self.disable_lamps()
         # bail immediately if showdown or ambush is running
         if self.game.show_tracking('showdownStatus') == "RUNNING" or\
-           self.game.show_tracking('ambushStatus') == "RUNNING":
+           self.game.show_tracking('ambushStatus') == "RUNNING" or\
+           self.game.show_tracking('cvaStatus') == "RUNNING":
             return
         # reset first
-        self.disable_lamps()
         # bail if lights are off
         status = self.game.show_tracking('lampStatus')
         if status != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING":
