@@ -308,7 +308,7 @@ class CvA(ep.EP_Mode):
             duration = self.game.sound.play(self.game.assets.music_cvaIntro)
             # main loop
             self.delay(delay=duration,handler=self.game.base.music_on,param=self.game.assets.music_cvaLoop)
-            self.delay(delay=duration,handler=self.gi_bloom,param=4.34811782837)
+            self.delay(delay=duration,handler=self.gi_bloom,param=4.35)
             self.delay(delay=duration,handler=self.intro,param=3)
             # load a blank frame to fade in from
             self.blankLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
