@@ -250,9 +250,11 @@ class BankRobbery(ep.EP_Mode):
 
             ## tick down the timer
             self.modeTimer -= 0.1
-            ## hurry quote at 5 seconds
+            ## hurry quote at 5 seconds, plead at 15
+            if abs(self.modeTimer - 15) < 0.00000001:
+                self.game.base.play_quote(self.game.assets.quote_pollyPlead)
             if abs(self.modeTimer - 5) < 0.00000001:
-                self.game.base.play_quote(self.game.assets.quote_hurry)
+                self.game.base.play_quote(self.game.assets.quote_pollyHurry)
             if self.modeTimer <= 0:
                 # go to a grace period
                 self.polly_died()
