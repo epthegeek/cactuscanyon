@@ -304,8 +304,6 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvaYell, self.sfx_path + "bangarang-yell.wav")
         self.sfx_cvaExplosion = 'sfx_cvaExplosion'
         self.game.sound.register_sound(self.sfx_cvaExplosion, self.sfx_path + "208-afm-explosion.wav")
-        self.sfx_cvaSaucerHitRiff = 'sfx_cvaSaucerHitRiff'
-        self.game.sound.register_sound(self.sfx_cvaSaucerHitRiff, self.sfx_path + "334-afm-saucer-hit-rif.wav")
         self.sfx_cvaFinalRiff = 'sfx_cvaFinalRiff'
         self.game.sound.register_sound(self.sfx_cvaFinalRiff, self.sfx_path + "328-afm-celebratory-riff.wav")
         self.sfx_cvaTeleport = 'sfx_cvaTeleport'

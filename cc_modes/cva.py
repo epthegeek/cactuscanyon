@@ -749,8 +749,6 @@ class CvA(ep.EP_Mode):
         self.layer = combined
         # play the boom
         self.game.sound.play(self.game.assets.sfx_cvaExplosion)
-        # play the riff
-        self.delay("Display",delay=myWait-0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaSaucerHitRiff)
         # delay the normal display and next saucer
         theDelay = myWait + 1.5
         self.delay(delay=theDelay+0.1,handler=self.update_display)
