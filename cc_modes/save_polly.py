@@ -199,6 +199,8 @@ class SavePolly(ep.EP_Mode):
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
             self.delay("Get Going",delay=2,handler=self.in_progress)
+            # play the intro quote
+            self.game.base.play_quote(self.game.assets.quote_ttttIntro)
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause

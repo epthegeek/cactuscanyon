@@ -530,6 +530,9 @@ class Assets():
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "818-polly-help.wav")
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "811-polly-help.save-little-old-me.wav")
 
+        self.quote_ttttIntro = 'quote_ttttIntro'
+        self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "1193-mayor-miss-polly-tracks-2.wav")
+        self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "1193-mayor-miss-polly-tracks.wav")
 
         self.quote_mobStart = 'quote_mobStart'
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1171-mayor-shoot-anything-that-pops-up.wav")
