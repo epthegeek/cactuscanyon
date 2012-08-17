@@ -247,7 +247,10 @@ class CvA(ep.EP_Mode):
         return game.SwitchStop
 
     def quickdraw_hit(self,position,side):
-        pass
+        # play the switch sound
+        self.game.sound.play(self.game.assets.sfx_cvaSiren)
+        # score the arbitrary and wacky points
+        self.game.score_with_bonus(2530)
 
     # beer mug
     def sw_beerMug_active(self,sw):
@@ -289,6 +292,46 @@ class CvA(ep.EP_Mode):
         ## -- set the last switch hit --
         ep.last_switch = "jetBumpersExit"
         return game.SwitchStop
+
+    # inlanes
+    def sw_leftReturnLane_active(self, sw):
+        # register a left return lane hit
+        self.return_lane_hit(0)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftReturnLane"
+        return game.SwitchStop
+
+    def sw_rightReturnLane_active(self,sw):
+        # register a right return lane hit
+        self.return_lane_hit(1)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightReturnLane"
+        return game.SwitchStop
+
+    def return_lane_hit(self,side):
+        # play the sound
+        self.game.sound.play(self.game.assets.sfx_cvaInlane)
+        # score the points
+        self.game.score_with_bonus(2530)
+
+    # outlanes
+    def sw_leftOutlane_active(self,sw):
+        self.outlane_hit(0)
+        ## -- set the last switch hit --
+        ep.last_switch = "leftOutlane"
+        return game.SwitchStop
+
+    def sw_rightOutlane_active(self,sw):
+        self.outlane_hit(1)
+        ## -- set the last switch hit --
+        ep.last_switch = "rightOutlane"
+        return game.SwitchStop
+
+    def outlane_hit(self, side):
+        # play the sound
+        self.game.sound.play(self.game.assets.sfx_cvaDrain)
+        # score the points
+        self.game.score_with_bonus(2530)
 
 
     def intro(self,step=1,entry="inlane",onSide = 0):
@@ -541,6 +584,8 @@ class CvA(ep.EP_Mode):
         if mode == "SHIP":
             # change the mode type
             self.mode = "SHIP"
+            # kill the taunt delay
+            self.cancel_delayed("Taunt")
             # set the ship in motion
             self.saucerMoving = True
             self.update_display()
@@ -605,7 +650,8 @@ class CvA(ep.EP_Mode):
         self.teleporting = True
         # update the display
         self.update_display()
-        self.game.sound.play(self.game.assets.sfx_cvaTeleport)
+        duration = self.game.sound.play(self.game.assets.sfx_cvaTeleport)
+        self.delay(delay = duration,handler=self.game.base.play_quote,param=self.game.assets.quote_cvaTeleported)
         # delay the actual activation of the targets
         self.delay("Aliens",delay=myWait,handler=self.activate_aliens,param=aliens)
 
@@ -629,6 +675,8 @@ class CvA(ep.EP_Mode):
         # turn off the teleporting flag
         self.teleporting = False
         self.update_display()
+        # taunt loop timer
+        self.taunt_timer()
 
     def hit_alien(self,target):
         # flasher flourish
@@ -657,7 +705,8 @@ class CvA(ep.EP_Mode):
         scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
         combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
         self.layer = combined
-        self.game.sound.play(self.game.assets.sfx_cvaGroan)
+        self.delay(delay=0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaGroan)
+        self.game.sound.play(self.game.assets.sfx_cvaAlienHit)
         # delay the normal display and next saucer
         theDelay = myWait + 1.5
         # if all 4 are dead, we change modes to the ship
@@ -700,12 +749,16 @@ class CvA(ep.EP_Mode):
         self.layer = combined
         # play the boom
         self.game.sound.play(self.game.assets.sfx_cvaExplosion)
+        # play the riff
+        self.delay("Display",delay=myWait-0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaSaucerHitRiff)
         # delay the normal display and next saucer
         theDelay = myWait + 1.5
         self.delay(delay=theDelay+0.1,handler=self.update_display)
         self.delay(delay=theDelay,handler=self.next_saucer,param=True)
 
     def end_cva(self):
+        # kill the taunt delay
+        self.cancel_delayed("Taunt")
         # kill the alien delay if there is one
         self.cancel_delayed("Aliens")
         # and the display delay
@@ -751,9 +804,11 @@ class CvA(ep.EP_Mode):
         # and activate
         self.layer = summary
         # play a cheer noise
-        self.game.sound.play(self.game.assets.sfx_cheers)
+        self.game.sound.play(self.game.assets.sfx_cvaFinalRiff)
+        self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaFinalRiff)
         # and delay the second one
-        self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
+        self.delay(delay=0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
+        self.delay(delay=2,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
         # finish up after 3 seconds
         self.delay(delay = 3,handler=self.finish_up)
 
@@ -775,6 +830,12 @@ class CvA(ep.EP_Mode):
 
         # and then unload
         self.unload()
+
+    def taunt_timer(self,counter = 0):
+        counter += 1
+        if counter == 9:
+            self.game.base.play_quote(self.game.assets.quote_cvaTaunt)
+        self.delay("Taunt",delay=1,handler=self.taunt_timer,param=counter)
 
     def gi_flutter(self):
         print "GI FLUTTER"

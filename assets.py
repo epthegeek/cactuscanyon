@@ -296,10 +296,18 @@ class Assets():
         self.sfx_fireworks3 = 'sfx_fireworks3'
         self.game.sound.register_sound(self.sfx_fireworks3, self.sfx_path + "311-sfx-fireworks-3.wav")
 
+        self.sfx_cvaInlane = 'sfx_cvaInlane'
+        self.game.sound.register_sound(self.sfx_cvaInlane, self.sfx_path + "828-afm-beam-noise.wav")
+        self.sfx_cvaDrain = 'sfx_cvaDrain'
+        self.game.sound.register_sound(self.sfx_cvaDrain,self.sfx_path + "340-afm-drain-noise.wav")
         self.sfx_cvaYell = 'sfx_cvaYell'
         self.game.sound.register_sound(self.sfx_cvaYell, self.sfx_path + "bangarang-yell.wav")
         self.sfx_cvaExplosion = 'sfx_cvaExplosion'
         self.game.sound.register_sound(self.sfx_cvaExplosion, self.sfx_path + "208-afm-explosion.wav")
+        self.sfx_cvaSaucerHitRiff = 'sfx_cvaSaucerHitRiff'
+        self.game.sound.register_sound(self.sfx_cvaSaucerHitRiff, self.sfx_path + "334-afm-saucer-hit-rif.wav")
+        self.sfx_cvaFinalRiff = 'sfx_cvaFinalRiff'
+        self.game.sound.register_sound(self.sfx_cvaFinalRiff, self.sfx_path + "328-afm-celebratory-riff.wav")
         self.sfx_cvaTeleport = 'sfx_cvaTeleport'
         self.game.sound.register_sound(self.sfx_cvaTeleport, self.sfx_path + "294-afm-teleport.wav")
         self.sfx_cvaWoosh = 'sfx_cvaWoosh'
@@ -308,8 +316,29 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-1.wav")
         self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-2.wav")
         self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-3.wav")
+        self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-4.wav")
+        self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-5.wav")
+        self.game.sound.register_sound(self.sfx_cvaGroan, self.sfx_path + "cva-groan-6.wav")
+        self.sfx_cvaAlienHit = 'sfx_cvaAlienHit'
+        self.game.sound.register_sound(self.sfx_cvaAlienHit, self.sfx_path + "322-afm-alien-hit.wav")
         self.sfx_cvaBumper = 'sfx_cvaBumper'
         self.game.sound.register_sound(self.sfx_cvaBumper, self.sfx_path + "bangarang-bwoip-noise.wav")
+        self.sfx_cvaSiren = 'sfx_cvaSiren'
+        self.game.sound.register_sound(self.sfx_cvaSiren, self.sfx_path + "bangarang-siren.wav")
+
+
+        self.quote_cvaTaunt = 'quote_cvaTaunt'
+        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "592-alien-you-dont-stand-a-chance.wav")
+        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "546-alien-nothing-can-defeat-us.wav")
+        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "544-alien-laugh-2.wav")
+        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "569-alien-taunt.wav")
+        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "543-we-are-invincible.wav")
+        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "538-earth-will-be-ours.wav")
+
+        self.quote_cvaTeleported = 'quote_cvaTeleported'
+        self.game.sound.register_sound(self.quote_cvaTeleported, self.quotes_path + "532-alien-attack.wav")
+        self.game.sound.register_sound(self.quote_cvaTeleported, self.quotes_path + "579-alien-martians-superior.wav")
+
 
         # Quotes
         # this bunches the welcome strings together for play_voice()
