@@ -123,7 +123,7 @@ class RightRamp(ep.EP_Mode):
             # blink the third
             self.game.lamps.rightRampSavePolly.schedule(0x0F0F0F0F)
         # this is completed - pulse the 3rd light
-        elif stage == 4:
+        elif stage == 5:
             # three on
             self.game.lamps.rightRampSoundAlarm.enable()
             self.game.lamps.rightRampShootOut.enable()

@@ -86,6 +86,10 @@ class CvA(ep.EP_Mode):
         # set the mode
         self.mode = "SHIP"
         self.saucerMoving = False
+        # reset the direction - should always start going left
+        if self.direction[0] != "LEFT":
+        # flip the direction of the ship
+            self.direction.reverse()
         # starting saucer value
         self.saucerValue = 1000000
         self.saucerIncrement = 250000
@@ -247,8 +251,6 @@ class CvA(ep.EP_Mode):
         return game.SwitchStop
 
     def quickdraw_hit(self,position,side):
-        # play the switch sound
-        self.game.sound.play(self.game.assets.sfx_cvaSiren)
         # score the arbitrary and wacky points
         self.game.score_with_bonus(2530)
 
@@ -779,7 +781,7 @@ class CvA(ep.EP_Mode):
         titleLayerOne = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
         titleLayerOne.set_text(textStringOne)
         # set the saucer score line
-        scoreLayerOne = ep.pulse_text(self,64,15,ep.format_score(self.saucerPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+        scoreLayerOne = ep.pulse_text(self,64,14,ep.format_score(self.saucerPoints),align="center",myOpaque=True,size="12px",timing=0.1)
         # build the layer
         pageOne = dmd.GroupedLayer(128,32,[shipBorder,titleLayerOne,scoreLayerOne])
         # add it to the script
@@ -792,7 +794,7 @@ class CvA(ep.EP_Mode):
         titleLayerTwo = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
         titleLayerTwo.set_text(textStringTwo)
         # set the aliens score line
-        scoreLayerTwo = ep.pulse_text(self,64,15,ep.format_score(self.alienPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+        scoreLayerTwo = ep.pulse_text(self,64,14,ep.format_score(self.alienPoints),align="center",myOpaque=True,size="12px",timing=0.1)
         # build the layer
         pageTwo = dmd.GroupedLayer(128,32,[alienBorder,titleLayerTwo,scoreLayerTwo])
         # add it to the script

@@ -43,12 +43,13 @@ class Saloon(ep.EP_Mode):
            self.game.show_tracking('cvaStatus') == "RUNNING":
             return
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
-        if not self.game.save_polly.running and \
+        if not self.game.peril and \
            "RUNNING" not in self.game.show_tracking('quickdrawStatus') and \
            True in self.game.show_tracking('stackLevel'):
             self.kick()
-        # Divert here for bionic bart if ready
-        elif self.game.show_tracking('bionicStatus') == "READY":
+        # Divert here for bionic bart if ready - unless polly is running
+        elif self.game.show_tracking('bionicStatus') == "READY" and not self.game.peril:
+            # if any of the polly modes is running, bail
             self.game.modes.add(self.game.bionic)
             self.game.bionic.start_bionic()
             # then break out of the rest of this action

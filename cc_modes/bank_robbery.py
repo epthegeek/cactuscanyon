@@ -36,6 +36,7 @@ class BankRobbery(ep.EP_Mode):
         self.won = False
 
     def mode_started(self):
+        self.game.peril = True
         self.modeTimer = 0
         # point value for shots
         self.shotValue = 250000
@@ -421,6 +422,7 @@ class BankRobbery(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
+        self.game.peril = False
             # unload the mode
         self.unload()
 

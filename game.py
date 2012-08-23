@@ -67,6 +67,8 @@ class CCGame(game.BasicGame):
                         self.lamps.gi03]
         self.squelched = False
         self.previousVolume = 0
+        # polly mode variable
+        self.peril = False
 
 
     def setup(self):
@@ -316,6 +318,8 @@ class CCGame(game.BasicGame):
         self.ballStarting = True
         # turn on the GI
         self.gi_control("ON")
+        # set peril (polly indicator) to false
+        self.polly = False
         # launch a ball, unless there is one in the shooter lane already - but really, this shouldn't
         # happen because we're only starting if trough is full
         if not self.switches.shooterLane.is_active():

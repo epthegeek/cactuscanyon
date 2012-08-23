@@ -33,6 +33,7 @@ class RiverChase(ep.EP_Mode):
         self.won = False
         self.distance_value = int(30.0 / self.shotsToWin)
     def mode_started(self):
+        self.game.peril = True
         self.modeTimer = 0
         self.shotsSoFar = 0
         # position for the horse
@@ -339,6 +340,7 @@ class RiverChase(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
+        self.game.peril = False
             # unload the mode
         self.unload()
 

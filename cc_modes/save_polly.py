@@ -32,6 +32,8 @@ class SavePolly(ep.EP_Mode):
         self.won = False
 
     def mode_started(self):
+        # set the polly indicator
+        self.game.peril = True
         self.shotsSoFar = 0
         self.cows = [self.game.assets.sfx_cow1, self.game.assets.sfx_cow2]
         self.modeTimer = 0
@@ -399,6 +401,8 @@ class SavePolly(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
+        # turn off the polly indicator
+        self.game.peril = False
         # unload the mode
         self.unload()
 

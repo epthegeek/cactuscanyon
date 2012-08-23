@@ -110,7 +110,7 @@ class Tracking(game.Player):
         self.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
         self.player_stats['quickdrawsStarted'] = 0
         self.player_stats['quickdrawsWon'] = 0
-        self.player_stats['badGuysDead'] = [True,False,True,True]
+        self.player_stats['badGuysDead'] = [False,False,False,False]
         # these are separate because the bad guy can be dead (quickdraw) but also up (showdown/gunfight)
         self.player_stats['badGuyUp'] = [False,False,False,False]
         # showdown status - OPEN, READY, RUNNING, OVER (to hold until ambush)
@@ -139,9 +139,9 @@ class Tracking(game.Player):
         self.player_stats['highNoonStatus'] = "OPEN"
         # list to store the lit items for the star ?
         # Starts at the top of the star with 0, goes clockwise. 0 = motherlode, 1=combo, 2=barts, 3=showdown, 4=stampede
-        self.player_stats['starStatus'] = [True,True,True,True,True]
+        self.player_stats['starStatus'] = [False, False, False, False, False]
         # Bionic Bart - OPEN / READY / RUNNING / DEAD
-        self.player_stats['bionicStatus'] = "READY"
+        self.player_stats['bionicStatus'] = "OPEN"
 
         # Move your train - OPEN / READY / RUNNING
         self.player_stats['mytStatus'] = "OPEN"
