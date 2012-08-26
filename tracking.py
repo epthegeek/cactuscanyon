@@ -159,4 +159,4 @@ class Tracking(game.Player):
         self.player_stats['stackLevel'] = [False,False,False,False]
 
         # cva OPEN, READY, RUNNING
-        self.player_stats['cvaStatus'] = "READY"
+        self.player_stats['cvaStatus'] = "OPEN"

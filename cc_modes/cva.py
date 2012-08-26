@@ -157,6 +157,14 @@ class CvA(ep.EP_Mode):
 
     # decide if this was a jackpot hit or a miss
     def process_shot(self,number,active):
+        if number == 3 and ep.last_switch == 'leftLoopTop':
+            # came in backwards
+            self.game.score(2530)
+            return
+        if number == 0 and ep.last_switch == 'rightLoopTop':
+            # came in backwards
+            self.game.score(2530)
+            return
         if active == number:
             # turn off moving, just in case
             self.saucerMoving = False
