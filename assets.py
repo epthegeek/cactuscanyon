@@ -410,8 +410,6 @@ class Assets():
         self.quote_rightRamp2 = 'quote_rightRamp2'
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.game.sound.register_sound(self.quote_rightRamp2, self.quotes_path + "850-polly-ooh-how-brave.wav")
-        self.quote_mayhemBank = 'quote_mayhemBank'
-        self.game.sound.register_sound(self.quote_mayhemBank, self.quotes_path + "1307-undertaker-oh-good-mayhem-at-the-bank.wav")
         self.quote_centerRamp1 = 'quote_centerRamp1'
         self.game.sound.register_sound(self.quote_centerRamp1, self.quotes_path + "1579-leader-bart-laugh-2.wav")
         self.game.sound.register_sound(self.quote_centerRamp1, self.quotes_path + "1576-leader-bart-you-cant-stop-this-train.wav")
@@ -524,15 +522,31 @@ class Assets():
         self.quote_pollyHurry = 'quote_pollyHurry'
         self.game.sound.register_sound(self.quote_pollyHurry, self.quotes_path + "815-polly-hurry.wav")
         self.game.sound.register_sound(self.quote_pollyHurry, self.quotes_path + "816-polly-hurry-hurry.wav")
+        self.game.sound.register_sound(self.quote_pollyHurry, self.quotes_path + "mayor-save-miss-polly.wav")
 
         self.quote_pollyPlead = 'quote_pollyPlead'
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "814-polly-be-a-gentlemen-and-save-me.wav")
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "818-polly-help.wav")
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "811-polly-help.save-little-old-me.wav")
+        self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "mayor-miss-polly-needs-your-help.wav")
+
 
         self.quote_ttttIntro = 'quote_ttttIntro'
         self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "1193-mayor-miss-polly-tracks-2.wav")
         self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "1193-mayor-miss-polly-tracks.wav")
+        self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "mayor-bart-boys-tied-miss-polly-to-the-tracks.wav")
+
+        self.quote_rotrIntro = 'quote_rotrIntro'
+        self.game.sound.register_sound(self.quote_rotrIntro, self.quotes_path + "mayor-they-went-down-to-the-river.wav")
+        self.game.sound.register_sound(self.quote_rotrIntro, self.quotes_path + "mayor-hurry-sheriff-catch-that-boat.wav")
+        self.game.sound.register_sound(self.quote_rotrIntro, self.quotes_path + "00-mayor-dont-let-em-get-away.wav")
+
+
+        self.quote_hatbIntro = 'quote_hatbIntro'
+        self.game.sound.register_sound(self.quote_hatbIntro, self.quotes_path + "mayor-hostage-in-the-bank.wav")
+        self.game.sound.register_sound(self.quote_hatbIntro, self.quotes_path + "mayor-miss-pollys-in-there-sheriff.wav")
+        self.game.sound.register_sound(self.quote_hatbIntro, self.quotes_path + "1307-undertaker-oh-good-mayhem-at-the-bank.wav")
+
 
         self.quote_mobStart = 'quote_mobStart'
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1171-mayor-shoot-anything-that-pops-up.wav")
@@ -548,6 +562,18 @@ class Assets():
         self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1169-mayor-nice-shootin-sir.wav")
         self.game.sound.register_sound(self.quote_mobEnd, self.quotes_path + "1309-undertaker-a-respectable-bodycount-indeed.wav")
 
+        self.quote_cvaIntro = 'quote_cvaIntro'
+        self.game.sound.register_sound(self.quote_cvaIntro, self.quotes_path + "mayor-something-strange-is-going-on-here.wav")
+        self.game.sound.register_sound(self.quote_cvaIntro, self.quotes_path + "mayor-this-can-not-be-a-good-thing.wav")
+        self.game.sound.register_sound(self.quote_cvaIntro, self.quotes_path + "mayor-whats-that-strange-light-in-the-sky.wav")
+
+        self.quote_cvaEnd = 'quote_cvaEnd'
+        self.game.sound.register_sound(self.quote_cvaEnd, self.quotes_path + "mayor-boy-im-glad-thats-over.wav")
+        self.game.sound.register_sound(self.quote_cvaEnd, self.quotes_path + "mayor-strange-geckos.wav")
+        self.game.sound.register_sound(self.quote_cvaEnd, self.quotes_path + "mayor-those-things-were-ugly.wav")
+
+        self.quote_mytTaunt = 'quote_mytTaunt'
+        self.game.sound.register_sound(self.quote_mytTaunt, self.quotes_path + "mayor-need-to-move-that-train.wav")
 
         self.quote_introBigBart = 'quote_introBigBart'
         self.game.sound.register_sound(self.quote_introBigBart, self.quotes_path + "1466-big-name-is-big-bart-tough-guy.wav")
@@ -725,8 +751,6 @@ class Assets():
         self.game.sound.register_sound(self.quote_leaderLaugh, self.quotes_path + "1581-leader-bart-laugh-3.wav")
         self.quote_nobodysHome = 'quote_nobodysHome'
         self.game.sound.register_sound(self.quote_nobodysHome, self.quotes_path + "1853-leader-bart-nobodys-home.wav")
-        self.quote_catchGuy = 'quote_catchGuy'
-        self.game.sound.register_sound(self.quote_catchGuy, self.quotes_path + "00-mayor-dont-let-em-get-away.wav")
 
 
     # Music

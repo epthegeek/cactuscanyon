@@ -184,7 +184,7 @@ class RiverChase(ep.EP_Mode):
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
             self.delay("Get Going",delay=2,handler=self.in_progress)
-            self.delay(delay=2,handler=self.game.base.play_quote,param=self.game.assets.quote_catchGuy)
+            self.delay(delay=2,handler=self.game.base.play_quote,param=self.game.assets.quote_rotrIntro)
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause

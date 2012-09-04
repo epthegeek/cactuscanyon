@@ -159,6 +159,9 @@ class MoveYourTrain(ep.EP_Mode):
         if not self.game.train.inMotion or self.game.fakePinProc:
             # increase the shots taken
             self.shots += 1
+            # if shots divisible by 10, taunt
+            if self.shots % 10 == 0:
+                self.game.sound.play(self.game.assets.quote_mytTaunt)
             self.game.train.stopAt = 20
             if direction == "left":
                 self.move_display("left")

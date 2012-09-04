@@ -206,7 +206,7 @@ class BankRobbery(ep.EP_Mode):
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
             self.delay("Get Going",delay=2,handler=self.in_progress)
-            self.delay(delay=2,handler=self.game.base.play_quote,param=self.game.assets.quote_mayhemBank)
+            self.delay(delay=2,handler=self.game.base.play_quote,param=self.game.assets.quote_hatbIntro)
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause
@@ -445,6 +445,9 @@ class BankRobbery(ep.EP_Mode):
         eGuy0.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_explosion11)
         eGuy0.add_frame_listener(4,self.game.sound.play,param=self.game.assets.sfx_explosion11)
 
+        # bail if no bad guys remain
+        if True not in self.isActive:
+            return
         # get the available bad guys into a list
         dudes = []
         if self.isActive[0]: dudes.append(0)

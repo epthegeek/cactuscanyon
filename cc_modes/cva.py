@@ -346,6 +346,8 @@ class CvA(ep.EP_Mode):
 
     def intro(self,step=1,entry="inlane",onSide = 0):
         if step == 1:
+            self.game.sound.play(self.game.assets.quote_cvaIntro)
+
             # set the running flag
             self.game.set_tracking("cvaStatus", "RUNNING")
             self.game.update_lamps()
@@ -823,6 +825,8 @@ class CvA(ep.EP_Mode):
     def finish_up(self):
         # turn the GI back on
         self.game.gi_control("ON")
+        # play the ending quote
+        self.games.base.priority_quote(self.game.assets.quote_cvaEnd)
         # set the stack level
         self.game.set_tracking('stackLevel',False,3)
         # turn off the running flag
