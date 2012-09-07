@@ -639,8 +639,8 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.show_tracking('leftLoopStage') == 4 and \
             self.game.show_tracking('rightLoopStage') == 4 and \
             self.game.show_tracking('centerRampStage') == 5 and \
-            self.game.show_tracking('leftRampStage') == 4 and \
-            self.game.show_tracking('rightRampStage') == 4:
+            self.game.show_tracking('leftRampStage') == 5 and \
+            self.game.show_tracking('rightRampStage') == 5:
 
             self.game.modes.add(self.game.stampede)
             self.game.stampede.start_stampede()
