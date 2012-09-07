@@ -112,7 +112,7 @@ class Interrupter(ep.EP_Mode):
     def closing_song(self,duration):
         self.delay(delay=duration+1,handler=self.game.base.music_on,param=self.game.assets.music_mainTheme)
         # and set a delay to fade it out after 2 minutes
-        self.delay(delay=60,handler=self.game.sound.fadeout_music)
+        self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music)
 
     def showdown_hit(self,points):
         pointString = ep.format_score(points)

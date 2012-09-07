@@ -279,6 +279,8 @@ class CCGame(game.BasicGame):
     def start_game(self):
         # remove the attract mode
         self.modes.remove(self.attract_mode)
+        # kill the attract mode song fade delay just in case
+        self.interrupter.cancel_delayed("Attract Fade")
         # tick up the audits
         self.game_data['Audits']['Games Started'] += 1
         # turn off all the ligths
