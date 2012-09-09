@@ -96,7 +96,7 @@ class CenterRamp(ep.EP_Mode):
 
         # bank robbery
         if self.game.bank_robbery.running:
-            if self.game.bank_robbery.isActive[2]:
+            if self.game.bank_robbery.isActive[1]:
                 self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
                 self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
                 self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)

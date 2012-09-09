@@ -327,7 +327,7 @@ class SavePolly(ep.EP_Mode):
             completeFrame = dmd.GroupedLayer(128,32,[border,pollyTitle,scoreLine,awardLine1,self.awardLine2b])
             transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
             # pause the train briefly
-            self.delay(name="Pause Timer",delay=1.5,handler=self.pause_timer,param=True)
+            self.delay(name="Pause Timer",delay=1.5,handler=self.pause_timer,param=4)
 
 
     # success

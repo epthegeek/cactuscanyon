@@ -116,8 +116,8 @@ class GoldMine(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 6
-        animLayer.add_frame_listener(12,self.game.base.play_quote,param=self.game.assets.quote_gold)
-        animLayer.add_frame_listener(24,self.game.base.play_quote,param=self.game.assets.quote_mine)
+        animLayer.add_frame_listener(12,self.game.base.priority_quote,param=self.game.assets.quote_gold)
+        animLayer.add_frame_listener(24,self.game.base.priority_quote,param=self.game.assets.quote_mine)
         # turn it on
         self.layer = animLayer
         # when the animation is over go to the next step
@@ -125,7 +125,7 @@ class GoldMine(ep.EP_Mode):
 
     def intro_banner(self):
         # play the sound
-        self.game.base.play_quote(self.game.assets.quote_multiball)
+        self.game.base.priority_quote(self.game.assets.quote_multiball)
         # generate a flashing thing
         inverse = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner-inverse.dmd').frames[0])
         normal = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner.dmd').frames[0])
@@ -210,7 +210,7 @@ class GoldMine(ep.EP_Mode):
             animLayer.frame_time = 6
             self.layer = animLayer
             # play a quote
-            self.game.base.play_quote(self.game.assets.quote_jackpot)
+            self.game.base.priority_quote(self.game.assets.quote_jackpot)
             # loop back to step 2
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         if step == 2:

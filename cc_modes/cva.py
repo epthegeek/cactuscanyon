@@ -826,7 +826,7 @@ class CvA(ep.EP_Mode):
         # turn the GI back on
         self.game.gi_control("ON")
         # play the ending quote
-        self.games.base.priority_quote(self.game.assets.quote_cvaEnd)
+        self.game.base.priority_quote(self.game.assets.quote_cvaEnd)
         # set the stack level
         self.game.set_tracking('stackLevel',False,3)
         # turn off the running flag

@@ -81,7 +81,7 @@ class BankRobbery(ep.EP_Mode):
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
-            if self.game.show_tracking("rightRampStage") == 4:
+            if self.running:
                 self.game.base.busy = True
                 self.polly_died()
 
@@ -309,8 +309,11 @@ class BankRobbery(ep.EP_Mode):
         self.cancel_delayed("Get Going")
         # set the flag
         self.halted = True
+        textString = "< SAVE POLLY PAUSED >"
+        self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
 
-    # success
+
+# success
     def polly_saved(self):
         self.game.score(750000)
         self.running = False
@@ -400,7 +403,7 @@ class BankRobbery(ep.EP_Mode):
 
     def end_bank_robbery(self):
         # stop the polly music
-        print "end_river_chase IS KILLING THE MUSIC"
+        print "end_bank_robbery IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         self.layer = None
         # set the tracking on the ramps

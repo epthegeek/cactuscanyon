@@ -57,7 +57,7 @@ class RiverChase(ep.EP_Mode):
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
-            if self.game.show_tracking("leftRampStage") == 4:
+            if self.running:
                 self.game.base.busy = True
                 self.polly_died()
 
@@ -235,6 +235,9 @@ class RiverChase(ep.EP_Mode):
         self.cancel_delayed("Get Going")
         # set the flag
         self.halted = True
+        textString = "< SAVE POLLY PAUSED >"
+        self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+
 
     # success
     def polly_saved(self):
@@ -318,7 +321,7 @@ class RiverChase(ep.EP_Mode):
 
     def end_river_chase(self):
         # stop the polly music
-        print "polly_finished IS KILLING THE MUSIC"
+        print "end_river_chase IS KILLING THE MUSIC"
         self.game.sound.stop_music()
         self.layer = None
         # set the tracking on the ramps

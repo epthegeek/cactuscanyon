@@ -635,6 +635,7 @@ class BaseGameMode(ep.EP_Mode):
 
     ### stampede
     def check_stampede(self):
+        print "CHECKING STAMPEDE"
         # if both loops are done and the save polly is finished, then it's time to stampede
         if self.game.show_tracking('leftLoopStage') == 4 and \
             self.game.show_tracking('rightLoopStage') == 4 and \
