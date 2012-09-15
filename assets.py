@@ -125,7 +125,7 @@ class Assets():
         self.sfx_flourish6 = 'sfx_flourish6'
         self.game.sound.register_sound(self.sfx_flourish6, self.sfx_path + "032-flourish-6.wav")
         self.sfx_flourish7 = 'sfx_flourish7'
-        self.game.sound.register_sound(self.sfx_flourish7, self.sfx_path + "034-flourish-7-Horns.wav")
+        self.game.sound.register_sound(self.sfx_flourish7, self.sfx_path + "034-flourish-7-horns.wav")
         self.sfx_grinDing = 'sfx_grinDing'
         self.game.sound.register_sound(self.sfx_grinDing, self.sfx_path + "117-sfx-grin-ding.wav")
         self.sfx_rightRampEnter = 'sfx_rightRampEnter'
@@ -300,8 +300,6 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvaInlane, self.sfx_path + "828-afm-beam-noise.wav")
         self.sfx_cvaDrain = 'sfx_cvaDrain'
         self.game.sound.register_sound(self.sfx_cvaDrain,self.sfx_path + "340-afm-drain-noise.wav")
-        self.sfx_cvaYell = 'sfx_cvaYell'
-        self.game.sound.register_sound(self.sfx_cvaYell, self.sfx_path + "bangarang-yell.wav")
         self.sfx_cvaExplosion = 'sfx_cvaExplosion'
         self.game.sound.register_sound(self.sfx_cvaExplosion, self.sfx_path + "208-afm-explosion.wav")
         self.sfx_cvaFinalRiff = 'sfx_cvaFinalRiff'
@@ -331,8 +329,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "546-alien-nothing-can-defeat-us.wav")
         self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "544-alien-laugh-2.wav")
         self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "569-alien-taunt.wav")
-        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "543-we-are-invincible.wav")
-        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "538-earth-will-be-ours.wav")
+        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "543-alien-we-are-invincible.wav")
+        self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "538-alien-earth-will-be-ours.wav")
 
         self.quote_cvaTeleported = 'quote_cvaTeleported'
         self.game.sound.register_sound(self.quote_cvaTeleported, self.quotes_path + "532-alien-attack.wav")
@@ -520,14 +518,14 @@ class Assets():
         self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1205-prospector-hurry-youre-runnin-outta-time.wav")
 
         self.quote_pollyHurry = 'quote_pollyHurry'
-        self.game.sound.register_sound(self.quote_pollyHurry, self.quotes_path + "815-polly-hurry.wav")
-        self.game.sound.register_sound(self.quote_pollyHurry, self.quotes_path + "816-polly-hurry-hurry.wav")
+        self.game.sound.register_sound(self.quote_pollyHurry, self.quotes_path + "815-polly-hurry-hurry.wav")
+        self.game.sound.register_sound(self.quote_pollyHurry, self.quotes_path + "816-polly-hurry.wav")
         self.game.sound.register_sound(self.quote_pollyHurry, self.quotes_path + "mayor-save-miss-polly.wav")
 
         self.quote_pollyPlead = 'quote_pollyPlead'
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "814-polly-be-a-gentlemen-and-save-me.wav")
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "818-polly-help.wav")
-        self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "811-polly-help.save-little-old-me.wav")
+        self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "811-polly-save-little-old-me.wav")
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "mayor-miss-polly-needs-your-help.wav")
 
 
