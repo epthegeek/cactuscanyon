@@ -262,7 +262,7 @@ class LeftLoop(ep.EP_Mode):
 
             self.game.score_with_bonus(points)
             self.tumbleweed_display(points,combo)
-        return
+            return
 
         # load the animation based on which was last played
         self.direction = self.anims[thisOne]['direction']
