@@ -243,18 +243,17 @@ class RightLoop(ep.EP_Mode):
             #self.game.score(15000)
             #self.type = ep.EP_Transition.TYPE_CROSSFADE
             # if we're not on a combo  show the award - combos after stage 4 should just show the combo
-            if combo:
-                self.layer = None
-                self.game.combos.display()
-            else:
-                #self.show_award_text()
-                # New thing - Tumbleweed!
-                value = self.game.increase_tracking('tumbleweedValue',5000)
-                if value == 3:
-                    # enable cva
-                    self.game.set.tracking('cvaStatus',"READY")
-                self.game.score_with_bonus(value)
-                self.tumbleweed_display(value)
+            #self.show_award_text()
+            # New thing - Tumbleweed!
+            points = self.game.increase_tracking('tumbleweedValue',5000)
+            value = self.game.increase_tracking('tumbleweedHits')
+            # TODO - change this to a configurable amount
+            if value == 3:
+                # enable cva
+                self.game.set_tracking('cvaStatus',"READY")
+            self.game.score_with_bonus(points)
+            self.tumbleweed_display(points)
+
         # then tick the stage up for next time unless it's completed
         if stage < 4:
             newstage = self.game.increase_tracking('rightLoopStage')
@@ -267,6 +266,7 @@ class RightLoop(ep.EP_Mode):
             # if we're now complete, check stampede
             if newstage == 4:
                 self.game.base.check_stampede()
+
 
 
     def show_marksman_award(self):
@@ -325,6 +325,9 @@ class RightLoop(ep.EP_Mode):
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_tumbleWind)
         self.delay(name="Display",delay=myWait,handler=self.clear_layer)
+        if combo:
+            self.delay(name="Display",delay=myWait,handler=self.game.combos.display)
+
 
     def abort_display(self):
         self.clear_layer()

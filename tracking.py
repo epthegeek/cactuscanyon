@@ -42,6 +42,7 @@ class Tracking(game.Player):
 
         # Tumbleweed increases 5000 per shot - so the first one is actually 25000 when scored
         self.player_stats['tumbleweedValue'] = 20000
+        self.player_stats['tumbleweedHits'] = 0
         self.player_stats['adventureCompleteValue'] = 20000
 
         self.player_stats['extraBallsTotal'] = 0

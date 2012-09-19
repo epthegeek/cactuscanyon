@@ -248,19 +248,21 @@ class LeftLoop(ep.EP_Mode):
 
         # break at this point if it was a combo hit on stage 4 or higher - dont' show the full display
         if stage >= 4:
-            if combo:
-                self.layer = None
-                self.game.combos.display()
-            else:
-                # New thing - Tumbleweed!
-                value = self.game.increase_tracking('tumbleweedValue',5000)
-                if value == 3:
-                    # enable cva
-                    self.game.set.tracking('cvaStatus',"READY")
+            #if combo:
+            #    self.layer = None
+            #    self.game.combos.display()
+            #else:
+            # New thing - Tumbleweed!
+            points = self.game.increase_tracking('tumbleweedValue',5000)
+            value = self.game.increase_tracking('tumbleweedHits')
+            # todo - change this to a configurable amount
+            if value == 3:
+                # enable cva
+                self.game.set_tracking('cvaStatus',"READY")
 
-                self.game.score_with_bonus(value)
-                self.tumbleweed_display(value)
-            return
+            self.game.score_with_bonus(points)
+            self.tumbleweed_display(points,combo)
+        return
 
         # load the animation based on which was last played
         self.direction = self.anims[thisOne]['direction']
@@ -301,7 +303,7 @@ class LeftLoop(ep.EP_Mode):
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,self.anims[1]['direction'])
         self.transition.callback = self.clear_layer
 
-    def tumbleweed_display(self,value):
+    def tumbleweed_display(self,value,combo):
         banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed-banner.dmd').frames[0])
         scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6)
         # load up the animation
@@ -318,6 +320,8 @@ class LeftLoop(ep.EP_Mode):
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_tumbleWind)
         self.delay(name="Display",delay=myWait,handler=self.clear_layer)
+        if combo:
+            self.delay(name="Display",delay=myWait,handler=self.game.combos.display)
 
     def abort_display(self):
         self.clear_layer()
