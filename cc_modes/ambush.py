@@ -62,6 +62,14 @@ class Ambush(ep.EP_Mode):
         # how long the bad guys wait before disappearing
         self.SECONDS = self.game.user_settings['Gameplay (Feature)']['Ambush Target Timer']
 
+    def sw_leftBonusLane_active(self,sw):
+        if not self.paused:
+            self.pause()
+
+    def sw_rightBonusLane_active(self,sw):
+        if not self.paused:
+            self.pause()
+
     # bumpers pause ambush
     def sw_leftJetBumper_active(self,sw):
             self.bumper_hit('left')

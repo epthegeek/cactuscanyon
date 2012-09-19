@@ -44,6 +44,14 @@ class Quickdraw(ep.EP_Mode):
 
     # switches
 
+    def sw_leftBonusLane_active(self,sw):
+        if not self.paused:
+            self.pause()
+
+    def sw_rightBonusLane_active(self,sw):
+        if not self.paused:
+            self.pause()
+
     # bumpers pause quickdraw
     def sw_leftJetBumper_active(self,sw):
         self.bumper_hit('left')
