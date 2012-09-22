@@ -252,7 +252,7 @@ class RightLoop(ep.EP_Mode):
                 # enable cva
                 self.game.set_tracking('cvaStatus',"READY")
             self.game.score_with_bonus(points)
-            self.tumbleweed_display(points)
+            self.tumbleweed_display(points,combo)
 
         # then tick the stage up for next time unless it's completed
         if stage < 4:
@@ -308,7 +308,7 @@ class RightLoop(ep.EP_Mode):
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_SOUTH)
         self.transition.callback = self.clear_layer()
 
-    def tumbleweed_display(self,value):
+    def tumbleweed_display(self,value,combo):
         banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed-banner.dmd').frames[0])
         scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6)
         # load up the animation
