@@ -109,7 +109,7 @@ class Train(game.Mode):
             self.fast_forward()
             # delay a stop, and step 2 of the check
             self.delay(delay=0.6,handler=self.stop)
-            self.delay(delay=0.9,handler=self.reset_toy,param=2)
+            self.delay(delay=1.5,handler=self.reset_toy,param=2)
         if step == 2:
             print("Resetting Train - Step 2")
             # check this again because save polly requests the reset directly

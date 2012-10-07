@@ -144,6 +144,7 @@ class GoldMine(ep.EP_Mode):
         if self.game.trough.num_balls_in_play < 3:
             total = 3 - self.game.trough.num_balls_in_play
             # turn on the autoplunge
+            print("Goldmine Multiball - Launching " + str(total) + "balls")
             self.game.trough.balls_to_autoplunge = total
             self.game.trough.launch_balls(total)
         # reset the jackpot status to available - just in case
