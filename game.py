@@ -29,6 +29,7 @@ import tracking
 from assets import *
 import ep
 import pygame
+import highscore
 
 ## Define the config file locations
 user_game_data_path = "config/game_data.yaml"
