@@ -194,8 +194,6 @@ class LeftRamp(ep.EP_Mode):
                 mode.abort_display()
 
         ##
-        ## For now, all the river runs use the same animation so it's in here
-        ## would be nice to come up with additional animations - but making them good enough? fuggedaboutit
         ##
         # set the animation
 
@@ -234,7 +232,7 @@ class LeftRamp(ep.EP_Mode):
             # math out the wait
             myWait = len(anim.frames) / 12.0
             # set the animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=5)
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=5)
             # turn it on
             self.layer = animLayer
             # set the delay for the award
@@ -308,6 +306,7 @@ class LeftRamp(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 7
+        animLayer.opaque = True
 
         animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
         animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)

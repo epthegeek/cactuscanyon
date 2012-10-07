@@ -116,6 +116,7 @@ class GoldMine(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 6
+        animLayer.opaque = True
         animLayer.add_frame_listener(12,self.game.base.priority_quote,param=self.game.assets.quote_gold)
         animLayer.add_frame_listener(24,self.game.base.priority_quote,param=self.game.assets.quote_mine)
         # turn it on
@@ -127,8 +128,8 @@ class GoldMine(ep.EP_Mode):
         # play the sound
         self.game.base.priority_quote(self.game.assets.quote_multiball)
         # generate a flashing thing
-        inverse = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner-inverse.dmd').frames[0])
-        normal = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner.dmd').frames[0])
+        inverse = dmd.FrameLayer(True, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner-inverse.dmd').frames[0])
+        normal = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner.dmd').frames[0])
         script = [{'seconds':0.1,'layer':inverse},{'seconds':0.1,'layer':normal}]
         myLayer = dmd.ScriptedLayer(128,32,script)
         self.layer = myLayer
@@ -159,7 +160,7 @@ class GoldMine(ep.EP_Mode):
 
     def main_display(self):
         # set up the display during multiball
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-frame.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-frame.dmd').frames[0])
         # title line
         titleLine = dmd.TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("GOLD MINE MULTIBALL")
         # score line
@@ -208,6 +209,7 @@ class GoldMine(ep.EP_Mode):
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
             animLayer.frame_time = 6
+            animLayer.opaque = True
             self.layer = animLayer
             # play a quote
             self.game.base.priority_quote(self.game.assets.quote_jackpot)
@@ -224,7 +226,7 @@ class GoldMine(ep.EP_Mode):
             self.delay(name="Display",delay=.8,handler=self.jackpot_hit,param=3)
         if step == 3:
             # then show 'multiball jackpot' with points
-            awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+            awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
             awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
             awardTextTop.set_text("MULTIBALL JACKPOT")
             awardTextBottom.set_text("500,000",blink_frames=4)
@@ -272,7 +274,7 @@ class GoldMine(ep.EP_Mode):
     def display_multiplier(self):
             multiplier = self.game.show_tracking('motherlodeMultiplier')
             # and do a display thing
-            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[0])
+            backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[0])
             awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
             awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
             awardTextTop.set_text("MOTHERLODE")
@@ -404,7 +406,7 @@ class GoldMine(ep.EP_Mode):
         # tick the times down
         times -= 1
         # setup the display
-        awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
         awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         awardTextTop.set_text("MOTHERLODE " + str(self.counter) + "X")
         awardTextBottom.set_text(ep.format_score(self.motherlodeValue * self.counter))

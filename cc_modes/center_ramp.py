@@ -26,7 +26,7 @@ class CenterRamp(ep.EP_Mode):
     """Cactus Canyon Center Ramp Mode"""
     def __init__(self, game, priority):
         super(CenterRamp, self).__init__(game, priority)
-        self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
+        self.border = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
 
     def mode_started(self):
         self.update_lamps()
@@ -209,7 +209,7 @@ class CenterRamp(ep.EP_Mode):
             # math out the wait
             myWait = len(anim.frames) / 10.0
             # set the animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
             # turn it on
             self.layer = animLayer
             # set the delay for the award
@@ -282,7 +282,7 @@ class CenterRamp(ep.EP_Mode):
         # math out the wait
         myWait = len(anim.frames) / 10.0
         # set the animation
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         # turn it on
         self.layer = animLayer
         # set the delay for the award
@@ -307,6 +307,7 @@ class CenterRamp(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 7
+        animLayer.opaque = True
         # keyframe sounds
         animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_trainStopWithBrake)
         # play the short chug

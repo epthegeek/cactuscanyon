@@ -211,6 +211,7 @@ class RightRamp(ep.EP_Mode):
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
             animLayer.frame_time = 7
+            animLayer.opaque = True
 
             # added a frame listener for the second sound effect
             animLayer.add_frame_listener(5, self.game.sound.play,param=self.game.assets.sfx_fallAndCrash1)
@@ -232,6 +233,7 @@ class RightRamp(ep.EP_Mode):
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
             animLayer.frame_time = 7
+            animLayer.opaque = True
 
             # add listener frames
             animLayer.add_frame_listener(15,self.game.sound.play,param=self.game.assets.sfx_explosion11)
@@ -290,6 +292,7 @@ class RightRamp(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 7
+        animLayer.opaque = True
 
         animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
         animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)

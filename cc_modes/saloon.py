@@ -262,14 +262,14 @@ class Saloon(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_bountyCollected)
 
         # give the award
-        mayorfeet = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mayor-feet.dmd').frames[0])
+        mayorfeet = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'mayor-feet.dmd').frames[0])
         self.layer = mayorfeet
         # pause a bit and then pan up the mayor
         self.delay(delay=.3,handler=self.mayor_pan)
 
     def mayor_pan(self):
         anim = dmd.Animation().load(ep.DMD_PATH+'mayor-pan.dmd')
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False)
         self.layer = animLayer
         myWait = len(anim.frames) / 60.0
         # when the pan finishes play the animation to reveal the award

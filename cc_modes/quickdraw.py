@@ -125,7 +125,7 @@ class Quickdraw(ep.EP_Mode):
         self.game.bad_guys.target_up(self.target)
         # Set up the display
         anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-start.dmd')
-        self.animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        self.animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         # set the end time based on the config setting
         # set up the point value
         value = [500000,750000,1000000,1500000,2000000]
@@ -197,7 +197,7 @@ class Quickdraw(ep.EP_Mode):
             self.game.sound.stop_music()
         # play the win animation
         anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-hit.dmd')
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         #  setup the text
         scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))
         # combine and activate

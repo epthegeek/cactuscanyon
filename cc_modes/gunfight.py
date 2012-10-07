@@ -91,7 +91,7 @@ class Gunfight(ep.EP_Mode):
         # display the clouds with gunfight text
         title = dmd.TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight")
         title.composite_op = "blacksrc"
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-top.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-top.dmd').frames[0])
         mask = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-mask.dmd').frames[0])
         mask.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[backdrop,mask,title])
@@ -132,7 +132,7 @@ class Gunfight(ep.EP_Mode):
         points = 750000
         self.game.score(points)
         # show the win screen
-        textLine1 = dmd.TextLayer(64, 0, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("BAD GUY SHOT!")
+        textLine1 = dmd.TextLayer(64, 0, self.game.assets.font_7px_bold_az, "center", opaque=True).set_text("BAD GUY SHOT!")
         textLine2 = ep.pulse_text(self,64,9,ep.format_score(points))
         textLine3 = dmd.TextLayer(64, 20, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString3)
         textLine4 = dmd.TextLayer(64, 26, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString4)
@@ -214,7 +214,7 @@ class Gunfight(ep.EP_Mode):
         # play the orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit3)
         # show the boots
-        boots = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[0])
+        boots = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[0])
         self.layer = boots
         # after a delay - pass to the final setp
         self.delay(name="draw",delay=1.1,handler=self.gunfight_intro_draw,param=badGuys)
@@ -242,7 +242,7 @@ class Gunfight(ep.EP_Mode):
         # play the draw quote
         self.game.base.play_quote(self.game.assets.quote_gunfightDraw)
         text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
+        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
         # turn the GI back on
         self.game.set_tracking('lampStatus', "ON")

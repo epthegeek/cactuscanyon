@@ -337,7 +337,7 @@ class SkillShot(ep.EP_Mode):
             self.game.score(1000000)
             self.game.add_bonus(2370)
             # setup the wipe animation and the text layer
-            topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("ONE", blink_frames=5)
+            topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=True).set_text("ONE", blink_frames=5)
             million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
             anim = dmd.Animation().load(ep.DMD_PATH+'cash-wipe.dmd')
             wipeLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
@@ -356,7 +356,7 @@ class SkillShot(ep.EP_Mode):
             self.game.score(3000000)
             self.game.add_bonus(6930)
             # setup the wipe animation and the text layer
-            topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("THREE", blink_frames=5)
+            topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=True).set_text("THREE", blink_frames=5)
             million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
             anim = dmd.Animation().load(ep.DMD_PATH+'cash-wipe.dmd')
             wipeLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)

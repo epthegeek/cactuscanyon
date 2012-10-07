@@ -111,6 +111,7 @@ class BonusLanes(ep.EP_Mode):
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold = True
         animLayer.frame_time = 7
+        animLayer.opaque = True
         animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_cactusMash)
         animLayer.add_frame_listener(4,self.game.base.red_flasher_flourish)
         # run the animation
