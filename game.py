@@ -19,8 +19,8 @@
 ## | |  | | (_| | | | | | | |_| | (_| | | | | | |  __/
 ## |_|  |_|\__,_|_|_| |_|  \____|\__,_|_| |_| |_|\___|
 
-import logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+#import logging
+#logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 from procgame import *
 import cc_modes

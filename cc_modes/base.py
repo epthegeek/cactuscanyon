@@ -642,9 +642,10 @@ class BaseGameMode(ep.EP_Mode):
             self.game.show_tracking('centerRampStage') == 5 and \
             self.game.show_tracking('leftRampStage') == 5 and \
             self.game.show_tracking('rightRampStage') == 5:
-
-            self.game.modes.add(self.game.stampede)
-            self.game.stampede.start_stampede()
+            # this check hopefully prevents concurrent checks from colliding
+            if self.game.stampede not in self.game.modes:
+                self.game.modes.add(self.game.stampede)
+                self.game.stampede.start_stampede()
         else:
             pass
 
@@ -812,9 +813,9 @@ class BaseGameMode(ep.EP_Mode):
         animLayer.frame_time = 4
         animLayer.composite_op = "blacksrc"
 
-        titleString = "TOTAL BONUS:"
+        titleString = "TOTAL SCORE:"
         titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(titleString)
-        pointsLine = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(ep.format_score(points))
+        pointsLine = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(ep.format_score(self.game.current_player().score))
         self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
         # add the points to the score
         self.game.score(points)

@@ -28,11 +28,12 @@ class Train(game.Mode):
         self.trainProgress = 0
         self.inMotion = False
         self.trainReset = False
+        self.trainDisabled = True
 
     def mode_started(self):
         # home the train
-        if not self.game.switches.trainHome.is_active():
-            self.reset_toy()
+        #if not self.game.switches.trainHome.is_active():
+        self.reset_toy()
         self.trainProgress = 0
         self.stopAt = 0
 
@@ -41,9 +42,17 @@ class Train(game.Mode):
             self.stop()
             self.trainReset = False
             self.trainProgress = 0
+            if self.trainDisabled:
+                # if the train didn't enable due to the encoder - its dead
+                print("Encoder not registering - Train Disabled")
+                self.game.interrupter.train_disabled()
 
     def sw_trainEncoder_active(self,sw):
         # this is the moving train
+        # if this switch isn't working, the train will be disabled.
+        # any registration of the encoder turns the train back on
+        if self.trainDisabled:
+            self.trainDisabled = False
         # each time it hits increment the train progress
         self.trainProgress += 1
         if self.stopAt > 0:
@@ -55,40 +64,60 @@ class Train(game.Mode):
                 self.stop()
 
     def move(self):
-        self.inMotion = True
-        self.game.coils.trainForward.patter(on_time=3,off_time=8)
+        if not self.trainDisabled:
+            self.inMotion = True
+            self.game.coils.trainForward.patter(on_time=3,off_time=8)
 
     def stop(self):
+        print("Stopping Train")
         # turn off the moving train solenoids
         self.game.coils.trainForward.disable()
         self.game.coils.trainReverse.disable()
         self.inMotion = False
 
     def fast_forward(self):
-        self.inMotion = True
-        self.game.coils.trainForward.enable()
+        print("Train Fast Forwrd")
+        if not self.trainDisabled or self.trainReset:
+            print("Train Moving Fast Forward")
+            self.inMotion = True
+            self.game.coils.trainForward.enable()
 
     def forward(self):
-        self.inMotion = True
-        # TODO need to tweak this out for speed later
-        self.game.coils.trainForward.patter(on_time=6,off_time=6)
+        if not self.trainDisabled:
+            self.inMotion = True
+            # TODO need to tweak this out for speed later
+            self.game.coils.trainForward.patter(on_time=6,off_time=6)
 
     def fast_reverse(self):
-        self.inMotion = True
-        self.game.coils.trainReverse.enable()
-
-    def reverse(self):
-        self.inMotion = True
-        # TODO need to tweak this for speed later
-        self.game.coils.trainReverse.patter(on_time=6,off_time=6)
-
-    def reset_toy(self):
-        # check this again because save polly requests the reset directly
-        if not self.game.switches.trainHome.is_active():
-            self.game.coils.trainForward.disable()
+        if not self.trainDisabled:
             self.inMotion = True
             self.game.coils.trainReverse.enable()
-            self.trainReset = True
+
+    def reverse(self):
+        if not self.trainDisabled:
+            print("Backing train up")
+            self.inMotion = True
+            self.game.coils.trainReverse.patter(on_time=6,off_time=6)
+
+    def reset_toy(self,step=1):
+        # set the reset flag
+        self.trainReset = True
+
+        if step == 1:
+            print("Resetting Train - Step 1")
+            # move the train forward
+            self.fast_forward()
+            # delay a stop, and step 2 of the check
+            self.delay(delay=0.6,handler=self.stop)
+            self.delay(delay=0.9,handler=self.reset_toy,param=2)
+        if step == 2:
+            print("Resetting Train - Step 2")
+            # check this again because save polly requests the reset directly
+            if not self.game.switches.trainHome.is_active():
+                self.game.coils.trainForward.disable()
+                self.inMotion = True
+                self.game.coils.trainReverse.enable()
+                #self.reverse()
 
     def progress(self):
         return self.trainProgress
