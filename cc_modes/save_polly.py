@@ -164,7 +164,7 @@ class SavePolly(ep.EP_Mode):
             # start the music
             self.game.base.music_on(self.game.assets.music_pollyPeril)
             # reset the train
-            self.game.train.reset_toy()
+            self.game.train.reset_toy(step=2)
             # run the animation
             anim = dmd.Animation().load(ep.DMD_PATH+'polly-peril.dmd')
             myWait = len(anim.frames) / 30
@@ -377,7 +377,7 @@ class SavePolly(ep.EP_Mode):
         # stop the polly music
         print "polly_finished IS KILLING THE MUSIC"
         self.game.sound.stop_music()
-        self.game.train.reset_toy()
+        self.game.train.reset_toy(step=2)
         # turn off the polly display
         self.layer = None
         # set the tracking on the ramps

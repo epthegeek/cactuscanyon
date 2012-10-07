@@ -61,14 +61,14 @@ class SkillShot(ep.EP_Mode):
         self.super = False
         print "THOOPER ITH FAHLTH"
         # call the welcome quote - and start the theme song after on the first ball
-        self.game.sound.play(self.game.assets.music_drumRiff)
+        duration = self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1 and not self.game.show_tracking('greeted'):
             # set the flag so we only do this onece
             self.game.set_tracking('greeted',True)
             # play a random voice call from a pre-set collection
             self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_welcomes)
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
-        self.delay(delay=0.2,handler=self.game.base.music_on,param=self.game.assets.music_shooterLaneGroove)
+        self.delay(delay=duration,handler=self.game.base.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
 
     def generate_prizes(self):

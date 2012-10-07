@@ -72,9 +72,6 @@ class Interrupter(ep.EP_Mode):
         if status == 2:
             print "DANGER DANGER"
             # double warning
-            line1 = dmd.TextLayer(128/2, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
-            line2 = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
-            self.layer = dmd.GroupedLayer(128,32,[line1,line2])
             # play a sound
             myWait = self.play_tilt_sound()
             self.delay(delay=0.5,handler=self.play_tilt_sound())
@@ -150,6 +147,7 @@ class Interrupter(ep.EP_Mode):
         combined.composite_op = "blacksrc"
         self.layer = combined
         self.delay(name="Display",delay=1,handler=self.clear_layer)
+
 
 
     ## Status section, for the HALIBUT
@@ -286,6 +284,12 @@ class Interrupter(ep.EP_Mode):
             self.delay(delay = 1.5,handler=self.clear_layer)
             self.delay(delay = 1.5,handler=self.game.ball_starting)
 
+    def train_disabled(self):
+        line1 = dmd.TextLayer(128/2, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("TRAIN DISABLED")
+        line2 = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("CHECK ENCODER SWITCH")
+        self.layer = dmd.GroupedLayer(128,32,[line1,line2])
+        self.game.base.repeat_ding(3)
+        self.delay(delay=2,handler=self.clear_layer)
 
     # delayed music on used by highscore
     def delayed_music_on(self,wait,song=None):
