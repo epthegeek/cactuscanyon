@@ -339,7 +339,7 @@ class SkillShot(ep.EP_Mode):
             # setup the wipe animation and the text layer
             topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=True).set_text("ONE", blink_frames=5)
             million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
-            anim = dmd.Animation().load(ep.DMD_PATH+'cash-wipe.dmd')
+            anim = self.game.assets.dmd_cashWipe
             wipeLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
             wipeLayer.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[topText,million,wipeLayer])
@@ -358,7 +358,7 @@ class SkillShot(ep.EP_Mode):
             # setup the wipe animation and the text layer
             topText= dmd.TextLayer(128/2,2, self.game.assets.font_5px_bold_AZ, "center", opaque=True).set_text("THREE", blink_frames=5)
             million = dmd.TextLayer(128/2,9, self.game.assets.font_20px_az, "center", opaque=False).set_text("MILLION",blink_frames=5)
-            anim = dmd.Animation().load(ep.DMD_PATH+'cash-wipe.dmd')
+            anim = self.game.assets.dmd_cashWipe
             wipeLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
             wipeLayer.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[topText,million,wipeLayer])
@@ -504,8 +504,9 @@ class SkillShot(ep.EP_Mode):
         # load the switch filter
         self.game.modes.add(self.game.super_filter)
 
-        anim1 = dmd.Animation().load(ep.DMD_PATH+'super-blink.dmd')
-        anim2 = dmd.Animation().load(ep.DMD_PATH+'super-skill-shot.dmd')
+        anim1 = self.game.assets.dmd_superBlink
+        anim2 = self.game.assets.dmd_superSkillShot
+
         # math out the wait
         myWait = len(anim2.frames) / 20.0
         # set the animation

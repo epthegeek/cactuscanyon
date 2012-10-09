@@ -29,7 +29,7 @@ class LeftRamp(ep.EP_Mode):
         # Set up the sounds
         # set up the animations
         self.game = game
-        self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'woodcut-border.dmd').frames[0])
+        self.border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_woodcutBorder.frames[0])
 
     def mode_started(self):
         self.update_lamps()
@@ -207,8 +207,8 @@ class LeftRamp(ep.EP_Mode):
             self.game.score_with_bonus(125000)
             self.game.base.play_quote(self.game.assets.quote_leftRamp1)
             # load the 2 animations
-            anim1 = dmd.Animation().load(ep.DMD_PATH+'blank-river.dmd')
-            anim2 = dmd.Animation().load(ep.DMD_PATH+'rowboat.dmd')
+            anim1 = self.game.assets.dmd_blankRiver
+            anim2 = self.game.assets.dmd_rowboat
             # set up the layers
             animLayer1 = dmd.AnimatedLayer(frames=anim1.frames,hold=True,opaque=True,repeat=False,frame_time=5)
             animLayer2 = dmd.AnimatedLayer(frames=anim2.frames,hold=True,opaque=False,repeat=False,frame_time=5)
@@ -301,7 +301,7 @@ class LeftRamp(ep.EP_Mode):
 
     def anim_river_victory(self):
         print "RIVER VICTORY"
-        anim = dmd.Animation().load(ep.DMD_PATH+'bank-victory-animation.dmd')
+        anim = self.game.assets.dmd_pollyVictory
         myWait = len(anim.frames) / 8.57
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
@@ -317,7 +317,7 @@ class LeftRamp(ep.EP_Mode):
 
     def push_out(self):
         print "TRANSITION MF"
-        blank = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
+        blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
         blank.composite_op = "blacksrc"
         transition = ep.EP_Transition(self,self.layer,blank,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         transition.callback = self.clear_layer

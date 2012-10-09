@@ -28,13 +28,13 @@ class LeftLoop(ep.EP_Mode):
         super(LeftLoop, self).__init__(game, priority)
         # set up the animations they are to alternate
         self.anims = []
-        anim0 = ep.DMD_PATH + "horse-run-left.dmd"
+        anim0 = self.game.assets.dmd_horseRunLeft
         self.anims.append({'layer':anim0,'direction':ep.EP_Transition.PARAM_WEST})
-        anim1 = ep.DMD_PATH + "horse-drag.dmd"
+        anim1 = self.game.assets.dmd_horseDrag
         self.anims.append({'layer':anim1,'direction':ep.EP_Transition.PARAM_WEST})
-        anim2 = ep.DMD_PATH + "horse-chase.dmd"
+        anim2 = self.game.assets.dmd_horseChase
         self.anims.append({'layer':anim2,'direction':ep.EP_Transition.PARAM_EAST})
-        anim3 = ep.DMD_PATH + "horse-run-right.dmd"
+        anim3 = self.game.assets.dmd_horseRunRight
         self.anims.append({'layer':anim3,'direction':ep.EP_Transition.PARAM_EAST})
 
     def mode_started(self):
@@ -266,7 +266,7 @@ class LeftLoop(ep.EP_Mode):
 
         # load the animation based on which was last played
         self.direction = self.anims[thisOne]['direction']
-        anim = dmd.Animation().load(self.anims[thisOne]['layer'])
+        anim = self.anims[thisOne]['layer']
 
         # this works out ok because we play the 2 middle ones before the first
         # then flip it for next time
@@ -304,10 +304,10 @@ class LeftLoop(ep.EP_Mode):
         self.transition.callback = self.clear_layer
 
     def tumbleweed_display(self,value,combo):
-        banner = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed-banner.dmd').frames[0])
+        banner = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tumbleweedBanner.frames[0])
         scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6)
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'tumbleweed-right.dmd')
+        anim = self.game.assets.dmd_tumbleweedRight
         # start the full on animation
         myWait = len(anim.frames) / 15.0 + 0.5
         # setup the animated layer

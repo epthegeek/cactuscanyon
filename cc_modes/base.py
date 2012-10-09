@@ -251,7 +251,7 @@ class BaseGameMode(ep.EP_Mode):
 
 
     def mug_display(self,textLine1,textLine2,textLine3):
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_beerMug.frames[0])
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
         # kill any previous display
         self.cancel_delayed("Display")
@@ -775,7 +775,7 @@ class BaseGameMode(ep.EP_Mode):
         self.delay(delay=1.5,handler=self.display_bonus,param=times)
 
     def display_bonus(self,times):
-        background = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-border.dmd').frames[0])
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cactusBorder.frames[0])
         titleString = "BONUS " + str(times) + "X"
         titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(titleString)
         # add the bonus amount to the running total
@@ -796,7 +796,7 @@ class BaseGameMode(ep.EP_Mode):
 
     def reveal_bonus(self,points):
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
+        anim = self.game.assets.dmd_burstWipe
         myWait = len(anim.frames) / 15.0
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold = True
@@ -806,7 +806,7 @@ class BaseGameMode(ep.EP_Mode):
 
     def finish_bonus(self,points):
         # set up the text display
-        anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe-2.dmd')
+        anim = self.game.assets.dmd_burstWipe2
         myWait = len(anim.frames) / 15.0 + 1.5
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold = True

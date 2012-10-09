@@ -820,6 +820,118 @@ class Assets():
         for lampshow in lampshows:
             self.game.lampctrl.register_show(lampshow,self.lampshows_path + lampshow + ".lampshow")
 
+        # experimental DMD pre-loading
+        self.dmd_blank = dmd.Animation().load(self.dmd_path +'blank.dmd')
+        self.dmd_mayorFeet = dmd.Animation().load(self.dmd_path +'mayor-feet.dmd')
+        self.dmd_mayorPan = dmd.Animation().load(self.dmd_path +'mayor-pan.dmd')
+        self.dmd_bountyCollected = dmd.Animation().load(self.dmd_path +'bounty-collected.dmd')
+        self.dmd_moneybagBorder = dmd.Animation().load(self.dmd_path +'moneybag-border.dmd')
+        self.dmd_starsBorder = dmd.Animation().load(self.dmd_path +'stars-border.dmd')
+        self.dmd_tracksBorder = dmd.Animation().load(self.dmd_path +'tracks-border.dmd')
+        self.dmd_gunsBorder = dmd.Animation().load(self.dmd_path +'guns-border.dmd')
+        self.dmd_woodcutBorder = dmd.Animation().load(self.dmd_path +'woodcut-border.dmd')
+        self.dmd_cactusBorder = dmd.Animation().load(self.dmd_path +'cactus-border.dmd')
+        self.dmd_weaveBorder = dmd.Animation().load(self.dmd_path +'weave-border.dmd')
+        self.dmd_singleCowboySidewaysBorder = dmd.Animation().load(self.dmd_path+'single-cowboy-sideways-border.dmd')
+        self.dmd_mineEntranceBorder = dmd.Animation().load(self.dmd_path +'mine-entrance-border.dmd')
+        self.dmd_skyline = dmd.Animation().load(self.dmd_path+'skyline.dmd')
+        self.dmd_escaped = dmd.Animation().load(self.dmd_path +'escaped.dmd')
+        self.dmd_beerMug = dmd.Animation().load(self.dmd_path +'beer-mug-1.dmd')
+
+        self.dmd_cashWipe = dmd.Animation().load(self.dmd_path +'cash-wipe.dmd')
+        self.dmd_burstWipe = dmd.Animation().load(self.dmd_path +'burst-wipe.dmd')
+        self.dmd_burstWipe2 = dmd.Animation().load(self.dmd_path +'burst-wipe-2.dmd')
+        self.dmd_horseWipeRight = dmd.Animation().load(self.dmd_path+'horse-wipe-right.dmd')
+
+        self.dmd_blankRiver = dmd.Animation().load(self.dmd_path +'blank-river.dmd')
+        self.dmd_blankRiverLoop = dmd.Animation().load(self.dmd_path + 'blank-river-loop.dmd')
+        self.dmd_rowboat = dmd.Animation().load(self.dmd_path +'rowboat.dmd')
+        self.dmd_rowboatLoop = dmd.Animation().load(self.dmd_path + 'rowboat-cycle.dmd')
+        self.dmd_horseLoop = dmd.Animation().load(self.dmd_path + 'horse-loop.dmd')
+
+        self.dmd_bankExplodes = dmd.Animation().load(self.dmd_path +'bank-explodes.dmd')
+        self.dmd_bankSheriff = dmd.Animation().load(self.dmd_path +'bank-sherrif-arrives.dmd')
+        self.dmd_bankDude = dmd.Animation().load(self.dmd_path + 'dude-shoots-bank.dmd')
+        self.dmd_bankInterior = dmd.Animation().load(self.dmd_path + 'bank-interior.dmd')
+        self.dmd_hatbTitle = dmd.Animation().load(self.dmd_path +'polly-peril-hatb.dmd')
+
+        self.dmd_dudeShotFullBody = dmd.Animation().load(self.dmd_path+'dude-gets-shot-full-body.dmd')
+        self.dmd_dudeShotShouldersUp = dmd.Animation().load(self.dmd_path+'dude-gets-shot-shoulders-up.dmd')
+        self.dmd_dudeShoots = dmd.Animation().load(self.dmd_path+'dude-shoots.dmd')
+
+        self.dmd_trainBoarding = dmd.Animation().load(self.dmd_path +'train-boarding.dmd')
+        self.dmd_trainRunning = dmd.Animation().load(self.dmd_path +'train-running-on-top.dmd')
+        self.dmd_trainBrakes = dmd.Animation().load(self.dmd_path +'train-brake-pull.dmd')
+
+        self.dmd_pollyIntro = dmd.Animation().load(self.dmd_path +'polly-peril.dmd')
+        self.dmd_pollyVictory = dmd.Animation().load(self.dmd_path +'bank-victory-animation.dmd')
+        self.dmd_ourHero = dmd.Animation().load(self.dmd_path+'our-hero.dmd')
+        self.dmd_rotrTitle = dmd.Animation().load(self.dmd_path +'polly-peril-rotr.dmd')
+
+        self.dmd_horseRunLeft = dmd.Animation().load(self.dmd_path + 'horse-run-left.dmd')
+        self.dmd_horseRunRight = dmd.Animation().load(self.dmd_path + 'horse-run-right.dmd')
+        self.dmd_horseDrag = dmd.Animation().load(self.dmd_path + 'horse-drag.dmd')
+        self.dmd_horseChase = dmd.Animation().load(self.dmd_path + 'horse-chase.dmd')
+
+        self.dmd_shotBottles = dmd.Animation().load(self.dmd_path +'shot-bottles-animation.dmd')
+        self.dmd_shotCandles = dmd.Animation().load(self.dmd_path +'shot-candles-animation.dmd')
+        self.dmd_shotCard = dmd.Animation().load(self.dmd_path +'shot-card-animation.dmd')
+        self.dmd_smokingCard = dmd.Animation().load(self.dmd_path +'smoking-card-loop.dmd')
+
+        self.dmd_tumbleweedBanner = dmd.Animation().load(self.dmd_path +'tumbleweed-banner.dmd')
+        self.dmd_tumbleweedRight = dmd.Animation().load(self.dmd_path +'tumbleweed-right.dmd')
+        self.dmd_tumbleweedLeft = dmd.Animation().load(self.dmd_path +'tumbleweed.dmd')
+
+        self.dmd_superBlink = dmd.Animation().load(self.dmd_path +'super-blink.dmd')
+        self.dmd_superSkillShot = dmd.Animation().load(self.dmd_path +'super-skill-shot.dmd')
+
+        self.dmd_quickdrawStart = dmd.Animation().load(self.dmd_path +'quickdraw-start.dmd')
+        self.dmd_quickdrawHit = dmd.Animation().load(self.dmd_path +'quickdraw-hit.dmd')
+
+        self.dmd_gunfightTop = dmd.Animation().load(self.dmd_path+'gunfight-top.dmd')
+        self.dmd_gunfightMask = dmd.Animation().load(self.dmd_path +'gunfight-mask.dmd')
+        self.dmd_gunfightPan = dmd.Animation().load(self.dmd_path+'gunfight-pan.dmd')
+        self.dmd_gunfightEyes = dmd.Animation().load(self.dmd_path+'gunfight-eyes.dmd')
+        self.dmd_gunfightHands = dmd.Animation().load(self.dmd_path+'gunfight-hands.dmd')
+        self.dmd_gunfightBoots = dmd.Animation().load(self.dmd_path+'gunfight-boots.dmd')
+
+        self.dmd_ambush = dmd.Animation().load(self.dmd_path +'ambush.dmd')
+        self.dmd_showdown = dmd.Animation().load(self.dmd_path +'showdown.dmd')
+        self.dmd_cloudLightning = dmd.Animation().load(self.dmd_path +'cloud-lightning.dmd')
+        self.dmd_townPan = dmd.Animation().load(self.dmd_path +'town-pan.dmd')
+
+        self.dmd_stampede = dmd.Animation().load(self.dmd_path + 'stampede-animation.dmd')
+        self.dmd_cowsParading = dmd.Animation().load(self.dmd_path +'cows-parading.dmd')
+        self.dmd_stampedeJackpot = dmd.Animation().load(self.dmd_path +'stampede-jackpot.dmd')
+
+        self.dmd_shootAgain = dmd.Animation().load(self.dmd_path+'shoot-again.dmd')
+        self.dmd_ball = dmd.Animation().load(self.dmd_path +'ball.dmd')
+        self.dmd_extraBall = dmd.Animation().load(self.dmd_path +'extra-ball.dmd')
+        self.dmd_bonusCactus = dmd.Animation().load(self.dmd_path+'bonus-cactus-mash.dmd')
+
+        self.dmd_lockOne = dmd.Animation().load(self.dmd_path +'ball-one-locked.dmd')
+        self.dmd_lockTwo = dmd.Animation().load(self.dmd_path +'ball-two-locked.dmd')
+        self.dmd_multiballStart = dmd.Animation().load(self.dmd_path+'multiball-start.dmd')
+        self.dmd_multiballBannerInverse = dmd.Animation().load(self.dmd_path +'multiball-banner-inverse.dmd')
+        self.dmd_multiballBanner = dmd.Animation().load(self.dmd_path +'multiball-banner.dmd')
+        self.dmd_multiballFrame = dmd.Animation().load(self.dmd_path +'multiball-frame.dmd')
+        self.dmd_mineCarCrash = dmd.Animation().load(self.dmd_path +'mine-car-crash.dmd')
+        self.dmd_goldmineJackpot = dmd.Animation().load(self.dmd_path +'jackpot.dmd')
+
+        self.dmd_bamBanner = dmd.Animation().load(self.dmd_path + 'bam-banner.dmd')
+        self.dmd_biffBanner = dmd.Animation().load(self.dmd_path + 'biff-banner.dmd')
+        self.dmd_ouchBanner = dmd.Animation().load(self.dmd_path + 'ouch-banner.dmd')
+        self.dmd_powBanner = dmd.Animation().load(self.dmd_path + 'pow-banner.dmd')
+        self.dmd_whamBanner = dmd.Animation().load(self.dmd_path + 'wham-banner.dmd')
+        self.dmd_zoinkBanner = dmd.Animation().load(self.dmd_path + 'zoink-banner.dmd')
+
+        self.dmd_bigPosterA = dmd.Animation().load(self.dmd_path +'wanted-BIG-A.dmd')
+        self.dmd_bandeleroPosterA = dmd.Animation().load(self.dmd_path + 'wanted-BANDELERO-A.dmd')
+        self.dmd_bubbaPosterA = dmd.Animation().load(self.dmd_path + 'wanted-BUBBA-A.dmd')
+        self.dmd_bigPosterB = dmd.Animation().load(self.dmd_path +'wanted-BIG-B.dmd')
+        self.dmd_bandeleroPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BANDELERO-B.dmd')
+        self.dmd_bubbaPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BUBBA-B.dmd')
+
         # Shared Paths
         self.shared_sound_path = "shared/sound/"
         self.shared_dmd_path = "shared/dmd/"

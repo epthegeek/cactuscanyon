@@ -104,7 +104,7 @@ class BonusLanes(ep.EP_Mode):
         self.abort_display()
 
         # play the cactus mashing animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'bonus-cactus-mash.dmd')
+        anim = self.game.assets.dmd_bonusCactus
         # calculate the wait for displaying the text
         myWait = (len(anim.frames) / 8.57) - 0.4
         # set the animation

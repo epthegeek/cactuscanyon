@@ -52,13 +52,13 @@ class BankRobbery(ep.EP_Mode):
         self.shotWait = 0
 
         # set up the dude standing layers
-        self.dude0 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH + 'dude-shoots-bank.dmd').frames[0])
+        self.dude0 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bankDude.frames[0])
         self.dude0.set_target_position(self.position[0],self.y_pos)
         self.dude0.composite_op = "blacksrc"
-        self.dude1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH + 'dude-shoots-bank.dmd').frames[0])
+        self.dude1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bankDude.frames[0])
         self.dude1.set_target_position(self.position[1],self.y_pos)
         self.dude1.composite_op = "blacksrc"
-        self.dude2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH + 'dude-shoots-bank.dmd').frames[0])
+        self.dude2 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bankDude.frames[0])
         self.dude2.set_target_position(self.position[2],self.y_pos)
         self.dude2.composite_op = "blacksrc"
 
@@ -69,13 +69,13 @@ class BankRobbery(ep.EP_Mode):
         self.layers = [self.dude0Layer,self.dude1Layer,self.dude2Layer]
 
         # load the shot animation
-        self.shotAnim = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd')
+        self.shotAnim = self.game.assets.dmd_dudeShotFullBody
         # create the layer
         self.deathWait = len(self.shotAnim.frames) / 10.0
 
 
         # foreground
-        self.foreground = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH + 'bank-interior.dmd').frames[0])
+        self.foreground = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bankInterior.frames[0])
         self.foreground.composite_op = "blacksrc"
 
 
@@ -188,7 +188,7 @@ class BankRobbery(ep.EP_Mode):
             # start the music
             self.game.base.music_on(self.game.assets.music_pollyPeril)
             # run the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'polly-peril.dmd')
+            anim = self.game.assets.dmd_pollyIntro
             myWait = len(anim.frames) / 30
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
             self.layer = animLayer
@@ -201,7 +201,7 @@ class BankRobbery(ep.EP_Mode):
             # pick a shoot delay
             self.set_shot_target()
             # set up the title card
-            titleCard = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'polly-peril-hatb.dmd').frames[0])
+            titleCard = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_hatbTitle.frames[0])
             # transition to the title card
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
@@ -331,11 +331,11 @@ class BankRobbery(ep.EP_Mode):
         if step == 1:
             self.game.base.play_quote(self.game.assets.quote_victory)
             # frame layer of the dead guy
-            self.layer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'our-hero.dmd').frames[0])
+            self.layer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ourHero.frames[0])
             self.delay("Display",delay=0.5,handler=self.win_display,param=2)
         if step == 2:
             # the pan up
-            anim = dmd.Animation().load(ep.DMD_PATH+'our-hero.dmd')
+            anim = self.game.assets.dmd_ourHero
             # math out the wait
             myWait = len(anim.frames) / 60.0
             # set the animation
@@ -345,7 +345,7 @@ class BankRobbery(ep.EP_Mode):
             # loop back for the finish animation
             self.delay("Display",delay=myWait,handler=self.win_display,param=3)
         if step == 3:
-            anim = dmd.Animation().load(ep.DMD_PATH+'bank-victory-animation.dmd')
+            anim = self.game.assets.dmd_pollyVictory
             myWait = len(anim.frames) / 8.57
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
@@ -437,7 +437,7 @@ class BankRobbery(ep.EP_Mode):
 
     def dude_shoots(self):
         # load the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'dude-shoots-bank.dmd')
+        anim = self.game.assets.dmd_bankDude
         # math out the wait
         self.shotWait = len(anim.frames) / 10.0
         # the shoots back animation

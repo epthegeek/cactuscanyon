@@ -60,7 +60,7 @@ class Showdown(ep.EP_Mode):
         # kick out more ball
         # pop up the targets
         # play a startup animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'showdown.dmd')
+        anim = self.game.assets.dmd_showdown
         myWait = len(anim.frames) / 10.0
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
@@ -111,7 +111,7 @@ class Showdown(ep.EP_Mode):
         self.game.gi_control("OFF")
         # play the interstitial animation
         # load up the lightning
-        anim = dmd.Animation().load(ep.DMD_PATH+'cloud-lightning.dmd')
+        anim = self.game.assets.dmd_cloudLightning
         # math out the wait
         myWait = len(anim.frames) / 10.0
         # set the animation
@@ -140,7 +140,7 @@ class Showdown(ep.EP_Mode):
         # setup the pan script
         script =[]
         for i in range(0,-52,-1):
-            showdownStill = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'town-pan.dmd').frames[0])
+            showdownStill = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_townPan.frames[0])
             showdownStill.set_target_position(0,i)
             if i == -51:
                 time = 1
@@ -172,19 +172,19 @@ class Showdown(ep.EP_Mode):
         self.game.bad_guys.setup_targets()
         # then reset the display
         self.guyLayers = []
-        self.badGuy0 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+        self.badGuy0 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
         self.badGuy0.set_target_position(-49,0)
         self.badGuy0.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy0)
-        self.badGuy1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+        self.badGuy1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
         self.badGuy1.set_target_position(-16,0)
         self.badGuy1.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy1)
-        self.badGuy2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+        self.badGuy2 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
         self.badGuy2.set_target_position(15,0)
         self.badGuy2.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy2)
-        self.badGuy3 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+        self.badGuy3 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
         self.badGuy3.set_target_position(47,0)
         self.badGuy3.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy3)
@@ -210,7 +210,7 @@ class Showdown(ep.EP_Mode):
         self.game.increase_tracking('showdownPoints',self.showdownValue)
 
         # swap out the appropriate layer
-        shotguy = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd')
+        shotguy = self.game.assets.dmd_dudeShotFullBody
         if target == 0:
             # take out the current hit guy
             self.guyLayers.remove(self.badGuy0)
@@ -292,7 +292,7 @@ class Showdown(ep.EP_Mode):
             # turn off the level 1 flag
         self.game.set_tracking('stackLevel',False,0)
         # setup a display frame
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-sideways-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
         textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
         textString = "SHOWDOWN: " + str(self.deathTally) + " KILLS"
         textLine1.set_text(textString)

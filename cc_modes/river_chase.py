@@ -46,12 +46,12 @@ class RiverChase(ep.EP_Mode):
         self.won = False
 
         # set up the layers
-        anim = dmd.Animation().load(ep.DMD_PATH + 'blank-river-loop.dmd')
+        anim = self.game.assets.dmd_blankRiverLoop
         self.backdrop = dmd.AnimatedLayer(frames=anim.frames, repeat=True, opaque=True,frame_time=6)
-        anim = dmd.Animation().load(ep.DMD_PATH + 'horse-loop.dmd')
+        anim = self.game.assets.dmd_horseLoop
         self.horse = dmd.AnimatedLayer(frames=anim.frames,repeat=True, frame_time = 6)
         self.horse.composite_op = "blacksrc"
-        anim = dmd.Animation().load(ep.DMD_PATH + 'rowboat-cycle.dmd')
+        anim = self.game.assets.dmd_rowboatLoop
         self.boat = dmd.AnimatedLayer(frames=anim.frames,repeat = True,frame_time = 6)
         self.boat.composite_op = "blacksrc"
 
@@ -168,7 +168,7 @@ class RiverChase(ep.EP_Mode):
             # start the music
             self.game.base.music_on(self.game.assets.music_pollyPeril)
             # run the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'polly-peril.dmd')
+            anim = self.game.assets.dmd_pollyIntro
             myWait = len(anim.frames) / 30
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
             self.layer = animLayer
@@ -179,7 +179,7 @@ class RiverChase(ep.EP_Mode):
             self.delay(delay=myWait,handler=self.start_river_chase,param=2)
         if step == 2:
             # set up the title card
-            titleCard = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'polly-peril-rotr.dmd').frames[0])
+            titleCard = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_rotrTitle.frames[0])
             # transition to the title card
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
@@ -258,11 +258,11 @@ class RiverChase(ep.EP_Mode):
         if step == 1:
             self.game.base.play_quote(self.game.assets.quote_victory)
             # frame layer of the dead guy
-            self.layer = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'our-hero.dmd').frames[0])
+            self.layer = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_ourHero.frames[0])
             self.delay("Display",delay=0.5,handler=self.win_display,param=2)
         if step == 2:
             # the pan up
-            anim = dmd.Animation().load(ep.DMD_PATH+'our-hero.dmd')
+            anim = self.game.assets.dmd_ourHero
             # math out the wait
             myWait = len(anim.frames) / 60.0
             # set the animation
@@ -272,12 +272,12 @@ class RiverChase(ep.EP_Mode):
             # loop back for the finish animation
             self.delay("Display",delay=myWait,handler=self.win_display,param=3)
         if step == 3:
-            anim = dmd.Animation().load(ep.DMD_PATH+'bank-victory-animation.dmd')
+            anim = self.game.assets.dmd_pollyVictory
             myWait = len(anim.frames) / 8.57
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
             animLayer.frame_time = 7
-            ainmLayer.opaque = True
+            animLayer.opaque = True
 
             animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
             animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)

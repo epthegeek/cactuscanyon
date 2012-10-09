@@ -99,7 +99,7 @@ class Interrupter(ep.EP_Mode):
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_dontMove)
         # show some display
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'skyline.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_skyline.frames[0])
         myLayer = dmd.TextLayer(128/2,14, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("BALL SAVED")
         myLayer.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[backdrop,myLayer])
@@ -135,7 +135,7 @@ class Interrupter(ep.EP_Mode):
         self.delay(name="Display",delay=1,handler=self.clear_layer)
 
     def dude_escaped(self,amount):
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'escaped.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_escaped.frames[0])
         backdrop.composite_op = "blacksrc"
         if amount <= 0:
             textString = "THEY GOT AWAY - YOU LOSE"
@@ -256,13 +256,13 @@ class Interrupter(ep.EP_Mode):
     def shoot_again(self,step=1):
         # shown when starting an extra ball
         if step == 1:
-            imageLayer = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'shoot-again.dmd').frames[0])
+            imageLayer = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_shootAgain.frames[0])
             self.game.base.play_quote(self.game.assets.quote_deepLaugh)
             self.game.sound.play(self.game.assets.sfx_incoming)
             self.layer = imageLayer
             self.delay(delay = 2,handler=self.shoot_again, param=2)
         if step == 2:
-            anim = dmd.Animation().load(ep.DMD_PATH+'shoot-again.dmd')
+            anim = self.game.assets.dmd_shootAgain
             # math out the wait
             myWait = len(anim.frames) / 10.0
             # set the animation
@@ -275,7 +275,7 @@ class Interrupter(ep.EP_Mode):
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.shoot_again,param=3)
         if step == 3:
-            imageLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'shoot-again.dmd').frames[7])
+            imageLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_shootAgain.frames[7])
             self.game.base.play_quote(self.game.assets.quote_shootAgain)
             textLine1 = dmd.TextLayer(80,5, self.game.assets.font_9px_az, "center", opaque= False).set_text("SHOOT")
             textLine2 = dmd.TextLayer(80,15, self.game.assets.font_9px_az, "center", opaque= False).set_text("AGAIN")

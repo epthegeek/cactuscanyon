@@ -26,7 +26,7 @@ class RightLoop(ep.EP_Mode):
     def __init__(self, game, priority):
         super(RightLoop, self).__init__(game, priority)
         # set up a frame layer with the guns border on it
-        self.border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'guns-border.dmd').frames[0])
+        self.border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_gunsBorder.frames[0])
         self.layer = None
         self.weedsForCvA = 3
 
@@ -195,7 +195,7 @@ class RightLoop(ep.EP_Mode):
             self.awardPoints = "125,000"
             self.game.score_with_bonus(125000)
             # load the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'shot-bottles-animation.dmd')
+            anim = self.game.assets.dmd_shotBottles
             # calculate a wait
             myWait = len(anim.frames) / 10.0
             # create the layer
@@ -219,7 +219,7 @@ class RightLoop(ep.EP_Mode):
             self.awardPoints = "150,000"
             self.game.score_with_bonus(150000)
             # play the animation and such
-            anim = dmd.Animation().load(ep.DMD_PATH+'shot-candles-animation.dmd')
+            anim = self.game.assets.dmd_shotCandles
             myWait = len(anim.frames) / 10.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
             self.layer = animLayer
@@ -230,7 +230,7 @@ class RightLoop(ep.EP_Mode):
             self.awardPoints = "175,000"
             self.game.score_with_bonus(175000)
             #self.show_award_text()
-            anim = dmd.Animation().load(ep.DMD_PATH+'shot-card-animation.dmd')
+            anim = self.game.assets.dmd_shotCard
             myWait = len(anim.frames) / 10.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
             self.layer = animLayer
@@ -270,7 +270,7 @@ class RightLoop(ep.EP_Mode):
 
 
     def show_marksman_award(self):
-        anim = dmd.Animation().load(ep.DMD_PATH+'smoking-card-loop.dmd')
+        anim = self.game.assets.dmd_smokingCard
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=7)
         awardTextTop = dmd.TextLayer(128/3,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
         awardTextBottom = dmd.TextLayer(128/3,11,self.game.assets.font_15px_az,justify="center",opaque=False)
@@ -309,10 +309,10 @@ class RightLoop(ep.EP_Mode):
         self.transition.callback = self.clear_layer()
 
     def tumbleweed_display(self,value,combo):
-        banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed-banner.dmd').frames[0])
+        banner = banner = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tumbleweedBanner.frames[0])
         scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6)
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'tumbleweed.dmd')
+        anim = self.game.assets.dmd_tumbleweedLeft
         # start the full on animation
         myWait = len(anim.frames) / 15.0 + 0.5
         # setup the animated layer
@@ -320,6 +320,7 @@ class RightLoop(ep.EP_Mode):
         animLayer.hold=True
         animLayer.frame_time = 4
         animLayer.opaque=False
+
         animLayer.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[banner,scoreLayer,animLayer])
         self.layer = combined

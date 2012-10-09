@@ -91,8 +91,8 @@ class Gunfight(ep.EP_Mode):
         # display the clouds with gunfight text
         title = dmd.TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight")
         title.composite_op = "blacksrc"
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-top.dmd').frames[0])
-        mask = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-mask.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_gunfightTop.frames[0])
+        mask = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_gunfightMask.frames[0])
         mask.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[backdrop,mask,title])
         # after a delay pan down to the dude
@@ -108,7 +108,7 @@ class Gunfight(ep.EP_Mode):
         self.delay(delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
         self.delay(delay=0.3,handler=self.game.base.priority_quote,param=self.game.assets.quote_gunWin)
         # play the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-shoulders-up.dmd')
+        anim = self.game.assets.dmd_dudeShotShouldersUp
         myWait = len(anim.frames) / 10.0
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
@@ -165,7 +165,7 @@ class Gunfight(ep.EP_Mode):
 
     def gunfight_pan(self,badGuys):
         # the intro animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'gunfight-pan.dmd')
+        anim = self.game.assets.dmd_gunfightPan
         myWait = len(anim.frames) / 60 + 1.3
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=1)
         self.layer = animLayer
@@ -179,7 +179,7 @@ class Gunfight(ep.EP_Mode):
         # play the orchestra hit sound
         self.game.sound.play(self.game.assets.sfx_gunfightHit1)
         # show the eyes animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'gunfight-eyes.dmd')
+        anim = self.game.assets.dmd_gunfightEyes
         myWait = len(anim.frames) / 10.0
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
@@ -197,7 +197,7 @@ class Gunfight(ep.EP_Mode):
         # play the second orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit2)
         # show the hands animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'gunfight-hands.dmd')
+        anim = self.game.assets.dmd_gunfightHands
         myWait = len(anim.frames) / 10.0
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
@@ -214,7 +214,7 @@ class Gunfight(ep.EP_Mode):
         # play the orchestra hit
         self.game.sound.play(self.game.assets.sfx_gunfightHit3)
         # show the boots
-        boots = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[0])
+        boots = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_gunfightBoots.frames[0])
         self.layer = boots
         # after a delay - pass to the final setp
         self.delay(name="draw",delay=1.1,handler=self.gunfight_intro_draw,param=badGuys)
@@ -231,7 +231,7 @@ class Gunfight(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
         self.delay(delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
         # run the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd')
+        anim = self.game.assets.dmd_gunfightBoots
         myWait = len(anim.frames) / 10.0
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
@@ -242,7 +242,7 @@ class Gunfight(ep.EP_Mode):
         # play the draw quote
         self.game.base.play_quote(self.game.assets.quote_gunfightDraw)
         text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'gunfight-boots.dmd').frames[8])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_gunfightBoots.frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
         # turn the GI back on
         self.game.set_tracking('lampStatus', "ON")

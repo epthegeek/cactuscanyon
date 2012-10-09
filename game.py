@@ -403,8 +403,11 @@ class CCGame(game.BasicGame):
 
         print "CHECKING TRACKING ball ended LR: " + str(self.show_tracking('leftRampStage'))
 
-    # then call the ball_ended from proc.game.BasicGame
+        # then call the ball_ended from proc.game.BasicGame
+        # Looping here? wha?
         self.end_ball()
+
+
 
     def game_ended(self):
         self.log("GAME ENDED")

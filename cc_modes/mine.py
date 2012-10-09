@@ -188,7 +188,7 @@ class Mine(ep.EP_Mode):
         # display a "shots left to light lock type thing
         textLine = str(hitStatus) + " MORE TO"
         textLine2 = "LIGHT LOCK"
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
         textLayer = dmd.TextLayer(56, 2, self.game.assets.font_9px_az, "center", opaque=False).set_text(textLine)
         textLayer2 = dmd.TextLayer(56, 13, self.game.assets.font_9px_az, "center", opaque=False).set_text(textLine2)
         textLayer2.composite_op = "blacksrc"
@@ -204,7 +204,7 @@ class Mine(ep.EP_Mode):
         self.game.set_tracking('mineStatus', "LOCK")
         # clear the hits to light lock
         self.game.set_tracking('mineHits', 0)
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
         textLine = dmd.TextLayer(56, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("LOCK IS LIT")
         composite = dmd.GroupedLayer(128,32,[backdrop,textLine])
         self.layer = composite
@@ -280,7 +280,7 @@ class Mine(ep.EP_Mode):
         self.cancel_delayed("Display")
         # quiet the music
         self.game.squelch_music()
-        anim = dmd.Animation().load(ep.DMD_PATH+'ball-one-locked.dmd')
+        anim = self.game.assets.dmd_lockOne
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
         # play the first sound
@@ -296,7 +296,7 @@ class Mine(ep.EP_Mode):
         self.cancel_delayed("Display")
         # quiet the music
         self.game.squelch_music()
-        anim = dmd.Animation().load(ep.DMD_PATH+'ball-two-locked.dmd')
+        anim = self.game.assets.dmd_lockTwo
         # calcuate the wait time to start the next part of the display
         myWait = len(anim.frames) / 10.0
         # set the animation
@@ -344,9 +344,9 @@ class Mine(ep.EP_Mode):
         textLine3 = ep.pulse_text(self,96,4,"IS")
         textLine4 = ep.pulse_text(self,96,16,"LIT",sequence=[1,3])
         # and a backdrop
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'ball.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_ball.frames[0])
         # and the wipe animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'horse-wipe-right.dmd')
+        anim = self.game.assets.dmd_horseWipeRight
         myWait = len(anim.frames) / 10.0 + 1
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         animLayer.composite_op = "blacksrc"
@@ -386,7 +386,7 @@ class Mine(ep.EP_Mode):
         # otherwise play the whole animation
         else:
             # load up the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'extra-ball.dmd')
+            anim = self.game.assets.dmd_extraBall
             # start the full on animation
             myWait = len(anim.frames) / 7.50
             # setup the animated layer
@@ -422,7 +422,7 @@ class Mine(ep.EP_Mode):
         # play a music riff
         self.game.sound.play(self.game.assets.sfx_ebFlourish)
         # setup the backdrop
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'extra-ball.dmd').frames[58])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_extraBall.frames[58])
         textLine = dmd.TextLayer(128/2, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("EXTRA>  BALL@")
         textLine.composite_op = "blacksrc"
         myLayer = dmd.GroupedLayer(128,32,[backdrop,textLine])

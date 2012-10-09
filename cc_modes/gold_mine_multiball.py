@@ -109,7 +109,7 @@ class GoldMine(ep.EP_Mode):
 
     def intro_animation(self):
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'multiball-start.dmd')
+        anim = self.game.assets.dmd_multiballStart
         # math out how long it is in play time
         myWait = len(anim.frames) / 10.0
         # setup the animated layer
@@ -128,8 +128,8 @@ class GoldMine(ep.EP_Mode):
         # play the sound
         self.game.base.priority_quote(self.game.assets.quote_multiball)
         # generate a flashing thing
-        inverse = dmd.FrameLayer(True, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner-inverse.dmd').frames[0])
-        normal = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-banner.dmd').frames[0])
+        inverse = dmd.FrameLayer(True, frame=self.game.assets.dmd_multiballBannerInverse.frames[0])
+        normal = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_multiballBanner.frames[0])
         script = [{'seconds':0.1,'layer':inverse},{'seconds':0.1,'layer':normal}]
         myLayer = dmd.ScriptedLayer(128,32,script)
         self.layer = myLayer
@@ -161,7 +161,7 @@ class GoldMine(ep.EP_Mode):
 
     def main_display(self):
         # set up the display during multiball
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-frame.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_multiballFrame.frames[0])
         # title line
         titleLine = dmd.TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("GOLD MINE MULTIBALL")
         # score line
@@ -202,7 +202,7 @@ class GoldMine(ep.EP_Mode):
             # see if the multiplier goes up
             self.multiplier = self.check_multiplier()
             # play the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'mine-car-crash.dmd')
+            anim = self.game.assets.dmd_mineCarCrash
             # TODO add the sounds to this and determine if it needs listenrs
             # calcuate the wait time to start the next part of the display
             myWait = len(anim.frames) / 10.0
@@ -218,9 +218,9 @@ class GoldMine(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         if step == 2:
             # grab the last frame of the minecart crash
-            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'mine-car-crash.dmd').frames[9])
+            backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mineCarCrash.frames[9])
             # and setup the text layer to say jackpot
-            jackpotLine = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'jackpot.dmd').frames[0])
+            jackpotLine = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_goldmineJackpot.frames[0])
             # then do the transition
             transition = ep.EP_Transition(self,backdrop,jackpotLine,ep.EP_Transition.TYPE_CROSSFADE)
             # and loop back for step 3
@@ -275,7 +275,7 @@ class GoldMine(ep.EP_Mode):
     def display_multiplier(self):
             multiplier = self.game.show_tracking('motherlodeMultiplier')
             # and do a display thing
-            backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'mine-entrance-border.dmd').frames[0])
+            backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
             awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
             awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
             awardTextTop.set_text("MOTHERLODE")

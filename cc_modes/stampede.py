@@ -26,7 +26,7 @@ class Stampede(ep.EP_Mode):
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         # set up the cows layer
-        anim = dmd.Animation().load(ep.DMD_PATH+'cows-parading.dmd')
+        anim = self.game.assets.dmd_cowsParading
         self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
         # set up the animations they are to alternate
         self.anims = []
@@ -100,7 +100,7 @@ class Stampede(ep.EP_Mode):
         # start the timer for the moving jackpot
         self.jackpot_shift()
         #play the opening anim
-        anim = dmd.Animation().load(ep.DMD_PATH+'stampede-animation.dmd')
+        anim = self.game.assets.dmd_stampede
         myWait = len(anim.frames) / 10 + 1.5
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
@@ -147,7 +147,7 @@ class Stampede(ep.EP_Mode):
     def jackpot_hit(self,step=1):
         if step == 1:
             # play an animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'stampede-jackpot.dmd')
+            anim = self.game.assets.dmd_stampedeJackpot
             myWait = len(anim.frames) / 15.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=4)
             self.layer = animLayer
@@ -159,7 +159,7 @@ class Stampede(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         # second pass layers the score over the text
         if step == 2:
-            self.backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stampede-jackpot.dmd').frames[42])
+            self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_stampedeJackpot.frames[42])
             self.scoreLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("500,000")
             self.scoreLine.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
@@ -168,7 +168,7 @@ class Stampede(ep.EP_Mode):
             self.delay(name="Display",delay=2,handler=self.jackpot_hit,param=3)
         # third pass plays the wipe
         if step == 3:
-            anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
+            anim = self.game.assets.dmd_burstWipe
             myWait = len(anim.frames) / 15.0
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True

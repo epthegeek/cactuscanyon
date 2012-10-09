@@ -26,7 +26,7 @@ class CenterRamp(ep.EP_Mode):
     """Cactus Canyon Center Ramp Mode"""
     def __init__(self, game, priority):
         super(CenterRamp, self).__init__(game, priority)
-        self.border = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
+        self.border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tracksBorder.frames[0])
 
     def mode_started(self):
         self.update_lamps()
@@ -205,7 +205,7 @@ class CenterRamp(ep.EP_Mode):
             self.game.base.play_quote(self.game.assets.quote_centerRamp1)
             self.game.sound.play(self.game.assets.sfx_trainChugShort)
             self.game.sound.play(self.game.assets.sfx_leftLoopEnter) # same sound used on left loop so the name is funny
-            anim = dmd.Animation().load(ep.DMD_PATH+'train-boarding.dmd')
+            anim = self.game.assets.dmd_trainBoarding
             # math out the wait
             myWait = len(anim.frames) / 10.0
             # set the animation
@@ -278,7 +278,7 @@ class CenterRamp(ep.EP_Mode):
         self.game.base.play_quote(self.game.assets.quote_centerRamp2)
         self.game.sound.play(self.game.assets.sfx_trainChugShort)
         self.game.sound.play(self.game.assets.sfx_trainWhistle)
-        anim = dmd.Animation().load(ep.DMD_PATH+'train-running-on-top.dmd')
+        anim = self.game.assets.dmd_trainRunning
         # math out the wait
         myWait = len(anim.frames) / 10.0
         # set the animation
@@ -300,7 +300,7 @@ class CenterRamp(ep.EP_Mode):
         self.awardPoints = str(ep.format_score(value))
         self.game.score_with_bonus(value)
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'train-brake-pull.dmd')
+        anim = self.game.assets.dmd_trainBrakes
         # start the full on animation
         myWait = len(anim.frames) / 8.57
         # setup the animated layer

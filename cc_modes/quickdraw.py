@@ -124,7 +124,7 @@ class Quickdraw(ep.EP_Mode):
         # pop that sucker up
         self.game.bad_guys.target_up(self.target)
         # Set up the display
-        anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-start.dmd')
+        anim = self.game.assets.dmd_quickdrawStart
         self.animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         # set the end time based on the config setting
         # set up the point value
@@ -196,7 +196,7 @@ class Quickdraw(ep.EP_Mode):
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         # play the win animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'quickdraw-hit.dmd')
+        anim = self.game.assets.dmd_quickdrawHit
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         #  setup the text
         scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))

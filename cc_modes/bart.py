@@ -44,7 +44,12 @@ class Bart(ep.EP_Mode):
         else:
             self.hitsToDefeatBart = [3,5,6,7,8,8]
             # hits banners list
-        self.banners = ['bam','biff','ouch','pow','wham','zoink']
+        self.banners = [self.game.assets.dmd_bamBanner,
+                        self.game.assets.dmd_biffBanner,
+                        self.game.assets.dmd_ouchBanner,
+                        self.game.assets.dmd_powBanner,
+                        self.game.assets.dmd_whamBanner,
+                        self.game.assets.dmd_zoinkBanner]
         # a flag for when bart is in motion
         self.moving = False
 
@@ -60,7 +65,7 @@ class Bart(ep.EP_Mode):
         # pick a random banner to use
         banner = random.choice(self.banners)
         # set up the banner layer
-        self.bannerLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+banner+'-banner.dmd').frames[0])
+        self.bannerLayer = dmd.FrameLayer(opaque=False, frame=banner.frames[0])
 
         # lookup the status
         status = self.game.show_tracking('bartStatus')
@@ -127,14 +132,16 @@ class Bart(ep.EP_Mode):
         taunts = (self.game.assets.quote_tauntBigBart, self.game.assets.quote_tauntBandeleroBart,self.game.assets.quote_tauntBubbaBart)
         defeats = (self.game.assets.quote_defeatBigBart, self.game.assets.quote_defeatBandeleroBart,self.game.assets.quote_defeatBubbaBart)
         intros = (self.game.assets.quote_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart)
+        posterA = (self.game.assets.dmd_bigPosterA, self.game.assets.dmd_bandeleroPosterA, self.game.assets.dmd_bubbaPosterA)
+        posterB = (self.game.assets.dmd_bigPosterB, self.game.assets.dmd_bandeleroPosterB, self.game.assets.dmd_bubbaPosterB)
         # look up which one is current
         index = self.game.show_tracking('currentBart')
         # setting up all the bits like name for text display
         self.brother = names[index].upper()
         # wanted poster
-        self.wantedFrameA = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'wanted-'+ self.brother +'-A.dmd').frames[0])
+        self.wantedFrameA = dmd.FrameLayer(opaque=False, frame=posterA[index].frames[0])
         self.wantedFrameA.composite_op = "blacksrc"
-        self.wantedFrameB = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'wanted-'+ self.brother +'-B.dmd').frames[0])
+        self.wantedFrameB = dmd.FrameLayer(opaque=False, frame=posterB[index].frames[0])
         # hit quotes
         self.hitQuote = hits[index]
         # taunt quotes
@@ -221,7 +228,7 @@ class Bart(ep.EP_Mode):
         # play a fancy lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
         # setup the display
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'weave-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_weaveBorder.frames[0])
         textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
         textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
         if currentTotal < self.bartsForStar:

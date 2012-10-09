@@ -205,7 +205,7 @@ class Saloon(ep.EP_Mode):
         # set the tracking
         self.game.set_tracking('isBountyLit', True)
         # show something on the screen
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stars-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_starsBorder.frames[0])
         topText = ep.pulse_text(self,64,4,"COLLECT BOUNTY")
         bottomText = ep.pulse_text(self,64,16,"IS LIT")
         self.repeat_ding(4)
@@ -262,13 +262,13 @@ class Saloon(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_bountyCollected)
 
         # give the award
-        mayorfeet = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'mayor-feet.dmd').frames[0])
+        mayorfeet = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mayorFeet.frames[0])
         self.layer = mayorfeet
         # pause a bit and then pan up the mayor
         self.delay(delay=.3,handler=self.mayor_pan)
 
     def mayor_pan(self):
-        anim = dmd.Animation().load(ep.DMD_PATH+'mayor-pan.dmd')
+        anim = self.game.assets.dmd_mayorPan
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False)
         self.layer = animLayer
         myWait = len(anim.frames) / 60.0
@@ -343,16 +343,15 @@ class Saloon(ep.EP_Mode):
             print "WTF BOUNTY: " + self.bountyPrize
 
         # load the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'bounty-collected.dmd')
         # set up the layer
-        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer = ep.EP_AnimatedLayer(self.game.assets.dmd_bountyCollected)
         animLayer.composite_op = "blacksrc"
         animLayer.frame_time = 6
         animLayer.hold = True
         # calculate a wait time with some buffer after to leave the text
-        myWait = (len(anim.frames) /10 ) + 2
+        myWait = (len(self.game.assets.dmd_bountyCollected.frames) /10 ) + 2
         # set the backdrop for the revealed award
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_moneybagBorder.frames[0])
         # set the text for the award
         awardTextTop = dmd.TextLayer(76,4,self.game.assets.font_9px_az,justify="center",opaque=False)
         awardTextTop.set_text("YOUR BOUNTY:")

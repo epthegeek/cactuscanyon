@@ -201,7 +201,7 @@ class RightRamp(ep.EP_Mode):
             self.awardPoints = "125,000*"
             self.game.score_with_bonus(125000)
             # load the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'bank-explodes.dmd')
+            anim = self.game.assets.dmd_bankExplodes
             # calcuate the wait time to start the next part of the display
             myWait = len(anim.frames) / 8.57
             # play the first sound
@@ -226,7 +226,7 @@ class RightRamp(ep.EP_Mode):
             self.awardPoints = "150,000*"
             self.game.score_with_bonus(150000)
             # load the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'bank-sherrif-arrives.dmd')
+            anim = self.game.assets.dmd_bankSheriff
             # calculate the wait time
             myWait = len(anim.frames) / 8.57
             # set the animation
@@ -287,7 +287,7 @@ class RightRamp(ep.EP_Mode):
 
     def anim_bank_victory(self):
         print "BANK VICTORY"
-        anim = dmd.Animation().load(ep.DMD_PATH+'bank-victory-animation.dmd')
+        anim = self.game.assets.dmd_pollyVictory
         myWait = len(anim.frames) / 8.57
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True

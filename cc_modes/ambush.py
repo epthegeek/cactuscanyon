@@ -36,19 +36,19 @@ class Ambush(ep.EP_Mode):
         self.targetNames = ['Left','Left Center','Right Center','Right']
         # setup the standing guys
         self.guyLayers = []
-        self.badGuy0 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+        self.badGuy0 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
         self.badGuy0.set_target_position(-49,0)
         self.badGuy0.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy0)
-        self.badGuy1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+        self.badGuy1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
         self.badGuy1.set_target_position(-16,0)
         self.badGuy1.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy1)
-        self.badGuy2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+        self.badGuy2 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
         self.badGuy2.set_target_position(15,0)
         self.badGuy2.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy2)
-        self.badGuy3 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+        self.badGuy3 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
         self.badGuy3.set_target_position(47,0)
         self.badGuy3.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy3)
@@ -130,7 +130,7 @@ class Ambush(ep.EP_Mode):
         # things, they go here
         self.deathTally = 0
         # play a startup animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'ambush.dmd')
+        anim = self.game.assets.dmd_ambush
         myWait = len(anim.frames) / 10.0
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
@@ -270,9 +270,9 @@ class Ambush(ep.EP_Mode):
 
         ## setup the shot guys
         shotLayers = []
-        shotguy = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd')
+        shotguy = self.game.assets.dmd_dudeShotFullBody
         escapeLayers = []
-        guyShoots = dmd.Animation().load(ep.DMD_PATH+'dude-shoots.dmd')
+        guyShoots = self.game.assets.dmd_dudeShoots
         for position in [-49,-16,15,47]:
             # the gets shot animation per position
             deadGuy0 = dmd.AnimatedLayer(frames=shotguy.frames,hold=True,opaque=False,repeat=False,frame_time=6)
@@ -424,7 +424,7 @@ class Ambush(ep.EP_Mode):
             # turn off the level 1 flag
         self.game.set_tracking('stackLevel',False,0)
         # setup a display frame
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-sideways-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
         textLine1 = dmd.TextLayer(76, 2, self.game.assets.font_7px_bold_az, "center", opaque=False)
         textString = "AMBUSH: " + str(self.deathTally) + " KILLS"
         textLine1.set_text(textString)
