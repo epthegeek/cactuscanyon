@@ -407,6 +407,28 @@ class CCGame(game.BasicGame):
         # Looping here? wha?
         self.end_ball()
 
+    def end_ball(self):
+        """Called by the implementor to notify the game that the current ball has ended."""
+
+        self.ball_end_time = time.time()
+        # Calculate ball time and save it because the start time
+        # gets overwritten when the next ball starts.
+        self.ball_time = self.get_ball_time()
+        self.current_player().game_time += self.ball_time
+
+        if self.current_player().extra_balls > 0:
+            self.current_player().extra_balls -= 1
+            self.shoot_again()
+            return
+        if self.current_player_index + 1 == len(self.players):
+            self.ball += 1
+            self.current_player_index = 0
+        else:
+            self.current_player_index += 1
+        if self.ball > self.balls_per_game:
+            self.end_game()
+        else:
+            self.start_ball() # Consider: Do we want to call this here, or should it be called by the game? (for bonus sequence)
 
 
     def game_ended(self):

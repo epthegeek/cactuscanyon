@@ -30,14 +30,14 @@ class Stampede(ep.EP_Mode):
         self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
         # set up the animations they are to alternate
         self.anims = []
-        anim0 = ep.DMD_PATH + "cows-left.dmd"
+        anim0 = self.game.assets.dmd_cowsLeft
         self.anims.append(anim0)
-        anim1 = ep.DMD_PATH + "cows-right.dmd"
+        anim1 = self.game.assets.dmd_cowsRight
         self.anims.append(anim1)
         self.banners = []
-        banner0 = ep.DMD_PATH + "stampede-banner-left.dmd"
+        banner0 = self.game.assets.dmd_stampedeBannerLeft
         self.banners.append(banner0)
-        banner1 = ep.DMD_PATH + "stampede-banner-right.dmd"
+        banner1 = self.game.assets.dmd_stampedeBannerRight
         self.banners.append(banner1)
 
     def mode_started(self):
@@ -183,8 +183,8 @@ class Stampede(ep.EP_Mode):
     def jackpot_wiff(self,step=1):
         if step == 1:
             # load the animation based on which was last played
-            anim = dmd.Animation().load(self.anims[0])
-            banner = dmd.Animation().load(self.banners[0])
+            anim = self.anims[0]
+            banner = self.banners[0]
             myWait = len(banner.frames) / 12.0
             # reverse them for next time
             self.anims.reverse()
@@ -221,7 +221,7 @@ class Stampede(ep.EP_Mode):
         self.game.sound.stop_music()
         # do a final display
         # setup a display frame
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'skulls-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_skullsBorder.frames[0])
         textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
         textString = "STAMPEDE: " + str(self.jackpots) + " JACKPOTS"
         textLine1.set_text(textString)

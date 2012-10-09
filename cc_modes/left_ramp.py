@@ -228,7 +228,7 @@ class LeftRamp(ep.EP_Mode):
             self.game.score_with_bonus(150000)
             self.game.base.play_quote(self.game.assets.quote_leftRamp2)
             # load the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'river-chase.dmd')
+            anim = self.game.assets.dmd_riverChase
             # math out the wait
             myWait = len(anim.frames) / 12.0
             # set the animation

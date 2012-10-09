@@ -84,7 +84,7 @@ class Combos(ep.EP_Mode):
         # tick down the timer
         self.myTimer -= 1
         # see if it hit zero
-        print "COMBO TIMER: " + str(self.myTimer)
+        #print "COMBO TIMER: " + str(self.myTimer)
         if self.myTimer <= 0:
             self.end()
         else:
@@ -93,13 +93,13 @@ class Combos(ep.EP_Mode):
     
     def end(self):
         self.update_lamps()
-        print "Combos have ENDED"
+        #print "Combos have ENDED"
     
     def start(self):
         # due to the multi ramp combos, this has to be able to add combos
         if self.chain > 1:
             self.add_combo()
-        print "Combos are ON"
+        #print "Combos are ON"
         # set the timer at the max settings from the game
         self.myTimer = self.default
         # turn the lights on
@@ -136,7 +136,7 @@ class Combos(ep.EP_Mode):
 
     def display(self):
         self.cancel_delayed("Display")
-        backdrop = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cactusBorder.frames[0])
         # build and show the display of combos made & left
         combos = self.game.show_tracking('combos')
         # if we've got a chain going, that affects display

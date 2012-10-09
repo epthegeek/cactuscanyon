@@ -38,9 +38,9 @@ class SavePolly(ep.EP_Mode):
         self.cows = [self.game.assets.sfx_cow1, self.game.assets.sfx_cow2]
         self.modeTimer = 0
         # setup the 2 animations
-        anim = dmd.Animation().load(ep.DMD_PATH+'train-head-on.dmd')
+        anim = self.game.assets.dmd_trainHeadOn
         self.trainLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=True,frame_time=6)
-        anim = dmd.Animation().load(ep.DMD_PATH+'cow-on-tracks.dmd')
+        anim = self.game.assets.dmd_cowOnTracks
         self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
         self.pollyTitle = dmd.TextLayer(34, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
         # if we haven't maxed extra balls, the prize is an extra ball light - otherwise, 5 mil
@@ -166,7 +166,7 @@ class SavePolly(ep.EP_Mode):
             # reset the train
             self.game.train.reset_toy(step=2)
             # run the animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'polly-peril.dmd')
+            anim = self.game.assets.dmd_pollyIntro
             myWait = len(anim.frames) / 30
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
             self.layer = animLayer
@@ -196,7 +196,7 @@ class SavePolly(ep.EP_Mode):
             self.delay(delay=myWait,handler=self.start_save_polly,param=2)
         if step == 2:
             # set up the title card
-            titleCard = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'polly-peril-tttt.dmd').frames[0])
+            titleCard = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ttttBanner.frames[0])
             # transition to the title card
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
@@ -255,7 +255,7 @@ class SavePolly(ep.EP_Mode):
                 # swap for the next shot
                 self.cows.reverse()
                 # setup the display
-                border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
+                border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_tracksBorder.frames[0])
                 awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
                 awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
                 awardTextTop.set_text("TRAIN")
@@ -319,7 +319,7 @@ class SavePolly(ep.EP_Mode):
             self.game.score(self.shotValue)
             # TODO play some sound?
             # setup the display
-            border = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tracks-border.dmd').frames[0])
+            border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_tracksBorder.frames[0])
             pollyTitle = dmd.TextLayer(64, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
             scoreLine = dmd.TextLayer(64, 6, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
             textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
@@ -339,7 +339,7 @@ class SavePolly(ep.EP_Mode):
         # sound for this is self.game.assets.sfx_trainStop
         # play the train stopping animation and some sounds
         # TODO needs sounds
-        anim = dmd.Animation().load(ep.DMD_PATH+'train-polly-on-tracks.dmd')
+        anim = self.game.assets.dmd_pollyOnTracks
         # math out the wait
         myWait = len(anim.frames) / 10.0
         # set the animation

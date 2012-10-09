@@ -63,7 +63,7 @@ class Quickdraw(ep.EP_Mode):
         self.bumper_hit('bottom')
 
     # so does the mine
-    def sw_minePopper_active_for_400ms(self,sw):
+    def sw_minePopper_active_for_390ms(self,sw):
         self.pause()
 
     # resume when exit

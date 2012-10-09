@@ -23,17 +23,17 @@ class MoveYourTrain(ep.EP_Mode):
     def __init__(self,game,priority):
         super(MoveYourTrain, self).__init__(game,priority)
         # train idle animation
-        self.animIdle = dmd.Animation().load(ep.DMD_PATH+'train-on-tracks.dmd')
+        self.animIdle = self.game.assets.dmd_trainOnTracks
         # train moving right animation
-        self.animRight = dmd.Animation().load(ep.DMD_PATH+'train-on-tracks-move-right.dmd')
+        self.animRight = self.game.assets.dmd_trainMoveRight
         # train moving left animation
-        self.animLeft = dmd.Animation().load(ep.DMD_PATH+'train-on-tracks-move-left.dmd')
+        self.animLeft = self.game.assets.dmd_trainMoveLeft
         # set the train animation wait
         self.animWait = len(self.animRight.frames) / 10.0
         # default the train layer
         self.set_train_layer()
         # empty track layer
-        self.emptyTrackLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'empty-track.dmd').frames[0])
+        self.emptyTrackLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_emptyTrack.frames[0])
         self.emptyTrackLayer.composite_op = "blacksrc"
         self.trainOffset = 0
         self.running = False

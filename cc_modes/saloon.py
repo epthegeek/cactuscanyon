@@ -403,7 +403,7 @@ class Saloon(ep.EP_Mode):
         print "GUNFIGHT IS LIT"
         # turn on the lights
         # show the display
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-border.dmd').frames[0])
+        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboyBorder.frames[0])
         textString1 = "GUNFIGHT"
         textLayer1 = ep.pulse_text(self,77,2,textString1,size="12px")
         textString2 = "IS LIT"

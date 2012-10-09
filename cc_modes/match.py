@@ -52,7 +52,7 @@ class Match(ep.EP_Mode):
         self.generate_digits()
         # put up the end of the scores
         # put up the bottles
-        bottlesLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'match.dmd').frames[0])
+        bottlesLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_match.frames[0])
         bottlesLayer.composite_op = "blacksrc"
         # put up the match number
         # text
@@ -70,7 +70,7 @@ class Match(ep.EP_Mode):
     def run_animation(self):
         # run the animation with sound
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'match.dmd')
+        anim = self.game.assets.dmd_match
         # start the full on animation
         myWait = len(anim.frames) / 7.5 + 0.5
         # setup the animated layer
@@ -111,7 +111,7 @@ class Match(ep.EP_Mode):
         if self.winners > 0:
             self.digitLayer.set_text(self.selection,blink_frames=8)
             self.zeroLayer.set_text("0",blink_frames=8)
-            bottlesLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'match.dmd').frames[20])
+            bottlesLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_match.frames[20])
             bottlesLayer.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,bottlesLayer])
             self.layer = combined

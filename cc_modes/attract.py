@@ -36,26 +36,26 @@ class Attract(ep.EP_Mode):
     def mode_started(self):
 
         ## Set up the layers to use
-        ballyBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bally-banner.dmd').frames[0])
+        ballyBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ballyBanner.frames[0])
 
         textLayer1 = dmd.TextLayer(76, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("ORIGINALLY")
         textLayer1.composite_op = "blacksrc"
         textLayer2 = dmd.TextLayer(76, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("BY")
         textLayer2.composite_op = "blacksrc"
-        leftGecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'gecko-border.dmd').frames[0])
+        leftGecko = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_geckoBorderLeft.frames[0])
         original = dmd.GroupedLayer(128, 32, [leftGecko, textLayer1,textLayer2])
 
         textLayer1 = dmd.TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("CONTINUED")
         textLayer1.composite_op = "blacksrc"
         textLayer2 = dmd.TextLayer(58, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("WITH")
         textLayer2.composite_op = "blacksrc"
-        rightGecko = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'right-gecko-border.dmd').frames[0])
+        rightGecko = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_geckoBorderRight.frames[0])
         expanded = dmd.GroupedLayer(128, 32, [rightGecko, textLayer1,textLayer2])
 
-        proc_banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load('shared/dmd/splash.dmd').frames[0])
+        proc_banner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_procBanner.frames[0])
 
-        splash = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cactus-canyon-banner.dmd').frames[0])
-        continuedBanner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'ccc-banner.dmd').frames[0])
+        splash = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ccBanner.frames[0])
+        continuedBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cccBanner.frames[0])
         self.myIndex = 0
 
 
@@ -136,7 +136,7 @@ class Attract(ep.EP_Mode):
         # looping timer to control the animation speed of attract mode
         # can be hurried to the next step by flipper buttons
         self.timer -= 1
-        print "ATTRACT TIMER: " + str(self.timer)
+        #print "ATTRACT TIMER: " + str(self.timer)
         if (self.timer == 0):
             self.run_animation_loop()
         # come back to the timer - after cancelling any existing delay, just to be sure
@@ -231,7 +231,7 @@ class Attract(ep.EP_Mode):
 
                 # generate a screen for the quickdraw high score champ
                 if category.game_data_key == 'QuickdrawChampHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'quick-draw-still.dmd').frames[0])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_quickdrawStill.frames[0])
                     title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("QUICKDRAW CHAMP")
                     initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
@@ -240,7 +240,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the showdown champ
                 if category.game_data_key == 'ShowdownChampHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd').frames[0])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
                     backdrop.set_target_position(40,0)
                     title = dmd.TextLayer(44, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("SHOWDOWN CHAMP")
                     initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
@@ -250,7 +250,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the ambush champ
                 if category.game_data_key == 'AmbushChampHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dude-shoots.dmd').frames[1])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShoots.frames[1])
                     backdrop.set_target_position(-49,0)
                     title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("AMBUSH CHAMP")
                     initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
@@ -260,7 +260,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the Tumbleweed Rustler
                 if category.game_data_key == 'TumbleweedChampHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tumbleweed.dmd').frames[7])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.dmd_tumbleweedLeft.frames[7])
                     backdrop.set_target_position(32,0)
                     title = dmd.TextLayer(51, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("TUMBLEWEED RUSTLER")
                     initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
@@ -270,7 +270,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the Town Drunk
                 if category.game_data_key == 'TownDrunkHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dmb-idle.dmd').frames[1])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbIdle.frames[1])
                     title = dmd.TextLayer(80, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("TOWN DRUNK")
                     initLine1 = dmd.TextLayer(80, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(80, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " BEERS")
@@ -279,7 +279,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the Town Drunk
                 if category.game_data_key == 'UndertakerHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'tombstone.dmd').frames[0])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_tombstone.frames[0])
                     title = dmd.TextLayer(44, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("UNDERTAKER")
                     initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(44, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " KILLS")
@@ -288,7 +288,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the Bounty Hunter
                 if category.game_data_key == 'BountyHunterHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'wanted-poster-3.dmd').frames[0])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_wantedPoster.frames[0])
                     title = dmd.TextLayer(64, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("BOUNTY HUNTER")
                     initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(44, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " BARTS")
@@ -297,7 +297,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the Combo Champ
                 if category.game_data_key == 'ComboChampHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'stars-border.dmd').frames[0])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_starsBorder.frames[0])
                     title = dmd.TextLayer(64, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("COMBO CHAMP")
                     initLine1 = dmd.TextLayer(64, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + "-WAY COMBO")
@@ -306,7 +306,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the motherlode champ
                 if category.game_data_key == 'MotherlodeChampHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'multiball-frame.dmd').frames[0])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_multiballFrame.frames[0])
                     title = dmd.TextLayer(64, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("MOTHERLODE CHAMP")
                     initLine1 = dmd.TextLayer(64, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = dmd.TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str)

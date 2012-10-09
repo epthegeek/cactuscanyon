@@ -822,6 +822,15 @@ class Assets():
 
         # experimental DMD pre-loading
         self.dmd_blank = dmd.Animation().load(self.dmd_path +'blank.dmd')
+        self.dmd_ballyBanner = dmd.Animation().load(self.dmd_path +'bally-banner.dmd')
+        self.dmd_geckoBorderLeft = dmd.Animation().load(self.dmd_path +'gecko-border.dmd')
+        self.dmd_geckoBorderRight = dmd.Animation().load(self.dmd_path +'right-gecko-border.dmd')
+        self.dmd_procBanner = dmd.Animation().load(self.dmd_path +'splash.dmd')
+        self.dmd_ccBanner = dmd.Animation().load(self.dmd_path+'cactus-canyon-banner.dmd')
+        self.dmd_cccBanner = dmd.Animation().load(self.dmd_path +'ccc-banner.dmd')
+
+        self.dmd_quickdrawStill = dmd.Animation().load(self.dmd_path+'quick-draw-still.dmd')
+
         self.dmd_mayorFeet = dmd.Animation().load(self.dmd_path +'mayor-feet.dmd')
         self.dmd_mayorPan = dmd.Animation().load(self.dmd_path +'mayor-pan.dmd')
         self.dmd_bountyCollected = dmd.Animation().load(self.dmd_path +'bounty-collected.dmd')
@@ -832,10 +841,15 @@ class Assets():
         self.dmd_woodcutBorder = dmd.Animation().load(self.dmd_path +'woodcut-border.dmd')
         self.dmd_cactusBorder = dmd.Animation().load(self.dmd_path +'cactus-border.dmd')
         self.dmd_weaveBorder = dmd.Animation().load(self.dmd_path +'weave-border.dmd')
+        self.dmd_skullsBorder = dmd.Animation().load(self.dmd_path+'skulls-border.dmd')
+        self.dmd_singleCowboyBorder = dmd.Animation().load(self.dmd_path +'single-cowboy-border.dmd')
         self.dmd_singleCowboySidewaysBorder = dmd.Animation().load(self.dmd_path+'single-cowboy-sideways-border.dmd')
         self.dmd_mineEntranceBorder = dmd.Animation().load(self.dmd_path +'mine-entrance-border.dmd')
         self.dmd_skyline = dmd.Animation().load(self.dmd_path+'skyline.dmd')
         self.dmd_escaped = dmd.Animation().load(self.dmd_path +'escaped.dmd')
+
+        self.dmd_tombstone = dmd.Animation().load(self.dmd_path+'tombstone.dmd')
+        self.dmd_wantedPoster = dmd.Animation().load(self.dmd_path +'wanted-poster-3.dmd')
         self.dmd_beerMug = dmd.Animation().load(self.dmd_path +'beer-mug-1.dmd')
 
         self.dmd_cashWipe = dmd.Animation().load(self.dmd_path +'cash-wipe.dmd')
@@ -848,12 +862,18 @@ class Assets():
         self.dmd_rowboat = dmd.Animation().load(self.dmd_path +'rowboat.dmd')
         self.dmd_rowboatLoop = dmd.Animation().load(self.dmd_path + 'rowboat-cycle.dmd')
         self.dmd_horseLoop = dmd.Animation().load(self.dmd_path + 'horse-loop.dmd')
+        self.dmd_riverChase = dmd.Animation().load(self.dmd_path +'river-chase.dmd')
 
         self.dmd_bankExplodes = dmd.Animation().load(self.dmd_path +'bank-explodes.dmd')
         self.dmd_bankSheriff = dmd.Animation().load(self.dmd_path +'bank-sherrif-arrives.dmd')
         self.dmd_bankDude = dmd.Animation().load(self.dmd_path + 'dude-shoots-bank.dmd')
         self.dmd_bankInterior = dmd.Animation().load(self.dmd_path + 'bank-interior.dmd')
         self.dmd_hatbTitle = dmd.Animation().load(self.dmd_path +'polly-peril-hatb.dmd')
+
+        self.dmd_trainHeadOn = dmd.Animation().load(self.dmd_path+'train-head-on.dmd')
+        self.dmd_cowOnTracks = dmd.Animation().load(self.dmd_path+'cow-on-tracks.dmd')
+        self.dmd_ttttBanner = dmd.Animation().load(self.dmd_path+'polly-peril-tttt.dmd')
+        self.dmd_pollyOnTracks = dmd.Animation().load(self.dmd_path +'train-polly-on-tracks.dmd')
 
         self.dmd_dudeShotFullBody = dmd.Animation().load(self.dmd_path+'dude-gets-shot-full-body.dmd')
         self.dmd_dudeShotShouldersUp = dmd.Animation().load(self.dmd_path+'dude-gets-shot-shoulders-up.dmd')
@@ -903,6 +923,10 @@ class Assets():
         self.dmd_stampede = dmd.Animation().load(self.dmd_path + 'stampede-animation.dmd')
         self.dmd_cowsParading = dmd.Animation().load(self.dmd_path +'cows-parading.dmd')
         self.dmd_stampedeJackpot = dmd.Animation().load(self.dmd_path +'stampede-jackpot.dmd')
+        self.dmd_cowsLeft = dmd.Animation().load(self.dmd_path + 'cows-left.dmd')
+        self.dmd_cowsRight = dmd.Animation().load(self.dmd_path + 'cows-right.dmd')
+        self.dmd_stampedeBannerLeft = dmd.Animation().load(self.dmd_path +'stampede-banner-left.dmd')
+        self.dmd_stampedeBannerRight = dmd.Animation().load(self.dmd_path + 'stampede-banner-right.dmd')
 
         self.dmd_shootAgain = dmd.Animation().load(self.dmd_path+'shoot-again.dmd')
         self.dmd_ball = dmd.Animation().load(self.dmd_path +'ball.dmd')
@@ -931,6 +955,15 @@ class Assets():
         self.dmd_bigPosterB = dmd.Animation().load(self.dmd_path +'wanted-BIG-B.dmd')
         self.dmd_bandeleroPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BANDELERO-B.dmd')
         self.dmd_bubbaPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BUBBA-B.dmd')
+
+        self.dmd_trainOnTracks = dmd.Animation().load(self.dmd_path+'train-on-tracks.dmd')
+        self.dmd_trainMoveRight = dmd.Animation().load(self.dmd_path+'train-on-tracks-move-right.dmd')
+        self.dmd_trainMoveLeft = dmd.Animation().load(self.dmd_path+'train-on-tracks-move-left.dmd')
+        self.dmd_emptyTrack = dmd.Animation().load(self.dmd_path+'empty-track.dmd')
+
+        self.dmd_dmbIdle = dmd.Animation().load(self.dmd_path+'dmb-idle.dmd')
+
+        self.dmd_match = dmd.Animation().load(self.dmd_path+'match.dmd')
 
         # Shared Paths
         self.shared_sound_path = "shared/sound/"
