@@ -30,6 +30,7 @@ from assets import *
 import ep
 import pygame
 import highscore
+import time
 
 ## Define the config file locations
 user_game_data_path = "config/game_data.yaml"
