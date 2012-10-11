@@ -260,7 +260,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the Tumbleweed Rustler
                 if category.game_data_key == 'TumbleweedChampHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=self.dmd_tumbleweedLeft.frames[7])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_tumbleweedLeft.frames[7])
                     backdrop.set_target_position(32,0)
                     title = dmd.TextLayer(51, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("TUMBLEWEED RUSTLER")
                     initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
