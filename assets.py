@@ -835,6 +835,7 @@ class Assets():
         self.dmd_mayorPan = dmd.Animation().load(self.dmd_path +'mayor-pan.dmd')
         self.dmd_bountyCollected = dmd.Animation().load(self.dmd_path +'bounty-collected.dmd')
         self.dmd_moneybagBorder = dmd.Animation().load(self.dmd_path +'moneybag-border.dmd')
+        self.dmd_moneybagBorderRight = dmd.Animation().load(self.dmd_path+'moneybag-right.dmd')
         self.dmd_starsBorder = dmd.Animation().load(self.dmd_path +'stars-border.dmd')
         self.dmd_tracksBorder = dmd.Animation().load(self.dmd_path +'tracks-border.dmd')
         self.dmd_gunsBorder = dmd.Animation().load(self.dmd_path +'guns-border.dmd')
@@ -843,6 +844,7 @@ class Assets():
         self.dmd_weaveBorder = dmd.Animation().load(self.dmd_path +'weave-border.dmd')
         self.dmd_skullsBorder = dmd.Animation().load(self.dmd_path+'skulls-border.dmd')
         self.dmd_singleCowboyBorder = dmd.Animation().load(self.dmd_path +'single-cowboy-border.dmd')
+        self.dmd_singleCowboyBorderRight = dmd.Animation().load(self.dmd_path+'cowboy-border-right.dmd')
         self.dmd_singleCowboySidewaysBorder = dmd.Animation().load(self.dmd_path+'single-cowboy-sideways-border.dmd')
         self.dmd_mineEntranceBorder = dmd.Animation().load(self.dmd_path +'mine-entrance-border.dmd')
         self.dmd_skyline = dmd.Animation().load(self.dmd_path+'skyline.dmd')
@@ -962,9 +964,60 @@ class Assets():
         self.dmd_emptyTrack = dmd.Animation().load(self.dmd_path+'empty-track.dmd')
 
         self.dmd_dmbIdle = dmd.Animation().load(self.dmd_path+'dmb-idle.dmd')
-
+        self.dmd_reverse = dmd.Animation().load(self.dmd_path+'reverse.dmd')
+        self.dmd_pourMask = dmd.Animation().load(self.dmd_path+'pour-mask.dmd')
+        self.dmd_beerMug1 = dmd.Animation().load(self.dmd_path+'beer-mug-1.dmd')
+        self.dmd_drunkMultiball = dmd.Animation().load(self.dmd_path+'drunk-multiball.dmd')
+        self.dmd_flippers1 = dmd.Animation().load(self.dmd_path+'flippers1.dmd')
+        self.dmd_flippers2 = dmd.Animation().load(self.dmd_path+'flippers2.dmd')
+        self.dmd_flippers3 = dmd.Animation().load(self.dmd_path+'flippers3.dmd')
+        self.dmd_rightArrow1 = dmd.Animation().load(self.dmd_path+'right-arrow-1.dmd')
+        self.dmd_rightArrow2 = dmd.Animation().load(self.dmd_path+'right-arrow-2.dmd')
+        self.dmd_rightArrow3 = dmd.Animation().load(self.dmd_path+'right-arrow-3.dmd')
+        self.dmd_leftArrow1 = dmd.Animation().load(self.dmd_path+'left-arrow-1.dmd')
+        self.dmd_leftArrow2 = dmd.Animation().load(self.dmd_path+'left-arrow-2.dmd')
+        self.dmd_leftArrow3 = dmd.Animation().load(self.dmd_path+'left-arrow-3.dmd')
+        self.dmd_dmb = dmd.Animation().load(self.dmd_path+'dmb.dmd')
+        self.dmd_dmbJackpotAdded = dmd.Animation().load(self.dmd_path+'jackpot-added.dmd')
+        self.dmd_beerSlide = dmd.Animation().load(self.dmd_path+'beer-slide.dmd')
+        self.dmd_dmbJackpot = dmd.Animation().load(self.dmd_path+'dmb-jackpot.dmd')
+        
         self.dmd_match = dmd.Animation().load(self.dmd_path+'match.dmd')
-
+        
+        self.dmd_bionicCombo = dmd.Animation().load(self.dmd_path +'bionic-combo.dmd')
+        self.dmd_bionicHit = dmd.Animation().load(self.dmd_path+'bionic-hit.dmd')
+        self.dmd_bionicGunClose = dmd.Animation().load(self.dmd_path+'gun-close.dmd')
+        self.dmd_bionicGunLoad = dmd.Animation().load(self.dmd_path+'gun-load.dmd')
+        self.dmd_bionicGunUnload = dmd.Animation().load(self.dmd_path+'gun-unload.dmd')
+        self.dmd_bionicGunOpen = dmd.Animation().load(self.dmd_path+'gun-open.dmd')
+        self.dmd_bionicDeath = dmd.Animation().load(self.dmd_path+'bionic-death.dmd')
+        self.dmd_bionicDeathTalking = dmd.Animation().load(self.dmd_path+'bionic-death-talking.dmd')
+        self.dmd_bionicExplode = dmd.Animation().load(self.dmd_path+'bionic-explode.dmd')
+        
+        self.dmd_cvaStandingAlien0 = dmd.Animation().load(self.dmd_path+'cva_standing_alien0.dmd')
+        self.dmd_cvaStandingAlien1 = dmd.Animation().load(self.dmd_path+'cva_standing_alien1.dmd')
+        self.dmd_cvaStandingAlien2 = dmd.Animation().load(self.dmd_path+'cva_standing_alien2.dmd')
+        self.dmd_cvaStandingAlien3 = dmd.Animation().load(self.dmd_path+'cva_standing_alien3.dmd')
+        self.dmd_cvsSmallShip = dmd.Animation().load(self.dmd_path+'cva_small_ship.dmd')
+        self.dmd_cvaLargeShip = dmd.Animation().load(self.dmd_path+'cva_large_ship.dmd')
+        self.dmd_cvaLargeShipExplodes = dmd.Animation().load(self.dmd_path+'cva_large_ship_explodes.dmd')
+        self.dmd_cvaShipBehindStatic = dmd.Animation().load(self.dmd_path+'cva_ship_behind_static.dmd')
+        self.dmd_cvaStatic = dmd.Animation().load(self.dmd_path+'cva_static.dmd')
+        self.dmd_cvaTeleport = dmd.Animation().load(self.dmd_path+'cva_teleport.dmd')
+        self.dmd_cvaShot = dmd.Animation().load(self.dmd_path+'cva_shot.dmd')
+        self.dmd_cvaIntro = dmd.Animation().load(self.dmd_path+'cva_intro.dmd')
+        self.dmd_cvaBlastWipe = dmd.Animation().load(self.dmd_path+'cva_blast_wipe.dmd')
+        self.dmd_cvaDesert = dmd.Animation().load(self.dmd_path+'cva_desert_empty.dmd')
+        self.dmd_cvaShipsBorder = dmd.Animation().load(self.dmd_path+'cva_ships_border.dmd')
+        self.dmd_cvaAliensBorder = dmd.Animation().load(self.dmd_path+'cva_aliens_border.dmd')
+        
+        self.dmd_highNoonBackdrop = dmd.Animation().load(self.dmd_path+'high-noon-backdrop.dmd')
+        self.dmd_bellTower = dmd.Animation().load(self.dmd_path+'bell-ring.dmd')
+        self.dmd_highNoon = dmd.Animation().load(self.dmd_path+'high-noon.dmd')
+        self.dmd_goodLuck = dmd.Animation().load(self.dmd_path+'good-luck.dmd')
+        self.dmd_fireworks = dmd.Animation().load(self.dmd_path+'fireworks.dmd')
+        
+        
         # Shared Paths
         self.shared_sound_path = "shared/sound/"
         self.shared_dmd_path = "shared/dmd/"

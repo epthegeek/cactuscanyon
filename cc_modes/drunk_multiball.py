@@ -31,14 +31,14 @@ class DrunkMultiball(ep.EP_Mode):
     """Mining for great justice - For the Gold Mine Multiball, and ... ? """
     def __init__(self,game,priority):
         super(DrunkMultiball, self).__init__(game,priority)
-        anim = dmd.Animation().load(ep.DMD_PATH+'dmb-idle.dmd')
+        anim = self.game.assets.dmd_dmbIdle
         self.overlay = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=8)
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         self.availableJackpots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
         self.active = []
         # an animation for use in the intro
-        anim = dmd.Animation().load(ep.DMD_PATH+'reverse.dmd')
+        anim = self.game.assets.dmd_reverse
         self.underLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
 
 
@@ -121,16 +121,16 @@ class DrunkMultiball(ep.EP_Mode):
     def banner(self):
         # setup the pour mask
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'pour-mask.dmd')
+        anim = self.game.assets.dmd_pourMask
         # setup the animated layer
         pour = ep.EP_AnimatedLayer(anim)
         pour.hold=True
         pour.frame_time = 6
         pour.composite_op = "blacksrc"
 
-        mug = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
+        mug = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_beerMug1.frames[0])
         mug.composite_op = "blacksrc"
-        words = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'drunk-multiball.dmd').frames[0])
+        words = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_drunkMultiball.frames[0])
         combined = dmd.GroupedLayer(128,32,[words,pour,mug])
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_pour)
@@ -138,9 +138,9 @@ class DrunkMultiball(ep.EP_Mode):
 
     def bannerTwo(self):
         self.game.base.play_quote(self.game.assets.quote_drunkDrinkToThat)
-        mug = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'beer-mug-1.dmd').frames[0])
+        mug = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_beerMug1.frames[0])
         mug.composite_op = "blacksrc"
-        words = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'drunk-multiball.dmd').frames[0])
+        words = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_drunkMultiball.frames[0])
         combined = dmd.GroupedLayer(128,32,[words,mug])
         self.layer = combined
         self.delay(delay=1,handler=self.intro_display)
@@ -148,25 +148,25 @@ class DrunkMultiball(ep.EP_Mode):
     def intro_display(self,step=1):
         ## show some junk about how the mode works
         if step == 1:
-            flippers = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'flippers1.dmd').frames[0])
+            flippers = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_flippers1.frames[0])
         elif step == 2 or step == 4 or step == 6 or step == 8 or step == 10:
-            flippers = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'flippers2.dmd').frames[0])
-            arrowOne = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'right-arrow-1.dmd').frames[0])
-            arrowTwo = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'right-arrow-2.dmd').frames[0])
-            arrowThree = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'right-arrow-3.dmd').frames[0])
+            flippers = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_flippers2.frames[0])
+            arrowOne = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_rightArrow1.frames[0])
+            arrowTwo = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_rightArrow2.frames[0])
+            arrowThree = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_rightArrow3.frames[0])
             arrow = dmd.ScriptedLayer(128,32,[{'seconds':0.15,'layer':arrowOne},{'seconds':0.15,'layer':arrowTwo},{'seconds':0.15,'layer':arrowThree}])
             arrow.composite_op = "blacksrc"
         elif step == 3 or step == 5 or step == 7 or step == 9:
-            flippers = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'flippers3.dmd').frames[0])
-            arrowOne = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'left-arrow-1.dmd').frames[0])
-            arrowTwo = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'left-arrow-2.dmd').frames[0])
-            arrowThree = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'left-arrow-3.dmd').frames[0])
+            flippers = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_flippers3.frames[0])
+            arrowOne = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_leftArrow1.frames[0])
+            arrowTwo = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_leftArrow2.frames[0])
+            arrowThree = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_leftArrow3.frames[0])
             arrow = dmd.ScriptedLayer(128,32,[{'seconds':0.15,'layer':arrowOne},{'seconds':0.15,'layer':arrowTwo},{'seconds':0.15,'layer':arrowThree}])
             arrow.composite_op = "blacksrc"
 
         flippers.composite_op = "blacksrc"
 
-        text = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'reverse.dmd').frames[0])
+        text = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_reverse.frames[0])
 
         if step == 2:
             self.game.base.play_quote(self.game.assets.quote_drunkNeverSeen)
@@ -223,7 +223,7 @@ class DrunkMultiball(ep.EP_Mode):
             mode.update_lamps()
 
         print "LIGHTING JACKPOT"
-        anim = dmd.Animation().load(ep.DMD_PATH+'dmb.dmd')
+        anim = self.game.assets.dmd_dmb
         #myWait = len(anim.frames) / 7.5
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
@@ -233,7 +233,7 @@ class DrunkMultiball(ep.EP_Mode):
         animLayer.add_frame_listener(5,self.game.sound.play,param=self.game.assets.sfx_ebDrink)
         animLayer.opaque=False
 
-        words = dmd.Animation().load(ep.DMD_PATH+'jackpot-added.dmd')
+        words = self.game.assets.dmd_dmbJackpotAdded
         myWait = len(words.frames) / 10.0
         wordsLayer = ep.EP_AnimatedLayer(words)
         wordsLayer.add_frame_listener(6,self.game.sound.play,param=self.game.assets.sfx_orchestraSet)
@@ -261,14 +261,14 @@ class DrunkMultiball(ep.EP_Mode):
         # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
         self.game.score(500000)
         # load up the animation
-        anim = dmd.Animation().load(ep.DMD_PATH+'beer-slide.dmd')
+        anim = self.game.assets.dmd_beerSlide
         # setup the animated layer
         beerLayer = ep.EP_AnimatedLayer(anim)
         beerLayer.hold=True
         beerLayer.frame_time = 3
         beerLayer.composite_op = "blacksrc"
 
-        anim = dmd.Animation().load(ep.DMD_PATH+'dmb-jackpot.dmd')
+        anim = self.game.assets.dmd_dmbJackpot
         # setup the animated layer
         wordsLayer = ep.EP_AnimatedLayer(anim)
         wordsLayer.hold=True
@@ -287,7 +287,7 @@ class DrunkMultiball(ep.EP_Mode):
         scoreString = "500,000*"
         scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString)
         scoreLine.composite_op = "blacksrc"
-        backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'dmb-jackpot.dmd').frames[17])
+        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])
         combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine])
         self.layer = combined
         self.delay(name="Display",delay=1,handler=self.update_display)

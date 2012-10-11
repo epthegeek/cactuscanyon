@@ -34,7 +34,7 @@ class HighNoon(ep.EP_Mode):
         self.hasWon = False
         self.starting = False
         # backdrop
-        self.backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'high-noon-backdrop.dmd').frames[0])
+        self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_highNoonBackdrop.frames[0])
 
     def ball_drained(self):
         if self.game.show_tracking('highNoonStatus') == "RUNNING":
@@ -141,7 +141,7 @@ class HighNoon(ep.EP_Mode):
         # a sound effect
         self.game.sound.play(self.game.assets.sfx_gunfightShot)
         # a video
-        anim = dmd.Animation().load(ep.DMD_PATH+'dude-gets-shot-full-body.dmd')
+        anim = self.game.assets.dmd_dudeShotFullBody
         myWait = len(anim.frames) / 10.0
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         # set the position of the dying guy based on target
@@ -194,7 +194,7 @@ class HighNoon(ep.EP_Mode):
             self.game.set_tracking('stackLevel',True,3)
             self.game.set_tracking('highNoonStatus',"RUNNING")
             # church bell
-            anim = dmd.Animation().load(ep.DMD_PATH+'bell-ring.dmd')
+            anim = self.game.assets.dmd_bellTower
             myWait = len(anim.frames) / 10.0
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
@@ -206,7 +206,7 @@ class HighNoon(ep.EP_Mode):
             self.delay(delay=myWait,handler=self.start_highNoon,param = 2)
         if step == 2:
             # show a 'high noon' banner or animation
-            self.banner = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'high-noon.dmd').frames[0])
+            self.banner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_highNoon.frames[0])
             self.layer = self.banner
             # play the opening quote
             duration = self.game.base.play_quote(self.game.assets.quote_highNoon)
@@ -218,7 +218,7 @@ class HighNoon(ep.EP_Mode):
     def intro(self,step=1):
         if step == 1 or step == 3 or step == 5 or step == 7 or step == 9:
             # burst wipe the current layer
-            anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
+            anim = self.game.assets.dmd_burstWipe
             myWait = len(anim.frames) / 15.0
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
@@ -246,7 +246,7 @@ class HighNoon(ep.EP_Mode):
             self.delay(delay=myWait,handler=self.intro,param=step)
         elif step == 2 or step == 4 or step == 6 or step == 8 or step == 10:
             # burst in the next frame
-            anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe-2.dmd')
+            anim = self.game.assets.dmd_burstWipe2
             myWait = len(anim.frames) / 15.0 + 1.5
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
@@ -254,7 +254,7 @@ class HighNoon(ep.EP_Mode):
             animLayer.composite_op = "blacksrc"
             if step == 2:
                 # set up the badguy layer to expose
-                backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'single-cowboy-sideways-border.dmd').frames[0])
+                backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
                 textLayer1 = dmd.TextLayer(80, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("SHOOT")
                 textLayer1.composite_op = "blacksrc"
                 textLayer2 = dmd.TextLayer(80, 11, self.game.assets.font_9px_az, "center", opaque=False).set_text("20 BAD GUYS")
@@ -277,14 +277,14 @@ class HighNoon(ep.EP_Mode):
                 # then combine it with the wipe
                 composite = dmd.GroupedLayer(128,32,[self.timeLayer,animLayer])
             if step == 6:
-                backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-border.dmd').frames[0])
+                backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_moneybagBorder.frames[0])
                 textLayer1 = dmd.TextLayer(80, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("JACKPOTS WORTH")
                 textLayer2 = dmd.TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text("250,000")
                 self.jackpotLayer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
                 # combine with burst
                 composite = dmd.GroupedLayer(128,32,[self.jackpotLayer,animLayer])
             if step == 8:
-                self.luckLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'good-luck.dmd').frames[0])
+                self.luckLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_goodLuck.frames[0])
                 composite = dmd.GroupedLayer(128,32,[self.luckLayer,animLayer])
             if step == 10:
                 displayLayer = self.display()
@@ -378,7 +378,7 @@ class HighNoon(ep.EP_Mode):
         # throw in a 'you won' display
         if self.hasWon:
             # fireworks
-            anim = dmd.Animation().load(ep.DMD_PATH+'fireworks.dmd')
+            anim = self.game.assets.dmd_fireworks
             myWait = len(anim.frames) / 10.0
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
@@ -470,13 +470,13 @@ class HighNoon(ep.EP_Mode):
         script = []
         # set the backdrop and offsets
         if title == "JACKPOT":
-            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'moneybag-right.dmd').frames[0])
+            backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_moneybagBorderRight.frames[0])
             x_offset = 50
         elif title == "BAD GUY":
-            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cowboy-border-right.dmd').frames[0])
+            backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboyBorderRight.frames[0])
             x_offset = 50
         else:
-            backdrop = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
+            backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
             x_offset = 64
         # first just the title
         titleLine = dmd.TextLayer(x_offset, 10, self.game.assets.font_12px_az, "center", opaque=False).set_text(title + "S")
@@ -505,7 +505,7 @@ class HighNoon(ep.EP_Mode):
             # set a sound for this point at the start of the wipe
         #self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_lightning2)
         # employ the burst wipe
-        anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
+        anim = self.game.assets.dmd_burstWipe
         animWait = len(anim.frames) / 15.0
         myWait += animWait
         animLayer = ep.EP_AnimatedLayer(anim)
@@ -516,7 +516,7 @@ class HighNoon(ep.EP_Mode):
         burstLayer = dmd.GroupedLayer(128,32,[combined,animLayer])
         script.append({"layer":burstLayer,"seconds":animWait})
         # then a final total with the second half of the wipe
-        anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe-2.dmd')
+        anim = self.game.assets.dmd_burstWipe2
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold = True
         animLayer.frame_time = 4

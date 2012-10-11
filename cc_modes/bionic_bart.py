@@ -32,9 +32,15 @@ class BionicBart(ep.EP_Mode):
         super(BionicBart, self).__init__(game,priority)
         self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
         self.shotModes = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.saloon]
-        self.banners = ['bam','biff','ouch','pow','wham','zoink']
+        self.banners = [self.game.assets.dmd_bamBanner,
+                        self.game.assets.dmd_biffBanner,
+                        self.game.assets.dmd_ouchBanner,
+                        self.game.assets.dmd_powBanner,
+                        self.game.assets.dmd_whamBanner,
+                        self.game.assets.dmd_zoinkBanner]
 
-    def ball_drained(self):
+
+def ball_drained(self):
         # if we lose all the balls the battle is lost
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('bionicStatus') == "RUNNING":
             self.cancel_delayed("Display")
@@ -47,31 +53,31 @@ class BionicBart(ep.EP_Mode):
         self.game.set_tracking('stackLevel',True,3)
         # set up the standard display stuff
         script = []
-        idleLayer1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[0])
+        idleLayer1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[0])
         script.append({'layer':idleLayer1,'seconds':11})
-        idleLayer2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[5])
+        idleLayer2 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[5])
         script.append({'layer':idleLayer2,'seconds':0.1})
-        idleLayer3 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[6])
+        idleLayer3 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[6])
         script.append({'layer':idleLayer3,'seconds':0.1})
         script.append({'layer':idleLayer2,'seconds':0.1})
         self.idleLayer = dmd.ScriptedLayer(128,32,script)
         script = []
-        talkLayer1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[1])
+        talkLayer1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[1])
         script.append({'layer':talkLayer1,'seconds':0.16})
-        talkLayer2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[2])
+        talkLayer2 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[2])
         script.append({'layer':talkLayer2,'seconds':0.16})
         self.talkingLayer = dmd.ScriptedLayer(128,32,script)
         script = []
-        hurtLayer1 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[3])
+        hurtLayer1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[3])
         script.append({'layer':hurtLayer1,'seconds':0.16})
-        hurtLayer2 = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'bionic-combo.dmd').frames[4])
+        hurtLayer2 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[4])
         script.append({'layer':hurtLayer2,'seconds':0.16})
         self.whineLayer = dmd.ScriptedLayer(128,32,script)
         self.title = dmd.TextLayer(46, 3, self.game.assets.font_15px_bionic, "center", opaque=False).set_text("BIONIC BART")
         self.title2 = dmd.TextLayer(46,20, self.game.assets.font_6px_az, "center", opaque=False).set_text("CHALLENGES YOU!")
         self.title2.composite_op = "blacksrc"
         # bart hit layer
-        anim = dmd.Animation().load(ep.DMD_PATH+'bionic-hit.dmd')
+        anim = self.game.assets.dmd_bionicHit
         self.stunnedLayer = ep.EP_AnimatedLayer(anim)
         self.stunnedLayer.hold=False
         self.stunnedLayer.repeat=True
@@ -230,7 +236,7 @@ class BionicBart(ep.EP_Mode):
             self.delay(delay=duration,handler=self.intro,param=2)
         if step == 2:
         # load up the lightning
-            anim = dmd.Animation().load(ep.DMD_PATH+'cloud-lightning.dmd')
+            anim = self.game.assets.dmd_cloudLightning
             # math out the wait
             myWait = len(anim.frames) / 10.0
             # set the animation
@@ -338,7 +344,7 @@ class BionicBart(ep.EP_Mode):
         # next round takes more hits - max at 3 for now
         if self.shotsToLoad < 3:
             self.shotsToLoad += 1
-        anim = dmd.Animation().load(ep.DMD_PATH+'gun-close.dmd')
+        anim = self.game.assets.dmd_bionicGunClose
         myWait = len(anim.frames) / 10.0
         # set the animation
         animLayer = ep.EP_AnimatedLayer(anim)
@@ -369,15 +375,15 @@ class BionicBart(ep.EP_Mode):
         amount = self.shotsToLoad - self.shots
         self.set_status_line(amount,"LOAD")
         if amount == 1:
-            anim = dmd.Animation().load(ep.DMD_PATH+'gun-load.dmd')
+            anim = self.game.assets.dmd_bionicGunLoad
             string = "NEW AMMO"
             sound = self.game.assets.sfx_orchestraSet
         if amount == 2:
-            anim = dmd.Animation().load(ep.DMD_PATH+'gun-unload.dmd')
+            anim = self.game.assets.dmd_bionicGunUnload
             string = "UNLOADED"
             sound = self.game.assets.sfx_orchestraBump2
         if amount == 3:
-            anim = dmd.Animation().load(ep.DMD_PATH+'gun-open.dmd')
+            anim = self.game.assets.dmd_bionicGunOpen
             string = "GUN OPEN"
             sound = self.game.assets.sfx_orchestraBump1
         myWait = len(anim.frames) / 10.0
@@ -403,7 +409,7 @@ class BionicBart(ep.EP_Mode):
             # turn off loaded and the lights
             self.loaded = False
             self.game.saloon.update_lamps()
-            anim = dmd.Animation().load(ep.DMD_PATH+'burst-wipe.dmd')
+            anim = self.game.assets.dmd_burstWipe
             myWait = len(anim.frames) / 14.0
             # set the animation
             animLayer = ep.EP_AnimatedLayer(anim)
@@ -425,7 +431,7 @@ class BionicBart(ep.EP_Mode):
             # pick a random banner to use
             banner = random.choice(self.banners)
             # set up the banner layer
-            bannerLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+banner+'-banner.dmd').frames[0])
+            bannerLayer = dmd.FrameLayer(opaque=False, frame=banner.frames[0])
             bannerLayer.composite_op = "blacksrc"
             fadeTo = dmd.GroupedLayer(128,32,[self.stunnedLayer,bannerLayer])
             self.game.sound.play(self.game.assets.sfx_hitBionicBart)
@@ -487,7 +493,7 @@ class BionicBart(ep.EP_Mode):
             # stop the music
             self.game.sound.stop_music()
             # load up the defeated animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'bionic-death.dmd')
+            anim = self.game.assets.dmd_bionicDeath
             # set the animation
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=False
@@ -511,7 +517,7 @@ class BionicBart(ep.EP_Mode):
             self.flash()
           #  combined = dmd.GroupedLayer(128,32,[blank,self.whineLayer])
             # load up the defeated animation
-            anim = dmd.Animation().load(ep.DMD_PATH+'bionic-death-talking.dmd')
+            anim = self.game.assets.dmd_bionicDeathTalking
             # set the animation
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=False
@@ -525,7 +531,7 @@ class BionicBart(ep.EP_Mode):
         if step == 4:
             self.cancel_delayed("Flashing")
             # this is the part where we blow up
-            anim = dmd.Animation().load(ep.DMD_PATH+'bionic-explode.dmd')
+            anim = self.game.assets.dmd_bionicExplode
             # set the animation
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True

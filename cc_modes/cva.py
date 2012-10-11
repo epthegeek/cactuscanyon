@@ -33,25 +33,25 @@ class CvA(ep.EP_Mode):
 
         self.targetNames = ['Left','Left Center','Right Center','Right']
         # setup the standing aliens
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_standing_alien0.dmd')
+        anim = self.game.assets.dmd_cvaStandingAlien0
         self.alienLayers = []
         self.alien0 = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
         self.alien0.composite_op = "blacksrc"
         self.alienLayers.append(self.alien0)
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_standing_alien1.dmd')
+        anim = self.game.assets.dmd_cvaStandingAlien1
         self.alien1 = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
         self.alien1.composite_op = "blacksrc"
         self.alienLayers.append(self.alien1)
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_standing_alien2.dmd')
+        anim = self.game.assets.dmd_cvaStandingAlien2
         self.alien2 = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
         self.alien2.composite_op = "blacksrc"
         self.alienLayers.append(self.alien2)
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_standing_alien3.dmd')
+        anim = self.game.assets.dmd_cvaStandingAlien3
         self.alien3 = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
         self.alien3.composite_op = "blacksrc"
         self.alienLayers.append(self.alien3)
         # the small ship layer
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_small_ship.dmd')
+        anim = self.game.assets.dmd_cvaSmallShip
         self.smallShip = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
 
         ## lamps
@@ -366,10 +366,10 @@ class CvA(ep.EP_Mode):
             self.delay(delay=duration,handler=self.gi_bloom,param=4.35)
             self.delay(delay=duration,handler=self.intro,param=3)
             # load a blank frame to fade in from
-            self.blankLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
+            self.blankLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
             self.blankLayer.composite_op = "blacksrc"
             # do the static display
-            anim = dmd.Animation().load(ep.DMD_PATH+'cva_static.dmd')
+            anim = self.game.assets.dmd_cvaStatic
             myWait = len(anim.frames) / 10.0
             self.staticLayer = ep.EP_AnimatedLayer(anim)
             self.staticLayer.hold=False
@@ -384,21 +384,21 @@ class CvA(ep.EP_Mode):
 
         if step == 2:
             print "STEP 2"
-            anim = dmd.Animation().load(ep.DMD_PATH+'cva_intro.dmd')
+            anim = self.game.assets.dmd_cvaIntro
             myWait = len(anim.frames) / 10.0
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
             animLayer.frame_time = 6
             self.layer = animLayer
         if step == 3:
-            anim = dmd.Animation().load(ep.DMD_PATH+'cva_blast_wipe.dmd')
+            anim = self.game.assets.dmd_cvaBlastWipe
             myWait = len(anim.frames) / 5.0
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
             animLayer.frame_time = 3
             animLayer.composite_op = "blacksrc"
 
-            self.desert = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cva_desert_empty.dmd').frames[0])
+            self.desert = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cvaDesert.frames[0])
             self.desert.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[self.desert,animLayer])
             self.layer = combined
@@ -437,12 +437,12 @@ class CvA(ep.EP_Mode):
         self.transition = ep.EP_Transition(self,self.staticLayer,self.blankLayer,ep.EP_Transition.TYPE_CROSSFADE,callback=self.one_beat)
 
     def clear_ship(self):
-        shipLayer = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(ep.DMD_PATH+'cva_large_ship.dmd').frames[0])
+        shipLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cvaLargeShip.frames[0])
         self.transition = ep.EP_Transition(self,self.staticShip,shipLayer,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_WEST,callback=self.one_beat)
 
     def static_to_ship(self):
         # transition to the ship
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_ship_behind_static.dmd')
+        anim = self.game.assets.dmd_cvaShipBehindStatic
         myWait = len(anim.frames) / 10.0
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=False
@@ -462,7 +462,7 @@ class CvA(ep.EP_Mode):
         # position the space ship
         # delay a move to the next spot
         # reassign the blank layer for later use
-        self.blankLayer = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'blank.dmd').frames[0])
+        self.blankLayer = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_blank.frames[0])
         # update the display
         self.update_display()
 
@@ -632,7 +632,7 @@ class CvA(ep.EP_Mode):
                 aliens = ["One","Three"]
             else:
                 aliens = ["Zero","Two"]
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_teleport.dmd')
+        anim = self.game.assets.dmd_cvaTeleport
         myWait = len(anim.frames) / 10.0
         # setup the first teleporting alien
         teleport1 = ep.EP_AnimatedLayer(anim)
@@ -703,7 +703,7 @@ class CvA(ep.EP_Mode):
         # and count it for the round
         self.aliensKilledRound += 1
         # do the display of the dying
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_shot.dmd')
+        anim = self.game.assets.dmd_cvaShot
         myWait = len(anim.frames) / 10.0
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
@@ -746,7 +746,7 @@ class CvA(ep.EP_Mode):
     def saucer_hit_display(self):
         # lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.game.update_lamps)
-        anim = dmd.Animation().load(ep.DMD_PATH+'cva_large_ship_explodes.dmd')
+        anim = self.game.assets.dmd_cvaLargeShipExplodes
         myWait = len(anim.frames) / 10.0
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
@@ -779,8 +779,8 @@ class CvA(ep.EP_Mode):
         self.game.bad_guys.kill_power()
         # do the final display
         # ship frame and alien frame
-        shipBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva_ships_border.dmd').frames[0])
-        alienBorder = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(ep.DMD_PATH+'cva_aliens_border.dmd').frames[0])
+        shipBorder = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cvaShipsBorder.frames[0])
+        alienBorder = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cvaAliensBorder.frames[0])
         # blank script
         script = []
         # set the saucer title line
