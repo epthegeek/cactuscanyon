@@ -40,7 +40,7 @@ class BionicBart(ep.EP_Mode):
                         self.game.assets.dmd_zoinkBanner]
 
 
-def ball_drained(self):
+    def ball_drained(self):
         # if we lose all the balls the battle is lost
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('bionicStatus') == "RUNNING":
             self.cancel_delayed("Display")
