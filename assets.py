@@ -998,7 +998,7 @@ class Assets():
         self.dmd_cvaStandingAlien1 = dmd.Animation().load(self.dmd_path+'cva_standing_alien1.dmd')
         self.dmd_cvaStandingAlien2 = dmd.Animation().load(self.dmd_path+'cva_standing_alien2.dmd')
         self.dmd_cvaStandingAlien3 = dmd.Animation().load(self.dmd_path+'cva_standing_alien3.dmd')
-        self.dmd_cvsSmallShip = dmd.Animation().load(self.dmd_path+'cva_small_ship.dmd')
+        self.dmd_cvaSmallShip = dmd.Animation().load(self.dmd_path+'cva_small_ship.dmd')
         self.dmd_cvaLargeShip = dmd.Animation().load(self.dmd_path+'cva_large_ship.dmd')
         self.dmd_cvaLargeShipExplodes = dmd.Animation().load(self.dmd_path+'cva_large_ship_explodes.dmd')
         self.dmd_cvaShipBehindStatic = dmd.Animation().load(self.dmd_path+'cva_ship_behind_static.dmd')
