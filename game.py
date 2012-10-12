@@ -287,7 +287,8 @@ class CCGame(game.BasicGame):
         self.game_data['Audits']['Games Started'] += 1
         # turn off all the ligths
         for lamp in self.lamps:
-            lamp.disable()
+            if 'gi' not in lamp.name:
+                lamp.disable()
         # run the start ball from parent
         super(CCGame,self).start_game()
         # Add the first player
@@ -374,7 +375,8 @@ class CCGame(game.BasicGame):
             if self.trough.num_balls_in_play == 0:
                 # turn off the lights
                 for lamp in self.lamps:
-                    lamp.disable()
+                    if 'gi' not in lamp.name:
+                        lamp.disable()
                 # kill all the display layers
                 for mode in self.ep_modes:
                     if getattr(mode, "clear_layer", None):
