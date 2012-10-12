@@ -210,7 +210,7 @@ class Mine(ep.EP_Mode):
         self.layer = composite
         self.delay(name="Display",delay=1.5,handler=self.clear_layer)
         # play a quote
-        self.game.base.play_quote(self.game.assets.quote_lockLit)
+        self.game.base.priority_quote(self.game.assets.quote_lockLit)
         print "LOCK IS LIT ... AND SO AM I"
         ## then kick the ball
         self.update_lamps()
