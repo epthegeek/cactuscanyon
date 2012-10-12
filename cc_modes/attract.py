@@ -24,6 +24,7 @@ from assets import *
 import cc_modes
 import ep
 import locale
+import random
 
 locale.setlocale(locale.LC_ALL, "")
 
@@ -81,6 +82,12 @@ class Attract(ep.EP_Mode):
 
         # Turn on the GIs
         self.game.gi_control("ON")
+
+        # flag for if the flippers should make noise or not
+        self.noisy = True
+        # number of sounds played
+        self.soundCount = 0
+
 
 
         ## lampshows for attract mode
@@ -145,10 +152,42 @@ class Attract(ep.EP_Mode):
 
 
     def sw_flipperLwL_active(self,sw):
-        self.run_animation_loop()
+        self.flipper_action()
 
     def sw_flipperLwR_active(self,sw):
+        self.flipper_action()
+
+    def flipper_action(self):
+        # page the attract animation
         self.run_animation_loop()
+        # if noisy, play a noise and count it
+        if self.noisy:
+            # play a sound
+            self.play_random()
+            # increment the count
+            self.soundCount += 1
+            # check if we're done now
+            if self.soundCount >= 3:
+                # turn the noisy flag off
+                self.noisy = False
+                # reset the sound count
+                self.soundCount = 0
+                # delay a re-enable
+                self.delay("Noisy",delay=180,handler=self.noisy_again)
+
+    def noisy_again(self):
+        self.noisy = True
+
+    # random sound routine
+    def play_random(self,loops=0, max_time=0, fade_ms=0):
+        """ """
+        if not self.game.sound.enabled: return
+        # pick a random key
+        key = random.choice(self.game.sound.sounds.keys())
+        if len(self.game.sound.sounds[key]) > 0:
+            random.shuffle(self.game.sound.sounds[key])
+        self.game.sound.sounds[key][0].play(loops,max_time,fade_ms)
+        return self.game.sound.sounds[key][0].get_length()
 
     def mode_topmost(self):
         pass

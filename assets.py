@@ -322,7 +322,10 @@ class Assets():
         self.sfx_cvaSiren = 'sfx_cvaSiren'
         self.game.sound.register_sound(self.sfx_cvaSiren, self.sfx_path + "bangarang-siren.wav")
 
-        # Quotes
+        self.snd_attractCollection = 'snd_attractCollection'
+        self.game.sound.register_sound(self.snd_attractCollection, self.quotes_path + "1132-mayor-vote-cheetum.wav")
+
+    # Quotes
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
         self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "592-alien-you-dont-stand-a-chance.wav")
