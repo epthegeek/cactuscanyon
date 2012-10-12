@@ -380,7 +380,7 @@ PRLamps:
         number: G05
 
 PRBallSave:
-    pulseCoils: [minePopper, saloonPopper, leftJetBumper, rightJetBumper, bottomJetBumper, leftSlingshot, rightSlingshot,moveBart]
+    pulseCoils: [minePopper, saloonPopper, leftJetBumper, rightJetBumper, bottomJetBumper,moveBart,moveBart]
     resetSwitches:
         shooterLane: open
         rightOutlane: open
