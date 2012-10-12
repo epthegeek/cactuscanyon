@@ -99,6 +99,14 @@ Highscore:
     increments: 50000000
     default: 350000000
 Gameplay (Feature):
+  'Number of attract sounds to play':
+    options: [3,10]
+    increments: 1
+    default: 3
+  'Attract sound delay time':
+    options: [30,600]
+    increments: 10
+    default: 120
   'Combo Timer':
     options: [3,10]
     increments: 1

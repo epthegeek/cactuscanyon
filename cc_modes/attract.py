@@ -33,6 +33,8 @@ class Attract(ep.EP_Mode):
     def __init__(self, game, priority):
         super(Attract, self).__init__(game, priority)
         self.timer = 3
+        self.NOISY_DELAY = self.game.user_settings['Gameplay (Feature)']['Number of attract sounds to play']
+        self.NOISY_COUNT = self.game.user_settings['Gameplay (Feature)']['Attract sound delay time']
 
     def mode_started(self):
 
@@ -167,13 +169,13 @@ class Attract(ep.EP_Mode):
             # increment the count
             self.soundCount += 1
             # check if we're done now
-            if self.soundCount >= 3:
+            if self.soundCount >= self.NOISY_COUNT:
                 # turn the noisy flag off
                 self.noisy = False
                 # reset the sound count
                 self.soundCount = 0
                 # delay a re-enable
-                self.delay("Noisy",delay=180,handler=self.noisy_again)
+                self.delay("Noisy",delay=self.NOISY_DELAY,handler=self.noisy_again)
 
     def noisy_again(self):
         self.noisy = True
