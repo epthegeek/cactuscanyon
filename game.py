@@ -435,9 +435,10 @@ class CCGame(game.BasicGame):
 
     def game_reset(self):
         print("RESETTING GAME")
-        # unload all the modes
-        for mode in self.modes:
-            self.modes.remove(mode)
+        # unload all the base mode
+        self.modes.remove(self.base)
+        # throw up a message about restarting
+        self.interrupter.restarting()
         # lot the end of the game
         self.log("GAME PREMATURELY ENDED")
         # restart the game

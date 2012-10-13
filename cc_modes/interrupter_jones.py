@@ -286,7 +286,14 @@ class Interrupter(ep.EP_Mode):
 
     def train_disabled(self):
         line1 = dmd.TextLayer(128/2, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("TRAIN DISABLED")
-        line2 = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("CHECK ENCODER SWITCH")
+        line2 = dmd.TextLayer(128/2, 15, self.game.assets.font_9px_az, "center", opaque=False).set_text("CHECK ENCODER SWITCH")
+        self.layer = dmd.GroupedLayer(128,32,[line1,line2])
+        self.game.base.repeat_ding(3)
+        self.delay(delay=2,handler=self.clear_layer)
+
+    def restarting(self):
+        line1 = dmd.TextLayer(128/2, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("NEW")
+        line2 = dmd.TextLayer(128/2, 15, self.game.assets.font_9px_az, "center", opaque=False).set_text("GAME")
         self.layer = dmd.GroupedLayer(128,32,[line1,line2])
         self.game.base.repeat_ding(3)
         self.delay(delay=2,handler=self.clear_layer)

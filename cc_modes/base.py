@@ -100,7 +100,7 @@ class BaseGameMode(ep.EP_Mode):
                 # do nothing, and bail
                 return
             # turn off all the lights
-            for lamp in self.game.lamps:
+            for lamp in self.game.lamps.items_tagged('Playfield'):
                 lamp.disable()
             # stop the music
             print "game.ball_drained IS KILLING THE MUSIC"
