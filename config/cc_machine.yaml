@@ -248,126 +248,187 @@ PRCoils:
 PRLamps:
     rankStranger:
         number: L11
+        tags: Playfield
     rankPartner:
         number: L12
+        tags: Playfield
     rankDeputy:
         number: L13
+        tags: Playfield
     rankSheriff:
         number: L14
+        tags: Playfield
     rankMarshall:
         number: L15
+        tags: Playfield
     starMotherlode:
         number: L16
+        tags: Playfield
     leftBonusLane:
         number: L17
+        tags: Playfield
     rightBonusLane:
         number: L18
+        tags: Playfield
     bountyBeacon:
         number: L21
+        tags: Playfield
     jackpotBeacon:
         number: L22
+        tags: Playfield
     shootToCollect:
         number: L23
+        tags: Playfield
     extraBallLitBeacon:
         number: L24
+        tags: Playfield
     bountySaloon:
         number: L25
+        tags: Playfield
     saloonArrow:
         number: L26
+        tags: Playfield
     extraBall:
         number: L27
+        tags: Playfield
     mineLock:
         number: L28
+        tags: Playfield
     badGuyL2:
         number: L31
+        tags: Playfield
     badGuyL0:
         number: L32
+        tags: Playfield
     leftQuickdraw:
         number: L33
+        tags: Playfield
     rightRampSoundAlarm:
         number: L34
+        tags: Playfield
     rightRampShootOut:
         number: L35
+        tags: Playfield
     rightRampSavePolly:
         number: L36
+        tags: Playfield
     rightRampJackpot:
         number: L37
+        tags: Playfield
     rightRampCombo:
         number: L38
+        tags: Playfield
     rightLoopCombo:
         number: L41
+        tags: Playfield
     rightLoopJackpot:
         number: L42
+        tags: Playfield
     rightLoopMarksman:
         number: L43
+        tags: Playfield
     rightLoopGunslinger:
         number: L44
+        tags: Playfield
     rightLoopGoodShot:
         number: L45
+        tags: Playfield
     leftReturnQuickdraw:
         number: L46
+        tags: Playfield
     leftGunfightPin:
         number: L47
+        tags: Playfield
     leftOutGunfight:
         number: L48
+        tags: Playfield
     badGuyL3:
         number: L51
+        tags: Playfield
     bottomRightQuickdraw:
         number: L52
+        tags: Playfield
     topRightQuickdraw:
         number: L53
+        tags: Playfield
     centerRampCatchTrain:
         number: L54
+        tags: Playfield
     centerRampStopTrain:
         number: L55
+        tags: Playfield
     centerRampSavePolly:
         number: L56
+        tags: Playfield
     centerRampJackpot:
         number: L57
+        tags: Playfield
     centerRampCombo:
         number: L58
+        tags: Playfield
     leftRampWhiteWater:
         number: L61
+        tags: Playfield
     leftRampWaterfall:
         number: L62
+        tags: Playfield
     leftRampSavePolly:
         number: L63
+        tags: Playfield
     leftRampJackpot:
         number: L64
+        tags: Playfield
     leftRampCombo:
         number: L65
+        tags: Playfield
     rightReturnQuickdraw:
         number: L66
+        tags: Playfield
     rightOutSpecial:
         number: L67
+        tags: Playfield
     rightGunfightPin:
         number: L68
+        tags: Playfield
     starStampede:
         number: L71
+        tags: Playfield
     starCombo:
         number: L72
+        tags: Playfield
     starHighNoon:
         number: L73
+        tags: Playfield
     leftLoopCombo:
         number: L74
+        tags: Playfield
     leftLoopJackpot:
         number: L75
+        tags: Playfield
     leftLoopRideEm:
         number: L76
+        tags: Playfield
     leftLoopWildRide:
         number: L77
+        tags: Playfield
     leftLoopBuckNBronco:
         number: L78
+        tags: Playfield
     starBartBrothers:
         number: L81
+        tags: Playfield
     shootAgain:
         number: L82
+        tags: Playfield
     starShowdown:
         number: L83
+        tags: Playfield
     badGuyL1:
         number: L84
+        tags: Playfield
     startButton:
         number: L88
+        tags: Playfield
     gi01:
         number: G01
     gi02:
