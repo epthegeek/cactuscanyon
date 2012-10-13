@@ -46,6 +46,7 @@ class CCGame(game.BasicGame):
             self.fakePinProc = True
         else:
             self.fakePinProc = False
+        self.restart = False
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
@@ -431,6 +432,18 @@ class CCGame(game.BasicGame):
             self.end_game()
         else:
             self.start_ball() # Consider: Do we want to call this here, or should it be called by the game? (for bonus sequence)
+
+    # to allow restarting the game
+    def sw_startButton_active_for_2s(self,sw):
+        # if there's a ball in the shooter lane and we're on a ball after ball 1
+        if self.switches.shooterLane.is_active() and self.game.ball > 1:
+            # unload all the modes
+            for mode in self.modes:
+                self.modes.remove(mode)
+            # lot the end of the game
+            self.log("GAME PREMATURELY ENDED")
+            # restart the game
+            self.start_game()
 
 
     def game_ended(self):
