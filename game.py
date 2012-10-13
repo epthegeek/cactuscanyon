@@ -375,8 +375,8 @@ class CCGame(game.BasicGame):
             # Tell every mode a ball has drained by calling the ball_drained function if it exists
             if self.trough.num_balls_in_play == 0:
                 # turn off the lights
-                for lamp in self.lamps.items_tagged('Playfield'):
-                    lamp.disable()
+                #for lamp in self.lamps.items_tagged('Playfield'):
+                #    lamp.disable()
                 # kill all the display layers
                 for mode in self.ep_modes:
                     if getattr(mode, "clear_layer", None):
