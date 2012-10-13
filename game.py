@@ -435,8 +435,12 @@ class CCGame(game.BasicGame):
 
     def game_reset(self):
         print("RESETTING GAME")
+        # unload all the base modes, just in case
+        self.base.remove_modes()
         # unload all the base mode
         self.modes.remove(self.base)
+        # and the skillshot
+        self.modes.remove(self.skill_shot)
         # throw up a message about restarting
         self.interrupter.restarting()
         # lot the end of the game
