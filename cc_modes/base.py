@@ -200,7 +200,7 @@ class BaseGameMode(ep.EP_Mode):
     # to allow restarting the game
     def sw_startButton_active_for_2s(self,sw):
         # if there's a ball in the shooter lane and we're on a ball after ball 1
-        if self.switches.shooterLane.is_active() and self.game.ball > 1:
+        if self.game.switches.shooterLane.is_active() and self.game.ball > 1:
             self.game.game_reset()
 
     def sw_shooterLane_open_for_1s(self,sw):
