@@ -168,6 +168,7 @@ class Attract(ep.EP_Mode):
             self.play_random()
             # increment the count
             self.soundCount += 1
+            print "SOUND COUNT: " . str(self.soundCount) . " OF " . str(self.NOISY_COUNT)
             # check if we're done now
             if self.soundCount >= self.NOISY_COUNT:
                 # turn the noisy flag off
