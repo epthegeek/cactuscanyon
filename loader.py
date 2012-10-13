@@ -13,7 +13,7 @@ class Loader(game.Mode):
         self.selection=0
 
         # Define the versions we want to run and what will run them
-        self.versions=['Williams ROM Release Version','Cactus Canyon Continued']
+        self.versions=['Bally Version','Cactus Canyon Continued']
         self.runners=['(using Pinmame CC_13)','(using pyProcgame)']
 
         self.reset()
@@ -65,8 +65,8 @@ class Loader(game.Mode):
         # Call the pinmame executable to take over from here, further execution of Python code is halted.
         # Positions 15 to 21 in the runner string contain the ROM name, so strip that out
         ## TODO - change this working directory
-        os.chdir("e:\mame\proc");
-        os.system(r"pinmamep "+self.runners[choice][15:21]+" -window -p-roc cc_machine.yaml -skip_disclaimer -skip_gameinfo")
+        os.chdir("/data/");
+        os.system(r"pinmamep "+self.runners[choice][15:21]+" -window -p-roc proc/cactuscanyon/config/cc_machine.yaml -skip_disclaimer -skip_gameinfo")
 
 
         #Pinmame executable was:
