@@ -47,7 +47,11 @@ class SkillShot(ep.EP_Mode):
                                 self.game.lamps.centerRampStopTrain,
                                 self.game.lamps.centerRampSavePolly,
                                 self.game.lamps.centerRampJackpot]
-
+        self.rankSounds = [self.game.assets.quote_rankUpPartner,
+                           self.game.assets.quote_rankUpPartner,
+                           self.game.assets.quote_rankUpDeputy,
+                           self.game.assets.quote_rankUpSheriff,
+                           self.game.assets.quote_rankUpMarshall]
         self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
         self.active = 0
 
@@ -315,9 +319,11 @@ class SkillShot(ep.EP_Mode):
         elif self.selectedPrizes[5:] == "K":
             # this one is the rank
             awardStringTop = "RANK INCREASED"
-            self.game.increase_tracking('rank')
+            newRank = self.game.increase_tracking('rank')
             ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
-            awardStringBottom = "TO " + ranks[self.game.show_tracking('rank')]
+            awardStringBottom = "TO " + ranks[newRank]
+            # play the appropriate rank quote
+            self.game.base.play_quote(self.rankSounds[newRank])
 
         elif self.selectedPrizes[5:] == "L":
             self.game.score_with_bonus(1000)
