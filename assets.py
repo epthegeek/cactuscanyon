@@ -446,6 +446,25 @@ class Assets():
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1871-leader-bart-lets-gunfight.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1544-leader-bart-this-is-my-town-lawman.wav")
         self.game.sound.register_sound(self.quote_gunfightStart, self.quotes_path + "1573-leader-bart-lawman-its-you-and-me.wav")
+        self.quote_gunfightWinMarshall = 'quote_gunfightWinMarshall'
+        self.game.sound.register_sound(self.quote_gunfightWinMarshall, self.quotes_path + "2027-waitress-nice-shootin-marshall.wav")
+        self.quote_rankUpMarshall = 'quote_rankUpMarshall'
+        self.game.sound.register_sound(self.quote_rankUpMarshall, self.quotes_path + "1147-mayor-congratulations-marshall.wav")
+        self.quote_gunfightWinSheriff = 'quote_gunfightWinSheriff'
+        self.game.sound.register_sound(self.quote_gunfightWinSheriff, self.quotes_path + "2026-waitress-nice-shootin-sheriff.wav")
+        self.quote_rankUpSheriff = 'quote_rankUpSheriff'
+        self.game.sound.register_sound(self.quote_rankUpSheriff, self.quotes_path + "1146-mayor-congratulations-sheriff.wav")
+        self.game.sound.register_sound(self.quote_rankUpSheriff, self.quotes_path + "863-polly-congratulations-sheriff.wav")
+        self.quote_gunfightWinDeputy = 'quote_gunfightWinDeputy'
+        self.game.sound.register_sound(self.quote_gunfightWinDeputy, self.quotes_path + "2025-waitress-nice-shootin-deputy.wav")
+        self.quote_rankUpDeputy = 'quote_rankUpDeputy'
+        self.game.sound.register_sound(self.quote_rankUpDeputy, self.quotes_path + "1145-mayor-contratulations-deputy.wav")
+        self.game.sound.register_sound(self.quote_rankUpDeputy, self.quotes_path + "862-polly-congratulations-deputy.wav")
+        self.quote_gunfightWinPartner = 'quote_gunfightWinPartner'
+        self.game.sound.register_sound(self.quote_gunfightWinPartner, self.quotes_path + "2024-waitress-nice-shootin-partner.wav")
+        self.quote_rankUpPartner = 'quote_rankUpPartner'
+        self.game.sound.register_sound(self.quote_rankUpPartner, self.quotes_path + "1144-mayor-congratulations-partner.wav")
+        self.game.sound.register_sound(self.quote_rankUpPartner, self.quotes_path + "861-polly-congratulations-partner.wav")
         self.quote_gunWin = 'quote_gunWin'
         self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1117-mayor-say-thats-a-pretty-good-eye-there.wav")
         self.game.sound.register_sound(self.quote_gunWin, self.quotes_path + "1170-mayor-quite-a-knack-with-those-six-shooters-friend.wav")
