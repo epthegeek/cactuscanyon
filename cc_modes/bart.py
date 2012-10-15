@@ -170,7 +170,7 @@ class Bart(ep.EP_Mode):
     def damage(self,saloonHit=False):
         print "DAMAGE BART"
         # play a quote appropriate to the current bart
-        self.game.base.play_quote(self.hitQuote)
+        self.game.base.priority_quote(self.hitQuote)
         # move bart
         self.animate(1)
 

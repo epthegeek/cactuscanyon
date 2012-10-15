@@ -33,20 +33,23 @@ class Saloon(ep.EP_Mode):
         self.unbusy()
 
     def sw_saloonPopper_active_for_300ms(self,sw):
+        print "Saloon popper mode - active for 300 ms"
         # if cva is ready, we do that
         if self.game.show_tracking('cvaStatus') == "READY":
             self.game.modes.add(self.game.cva)
             self.game.cva.intro(entry = "saloon")
             return
+
         # if bionic bart is running don't do anything
         if self.game.show_tracking('bionicStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING":
             return
+
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
-        if not self.game.peril and \
-           "RUNNING" not in self.game.show_tracking('quickdrawStatus') and \
-           True in self.game.show_tracking('stackLevel'):
-            self.kick()
+        if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus'):
+            if True in self.game.show_tracking('stackLevel'):
+                print "Saloon Stack bail"
+                self.kick()
         # Divert here for bionic bart if ready - unless polly is running
         elif self.game.show_tracking('bionicStatus') == "READY" and not self.game.peril:
             # if any of the polly modes is running, bail
@@ -54,8 +57,8 @@ class Saloon(ep.EP_Mode):
             self.game.bionic.start_bionic()
             # then break out of the rest of this action
             return
-
         else:
+            print "Made it to the else"
             ## if we went through the gate, and missed bart or snuck in the back way
             ## it counts as a hit so we have to do that first
             if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
@@ -119,6 +122,7 @@ class Saloon(ep.EP_Mode):
         ep.last_switch = "jetBumpersExit"
 
     def kick(self):
+        print "SALOON EJECTING"
         # kick the ball out
         if self.game.switches.saloonPopper.is_active():
             self.game.coils.saloonPopper.pulse(30)
