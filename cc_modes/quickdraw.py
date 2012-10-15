@@ -193,7 +193,8 @@ class Quickdraw(ep.EP_Mode):
         # and tick up the quickdraw wins
         dudesDead = self.game.increase_tracking('quickdrawsWon')
         # only kill the music if there's not a higher level running
-        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         # play the win animation
         anim = self.game.assets.dmd_quickdrawHit
@@ -270,11 +271,11 @@ class Quickdraw(ep.EP_Mode):
         self.game.base.update_lamps()
         # turn the main music back on - if a second level mode isn't running
         print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
-        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn the level 1 flag off
         self.game.set_tracking('stackLevel',False,0)
-        # full lamp update
+        if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
+            self.game.base.music_on(self.game.assets.music_mainTheme)
+            # full lamp update
         self.game.update_lamps()
         # remove the mode
         self.unload()
