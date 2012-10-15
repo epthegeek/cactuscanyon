@@ -107,7 +107,7 @@ class Interrupter(ep.EP_Mode):
         self.delay(delay=1,handler=self.clear_layer)
 
     def closing_song(self,duration):
-        self.delay(delay=duration+1,handler=self.game.base.music_on,param=self.game.assets.music_mainTheme)
+        self.delay(delay=duration+1,handler=self.game.base.music_on,param=self.game.assets.music_goldmineMultiball)
         # and set a delay to fade it out after 2 minutes
         self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music)
 

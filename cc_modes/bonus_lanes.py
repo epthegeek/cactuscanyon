@@ -121,6 +121,7 @@ class BonusLanes(ep.EP_Mode):
         # turn both lights off
         self.game.set_tracking('bonusLaneStatus',"OFF",0)
         self.game.set_tracking('bonusLaneStatus',"OFF",1)
+        self.update_lamps()
         # after the delay, show the award
         self.delay(name="Display",delay=myWait,handler=self.show_bonus_award)
 
@@ -137,7 +138,6 @@ class BonusLanes(ep.EP_Mode):
         self.layer = newLayer
         # then 1.5 seconds later, shut it off
         self.delay(name="Display",delay=1.5,handler=self.clear_layer)
-        self.delay(delay=1.5,handler=self.update_lamps)
 
     def abort_display(self):
         self.clear_layer()
