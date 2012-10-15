@@ -362,6 +362,7 @@ class BaseGameMode(ep.EP_Mode):
     def sw_plumbBobTilt_active(self, sw):
         # first, register the hit
         status = self.game.increase_tracking('tiltStatus')
+        print "TILT STATUS: " + str(status)
         # if that puts us at three, time to tilt
         if status == 3:
             self.tilt()
@@ -395,7 +396,9 @@ class BaseGameMode(ep.EP_Mode):
             if self.game.switches.saloonPopper.is_active():
                 self.game.coils.saloonPopper.pulse(30)
         #play sound
-        #play video
+        self.game.sound.stop_music()
+        self.game.sound.play(self.game.assets.sfx_spinDown)
+        #play video ?
 
     ###
     ###  ___       _

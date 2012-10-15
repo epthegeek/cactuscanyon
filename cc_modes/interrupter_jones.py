@@ -72,16 +72,23 @@ class Interrupter(ep.EP_Mode):
         if status == 2:
             print "DANGER DANGER"
             # double warning
+            line1 = dmd.TextLayer(128/2, 1, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R")
+            line1.composite_op = "blacksrc"
+            line2 = dmd.TextLayer(128/2, 16, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R")
+            line2.composite_op = "blacksrc"
+            self.layer = dmd.GroupedLayer(128,32,[line1,line2])
             # play a sound
             myWait = self.play_tilt_sound()
-            self.delay(delay=0.5,handler=self.play_tilt_sound())
+            self.delay(delay=0.5,handler=self.play_tilt_sound)
             self.delay(delay=1,handler=self.clear_layer)
 
         # otherwise this must be the first warning
         else:
             print "DANGER"
             #add a display layer and add a delayed removal of it.
-            self.layer = dmd.TextLayer(128/2, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("DANGER")
+            line1 = dmd.TextLayer(128/2, 10, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R")
+            line1.composite_op = "blacksrc"
+            self.layer = line1
             #play sound
             self.play_tilt_sound()
             self.delay(delay=1,handler=self.clear_layer)

@@ -66,6 +66,9 @@ class Assets():
         self.font_12px_az_outline.tracking = -1
         self.font_12px_az_outline.composite_op = "blacksrc"
 
+        self.font_dangerFont = dmd.Font(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
+        self.font_dangerFont.composite_op = "blacksrc"
+
         self.font_13px_score = dmd.Font(self.dmd_path + "Font_8_CactusCanyon.dmd")
         self.font_13px_extra_thin_score = dmd.Font(self.dmd_path + "Font_11_CactusCanyon.dmd")
         self.font_13px_thin_score = dmd.Font(self.dmd_path + "Font_7_CactusCanyon.dmd")
@@ -321,6 +324,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvaBumper, self.sfx_path + "bangarang-bwoip-noise.wav")
         self.sfx_cvaSiren = 'sfx_cvaSiren'
         self.game.sound.register_sound(self.sfx_cvaSiren, self.sfx_path + "bangarang-siren.wav")
+        self.sfx_spinDown = 'sfx_spinDown'
+        self.game.sound.register_sound(self.sfx_spinDown, self.sfx_path + "145-sfx-spin-down.wav")
 
         self.snd_attractCollection = 'snd_attractCollection'
         self.game.sound.register_sound(self.snd_attractCollection, self.quotes_path + "1132-mayor-vote-cheetum.wav")
