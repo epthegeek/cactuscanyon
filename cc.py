@@ -27,12 +27,14 @@ logging.basicConfig(level=logging.WARNING, format="%(asctime)s - %(name)s - %(le
 
 # Import the actual game script
 from game import *
+import os
 
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
 
 # the config file
-yaml_path = "config/cc_machine.yaml"
+curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
+yaml_path = curr_file_path + "/config/cc_machine.yaml"
 
 def main():
     # Load up the config file

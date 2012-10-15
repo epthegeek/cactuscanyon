@@ -15,7 +15,9 @@
 ##
 
 from procgame import *
+import os
 
+curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
 
 class Assets():
 
@@ -24,12 +26,12 @@ class Assets():
         self.game = game
 
         # Paths
-        self.lampshows_path = "lampshows/"
-        self.sounds_path = "sounds/"
-        self.sfx_path = "sounds/sfx/"
-        self.music_path = "sounds/music/"
-        self.quotes_path = "sounds/quotes/"
-        self.dmd_path = "dmd/"
+        self.lampshows_path = curr_file_path + "/lampshows/"
+        self.sounds_path = curr_file_path + "/sounds/"
+        self.sfx_path = curr_file_path + "/sounds/sfx/"
+        self.music_path = curr_file_path + "/sounds/music/"
+        self.quotes_path = curr_file_path + "/sounds/quotes/"
+        self.dmd_path = curr_file_path + "/dmd/"
 
         # CC Fonts
         # _az = All numerals, letters, and lower case
@@ -1048,8 +1050,8 @@ class Assets():
         
         
         # Shared Paths
-        self.shared_sound_path = "shared/sound/"
-        self.shared_dmd_path = "shared/dmd/"
+        self.shared_sound_path = curr_file_path + "/shared/sound/"
+        self.shared_dmd_path = curr_file_path + "/shared/dmd/"
 
         # Shared Fonts
         self.font_tiny7 = dmd.Font(self.shared_dmd_path + "04B-03-7px.dmd")

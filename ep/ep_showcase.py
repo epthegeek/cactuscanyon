@@ -17,8 +17,10 @@
 
 from procgame import *
 import ep
+import os
 
-DMD_PATH = "dmd/"
+curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
+DMD_PATH = curr_file_path + "/../dmd/"
 
 font_showcase_ll_0 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_LL_0.dmd")
 font_showcase_ll_1 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_LL_1.dmd")

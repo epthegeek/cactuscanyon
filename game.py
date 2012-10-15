@@ -31,12 +31,14 @@ import ep
 import pygame
 import highscore
 import time
+import os
 
+curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
 ## Define the config file locations
-user_game_data_path = "config/game_data.yaml"
-game_data_defaults_path = "config/game_data_template.yaml"
-settings_defaults_path = "config/settings_template.yaml"
-user_settings_path = "config/user_settings.yaml"
+user_game_data_path = curr_file_path + "/config/game_data.yaml"
+game_data_defaults_path = curr_file_path + "/config/game_data_template.yaml"
+settings_defaults_path = curr_file_path + "/config/settings_template.yaml"
+user_settings_path = curr_file_path + "/config/user_settings.yaml"
 
 ## Subclass BasicGame to create the main game
 class CCGame(game.BasicGame):
