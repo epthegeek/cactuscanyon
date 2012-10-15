@@ -58,6 +58,7 @@ class Mountain(ep.EP_Mode):
         self.game.mine.update_lamps()
 
     def eject(self):
+        print "MINE EJECTING"
         # flash the light and then kick out if there's a ball in there
         if self.game.switches.minePopper.is_active():
             self.flash()
