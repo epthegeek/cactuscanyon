@@ -450,11 +450,13 @@ class Assets():
         self.game.sound.register_sound(self.quote_gunfightWinMarshall, self.quotes_path + "2027-waitress-nice-shootin-marshall.wav")
         self.quote_rankUpMarshall = 'quote_rankUpMarshall'
         self.game.sound.register_sound(self.quote_rankUpMarshall, self.quotes_path + "1147-mayor-congratulations-marshall.wav")
+        self.game.sound.register_sound(self.quote_rankUpMarshall, self.quotes_path + "1129-mayor-fair-townsfolk-the-new-marshall.wav")
         self.quote_gunfightWinSheriff = 'quote_gunfightWinSheriff'
         self.game.sound.register_sound(self.quote_gunfightWinSheriff, self.quotes_path + "2026-waitress-nice-shootin-sheriff.wav")
         self.quote_rankUpSheriff = 'quote_rankUpSheriff'
         self.game.sound.register_sound(self.quote_rankUpSheriff, self.quotes_path + "1146-mayor-congratulations-sheriff.wav")
         self.game.sound.register_sound(self.quote_rankUpSheriff, self.quotes_path + "863-polly-congratulations-sheriff.wav")
+        self.game.sound.register_sound(self.quote_rankUpSheriff, self.quotes_path + "1128-mayor-citizens-our-new-sheriff.wav")
         self.quote_gunfightWinDeputy = 'quote_gunfightWinDeputy'
         self.game.sound.register_sound(self.quote_gunfightWinDeputy, self.quotes_path + "2025-waitress-nice-shootin-deputy.wav")
         self.quote_rankUpDeputy = 'quote_rankUpDeputy'

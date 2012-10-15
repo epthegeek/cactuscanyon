@@ -31,7 +31,16 @@ class Gunfight(ep.EP_Mode):
     def __init__(self,game,priority):
         super(Gunfight, self).__init__(game,priority)
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
-
+        self.rankUps = [self.game.assets.quote_rankUpPartner,
+                        self.game.assets.quote_rankUpPartner,
+                        self.game.assets.quote_rankUpDeputy,
+                        self.game.assets.quote_rankUpSheriff,
+                        self.game.assets.quote_rankUpMarshall]
+        self.winQuotes = [self.game.assets.quote_gunfightWinPartner,
+                          self.game.assets.quote_gunfightWinPartner,
+                          self.game.assets.quote_gunfightWinDeputy,
+                          self.game.assets.quote_gunfightWinSheriff,
+                          self.game.assets.quote_gunfightWinMarshall]
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
             self.lost()
@@ -99,23 +108,6 @@ class Gunfight(ep.EP_Mode):
         self.delay(name="pan",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
 
     def won(self):
-        print "GUNFIGHT WON IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
-        # cancel the lose delay
-        self.cancel_delayed("Gunfight Lost")
-        # play a quote
-        self.game.sound.play(self.game.assets.sfx_gunfightShot)
-        self.delay(delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
-        self.delay(delay=0.3,handler=self.game.base.priority_quote,param=self.game.assets.quote_gunWin)
-        # play the animation
-        anim = self.game.assets.dmd_dudeShotShouldersUp
-        myWait = len(anim.frames) / 10.0
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
-        self.layer = animLayer
-        # after the animation, display the win
-        self.delay(delay=myWait,handler=self.display_win)
-
-    def display_win(self):
         # set some tracking
         self.game.increase_tracking('gunfightsWon')
         # up the rank if it's not full yet
@@ -124,6 +116,26 @@ class Gunfight(ep.EP_Mode):
         # if it is full, this bit is awkward
         else:
             newrank = 4
+
+        print "GUNFIGHT WON IS KILLING THE MUSIC"
+        self.game.sound.stop_music()
+        # cancel the lose delay
+        self.cancel_delayed("Gunfight Lost")
+        # play a quote
+        self.game.sound.play(self.game.assets.sfx_gunfightShot)
+        self.delay(delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
+        # pick the sound to play
+        quote = random.choice([self.rankUps,self.winQuotes])
+        self.delay(delay=0.3,handler=self.game.base.priority_quote,param=quote[newrank])
+        # play the animation
+        anim = self.game.assets.dmd_dudeShotShouldersUp
+        myWait = len(anim.frames) / 10.0
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+        self.layer = animLayer
+        # after the animation, display the win
+        self.delay(delay=myWait,handler=self.display_win,param=newrank)
+
+    def display_win(self,newrank):
         ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
         textString3 = "YOUR RANK: " + ranks[newrank]
         values = ["500,000","750,000","1,000,000","1,500,000","2,000,000"]
