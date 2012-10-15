@@ -143,15 +143,13 @@ class Mine(ep.EP_Mode):
                 lockedBalls = 9
             print "LOCKED BALLS: " + str(lockedBalls)
             # check if we should lock the ball or start multiball
-            # should we start multiball?
             # multiball itself will be a separate mode with switchstop that loads above this
             # so we don't have to handle 'RUNNING' here
             if self.game.show_tracking('mineStatus') == "READY":
                 ## If any level below is running, avoid multiball start
                 stackLevel = self.game.show_tracking('stackLevel')
                 print stackLevel
-                if True in stackLevel[:2]:
-                    print "Mine stack kick"
+                if True in stackLevel[2:]:
                     self.game.mountain.kick()
                 else:
                     self.start_multiball()
