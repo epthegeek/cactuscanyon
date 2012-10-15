@@ -611,10 +611,16 @@ class BaseGameMode(ep.EP_Mode):
 
     ## Flipper switch detection for flipping the bonus lanes
     def sw_flipperLwL_active(self,sw):
+        # if no balls in play, don't do this.
+        if self.game.trough.num_balls_in_play == 0:
+            return
         # toggle the bonus lane
         self.game.bonus_lanes.flip()
 
     def sw_flipperLwR_active(self,sw):
+        # if no balls in play, don't do this.
+        if self.game.trough.num_balls_in_play == 0:
+            return
         # toggle the bonus lane
         self.game.bonus_lanes.flip()
 
