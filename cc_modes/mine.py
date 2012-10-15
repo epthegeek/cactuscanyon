@@ -149,7 +149,9 @@ class Mine(ep.EP_Mode):
             if self.game.show_tracking('mineStatus') == "READY":
                 ## If any level below is running, avoid multiball start
                 stackLevel = self.game.show_tracking('stackLevel')
+                print stackLevel
                 if True in stackLevel[:2]:
+                    print "Mine stack kick"
                     self.game.mountain.kick()
                 else:
                     self.start_multiball()

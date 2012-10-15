@@ -164,6 +164,8 @@ class RiverChase(ep.EP_Mode):
             self.game.right_ramp.update_lamps()
             self.game.center_ramp.update_lamps()
             self.game.left_ramp.update_lamps()
+            self.game.saloon.update_lamps()
+
 
             # start the music
             self.game.base.music_on(self.game.assets.music_pollyPeril)

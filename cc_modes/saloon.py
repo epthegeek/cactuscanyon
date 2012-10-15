@@ -166,8 +166,9 @@ class Saloon(ep.EP_Mode):
         if beacon:
             self.game.lamps.shootToCollect.enable()
         if self.game.show_tracking('gunfightStatus') == 'READY':
-            self.game.lamps.rightGunfightPin.enable()
-            self.game.lamps.leftGunfightPin.enable()
+            if self.game.base.guns_allowed():
+                self.game.lamps.rightGunfightPin.enable()
+                self.game.lamps.leftGunfightPin.enable()
         if self.game.show_tracking('drunkMultiballStatus') == "READY":
             self.game.lamps.bountySaloon.disable()
             self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
