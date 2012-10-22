@@ -1,0 +1,49 @@
+##   ____           _                ____
+##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
+## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
+## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
+##  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
+##                                                   |___/
+##           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
+##          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
+##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
+##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
+##
+## A P-ROC Project by Eric Priepke
+## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
+## Original Cactus Canyon software by Matt Coriale
+##
+#
+# This mode is to ride over the low end basic ramp shots whenever there's a stackable mode running
+# to allow stacked modes to share the shots - but not progress the basic ramp shots.
+#
+
+from procgame import *
+import cc_modes
+import random
+import ep
+
+class SwitchBlock(game.Mode):
+    """This is to load between the low ramp basic shots and higher level stackable modes"""
+    def __init__(self, game,priority):
+        super(SwitchBlock, self).__init__(game, priority)
+
+
+    # The loops
+    def sw_leftLoopTop_active(self,sw):
+        return game.SwitchStop
+
+    # right loop top
+    def sw_rightLoopTop_active(self,sw):
+        return game.SwitchStop
+
+    # The ramps
+    def sw_leftRampEnter_active(self,sw):
+        return game.SwitchStop
+
+    def sw_centerRampMake_active(self,sw):
+        return game.SwitchStop
+
+    def sw_rightRampMake_active(self,sw):
+        return game.SwitchStop
+

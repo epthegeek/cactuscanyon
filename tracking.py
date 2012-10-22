@@ -159,7 +159,7 @@ class Tracking(game.Player):
         # Level 3 is goldmine multiball, stampede
         # Level 4 is cva,
         # level 5 is bionic bart,high noon
-        self.player_stats['stackLevel'] = [False,False,False,False]
+        self.player_stats['stackLevel'] = [False,False,False,False,False,False]
 
         # cva OPEN, READY, RUNNING
         self.player_stats['cvaStatus'] = "OPEN"

@@ -48,6 +48,8 @@ class Stampede(ep.EP_Mode):
         for mode in self.game.ep_modes:
             if getattr(mode, "abort_display", None):
                 mode.abort_display()
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add')
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
@@ -59,30 +61,25 @@ class Stampede(ep.EP_Mode):
 
     def sw_leftLoopTop_active(self,sw):
         self.process_shot(0,self.active)
-        return game.SwitchStop
 
     def sw_leftRampEnter_active(self, sw):
         self.process_shot(1,self.active)
-        return game.SwitchStop
 
     def sw_centerRampMake_active(self, sw):
         self.process_shot(2,self.active)
-        return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
         if not self.game.bart.moving:
             self.process_shot(3,self.active)
-        return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
         self.process_shot(4,self.active)
-        return game.SwitchStop
 
     def start_stampede(self):
         # reset the jackpot count, just in case
         self.jackpots = 0
         # set the stack layer
-        self.game.set_tracking('stackLevel',True,1)
+        self.game.set_tracking('stackLevel',True,3)
         # stop the current music
         self.game.sound.stop_music()
         # turn on a starting jackpot
@@ -249,10 +246,12 @@ class Stampede(ep.EP_Mode):
         # unset the base busy flag
         self.game.base.busy = False
         # clear the stack layer
-        self.game.set_tracking('stackLevel',False,1)
+        self.game.set_tracking('stackLevel',False,3)
         # turn the main music back on
         if self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
+        # remove the switch blocker
+        self.game.switch_blocker('remove')
         # unload the mode
         self.unload()
 

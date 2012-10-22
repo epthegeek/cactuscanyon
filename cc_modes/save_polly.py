@@ -32,6 +32,8 @@ class SavePolly(ep.EP_Mode):
         self.won = False
 
     def mode_started(self):
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add')
         # set the polly indicator
         self.game.peril = True
         self.shotsSoFar = 0
@@ -122,7 +124,6 @@ class SavePolly(ep.EP_Mode):
             # center ramp pauses the train
             self.game.sound.play(self.game.assets.sfx_trainWhistle)
             self.pause_train()
-        return game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
         # kill the mode timer until x
@@ -133,7 +134,6 @@ class SavePolly(ep.EP_Mode):
             self.game.score(self.shotValue)
             self.game.sound.play(self.game.assets.sfx_trainWhistle)
             self.advance_save_polly()
-        return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         # kill the mode timer until x
@@ -144,7 +144,6 @@ class SavePolly(ep.EP_Mode):
             self.game.score(self.shotValue)
             self.game.sound.play(self.game.assets.sfx_trainWhistle)
             self.advance_save_polly()
-        return game.SwitchStop
 
     def start_save_polly(self,step=1):
         if step == 1:
@@ -381,7 +380,7 @@ class SavePolly(ep.EP_Mode):
         print "polly_finished IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         self.game.train.reset_toy(step=2)
         # turn off the polly display
@@ -408,6 +407,8 @@ class SavePolly(ep.EP_Mode):
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # turn off the polly indicator
         self.game.peril = False
+        # remove the switch blocker
+        self.game.switch_blocker('remove')
         # unload the mode
         self.unload()
 

@@ -44,6 +44,8 @@ class BaseGameMode(ep.EP_Mode):
         self.current_music = self.game.assets.music_mainTheme
         self.unbusy()
         self.active_quotes = []
+        # for aborting thebonus display
+        self.doingBonus = False
 
     def mode_started(self):
         self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
@@ -111,7 +113,7 @@ class BaseGameMode(ep.EP_Mode):
             self.game.enable_flippers(False)
             # unload the modes
             self.remove_modes()
-            if self.game.show_tracking('tiltStatus') != 3:
+            if self.game.show_tracking('tiltStatus') < 3:
                 # go check the bonus - after that we'll finish the ball
                 # delay 1 second to give other modes time too set the busy if needed
                 self.delay(delay=1,handler=self.check_bonus)
@@ -128,7 +130,7 @@ class BaseGameMode(ep.EP_Mode):
            self.game.show_tracking('bionicStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING":
             return        
-	# left side - either the playfield light is on or blinking, or the inlane light is on
+        # left side - either the playfield light is on or blinking, or the inlane light is on
         left = self.game.show_tracking('quickdrawStatus',0)
         if left == 'OPEN':
             self.game.lamps.leftQuickdraw.enable()
@@ -192,7 +194,7 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.base.priority_quote(self.game.assets.quote_playerThree)
             elif len(self.game.players) == 4:
                 self.game.base.priority_quote(self.game.assets.quote_playerFour)
-	    self.game.interrupter.add_player()
+        self.game.interrupter.add_player()
         ## -- set the last switch hit --
         ep.last_switch = "startButton"
 
@@ -374,6 +376,8 @@ class BaseGameMode(ep.EP_Mode):
         # First check to make sure tilt hasn't already been processed once.
         # No need to do this stuff again if for some reason tilt already occurred.
         if self.game.show_tracking('tiltStatus') == 3:
+            # disable status
+            self.game.statusOK = False
 
             self.game.interrupter.tilt_display()
             # Disable flippers so the ball will drain.
@@ -426,9 +430,6 @@ class BaseGameMode(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
         # score the points
         self.game.score_with_bonus(2530)
-	# if there's a super skillshot running - pass
-	if self.game.skill_shot.super:
-		pass
         # if there's a running quickdraw or showdown - pass
         if not self.guns_allowed():
             print "PASSING - Guns disabled"
@@ -459,6 +460,7 @@ class BaseGameMode(ep.EP_Mode):
             self.game.modes.add(self.game.quickdraw)
             self.game.quickdraw.start_quickdraw(side)
         else:
+            # nothing here
             pass
 
     def guns_allowed(self):
@@ -466,7 +468,7 @@ class BaseGameMode(ep.EP_Mode):
         if True in self.game.show_tracking('stackLevel') or self.game.skill_shot.super:
         # if any stack level is active, new gunfight action is not allowed
             return False
-	    print "Guns not allowed right now"
+            print "Guns not allowed right now"
         else:
             print "Guns allowed right now"
             return True
@@ -620,6 +622,9 @@ class BaseGameMode(ep.EP_Mode):
             return
         # toggle the bonus lane
         self.game.bonus_lanes.flip()
+        # if both flippers are hit, kill the bonus
+        if self.game.switches.flipperLwL.is_active() and self.doingBonus:
+            self.abort_bonus()
 
     def sw_flipperLwR_active(self,sw):
         # if no balls in play, don't do this.
@@ -627,6 +632,9 @@ class BaseGameMode(ep.EP_Mode):
             return
         # toggle the bonus lane
         self.game.bonus_lanes.flip()
+        # if both flippers are hit kill the bonus
+        if self.game.switches.flipperLwR.is_active() and self.doingBonus:
+            self.abort_bonus()
 
     ### shooter lane stuff
 
@@ -776,6 +784,14 @@ class BaseGameMode(ep.EP_Mode):
         self.wait_until_unbusy(self.do_bonus)
 
     def do_bonus(self):
+        # do the bonus right up front so it's on the score
+        bonus_points = self.game.show_tracking('bonus') * self.game.show_tracking('bonusX')
+        # add the points to the score
+        self.game.score(bonus_points)
+        # set  a flag for interrupting
+        self.doingBonus = True
+        # turn off the status OK
+        self.game.statusOK = False
         # get the bonus multiplier
         times = self.game.show_tracking('bonusX')
         print "BONUS TIMES: " + str(times)
@@ -791,7 +807,7 @@ class BaseGameMode(ep.EP_Mode):
         # throw up a  layer that says bonus as an interstitial
         self.layer = ep.EP_Showcase().blink_fill(2,2,3,1,0.3,isOpaque=True,text="BONUS")
         # then 1.5 seconds later, move on
-        self.delay(delay=1.5,handler=self.display_bonus,param=times)
+        self.delay("Bonus Display",delay=1.5,handler=self.display_bonus,param=times)
 
     def display_bonus(self,times):
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cactusBorder.frames[0])
@@ -808,10 +824,10 @@ class BaseGameMode(ep.EP_Mode):
         times -= 1
         if times <= 0:
             # if we're at the last one, it's time to finish up
-            self.delay(delay=1.5,handler=self.reveal_bonus,param=self.runningTotal)
+            self.delay("Bonus Display",delay=1.5,handler=self.reveal_bonus,param=self.runningTotal)
         else:
             # if not, loop back around after a delay
-            self.delay(delay=0.5,handler=self.display_bonus,param=times)
+            self.delay("Bonus Display",delay=0.5,handler=self.display_bonus,param=times)
 
     def reveal_bonus(self,points):
         # load up the animation
@@ -821,7 +837,7 @@ class BaseGameMode(ep.EP_Mode):
         animLayer.hold = True
         animLayer.frame_time = 4
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.finish_bonus,param=points)
+        self.delay("Bonus Display",delay=myWait,handler=self.finish_bonus,param=points)
 
     def finish_bonus(self,points):
         # set up the text display
@@ -836,13 +852,20 @@ class BaseGameMode(ep.EP_Mode):
         titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(titleString)
         pointsLine = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(ep.format_score(self.game.current_player().score))
         self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
-        # add the points to the score
-        self.game.score(points)
         # play a final sound
         self.game.sound.play(self.game.assets.sfx_flourish6)
+        # unset the flag
+        self.doingBonus = False
         # then loop back to end ball
-        self.delay(delay=2,handler=self.game.ball_ended)
-        self.delay(delay=2,handler=self.clear_layer)
+        self.delay("Bonus Display",delay=2,handler=self.game.ball_ended)
+        self.delay("Bonus Display",delay=2,handler=self.clear_layer)
+
+    def abort_bonus(self):
+        # unset the flag
+        self.doingBonus = False
+        # and do the end bits
+        self.game.ball_ended()
+        self.clear_layer()
 
     # bozo ball action
     def enable_bozo_ball(self):

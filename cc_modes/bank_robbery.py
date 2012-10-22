@@ -36,6 +36,9 @@ class BankRobbery(ep.EP_Mode):
         self.won = False
 
     def mode_started(self):
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add')
+
         self.game.peril = True
         self.modeTimer = 0
         # point value for shots
@@ -131,17 +134,14 @@ class BankRobbery(ep.EP_Mode):
     def sw_centerRampMake_active(self,sw):
         if self.running:
             self.process_shot(1)
-        return game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
         if self.running:
             self.process_shot(0)
-        return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         if self.running:
             self.process_shot(2)
-        return game.SwitchStop
 
     def process_shot(self,shot):
         # kill the mode timer for good measure
@@ -312,12 +312,14 @@ class BankRobbery(ep.EP_Mode):
         self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
 
 
-# success
+    # success
     def polly_saved(self):
         self.game.score(750000)
         self.running = False
         self.cancel_delayed("Mode Timer")
-        self.game.sound.stop_music()
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         self.win_display()
 
     # fail
@@ -405,7 +407,7 @@ class BankRobbery(ep.EP_Mode):
         print "end_bank_robbery IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         self.layer = None
         # set the tracking on the ramps
@@ -428,7 +430,9 @@ class BankRobbery(ep.EP_Mode):
         if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
         self.game.peril = False
-            # unload the mode
+        # remove the switch blocker
+        self.game.switch_blocker('remove')
+        # unload the mode
         self.unload()
 
     def set_shot_target(self):

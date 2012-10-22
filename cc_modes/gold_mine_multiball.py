@@ -29,6 +29,9 @@ class GoldMine(ep.EP_Mode):
         self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine,self.game.combos]
 
     def mode_started(self):
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add')
+
         self.motherlodeValue = 0
         self.counter = 0
         self.multiplier = False
@@ -48,24 +51,19 @@ class GoldMine(ep.EP_Mode):
     ### switches
     def sw_leftLoopTop_active(self,sw):
         self.process_shot(0)
-        return game.SwitchStop
 
     def sw_leftRampEnter_active(self, sw):
         self.process_shot(1)
-        return game.SwitchStop
 
     def sw_centerRampMake_active(self, sw):
         self.process_shot(2)
-        return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
         if not self.game.bart.moving:
             self.process_shot(3)
-        return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
         self.process_shot(4)
-        return game.SwitchStop
 
     def process_shot(self,shot):
         # we've hit a potential jackpot
@@ -97,8 +95,8 @@ class GoldMine(ep.EP_Mode):
             self.game.score(2530)
 
     def start_multiball(self):
-        # set the stack level flag - since right now only GM Multiball is on stack 2
-        self.game.set_tracking('stackLevel',True,2)
+        # set the stack level flag - since right now only GM Multiball is on stack 3
+        self.game.set_tracking('stackLevel',True,3)
         print "MULTIBALL STARTING"
         # kill the music
         print "start multiball IS KILLING THE MUSIC"
@@ -138,7 +136,7 @@ class GoldMine(ep.EP_Mode):
         self.delay(delay=1.5,handler=self.get_going)
 
     def get_going(self):
-	self.running = True
+        self.running = True
         # kick the ball out of the mine
         self.game.mountain.eject()
         # launch up to 2 more balls
@@ -436,7 +434,7 @@ class GoldMine(ep.EP_Mode):
             self.delay(delay=1,handler=self.award_motherlode,param=times)
 
     def end_multiball(self):
-	self.running = False
+        self.running = False
         # clear the layer
         self.layer = None
         # kill the motherload just in case
@@ -454,7 +452,7 @@ class GoldMine(ep.EP_Mode):
         # unset the busy flag
         self.game.base.busy = False
         # set the stack flag back off
-        self.game.set_tracking('stackLevel',False,2)
+        self.game.set_tracking('stackLevel',False,3)
         #refresh the mine lights
         self.game.update_lamps()
         # reset some junk
@@ -462,6 +460,8 @@ class GoldMine(ep.EP_Mode):
         self.banditsUp = 0
         self.bandits = False
         self.game.bad_guys.drop_targets()
+        # remove the switch blocker
+        self.game.switch_blocker('remove')
         # unload the mode
         self.unload()
 

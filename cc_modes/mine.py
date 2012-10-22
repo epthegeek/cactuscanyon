@@ -91,11 +91,11 @@ class Mine(ep.EP_Mode):
            self.game.show_tracking('drunkMultiballStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING":
             print "WAIT, HOW DID I GET HERE"
-	    # if there's an extra ball pending, award it
+        # if there's an extra ball pending, award it
             eb = self.game.show_tracking('extraBallsPending')
             if eb > 0:
                 # force the short extra ball collect
-	        self.collect_extra_ball(type=1)
+                self.collect_extra_ball(type=1)
             return
         # stock sound for the switch
         if self.game.show_tracking('highNoonStatus') != "READY":
@@ -128,10 +128,10 @@ class Mine(ep.EP_Mode):
 
     def mine_shot(self):
         # if cva is ready, we do that
-       # if self.game.show_tracking('cvaStatus') == "READY":
-       #     self.game.modes.add(self.game.cva)
-       #     self.game.cva.intro(entry = "mine")
-       #     return
+        if self.game.show_tracking('cvaStatus') == "READY":
+            self.game.modes.add(self.game.cva)
+            self.game.cva.intro(entry = "mine")
+            return
         # if high noon is ready, we do that
         if self.game.show_tracking('highNoonStatus') == "READY":
             self.game.modes.add(self.game.high_noon)
@@ -256,10 +256,10 @@ class Mine(ep.EP_Mode):
             # then kick out of the routine
         ## this applies to the easy setting
         ## in the event that the hits to light lock is 0, turn the lock back on right away
-	## have to cap the myBallsLockedTotal at 9 for this
-	if myBallsLockedTotal > 9:
-		myBallsLockedTotal = 9
-	# then we check for zeros
+        ## have to cap the myBallsLockedTotal at 9 for this
+        if myBallsLockedTotal > 9:
+            myBallsLockedTotal = 9
+        # then we check for zeros
         if self.hitsToLightLock[myBallsLockedTotal] == 0:
             ## if two balls are now locked, light multiball
             if myBallsLocked == 2:
@@ -380,7 +380,8 @@ class Mine(ep.EP_Mode):
         self.game.squelch_music()
         # turn off the mine flasher
         # add one to the total of extra balls
-        self.game.increase_tracking('extraBallsTotal')
+        ebt = self.game.increase_tracking('extraBallsTotal')
+        print "Extra balls total: " + str(ebt)
         # take one off of the pending total
         self.game.decrease_tracking('extraBallsPending')
         self.update_lamps()

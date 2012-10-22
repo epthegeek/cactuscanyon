@@ -72,7 +72,7 @@ class CvA(ep.EP_Mode):
 
     def mode_started(self):
         # set the stack level
-        self.game.set_tracking('stackLevel',True,3)
+        self.game.set_tracking('stackLevel',True,4)
         # resetting defaults
         # the transitions fail if they're too close together - this is for putting a 1 second delay in between
         self.beat = 0
@@ -828,7 +828,7 @@ class CvA(ep.EP_Mode):
         # play the ending quote
         self.game.base.priority_quote(self.game.assets.quote_cvaEnd)
         # set the stack level
-        self.game.set_tracking('stackLevel',False,3)
+        self.game.set_tracking('stackLevel',False,4)
         # turn off the running flag
         self.game.set_tracking("cvaStatus","OPEN")
         # turn off the base busy
@@ -840,8 +840,8 @@ class CvA(ep.EP_Mode):
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
 
-	# reset the saucer x just in case
-	self.saucerX = 104
+        # reset the saucer x just in case
+        self.saucerX = 104
         # and then unload
         self.unload()
 

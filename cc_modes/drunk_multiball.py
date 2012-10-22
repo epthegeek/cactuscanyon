@@ -41,6 +41,9 @@ class DrunkMultiball(ep.EP_Mode):
         anim = self.game.assets.dmd_reverse
         self.underLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
 
+    def mode_started(self):
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add')
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
@@ -53,24 +56,19 @@ class DrunkMultiball(ep.EP_Mode):
 
     def sw_leftLoopTop_active(self,sw):
         self.process_shot('leftLoop',self.shotModes[0])
-        return game.SwitchStop
 
     def sw_leftRampEnter_active(self, sw):
         self.process_shot('leftRamp',self.shotModes[2])
-        return game.SwitchStop
 
     def sw_centerRampMake_active(self, sw):
         self.process_shot('centerRamp',self.shotModes[3])
-        return game.SwitchStop
 
     def sw_rightLoopTop_active(self, sw):
         if not self.game.bart.moving:
             self.process_shot('rightLoop',self.shotModes[1])
-        return game.SwitchStop
 
     def sw_rightRampMake_active(self, sw):
         self.process_shot('rightRamp',self.shotModes[4])
-        return game.SwitchStop
 
     def process_shot(self,shot,mode):
         if shot in self.active:
@@ -98,7 +96,7 @@ class DrunkMultiball(ep.EP_Mode):
         print "STARTING DRUNK ASS MULTIBALL"
         self.running = True
         # set the stack level
-        self.game.set_tracking('stackLevel',True,1)
+        self.game.set_tracking('stackLevel',True,2)
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "RUNNING")
         # update the lamps
@@ -324,9 +322,11 @@ class DrunkMultiball(ep.EP_Mode):
         # reset the mug hits for next time
         self.game.set_tracking('beerMugHits',0)
         # set the stack flag back off
-        self.game.set_tracking('stackLevel',False,1)
+        self.game.set_tracking('stackLevel',False,2)
         # tick up the shots needed for next time
         self.game.base.mug_shots += 3
+        # remove the switch blocker
+        self.game.switch_blocker('remove')
         # unload the mode
         self.unload()
 

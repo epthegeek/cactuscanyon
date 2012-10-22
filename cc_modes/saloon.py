@@ -28,23 +28,26 @@ class Saloon(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(Saloon, self).__init__(game, priority)
-    self.rankSounds = [self.game.assets.quote_rankUpPartner,
+        self.rankSounds = [self.game.assets.quote_rankUpPartner,
                            self.game.assets.quote_rankUpPartner,
                            self.game.assets.quote_rankUpDeputy,
                            self.game.assets.quote_rankUpSheriff,
                            self.game.assets.quote_rankUpMarshall]
-    self.smacked = False
+        self.smacked = False
 
     def mode_started(self):
         self.unbusy()
 
+    def start_cva(self):
+        self.game.modes.add(self.game.cva)
+        self.game.cva.intro(entry = "saloon")
+
     def sw_saloonPopper_active_for_300ms(self,sw):
         print "Saloon popper mode - active for 300 ms"
         # if cva is ready, we do that
-       # if self.game.show_tracking('cvaStatus') == "READY":
-       #     self.game.modes.add(self.game.cva)
-       #     self.game.cva.intro(entry = "saloon")
-       #     return
+        if self.game.show_tracking('cvaStatus') == "READY":
+            self.wait_until_unbusy(self.start_cva)
+            return
 
         # if bionic bart is running don't do anything
         if self.game.show_tracking('bionicStatus') == "RUNNING" or \
@@ -54,9 +57,9 @@ class Saloon(ep.EP_Mode):
 
         # if drunk multiball is ready, start that, maybe
         if self.game.show_tracking('drunkMultiballStatus') == "READY":
-            ## If any level below is running, avoid multiball start
+            ## If anything other than a gun mode is running, dmb does not start
             stackLevel = self.game.show_tracking('stackLevel')
-            if True in stackLevel[:2]:
+            if True in stackLevel[:1]:
                 pass
             else:
                 self.game.modes.add(self.game.drunk_multiball)
@@ -70,7 +73,7 @@ class Saloon(ep.EP_Mode):
                 self.kick()
             return
 
-    # Divert here for bionic bart if ready - unless polly is running
+        # Divert here for bionic bart if ready - unless polly is running
         if self.game.show_tracking('bionicStatus') == "READY" and not self.game.peril:
             # if any of the polly modes is running, bail
             self.game.modes.add(self.game.bionic)
@@ -78,23 +81,11 @@ class Saloon(ep.EP_Mode):
             # then break out of the rest of this action
             return
         else:
-            print "Made it to the else"
-            ## if we went through the gate, and missed bart or snuck in the back way
-            ## it counts as a hit so we have to do that first
+            ## if it it counts as a hit so we have to do that first
             if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop" and not self.smacked:          
             # set the busy flag
                 self.is_busy()
-                # if drunk multiball is ready, start that, maybe
-            #    if self.game.show_tracking('drunkMultiballStatus') == "READY":
-            #    ## If any level below is running, avoid multiball start
-            #        stackLevel = self.game.show_tracking('stackLevel')
-            #        if True in stackLevel[:2]:
-            #            self.game.bart.hit()
-            #        else:
-            #            self.game.modes.add(self.game.drunk_multiball)
-            #            self.game.drunk_multiball.start_drunk()
-            #    else:
-                    # then hit bart
+                # then hit bart
                 self.game.bart.hit(True)
             # now we check the bounty after an appropriate delay.
             self.wait_until_unbusy(self.check_bounty)

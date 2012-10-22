@@ -23,7 +23,7 @@ import cc_modes
 import ep
 
 class LeftRamp(ep.EP_Mode):
-    """Cactus Canyon Right Ramp Mode"""
+    """Cactus Canyon Left Ramp Mode"""
     def __init__(self, game, priority):
         super(LeftRamp, self).__init__(game, priority)
         # Set up the sounds
@@ -170,10 +170,16 @@ class LeftRamp(ep.EP_Mode):
         else:
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
-        # play the river ramp sound
-        self.game.sound.play(self.game.assets.sfx_leftRampEnter)
 
-        self.award_ramp_score(combo)
+        # if a polly mode is running, let it go man
+        if self.game.peril:
+            pass
+        else:
+            # play the river ramp sound
+            self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+
+            self.award_ramp_score(combo)
+
         ## -- set the last switch hit --
         ep.last_switch = "leftRampEnter"
         ep.last_shot = "left"
@@ -294,7 +300,7 @@ class LeftRamp(ep.EP_Mode):
         #self.layer = completeFrame
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)
         # clear in 2 seconds
-        self.delay(name="ClearLeftRamp",delay=2,handler=self.clear_layer)
+        self.delay(name="Display",delay=2,handler=self.clear_layer)
         # show combo display if the chain is high enough
         if self.game.combos.chain > 1:
             self.delay(name="Display",delay=2,handler=self.game.combos.display)

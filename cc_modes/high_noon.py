@@ -191,7 +191,7 @@ class HighNoon(ep.EP_Mode):
             self.game.set_tracking('lampStatus', "OFF")
             self.game.update_lamps()
 
-            self.game.set_tracking('stackLevel',True,3)
+            self.game.set_tracking('stackLevel',True,5)
             self.game.set_tracking('highNoonStatus',"RUNNING")
             # church bell
             anim = self.game.assets.dmd_bellTower
@@ -552,7 +552,7 @@ class HighNoon(ep.EP_Mode):
         self.game.set_tracking('leftLoopStatus',1)
         self.game.set_tracking('rightLoopStatus',1)
         # clear the stack level
-        self.game.set_tracking('stackLevel',False,3)
+        self.game.set_tracking('stackLevel',False,5)
         # turn the flippers back on
         self.game.enable_flippers(True)
         # turn the lights back on

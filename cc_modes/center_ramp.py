@@ -182,7 +182,12 @@ class CenterRamp(ep.EP_Mode):
         else:
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
-        self.award_ramp_score(combo)
+
+        # if a polly mode is runnning, let it go, man
+        if self.game.peril:
+            pass
+        else:
+            self.award_ramp_score(combo)
 
         ## -- set the last switch hit --
         ep.last_switch = "centerRampMake"
@@ -220,10 +225,10 @@ class CenterRamp(ep.EP_Mode):
 
         ## stage three starts save polly peril train toy mode
         elif stage == 3:
-	    # if move your train is running, don't start save polly
-  	    if self.game.move_your_train.running:
-		return
-	    else:	
+        # if move your train is running, don't start save polly
+            if self.game.move_your_train.running:
+                return
+            else:
                 self.game.increase_tracking('centerRampStage')
                 self.game.modes.add(self.game.save_polly)
                 self.game.save_polly.start_save_polly()

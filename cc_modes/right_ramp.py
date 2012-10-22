@@ -176,7 +176,13 @@ class RightRamp(ep.EP_Mode):
         else:
             # and turn on the combo timer - returns false for use later
             combo = self.game.combos.start()
-        self.award_ramp_score(combo)
+
+        # if a polly mode is running - let it go man
+        if self.game.peril:
+            pass
+        else:
+            self.award_ramp_score(combo)
+
         ## -- set the last switch hit --
         ep.last_switch = "rightRampMake"
         ep.last_shot = "right"

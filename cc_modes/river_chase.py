@@ -33,6 +33,8 @@ class RiverChase(ep.EP_Mode):
         self.won = False
         self.distance_value = int(30.0 / self.shotsToWin)
     def mode_started(self):
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add')
         self.game.peril = True
         self.modeTimer = 0
         self.shotsSoFar = 0
@@ -109,19 +111,16 @@ class RiverChase(ep.EP_Mode):
         if self.running:
             self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
             self.process_shot()
-        return game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
         if self.running:
             self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
             self.process_shot()
-        return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         if self.running:
             self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
             self.process_shot()
-        return game.SwitchStop
 
     def sw_leftRampMake_active(self,sw):
         self.game.sound.play(self.game.assets.sfx_horse)
@@ -246,7 +245,9 @@ class RiverChase(ep.EP_Mode):
         self.game.score(500000)
         self.running = False
         self.dispatch_delayed()
-        self.game.sound.stop_music()
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         self.won = True
         self.win_display()
 
@@ -327,7 +328,7 @@ class RiverChase(ep.EP_Mode):
         print "end_river_chase IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         self.layer = None
         # set the tracking on the ramps
@@ -350,7 +351,9 @@ class RiverChase(ep.EP_Mode):
         if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
         self.game.peril = False
-            # unload the mode
+        # remove the switch blocker
+        self.game.switch_blocker('remove')
+        # unload the mode
         self.unload()
 
 

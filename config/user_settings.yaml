@@ -5,7 +5,7 @@ Gameplay (Feature): {Attract Mode Music: 'No', Attract Mode Sounds: 'Yes', Bart 
   Quickdraw Timer: 20, Quickdraws Lit Difficulty: Easy, Shots to save Polly: 5}
 Highscore: {Grand Champion: 350000000}
 Machine (Standard): {Allow Dim Illumination: 'No', Balls Per Game: 3, Game Restart: true,
-  Maximum Extra Balls: 4, Maximum Extra Balls/Ball In Play: 0, No Bonus Flips: 'No',
+  Maximum Extra Balls: 2, Maximum Extra Balls/Ball In Play: 0, No Bonus Flips: 'No',
   Tilt Warnings: 2}
 Network: {Gateway: 0, IP Address: 0, Subnet: 0, Tournament Server: 0}
 Replay: {Replay Award: Audit, Replay Boost: 100000, Replay Level 1: 100000, Replay Level 2: 200000,

@@ -74,6 +74,8 @@ class CCGame(game.BasicGame):
         self.previousVolume = 0
         # polly mode variable
         self.peril = False
+        # status display ok ornot
+        self.statusOK = False
 
 
     def setup(self):
@@ -184,18 +186,22 @@ class CCGame(game.BasicGame):
         self.train = cc_modes.Train(game=self,priority=6)
         self.mountain = cc_modes.Mountain(game=self,priority = 7)
         self.badge = cc_modes.Badge(game=self,priority = 7)
-
-        self.combos = cc_modes.Combos(game=self,priority=9)
+        # basic ramp & loop handling
         self.right_ramp = cc_modes.RightRamp(game=self,priority=10)
-        self.left_ramp = cc_modes.LeftRamp(game=self,priority=11)
-        self.center_ramp = cc_modes.CenterRamp(game=self,priority=12)
-        # save polly rides above the ramps, but below the loops
+        self.left_ramp = cc_modes.LeftRamp(game=self,priority=10)
+        self.center_ramp = cc_modes.CenterRamp(game=self,priority=10)
+        self.left_loop = cc_modes.LeftLoop(game=self,priority=10)
+        self.right_loop = cc_modes.RightLoop(game=self,priority=10)
+        # this is the layer that prevents basic ramp/loop shots from registering
+        self.switch_block = cc_modes.SwitchBlock(game=self,priority=11)
+        # combos should always register - so they ride above the switch block
+        self.combos = cc_modes.Combos(game=self,priority=12)
+
+        # save polly modes
         self.save_polly = cc_modes.SavePolly(game=self,priority=13)
-        # two new save polly modes
         self.river_chase = cc_modes.RiverChase(game=self,priority=13)
         self.bank_robbery = cc_modes.BankRobbery(game=self,priority=13)
-        self.left_loop = cc_modes.LeftLoop(game=self,priority=14)
-        self.right_loop = cc_modes.RightLoop(game=self,priority=15)
+
         self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=16)
 
         self.match = cc_modes.Match(game=self,priority=20)
@@ -206,12 +212,14 @@ class CCGame(game.BasicGame):
         self.bart = cc_modes.Bart(game=self,priority=25)
 
 
-        # Quickdraw battle and showdown
+        # general bad guy handling
         self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
+        # the gun modes
         self.quickdraw = cc_modes.Quickdraw(game=self,priority=68)
         self.showdown = cc_modes.Showdown(game=self,priority=68)
         self.ambush = cc_modes.Ambush(game=self,priority=68)
         self.gunfight = cc_modes.Gunfight(game=self,priority=68)
+        # stampede multiball
         self.stampede = cc_modes.Stampede(game=self,priority=69)
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
@@ -267,7 +275,8 @@ class CCGame(game.BasicGame):
                          self.move_your_train,
                          self.bank_robbery,
                          self.river_chase,
-                         self.cva]
+                         self.cva,
+                         self.switch_block]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
@@ -300,6 +309,8 @@ class CCGame(game.BasicGame):
         self.modes.add(self.base)
         # Start the ball.  This includes ejecting a ball from the trough.
         self.start_ball()
+        # add the ability to see the status
+        self.statusOK = True
 
     def start_ball(self):
         # run the start_ball from proc.game.BasicGame
@@ -319,8 +330,8 @@ class CCGame(game.BasicGame):
         self.interrupter.shoot_again()
 
     def ball_starting(self):
-	# restore music, just in case
-	self.restore_music()
+        # restore music, just in case
+        self.restore_music()
         print "BALL STARTING - number " + str(self.ball)
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
@@ -329,8 +340,10 @@ class CCGame(game.BasicGame):
         self.gi_control("ON")
         # set peril (polly indicator) to false
         self.polly = False
-	# reset the pop bumper count
-	self.set_tracking('bumperHits',0)
+        # reset the pop bumper count
+        self.set_tracking('bumperHits',0)
+        # reset the player bonus
+        self.set_tracking('bonus', 0)
         # launch a ball, unless there is one in the shooter lane already 
         if not self.switches.shooterLane.is_active():
             self.trough.launch_balls(1) # eject a ball into the shooter lane
@@ -378,9 +391,6 @@ class CCGame(game.BasicGame):
         if not self.trough.launch_in_progress:
             # Tell every mode a ball has drained by calling the ball_drained function if it exists
             if self.trough.num_balls_in_play == 0:
-                # turn off the lights
-                #for lamp in self.lamps.items_tagged('Playfield'):
-                #    lamp.disable()
                 # kill all the display layers
                 for mode in self.ep_modes:
                     if getattr(mode, "clear_layer", None):
@@ -400,8 +410,8 @@ class CCGame(game.BasicGame):
         self.set_tracking('tiltStatus',0)
         # stop the music
         print "BALL ENDED IS KILLING THE MUSIC"
-	# disable ball save
-	self.ball_save.disable()
+        # disable ball save
+        self.ball_save.disable()
 
         self.sound.stop_music()
         # unload the base add on modes
@@ -416,6 +426,7 @@ class CCGame(game.BasicGame):
         # Looping here? wha?
         self.end_ball()
 
+
     def end_ball(self):
         """Called by the implementor to notify the game that the current ball has ended."""
 
@@ -427,9 +438,9 @@ class CCGame(game.BasicGame):
 
         if self.current_player().extra_balls > 0:
             self.current_player().extra_balls -= 1
-	    #set the ball starting flag to help the trough not be SO STUPID
-	    self.ballStarting = True
-	    print "Starting extra ball - remaining extra balls:" + str(self.current_player().extra_balls)
+            #set the ball starting flag to help the trough not be SO STUPID
+            self.ballStarting = True
+            print "Starting extra ball - remaining extra balls:" + str(self.current_player().extra_balls)
             self.shoot_again()
             return
         if self.current_player_index + 1 == len(self.players):
@@ -738,3 +749,15 @@ class CCGame(game.BasicGame):
         if self.squelched:
             self.squelched = False
             pygame.mixer.music.set_volume(self.previousVolume)
+
+    # switch blocker load and unload - checks to be sure if it should do what it is told
+    def switch_blocker(self,function):
+        if function == 'add':
+            if self.switch_block not in self.modes:
+                self.modes.add(self.switch_block)
+        elif function == 'remove':
+            stackLevel = self.show_tracking('stackLevel')
+            if True not in stackLevel[1:]:
+                self.modes.remove(self.switch_block)
+        else:
+            pass
