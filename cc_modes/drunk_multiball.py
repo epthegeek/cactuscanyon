@@ -96,7 +96,7 @@ class DrunkMultiball(ep.EP_Mode):
 
     def start_drunk(self):
         print "STARTING DRUNK ASS MULTIBALL"
-	self.running = True
+        self.running = True
         # set the stack level
         self.game.set_tracking('stackLevel',True,1)
         # update the tracking
@@ -193,11 +193,11 @@ class DrunkMultiball(ep.EP_Mode):
             self.game.trough.launch_balls(thisMany)
         # start a ball save
         #self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
-	self.delay(delay=2,handler=self.dmb_ball_save)
-	self.update_display()
-    
+        self.delay(delay=2,handler=self.dmb_ball_save)
+        self.update_display()
+
     def dmb_ball_save(self):
-	# start a ball save
+    # start a ball save
         self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
 
     def update_display(self):
@@ -300,11 +300,11 @@ class DrunkMultiball(ep.EP_Mode):
 
     def end_save(self):
         # a ball saver to allow for reacclimation
-        self.game.ball_save.start(num_balls_to_save=1, time=15, now=True, allow_multiple_saves=False)
+        self.game.ball_save.start(num_balls_to_save=1, time=8, now=True, allow_multiple_saves=False)
         self.end_drunk()
 
     def end_drunk(self):
-	self.running = False
+        self.running = False
         self.cancel_delayed("Display")
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "OPEN")
@@ -325,8 +325,8 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.set_tracking('beerMugHits',0)
         # set the stack flag back off
         self.game.set_tracking('stackLevel',False,1)
-	# tick up the shots needed for next time
-	self.game.base.mug_shots += 3
+        # tick up the shots needed for next time
+        self.game.base.mug_shots += 3
         # unload the mode
         self.unload()
 
