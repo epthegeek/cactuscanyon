@@ -24,6 +24,7 @@ class EP_Mode(game.Mode):
         super(EP_Mode, self).__init__(game, priority)
         self.busy = False
         self.POSTS = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
+	self.running = False
 
     # busy flag set and unset
     def is_busy(self):

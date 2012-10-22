@@ -187,6 +187,8 @@ class Bart(ep.EP_Mode):
         # math the remaining hits
         print "HITS FOR THIS BART: " + str(self.hitsThisBart)
         print "CURRENT HITS: " + str(currentHits)
+	if self.hitsThisBart > currentHits:
+  	    self.hitsThisBart = currentHits
         hitsLeft = self.hitsThisBart - currentHits
         if hitsLeft <= 1:
             # if it is, set the status to last
@@ -236,7 +238,7 @@ class Bart(ep.EP_Mode):
         elif currentTotal == self.bartsForStar:
             thetext = "BADGE COLLECTED!"
             # actually collect the badge - barts defeated is 2
-            self.game.badge.check_bionic_bart(2)
+            self.game.badge.update(2)
         else:
             thetext = str(currentTotal) + " DEFEATED!"
         textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)

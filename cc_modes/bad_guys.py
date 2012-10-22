@@ -175,7 +175,7 @@ class BadGuys(ep.EP_Mode):
             self.target_activate(target)
 
     def target_down(self,target):
-        print "DEACTIVATING TARGET " + str(target)
+        #print "DEACTIVATING TARGET " + str(target)
         # we'll still deactivate when the coil goes off, just to maintain sync
         status = self.game.show_tracking('highNoonStatus')
         if status != "RUNNING":

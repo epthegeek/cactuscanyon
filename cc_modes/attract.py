@@ -65,9 +65,11 @@ class Attract(ep.EP_Mode):
         # adding a blank layer
         blanker = self.game.score_display.layer
 
+
         self.layers = [ {'layer':blanker,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH},
                         {'layer':splash,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
                         {'layer':continuedBanner,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST},
+#{'layer':continuedBanner,'type':"NONE",'direction':"DERP"},
                         {'layer':original,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_EAST},
                         {'layer':ballyBanner,'type':ep.EP_Transition.TYPE_CROSSFADE, 'direction':False},
                         {'layer':expanded,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
@@ -132,8 +134,20 @@ class Attract(ep.EP_Mode):
         frameA = self.layers[indexA]
         frameB = self.layers[indexB]
 
+	# new type for the rolling weed animation
+	if frameB['type'] == "NONE":
+	# tumble weed wipe bits
+	    continuedBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cccBanner.frames[0])
+            anim = self.game.assets.dmd_tumbleweedRight
+            weedFront = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=4)
+	    weedFront.composite_op = "blacksrc"
+	    weedBack = continuedBanner
+	    tumbleweedWipe = dmd.GroupedLayer(128,32,[weedBack,weedFront])
+	    weedWait = len(anim.frames) / 15.0
+            self.layer = tumbleweedWipe
+            self.game.sound.play(self.game.assets.sfx_tumbleWind)
         # two versions of the transition creation to cover if a direction is needed or not
-        if frameB['direction'] != False:
+        elif frameB['direction'] != False:
             self.transition = ep.EP_Transition(self,frameA['layer'],frameB['layer'],frameB['type'],frameB['direction'])
         else:
             self.transition = ep.EP_Transition(self,frameA['layer'],frameB['layer'],frameB['type'])

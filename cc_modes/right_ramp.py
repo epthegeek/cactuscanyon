@@ -247,7 +247,7 @@ class RightRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
 
         elif stage == 3:
-            self.game.increase_tracking('leftRampStage')
+            self.game.increase_tracking('rightRampStage')
             self.game.modes.add(self.game.bank_robbery)
             self.game.bank_robbery.start_bank_robbery()
 

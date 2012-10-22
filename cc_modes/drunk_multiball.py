@@ -96,6 +96,7 @@ class DrunkMultiball(ep.EP_Mode):
 
     def start_drunk(self):
         print "STARTING DRUNK ASS MULTIBALL"
+	self.running = True
         # set the stack level
         self.game.set_tracking('stackLevel',True,1)
         # update the tracking
@@ -191,8 +192,13 @@ class DrunkMultiball(ep.EP_Mode):
             self.game.trough.balls_to_autoplunge = thisMany
             self.game.trough.launch_balls(thisMany)
         # start a ball save
+        #self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
+	self.delay(delay=2,handler=self.dmb_ball_save)
+	self.update_display()
+    
+    def dmb_ball_save(self):
+	# start a ball save
         self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
-        self.update_display()
 
     def update_display(self):
         self.overlay.composite_op = "blacksrc"
@@ -202,7 +208,7 @@ class DrunkMultiball(ep.EP_Mode):
         textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("DRUNK MULTIBALL")
         if self.active:
             textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOTS")
-            textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("WORTH 500,000")
+            textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("WORTH 5,000,000")
         else:
             textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HIT BEER MUG")
             textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("TO LIGHT JACKPOTS")
@@ -259,7 +265,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.lamps.gi03.schedule(0x00FF00FF,cycle_seconds=1)
 
         # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
-        self.game.score(500000)
+        self.game.score(5000000)
         # load up the animation
         anim = self.game.assets.dmd_beerSlide
         # setup the animated layer
@@ -284,7 +290,7 @@ class DrunkMultiball(ep.EP_Mode):
 
     def jackpot_score(self):
         self.game.sound.play(self.game.assets.sfx_orchestraSpike)
-        scoreString = "500,000*"
+        scoreString = "5,000,000*"
         scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString)
         scoreLine.composite_op = "blacksrc"
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])
@@ -298,6 +304,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.end_drunk()
 
     def end_drunk(self):
+	self.running = False
         self.cancel_delayed("Display")
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "OPEN")
@@ -318,6 +325,8 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.set_tracking('beerMugHits',0)
         # set the stack flag back off
         self.game.set_tracking('stackLevel',False,1)
+	# tick up the shots needed for next time
+	self.game.base.mug_shots += 3
         # unload the mode
         self.unload()
 

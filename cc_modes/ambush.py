@@ -224,7 +224,8 @@ class Ambush(ep.EP_Mode):
 
     def targetTimer(self,target):
         # tick one off the timer for that target
-        self.badGuyTimer[target] -= 1
+	if self.badGuyTimer[target] > 0:
+            self.badGuyTimer[target] -= 1
         print "TIMER WORKING ON TARGET: " + str(target) + " - TIME: " + str(self.badGuyTimer[target])
         # if we're down to 2 seconds speed the light up and maybe play a quote
         if self.badGuyTimer[target] == 2:

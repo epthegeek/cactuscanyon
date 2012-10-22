@@ -247,7 +247,7 @@ class Stampede(ep.EP_Mode):
         # badge light - stampede is 4
         self.game.badge.update(4)
         # unset the base busy flag
-        self.game.base.busy = True
+        self.game.base.busy = False
         # clear the stack layer
         self.game.set_tracking('stackLevel',False,1)
         # turn the main music back on

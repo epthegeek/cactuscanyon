@@ -131,7 +131,7 @@ class SavePolly(ep.EP_Mode):
         if self.running:
             # score points
             self.game.score(self.shotValue)
-            self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+            self.game.sound.play(self.game.assets.sfx_trainWhistle)
             self.advance_save_polly()
         return game.SwitchStop
 
@@ -142,7 +142,7 @@ class SavePolly(ep.EP_Mode):
         if self.running:
             # score points
             self.game.score(self.shotValue)
-            self.game.sound.play(self.game.assets.sfx_thrownCoins)
+            self.game.sound.play(self.game.assets.sfx_trainWhistle)
             self.advance_save_polly()
         return game.SwitchStop
 
@@ -335,6 +335,7 @@ class SavePolly(ep.EP_Mode):
     # success
     def polly_saved(self):
         # this is mostly for the lights
+        self.won = True
         self.running = False
         self.game.train.stop()
         self.dispatch_delayed()
@@ -378,7 +379,10 @@ class SavePolly(ep.EP_Mode):
     def polly_finished(self):
         # stop the polly music
         print "polly_finished IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
+        # only kill the music if there's not a higher level running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         self.game.train.reset_toy(step=2)
         # turn off the polly display
         self.layer = None
@@ -386,7 +390,6 @@ class SavePolly(ep.EP_Mode):
         # this is mostly for the lights
         self.game.set_tracking('centerRampStage',5)
         self.game.update_lamps()
-        self.won = True
         self.end_save_polly()
 
     # clean up and exit

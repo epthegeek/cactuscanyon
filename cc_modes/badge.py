@@ -41,7 +41,7 @@ class Badge(ep.EP_Mode):
         # star lamps for high noon
         for lamp in range(0,5,1):
             if self.game.show_tracking('starStatus',lamp) == True:
-                print "STAR LAMP " + str(lamp) + "IS" + str(self.game.show_tracking('starStatus',lamp))
+                #print "STAR LAMP " + str(lamp) + "IS" + str(self.game.show_tracking('starStatus',lamp))
                 self.starLamps[lamp].enable()
         # bionic bart ready chases the lights
         status = self.game.show_tracking('bionicStatus')
@@ -56,7 +56,7 @@ class Badge(ep.EP_Mode):
             self.game.lamps.starHighNoon.schedule(0x00FF00FF)
             for lamp in range(0,5,1):
                 if self.game.show_tracking('starStatus',lamp) == True:
-                    print "STAR LAMP " + str(lamp) + "IS" + str(self.game.show_tracking('starStatus',lamp))
+                    #print "STAR LAMP " + str(lamp) + "IS" + str(self.game.show_tracking('starStatus',lamp))
                     self.starLamps[lamp].schedule(0xFF00FF00)
 
     def disable_lamps(self):

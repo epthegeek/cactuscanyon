@@ -33,6 +33,19 @@ class Quickdraw(ep.EP_Mode):
         # default
         self.side = 0
         self.target = 0
+	# build the pause view
+	script = []
+	# set up the text layer
+        textString = "< QUICKDRAW PAUSED >"
+	textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+	script.append({'seconds':0.3,'layer':textLayer})
+	# set up the alternating blank layer
+	blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
+	blank.composite_op = "blacksrc"
+	script.append({'seconds':0.3,'layer':blank})
+	# make a script layer with the two
+	self.pauseView = dmd.ScriptedLayer(128,32,script)
+	self.pauseView.composite_op = "blacksrc"
 
     def mode_started(self):
         self.paused = False
@@ -154,7 +167,7 @@ class Quickdraw(ep.EP_Mode):
             self.lost(target)
         else:
             # every 3 seconds, play a taunt quote
-            if int(self.runtime % 3.0) == 0 and self.runtime >= 5:
+            if int(self.runtime % 5.0) == 0 and self.runtime >= 6:
                 self.game.base.play_quote(self.game.assets.quote_quickdrawTaunt)
             # play a hurry quote if we're at 2 seconds.
             if self.runtime == 2:
@@ -175,8 +188,9 @@ class Quickdraw(ep.EP_Mode):
         # clear the layer
         self.layer = None
         self.cancel_delayed("Timer Delay")
-        textString = "< QUICKDRAW PAUSED >"
-        self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+        #textString = "< QUICKDRAW PAUSED >"
+        #self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+	self.layer = self.pauseView
 
     def resume(self):
         self.paused = False
@@ -243,8 +257,8 @@ class Quickdraw(ep.EP_Mode):
 
     def lost(self,target):
         # kill the mode music
-        print "QUICKDRAW LOST IS KILLING THE MUSIC"
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+            print "QUICKDRAW LOST IS KILLING THE MUSIC"
             self.game.sound.stop_music()
         # stuff specific to losing
         # drop the coil and kill the lamp

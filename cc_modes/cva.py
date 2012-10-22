@@ -797,7 +797,7 @@ class CvA(ep.EP_Mode):
         # add it to the script
         script.append({'layer':pageOne,'seconds':1.5})
         # set the aliens title line
-        if self.aliensKilled == 0:
+        if self.aliensKilled == 1:
             textStringTwo = "1 ALIEN KILLED"
         else:
             textStringTwo = str(self.aliensKilled) + " ALIENS KILLED"
@@ -840,6 +840,8 @@ class CvA(ep.EP_Mode):
         if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
 
+	# reset the saucer x just in case
+	self.saucerX = 104
         # and then unload
         self.unload()
 

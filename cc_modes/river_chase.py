@@ -107,19 +107,19 @@ class RiverChase(ep.EP_Mode):
 
     def sw_centerRampMake_active(self,sw):
         if self.running:
-            self.game.sound.play(self.game.assets.sfx_trainWhistle)
+            self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
             self.process_shot()
         return game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
         if self.running:
-            self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+            self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
             self.process_shot()
         return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         if self.running:
-            self.game.sound.play(self.game.assets.sfx_thrownCoins)
+            self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
             self.process_shot()
         return game.SwitchStop
 
@@ -325,7 +325,10 @@ class RiverChase(ep.EP_Mode):
     def end_river_chase(self):
         # stop the polly music
         print "end_river_chase IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
+        # only kill the music if there's not a higher level running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         self.layer = None
         # set the tracking on the ramps
         self.game.set_tracking('leftRampStage',5)

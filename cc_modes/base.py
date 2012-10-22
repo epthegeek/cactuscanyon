@@ -42,13 +42,11 @@ class BaseGameMode(ep.EP_Mode):
                           self.game.lamps.rankSheriff,
                           self.game.lamps.rankMarshall]
         self.current_music = self.game.assets.music_mainTheme
-        self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
         self.unbusy()
         self.active_quotes = []
 
     def mode_started(self):
-        print "INTERRUPTER IS DISPATCHING DELAYS"
-
+        self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
         ## cancel the closing song delay, just in case
         self.game.interrupter.dispatch_delayed()
         # and update the lamps
@@ -129,14 +127,14 @@ class BaseGameMode(ep.EP_Mode):
         if status != "ON" or \
            self.game.show_tracking('bionicStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING":
-            return
-        # left side - either the playfield light is on or blinking, or the inlane light is on
+            return        
+	# left side - either the playfield light is on or blinking, or the inlane light is on
         left = self.game.show_tracking('quickdrawStatus',0)
         if left == 'OPEN':
             self.game.lamps.leftQuickdraw.enable()
         elif left == 'TOP' or left == 'BOT':
             self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
-        elif left == 'READY':
+        elif left == 'READY' and self.guns_allowed():
             self.game.lamps.leftReturnQuickdraw.schedule(0x00FF00FF)
         else:
             pass
@@ -149,7 +147,7 @@ class BaseGameMode(ep.EP_Mode):
             self.game.lamps.bottomRightQuickdraw.enable()
         elif right == 'BOT':
             self.game.lamps.topRightQuickdraw.enable()
-        elif right == 'READY':
+        elif right == 'READY' and self.guns_allowed():
             self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
         else:
             pass
@@ -189,11 +187,12 @@ class BaseGameMode(ep.EP_Mode):
             self.game.add_player()
             # and play a soundbyte
             if len(self.game.players) == 2:
-                self.game.base.play_quote(self.game.assets.quote_playerTwo)
+                self.game.base.priority_quote(self.game.assets.quote_playerTwo)
             elif len(self.game.players) == 3:
-                self.game.base.play_quote(self.game.assets.quote_playerThree)
+                self.game.base.priority_quote(self.game.assets.quote_playerThree)
             elif len(self.game.players) == 4:
-                self.game.base.play_quote(self.game.assets.quote_playerFour)
+                self.game.base.priority_quote(self.game.assets.quote_playerFour)
+	    self.game.interrupter.add_player()
         ## -- set the last switch hit --
         ep.last_switch = "startButton"
 
@@ -427,6 +426,9 @@ class BaseGameMode(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
         # score the points
         self.game.score_with_bonus(2530)
+	# if there's a super skillshot running - pass
+	if self.game.skill_shot.super:
+		pass
         # if there's a running quickdraw or showdown - pass
         if not self.guns_allowed():
             print "PASSING - Guns disabled"
@@ -461,10 +463,12 @@ class BaseGameMode(ep.EP_Mode):
 
     def guns_allowed(self):
         # this is for turning the guns back on if the conditions are good
-        if True in self.game.show_tracking('stackLevel'):
+        if True in self.game.show_tracking('stackLevel') or self.game.skill_shot.super:
         # if any stack level is active, new gunfight action is not allowed
             return False
+	    print "Guns not allowed right now"
         else:
+            print "Guns allowed right now"
             return True
 
 
@@ -552,29 +556,29 @@ class BaseGameMode(ep.EP_Mode):
         hits = self.game.increase_tracking('bumperHits')
         # flash the back left flasher per hit
         self.game.coils.backLeftFlasher.pulse(30)
-        if hits == 75:
+        if hits == 125:
             # display the super jets display
             pass
-        elif hits == 150:
+        elif hits == 250:
             # display the mega jets display
             pass
         if self.game.show_tracking('cvaStatus') == "RUNNING":
             self.game.score(5250)
             self.game.base.play_quote(self.game.assets.sfx_cvaBumper)
 
-        if hits < 75:
+        if hits < 125:
             # if we're under 75 points are low
             self.game.score(5250)
             # and the sound is a punch
             self.game.sound.play(self.game.assets.sfx_punch)
             self.display_bumper(hits,"SUPER")
-        elif hits >= 75 and hits < 150:
+        elif hits >= 125 and hits < 250:
             # if we're in super jets the score is more
             self.game.score(50000)
             # and the sound is an explosion
             self.game.sound.play(self.game.assets.sfx_smallExplosion)
             self.display_bumper(hits,"MEGA")
-        elif hits >= 150:
+        elif hits >= 250:
             # mega jets
             self.game.score(500000)
             # and the sound is the futuristic ricochet
@@ -583,10 +587,10 @@ class BaseGameMode(ep.EP_Mode):
     ## TODO add the displays for shots to increase level and the various active levels
     def display_bumper(self,hits,nextup):
         if nextup == "SUPER":
-            textString1 = "< " + str(75 - hits) + " MORE HITS >"
+            textString1 = "< " + str(125 - hits) + " MORE HITS >"
             textString2 = "< FOR SUPER JETS >"
         elif nextup == "MEGA":
-            textString1 = "<" + str(150 - hits) + " MORE HITS >"
+            textString1 = "<" + str(250 - hits) + " MORE HITS >"
             textString2 = "< FOR  MEGA  JETS >"
         textLayer1 = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString1)
         textLayer2 = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString2)

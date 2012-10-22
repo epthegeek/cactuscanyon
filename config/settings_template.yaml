@@ -31,7 +31,7 @@ Machine (Standard):
   'Maximum Extra Balls':
     options: [0,10]
     increments: 1
-    default: 4
+    default: 2
   'Maximum Extra Balls/Ball In Play':
     options: [0,10]
     increments: 1

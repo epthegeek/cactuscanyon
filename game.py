@@ -316,10 +316,11 @@ class CCGame(game.BasicGame):
         # Don't start_ball() here, since Attract does that after calling start_game().
 
     def shoot_again(self):
-        print "STARTING EXTRA BALL"
         self.interrupter.shoot_again()
 
     def ball_starting(self):
+	# restore music, just in case
+	self.restore_music()
         print "BALL STARTING - number " + str(self.ball)
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
@@ -328,8 +329,9 @@ class CCGame(game.BasicGame):
         self.gi_control("ON")
         # set peril (polly indicator) to false
         self.polly = False
-        # launch a ball, unless there is one in the shooter lane already - but really, this shouldn't
-        # happen because we're only starting if trough is full
+	# reset the pop bumper count
+	self.set_tracking('bumperHits',0)
+        # launch a ball, unless there is one in the shooter lane already 
         if not self.switches.shooterLane.is_active():
             self.trough.launch_balls(1) # eject a ball into the shooter lane
         else:
@@ -398,6 +400,8 @@ class CCGame(game.BasicGame):
         self.set_tracking('tiltStatus',0)
         # stop the music
         print "BALL ENDED IS KILLING THE MUSIC"
+	# disable ball save
+	self.ball_save.disable()
 
         self.sound.stop_music()
         # unload the base add on modes
@@ -423,6 +427,9 @@ class CCGame(game.BasicGame):
 
         if self.current_player().extra_balls > 0:
             self.current_player().extra_balls -= 1
+	    #set the ball starting flag to help the trough not be SO STUPID
+	    self.ballStarting = True
+	    print "Starting extra ball - remaining extra balls:" + str(self.current_player().extra_balls)
             self.shoot_again()
             return
         if self.current_player_index + 1 == len(self.players):
@@ -522,7 +529,7 @@ class CCGame(game.BasicGame):
     def setup_ball_search(self):
         # No special handlers in starter game.
         special_handler_modes = []
-        self.ball_search = cc_modes.BallSearch(self, priority=100,countdown_time=30, coils=self.ballsearch_coils,reset_switches=self.ballsearch_resetSwitches,stop_switches=self.ballsearch_stopSwitches,special_handler_modes=special_handler_modes)
+        self.ball_search = cc_modes.BallSearch(self, priority=100,countdown_time=15, coils=self.ballsearch_coils,reset_switches=self.ballsearch_resetSwitches,stop_switches=self.ballsearch_stopSwitches,special_handler_modes=special_handler_modes)
 
     def schedule_lampshows(self,lampshows,repeat=True):
         self.scheduled_lampshows = lampshows
@@ -608,7 +615,7 @@ class CCGame(game.BasicGame):
         # divide the score by 100 to get what 1 % is (rounded), then multiply by the applied percent, then round to an even 10.
         # why? because that's what modern pinball does. Score always ends in 0
         bonus = points / 100 * percent / 10 * 10
-        print "ADDING BONUS - " + str(bonus)
+        #print "ADDING BONUS - " + str(bonus)
         p.player_stats['bonus'] += bonus
 
     ## bonus stuff

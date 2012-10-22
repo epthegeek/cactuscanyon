@@ -130,19 +130,16 @@ class BankRobbery(ep.EP_Mode):
 
     def sw_centerRampMake_active(self,sw):
         if self.running:
-            self.game.sound.play(self.game.assets.sfx_trainWhistle)
             self.process_shot(1)
         return game.SwitchStop
 
     def sw_leftRampEnter_active(self,sw):
         if self.running:
-            self.game.sound.play(self.game.assets.sfx_leftRampEnter)
             self.process_shot(0)
         return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         if self.running:
-            self.game.sound.play(self.game.assets.sfx_thrownCoins)
             self.process_shot(2)
         return game.SwitchStop
 
@@ -169,6 +166,7 @@ class BankRobbery(ep.EP_Mode):
             self.kill_dude(shot)
         else:
             self.game.score(2370)
+            self.game.sound.play(self.game.assets.sfx_thrownCoins)
             # if we did't hit a shot, restart the mode timer
             self.in_progress()
 
@@ -405,7 +403,10 @@ class BankRobbery(ep.EP_Mode):
     def end_bank_robbery(self):
         # stop the polly music
         print "end_bank_robbery IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
+        # only kill the music if there's not a higher level running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         self.layer = None
         # set the tracking on the ramps
         self.game.set_tracking('rightRampStage',5)

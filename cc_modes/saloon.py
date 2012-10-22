@@ -28,6 +28,12 @@ class Saloon(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(Saloon, self).__init__(game, priority)
+	self.rankSounds = [self.game.assets.quote_rankUpPartner,
+                           self.game.assets.quote_rankUpPartner,
+                           self.game.assets.quote_rankUpDeputy,
+                           self.game.assets.quote_rankUpSheriff,
+                           self.game.assets.quote_rankUpMarshall]
+	self.smacked = False
 
     def mode_started(self):
         self.unbusy()
@@ -35,23 +41,37 @@ class Saloon(ep.EP_Mode):
     def sw_saloonPopper_active_for_300ms(self,sw):
         print "Saloon popper mode - active for 300 ms"
         # if cva is ready, we do that
-        if self.game.show_tracking('cvaStatus') == "READY":
-            self.game.modes.add(self.game.cva)
-            self.game.cva.intro(entry = "saloon")
-            return
+       # if self.game.show_tracking('cvaStatus') == "READY":
+       #     self.game.modes.add(self.game.cva)
+       #     self.game.cva.intro(entry = "saloon")
+       #     return
 
         # if bionic bart is running don't do anything
         if self.game.show_tracking('bionicStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING":
+	    print "cva bionic bail"
             return
+
+        # if drunk multiball is ready, start that, maybe
+        if self.game.show_tracking('drunkMultiballStatus') == "READY":
+            ## If any level below is running, avoid multiball start
+            stackLevel = self.game.show_tracking('stackLevel')
+            if True in stackLevel[:2]:
+                pass
+            else:
+                self.game.modes.add(self.game.drunk_multiball)
+                self.game.drunk_multiball.start_drunk()
+		return
 
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
         if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus'):
             if True in self.game.show_tracking('stackLevel'):
                 print "Saloon Stack bail"
                 self.kick()
-        # Divert here for bionic bart if ready - unless polly is running
-        elif self.game.show_tracking('bionicStatus') == "READY" and not self.game.peril:
+ 	    	return
+        
+	# Divert here for bionic bart if ready - unless polly is running
+        if self.game.show_tracking('bionicStatus') == "READY" and not self.game.peril:
             # if any of the polly modes is running, bail
             self.game.modes.add(self.game.bionic)
             self.game.bionic.start_bionic()
@@ -61,27 +81,33 @@ class Saloon(ep.EP_Mode):
             print "Made it to the else"
             ## if we went through the gate, and missed bart or snuck in the back way
             ## it counts as a hit so we have to do that first
-            if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop":
-                # set the busy flag
+            if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop" and not self.smacked:          
+	      # set the busy flag
                 self.is_busy()
                 # if drunk multiball is ready, start that, maybe
-                if self.game.show_tracking('drunkMultiballStatus') == "READY":
-                ## If any level below is running, avoid multiball start
-                    stackLevel = self.game.show_tracking('stackLevel')
-                    if True in stackLevel[:2]:
-                        self.game.bart.hit()
-                    else:
-                        self.game.modes.add(self.game.drunk_multiball)
-                        self.game.drunk_multiball.start_drunk()
-                else:
+            #    if self.game.show_tracking('drunkMultiballStatus') == "READY":
+            #    ## If any level below is running, avoid multiball start
+            #        stackLevel = self.game.show_tracking('stackLevel')
+            #        if True in stackLevel[:2]:
+            #            self.game.bart.hit()
+            #        else:
+            #            self.game.modes.add(self.game.drunk_multiball)
+            #            self.game.drunk_multiball.start_drunk()
+            #    else:
                     # then hit bart
-                    self.game.bart.hit(True)
+                self.game.bart.hit(True)
             # now we check the bounty after an appropriate delay.
             self.wait_until_unbusy(self.check_bounty)
             ## -- set the last switch hit --
             ep.last_switch = "saloonPopper"
 
+    def unsmack(self):
+	self.smacked = False
+
     def sw_saloonBart_active(self,sw):
+	# set a timer flag about the hit
+	self.smacked = True
+	self.delay("Smack Delay",delay=2,handler=self.unsmack)
         bionic = self.game.show_tracking('bionicStatus')
         if bionic == "READY":
             # play a laugh sound and flash the light and return
@@ -237,8 +263,8 @@ class Saloon(ep.EP_Mode):
         if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             prizes.append('extraBall')
         #   2 - Light Gun Fight - include if not currently lit via dead bart
-        if self.game.show_tracking('bartStatus') != "DEAD":
-            prizes.append('lightGunFight')
+        #if self.game.show_tracking('bartStatus') != "DEAD":
+        #    prizes.append('lightGunFight')
         #   3 - Light Quick Draw
         if "OPEN" in self.game.show_tracking('quickdrawStatus'):
             prizes.append('lightQuickdraw')
@@ -257,8 +283,9 @@ class Saloon(ep.EP_Mode):
         prizes.append('points500k')
         #   9 - + 1 Million Bonus
         prizes.append('points1Mil')
-        # 10 - Move your train
-        prizes.append('moveYourTrain')
+        # 10 - Move your train - only add if polly isn't running
+	if not self.game.peril and self.game.move_your_train not in self.game.modes:
+            prizes.append('moveYourTrain')
         # so as of this point we have a prizes list to use
         # and pick one of those at random
         self.bountyPrize = random.choice(prizes)
@@ -321,7 +348,6 @@ class Saloon(ep.EP_Mode):
             prizeText2 = "INCREASED"
             self.prizeHandler = self.game.increase_tracking
             self.prizeParam = 'rank'
-            self.game.base.update_lamps()
         elif self.bountyPrize == 'points250k':
             prizeText = "250,000"
             self.prizeHandler = self.game.score
@@ -375,7 +401,12 @@ class Saloon(ep.EP_Mode):
         # play a lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.game.update_lamps)
         # play the quote
-        self.game.base.play_quote(self.game.assets.quote_bountyCollected)
+	if self.prizeParam == 'rank':
+	    rank = self.game.show_tracking('rank')
+	    self.game.base.priority_quote(self.rankSounds[rank+1])
+	else:
+            self.game.base.priority_quote(self.game.assets.quote_bountyCollected)
+	
         # then clear the layer and kick the ball out
         self.delay(delay = myWait,handler=self.finish_up)
 
@@ -390,6 +421,8 @@ class Saloon(ep.EP_Mode):
             self.prizeHandler()
         # update lamps
         self.update_lamps()
+	self.game.base.update_lamps()
+
         # for anything other than move your train, kick the ball out
         if self.bountyPrize != "moveYourTrain":
             self.kick()

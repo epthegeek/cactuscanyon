@@ -138,6 +138,7 @@ class GoldMine(ep.EP_Mode):
         self.delay(delay=1.5,handler=self.get_going)
 
     def get_going(self):
+	self.running = True
         # kick the ball out of the mine
         self.game.mountain.eject()
         # launch up to 2 more balls
@@ -238,6 +239,13 @@ class GoldMine(ep.EP_Mode):
             # if multipier went up, we go there, not, it's back to main
             if self.multiplier:
                 handler = self.display_multiplier
+                # and reset the jackpots
+                for i in range(0,5,1):
+                    self.game.set_tracking('jackpotStatus',True,i)
+                # and refresh all the lamps
+                for shot in self.gmShots:
+                    shot.update_lamps()
+
             else:
                 handler = self.main_display
             # go back to the main display
@@ -283,12 +291,6 @@ class GoldMine(ep.EP_Mode):
             combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom])
             self.layer = combined
             self.delay(name="Display",delay=1.5,handler=self.main_display)
-            # and reset the jackpots
-            for i in range(0,5,1):
-                self.game.set_tracking('jackpotStatus',True,i)
-            # and refresh all the lamps
-            for shot in self.gmShots:
-                shot.update_lamps()
 
     def motherlode_hit(self):
         # stop the mountain
@@ -434,6 +436,7 @@ class GoldMine(ep.EP_Mode):
             self.delay(delay=1,handler=self.award_motherlode,param=times)
 
     def end_multiball(self):
+	self.running = False
         # clear the layer
         self.layer = None
         # kill the motherload just in case

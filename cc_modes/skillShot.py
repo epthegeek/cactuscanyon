@@ -63,7 +63,7 @@ class SkillShot(ep.EP_Mode):
     def mode_started(self):
         # reset the super just in case
         self.super = False
-        print "THOOPER ITH FAHLTH"
+        #print "THOOPER ITH FAHLTH"
         # call the welcome quote - and start the theme song after on the first ball
         duration = self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1 and not self.game.show_tracking('greeted'):
@@ -162,6 +162,7 @@ class SkillShot(ep.EP_Mode):
             self.selectedPrizes = self.selectedPrizes[4:5] + self.selectedPrizes
             count += 1
 
+	print "Selected Prizes: " + self.selectedPrizes
         # if we're not in the super skillshot, update the display right away
         if not self.super:
             print "UPDATING LAYER AFTER PRIZE GENERATE"

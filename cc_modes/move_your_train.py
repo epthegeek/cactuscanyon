@@ -79,7 +79,7 @@ class MoveYourTrain(ep.EP_Mode):
     def sw_rightRampMake_active(self,sw):
         self.move_train("right")
 
-    def sw_saloonGate_active(self,sw):
+    def sw_saloonPopper_active_for_290ms(self,sw):
         self.move_train("right")
 
     # center shot
@@ -171,9 +171,11 @@ class MoveYourTrain(ep.EP_Mode):
                 self.game.train.fast_reverse()
             if direction == "center":
                 if self.trainOffset > 0:
-                    self.move_display("left")
-                elif self.trainOffset < 0:
                     self.move_display("right")
+		    self.game.train.fast_reverse()
+                elif self.trainOffset < 0:
+                    self.move_display("left")
+		    self.game.train.fast_forward()
                 else:
                     self.game.sound.play(self.game.assets.sfx_trainWhistle)
 
@@ -226,6 +228,7 @@ class MoveYourTrain(ep.EP_Mode):
         # turn off the running flag
         self.running = False
         # reset the train
+	self.game.train.stop_at = 0
         self.game.train.reset_toy()
         # turn the status to off
         self.game.set_tracking("mytStatus", "OPEN")

@@ -220,6 +220,10 @@ class CenterRamp(ep.EP_Mode):
 
         ## stage three starts save polly peril train toy mode
         elif stage == 3:
+	    # if move your train is running, don't start save polly
+  	    if self.game.move_your_train.running:
+		return
+	    else:	
                 self.game.increase_tracking('centerRampStage')
                 self.game.modes.add(self.game.save_polly)
                 self.game.save_polly.start_save_polly()
