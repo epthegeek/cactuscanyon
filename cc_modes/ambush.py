@@ -62,6 +62,21 @@ class Ambush(ep.EP_Mode):
         # how long the bad guys wait before disappearing
         self.SECONDS = self.game.user_settings['Gameplay (Feature)']['Ambush Target Timer']
 
+        # build the pause view
+        script = []
+        # set up the text layer
+        textString = "< AMBUSH PAUSED >"
+        textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+        script.append({'seconds':0.3,'layer':textLayer})
+        # set up the alternating blank layer
+        blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
+        blank.composite_op = "blacksrc"
+        script.append({'seconds':0.3,'layer':blank})
+        # make a script layer with the two
+        self.pauseView = dmd.ScriptedLayer(128,32,script)
+        self.pauseView.composite_op = "blacksrc"
+
+
     def sw_leftBonusLane_active(self,sw):
         if not self.paused:
             self.pause()
@@ -95,6 +110,7 @@ class Ambush(ep.EP_Mode):
             self.pause()
 
     def mode_started(self):
+        self.running = True
         self.deathTally = 0
         self.showdownValue = 300000
         self.tauntTimer = 0
@@ -210,9 +226,9 @@ class Ambush(ep.EP_Mode):
                 if self.badGuyTimer[target] != 0 and self.badGuyTimer[target] != None:
                     print "CANCEL TIMER: " + self.targetNames[target] + " HAD: " + str(self.badGuyTimer[target])
                     self.cancel_delayed(self.targetNames[target])
-            textString = "< AMBUSH PAUSED >"
-            self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
-
+            #textString = "< AMBUSH PAUSED >"
+            #self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+            self.layer = self.pauseView
 
     def resume(self):
         for target in range(0,4,1):
@@ -397,8 +413,10 @@ class Ambush(ep.EP_Mode):
         self.clear_layer()
         # drop all the targets
         self.game.bad_guys.drop_targets()
-        # kill the music
-        self.game.sound.stop_music()
+        # kill the music - if nothing else is running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         # tally some score?
 
         # play a quote about bodycount
@@ -419,10 +437,11 @@ class Ambush(ep.EP_Mode):
         for i in range (0,4,1):
             self.game.set_tracking('badGuyUp',False,i)
         self.game.bad_guys.update_lamps()
-        # start up the main theme again if a second level mode isn't running
-        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+        # start up the main theme again if a higher level mode isn't running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
-            # turn off the level 1 flag
+        # turn off the level 0 flag
         self.game.set_tracking('stackLevel',False,0)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
@@ -450,6 +469,7 @@ class Ambush(ep.EP_Mode):
         self.delay(delay=2.1,handler=self.unload)
 
     def mode_stopped(self):
+        self.running = False
         print "AMBUSH IS DISPATCHING DELAYS"
         self.dispatch_delayed()
 

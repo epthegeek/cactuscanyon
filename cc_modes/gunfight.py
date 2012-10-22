@@ -42,10 +42,13 @@ class Gunfight(ep.EP_Mode):
                           self.game.assets.quote_gunfightWinSheriff,
                           self.game.assets.quote_gunfightWinMarshall]
     def ball_drained(self):
-	print "GUNFIGHT - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
+        print "GUNFIGHT - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
-	    print "GUNFIGHT BALL DRAINED ROUTINE"
+            print "GUNFIGHT BALL DRAINED ROUTINE"
             self.lost()
+
+    def mode_started(self):
+        self.running = True
 
     def start_gunfight(self,side):
         print "GUNFIGHT GOES HERE"
@@ -117,7 +120,7 @@ class Gunfight(ep.EP_Mode):
         # up the rank if it's not full yet
         if self.game.show_tracking('rank') < 4:
             newrank = self.game.increase_tracking('rank')
-	    self.game.base.update_lamps()
+            self.game.base.update_lamps()
         # if it is full, this bit is awkward
         else:
             newrank = 4
@@ -165,7 +168,7 @@ class Gunfight(ep.EP_Mode):
         # only kill the music if there's not a higher level running
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
-	    print "GUNFIGHT LOST IS KILLING THE MUSIC"
+            print "GUNFIGHT LOST IS KILLING THE MUSIC"
             self.game.sound.stop_music()
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_gunFail)
@@ -181,7 +184,9 @@ class Gunfight(ep.EP_Mode):
         # turn off the level one flag
         self.game.set_tracking('stackLevel',False,0)
         # turn the main game music back on if a second level mode isn't running
-        if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
+        # start up the main theme again if a higher level mode isn't running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # unload
         self.unload()
@@ -277,5 +282,6 @@ class Gunfight(ep.EP_Mode):
         self.delay(name="Gunfight Lost",delay=4,handler=self.lost)
 
     def mode_stopped(self):
+        self.running = False
         print "GUNFIGHT IS DISPATCHING DELAYS"
         self.dispatch_delayed()

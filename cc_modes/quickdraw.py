@@ -33,22 +33,23 @@ class Quickdraw(ep.EP_Mode):
         # default
         self.side = 0
         self.target = 0
-	# build the pause view
-	script = []
-	# set up the text layer
-        textString = "< QUICKDRAW PAUSED >"
-	textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
-	script.append({'seconds':0.3,'layer':textLayer})
-	# set up the alternating blank layer
-	blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
-	blank.composite_op = "blacksrc"
-	script.append({'seconds':0.3,'layer':blank})
-	# make a script layer with the two
-	self.pauseView = dmd.ScriptedLayer(128,32,script)
-	self.pauseView.composite_op = "blacksrc"
+    # build the pause view
+    script = []
+    # set up the text layer
+    textString = "< QUICKDRAW PAUSED >"
+    textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+    script.append({'seconds':0.3,'layer':textLayer})
+    # set up the alternating blank layer
+    blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
+    blank.composite_op = "blacksrc"
+    script.append({'seconds':0.3,'layer':blank})
+    # make a script layer with the two
+    self.pauseView = dmd.ScriptedLayer(128,32,script)
+    self.pauseView.composite_op = "blacksrc"
 
     def mode_started(self):
         self.paused = False
+        self.running = True
 
     def ball_drained(self):
         # the the ball drains, quickdraw is lost
@@ -98,6 +99,9 @@ class Quickdraw(ep.EP_Mode):
             self.pause()
 
     def start_quickdraw(self,side):
+        # set the level 1 stack flag
+        self.game.set_tracking('stackLevel',True,0)
+
         # cancel any other displays
         for mode in self.game.ep_modes:
             if getattr(mode, "abort_display", None):
@@ -190,7 +194,7 @@ class Quickdraw(ep.EP_Mode):
         self.cancel_delayed("Timer Delay")
         #textString = "< QUICKDRAW PAUSED >"
         #self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
-	self.layer = self.pauseView
+        self.layer = self.pauseView
 
     def resume(self):
         self.paused = False
@@ -257,7 +261,9 @@ class Quickdraw(ep.EP_Mode):
 
     def lost(self,target):
         # kill the mode music
-        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+        # start up the main theme again if a higher level mode isn't running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             print "QUICKDRAW LOST IS KILLING THE MUSIC"
             self.game.sound.stop_music()
         # stuff specific to losing
@@ -295,5 +301,6 @@ class Quickdraw(ep.EP_Mode):
         self.unload()
 
     def mode_stopped(self):
+        self.running = False
         print "QUICKDRAW IS DISPATCHING DELAYS"
         self.dispatch_delayed()

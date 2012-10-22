@@ -34,6 +34,7 @@ class Showdown(ep.EP_Mode):
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
 
     def mode_started(self):
+        self.running = True
         self.deathTally = 0
         self.showdownValue = 300000
         self.tauntTimer = 0
@@ -262,8 +263,11 @@ class Showdown(ep.EP_Mode):
     def end_showdown(self):
         # drop all teh targets
         self.game.bad_guys.drop_targets()
-        # kill the music
-        self.game.sound.stop_music()
+        # kill the music - if nothing else is running
+        # start up the main theme again if a higher level mode isn't running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+            self.game.sound.stop_music()
         # tally some score?
         # award the badge light - showdown/ambush is 3
         self.game.badge.update(3)
@@ -286,8 +290,9 @@ class Showdown(ep.EP_Mode):
         for i in range (0,4,1):
             self.game.set_tracking('badGuyUp',False,i)
         self.game.bad_guys.update_lamps()
-        # start up the main themse again if a second level mode isn't running
-        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+        # start up the main theme again if a higher level mode isn't running
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn off the level 1 flag
         self.game.set_tracking('stackLevel',False,0)
@@ -314,5 +319,6 @@ class Showdown(ep.EP_Mode):
         self.delay(delay=2.1,handler=self.unload)
 
     def mode_stopped(self):
+        self.running = False
         print "SHOWDOWN IS DISPATCHING DELAYS"
         self.dispatch_delayed()
