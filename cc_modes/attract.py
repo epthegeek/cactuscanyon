@@ -57,7 +57,7 @@ class Attract(ep.EP_Mode):
 
         proc_banner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_procBanner.frames[0])
 
-        splash = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ccBanner.frames[0])
+        self.splash = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ccBanner.frames[0])
         continuedBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cccBanner.frames[0])
         self.myIndex = 0
 
@@ -67,9 +67,9 @@ class Attract(ep.EP_Mode):
 
 
         self.layers = [ {'layer':blanker,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH},
-                        {'layer':splash,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
-                        {'layer':continuedBanner,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST},
-#{'layer':continuedBanner,'type':"NONE",'direction':"DERP"},
+                        {'layer':self.splash,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
+                        #{'layer':continuedBanner,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST},
+                        {'layer':continuedBanner,'type':"NONE",'direction':"DERP"},
                         {'layer':original,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_EAST},
                         {'layer':ballyBanner,'type':ep.EP_Transition.TYPE_CROSSFADE, 'direction':False},
                         {'layer':expanded,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
@@ -134,16 +134,15 @@ class Attract(ep.EP_Mode):
         frameA = self.layers[indexA]
         frameB = self.layers[indexB]
 
-	# new type for the rolling weed animation
-	if frameB['type'] == "NONE":
-	# tumble weed wipe bits
-	    continuedBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cccBanner.frames[0])
-            anim = self.game.assets.dmd_tumbleweedRight
+        # new type for the rolling weed animation
+        if frameB['type'] == "NONE":
+            # tumble weed wipe bits
+            anim = self.game.assets.dmd_tumbleweedAttract
             weedFront = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=4)
-	    weedFront.composite_op = "blacksrc"
-	    weedBack = continuedBanner
-	    tumbleweedWipe = dmd.GroupedLayer(128,32,[weedBack,weedFront])
-	    weedWait = len(anim.frames) / 15.0
+            weedFront.composite_op = "blacksrc"
+            weedBack = self.splash
+            tumbleweedWipe = dmd.GroupedLayer(128,32,[weedBack,weedFront])
+            weedWait = len(anim.frames) / 15.0
             self.layer = tumbleweedWipe
             self.game.sound.play(self.game.assets.sfx_tumbleWind)
         # two versions of the transition creation to cover if a direction is needed or not
@@ -168,6 +167,8 @@ class Attract(ep.EP_Mode):
 
 
     def sw_flipperLwL_active(self,sw):
+        # if going left - bump the index down
+        self.myIndex -= 2
         self.flipper_action()
 
     def sw_flipperLwR_active(self,sw):

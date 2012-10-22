@@ -934,6 +934,7 @@ class Assets():
         self.dmd_tumbleweedBanner = dmd.Animation().load(self.dmd_path +'tumbleweed-banner.dmd')
         self.dmd_tumbleweedRight = dmd.Animation().load(self.dmd_path +'tumbleweed-right.dmd')
         self.dmd_tumbleweedLeft = dmd.Animation().load(self.dmd_path +'tumbleweed.dmd')
+        self.dmd_tumbleweedAttract = dmd.Animation().load(self.dmd_path +'tumbleweed-attract.dmd')
 
         self.dmd_superBlink = dmd.Animation().load(self.dmd_path +'super-blink.dmd')
         self.dmd_superSkillShot = dmd.Animation().load(self.dmd_path +'super-skill-shot.dmd')
