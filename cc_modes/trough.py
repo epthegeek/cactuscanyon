@@ -262,7 +262,7 @@ class Trough(Mode):
             if self.launch_callback:
                 self.launch_callback()
 
-    def sw_shooterLane_active_for_100ms(self,sw):
+    def sw_shooterLane_active_for_50ms(self,sw):
         print "SOLID LAUNCH, GOOD TO GO"
         # if we're ejecting - process the launch
         if self.launch_in_progress:
