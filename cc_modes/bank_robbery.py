@@ -466,7 +466,7 @@ class BankRobbery(ep.EP_Mode):
         eGuy0.frame_time=6
         eGuy0.composite_op = "blacksrc"
         eGuy0.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_explosion11)
-        eguy0.add_frame_listener(2,self.game.base.flash,param=self.flashers[self.shooter])
+        eGuy0.add_frame_listener(2,self.game.base.flash,param=self.flashers[self.shooter])
         eGuy0.add_frame_listener(4,self.game.sound.play,param=self.game.assets.sfx_explosion11)
         eGuy0.add_frame_listener(4,self.game.base.flash,param=self.flashers[self.shooter])
 
