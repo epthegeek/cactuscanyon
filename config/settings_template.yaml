@@ -160,6 +160,9 @@ Gameplay (Feature):
   'Multiball Locks Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Showdown Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
   'Attract Mode Sounds':
     options: ['Yes','No']
     default: 'Yes'

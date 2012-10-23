@@ -32,12 +32,15 @@ class Showdown(ep.EP_Mode):
     def __init__(self,game,priority):
         super(Showdown, self).__init__(game,priority)
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
+        # read the difficulty setting from the options
+        self.difficulty = self.game.user_settings['Gameplay (Feature)']['Showdown Difficulty']
 
     def mode_started(self):
         self.running = True
         self.deathTally = 0
         self.showdownValue = 300000
         self.tauntTimer = 0
+        self.ballAdded = False
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('showdownStatus') == "RUNNING":
@@ -155,10 +158,19 @@ class Showdown(ep.EP_Mode):
     def new_rack_display(self):
         # if 2 balls are in play add another
         if self.game.trough.num_balls_in_play <= 2:
-            self.add_ball()
-            self.game.interrupter.ball_added()
-        # if 3 balls are already in play
-        elif self.game.trough.num_balls_in_play == 3:
+            if self.difficulty == 'Easy':
+                self.add_ball()
+                self.game.interrupter.ball_added()
+            elif self.difficulty == 'Hard' and not self.ballAdded:
+                # for hard setting you get one extra ball - add one and set the flag
+                self.add_ball()
+                self.ballAdded = True
+                self.game.interrupter.ball_added()
+            # hit this one if difficulty is hard and there's already been a ball added
+            else:
+                pass
+        # if 3 balls are already in play - and difficulty is easy - you get a ball save
+        elif self.game.trough.num_balls_in_play == 3 and self.difficulty == 'Easy':
             self.game.ball_save.start(num_balls_to_save=1, time=10, now=True, allow_multiple_saves=False)
             self.game.interrupter.ball_save_activated()
             # this is where to show "ball added" or "ball saver on"
