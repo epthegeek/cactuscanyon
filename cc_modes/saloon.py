@@ -47,8 +47,10 @@ class Saloon(ep.EP_Mode):
         self.saloon_shot()
 
     def saloon_shot(self):
-        # if cva is ready, we do that
-        if self.game.show_tracking('cvaStatus') == "READY":
+        stackLevel = self.game.show_tracking('stackLevel')
+
+        # if cva is ready, we do that - if guns or less is running
+        if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:]:
             self.wait_until_unbusy(self.start_cva)
             return
 
@@ -61,7 +63,6 @@ class Saloon(ep.EP_Mode):
         # if drunk multiball is ready, start that, maybe
         if self.game.show_tracking('drunkMultiballStatus') == "READY":
             ## If anything other than a gun mode is running, dmb does not start
-            stackLevel = self.game.show_tracking('stackLevel')
             if True in stackLevel[:1]:
                 pass
             else:
@@ -71,15 +72,15 @@ class Saloon(ep.EP_Mode):
 
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
         if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus'):
-            if True in self.game.show_tracking('stackLevel'):
+            if True in stackLevel:
                 print "Saloon Stack bail"
                 self.kick()
                 return
             else:
                 pass
 
-        # Divert here for bionic bart if ready - unless polly is running
-        if self.game.show_tracking('bionicStatus') == "READY" and not self.game.peril:
+        # Divert here for bionic bart if ready - unless something above guns is running
+        if self.game.show_tracking('bionicStatus') == "READY" and True not in stackLevel[1:]:
             # if any of the polly modes is running, bail
             self.game.modes.add(self.game.bionic)
             self.game.bionic.start_bionic()

@@ -88,16 +88,13 @@ class DrunkMultiball(ep.EP_Mode):
     # if it lands in the mine, just kick it out
     def sw_minePopper_active_for_390ms(self,sw):
         self.game.score(2530)
-        # kick the ball
-        self.game.mountain.eject()
-        return game.SwitchStop
 
 
     def start_drunk(self):
         print "STARTING DRUNK ASS MULTIBALL"
         self.running = True
         # set the stack level
-        self.game.set_tracking('stackLevel',True,2)
+        self.game.set_tracking('stackLevel',True,3)
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "RUNNING")
         # update the lamps
@@ -313,9 +310,6 @@ class DrunkMultiball(ep.EP_Mode):
         # reset the lamps
         for mode in self.shotModes:
             mode.update_lamps()
-        # stop the music
-        self.game.sound.stop_music()
-        self.game.base.music_on(self.game.assets.music_mainTheme)
         # clear the layer
         self.layer = None
         # turn the GI back on
@@ -323,8 +317,13 @@ class DrunkMultiball(ep.EP_Mode):
         # reset the mug hits for next time
         self.game.set_tracking('beerMugHits',0)
         # set the stack flag back off
-        self.game.set_tracking('stackLevel',False,2)
-        # tick up the shots needed for next time
+        self.game.set_tracking('stackLevel',False,3)
+        stackLevel = self.game.show_tracking('stackLevel')
+        # stop the music if there isn't a higher mode running
+        if True not in stackLevel[4:]:
+            self.game.sound.stop_music()
+            # tick up the shots needed for next time
+            self.game.base.music_on(self.game.assets.music_mainTheme)
         self.game.base.mug_shots += 3
         # remove the switch blocker
         self.game.switch_blocker('remove')

@@ -99,7 +99,7 @@ class Quickdraw(ep.EP_Mode):
             self.pause()
 
     def start_quickdraw(self,side):
-        # set the level 1 stack flag
+        # set the stack flag
         self.game.set_tracking('stackLevel',True,0)
 
         # cancel any other displays
@@ -107,8 +107,6 @@ class Quickdraw(ep.EP_Mode):
             if getattr(mode, "abort_display", None):
                 mode.abort_display()
 
-        # set the flag to stop other gun modes
-        self.game.set_tracking('stackLevel',True,0)
         self.side = side
         # tick up the started stat
         self.game.increase_tracking('quickdrawsStarted')

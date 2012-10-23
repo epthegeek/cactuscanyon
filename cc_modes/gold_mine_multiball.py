@@ -96,7 +96,7 @@ class GoldMine(ep.EP_Mode):
 
     def start_multiball(self):
         # set the stack level flag - since right now only GM Multiball is on stack 3
-        self.game.set_tracking('stackLevel',True,3)
+        self.game.set_tracking('stackLevel',True,4)
         print "MULTIBALL STARTING"
         # kill the music
         print "start multiball IS KILLING THE MUSIC"
@@ -450,12 +450,13 @@ class GoldMine(ep.EP_Mode):
         self.game.set_tracking('mineStatus','OPEN')
         print "MULTIBALL ENDED"
         # start the music back up
-        if self.game.trough.num_balls_in_play != 0:
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True not in stackLevel[5:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # unset the busy flag
         self.game.base.busy = False
         # set the stack flag back off
-        self.game.set_tracking('stackLevel',False,3)
+        self.game.set_tracking('stackLevel',False,4)
         #refresh the mine lights
         self.game.update_lamps()
         # reset some junk

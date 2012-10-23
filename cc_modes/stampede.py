@@ -79,7 +79,7 @@ class Stampede(ep.EP_Mode):
         # reset the jackpot count, just in case
         self.jackpots = 0
         # set the stack layer
-        self.game.set_tracking('stackLevel',True,3)
+        self.game.set_tracking('stackLevel',True,4)
         # stop the current music
         self.game.sound.stop_music()
         # turn on a starting jackpot
@@ -213,9 +213,11 @@ class Stampede(ep.EP_Mode):
         self.delay(name="Timer",delay=6,handler=self.jackpot_shift)
 
     def end_stampede(self):
+        stackLevel = self.game.show_tracking('stackLevel')
         print "ENDING S T A M P E D E"
         # stop the music
-        self.game.sound.stop_music()
+        if True not in stackLevel[5:]:
+         self.game.sound.stop_music()
         # do a final display
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_skullsBorder.frames[0])
@@ -246,9 +248,9 @@ class Stampede(ep.EP_Mode):
         # unset the base busy flag
         self.game.base.busy = False
         # clear the stack layer
-        self.game.set_tracking('stackLevel',False,3)
+        self.game.set_tracking('stackLevel',False,4)
         # turn the main music back on
-        if self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[5:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # remove the switch blocker
         self.game.switch_blocker('remove')

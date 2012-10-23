@@ -174,7 +174,7 @@ class BankRobbery(ep.EP_Mode):
     def start_bank_robbery(self,step=1):
         if step == 1:
             # set the level 1 stack flag
-            self.game.set_tracking('stackLevel',True,1)
+            self.game.set_tracking('stackLevel',True,2)
             # set the running flag
             self.running = True
             # clear any running music
@@ -319,7 +319,7 @@ class BankRobbery(ep.EP_Mode):
         self.running = False
         self.cancel_delayed("Mode Timer")
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         self.win_display()
 
@@ -408,7 +408,7 @@ class BankRobbery(ep.EP_Mode):
         print "end_bank_robbery IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         self.layer = None
         # set the tracking on the ramps
@@ -420,7 +420,7 @@ class BankRobbery(ep.EP_Mode):
     def end_save_polly(self):
         print "ENDING SAVE POLLY"
         # turn the level 1 stack flag back off
-        self.game.set_tracking('stackLevel',False,1)
+        self.game.set_tracking('stackLevel',False,2)
         # check to see if stampede is ready - if we're not ending due to ball fail
         if self.game.trough.num_balls_in_play != 0:
             self.game.base.check_stampede()
@@ -428,7 +428,7 @@ class BankRobbery(ep.EP_Mode):
         self.game.base.busy = False
         # turn the music back on
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
         self.game.peril = False
         # remove the switch blocker

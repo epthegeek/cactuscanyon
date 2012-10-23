@@ -69,7 +69,7 @@ class Mine(ep.EP_Mode):
         if status == "LOCK":
             self.game.lamps.mineLock.enable()
         # if there is an active 0 or 1 mode, we don't allow multiball to start, so skip the light
-        elif status == "READY" and True not in stackLevel[:2]:
+        elif status == "READY":
             self.game.lamps.mineLock.schedule(0x0F0F0F0F)
         # if there's an extra ball waiting, and the mine status multiball is not running, flash the light
         if eb > 0 and status != "RUNNING":
@@ -87,11 +87,11 @@ class Mine(ep.EP_Mode):
 
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
+        # somehow this falls through despite switch stop
         if self.game.show_tracking('bionicStatus') == "RUNNING" or \
-           self.game.show_tracking('drunkMultiballStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING":
             print "WAIT, HOW DID I GET HERE"
-        # if there's an extra ball pending, award it
+            # if there's an extra ball pending, award it
             eb = self.game.show_tracking('extraBallsPending')
             if eb > 0:
                 # force the short extra ball collect
@@ -127,13 +127,16 @@ class Mine(ep.EP_Mode):
         ep.last_shot = None
 
     def mine_shot(self):
-        # if cva is ready, we do that
-        if self.game.show_tracking('cvaStatus') == "READY":
+        stackLevel = self.game.show_tracking('stackLevel')
+        print stackLevel
+
+        # if cva is ready, we do that - as long as no mode above guns is running
+        if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:]:
             self.game.modes.add(self.game.cva)
             self.game.cva.intro(entry = "mine")
             return
-        # if high noon is ready, we do that
-        if self.game.show_tracking('highNoonStatus') == "READY":
+        # if high noon is ready, we do that - as long as no mode at all is running
+        if self.game.show_tracking('highNoonStatus') == "READY" and True not in stackLevel:
             self.game.modes.add(self.game.high_noon)
             print "STARTING HIGH NOON"
             self.game.high_noon.start_highNoon()
@@ -148,13 +151,13 @@ class Mine(ep.EP_Mode):
                 lockedBalls = 9
             print "LOCKED BALLS: " + str(lockedBalls)
             # check if we should lock the ball or start multiball
-            # multiball itself will be a separate mode with switchstop that loads above this
-            # so we don't have to handle 'RUNNING' here
-            if self.game.show_tracking('mineStatus') == "READY":
-                ## If any level below is running, avoid multiball start
-                stackLevel = self.game.show_tracking('stackLevel')
-                print stackLevel
-                if True in stackLevel[2:]:
+            # if multiball is running - that handles hits to the mine
+            if self.game.show_tracking('mineStatus') == "RUNNING":
+                pass
+            # if ready, we might have to start it
+            elif self.game.show_tracking('mineStatus') == "READY":
+                # if CVA, Bionic Bart or High Noon are running, just kick back out
+                if True in stackLevel[5:]:
                     self.game.mountain.kick()
                 else:
                     self.start_multiball()

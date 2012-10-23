@@ -54,7 +54,7 @@ class Showdown(ep.EP_Mode):
         self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
 
         # set the layer tracking
-        self.game.set_tracking('stackLevel',True,0)
+        self.game.set_tracking('stackLevel',True,1)
         # set the showdown tracking
         self.game.set_tracking('showdownStatus', "RUNNING")
         # kill the GI
@@ -278,7 +278,7 @@ class Showdown(ep.EP_Mode):
         # kill the music - if nothing else is running
         # start up the main theme again if a higher level mode isn't running
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         # tally some score?
         # award the badge light - showdown/ambush is 3
@@ -303,11 +303,10 @@ class Showdown(ep.EP_Mode):
             self.game.set_tracking('badGuyUp',False,i)
         self.game.bad_guys.update_lamps()
         # start up the main theme again if a higher level mode isn't running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn off the level 1 flag
-        self.game.set_tracking('stackLevel',False,0)
+        self.game.set_tracking('stackLevel',False,1)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
         textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)

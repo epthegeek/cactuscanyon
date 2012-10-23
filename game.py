@@ -357,7 +357,7 @@ class CCGame(game.BasicGame):
         # reset the tilt status
         self.set_tracking('tiltStatus',0)
         # reset the stack levels
-        for i in range(0,4,1):
+        for i in range(0,7,1):
             self.set_tracking('stackLevel',False,i)
         # and load the skill shot
         self.modes.add(self.skill_shot)
@@ -757,7 +757,7 @@ class CCGame(game.BasicGame):
                 self.modes.add(self.switch_block)
         elif function == 'remove':
             stackLevel = self.show_tracking('stackLevel')
-            if True not in stackLevel[1:]:
+            if True not in stackLevel[2:]:
                 self.modes.remove(self.switch_block)
         else:
             pass

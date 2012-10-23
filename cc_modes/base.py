@@ -434,6 +434,7 @@ class BaseGameMode(ep.EP_Mode):
         if not self.guns_allowed():
             print "PASSING - Guns disabled"
             print self.game.show_tracking('stackLevel')
+        # Everything beyond this point only registers if there's no other mode running - so no stack checking is needed
         # cva
         elif self.game.show_tracking('cvaStatus') == "READY":
             self.game.modes.add(self.game.cva)
@@ -460,8 +461,8 @@ class BaseGameMode(ep.EP_Mode):
             self.game.modes.add(self.game.quickdraw)
             self.game.quickdraw.start_quickdraw(side)
         else:
-            # nothing here
-            pass
+            # check stampede
+            self.check_stampede()
 
     def guns_allowed(self):
         # this is for turning the guns back on if the conditions are good
@@ -669,10 +670,16 @@ class BaseGameMode(ep.EP_Mode):
             self.game.show_tracking('centerRampStage') == 5 and \
             self.game.show_tracking('leftRampStage') == 5 and \
             self.game.show_tracking('rightRampStage') == 5:
-            # this check hopefully prevents concurrent checks from colliding
-            if self.game.stampede not in self.game.modes:
-                self.game.modes.add(self.game.stampede)
-                self.game.stampede.start_stampede()
+            # don't start stampede during CVA, Bionic Bart, or High noon
+            stackLevel = self.game.show_tracking('stackLevel')
+            if True in stackLevel[5:]:
+                print "CVA, BB, or High Noon Running - no stampede"
+                pass
+            else:
+                # this check hopefully prevents concurrent checks from colliding
+                if self.game.stampede not in self.game.modes:
+                    self.game.modes.add(self.game.stampede)
+                    self.game.stampede.start_stampede()
         else:
             pass
 

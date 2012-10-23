@@ -72,7 +72,7 @@ class CvA(ep.EP_Mode):
 
     def mode_started(self):
         # set the stack level
-        self.game.set_tracking('stackLevel',True,4)
+        self.game.set_tracking('stackLevel',True,5)
         # resetting defaults
         # the transitions fail if they're too close together - this is for putting a 1 second delay in between
         self.beat = 0
@@ -823,12 +823,13 @@ class CvA(ep.EP_Mode):
         self.delay(delay = 3,handler=self.finish_up)
 
     def finish_up(self):
+        stackLevel = self.game.show_tracking('stackLevel')
         # turn the GI back on
         self.game.gi_control("ON")
         # play the ending quote
         self.game.base.priority_quote(self.game.assets.quote_cvaEnd)
         # set the stack level
-        self.game.set_tracking('stackLevel',False,4)
+        self.game.set_tracking('stackLevel',False,5)
         # turn off the running flag
         self.game.set_tracking("cvaStatus","OPEN")
         # turn off the base busy
@@ -837,7 +838,7 @@ class CvA(ep.EP_Mode):
         self.game.update_lamps()
         # turn the music back on if appropriate
         # turn the music back on
-        if not self.game.show_tracking('stackLevel',1) and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[6:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
 
         # reset the saucer x just in case

@@ -153,13 +153,14 @@ class Tracking(game.Player):
         self.player_stats['lampStatus'] = "ON"
 
         # a new idea - stack level for tracking what can or can not start
-        # Level 0 is Gunfight, Quick Draw, Ambush and showdown - only one of these can run at a time, and can finish even if a higher level starts
-        # Level 1 is Save Polly modes - only one of these can run at a time, and they are allowed to run with level 0
-        # Level 2 is drunk multiball
-        # Level 3 is goldmine multiball, stampede
-        # Level 4 is cva,
-        # level 5 is bionic bart,high noon
-        self.player_stats['stackLevel'] = [False,False,False,False,False,False]
+        # Level 0 is Gunfight, Quick Draw only one of these can run at a time, and can finish even if a higher level starts
+        # Level 1 is Ambush & Showdown
+        # Level 2 is Save Polly modes - only one of these can run at a time, and they are allowed to run with level 0
+        # Level 3 is drunk multiball
+        # Level 4 is goldmine multiball, stampede
+        # Level 5 is cva,
+        # level 6 is bionic bart,high noon
+        self.player_stats['stackLevel'] = [False,False,False,False,False,False,False]
 
         # cva OPEN, READY, RUNNING
         self.player_stats['cvaStatus'] = "OPEN"

@@ -148,7 +148,7 @@ class SavePolly(ep.EP_Mode):
     def start_save_polly(self,step=1):
         if step == 1:
             # set the level 1 stack flag
-            self.game.set_tracking('stackLevel',True,1)
+            self.game.set_tracking('stackLevel',True,2)
             # set the running flag
             self.running = True
             # clear any running music
@@ -379,7 +379,7 @@ class SavePolly(ep.EP_Mode):
             self.delay("Display",delay=myWait,handler=self.polly_died,param=2)
         if step == 2:
             stackLevel = self.game.show_tracking('stackLevel')
-            if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
+            if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
                 self.game.sound.stop_music()
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
             awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False).set_text("POLLY")
@@ -397,7 +397,7 @@ class SavePolly(ep.EP_Mode):
         print "polly_finished IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
         self.game.train.reset_toy(step=2)
         # turn off the polly display
@@ -412,7 +412,7 @@ class SavePolly(ep.EP_Mode):
     def end_save_polly(self):
         print "ENDING SAVE POLLY"
         # turn the level 1 stack flag back off
-        self.game.set_tracking('stackLevel',False,1)
+        self.game.set_tracking('stackLevel',False,2)
         # check to see if stampede is ready - if we're not ending due to ball fail
         if self.game.trough.num_balls_in_play != 0:
             self.game.base.check_stampede()
@@ -420,7 +420,7 @@ class SavePolly(ep.EP_Mode):
         self.game.base.busy = False
         # turn the music back on
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
+        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # turn off the polly indicator
         self.game.peril = False
