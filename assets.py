@@ -125,6 +125,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_explosion17, self.sfx_path + "341-sfx-explosion-17.wav")
         self.sfx_fallAndCrash1 = 'sfx_fallAndCrash1'
         self.game.sound.register_sound(self.sfx_fallAndCrash1, self.sfx_path + "101-sfx-fall-and-crash-1.wav")
+        self.sfx_smashingWood = 'sfx_smashingWood'
+        self.game.sound.register_sound(self.sfx_smashingWood, self.sfx_path + "133-sfx-smashing-wood.wav")
         self.sfx_bonusX = 'sfx_bonusX'
         self.game.sound.register_sound(self.sfx_bonusX, self.sfx_path + "036-sfx-bonus-x.wav")
         self.sfx_flourish6 = 'sfx_flourish6'
@@ -329,6 +331,8 @@ class Assets():
         self.sfx_spinDown = 'sfx_spinDown'
         self.game.sound.register_sound(self.sfx_spinDown, self.sfx_path + "145-sfx-spin-down.wav")
 
+        self.sfx_glumRiff = 'sfx_glumRiff'
+        self.game.sound.register_sound(self.sfx_glumRiff, self.sfx_path + "021-glum-riff.wav")
         self.snd_attractCollection = 'snd_attractCollection'
         self.game.sound.register_sound(self.snd_attractCollection, self.quotes_path + "1132-mayor-vote-cheetum.wav")
 
@@ -559,6 +563,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "811-polly-save-little-old-me.wav")
         self.game.sound.register_sound(self.quote_pollyPlead, self.quotes_path + "mayor-miss-polly-needs-your-help.wav")
 
+        self.quote_pollyStop = 'quote_pollyStop'
+        self.game.sound.register_sound(self.quote_pollyStop, self.quotes_path + "823-polly-stop-the-train.wav")
 
         self.quote_ttttIntro = 'quote_ttttIntro'
         self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "1193-mayor-miss-polly-tracks-2.wav")
@@ -907,6 +913,10 @@ class Assets():
         self.dmd_cowOnTracks = dmd.Animation().load(self.dmd_path+'cow-on-tracks.dmd')
         self.dmd_ttttBanner = dmd.Animation().load(self.dmd_path+'polly-peril-tttt.dmd')
         self.dmd_pollyOnTracks = dmd.Animation().load(self.dmd_path +'train-polly-on-tracks.dmd')
+
+        self.dmd_pollyMurder = dmd.Animation().load(self.dmd_path +'train-murder.dmd')
+        self.dmd_pollyDied = dmd.Animation().load(self.dmd_path + 'polly-died-text.dmd')
+        self.dmd_poutySheriff = dmd.Animation().load(self.dmd_path + 'pouty-sheriff.dmd')
 
         self.dmd_dudeShotFullBody = dmd.Animation().load(self.dmd_path+'dude-gets-shot-full-body.dmd')
         self.dmd_dudeShotShouldersUp = dmd.Animation().load(self.dmd_path+'dude-gets-shot-shoulders-up.dmd')

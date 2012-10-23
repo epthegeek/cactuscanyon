@@ -302,30 +302,37 @@ class CenterRamp(ep.EP_Mode):
         if self.game.save_polly.won:
             self.awardString = "POLLY SAVED"
             value = start_value
+            # load up the animation
+            anim = self.game.assets.dmd_trainBrakes
+            # start the full on animation
+            myWait = len(anim.frames) / 8.57
+            # setup the animated layer
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time = 7
+            animLayer.opaque = True
+            # keyframe sounds
+            animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_trainStopWithBrake)
+            # play the short chug
+            self.game.sound.play(self.game.assets.sfx_trainChugShort)
+            # turn on the animation
+            self.layer = animLayer
         else:
             self.awardString = "POLLY DIED"
             value = start_value / 10
 
+            backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
+            textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
+            textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
+            combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+            self.layer = combined
+            myWait = 1.5
+
+        self.delay(name="Display",delay=myWait,handler=self.show_award_text)
         self.awardPoints = str(ep.format_score(value))
         self.game.score_with_bonus(value)
-        # load up the animation
-        anim = self.game.assets.dmd_trainBrakes
-        # start the full on animation
-        myWait = len(anim.frames) / 8.57
-        # setup the animated layer
-        animLayer = ep.EP_AnimatedLayer(anim)
-        animLayer.hold=True
-        animLayer.frame_time = 7
-        animLayer.opaque = True
-        # keyframe sounds
-        animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_trainStopWithBrake)
-        # play the short chug
-        self.game.sound.play(self.game.assets.sfx_trainChugShort)
-        # turn on the animation
-        self.layer = animLayer
-        self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
-    def abort_display(self):
+def abort_display(self):
         self.clear_layer()
         self.cancel_delayed("Display")
 

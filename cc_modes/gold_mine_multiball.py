@@ -117,6 +117,7 @@ class GoldMine(ep.EP_Mode):
         animLayer.opaque = True
         animLayer.add_frame_listener(12,self.game.base.priority_quote,param=self.game.assets.quote_gold)
         animLayer.add_frame_listener(24,self.game.base.priority_quote,param=self.game.assets.quote_mine)
+        animLayer.add_frame_listener(43,self.game.sound.play,param=self.game.assets.sfx_smashingWood)
         # turn it on
         self.layer = animLayer
         # when the animation is over go to the next step
@@ -212,7 +213,7 @@ class GoldMine(ep.EP_Mode):
             animLayer.opaque = True
             self.layer = animLayer
             # play a quote
-            self.game.base.priority_quote(self.game.assets.quote_jackpot)
+            self.game.sound.play(self.game.assets.sfx_revRicochet)
             # loop back to step 2
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         if step == 2:
@@ -222,6 +223,8 @@ class GoldMine(ep.EP_Mode):
             jackpotLine = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_goldmineJackpot.frames[0])
             # then do the transition
             transition = ep.EP_Transition(self,backdrop,jackpotLine,ep.EP_Transition.TYPE_CROSSFADE)
+            # play a quote
+            self.game.base.priority_quote(self.game.assets.quote_jackpot)
             # and loop back for step 3
             self.delay(name="Display",delay=.8,handler=self.jackpot_hit,param=3)
         if step == 3:

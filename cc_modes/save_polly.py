@@ -168,12 +168,12 @@ class SavePolly(ep.EP_Mode):
             self.game.train.reset_toy(step=2)
             # run the animation
             anim = self.game.assets.dmd_pollyIntro
-            myWait = len(anim.frames) / 30
+            myWait = len(anim.frames) / 30.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
             self.layer = animLayer
 
             # set the timer for the mode
-            self.modeTimer = 30
+            self.modeTimer = 10
             # setup some layers
             # alternate lines for the bottom
             script = []
@@ -364,16 +364,33 @@ class SavePolly(ep.EP_Mode):
         self.polly_finished() # should delay this
 
     # fail
-    def polly_died(self):
+    def polly_died(self,step=1):
         print "OMG POLLY IS DEAD"
-        # turn off the running flag
-        self.running = False
-        # stop the train
-        self.game.train.stop()
-        # clear delays
-        self.dispatch_delayed()
-        # close up shop
-        self.polly_finished()
+        if step == 1:
+            self.running = False
+            self.game.base.play_quote(self.game.assets.quote_pollyStop)
+            # stop the train
+            self.game.train.stop()
+            anim = self.game.assets.dmd_pollyMurder
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True, opaque=True,repeat=False,frame_time=6)
+            myWait = len(anim.frames) / 10.0
+            self.layer = animLayer
+            self.game.sound.play(self.game.assets.sfx_trainChugShort)
+            self.delay("Display",delay=myWait,handler=self.polly_died,param=2)
+        if step == 2:
+            stackLevel = self.game.show_tracking('stackLevel')
+            if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
+                self.game.sound.stop_music()
+            backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
+            awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False).set_text("POLLY")
+            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False).set_text("DIED*")
+            awardTextBottom.composite_op = "blacksrc"
+            awardTextTop.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom])
+            self.layer = combined
+            duration = self.game.sound.play(self.game.assets.sfx_glumRiff)
+            self.delay("Display",delay=duration,handler=self.clear_layer)
+            self.delay(delay=duration,handler=self.polly_finished)
 
     def polly_finished(self):
         # stop the polly music
