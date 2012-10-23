@@ -36,7 +36,6 @@ class DrunkMultiball(ep.EP_Mode):
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         self.availableJackpots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
-        self.active = []
         # an animation for use in the intro
         anim = self.game.assets.dmd_reverse
         self.underLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
@@ -44,6 +43,8 @@ class DrunkMultiball(ep.EP_Mode):
     def mode_started(self):
         # fire up the switch block if it's not already loaded
         self.game.switch_blocker('add')
+        # reset the jackpots
+        self.active = []
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
