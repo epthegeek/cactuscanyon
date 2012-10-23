@@ -173,7 +173,7 @@ class SavePolly(ep.EP_Mode):
             self.layer = animLayer
 
             # set the timer for the mode
-            self.modeTimer = 10
+            self.modeTimer = 30
             # setup some layers
             # alternate lines for the bottom
             script = []

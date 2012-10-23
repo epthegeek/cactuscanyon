@@ -34,6 +34,7 @@ class BankRobbery(ep.EP_Mode):
         self.isActive = [True,True,True]
         self.shots = [self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.won = False
+        self.flashers = [self.game.coils.backLeftFlasher,self.game.coils.backRightFlasher,self.game.coils.middleRightFlasher]
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -442,6 +443,19 @@ class BankRobbery(ep.EP_Mode):
         self.shotTimer = 0
 
     def dude_shoots(self):
+        # bail if no bad guys remain
+        if True not in self.isActive:
+            return
+            # get the available bad guys into a list
+        dudes = []
+        if self.isActive[0]: dudes.append(0)
+        if self.isActive[1]: dudes.append(1)
+        if self.isActive[2]: dudes.append(2)
+        print "DUDES:"
+        print dudes
+        # pick a random guy to shoot
+        self.shooter = random.choice(dudes)
+        print "THE SHOOTER IS: " + str(self.shooter)
         # load the animation
         anim = self.game.assets.dmd_bankDude
         # math out the wait
@@ -452,21 +466,10 @@ class BankRobbery(ep.EP_Mode):
         eGuy0.frame_time=6
         eGuy0.composite_op = "blacksrc"
         eGuy0.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_explosion11)
+        eguy0.add_frame_listener(2,self.game.base.flash,param=self.flashers[self.shooter])
         eGuy0.add_frame_listener(4,self.game.sound.play,param=self.game.assets.sfx_explosion11)
+        eGuy0.add_frame_listener(4,self.game.base.flash,param=self.flashers[self.shooter])
 
-        # bail if no bad guys remain
-        if True not in self.isActive:
-            return
-        # get the available bad guys into a list
-        dudes = []
-        if self.isActive[0]: dudes.append(0)
-        if self.isActive[1]: dudes.append(1)
-        if self.isActive[2]: dudes.append(2)
-        print "DUDES:"
-        print dudes
-        # pick a random guy to shoot
-        self.shooter = random.choice(dudes)
-        print "THE SHOOTER IS: " + str(self.shooter)
         # set the position of the layer based on choice
         eGuy0.set_target_position(self.position[self.shooter],self.y_pos)
         # assign the layer to the positon of the shooter
