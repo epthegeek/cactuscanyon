@@ -44,6 +44,9 @@ class Saloon(ep.EP_Mode):
 
     def sw_saloonPopper_active_for_300ms(self,sw):
         print "Saloon popper mode - active for 300 ms"
+        self.saloon_shot()
+
+    def saloon_shot(self):
         # if cva is ready, we do that
         if self.game.show_tracking('cvaStatus') == "READY":
             self.wait_until_unbusy(self.start_cva)
@@ -63,7 +66,7 @@ class Saloon(ep.EP_Mode):
                 pass
             else:
                 self.game.modes.add(self.game.drunk_multiball)
-                self.game.drunk_multiball.start_drunk()
+                self.wait_until_unbusy(self.game.drunk_multiball.start_drunk)
             return
 
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
@@ -71,7 +74,9 @@ class Saloon(ep.EP_Mode):
             if True in self.game.show_tracking('stackLevel'):
                 print "Saloon Stack bail"
                 self.kick()
-            return
+                return
+            else:
+                pass
 
         # Divert here for bionic bart if ready - unless polly is running
         if self.game.show_tracking('bionicStatus') == "READY" and not self.game.peril:
@@ -449,3 +454,6 @@ class Saloon(ep.EP_Mode):
             print "I GOT A GUNFIGHT CALLBACK"
             self.delay(delay=2,handler=callback)
         self.delay(delay=2,handler=self.clear_layer)
+        if self.busy:
+            print "Light Gunfight - Delay timer for unbusy"
+            self.delay(delay=2,handler=self.unbusy)

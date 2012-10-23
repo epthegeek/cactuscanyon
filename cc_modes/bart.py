@@ -187,8 +187,8 @@ class Bart(ep.EP_Mode):
         # math the remaining hits
         print "HITS FOR THIS BART: " + str(self.hitsThisBart)
         print "CURRENT HITS: " + str(currentHits)
-	if self.hitsThisBart > currentHits:
-  	    self.hitsThisBart = currentHits
+        if currentHits > self.hitsThisBart:
+            self.hitsThisBart = currentHits
         hitsLeft = self.hitsThisBart - currentHits
         if hitsLeft <= 1:
             # if it is, set the status to last
@@ -247,7 +247,7 @@ class Bart(ep.EP_Mode):
         # light gunfight?
         self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
         # clear the layer
-        self.delay(delay=myWait,handler=self.clear_layer)
+        self.delay(delay=myWait,handler=self.clear_layer,param=True)
 
     def display_damage_one(self):
         print "MADE IT TO DAMAGE ONE"
@@ -296,7 +296,8 @@ class Bart(ep.EP_Mode):
         # pulse the flasher light
         self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
 
-    def clear_layer(self):
+    def clear_layer(self,stayBusy = False):
         self.layer = None
         # bart ties directly to the saloon - when this layer clears it frees up the busy flag on the saloon
-        self.game.saloon.busy = False
+        if not stayBusy:
+            self.game.saloon.busy = False
