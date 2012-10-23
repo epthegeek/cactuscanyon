@@ -41,6 +41,8 @@ class Gunfight(ep.EP_Mode):
                           self.game.assets.quote_gunfightWinDeputy,
                           self.game.assets.quote_gunfightWinSheriff,
                           self.game.assets.quote_gunfightWinMarshall]
+        self.win = False
+
     def ball_drained(self):
         print "GUNFIGHT - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
@@ -49,6 +51,41 @@ class Gunfight(ep.EP_Mode):
 
     def mode_started(self):
         self.running = True
+        self.win = False
+
+    # kill switches - they check win first, in case the ball glanced off a bad guy and then hit a target
+    def sw_leftRampEnter_active(self,sw):
+        if not self.win:
+            self.lost()
+
+    def sw_centerRampMake_active(self,sw):
+        if not self.win:
+            self.lost()
+
+    def sw_rightRampMake_active(self,sw):
+        if not self.win:
+            self.lost()
+
+    def sw_beerMug_active(self,sw):
+        if not self.win:
+            self.lost()
+
+    def sw_saloonGate_active(self,sw):
+        if not self.win:
+            self.lost()
+
+    def sw_mineEntrance_active(self,sw):
+        if not self.win:
+            self.lost()
+
+    def sw_leftLoopBottom_active(self,sw):
+        if not self.win:
+            self.lost()
+
+    def sw_rightLoopBottom_active(self,sw):
+        if not self.win:
+            self.lost()
+
 
     def start_gunfight(self,side):
         print "GUNFIGHT GOES HERE"
@@ -115,6 +152,7 @@ class Gunfight(ep.EP_Mode):
         self.delay(name="pan",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
 
     def won(self):
+        self.win = True
         # set some tracking
         self.game.increase_tracking('gunfightsWon')
         # up the rank if it's not full yet
