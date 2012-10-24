@@ -385,6 +385,10 @@ class SavePolly(ep.EP_Mode):
                 self.delay("Display",delay=myWait,handler=self.polly_died,param=2)
             # if not, just move on to polly finished
             else:
+                stackLevel = self.game.show_tracking('stackLevel')
+                if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
+                    self.game.sound.stop_music()
+                self.clear_layer()
                 self.polly_finished()
         if step == 2:
             stackLevel = self.game.show_tracking('stackLevel')

@@ -260,8 +260,8 @@ class Saloon(ep.EP_Mode):
         if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             prizes.append('extraBall')
         #   2 - Light Gun Fight - include if not currently lit via dead bart
-        #if self.game.show_tracking('bartStatus') != "DEAD":
-        #    prizes.append('lightGunFight')
+        if self.game.show_tracking('bartStatus') != "DEAD":
+            prizes.append('lightGunFight')
         #   3 - Light Quick Draw
         if "OPEN" in self.game.show_tracking('quickdrawStatus'):
             prizes.append('lightQuickdraw')
