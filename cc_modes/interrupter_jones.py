@@ -103,10 +103,10 @@ class Interrupter(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_tiltDanger)
 
     def ball_saved(self):
-	# don't show in certain situations
-	if self.game.drunk_multiball.running:
-	   return
-	# otherwise, party on
+    # don't show in certain situations
+        if self.game.drunk_multiball.running:
+            return
+        # otherwise, party on
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_dontMove)
         # show some display
@@ -121,11 +121,11 @@ class Interrupter(ep.EP_Mode):
         self.delay(delay=duration+1,handler=self.game.base.music_on,param=self.game.assets.music_goldmineMultiball)
         # and set a delay to fade it out after 2 minutes
         self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music)
-	# new line to reset the volume after fade because it may affect new game
-	self.delay("Attract Fade",delay=60.5,handler=self.reset_volume)
+        # new line to reset the volume after fade because it may affect new game
+        self.delay("Attract Fade",delay=60.5,handler=self.reset_volume)
 
     def reset_volume(self):
-	self.game.sound.set_volume(self.game.user_settings['Sound']['Initial volume'])
+        self.game.sound.set_volume(self.game.user_settings['Sound']['Initial volume'])
 
     def showdown_hit(self,points):
         pointString = ep.format_score(points)
@@ -196,15 +196,15 @@ class Interrupter(ep.EP_Mode):
             self.status()
 
     def status_on(self,side):
-	if self.game.base in self.game.modes:
+        if self.game.combos in self.game.modes:
             self.statusDisplay = side
             print "STATUS GOES HERE"
             # disable ball search
             self.game.ball_search.disable()
             # start the status display
             self.status()
-	else:
-	    pass
+        else:
+            pass
 
     def status_off(self):
         self.statusDisplay = "Off"
@@ -330,8 +330,8 @@ class Interrupter(ep.EP_Mode):
 
     def add_player(self):
         # show the score layer for a second
-	self.layer = self.game.score_display.layer
-	self.delay(delay = 1,handler=self.clear_layer)
+        self.layer = self.game.score_display.layer
+        self.delay(delay = 1,handler=self.clear_layer)
 
 
 
