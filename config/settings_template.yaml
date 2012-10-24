@@ -171,6 +171,9 @@ Gameplay (Feature):
   'Showdown Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Polly Dies Animation':
+    options: ['Show','Hide']
+    default: 'Show'
   'Attract Mode Sounds':
     options: ['Yes','No']
     default: 'Yes'

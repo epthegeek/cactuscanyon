@@ -196,11 +196,13 @@ class CCGame(game.BasicGame):
         self.switch_block = cc_modes.SwitchBlock(game=self,priority=11)
         # combos should always register - so they ride above the switch block
         self.combos = cc_modes.Combos(game=self,priority=12)
+        # drunk multiball
+        self.drunk_multiball = cc_modes.DrunkMultiball(game=self,priority=13)
 
         # save polly modes
-        self.save_polly = cc_modes.SavePolly(game=self,priority=13)
-        self.river_chase = cc_modes.RiverChase(game=self,priority=13)
-        self.bank_robbery = cc_modes.BankRobbery(game=self,priority=13)
+        self.save_polly = cc_modes.SavePolly(game=self,priority=14)
+        self.river_chase = cc_modes.RiverChase(game=self,priority=14)
+        self.bank_robbery = cc_modes.BankRobbery(game=self,priority=14)
 
         self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=16)
 
@@ -225,8 +227,6 @@ class CCGame(game.BasicGame):
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
         # gold mine multiball
         self.gm_multiball = cc_modes.GoldMine(game=self,priority=88)
-        # drunk multiball
-        self.drunk_multiball = cc_modes.DrunkMultiball(game=self,priority=88)
         # cva
         self.cva = cc_modes.CvA(game=self,priority=88)
         # bionic bart

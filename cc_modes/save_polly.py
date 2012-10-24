@@ -27,6 +27,7 @@ class SavePolly(ep.EP_Mode):
     def __init__(self,game,priority):
         super(SavePolly, self).__init__(game,priority)
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Save Polly Shots - Train']
+        self.showDeathAnimation = self.game.user_settings['Gameplay (Feature)']['Polly Dies Animation']
         self.running = False
         self.halted = False
         self.won = False
@@ -370,15 +371,21 @@ class SavePolly(ep.EP_Mode):
         print "OMG POLLY IS DEAD"
         if step == 1:
             self.running = False
-            self.game.base.play_quote(self.game.assets.quote_pollyStop)
             # stop the train
             self.game.train.stop()
-            anim = self.game.assets.dmd_pollyMurder
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True, opaque=True,repeat=False,frame_time=6)
-            myWait = len(anim.frames) / 10.0
-            self.layer = animLayer
-            self.game.sound.play(self.game.assets.sfx_trainChugShort)
-            self.delay("Display",delay=myWait,handler=self.polly_died,param=2)
+            #if we're showing the full animation, do that now
+            if self.showDeathAnimation == 'Show':
+
+                self.game.base.play_quote(self.game.assets.quote_pollyStop)
+                anim = self.game.assets.dmd_pollyMurder
+                animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True, opaque=True,repeat=False,frame_time=6)
+                myWait = len(anim.frames) / 10.0
+                self.layer = animLayer
+                self.game.sound.play(self.game.assets.sfx_trainChugShort)
+                self.delay("Display",delay=myWait,handler=self.polly_died,param=2)
+            # if not, just move on to polly finished
+            else:
+                self.polly_finished()
         if step == 2:
             stackLevel = self.game.show_tracking('stackLevel')
             if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:

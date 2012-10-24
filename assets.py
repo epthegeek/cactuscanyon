@@ -914,7 +914,7 @@ class Assets():
         self.dmd_ttttBanner = dmd.Animation().load(self.dmd_path+'polly-peril-tttt.dmd')
         self.dmd_pollyOnTracks = dmd.Animation().load(self.dmd_path +'train-polly-on-tracks.dmd')
 
-        self.dmd_pollyDied = dmd.Animation().load(self.dmd_path + 'polly-died-text.dmd')
+        self.dmd_pollyMurder = dmd.Animation().load(self.dmd_path + 'train-murder.dmd')
         self.dmd_poutySheriff = dmd.Animation().load(self.dmd_path + 'pouty-sheriff.dmd')
 
         self.dmd_dudeShotFullBody = dmd.Animation().load(self.dmd_path+'dude-gets-shot-full-body.dmd')
