@@ -306,19 +306,28 @@ class LeftRamp(ep.EP_Mode):
             self.delay(name="Display",delay=2,handler=self.game.combos.display)
 
     def anim_river_victory(self):
-        print "RIVER VICTORY"
-        anim = self.game.assets.dmd_pollyVictory
-        myWait = len(anim.frames) / 8.57
-        animLayer = ep.EP_AnimatedLayer(anim)
-        animLayer.hold=True
-        animLayer.frame_time = 7
-        animLayer.opaque = True
+        if self.game.river_chase.won:
+            print "RIVER VICTORY"
+            anim = self.game.assets.dmd_pollyVictory
+            myWait = len(anim.frames) / 8.57
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time = 7
+            animLayer.opaque = True
 
-        animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
-        animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)
-        # play animation
-        self.layer = animLayer
-        self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+            animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
+            animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)
+            # play animation
+            self.layer = animLayer
+            self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+        else:
+            backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
+            textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
+            textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
+            combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+            self.layer = combined
+            myWait = 1.5
+
         self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
     def push_out(self):

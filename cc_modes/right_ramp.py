@@ -292,18 +292,27 @@ class RightRamp(ep.EP_Mode):
             self.game.center_ramp.update_lamps()
 
     def anim_bank_victory(self):
-        print "BANK VICTORY"
-        anim = self.game.assets.dmd_pollyVictory
-        myWait = len(anim.frames) / 8.57
-        animLayer = ep.EP_AnimatedLayer(anim)
-        animLayer.hold=True
-        animLayer.frame_time = 7
-        animLayer.opaque = True
+        if self.game.bank_robbery.won:
+            print "BANK VICTORY"
+            anim = self.game.assets.dmd_pollyVictory
+            myWait = len(anim.frames) / 8.57
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time = 7
+            animLayer.opaque = True
 
-        animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
-        animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)
-        # play animation
-        self.layer = animLayer
+            animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
+            animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)
+            # play animation
+            self.layer = animLayer
+        else:
+            backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
+            textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
+            textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
+            combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+            self.layer = combined
+            myWait = 1.5
+
         self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
 
     def blink_award_text(self):
