@@ -447,7 +447,7 @@ class Saloon(ep.EP_Mode):
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
         # play a quote
         self.game.sound.play(self.game.assets.sfx_flourish6)
-        self.game.base.play_quote(self.game.assets.quote_gunfightLit)
+        self.game.base.priority_quote(self.game.assets.quote_gunfightLit)
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
         self.update_lamps()

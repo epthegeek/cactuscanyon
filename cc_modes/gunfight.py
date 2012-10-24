@@ -153,12 +153,17 @@ class Gunfight(ep.EP_Mode):
 
     def won(self):
         self.win = True
+        # default the quoteToPlay
+        quoteToPlay = self.game.assets.quote_gunWin
         # set some tracking
         self.game.increase_tracking('gunfightsWon')
         # up the rank if it's not full yet
         if self.game.show_tracking('rank') < 4:
             newrank = self.game.increase_tracking('rank')
             self.game.base.update_lamps()
+            # pick the sound to play
+            quote = random.choice([self.rankUps,self.winQuotes])
+            quoteToPlay = quote[newrank]
         # if it is full, this bit is awkward
         else:
             newrank = 4
@@ -170,12 +175,10 @@ class Gunfight(ep.EP_Mode):
             self.game.sound.stop_music()
         # cancel the lose delay
         self.cancel_delayed("Gunfight Lost")
-        # play a quote
         self.game.sound.play(self.game.assets.sfx_gunfightShot)
         self.delay(delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
-        # pick the sound to play
-        quote = random.choice([self.rankUps,self.winQuotes])
-        self.delay(delay=0.3,handler=self.game.base.priority_quote,param=quote[newrank])
+        # this plays the quoteToPlay decided above - separates ranking up from marhsall wins
+        self.delay(delay=0.3,handler=self.game.base.priority_quote,param=quoteToPlay)
         # play the animation
         anim = self.game.assets.dmd_dudeShotShouldersUp
         myWait = len(anim.frames) / 10.0

@@ -60,6 +60,10 @@ class Bart(ep.EP_Mode):
             self.setup()
 
     def hit(self,Saloon=False):
+        # cancel any other displays
+        for mode in self.game.ep_modes:
+            if getattr(mode, "abort_display", None):
+                mode.abort_display()
         # intialize this to zero to use later
         duration = 0
         # pick a random banner to use
@@ -123,7 +127,7 @@ class Bart(ep.EP_Mode):
         # if there's only 1 hit to defeat this bart, set the status to last
         if self.hitsThisBart == 1:
             self.game.set_tracking('bartStatus',"LAST")
-        self.delay(delay=1.5,handler=self.clear_layer)
+        self.delay("Display",delay=1.5,handler=self.clear_layer)
 
     def setup(self):
         # our cast of characters
@@ -158,7 +162,7 @@ class Bart(ep.EP_Mode):
         self.defeatValue = 150000 + (50000 * defeated)
         self.defeatString = locale.format("%d", self.defeatValue, True) # Add commas
         # setup the hits needed to defeat this bart
-        self.hitsThisBart = self.hitsToDefeatBart[index]
+        self.hitsThisBart = self.hitsToDefeatBart[defeated]
         # set up the name line for the cards
         print self.brother + " IS THE BROTHER"
         if self.brother != "BANDELERO":
@@ -247,7 +251,7 @@ class Bart(ep.EP_Mode):
         # light gunfight?
         self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
         # clear the layer
-        self.delay(delay=myWait,handler=self.clear_layer,param=True)
+        self.delay("Display",delay=myWait,handler=self.clear_layer,param=True)
 
     def display_damage_one(self):
         print "MADE IT TO DAMAGE ONE"
@@ -255,13 +259,13 @@ class Bart(ep.EP_Mode):
         layerOne = dmd.GroupedLayer(128,32,[self.bannerLayer,self.wantedFrameA])
         # activate it
         self.layer = layerOne
-        self.delay(delay=0.2,handler=self.display_damage_two,param=layerOne)
+        self.delay("Display",delay=0.2,handler=self.display_damage_two,param=layerOne)
 
     def display_damage_two(self,layerOne):
         # set up the second layer
         layerTwo = dmd.GroupedLayer(128,32,[self.wantedFrameB,self.textLayer])
         transition = ep.EP_Transition(self,layerOne,layerTwo,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
-        self.delay(delay = 1.5,handler=self.clear_layer)
+        self.delay("Display",delay = 1.5,handler=self.clear_layer)
 
     def move(self):
         # pulse the bart move coil
@@ -297,7 +301,11 @@ class Bart(ep.EP_Mode):
         self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
 
     def clear_layer(self,stayBusy = False):
+
         self.layer = None
         # bart ties directly to the saloon - when this layer clears it frees up the busy flag on the saloon
         if not stayBusy:
             self.game.saloon.busy = False
+
+    def abort_display(self):
+        self.cancel_delayed("Display")
