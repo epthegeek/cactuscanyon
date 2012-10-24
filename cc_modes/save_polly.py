@@ -333,19 +333,21 @@ class SavePolly(ep.EP_Mode):
 
     # success
     def polly_saved(self):
-        # this is mostly for the lights
         self.won = True
         self.running = False
         self.game.train.stop()
         self.dispatch_delayed()
-        # sound for this is self.game.assets.sfx_trainStop
         # play the train stopping animation and some sounds
-        # TODO needs sounds
         anim = self.game.assets.dmd_pollyOnTracks
         # math out the wait
         myWait = len(anim.frames) / 10.0
         # set the animation
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        # setup the animated layer
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold=True
+        animLayer.frame_time = 6
+        animLayer.opaque = True
+        animLayer.add_frame_listener(6,self.game.base.priority_quote,param=self.game.assets.quote_victory)
         # turn it on
         self.layer = animLayer
         # play the train stop noise
