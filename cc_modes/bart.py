@@ -284,13 +284,13 @@ class Bart(ep.EP_Mode):
             self.delay(delay=0.15,handler=self.not_moving)
         # this one is for just talking - for the taunts
         if version == 2:
-            self.game.coils.moveBart.schedule(0x0000000A,cycle_seconds=1)
+            self.game.coils.moveBart.schedule(0x10010001,cycle_seconds=1)
             self.game.coils.saloonFlasher.schedule(0x00000555,cycle_seconds=1)
             self.delay(delay=0.15,handler=self.not_moving)
         # this one is just the hat and the shaking with no light for bionic bart
         if version == 3:
             self.hat()
-            self.game.coils.moveBart.schedule(0x0000000A,cycle_seconds=1)
+            self.game.coils.moveBart.schedule(0x10010001,cycle_seconds=1)
             self.delay(delay=0.15,handler=self.not_moving)
 
     def not_moving(self):
