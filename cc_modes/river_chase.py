@@ -36,7 +36,6 @@ class RiverChase(ep.EP_Mode):
         # fire up the switch block if it's not already loaded
         self.game.switch_blocker('add')
         self.game.peril = True
-        self.modeTimer = 0
         self.shotsSoFar = 0
         # position for the horse
         self.x_pos = 6
@@ -46,6 +45,9 @@ class RiverChase(ep.EP_Mode):
         self.distance = 0
         self.banner = False
         self.won = False
+        # set the timer
+        self.modeTimer = self.game.user_settings['Gameplay (Feature)']['Save Polly Timer - River']
+        self.modeTimer += 1
 
         # set up the layers
         anim = self.game.assets.dmd_blankRiverLoop
@@ -174,8 +176,6 @@ class RiverChase(ep.EP_Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
             self.layer = animLayer
 
-            # set the timer for the mode
-            self.modeTimer = 30
             # loop back for the title card
             self.delay(delay=myWait,handler=self.start_river_chase,param=2)
         if step == 2:

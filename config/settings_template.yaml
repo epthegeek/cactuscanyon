@@ -146,6 +146,14 @@ Gameplay (Feature):
     options: [2,15]
     increments: 1
     default: 3
+  'Save Polly Timer - Bank':
+    options: [15,60]
+    increments: 5
+    default: 30
+  'Save Polly Timer - River':
+    options: [15,60]
+    increments: 5
+    default: 30
   'Shots to defeat Bionic Bart':
     options: [2,10]
     increments: 1

@@ -41,7 +41,6 @@ class BankRobbery(ep.EP_Mode):
         self.game.switch_blocker('add')
 
         self.game.peril = True
-        self.modeTimer = 0
         # point value for shots
         self.shotValue = 250000
         self.isActive = [True,True,True]
@@ -76,7 +75,9 @@ class BankRobbery(ep.EP_Mode):
         self.shotAnim = self.game.assets.dmd_dudeShotFullBody
         # create the layer
         self.deathWait = len(self.shotAnim.frames) / 10.0
-
+        # set the timer
+        self.modeTimer = self.game.user_settings['Gameplay (Feature)']['Save Polly Timer - Bank']
+        self.modeTimer += 1
 
         # foreground
         self.foreground = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bankInterior.frames[0])
@@ -193,8 +194,6 @@ class BankRobbery(ep.EP_Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
             self.layer = animLayer
 
-            # set the timer for the mode
-            self.modeTimer = 30
             # loop back for the title card
             self.delay(delay=myWait,handler=self.start_bank_robbery,param=2)
         if step == 2:
