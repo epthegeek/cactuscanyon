@@ -455,7 +455,10 @@ class Ambush(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
         # play a quote
-        self.game.base.play_quote(self.game.assets.quote_mobEnd)
+        if self.deathTally == 0:
+            self.game.base.play_quote(self.game.assets.quote_gunFail)
+        else:
+            self.game.base.play_quote(self.game.assets.quote_mobEnd)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
         # reset the showdown points for next time
         self.game.set_tracking('ambushPoints',0)

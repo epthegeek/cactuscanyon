@@ -154,7 +154,7 @@ class Gunfight(ep.EP_Mode):
     def won(self):
         self.win = True
         # default the quoteToPlay
-        quoteToPlay = self.game.assets.quote_gunWin
+        quoteToPlay = self.game.assets.quote_quickdrawWin
         # set some tracking
         self.game.increase_tracking('gunfightsWon')
         # up the rank if it's not full yet
