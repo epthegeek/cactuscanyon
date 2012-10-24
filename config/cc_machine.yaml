@@ -108,6 +108,8 @@ PRSwitches:
     saloonPopper:
         number: S42
         type: 'NC'
+    phantomSwitch:
+        number: S43
     topRightStandUp:
         number: S44
     beerMug:
