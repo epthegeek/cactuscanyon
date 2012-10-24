@@ -106,8 +106,8 @@ class InitialEntryMode(Mode):
 				(w, h) = self.font.size(self.letters[index])
 				#print "Drawing %d w=%d" % (index, w)
 				self.letters_font.draw(frame, self.letters[index], 128/2 - offset * letter_spread - letter_width/2 + x, 0)
-			frame.fill_rect(64-5, 0, 1, 10, 1)
-			frame.fill_rect(64+5, 0, 1, 10, 1)
+			frame.fill_rect(64-5, 0, 1, 10, 5)
+			frame.fill_rect(64+5, 0, 1, 10, 5)
 			self.lowerhalf_layer.frames += [frame]
 		self.current_letter_index = new_index
 		
