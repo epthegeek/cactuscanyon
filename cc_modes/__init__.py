@@ -51,7 +51,8 @@ __all__ = [
     'river_chase',
     'bank_robbery',
     'cva',
-    'switch_block'
+    'switch_block',
+    'marshall_multiball'
 ]
 from base import *
 from attract import *
@@ -90,3 +91,4 @@ from river_chase import *
 from bank_robbery import *
 from cva import *
 from switch_block import *
+from marshall_multiball import *

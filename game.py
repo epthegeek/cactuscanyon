@@ -229,6 +229,8 @@ class CCGame(game.BasicGame):
         self.gm_multiball = cc_modes.GoldMine(game=self,priority=88)
         # cva
         self.cva = cc_modes.CvA(game=self,priority=88)
+        # marhsall multiball
+        self.marshall_multiball = cc_modes.MarshallMultiball(game=self,priority=88)
         # bionic bart
         self.bionic = cc_modes.BionicBart(game=self,priority=90)
         # High Noon

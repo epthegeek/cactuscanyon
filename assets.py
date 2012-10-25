@@ -95,7 +95,7 @@ class Assets():
 
         self.font_skillshot = dmd.Font(self.dmd_path + "Font_20_CactusCanyon.dmd")
 
-
+        self.font_marshallScore = dmd.Font(self.dmd_path + "Font_Reel.dmd")
 
         # CC Sounds
         # Sound Effects
@@ -336,6 +336,18 @@ class Assets():
         self.snd_attractCollection = 'snd_attractCollection'
         self.game.sound.register_sound(self.snd_attractCollection, self.quotes_path + "1132-mayor-vote-cheetum.wav")
 
+        self.sfx_chime10 = 'sfx_chime10'
+        self.game.sound.register_sound(self.sfx_chime10, self.sfx_path + "BELL10.wav")
+        self.sfx_chime100 = 'sfx_chime100'
+        self.game.sound.register_sound(self.sfx_chime100, self.sfx_path + "BELL100.wav")
+        self.sfx_chime1000 = 'sfx_chime1000'
+        self.game.sound.register_sound(self.sfx_chime1000, self.sfx_path + "BELL1000.wav")
+        self.sfx_chime3000 = 'sfx_chime3000'
+        self.game.sound.register_sound(self.sfx_chime3000, self.sfx_path + "BELL3000.wav")
+        self.sfx_chime3up = 'sfx_chime3up'
+        self.game.sound.register_sound(self.sfx_chime3up, self.sfx_path + "BELL-1000-10-100.wav")
+        self.sfx_chimeIntro = 'sfx_chimeIntro'
+        self.game.sound.register_sound(self.sfx_chimeIntro, self.sfx_path + "Bell-intro.wav")
     # Quotes
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
@@ -799,6 +811,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_leaderLaugh, self.quotes_path + "1581-leader-bart-laugh-3.wav")
         self.quote_nobodysHome = 'quote_nobodysHome'
         self.game.sound.register_sound(self.quote_nobodysHome, self.quotes_path + "1853-leader-bart-nobodys-home.wav")
+        self.quote_marshallMultiball = 'quote_marshallMultiball'
+        self.game.sound.register_sound(self.quote_marshallMultiball, self.quotes_path + "544-marshall-multiball.wav")
 
 
     # Music
@@ -1070,7 +1084,8 @@ class Assets():
         self.dmd_highNoon = dmd.Animation().load(self.dmd_path+'high-noon.dmd')
         self.dmd_goodLuck = dmd.Animation().load(self.dmd_path+'good-luck.dmd')
         self.dmd_fireworks = dmd.Animation().load(self.dmd_path+'fireworks.dmd')
-        
+
+        self.dmd_marshallBorder = dmd.Animation().load(self.dmd_path+'marshall-border.dmd')
         
         # Shared Paths
         self.shared_sound_path = curr_file_path + "/shared/sound/"

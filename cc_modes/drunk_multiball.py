@@ -28,7 +28,7 @@ import ep
 import random
 
 class DrunkMultiball(ep.EP_Mode):
-    """Mining for great justice - For the Gold Mine Multiball, and ... ? """
+    """Drunk multiball mode ... """
     def __init__(self,game,priority):
         super(DrunkMultiball, self).__init__(game,priority)
         anim = self.game.assets.dmd_dmbIdle

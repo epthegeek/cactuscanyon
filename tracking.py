@@ -98,7 +98,7 @@ class Tracking(game.Player):
         self.player_stats['bountyCollected'] = 0
         self.player_stats['isBountyLit'] = False
 
-        self.player_stats['rank'] = 0
+        self.player_stats['rank'] = 3
         self.player_stats['combos'] = 0
         # needed for being able to reset the star
         self.player_stats['combosTotal'] = 0
@@ -155,7 +155,7 @@ class Tracking(game.Player):
         # Level 2 is Save Polly modes - only one of these can run at a time, and they are allowed to run with level 0
         # Level 3 is drunk multiball
         # Level 4 is goldmine multiball, stampede
-        # Level 5 is cva,
+        # Level 5 is cva,marshall
         # level 6 is bionic bart,high noon
         self.player_stats['stackLevel'] = [False,False,False,False,False,False,False]
 
@@ -165,3 +165,6 @@ class Tracking(game.Player):
         self.player_stats['tumbleweedHitsTotal'] = 0
         # cva OPEN, READY, RUNNING
         self.player_stats['cvaStatus'] = "OPEN"
+
+        self.player_stats['marshallBest'] = 0
+        self.player_stats['marshallMultiballRun'] = False

@@ -229,6 +229,12 @@ class Gunfight(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
+        # if we're at marshall, and it hasn't run yet, do the MM if nothing else is running
+        if self.game.show_tracking('rank') == 4 and self.game.show_tracking('marshallMultiballRun') == False:
+            if True not in self.game.show_tracking('stackLevel'):
+                self.game.modes.add(self.game.marshall_multiball)
+            else:
+                pass
         # unload
         self.unload()
 
