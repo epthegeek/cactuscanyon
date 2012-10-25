@@ -48,6 +48,10 @@ class Saloon(ep.EP_Mode):
 
     def saloon_shot(self):
         stackLevel = self.game.show_tracking('stackLevel')
+        # if MMB is running, just kick out
+        if self.game.marshall_multiball.running:
+            self.kick()
+            return
 
         # if cva is ready, we do that - if guns or less is running
         if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:]:

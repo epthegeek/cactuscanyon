@@ -338,14 +338,42 @@ class Assets():
 
         self.sfx_chime10 = 'sfx_chime10'
         self.game.sound.register_sound(self.sfx_chime10, self.sfx_path + "BELL10.wav")
+        self.sfx_chime20 = 'sfx_chime20'
+        self.game.sound.register_sound(self.sfx_chime20, self.sfx_path + "BELL20.wav")
+        self.sfx_chime30 = 'sfx_chime30'
+        self.game.sound.register_sound(self.sfx_chime30, self.sfx_path + "BELL30.wav")
+
         self.sfx_chime100 = 'sfx_chime100'
         self.game.sound.register_sound(self.sfx_chime100, self.sfx_path + "BELL100.wav")
+        self.sfx_chime200 = 'sfx_chime200'
+        self.game.sound.register_sound(self.sfx_chime200, self.sfx_path + "BELL200.wav")
+        self.sfx_chime300 = 'sfx_chime300'
+        self.game.sound.register_sound(self.sfx_chime300, self.sfx_path + "BELL300.wav")
+
         self.sfx_chime1000 = 'sfx_chime1000'
         self.game.sound.register_sound(self.sfx_chime1000, self.sfx_path + "BELL1000.wav")
+        self.sfx_chime2000 = 'sfx_chime2000'
+        self.game.sound.register_sound(self.sfx_chime2000, self.sfx_path + "BELL2000.wav")
         self.sfx_chime3000 = 'sfx_chime3000'
         self.game.sound.register_sound(self.sfx_chime3000, self.sfx_path + "BELL3000.wav")
-        self.sfx_chime3up = 'sfx_chime3up'
-        self.game.sound.register_sound(self.sfx_chime3up, self.sfx_path + "BELL-1000-10-100.wav")
+
+        self.sfx_chime250 = 'sfx_chime250'
+        self.game.sound.register_sound(self.sfx_chime250, self.sfx_path + "Bell-10-10-100.wav")
+        self.sfx_chime500 = 'sfx_chime500'
+        self.game.sound.register_sound(self.sfx_chime500, self.sfx_path + "Bell-100-100-10.wav")
+        self.sfx_chime1500 = 'sfx_chime1500'
+        self.game.sound.register_sound(self.sfx_chime1500, self.sfx_path + "Bell-1000-10-100.wav")
+        self.sfx_chime2500 = 'sfx_chime2500'
+        self.game.sound.register_sound(self.sfx_chime2500, self.sfx_path + "Bell-100-100-10-10-1000.wav")
+        self.sfx_chime3500 = 'sfx_chime3500'
+        self.game.sound.register_sound(self.sfx_chime3500, self.sfx_path + "Bell-1000-1000-1000-10.wav")
+        self.sfx_chime4500 = 'sfx_chime4500'
+        self.game.sound.register_sound(self.sfx_chime4500, self.sfx_path + "Bell-10-1000-10-100.wav")
+        self.sfx_chime5000 = 'sfx_chime5000'
+        self.game.sound.register_sound(self.sfx_chime5000, self.sfx_path + "Bell-1000-1000-100-100-10.wav")
+
+        self.sfx_chimeOut = 'sfx_chimeOut'
+        self.game.sound.register_sound(self.sfx_chimeOut, self.sfx_path + "Bell-100-10-1000.wav")
         self.sfx_chimeIntro = 'sfx_chimeIntro'
         self.game.sound.register_sound(self.sfx_chimeIntro, self.sfx_path + "Bell-intro.wav")
     # Quotes
