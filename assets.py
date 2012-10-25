@@ -402,6 +402,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1117-mayor-say-thats-a-pretty-good-eye-there.wav")
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1170-mayor-quite-a-knack-with-those-six-shooters-friend.wav")
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2015-waitress-i-like-that-colt-45.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1406-drunk-thats-a-good-one-buddy.wav")
         self.quote_bionicUrge = 'quote_bionicUrge'
         self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "1151-mayor-shoot-the-bad-guy.wav")
         self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "1277-prospector-the-bad-guy-shoot-the-bad-guy.wav")
@@ -502,6 +503,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "2013-waitress-that-extra-ball-is-lit-honey.wav")
         self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1258-prospector-extra-ball-is-lit.wav")
         self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1020-mayor-the-extra-ball-is-lit.wav")
+        self.game.sound.register_sound(self.quote_extraBallLit, self.quotes_path + "1036-mayor-shoot-the-mine-to-collect.wav")
         self.quote_extraBallSet = 'quote_extraBallSet'
         self.game.sound.register_sound(self.quote_extraBallSet, self.quotes_path + "2018-waitress-extra-ball.wav")
         self.quote_goodbye = 'quote_goodbye'
@@ -551,6 +553,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "2021-waitress-shoot-again.wav")
         self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "854-polly-shoot-again.wav")
         self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "875-polly-try-again-big-fella.wav")
+        self.game.sound.register_sound(self.quote_shootAgain, self.quotes_path + "1133-mayor-welcome-back.wav")
 
         self.quote_hurry = 'quote_hurry'
         self.game.sound.register_sound(self.quote_hurry, self.quotes_path + "1175-mayor-i-suggest-you-hurry-friend.wav")
@@ -593,6 +596,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1171-mayor-shoot-anything-that-pops-up.wav")
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1259-prospector-shoot-all-the-bad-guys.wav")
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1152-mayor-ive-had-about-enough-of-those-bart-boys.wav")
+        self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1401-drunk-lookout.wav")
         self.quote_mobTaunt = 'quote_mobTaunt'
         self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "2020-waitress-honey-just-shoot-anything.wav")
         self.game.sound.register_sound(self.quote_mobTaunt, self.quotes_path + "1165-mayor-aw-just-shoot-em.wav")
