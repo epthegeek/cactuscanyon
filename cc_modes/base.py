@@ -48,7 +48,10 @@ class BaseGameMode(ep.EP_Mode):
         self.doingBonus = False
 
     def mode_started(self):
+        # set the number for the hits to the beer mug to start drunk multiball
         self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
+        # set the number for tumbleweed hits to start cva
+        self.tumbleweedShots = self.game.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA']
         ## cancel the closing song delay, just in case
         self.game.interrupter.dispatch_delayed()
         # and update the lamps

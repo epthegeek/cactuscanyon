@@ -246,9 +246,13 @@ class RightLoop(ep.EP_Mode):
             #self.show_award_text()
             # New thing - Tumbleweed!
             points = self.game.increase_tracking('tumbleweedValue',5000)
+            # this number can reset for re-starting cva
             value = self.game.increase_tracking('tumbleweedHits')
-            # TODO - change this to a configurable amount
-            if value == 3:
+            # this one is a running total
+            self.game.increase_tracking('tumbleweedHitsTotal')
+            # compare the number to light cva with the current number
+            left = self.game.base.tumbleweedShots - value
+            if left == 0:
                 # enable cva
                 self.game.set_tracking('cvaStatus',"READY")
             self.game.score_with_bonus(points)

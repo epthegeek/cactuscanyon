@@ -137,7 +137,7 @@ class CCGame(game.BasicGame):
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'TumbleweedChampHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('fullLoops')
+        cat.score_for_player = lambda player: self.show_tracking('tumbleweedHitsTotal')
         cat.titles = ['Tumbleweed Champ']
         self.highscore_categories.append(cat)
 

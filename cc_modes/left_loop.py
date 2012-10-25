@@ -254,9 +254,13 @@ class LeftLoop(ep.EP_Mode):
             #else:
             # New thing - Tumbleweed!
             points = self.game.increase_tracking('tumbleweedValue',5000)
+            # this hits total can reset to re-start CVA
             value = self.game.increase_tracking('tumbleweedHits')
-            # todo - change this to a configurable amount
-            if value == 3:
+            # tick up the total hits
+            self.game.increase_tracking('tumbleweedHitsTotal')
+            # compare the number to light cva with the current number
+            left = self.game.base.tumbleweedShots - value
+            if left == 0:
                 # enable cva
                 self.game.set_tracking('cvaStatus',"READY")
 

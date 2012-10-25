@@ -40,9 +40,6 @@ class Tracking(game.Player):
 
         self.player_stats['bumperHits'] = 0
 
-        # Tumbleweed increases 5000 per shot - so the first one is actually 25000 when scored
-        self.player_stats['tumbleweedValue'] = 20000
-        self.player_stats['tumbleweedHits'] = 0
         self.player_stats['adventureCompleteValue'] = 20000
 
         self.player_stats['extraBallsTotal'] = 0
@@ -162,5 +159,9 @@ class Tracking(game.Player):
         # level 6 is bionic bart,high noon
         self.player_stats['stackLevel'] = [False,False,False,False,False,False,False]
 
+        # Tumbleweed increases 5000 per shot - so the first one is actually 25000 when scored
+        self.player_stats['tumbleweedValue'] = 20000
+        self.player_stats['tumbleweedHits'] = 0
+        self.player_stats['tumbleweedHitsTotal'] = 0
         # cva OPEN, READY, RUNNING
         self.player_stats['cvaStatus'] = "OPEN"
