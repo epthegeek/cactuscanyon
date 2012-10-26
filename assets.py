@@ -533,9 +533,11 @@ class Assets():
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1321-undertaker-your-shooting-is-killing-me.wav")
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1244-prospector-say-is-that-thing-loaded.wav")
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1280-prospector-check-the-sights.wav")
+        self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1565-leader-bart-you-missed.wav")
         self.quote_superFail = 'quote_superFail'
         self.game.sound.register_sound(self.quote_superFail, self.quotes_path + "1505-leader-bart-better-luck-next-time.wav")
         self.game.sound.register_sound(self.quote_superFail, self.quotes_path + "1563-leader-bart-aw-you-missed.wav")
+        self.game.sound.register_sound(self.quote_superFail, self.quotes_path + "1565-leader-bart-you-missed.wav")
         self.quote_beerMug = 'quote_beerMug'
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1408-drunk-hey-buddy-you-shot-my-drink.wav")
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1409-drunk-stop-shootin-at-my-drink.wav")
