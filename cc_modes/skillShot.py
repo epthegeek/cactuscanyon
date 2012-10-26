@@ -162,7 +162,7 @@ class SkillShot(ep.EP_Mode):
             self.selectedPrizes = self.selectedPrizes[4:5] + self.selectedPrizes
             count += 1
 
-	print "Selected Prizes: " + self.selectedPrizes
+        print "Selected Prizes: " + self.selectedPrizes
         # if we're not in the super skillshot, update the display right away
         if not self.super:
             print "UPDATING LAYER AFTER PRIZE GENERATE"
@@ -479,9 +479,7 @@ class SkillShot(ep.EP_Mode):
         # turn off super mode
         self.super = False
         # start the main game music
-        gfStatus = self.game.show_tracking('gunfightStatus')
-        if gfStatus != "RUNNING" and  gfStatus != "READY" and \
-           self.game.show_tracking('cvaStatus') != "RUNNING":
+        if True not in self.game.show_tracking('stackLevel'):
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # check if the award finished stampede
         self.game.base.check_stampede()
