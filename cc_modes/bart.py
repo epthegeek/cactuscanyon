@@ -162,6 +162,9 @@ class Bart(ep.EP_Mode):
         self.defeatValue = 150000 + (50000 * defeated)
         self.defeatString = locale.format("%d", self.defeatValue, True) # Add commas
         # setup the hits needed to defeat this bart
+        # trim back to 5 if over 5 defeated to avoid crash
+        if defeated > 5:
+            defeated = 5
         self.hitsThisBart = self.hitsToDefeatBart[defeated]
         # set up the name line for the cards
         print self.brother + " IS THE BROTHER"

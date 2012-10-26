@@ -56,34 +56,42 @@ class Gunfight(ep.EP_Mode):
     # kill switches - they check win first, in case the ball glanced off a bad guy and then hit a target
     def sw_leftRampEnter_active(self,sw):
         if not self.win:
+            print "Gunfight - Left ramp enter killed it"
             self.lost()
 
     def sw_centerRampMake_active(self,sw):
         if not self.win:
+            print "Gunfight - Center ramp make killed it"
             self.lost()
 
     def sw_rightRampMake_active(self,sw):
         if not self.win:
+            print "Gunfight - right ramp make killed it"
             self.lost()
 
     def sw_beerMug_active(self,sw):
         if not self.win:
+            print "Gunfight - beer mug killed it"
             self.lost()
 
     def sw_saloonGate_active(self,sw):
         if not self.win:
+            print "Gunfight - saloon gate killed it"
             self.lost()
 
     def sw_mineEntrance_active(self,sw):
         if not self.win:
+            print "Gunfight - mine entrance killed it"
             self.lost()
 
     def sw_leftLoopBottom_active(self,sw):
         if not self.win:
+            print "Gunfight - left loop bottom killed it"
             self.lost()
 
     def sw_rightLoopBottom_active(self,sw):
         if not self.win:
+            print "Gunfight - right loop bottom killed it"
             self.lost()
 
 
@@ -114,10 +122,10 @@ class Gunfight(ep.EP_Mode):
         # select our eventual target
         # 0 is the left side, it shouldn't use target 1
         if side == 0:
-            enemy = random.randrange(1,3,1)
+            enemy = random.randrange(1,4,1)
         # 1 is the right side, it shouldn't use target 3
         else:
-            enemy = random.randrange(0,2,1)
+            enemy = random.randrange(0,3,1)
             # scramble the list
         random.shuffle(badGuys)
         # pull out the enemey
@@ -204,6 +212,9 @@ class Gunfight(ep.EP_Mode):
         self.delay(delay=2,handler=self.end_gunfight)
 
     def lost(self):
+        print "Gunfight - Lost routine"
+        # cancel the delay, in case a switch sent us here
+        self.cancel_delayed("Gunfight Lost")
         # drop the bad guy
         self.game.bad_guys.target_down(self.enemy)
         # only kill the music if there's not a higher level running
@@ -218,10 +229,11 @@ class Gunfight(ep.EP_Mode):
 
     def end_gunfight(self):
         self.layer = None
-        self.game.bad_guys.update_lamps()
         # tidy up - set the gunfight status and bart brothers status to open
         self.game.set_tracking('gunfightStatus',"OPEN")
-        self.game.set_tracking('bartStatus',"OPEN")
+        # only change the bart status if he was dead - gunfights from bounty/skill shot shouldn't reset bart
+        if self.game.show_tracking('bartStatus') == "DEAD":
+            self.game.set_tracking('bartStatus',"OPEN")
         # turn off the level one flag
         self.game.set_tracking('stackLevel',False,0)
         # turn the main game music back on if a second level mode isn't running
@@ -232,9 +244,12 @@ class Gunfight(ep.EP_Mode):
         # if we're at marshall, and it hasn't run yet, do the MM if nothing else is running
         if self.game.show_tracking('rank') == 4 and self.game.show_tracking('marshallMultiballRun') == False:
             if True not in self.game.show_tracking('stackLevel'):
-                self.game.modes.add(self.game.marshall_multiball)
+                # disabled marshall multiball for now
+                #self.game.modes.add(self.game.marshall_multiball)
+                pass
             else:
                 pass
+        self.game.bad_guys.update_lamps()
         # unload
         self.unload()
 
