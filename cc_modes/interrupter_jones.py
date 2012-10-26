@@ -199,8 +199,6 @@ class Interrupter(ep.EP_Mode):
         if self.game.combos in self.game.modes:
             self.statusDisplay = side
             print "STATUS GOES HERE"
-            # disable ball search
-            self.game.ball_search.disable()
             # start the status display
             self.status()
         else:
@@ -210,8 +208,6 @@ class Interrupter(ep.EP_Mode):
         self.statusDisplay = "Off"
         print "STATUS ENDING"
         self.cancel_delayed("Display")
-        # enable ball search
-        self.game.ball_search.enable()
         # clear the layer
         self.layer = None
         # reset the page to 0
