@@ -911,4 +911,4 @@ class BaseGameMode(ep.EP_Mode):
 
     def sw_phantomSwitch_active(self,sw):
         self.game.trough.num_balls_in_play = 0
-        self.ball_drained()
+        self.game.ball_drained()

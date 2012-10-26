@@ -51,6 +51,7 @@ class DrunkMultiball(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
             self.end_save()
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+            self.game.base.busy = True
             self.end_drunk()
 
     ### switches
@@ -300,8 +301,10 @@ class DrunkMultiball(ep.EP_Mode):
         self.end_drunk()
 
     def end_drunk(self):
+        print "ENDING DRUNK MULTIBALL"
         self.running = False
         self.cancel_delayed("Display")
+        self.clear_layer()
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "OPEN")
         # reset the flippers
@@ -327,6 +330,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.base.mug_shots += 3
         # remove the switch blocker
         self.game.switch_blocker('remove')
+        self.game.base.busy = False
         # unload the mode
         self.unload()
 

@@ -443,6 +443,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1170-mayor-quite-a-knack-with-those-six-shooters-friend.wav")
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "2015-waitress-i-like-that-colt-45.wav")
         self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1406-drunk-thats-a-good-one-buddy.wav")
+        self.game.sound.register_sound(self.quote_quickdrawWin, self.quotes_path + "1538-leader-bart-aw-I-never-liked-him-anyway.wav")
         self.quote_bionicUrge = 'quote_bionicUrge'
         self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "1151-mayor-shoot-the-bad-guy.wav")
         self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "1277-prospector-the-bad-guy-shoot-the-bad-guy.wav")
