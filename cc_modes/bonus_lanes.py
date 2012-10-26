@@ -36,6 +36,9 @@ class BonusLanes(ep.EP_Mode):
         self.game.set_tracking('bonusX',1)
 
     def update_lamps(self):
+        # skip entirely if MBB is running
+        if self.game.marshall_multiball.running:
+            return
         # reset first
         self.disable_lamps()
         status = self.game.show_tracking('lampStatus')

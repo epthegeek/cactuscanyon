@@ -67,7 +67,7 @@ class Saloon(ep.EP_Mode):
         # if drunk multiball is ready, start that, maybe
         if self.game.show_tracking('drunkMultiballStatus') == "READY":
             ## If anything other than a gun mode is running, dmb does not start
-            if True in stackLevel[:1]:
+            if True in stackLevel[1:]:
                 pass
             else:
                 self.game.modes.add(self.game.drunk_multiball)

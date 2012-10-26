@@ -43,6 +43,9 @@ class Combos(ep.EP_Mode):
         self.chain = 1
 
     def update_lamps(self):
+        if self.game.marshall_multiball.running:
+            return
+
         self.disable_lamps()
 
         # high noon check

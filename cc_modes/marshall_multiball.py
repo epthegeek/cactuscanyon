@@ -32,13 +32,6 @@ class MarshallMultiball(ep.EP_Mode):
         self.pointTotal = 0
         self.running = True
         self.game.set_tracking('stackLevel',True,5)
-        # kill the music
-        self.game.sound.stop_music()
-        self.game.sound.play(self.game.assets.sfx_chime3000)
-        self.delay(delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
-        self.delay(delay=1.2,handler=self.game.sound.play,param=self.game.assets.sfx_chimeIntro)
-        self.delay(delay=1.8,handler=self.start)
-
         # set a bunch of defaults
         self.leftLoopLevel = 0
         self.leftRampLevel = 0
@@ -49,11 +42,31 @@ class MarshallMultiball(ep.EP_Mode):
         self.completedSets = 0
         # for the mine/saloon
         self.activeHole = 0
+        # kill the music
+        self.game.sound.stop_music()
+        # kill the lights
+        self.update_lamps()
+        # chase the rank lamps
+        self.game.lamps.rankStranger.schedule(0xFFF00000)
+        self.game.lamps.rankPartner.schedule(0x0FFF0000)
+        self.game.lamps.rankDeputy.schedule(0x000FFF00)
+        self.game.lamps.rankSheriff.schedule(0x0000FFF0)
+        self.game.lamps.rankMarshall.schedule(0x00000FFF)
+
+        self.game.sound.play(self.game.assets.sfx_chime3000)
+        self.delay(delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
+        self.delay(delay=1.2,handler=self.game.sound.play,param=self.game.assets.sfx_chimeIntro)
+        self.delay(delay=1.8,handler=self.start)
+
 
     def ball_drained(self):
-        if self.game.trough.num_balls_in_play in (1,0) and self.running:
-            self.game.base.busy = True
-            self.end()
+        print "HEY MMB, A BALL DRAINED, PAY ATTENTION"
+        print "THERE ARE " + str(self.game.trough.num_balls_in_play) + " BALLS IN PLAY"
+        if self.running:
+            print "WELL MMB KNOWS IT IS RUNNING"
+            if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
+                self.game.base.busy = True
+                self.end_mmb()
 
     # lamps
     def update_lamps(self):
@@ -62,84 +75,109 @@ class MarshallMultiball(ep.EP_Mode):
         # then turn on what's needed
         # left loop
         if self.leftLoopLevel == 0:
-            pass
+            self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
         if self.leftLoopLevel >= 1:
             self.game.lamps.leftLoopBuckNBronco.enable()
+            self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
         if self.leftLoopLevel >= 2:
             self.game.lamps.leftLoopWildRide.enable()
+            self.game.lamps.leftLoopRideEm.eschedule(0x00FF00FF)
         if self.leftLoopLevel >= 3:
             self.game.lamps.leftLoopRideEm.enable()
+            self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
         if self.leftLoopLevel >= 4:
             self.game.lamps.leftLoopJackpot.enable()
+            self.game.lamps.leftLoopCombo.schedule(0x00FF00FF)
         if self.leftLoopLevel == 5:
             self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
             self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
             self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
             self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopCombo.schedule(0x00FF00FF)
         # left ramp
         if self.leftRampLevel == 0:
-            pass
+            self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
         if self.leftRampLevel >= 1:
             self.game.lamps.leftRampWhiteWater.enable()
+            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
         if self.leftRampLevel >= 2:
             self.game.lamps.leftRampWaterfall.enable()
+            self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
         if self.leftRampLevel >= 3:
             self.game.lamps.leftRampSavePolly.enable()
+            self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
         if self.leftRampLevel >= 4:
             self.game.lamps.leftRampJackpot.enable()
+            self.game.lamps.leftRampCombo.schedule(0x00FF00FF)
         if self.leftRampLevel == 5:
             self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
             self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
+            self.game.lamps.leftRampCombo.schedule(0x00FF00FF)
         # center ramp
         if self.centerRampLevel == 0:
-            pass
+            self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
         if self.centerRampLevel >= 1:
             self.game.lamps.centerRampCatchTrain.enable()
+            self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
         if self.centerRampLevel >= 2:
             self.game.lamps.centerRampStopTrain.enable()
+            self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
         if self.centerRampLevel >= 3:
             self.game.lamps.centerRampSavePolly.enable()
+            self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
         if self.centerRampLevel >= 4:
             self.game.lamps.centerRampJackpot.enable()
+            self.game.lamps.centerRampCombo.schedule(0x00FF00FF)
         if self.centerRampLevel == 5:
             self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
             self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
             self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
             self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
+            self.game.lamps.centerRampCombo.schedule(0x00FF00FF)
         # right loop
         if self.rightLoopLevel == 0:
-            pass
+            self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
         if self.rightLoopLevel >= 1:
             self.game.lamps.rightLoopGoodShot.enable()
+            self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
         if self.rightLoopLevel >= 2:
             self.game.lamps.rightLoopGunslinger.enable()
+            self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
         if self.rightLoopLevel >= 3:
             self.game.lamps.rightLoopMarksman.enable()
+            self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
         if self.rightLoopLevel >= 4:
             self.game.lamps.rightLoopJackpot.enable()
+            self.game.lamps.rightLoopCombo.schedule(0x00FF00FF)
         if self.rightLoopLevel == 5:
             self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
             self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
             self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
             self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopCombo.schedule(0x00FF00FF)
         # right ramp
         if self.rightRampLevel == 0:
-            pass
+            self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
         if self.rightRampLevel >= 1:
             self.game.lamps.rightRampSoundAlarm.enable()
+            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
         if self.rightRampLevel >= 2:
             self.game.lamps.rightRampShootOut.enable()
+            self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
         if self.rightRampLevel >= 3:
             self.game.lamps.rightRampSavePolly.enable()
+            self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
         if self.rightRampLevel >= 4:
             self.game.lamps.rightRampJackpot.enable()
+            self.game.lamps.rightRampCombo.schedule(0x00FF00FF)
         if self.rightRampLevel == 5:
             self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
             self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
             self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+            self.game.lamps.rightRampCombo.schedule(0x00FF00FF)
 
 
 
@@ -406,9 +444,11 @@ class MarshallMultiball(ep.EP_Mode):
 
 
     # finish up
-    def end(self):
+    def end_mmb(self):
         # stop the score from updating
         self.cancel_delayed("Score Display")
+        # clear the layer
+        self.clear_layer()
         # store up the final score - if better than any previous run
         if self.pointTotal > self.game.show_tracking('marshallBest'):
             self.game.set_tracking('marshallBest',self.pointTotal)
@@ -417,7 +457,15 @@ class MarshallMultiball(ep.EP_Mode):
         # kill the running flag
         self.running = False
         self.game.set_tracking('stackLevel',False,5)
+        # turn the music back on
+        if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
+            self.game.base.music_on(self.game.assets.music_mainTheme)
+
         # turn off the base busy flag
         self.game.base.busy = False
         # unload
         self.unload()
+
+    def mode_stopped(self):
+        # turn the lights back on
+        self.game.update_lamps()

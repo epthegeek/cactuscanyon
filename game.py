@@ -278,7 +278,8 @@ class CCGame(game.BasicGame):
                          self.bank_robbery,
                          self.river_chase,
                          self.cva,
-                         self.switch_block]
+                         self.switch_block,
+                         self.marshall_multiball]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
