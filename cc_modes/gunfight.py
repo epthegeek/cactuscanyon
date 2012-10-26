@@ -223,11 +223,11 @@ class Gunfight(ep.EP_Mode):
             print "GUNFIGHT LOST IS KILLING THE MUSIC"
             self.game.sound.stop_music()
         # play a quote
-        self.game.base.play_quote(self.game.assets.quote_gunFail)
+        duration = self.game.base.play_quote(self.game.assets.quote_gunFail)
         # shut things down
-        self.end_gunfight()
+        self.end_gunfight(duration)
 
-    def end_gunfight(self):
+    def end_gunfight(self,waitTime=0):
         self.layer = None
         # tidy up - set the gunfight status and bart brothers status to open
         self.game.set_tracking('gunfightStatus',"OPEN")
@@ -245,8 +245,7 @@ class Gunfight(ep.EP_Mode):
         if self.game.show_tracking('rank') == 4 and self.game.show_tracking('marshallMultiballRun') == False:
             if True not in self.game.show_tracking('stackLevel'):
                 # disabled marshall multiball for now
-                #self.game.modes.add(self.game.marshall_multiball)
-                pass
+                self.delay(delay=waitTime,handler=self.game.base.kickoff_marshall)
             else:
                 pass
         self.game.bad_guys.update_lamps()
@@ -347,3 +346,4 @@ class Gunfight(ep.EP_Mode):
         self.running = False
         print "GUNFIGHT IS DISPATCHING DELAYS"
         self.dispatch_delayed()
+

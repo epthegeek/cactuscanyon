@@ -324,7 +324,10 @@ class SkillShot(ep.EP_Mode):
             ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
             awardStringBottom = "TO " + ranks[newRank]
             # play the appropriate rank quote
-            self.game.base.play_quote(self.rankSounds[newRank])
+            duration = self.game.base.play_quote(self.rankSounds[newRank])
+            # if we've made it to marshall, that should start
+            if newRank == 4:
+                self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
 
         elif self.selectedPrizes[5:] == "L":
             self.game.score_with_bonus(1000)

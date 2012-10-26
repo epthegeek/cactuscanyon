@@ -905,6 +905,10 @@ class BaseGameMode(ep.EP_Mode):
     def flash(self,bulb):
         bulb.pulse(30)
 
+    # for starting marshall multiball, so other modes can reference it and then quit if necessary
+    def kickoff_marshall(self):
+        self.game.modes.add(self.game.marshall_multiball)
+
     def sw_phantomSwitch_active(self,sw):
         self.game.trough.num_balls_in_play = 0
         self.ball_drained()

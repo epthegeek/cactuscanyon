@@ -53,10 +53,13 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.lamps.rankSheriff.schedule(0x0000FFF0)
         self.game.lamps.rankMarshall.schedule(0x00000FFF)
 
-        self.game.sound.play(self.game.assets.sfx_chime3000)
-        self.delay(delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
-        self.delay(delay=1.2,handler=self.game.sound.play,param=self.game.assets.sfx_chimeIntro)
-        self.delay(delay=1.8,handler=self.start)
+        # play the quote
+        duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
+
+        self.delay(delay=duration+0.2,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
+        self.delay(delay=duration+0.8,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
+        self.delay(delay=duration+1.4,handler=self.game.sound.play,param=self.game.assets.sfx_chimeIntro)
+        self.delay(delay=duration+2,handler=self.start)
 
 
     def ball_drained(self):
@@ -81,7 +84,7 @@ class MarshallMultiball(ep.EP_Mode):
             self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
         if self.leftLoopLevel >= 2:
             self.game.lamps.leftLoopWildRide.enable()
-            self.game.lamps.leftLoopRideEm.eschedule(0x00FF00FF)
+            self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
         if self.leftLoopLevel >= 3:
             self.game.lamps.leftLoopRideEm.enable()
             self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
@@ -349,8 +352,6 @@ class MarshallMultiball(ep.EP_Mode):
     def start(self):
         # tag this player as having run the MB so it doesn't repeat
         self.game.set_tracking('marshallMultiballRun',True)
-        # play the quote
-        self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
         # launch an extra ball
         if self.game.trough.num_balls_in_play < 2:
             self.game.trough.balls_to_autoplunge = 1
