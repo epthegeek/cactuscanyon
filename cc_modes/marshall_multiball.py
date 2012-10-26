@@ -42,16 +42,22 @@ class MarshallMultiball(ep.EP_Mode):
         self.completedSets = 0
         # for the mine/saloon
         self.activeHole = 0
+        # For the rank lamps
+        self.rankHits = [False,False,False,False,False]
+        # for the badge points
+        self.badgeHits = 0
+        # 'jackpot' mode
+        self.jackpot = False
+        # timer for targets
+        self.targetTime = 7
+        # active targets
+        self.activeTargets = [False,False,False,False]
+        # bonus lanes
+        self.bonusLanes = [False,False]
         # kill the music
         self.game.sound.stop_music()
         # kill the lights
         self.update_lamps()
-        # chase the rank lamps
-        self.game.lamps.rankStranger.schedule(0xFFF00000)
-        self.game.lamps.rankPartner.schedule(0x0FFF0000)
-        self.game.lamps.rankDeputy.schedule(0x000FFF00)
-        self.game.lamps.rankSheriff.schedule(0x0000FFF0)
-        self.game.lamps.rankMarshall.schedule(0x00000FFF)
 
         # play the quote
         duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
@@ -91,7 +97,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.leftLoopLevel >= 4:
             self.game.lamps.leftLoopJackpot.enable()
             self.game.lamps.leftLoopCombo.schedule(0x00FF00FF)
-        if self.leftLoopLevel == 5:
+        if self.leftLoopLevel == 5 or self.jackpot:
             self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
             self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
             self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
@@ -112,7 +118,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.leftRampLevel >= 4:
             self.game.lamps.leftRampJackpot.enable()
             self.game.lamps.leftRampCombo.schedule(0x00FF00FF)
-        if self.leftRampLevel == 5:
+        if self.leftRampLevel == 5 or self.jackpot:
             self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
@@ -133,7 +139,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.centerRampLevel >= 4:
             self.game.lamps.centerRampJackpot.enable()
             self.game.lamps.centerRampCombo.schedule(0x00FF00FF)
-        if self.centerRampLevel == 5:
+        if self.centerRampLevel == 5 or self.jackpot:
             self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
             self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
             self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
@@ -154,7 +160,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.rightLoopLevel >= 4:
             self.game.lamps.rightLoopJackpot.enable()
             self.game.lamps.rightLoopCombo.schedule(0x00FF00FF)
-        if self.rightLoopLevel == 5:
+        if self.rightLoopLevel == 5 or self.jackpot:
             self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
             self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
             self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
@@ -175,14 +181,51 @@ class MarshallMultiball(ep.EP_Mode):
         if self.rightRampLevel >= 4:
             self.game.lamps.rightRampJackpot.enable()
             self.game.lamps.rightRampCombo.schedule(0x00FF00FF)
-        if self.rightRampLevel == 5:
+        if self.rightRampLevel == 5 or self.jackpot:
             self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
             self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
             self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
             self.game.lamps.rightRampCombo.schedule(0x00FF00FF)
-
-
+        # rank lights - if true for position, enable
+        if self.rankHits[0]:
+            self.game.lamps.rankStranger.enable()
+        if self.rankHits[1]:
+            self.game.lamps.rankPartner.enable()
+        if self.rankHits[2]:
+            self.game.lamps.rankDeputy.enable()
+        if self.rankHits[3]:
+            self.game.lamps.rankSheriff.enable()
+        if self.rankHits[4]:
+            self.game.lamps.rankMarshall.enable()
+        # if jackpot they all flash
+        if self.jackpot:
+            self.game.lamps.rankStranger.schedule(0xFFF00000)
+            self.game.lamps.rankPartner.schedule(0x0FFF0000)
+            self.game.lamps.rankDeputy.schedule(0x000FFF00)
+            self.game.lamps.rankSheriff.schedule(0x0000FFF0)
+            self.game.lamps.rankMarshall.schedule(0x00000FFF)
+        # badge lights
+        if self.badgeHits >= 1:
+            self.game.lamps.starMotherlode.enable()
+        if self.badgeHits >= 2:
+            self.game.lamps.starCombo.enable()
+        if self.badgeHits >= 3:
+            self.game.lamps.starBartBrothers.enable()
+        if self.badgeHits >= 4:
+            self.game.lamps.starShowdown.enable()
+        if self.jackpot >= 5:
+            self.game.lamps.starMotherlode.schedule(0x00FF00FF)
+            self.game.lamps.starCombo.schedule(0x00FF00FF)
+            self.game.lamps.starBartBrothers.schedule(0x00FF00FF)
+            self.game.lamps.starShowdown.schedule(0x00FF00FF)
+            self.game.lamps.starStampede.schedule(0x00FF00FF)
+            self.game.lamps.starHighNoon.schedule(0x00FF00FF)
+        # bonus lane lights
+        if self.bonusLanes[0]:
+            self.game.lamps.leftBonusLane.enable()
+        if self.bonusLanes[1]:
+            self.game.lamps.rightBonusLane.enable()
 
     def disable_lamps(self):
     # turn off all the lights
@@ -196,20 +239,32 @@ class MarshallMultiball(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_leftLoopTop_active(self,sw):
+        if self.jackpot:
+            self.jackpot_shot()
+            return
+
         self.leftLoopLevel += 1
         self.main_shot_routine(self.leftLoopLevel)
         # then reset the level if over
         if self.leftLoopLevel == 6:
             self.leftLoopLevel = 0
+            # turn on the rank light for this shot
+            self.light_rank(0)
         return game.SwitchStop
 
     # left ramp
     def sw_leftRampEnter_active(self,sw):
+        if self.jackpot:
+            self.jackpot_shot()
+            return
+
         self.leftLoopLevel += 1
         self.main_shot_routine(self.leftLoopLevel)
         # then reset the level if over
         if self.leftLoopLevel == 6:
             self.leftLoopLevel = 0
+            # turn on the rank light for this shot
+            self.light_rank(1)
         return game.SwitchStop
 
     def sw_leftRampMake_active(self,sw):
@@ -220,11 +275,17 @@ class MarshallMultiball(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_centerRampMake_active(self,sw):
+        if self.jackpot:
+            self.jackpot_shot()
+            return
+
         self.centerRampLevel += 1
         self.main_shot_routine(self.centerRampLevel)
         # then reset the level if over
         if self.centerRampLevel == 6:
             self.centerRampLevel = 0
+            # turn on the rank light for this shot
+            self.light_rank(2)
         return game.SwitchStop
 
     #right loop
@@ -233,11 +294,18 @@ class MarshallMultiball(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_rightLoopTop_active(self,sw):
+        if self.jackpot:
+            self.jackpot_shot()
+            return
+
         self.rightLoopLevel += 1
         self.main_shot_routine(self.rightLoopLevel)
         # then reset the level if over
         if self.rightLoopLevel == 6:
             self.rightLoopLevel = 0
+            # turn on the rank light for this shot
+            self.light_rank(3)
+
         return game.SwitchStop
 
     #right ramp
@@ -245,11 +313,18 @@ class MarshallMultiball(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
+        if self.jackpot:
+            self.jackpot_shot()
+            return
+
         self.rightRampLevel += 1
         self.main_shot_routine(self.rightRampLevel)
         # then reset the level if over
         if self.rightRampLevel == 6:
             self.rightRampLevel = 0
+            # turn on the rank light for this shot
+            self.light_rank(4)
+
         return game.SwitchStop
 
     def sw_rightRampBottom_active(self,sw):
@@ -275,11 +350,11 @@ class MarshallMultiball(ep.EP_Mode):
 
     # bonus lanes
     def sw_leftBonusLane_active(self,sw):
-        self.register(10)
+        self.bonus_lane_hit(0)
         return game.SwitchStop
 
     def sw_rightBonusLane_active(self,sw):
-        self.register(10)
+        self.bonus_lane_hit(1)
         return game.SwitchStop
 
     # beer mug
@@ -293,7 +368,7 @@ class MarshallMultiball(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_bottomLeftStandUp_active(self,sw):
-        self.register(10)
+        self.register(100)
         return game.SwitchStop
 
     def sw_topRightStandUp_active(self,sw):
@@ -301,7 +376,7 @@ class MarshallMultiball(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_bottomRightStandUp_active(self,sw):
-        self.register(10)
+        self.register(100)
         return game.SwitchStop
 
     # slingshots
@@ -443,6 +518,61 @@ class MarshallMultiball(ep.EP_Mode):
     def score(self,points):
         self.pointTotal += points
 
+    def light_rank(self,shot):
+        # set that light to true
+        self.rankHits[shot] = True
+        # if they're all lit now, then light a badge point
+        if False not in self.rankHits:
+            self.light_badge()
+        # and update the lights
+        self.update_lamps()
+
+    def light_badge(self):
+        # increase the lit badge points
+        self.badgeHits += 1
+        # if we're now at 5, it's jackpot time
+        if self.badgeHits >= 5:
+            self.jackpot_mode(True)
+        # and then update the lights
+        self.update_lamps()
+
+    def jackpot_mode(self,value):
+        # set the flag
+        self.jackpot = value
+        # update the lights
+        self.update_lamps()
+        # if jackpot is active, set the timer to turn it off
+        if self.jackpot == True:
+            # TODO make this a configurable timer
+            self.delay(delay=20,handler=self.jackpot_mode,param=False)
+            # fire off the big bell
+            self.game.sound.play(self.game.assets.sfx_churchBell)
+        # if jackpots are ending, reset some things
+        else:
+            self.badgeHits = 0
+            self.rankHits = [False,False,False,False,False]
+
+    def jackpot_shot(self):
+        # all main shots in jakcpot mode score 5000
+        self.register(5000)
+
+    def bonus_lane_hit(self,side):
+        # if lit - score 20
+        if self.bonusLanes[side]:
+            self.register(20)
+        # if it's not lit
+        else:
+            # light it up
+            self.bonusLanes[side] = True
+            # if they're now both lit - that's 1500 and reset
+            if False not in self.bonusLanes:
+                self.register(1500)
+                self.bonusLanes = [False,False]
+            # if this is the first one lit, it's worth 500
+            else:
+                self.register(500)
+            # and update the lamps
+            self.update_lamps()
 
     # finish up
     def end_mmb(self):
