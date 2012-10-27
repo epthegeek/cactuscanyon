@@ -308,6 +308,7 @@ class Mine(ep.EP_Mode):
         self.layer = animLayer
         self.delay(delay=1,handler=self.game.base.play_quote,param=self.game.assets.quote_pollyHelp)
         self.delay(name="Display",delay=myWait,handler=self.lock_display_text)
+        self.delay(delay=myWait+2.1,handler=self.game.restore_music)
 
     def play_ball_two_lock_anim(self):
         self.cancel_delayed("Display")
@@ -329,6 +330,7 @@ class Mine(ep.EP_Mode):
         # play the animation
         self.layer = animLayer
         self.delay(name="Display",delay=myWait,handler=self.lock_display_text,param=2)
+        self.delay(delay=myWait+2.1,handler=self.game.restore_music)
 
     def lock_display_text(self,lock=1):
         if lock == 1:
@@ -342,7 +344,6 @@ class Mine(ep.EP_Mode):
         if self.game.switches.minePopper.is_active():
             self.delay(delay=2,handler=self.game.mountain.eject)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
-        self.delay(delay=2.1,handler=self.game.restore_music)
         #if we had a callback, process that - it's for the skillshot ending
         if self.callback:
             self.delay(delay=2,handler=self.callback)
