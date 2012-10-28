@@ -189,8 +189,8 @@ class DrunkMultiball(ep.EP_Mode):
             self.game.trough.balls_to_autoplunge = thisMany
             self.game.trough.launch_balls(thisMany)
         # start a ball save
-        #self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
-        self.delay(delay=2,handler=self.dmb_ball_save)
+        self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
+        #self.delay(delay=2,handler=self.dmb_ball_save)
         self.update_display()
 
     def dmb_ball_save(self):
