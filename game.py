@@ -344,7 +344,7 @@ class CCGame(game.BasicGame):
         # turn on the GI
         self.gi_control("ON")
         # set peril (polly indicator) to false
-        self.polly = False
+        self.peril = False
         # reset the pop bumper count
         self.set_tracking('bumperHits',0)
         # reset the player bonus

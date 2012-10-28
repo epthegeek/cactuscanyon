@@ -451,7 +451,10 @@ class GoldMine(ep.EP_Mode):
         print "MULTIBALL ENDED"
         # start the music back up
         stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[5:] and self.game.trough.num_balls_in_play != 0:
+        # if save polly is running, turn that on instead
+        if self.game.peril:
+            self.game.base.music_on(self.game.assets.music_pollyPeril)
+        elif True not in stackLevel[5:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # unset the busy flag
         self.game.base.busy = False

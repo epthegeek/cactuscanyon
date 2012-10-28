@@ -40,6 +40,7 @@ class Mine(ep.EP_Mode):
             self.hitsToLightLock = [1,1,1,2,2,2,3,3,3,4]
         self.hold = False
         self.callback = None
+        self.collectingEB = False
 
     def mode_started(self):
         self.update_lamps()
@@ -404,6 +405,8 @@ class Mine(ep.EP_Mode):
             self.extra_ball_ending(isLong=False)
         # otherwise play the whole animation
         else:
+            # set the flag here for being able to abort
+            self.collectingEB = True
             # load up the animation
             anim = self.game.assets.dmd_extraBall
             # start the full on animation
@@ -428,13 +431,13 @@ class Mine(ep.EP_Mode):
             # turn that sucker on
             self.layer = animLayer
             # after a delay, play the ending
-            self.delay(delay=myWait,handler=self.extra_ball_ending)
+            self.delay("Collecting",delay=myWait,handler=self.extra_ball_ending)
 
     def extra_ball_ending(self,isLong=True):
         # play a quote
         if isLong:
             # play this quote
-            self.game.base.play_quote(self.game.assets.quote_extraBallGuy)
+            self.game.base.priority_quote(self.game.assets.quote_extraBallGuy)
         else:
             # play this other quote
             self.game.base.play_quote(self.game.assets.quote_extraBallSet)
@@ -451,6 +454,12 @@ class Mine(ep.EP_Mode):
         self.delay(delay=3,handler=self.game.restore_music)
         # update lamps to turn on the EB light
         self.game.base.update_lamps()
+
+    def abort_extra_ball(self):
+        self.collectingEB = False
+        self.clear_layer()
+        self.cancel_delayed("Collecting")
+        self.extra_ball_ending(False)
 
     def abort_display(self):
         self.clear_layer()

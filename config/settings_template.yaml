@@ -110,7 +110,7 @@ Gameplay (Feature):
   'Combo Timer':
     options: [3,10]
     increments: 1
-    default: 5
+    default: 7
   'Combos for Star':
     options: [5,20]
     increments: 1

@@ -621,24 +621,38 @@ class BaseGameMode(ep.EP_Mode):
 
     ## Flipper switch detection for flipping the bonus lanes
     def sw_flipperLwL_active(self,sw):
+        # if both flippers are hit, kill the bonus
+        if self.game.switches.flipperLwL.is_active():
+            # if the bonus is active, kill that
+            if self.doingBonus:
+                self.abort_bonus()
+            # if the long form extra ball thing is running, kill that
+            elif self.game.mine.collectingEB:
+                self.game.mine.abort_extra_ball()
+            else:
+                pass
         # if no balls in play, don't do this.
         if self.game.trough.num_balls_in_play == 0:
             return
         # toggle the bonus lane
         self.game.bonus_lanes.flip()
-        # if both flippers are hit, kill the bonus
-        if self.game.switches.flipperLwL.is_active() and self.doingBonus:
-            self.abort_bonus()
 
     def sw_flipperLwR_active(self,sw):
+        # if both flippers are hit kill the bonus
+        if self.game.switches.flipperLwR.is_active():
+            # if the bonus is active, kill that
+            if self.doingBonus:
+                self.abort_bonus()
+            # if the long form extra ball thing is running, kill that
+            elif self.game.mine.collectingEB:
+                self.game.mine.abort_extra_ball()()
+            else:
+                pass
         # if no balls in play, don't do this.
         if self.game.trough.num_balls_in_play == 0:
             return
         # toggle the bonus lane
         self.game.bonus_lanes.flip()
-        # if both flippers are hit kill the bonus
-        if self.game.switches.flipperLwR.is_active() and self.doingBonus:
-            self.abort_bonus()
 
     ### shooter lane stuff
 
@@ -834,12 +848,12 @@ class BaseGameMode(ep.EP_Mode):
         times -= 1
         if times <= 0:
             # if we're at the last one, it's time to finish up
-            self.delay("Bonus Display",delay=1.5,handler=self.reveal_bonus,param=self.runningTotal)
+            self.delay("Bonus Display",delay=1.5,handler=self.reveal_bonus)
         else:
             # if not, loop back around after a delay
             self.delay("Bonus Display",delay=0.5,handler=self.display_bonus,param=times)
 
-    def reveal_bonus(self,points):
+    def reveal_bonus(self):
         # load up the animation
         anim = self.game.assets.dmd_burstWipe
         myWait = len(anim.frames) / 15.0
@@ -847,9 +861,9 @@ class BaseGameMode(ep.EP_Mode):
         animLayer.hold = True
         animLayer.frame_time = 4
         self.layer = animLayer
-        self.delay("Bonus Display",delay=myWait,handler=self.finish_bonus,param=points)
+        self.delay("Bonus Display",delay=myWait,handler=self.finish_bonus)
 
-    def finish_bonus(self,points):
+    def finish_bonus(self):
         # set up the text display
         anim = self.game.assets.dmd_burstWipe2
         myWait = len(anim.frames) / 15.0 + 1.5
@@ -873,9 +887,10 @@ class BaseGameMode(ep.EP_Mode):
     def abort_bonus(self):
         # unset the flag
         self.doingBonus = False
+        # cancel the display
+        self.cancel_delayed("Bonus Display")
         # and do the end bits
-        self.game.ball_ended()
-        self.clear_layer()
+        self.finish_bonus()
 
     # bozo ball action
     def enable_bozo_ball(self):
