@@ -243,16 +243,18 @@ class Attract(ep.EP_Mode):
     # as lost?
 
     def sw_startButton_active(self, sw):
-        # If the trough is full start a game
-
-        if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
-            # kill the lampshow
-            self.game.lampctrl.stop_show()
-            # Initialize game
-            self.game.start_game()
-        else:
-            print "BALL SEARCH"
-            self.game.ball_search.perform_search(1)
+        # If the trough is full start a game - if the end of game delay isn't active
+        if not self.game.endBusy:
+            if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
+                # kill the lampshow
+                self.game.lampctrl.stop_show()
+                # kill the music in case the 'end of game' song is playing
+                self.game.sound.stop_music()
+                # Initialize game
+                self.game.start_game()
+            else:
+                print "BALL SEARCH"
+                self.game.ball_search.perform_search(1)
 
     def generate_score_frames(self):
         # This big mess generates frames for the attract loop based on high score data.
