@@ -464,6 +464,11 @@ class Mine(ep.EP_Mode):
     def abort_display(self):
         self.clear_layer()
         self.cancel_delayed("Display")
+        # kick teh ball out of the mine if there's one in there
+        if self.game.switches.minePopper.is_active():
+            self.game.mountain.eject()
+
+
 
 
 
