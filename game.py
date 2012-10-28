@@ -76,6 +76,7 @@ class CCGame(game.BasicGame):
         self.peril = False
         # status display ok ornot
         self.statusOK = False
+        self.endBusy = False
 
 
     def setup(self):
@@ -520,6 +521,8 @@ class CCGame(game.BasicGame):
         self.modes.remove(mode)
         # Stop the music
         self.sound.stop_music()
+        # set a busy flag so that the start button won't restart the game right away
+        self.endBusy = True
         # re-add the attract mode
         self.modes.add(self.attract_mode)
         # play a quote
