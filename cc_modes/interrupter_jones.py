@@ -329,5 +329,14 @@ class Interrupter(ep.EP_Mode):
         self.layer = self.game.score_display.layer
         self.delay(delay = 1,handler=self.clear_layer)
 
+    # this for low priority modes to throw a display over something else that is running
+    def cut_in(self,layer,timer):
+        # cancel any already running cut in
+        self.cancel_delayed("Cut In")
+        # set the layer to the one given
+        self.layer = layer
+        # set the timer for clearing
+        self.delay("Cut In",delay=timer,handler=self.clear_layer)
+
 
 

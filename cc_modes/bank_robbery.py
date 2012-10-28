@@ -363,8 +363,12 @@ class BankRobbery(ep.EP_Mode):
             awardScoreString = "750,000"
             # combine them
             completeFrame = self.build_display(awardTextString,awardScoreString)
-            # swap in the new layer
-            self.layer = completeFrame
+            stackLevel = self.game.show_tracking('stackLevel')
+            # if something higher is running, throw the win display in a cut in
+            if True in stackLevel[3:]:
+                self.game.interrupter.cut_in(completeFrame,1)
+            else:
+                self.layer = completeFrame
             self.delay(name="Display",delay=2,handler=self.end_bank_robbery)
             # show combo display if the chain is high enough
             if self.game.combos.chain > 1:

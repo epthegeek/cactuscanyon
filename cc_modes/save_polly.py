@@ -349,8 +349,12 @@ class SavePolly(ep.EP_Mode):
         animLayer.frame_time = 6
         animLayer.opaque = True
         animLayer.add_frame_listener(6,self.game.base.priority_quote,param=self.game.assets.quote_victory)
-        # turn it on
-        self.layer = animLayer
+        stackLevel = self.game.show_tracking('stackLevel')
+        # if something higher is running, throw the win display in a cut in
+        if True in stackLevel[3:]:
+            self.game.interrupter.cut_in(animLayer,myWait)
+        else:
+            self.layer = animLayer
         # play the train stop noise
         self.game.sound.play(self.game.assets.sfx_trainStop)
         # set the delay for the award

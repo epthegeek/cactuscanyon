@@ -222,7 +222,13 @@ class Quickdraw(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_quickdrawHit)
         self.game.sound.play(self.game.assets.sfx_quickdrawFinale)
         self.game.sound.play(self.game.assets.sfx_cheers)
-        self.layer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
+        stackLevel = self.game.show_tracking('stackLevel')
+        winLayer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
+        # if something higher is running, throw the win display in a cut in
+        if True in stackLevel[1:]:
+            self.game.interrupter.cut_in(winLayer,1)
+        else:
+            self.layer = winLayer
         myWait = len(anim.frames) / 10.0 + 2
         # stuff specific to winning
         # score the points

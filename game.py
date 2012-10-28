@@ -194,17 +194,22 @@ class CCGame(game.BasicGame):
         self.right_loop = cc_modes.RightLoop(game=self,priority=10)
         # this is the layer that prevents basic ramp/loop shots from registering
         self.switch_block = cc_modes.SwitchBlock(game=self,priority=11)
+        # the gun modes
+        self.quickdraw = cc_modes.Quickdraw(game=self,priority=12)
+        self.gunfight = cc_modes.Gunfight(game=self,priority=12)
+        self.showdown = cc_modes.Showdown(game=self,priority=13)
+        self.ambush = cc_modes.Ambush(game=self,priority=13)
         # combos should always register - so they ride above the switch block
-        self.combos = cc_modes.Combos(game=self,priority=12)
+        self.combos = cc_modes.Combos(game=self,priority=14)
         # drunk multiball
-        self.drunk_multiball = cc_modes.DrunkMultiball(game=self,priority=13)
+        self.drunk_multiball = cc_modes.DrunkMultiball(game=self,priority=15)
 
         # save polly modes
-        self.save_polly = cc_modes.SavePolly(game=self,priority=14)
-        self.river_chase = cc_modes.RiverChase(game=self,priority=14)
-        self.bank_robbery = cc_modes.BankRobbery(game=self,priority=14)
+        self.save_polly = cc_modes.SavePolly(game=self,priority=16)
+        self.river_chase = cc_modes.RiverChase(game=self,priority=16)
+        self.bank_robbery = cc_modes.BankRobbery(game=self,priority=16)
 
-        self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=16)
+        self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=17)
 
         self.match = cc_modes.Match(game=self,priority=20)
 
@@ -216,11 +221,6 @@ class CCGame(game.BasicGame):
 
         # general bad guy handling
         self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
-        # the gun modes
-        self.quickdraw = cc_modes.Quickdraw(game=self,priority=68)
-        self.showdown = cc_modes.Showdown(game=self,priority=68)
-        self.ambush = cc_modes.Ambush(game=self,priority=68)
-        self.gunfight = cc_modes.Gunfight(game=self,priority=68)
         # stampede multiball
         self.stampede = cc_modes.Stampede(game=self,priority=69)
         # this mode unloads when not in use
