@@ -72,7 +72,7 @@ class Saloon(ep.EP_Mode):
             else:
                 self.game.modes.add(self.game.drunk_multiball)
                 self.wait_until_unbusy(self.game.drunk_multiball.start_drunk)
-            return
+                return
 
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
         if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus'):
