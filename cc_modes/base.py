@@ -645,7 +645,7 @@ class BaseGameMode(ep.EP_Mode):
                 self.abort_bonus()
             # if the long form extra ball thing is running, kill that
             elif self.game.mine.collectingEB:
-                self.game.mine.abort_extra_ball()()
+                self.game.mine.abort_extra_ball()
             else:
                 pass
         # if no balls in play, don't do this.
