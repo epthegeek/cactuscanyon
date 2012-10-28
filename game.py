@@ -197,8 +197,6 @@ class CCGame(game.BasicGame):
         # the gun modes
         self.quickdraw = cc_modes.Quickdraw(game=self,priority=12)
         self.gunfight = cc_modes.Gunfight(game=self,priority=12)
-        self.showdown = cc_modes.Showdown(game=self,priority=13)
-        self.ambush = cc_modes.Ambush(game=self,priority=13)
         # combos should always register - so they ride above the switch block
         self.combos = cc_modes.Combos(game=self,priority=14)
         # drunk multiball
@@ -226,11 +224,15 @@ class CCGame(game.BasicGame):
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
         # gold mine multiball
-        self.gm_multiball = cc_modes.GoldMine(game=self,priority=88)
+        self.gm_multiball = cc_modes.GoldMine(game=self,priority=75)
+        # the mob gun modes so they ride in front of most things
+        self.showdown = cc_modes.Showdown(game=self,priority=80)
+        self.ambush = cc_modes.Ambush(game=self,priority=80)
+
         # cva
-        self.cva = cc_modes.CvA(game=self,priority=88)
+        self.cva = cc_modes.CvA(game=self,priority=85)
         # marhsall multiball
-        self.marshall_multiball = cc_modes.MarshallMultiball(game=self,priority=88)
+        self.marshall_multiball = cc_modes.MarshallMultiball(game=self,priority=85)
         # bionic bart
         self.bionic = cc_modes.BionicBart(game=self,priority=90)
         # High Noon
