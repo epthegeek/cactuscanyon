@@ -64,12 +64,8 @@ class Bart(ep.EP_Mode):
             self.setup()
 
     def ball_drained(self):
-        # if boss is running and we lose a ball (or both) boss has to end
-        if self.game.trough.num_balls_in_play == 0 and self.bossWin:
-            self.busy = False
-        elif self.game.trough.num_balls_in_play in (0,1) and self.bossFight:
-            self.game.base.busy = True
-            self.boss_lose()
+        if self.game.trough.num_balls_in_play == 0 and self.bossFight:
+            self.game.bad_guys.drop_targets()
 
     def hit(self,Saloon=False):
         # cancel any other displays
@@ -144,12 +140,7 @@ class Bart(ep.EP_Mode):
         transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         # divert here if we're on boss bart
         if self.brother == 'BOSS':
-            # stop the music
-            self.game.sound.stop_music()
-            # set the flag
             self.bossFight = True
-            # set the stacking level
-            self.game.set_tracking('stackLevel',True,5)
             self.delay(delay=1.5,handler=self.activate_boss)
         else:
 
@@ -162,27 +153,12 @@ class Bart(ep.EP_Mode):
         # bump up the points
         self.hitValue *= 2
         self.defeatValue *= 2
-        # set some defaults - for target work
-        self.bossTargetTimer = [None,None,None,None]
         self.deathTally = 0
-
-        # set the hits to defeat value - 3 for the first, 6 for the second, etc
-        self.hitsThisBart = (self.game.show_tracking('bossBartsDefeated') + 1) * 3
-        # activate the drop targets
+       # activate the drop targets
         self.game.bad_guys.setup_targets()
-        # add a ball
-        self.game.trough.balls_to_autoplunge = 1
-        self.game.trough.launch_balls(1)
         # eject the saloon - by clearing the busy flag
         self.game.saloon.unbusy()
-        # start some song?
-        self.game.base.music_on(self.game.assets.music_steampunk)
-        # kill the lights
-        self.kill_lights()
-        # flash the lights on front of the saloon
-        self.game.lamps.saloonArrow.schedule(0xF0F0F0F0)
-        self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
-
+        self.game.update_lamps()
         # go to the boss fight display
         self.boss_display()
 
@@ -301,12 +277,9 @@ class Bart(ep.EP_Mode):
         self.game.set_tracking('bartHits',0)
         # play a fancy lampshow
         if self.bossFight:
-            myCallback = self.kill_lights
             self.bossWin = True
             self.busy = True
-        else:
-            myCallback = self.game.update_lamps
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, myCallback)
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
 
         # divert to boss win here
         if self.bossFight:
@@ -350,12 +323,8 @@ class Bart(ep.EP_Mode):
     ## BOSS FIGHT STUFF
 
     def boss_target_hit(self,target):
-        # desicde if quote or not
-        choices = [False,True]
-        bartSpeaks = random.choice(choices)
-        if bartSpeaks:
-            self.game.base.play_quote(self.game.assets.quote_targetBossBart)
-            self.animate(2)
+        self.game.base.play_quote(self.game.assets.quote_targetBossBart)
+        self.animate(2)
         # cancel the main display
         self.cancel_delayed("Boss Display")
         # show a display of dude getting hit
@@ -375,12 +344,8 @@ class Bart(ep.EP_Mode):
         # score points - dudes worth 20,000
         self.game.score(20000)
         # increase the shot value and defeat value
-        self.hitValue += 10000
-        self.defeatValue += 50000
-        # start a timer for the target to return
-        # start a timer for that target - 15 for the default time for now
-        self.bossTargetTimer[target] = 15
-        self.boss_target_timer(target)
+        self.hitValue += 50000
+        self.defeatValue += 100000
 
     def boss_display(self):
         # cancel delay just in case
@@ -413,7 +378,7 @@ class Bart(ep.EP_Mode):
         self.layer = combined
         # delay a loop back to the boss display
         if loop:
-            self.delay("Boss Display", delay=1, handler=self.boss_display)
+            self.delay("Boss Display", delay=0.5, handler=self.boss_display)
 
     def boss_target_timer(self,target):
         # tick one off the timer for that target
@@ -469,30 +434,31 @@ class Bart(ep.EP_Mode):
             self.game.saloon.kick()
         # light gunfight after the animation
         self.delay(delay=myWait+1,handler=self.game.saloon.light_gunfight)
+        # draw a display that says collecting balls
+        self.delay(delay=myWait+1.5,handler=self.please_wait)
         # set the wait for all the balls to drain
         self.final_display_pause()
 
     def final_display_pause(self):
-        # fakepinproc crutch - I hope
-        if self.game.fakePinProc:
-            self.game.trough.num_balls_in_play = 0
-            # this just calls final display, but checks to see if there are any balls first
-        # if there are balls on the field, delay the final display
-        if self.game.trough.num_balls_in_play > 0:
-            self.busy = True
+        print "BOSS FINAL_DISPLAY_PAUSE"
         self.wait_until_unbusy(self.finish_up)
 
     def finish_up(self):
+        print "BOSS FINISH_UP"
+        # turn off the win flag
+        self.bossWin = False
+        # kill the running flag
+        self.bossFight = False
         # this is for launching a new ball to continue with
         self.game.update_lamps()
         self.game.trough.balls_to_autolaunch = 1
         self.game.trough.launch_balls(1)
         self.game.enable_flippers(True)
         # turn off the win flag
-        self.bossWin = False
         self.end_boss()
 
     def boss_lose(self):
+        print "BOSS_LOSE"
         # drop all the targets
         self.game.bad_guys.drop_targets()
 
@@ -513,6 +479,7 @@ class Bart(ep.EP_Mode):
         self.end_boss()
 
     def end_boss(self):
+        print "BOSS END_BOSS"
         # kill the running flag
         self.bossFight = False
         # set the stack level back down
@@ -525,6 +492,8 @@ class Bart(ep.EP_Mode):
         self.game.base.music_on(self.game.assets.music_mainTheme)
         # update the game lamps
         self.game.update_lamps()
+        # kill the local busy flag
+        self.game.base.busy = False
 
     ## OTHER BITS
 
@@ -574,3 +543,9 @@ class Bart(ep.EP_Mode):
     def kill_lights(self):
         for lamp in self.game.lamps.items_tagged('Playfield'):
             lamp.disable()
+
+    def please_wait(self):
+        textLine1 = dmd.TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=True).set_text("PLEASE WAIT",blink_frames=4)
+        textLine2 = dmd.TextLayer(64, 15, self.game.assets.font_9px_az_mid,"center",opaque=False).set_text("COLLECTING BALLS")
+        combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
+        self.layer = combined

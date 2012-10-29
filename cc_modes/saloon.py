@@ -75,7 +75,7 @@ class Saloon(ep.EP_Mode):
                 return
 
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
-        if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus'):
+        if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus') and not self.game.bart.bossFight:
             if True in stackLevel:
                 print "Saloon Stack bail"
                 self.kick()
@@ -169,7 +169,7 @@ class Saloon(ep.EP_Mode):
 
         # flash the saloon arrow if bionic bart is ready
         bionicStatus = self.game.show_tracking('bionicStatus')
-        if bionicStatus == "READY":
+        if bionicStatus == "READY" or self.game.bart.bossFight:
             self.game.lamps.saloonArrow.schedule(0xF0F0F0F0)
             self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
         # flash bount and arrow if running and loaded
