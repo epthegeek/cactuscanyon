@@ -126,6 +126,7 @@ class Tracking(game.Player):
         self.player_stats['bartStatus'] = "OPEN"
         self.player_stats['bartHits'] = 0
         self.player_stats['bartsDefeated'] = 0
+        self.player_stats['bossBartsDefeated'] = 0
         self.player_stats['bartsDefeatedTotal'] = 0
         self.player_stats['currentBart'] = 0
         self.player_stats['gunfightsStarted'] = 0
@@ -155,7 +156,7 @@ class Tracking(game.Player):
         # Level 2 is Save Polly modes - only one of these can run at a time, and they are allowed to run with level 0
         # Level 3 is drunk multiball
         # Level 4 is goldmine multiball, stampede
-        # Level 5 is cva,marshall
+        # Level 5 is cva,marshall,boss bart
         # level 6 is bionic bart,high noon
         self.player_stats['stackLevel'] = [False,False,False,False,False,False,False]
 

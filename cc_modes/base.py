@@ -96,10 +96,10 @@ class BaseGameMode(ep.EP_Mode):
         print "CHECKING TRACKING ball drained LR: " + str(self.game.show_tracking('leftRampStage'))
         # if that was the last ball in play need to finish up - unless high noon is finishing up
         if self.game.trough.num_balls_in_play == 0:
-            # check if we're in high noon
+            # check if we're in high noon - or boss bart fight
             status = self.game.show_tracking('highNoonStatus')
-            if status == "RUNNING" or status == "FINISH":
-                print "HIGH NOON IS RUNNING - HOLD IT"
+            if status == "RUNNING" or status == "FINISH" or self.game.bart.bossWin:
+                print "HIGH NOON IS RUNNING - HOLD IT (or boss bart)"
                 # do nothing, and bail
                 return
             # turn off all the lights

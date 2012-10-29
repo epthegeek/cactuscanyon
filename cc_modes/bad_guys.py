@@ -144,6 +144,10 @@ class BadGuys(ep.EP_Mode):
         if "RUNNING" in self.game.show_tracking('quickdrawStatus'):
             # It's been won
             self.game.quickdraw.won(target)
+        # we might be fighting with boss bart
+        elif self.game.bart.bossFight:
+            print "FIGHTING BOSS BART - TARGET DIVERTS"
+            self.game.bart.boss_target_hit(target)
         # Otherwise, if all badguys are dead, we're in a showdown
         elif self.game.show_tracking('showdownStatus') == "RUNNING":
             print "SHOWDOWN RUNNING OMG"

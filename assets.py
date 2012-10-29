@@ -540,6 +540,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_superFail, self.quotes_path + "1505-leader-bart-better-luck-next-time.wav")
         self.game.sound.register_sound(self.quote_superFail, self.quotes_path + "1563-leader-bart-aw-you-missed.wav")
         self.game.sound.register_sound(self.quote_superFail, self.quotes_path + "1565-leader-bart-you-missed.wav")
+        self.game.sound.register_sound(self.quote_superFail, self.quotes_path + "1579-leader-bart-laugh-2.wav")
+        self.game.sound.register_sound(self.quote_superFail, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.quote_beerMug = 'quote_beerMug'
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1408-drunk-hey-buddy-you-shot-my-drink.wav")
         self.game.sound.register_sound(self.quote_beerMug, self.quotes_path + "1409-drunk-stop-shootin-at-my-drink.wav")
@@ -726,6 +728,35 @@ class Assets():
         self.game.sound.register_sound(self.quote_defeatBubbaBart, self.quotes_path + "1904-bubba-defeat-bubba-take-dirt-nap.wav")
         self.game.sound.register_sound(self.quote_defeatBubbaBart, self.quotes_path + "1916-bubba-defeat-nite-nite-bubba-go-to-sleep-now.wav")
 
+        self.quote_introBossBart = 'quote_introBossBart'
+        self.game.sound.register_sound(self.quote_introBossBart, self.quotes_path + "1850-leader-bart-intro-were-the-bart-boys-and-im-the-boss.wav")
+
+        self.quote_hitBossBart = 'quote_hitBossBart'
+        self.game.sound.register_sound(self.quote_hitBossBart, self.quotes_path + "1555-leader-bart-hit-oh-hot-lead.wav")
+        self.game.sound.register_sound(self.quote_hitBossBart, self.quotes_path + "1551-leader-bart-hit-nothin-but-a-scratch.wav")
+        self.game.sound.register_sound(self.quote_hitBossBart, self.quotes_path + "1859-leader-bart-hit-i-never-use-that-finger-anyway.wav")
+        self.game.sound.register_sound(self.quote_hitBossBart, self.quotes_path + "1856-leader-bart-hit-oh-im-hit.wav")
+        self.game.sound.register_sound(self.quote_hitBossBart, self.quotes_path + "1857-leader-bart-hit-just-a-flesh-wound.wav")
+
+        self.quote_defeatBossBart = 'quote_defeatBossBart'
+        self.game.sound.register_sound(self.quote_defeatBossBart, self.quotes_path+ "1862-leader-bart-defeat-nice-knowin-ya-boys.wav")
+        self.game.sound.register_sound(self.quote_defeatBossBart, self.quotes_path+ "1860-leader-bart-defeat-i-think-ill-just-rest.wav")
+        self.game.sound.register_sound(self.quote_defeatBossBart, self.quotes_path+ "1866-leader-bart-defeat-seeya-six-feet-under.wav")
+        self.game.sound.register_sound(self.quote_defeatBossBart, self.quotes_path+ "1864-leader-bart-defeat-hes-better-than-he-looks.wav")
+        self.game.sound.register_sound(self.quote_defeatBossBart, self.quotes_path+ "1861-leader-bart-defeat-well-boys-im-a-goner.wav")
+
+        self.quote_tauntBossBart = 'quote_tauntBossBart'
+        self.game.sound.register_sound(self.quote_tauntBossBart, self.quotes_path + "1582-leader-bart-taunt-youre-askin-for-it.wav")
+        self.game.sound.register_sound(self.quote_tauntBossBart, self.quotes_path + "1852-leader-bart-taunt-i-love-the-smell-of-lead.wav")
+        self.game.sound.register_sound(self.quote_tauntBossBart, self.quotes_path + "1549-leader-bart-taunt-show-me-yer-stuff.wav")
+        self.game.sound.register_sound(self.quote_tauntBossBart, self.quotes_path + "1501-leader-bart-taunt-you-got-a-hankerin.wav")
+
+        self.quote_targetBossBart = 'quote_targetBossBart'
+        self.game.sound.register_sound(self.quote_targetBossBart, self.quotes_path+ "1870-leader-bart-target-you-hurt-my-brother.wav")
+        self.game.sound.register_sound(self.quote_targetBossBart, self.quotes_path+ "1869-leader-bart-target-that-was-my-brother.wav")
+        self.game.sound.register_sound(self.quote_targetBossBart, self.quotes_path+ "1868-leader-bart-target-you-shot-my-brother.wav")
+        self.game.sound.register_sound(self.quote_targetBossBart, self.quotes_path+ "1535-leader-bart-target-you-shot-my-brother.wav")
+
         self.quote_bionicIntroQuote = 'quote_bionicIntroQuote'
         self.game.sound.register_sound(self.quote_bionicIntroQuote, self.quotes_path + "1569-leader-bart-alright-tough-guy-deal-with-this.wav")
         self.game.sound.register_sound(self.quote_bionicIntroQuote, self.quotes_path + "1568-leader-bart-my-secret-weapon.wav")
@@ -891,6 +922,8 @@ class Assets():
         self.game.sound.register_music(self.music_cvaLoop, self.music_path + "bangarang-loop.wav")
         self.sfx_cvaLoop = 'sfx_cvaLoop'
         self.game.sound.register_sound(self.sfx_cvaLoop, self.music_path + "bangarang-loop.wav")
+        self.music_steampunk = 'music_steampunk'
+        self.game.sound.register_music(self.music_steampunk, self.music_path + "028-music-steam-punk-ish.wav")
         #self.music_tensePiano1 = 'music_tensePiano1'
         #self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
         #self.music_tensePiano2 = 'music_tensePiano2'
@@ -1119,6 +1152,9 @@ class Assets():
         self.dmd_fireworks = dmd.Animation().load(self.dmd_path+'fireworks.dmd')
 
         self.dmd_marshallBorder = dmd.Animation().load(self.dmd_path+'marshall-border.dmd')
+
+        self.dmd_boss = dmd.Animation().load(self.dmd_path+'boss.dmd')
+        self.dmd_bossHit = dmd.Animation().load(self.dmd_path+'boss-hit.dmd')
         
         # Shared Paths
         self.shared_sound_path = curr_file_path + "/shared/sound/"

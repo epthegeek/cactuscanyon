@@ -131,7 +131,7 @@ class Gunfight(ep.EP_Mode):
         # pull out the enemey
         print "ENEMY: " + str(enemy)
         # save the final target
-        self.gunfighter = enemy
+        self.enemy = enemy
         print badGuys
         badGuys.remove(enemy)
         # and tag them on the end
