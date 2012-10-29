@@ -350,6 +350,12 @@ class Bart(ep.EP_Mode):
     ## BOSS FIGHT STUFF
 
     def boss_target_hit(self,target):
+        # desicde if quote or not
+        choices = [False,True]
+        bartSpeaks = random.choice(choices)
+        if bartSpeaks:
+            self.game.base.play_quote(self.game.assets.quote_targetBossBart)
+            self.animate(2)
         # cancel the main display
         self.cancel_delayed("Boss Display")
         # show a display of dude getting hit

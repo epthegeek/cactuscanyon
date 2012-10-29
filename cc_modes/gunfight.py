@@ -42,6 +42,7 @@ class Gunfight(ep.EP_Mode):
                           self.game.assets.quote_gunfightWinSheriff,
                           self.game.assets.quote_gunfightWinMarshall]
         self.win = False
+        self.starting = False
 
     def ball_drained(self):
         print "GUNFIGHT - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
@@ -55,47 +56,48 @@ class Gunfight(ep.EP_Mode):
 
     # kill switches - they check win first, in case the ball glanced off a bad guy and then hit a target
     def sw_leftRampEnter_active(self,sw):
-        if not self.win:
+        if not self.win and not self.starting:
             print "Gunfight - Left ramp enter killed it"
             self.lost()
 
     def sw_centerRampMake_active(self,sw):
-        if not self.win:
+        if not self.win and not self.starting:
             print "Gunfight - Center ramp make killed it"
             self.lost()
 
     def sw_rightRampMake_active(self,sw):
-        if not self.win:
+        if not self.win and not self.starting:
             print "Gunfight - right ramp make killed it"
             self.lost()
 
     def sw_beerMug_active(self,sw):
-        if not self.win:
+        if not self.win and not self.starting:
             print "Gunfight - beer mug killed it"
             self.lost()
 
     def sw_saloonGate_active(self,sw):
-        if not self.win:
+        if not self.win and not self.starting:
             print "Gunfight - saloon gate killed it"
             self.lost()
 
     def sw_mineEntrance_active(self,sw):
-        if not self.win:
+        if not self.win and not self.starting:
             print "Gunfight - mine entrance killed it"
             self.lost()
 
     def sw_leftLoopBottom_active(self,sw):
-        if not self.win:
+        if not self.win and not self.starting:
             print "Gunfight - left loop bottom killed it"
             self.lost()
 
     def sw_rightLoopBottom_active(self,sw):
-        if not self.win:
+        if not self.win and not self.starting:
             print "Gunfight - right loop bottom killed it"
             self.lost()
 
 
     def start_gunfight(self,side):
+        self.starting = True
         print "GUNFIGHT GOES HERE"
         # pop up the post
         print "RAISE POST ON SIDE: " + str(side)
@@ -316,6 +318,8 @@ class Gunfight(ep.EP_Mode):
         # need this for the lost
         self.enemy = enemy
         self.game.bad_guys.target_up(enemy)
+        # kill the starting flag
+        self.starting = False
         # play the 4 bells
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
         self.delay(delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
@@ -346,4 +350,5 @@ class Gunfight(ep.EP_Mode):
         self.running = False
         print "GUNFIGHT IS DISPATCHING DELAYS"
         self.dispatch_delayed()
+        self.starting = False
 

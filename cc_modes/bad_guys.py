@@ -163,7 +163,11 @@ class BadGuys(ep.EP_Mode):
             self.game.cva.hit_alien(target)
         # option 3 is a gunfight
         else:
-            self.game.gunfight.won()
+            # if the gunfight is still starting up, do nothing
+            if self.game.gunfight.starting:
+                pass
+            else:
+                self.game.gunfight.won()
 
     def target_up(self,target):
         print "TARGET RAISED " + str(target)
