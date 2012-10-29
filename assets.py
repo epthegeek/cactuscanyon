@@ -245,6 +245,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_smallExplosion, self.sfx_path + "263-sfx-explosion.wav")
         self.sfx_woosh = 'sfx_woosh'
         self.game.sound.register_sound(self.sfx_woosh, self.sfx_path + "229-sfx-plain-woosh.wav")
+        self.sfx_wooshDing = 'sfx_wooshDing'
+        self.game.sound.register_sound(self.sfx_wooshDing, self.sfx_path + "277-sfx-woosh-ding.wav")
         self.sfx_ropeWoosh = 'sfx_ropeWoosh'
         self.game.sound.register_sound(self.sfx_ropeWoosh, self.sfx_path + "00-rope-woosh.wav")
         self.sfx_ropeCreak = 'sfx_ropeCreak'

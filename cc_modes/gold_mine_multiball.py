@@ -33,6 +33,7 @@ class GoldMine(ep.EP_Mode):
         self.game.switch_blocker('add')
 
         self.motherlodeValue = 0
+        self.displayMotherlodeValue = 0
         self.counter = 0
         self.multiplier = False
         self.bandits = False
@@ -384,7 +385,23 @@ class GoldMine(ep.EP_Mode):
         motherlodes = self.game.increase_tracking('motherlodesCollected')
         # and one to the total motherlodes for good measure
         self.game.increase_tracking('motherlodesCollectedTotal')
+        # check the multiplier value
         myMultiplier = self.game.show_tracking('motherlodeMultiplier')
+        # award the points - motherlode value X multiplier
+        # save the current value for the display later
+        self.displayMotherlodeValue = self.motherlodeValue
+        # calc the points to award
+        motherLodeScore = self.motherlodeValue * myMultiplier
+        # award the points
+        self.game.score(motherLodeScore)
+        # track highest shot for motherlode champ
+        if motherLodeScore > self.game.show_tracking('motherlodeValue'):
+            self.game.set_tracking('motherlodeValue', motherLodeScore)
+        # and reset the motherlode value and multiplier
+        self.motherlodeValue = 0
+        # reset the motherlode multiplier
+        self.game.set_tracking('motherlodeMultiplier',1)
+
         # if we've collected 3 regular motherlodes, or any motherload with a multiplier, then light the badge
         if motherlodes >= 3 or myMultiplier > 1:
             # set the star flag for motherlode - it's 0
@@ -400,9 +417,18 @@ class GoldMine(ep.EP_Mode):
             sound = self.game.assets.quote_tripleMotherlode
         else:
             sound = self.game.assets.quote_motherlode
-        self.game.base.play_quote(sound)
+        # play the woosh sound followed by the quote
+        self.game.sound.play(self.game.assets.sfx_wooshDing)
+        self.delay(delay=1.2,handler=self.game.base.priority_quote,param=sound)
         # then move on to the display
-        self.award_motherlode(myMultiplier)
+        self.wipe_transition(myMultiplier)
+
+    def wipe_transition(self,multiplier):
+        anim = self.game.assets.dmd_burstWipe
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+        myWait = len(anim.frames) / 10.0
+        self.layer = animLayer
+        self.delay(delay=myWait,handler=self.award_motherlode,param=multiplier)
 
     def award_motherlode(self,times):
         # tick the counter up
@@ -413,22 +439,18 @@ class GoldMine(ep.EP_Mode):
         awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
         awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         awardTextTop.set_text("MOTHERLODE " + str(self.counter) + "X")
-        awardTextBottom.set_text(ep.format_score(self.motherlodeValue * self.counter))
+        awardTextBottom.set_text(ep.format_score(self.displayMotherlodeValue * self.counter))
         combined = dmd.GroupedLayer(128,32,[awardTextTop, awardTextBottom])
-        self.layer = combined
+        # if we're on the first counter, crossfade to the score
+        if self.counter == 1:
+            ep.EP_Transition(self,self.layer,combined,ep.EP_Transition.TYPE_CROSSFADE)
+        # otherwise just update the view
+        else:
+            self.layer = combined
         # loop through the multiplier again if times is not zero
         if times == 0:
-            # award the points
-            self.game.score(self.motherlodeValue * self.counter)
-            # track highest shot for motherlode champ
-            if self.motherlodeValue > self.game.show_tracking('motherlodeValue'):
-                self.game.set_tracking('motherlodeValue', self.motherlodeValue)
-            # and reset the motherlode value
-            self.motherlodeValue = 0
             # then go back to the main display
             self.delay(name="Display",delay=1.5,handler=self.main_display)
-            # reset the motherlode multiplier
-            self.game.set_tracking('motherlodeMultiplier',1)
             # and kick the ball out
             self.game.mountain.kick()
             # false the bandits flag in case it's on

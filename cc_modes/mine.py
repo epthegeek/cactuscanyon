@@ -104,7 +104,7 @@ class Mine(ep.EP_Mode):
                 self.collect_extra_ball(type=1)
             return
         # stock sound for the switch
-        if self.game.show_tracking('highNoonStatus') != "READY":
+        if self.game.show_tracking('highNoonStatus') != "READY" and self.game.show_tracking('mineStatus') != "RUNNING":
             self.game.sound.play(self.game.assets.sfx_mineKicker)
         # if there's an extra ball waiting, collect one
         if self.game.show_tracking('extraBallsPending') > 0:

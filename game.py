@@ -187,6 +187,9 @@ class CCGame(game.BasicGame):
         self.train = cc_modes.Train(game=self,priority=6)
         self.mountain = cc_modes.Mountain(game=self,priority = 7)
         self.badge = cc_modes.Badge(game=self,priority = 7)
+        # the gun modes
+        self.quickdraw = cc_modes.Quickdraw(game=self,priority=9)
+        self.gunfight = cc_modes.Gunfight(game=self,priority=9)
         # basic ramp & loop handling
         self.right_ramp = cc_modes.RightRamp(game=self,priority=10)
         self.left_ramp = cc_modes.LeftRamp(game=self,priority=10)
@@ -195,18 +198,15 @@ class CCGame(game.BasicGame):
         self.right_loop = cc_modes.RightLoop(game=self,priority=10)
         # this is the layer that prevents basic ramp/loop shots from registering
         self.switch_block = cc_modes.SwitchBlock(game=self,priority=11)
-        # the gun modes
-        self.quickdraw = cc_modes.Quickdraw(game=self,priority=12)
-        self.gunfight = cc_modes.Gunfight(game=self,priority=12)
         # combos should always register - so they ride above the switch block
         self.combos = cc_modes.Combos(game=self,priority=14)
-        # drunk multiball
-        self.drunk_multiball = cc_modes.DrunkMultiball(game=self,priority=15)
 
         # save polly modes
-        self.save_polly = cc_modes.SavePolly(game=self,priority=16)
-        self.river_chase = cc_modes.RiverChase(game=self,priority=16)
-        self.bank_robbery = cc_modes.BankRobbery(game=self,priority=16)
+        self.save_polly = cc_modes.SavePolly(game=self,priority=15)
+        self.river_chase = cc_modes.RiverChase(game=self,priority=15)
+        self.bank_robbery = cc_modes.BankRobbery(game=self,priority=15)
+        # drunk multiball
+        self.drunk_multiball = cc_modes.DrunkMultiball(game=self,priority=16)
 
         self.bonus_lanes = cc_modes.BonusLanes(game=self,priority=17)
 

@@ -31,19 +31,34 @@ class SwitchBlock(game.Mode):
 
     # The loops
     def sw_leftLoopTop_active(self,sw):
-        return game.SwitchStop
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True in stackLevel[3:]:
+            return game.SwitchStop
 
     # right loop top
     def sw_rightLoopTop_active(self,sw):
-        return game.SwitchStop
+        stackLevel = self.game.show_tracking('stackLevel')
+        if True in stackLevel[3:]:
+            return game.SwitchStop
 
     # The ramps
     def sw_leftRampEnter_active(self,sw):
         return game.SwitchStop
 
+    def sw_leftRampMake_active(self,sw):
+        return game.SwitchStop
+
     def sw_centerRampMake_active(self,sw):
+        return game.SwitchStop
+
+    def sw_centerRampEnter_active(self,sw):
+        return game.SwitchStop
+
+    def sw_rightRampEnter_active(self,sw):
         return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):
         return game.SwitchStop
 
+    def sw_rightRampBottom_active(self,sw):
+        return game.SwitchStop
