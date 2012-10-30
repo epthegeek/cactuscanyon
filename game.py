@@ -150,7 +150,7 @@ class CCGame(game.BasicGame):
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'BountyHunterHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('bartsDefeated')
+        cat.score_for_player = lambda player: self.show_tracking('bartsDefeatedTotal')
         cat.titles = ['Bounty Hunter']
         self.highscore_categories.append(cat)
 

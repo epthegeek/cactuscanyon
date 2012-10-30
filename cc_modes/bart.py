@@ -56,6 +56,7 @@ class Bart(ep.EP_Mode):
         self.bossWin = False
         self.targetNames = ['Left','Left Center','Right Center','Right']
         self.busy = False
+        self.activeBossPosse = []
 
     def mode_started(self):
         # activate the first bart if we're on the first ball
@@ -65,7 +66,7 @@ class Bart(ep.EP_Mode):
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.bossFight:
-            self.game.bad_guys.drop_targets()
+            self.drop_posse()
 
     def hit(self,Saloon=False):
         # cancel any other displays
@@ -134,33 +135,30 @@ class Bart(ep.EP_Mode):
         textLayer3.set_text("YOU")
 
         textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
+
         # play the intro
-        self.game.base.play_quote(self.introQuote)
+        self.game.base.play_quote(self.introQuote,squelch=True)
+
         # show the transition
         transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         # divert here if we're on boss bart
         if self.brother == 'BOSS':
             self.bossFight = True
-            self.delay(delay=1.5,handler=self.activate_boss)
+            # bump up the points
+            self.hitValue *= 2
+            self.defeatValue *= 2
+            self.deathTally = 0
+            # activate the drop targets
+            self.game.bad_guys.setup_targets()
+            # set them all to true
+            self.activeBossPosse = [0,1,2,3]
         else:
 
             # if there's only 1 hit to defeat this bart, set the status to last
             if self.hitsThisBart == 1:
                 self.game.set_tracking('bartStatus',"LAST")
-            self.delay("Display",delay=1.5,handler=self.clear_layer)
+        self.delay("Display",delay=1.5,handler=self.clear_layer)
 
-    def activate_boss(self):
-        # bump up the points
-        self.hitValue *= 2
-        self.defeatValue *= 2
-        self.deathTally = 0
-       # activate the drop targets
-        self.game.bad_guys.setup_targets()
-        # eject the saloon - by clearing the busy flag
-        self.game.saloon.unbusy()
-        self.game.update_lamps()
-        # go to the boss fight display
-        self.boss_display()
 
     def setup(self):
         # our cast of characters
@@ -210,7 +208,8 @@ class Bart(ep.EP_Mode):
     def damage(self,saloonHit=False):
         print "DAMAGE BART"
         # play a quote appropriate to the current bart
-        self.game.base.priority_quote(self.hitQuote)
+        self.game.base.priority_quote(self.hitQuote,squelch=True)
+
         # move bart
         self.animate(1)
 
@@ -238,10 +237,14 @@ class Bart(ep.EP_Mode):
             # if it is, set the status to last
             self.game.set_tracking('bartStatus',"LAST")
         theText = str(hitsLeft) + " MORE HITS"
-        textLayer1 = dmd.TextLayer(42,1,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(self.nameLine)
-        textLayer2 = dmd.TextLayer(42,9,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(str(self.hitString))
-        textLayer3 = dmd.TextLayer(42,17,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText)
-        textLayer4 = dmd.TextLayer(42,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text("TO COLLECT")
+        if self.brother == "BOSS":
+            offset = 40
+        else:
+            offset = 42
+        textLayer1 = dmd.TextLayer(offset,1,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(self.nameLine)
+        textLayer2 = dmd.TextLayer(offset,9,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(str(self.hitString))
+        textLayer3 = dmd.TextLayer(offset,17,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText)
+        textLayer4 = dmd.TextLayer(offset,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text("TO COLLECT")
         self.textLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3,textLayer4])
         self.textLayer.composite_op = "blacksrc"
         # play a fancy lamp show
@@ -254,19 +257,31 @@ class Bart(ep.EP_Mode):
 
     def defeat(self):
         print "DEFEATING BART"
-        # add to the defeated barts - this one doesn't count boss barts
-        if not self.bossFight:
-            self.game.increase_tracking('bartsDefeated')
-        # tick up the global count as well - this one does count boss barts
+        # count barts to the reset
+        total = self.game.increase_tracking('bartsDefeated')
+        # tick up the global count as well
         globalTotal = self.game.increase_tracking('bartsDefeatedTotal')
+        # this bart total counts just regualr barts
+        if not self.bossFight:
+            self.game.increase_tracking('regularBartsDefeated')
         # move bart
         self.animate(1)
+
         # play a defeated quote
-        myWait = self.game.base.play_quote(self.defeatQuote)
+        myWait = self.game.base.play_quote(self.defeatQuote,squelch=True)
+
         # set the status to dead - gunfight has to set it back to open
         self.game.set_tracking('bartStatus',"DEAD")
+        # if we're one away from the badge, switch to boss
+        if self.bartsForStar - total == 1:
+            # by jumping ahead to the 4th spot
+            self.game.set_tracking('currentBart',3)
+        # if we just did boss bart, figure out where we were in the rotation
+        elif self.game.show_tracking('currentBart') == 3:
+            nextBart = self.game.show_tracking('regularBartsDefeated') % 3
+            self.game.set_tracking('currentBart',nextBart)
         # if we're at the end of the line, reset to 0
-        if self.game.show_tracking('currentBart') == 3:
+        elif self.game.show_tracking('currentBart') == 2:
             self.game.set_tracking('currentBart',0)
         # if not tick up the current bart for next time
         else:
@@ -276,35 +291,30 @@ class Bart(ep.EP_Mode):
         # reset the hits on bart
         self.game.set_tracking('bartHits',0)
         # play a fancy lampshow
-        if self.bossFight:
-            self.bossWin = True
-            self.busy = True
         self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
-
-        # divert to boss win here
-        if self.bossFight:
-            self.boss_damage_display(False)
-            self.delay(delay=myWait,handler=self.boss_win)
+        # kill the bossfight flag just to cover if it's on
+        if self.bossFight == True:
+            self.bossFight = False
+            # drop all the targets that are still up
+            self.drop_posse()
+        # setup the display
+        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_weaveBorder.frames[0])
+        textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
+        textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
+        if globalTotal < self.bartsForStar:
+            thetext = str(self.bartsForStar - total) + " MORE FOR BADGE"
+        elif globalTotal == self.bartsForStar:
+            thetext = "BADGE COLLECTED!"
+            # actually collect the badge - barts defeated is 2
+            self.game.badge.update(2)
         else:
-            # setup the display
-            backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_weaveBorder.frames[0])
-            textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
-            textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
-            if globalTotal < self.bartsForStar:
-                thetext = str(self.bartsForStar - globalTotal) + " MORE FOR BADGE"
-            elif globalTotal == self.bartsForStar:
-                thetext = "BADGE COLLECTED!"
-                # actually collect the badge - barts defeated is 2
-                self.game.badge.update(2)
-            else:
-                thetext = str(globalTotal) + " DEFEATED!"
-            textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)
-            self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
-
-            # light gunfight?
-            self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
-            # clear the layer
-            self.delay("Display",delay=myWait,handler=self.clear_layer,param=True)
+            thetext = str(globalTotal) + " DEFEATED!"
+        textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)
+        self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
+         # light gunfight?
+        self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
+        # clear the layer
+        self.delay("Display",delay=myWait,handler=self.clear_layer,param=True)
 
     def display_damage_one(self):
         print "MADE IT TO DAMAGE ONE"
@@ -323,6 +333,8 @@ class Bart(ep.EP_Mode):
     ## BOSS FIGHT STUFF
 
     def boss_target_hit(self,target):
+        # remove this dude from the posse
+        self.activeBossPosse.remove(target)
         self.game.base.play_quote(self.game.assets.quote_targetBossBart)
         self.animate(2)
         # cancel the main display
@@ -331,43 +343,22 @@ class Bart(ep.EP_Mode):
         anim = self.game.assets.dmd_dudeShotShouldersUp
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         animLayer.composite_op = "blacksrc"
-        pointsLayer = dmd.TextLayer(64, 6, self.game.assets.font_15px_az, "center", opaque=True).set_text("20,000",blink_frames=4)
-        self.layer = dmd.GroupedLayer(128,32,[pointsLayer,animLayer])
+        pointsLayer = dmd.TextLayer(64, 1, self.game.assets.font_15px_az, "center", opaque=True).set_text("25,000",blink_frames=4)
+        textLine = dmd.TextLayer(64,18,self.game.assets.font_5px_AZ, "center",opaque = False).set_text("BOSS SHOTS")
+        textLine2 = dmd.TextLayer(64,24,self.game.assets.font_5px_AZ,"center",opaque = False).set_text("VALUE INCREASED")
+        self.layer = dmd.GroupedLayer(128,32,[pointsLayer,textLine,textLine2,animLayer])
         myWait = len(anim.frames) / 10.0 + 1
         # play a shot sound
         self.game.sound.play(self.game.assets.sfx_quickdrawHit)
-        # delay restarting of the boss display
-        self.delay("Boss Display",delay=myWait,handler=self.boss_display)
-        print "TARGET " + str(target) + " HIT"
+        # delay clearing display
+        self.delay("Display",delay=myWait,handler=self.clear_layer)
         # count the dude
         self.deathTally += 1
         # score points - dudes worth 20,000
-        self.game.score(20000)
+        self.game.score(25000)
         # increase the shot value and defeat value
         self.hitValue += 50000
         self.defeatValue += 100000
-
-    def boss_display(self):
-        # cancel delay just in case
-        self.cancel_delayed("Boss Display")
-        self.layer = self.generate_boss_display()
-        # delay a loop back to the boss display
-        self.delay("Boss Display", delay=1.5, handler=self.boss_display)
-
-    def generate_boss_display(self):
-        # score line
-        p = self.game.current_player()
-        scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(40, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
-        # text line
-        hits = self.hitsThisBart - self.game.show_tracking('bartHits')
-        textLine = dmd.TextLayer(40,12,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(str(hits) + " HITS TO WIN")
-        # hits worth line
-        textLine2 = dmd.TextLayer(40,19,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HITS WORTH:")
-        # points line
-        valueLine = dmd.TextLayer(40,26,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(str(ep.format_score(self.hitValue)))
-        # combined layer
-        return dmd.GroupedLayer(128,32,[self.wantedFrameB,scoreLine,textLine,textLine2,valueLine])
 
     def boss_damage_display(self,loop = True):
         # cancel the delay to be safe
@@ -376,124 +367,12 @@ class Bart(ep.EP_Mode):
         self.bannerLayer.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[self.wantedFrameA,self.bannerLayer])
         self.layer = combined
+        self.delay("Display",delay=0.7,handler=self.boss_display_two)
+
+    def boss_display_two(self):
+        self.layer = dmd.GroupedLayer(128,32,[self.wantedFrameB,self.textLayer])
         # delay a loop back to the boss display
-        if loop:
-            self.delay("Boss Display", delay=0.5, handler=self.boss_display)
-
-    def boss_target_timer(self,target):
-        # tick one off the timer for that target
-        if self.bossTargetTimer[target] > 0:
-            self.bossTargetTimer[target] -= 1
-        # if the timer has run out, the bad guy comes back
-        if self.bossTargetTimer[target] == 0:
-            self.game.bad_guys.target_up(target)
-            print "RESTARING TARGET " + str(target)
-        # if not, loop back again in a bit
-        else:
-            self.delay(name=self.targetNames[target],delay=1,handler=self.boss_target_timer,param=target)
-
-    def boss_win(self):
-        # drop all the targets
-        self.game.bad_guys.drop_targets()
-
-        # cancel the main display
-        self.cancel_delayed("Boss Display")
-        # fireworks
-        anim = self.game.assets.dmd_fireworks
-        myWait = len(anim.frames) / 10.0
-        animLayer = ep.EP_AnimatedLayer(anim)
-        animLayer.hold = True
-        animLayer.frame_time = 6
-        # ding the bell on frame 5
-        animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_fireworks1)
-        animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_fireworks2)
-        animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_fireworks3)
-        animLayer.composite_op = "blacksrc"
-        # setup the display
-        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_weaveBorder.frames[0])
-        textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BOSS DEFEATED")
-        textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
-        globalTotal = self.game.show_tracking('bartsDefeatedTotal')
-        if globalTotal < self.bartsForStar:
-            thetext = str(self.bartsForStar - globalTotal) + " MORE FOR BADGE"
-        elif globalTotal == self.bartsForStar:
-            thetext = "BADGE COLLECTED!"
-            # actually collect the badge - barts defeated is 2
-            self.game.badge.update(2)
-        else:
-            thetext = str(globalTotal) + " BROS DEFEATED!"
-        textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)
-        combined = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3,animLayer])
-        self.layer = combined
-        #  turn the flippers off
-        self.game.enable_flippers(False)
-        # clear the saloon and mine if needed
-        if self.game.switches.minePopper.is_active():
-            self.game.mountain.kick()
-        if self.game.switches.saloonPopper.is_active():
-            self.game.saloon.kick()
-        # light gunfight after the animation
-        self.delay(delay=myWait+1,handler=self.game.saloon.light_gunfight)
-        # draw a display that says collecting balls
-        self.delay(delay=myWait+1.5,handler=self.please_wait)
-        # set the wait for all the balls to drain
-        self.final_display_pause()
-
-    def final_display_pause(self):
-        print "BOSS FINAL_DISPLAY_PAUSE"
-        self.wait_until_unbusy(self.finish_up)
-
-    def finish_up(self):
-        print "BOSS FINISH_UP"
-        # turn off the win flag
-        self.bossWin = False
-        # kill the running flag
-        self.bossFight = False
-        # this is for launching a new ball to continue with
-        self.game.update_lamps()
-        self.game.trough.balls_to_autolaunch = 1
-        self.game.trough.launch_balls(1)
-        self.game.enable_flippers(True)
-        # turn off the win flag
-        self.end_boss()
-
-    def boss_lose(self):
-        print "BOSS_LOSE"
-        # drop all the targets
-        self.game.bad_guys.drop_targets()
-
-        # play a quote
-        self.game.sound.play_quote(self.game.asssets.quote_superFail)
-        # housekeeping for the next bart
-        # if we're at the end of the line, reset to 0
-        if self.game.show_tracking('currentBart') == 3:
-            self.game.set_tracking('currentBart',0)
-        # if not tick up the current bart for next time
-        else:
-            self.game.increase_tracking('currentBart')
-            # reset the hits on bart
-        self.game.set_tracking('bartHits',0)
-        # set bart back to open
-        self.game.set_tracking('bartStatus',"OPEN")
-        # finish up
-        self.end_boss()
-
-    def end_boss(self):
-        print "BOSS END_BOSS"
-        # kill the running flag
-        self.bossFight = False
-        # set the stack level back down
-        self.game.set_tracking('stackLevel',False,5)
-        # cancel the display delay if any, and target timers
-        self.dispatch_delayed()
-        # clear the layer
-        self.clear_layer()
-        # turn the music back on
-        self.game.base.music_on(self.game.assets.music_mainTheme)
-        # update the game lamps
-        self.game.update_lamps()
-        # kill the local busy flag
-        self.game.base.busy = False
+        self.delay("Display",delay = 2,handler=self.clear_layer)
 
     ## OTHER BITS
 
@@ -540,12 +419,8 @@ class Bart(ep.EP_Mode):
     def abort_display(self):
         self.cancel_delayed("Display")
 
-    def kill_lights(self):
-        for lamp in self.game.lamps.items_tagged('Playfield'):
-            lamp.disable()
 
-    def please_wait(self):
-        textLine1 = dmd.TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=True).set_text("PLEASE WAIT",blink_frames=4)
-        textLine2 = dmd.TextLayer(64, 15, self.game.assets.font_9px_az_mid,"center",opaque=False).set_text("COLLECTING BALLS")
-        combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
-        self.layer = combined
+    def drop_posse(self):
+        for dude in self.activeBossPosse:
+            self.game.bad_guys.target_down(dude)
+        self.activeBossPosse = []

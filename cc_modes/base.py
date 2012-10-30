@@ -312,7 +312,7 @@ class BaseGameMode(ep.EP_Mode):
 
     # modified version of play voice from procgame.sound that stores a list of active quotes
     # even though more than one shouldn't be possible given the time checking
-    def play_quote(self,key, loops=0, max_time=0, fade_ms=0,override=False):
+    def play_quote(self,key, loops=0, max_time=0, fade_ms=0,override=False,squelch=False):
         if not self.game.sound.enabled:
             return 0
         current_time = time.time()
@@ -321,6 +321,10 @@ class BaseGameMode(ep.EP_Mode):
             if current_time < self.game.sound.voice_end_time: return 0
         # if the key exists, stuff happens
         if key in self.game.sound.sounds:
+            if squelch:
+                # if we're squelching, turn down the music volume - but first, cancel any previous restore delay
+                self.cancel_delayed("Squelch")
+                self.game.squelch_music()
             # store the key in a list
             self.active_quotes.append(key)
             if len(self.game.sound.sounds[key]) > 0:
@@ -330,6 +334,9 @@ class BaseGameMode(ep.EP_Mode):
             self.game.sound.voice_end_time = current_time + duration
             # delay a removal of the active quote from the list
             self.delay(delay=duration,handler=self.end_quote,param=key)
+            if squelch:
+                # if we're squelching, set a delay to restore the music
+                self.delay("Squelch",delay=duration+0.2,handler=self.game.restore_music)
             return duration
         # if not, return zilch
         else:
@@ -338,13 +345,13 @@ class BaseGameMode(ep.EP_Mode):
     def end_quote(self,key):
         self.active_quotes.remove(key)
 
-    def priority_quote(self,quote,loops=0, max_time=0, fade_ms=0):
+    def priority_quote(self,quote,loops=0, max_time=0, fade_ms=0,squelch=False):
         # cancel any other voice quote
         for key in self.active_quotes:
             print "STOPPING " + str(key)
             self.game.sound.stop(key)
         # then play the quote - overriding the voice delay timer
-        duration = self.play_quote(quote,loops,max_time,fade_ms,override=True)
+        duration = self.play_quote(quote,loops,max_time,fade_ms,override=True,squelch=squelch)
         return duration
 
     def repeat_ding(self,times):

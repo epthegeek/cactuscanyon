@@ -922,8 +922,7 @@ class Assets():
         self.game.sound.register_music(self.music_cvaLoop, self.music_path + "bangarang-loop.wav")
         self.sfx_cvaLoop = 'sfx_cvaLoop'
         self.game.sound.register_sound(self.sfx_cvaLoop, self.music_path + "bangarang-loop.wav")
-        self.music_steampunk = 'music_steampunk'
-        self.game.sound.register_music(self.music_steampunk, self.music_path + "028-music-steam-punk-ish.wav")
+
         #self.music_tensePiano1 = 'music_tensePiano1'
         #self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
         #self.music_tensePiano2 = 'music_tensePiano2'

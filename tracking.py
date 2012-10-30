@@ -125,9 +125,12 @@ class Tracking(game.Player):
         # bartStatus: OPEN, RUNNING, LAST, DEAD
         self.player_stats['bartStatus'] = "OPEN"
         self.player_stats['bartHits'] = 0
+        # defeated since last badge reset
         self.player_stats['bartsDefeated'] = 0
-        self.player_stats['bossBartsDefeated'] = 0
+        # total defeated including boss barts
         self.player_stats['bartsDefeatedTotal'] = 0
+        # total regular barts defeated for finding spot
+        self.player_stats['regularBartsDefeated'] = 0
         self.player_stats['currentBart'] = 0
         self.player_stats['gunfightsStarted'] = 0
         self.player_stats['gunfightsWon'] = 0

@@ -75,7 +75,7 @@ class Saloon(ep.EP_Mode):
                 return
 
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
-        if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus') and not self.game.bart.bossFight:
+        if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus'):
             if True in stackLevel:
                 print "Saloon Stack bail"
                 self.kick()
@@ -169,7 +169,7 @@ class Saloon(ep.EP_Mode):
 
         # flash the saloon arrow if bionic bart is ready
         bionicStatus = self.game.show_tracking('bionicStatus')
-        if bionicStatus == "READY" or self.game.bart.bossFight:
+        if bionicStatus == "READY":
             self.game.lamps.saloonArrow.schedule(0xF0F0F0F0)
             self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
         # flash bount and arrow if running and loaded
@@ -189,7 +189,6 @@ class Saloon(ep.EP_Mode):
             beacon = True
         if self.game.show_tracking('extraBallsPending') > 0:
             beacon = True
-        ## todo jackpot isn't set up
         if beacon:
             self.game.lamps.shootToCollect.enable()
         if self.game.show_tracking('gunfightStatus') == 'READY':
