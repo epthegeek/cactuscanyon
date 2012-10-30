@@ -137,7 +137,7 @@ class Bart(ep.EP_Mode):
         textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
 
         # play the intro
-        self.game.base.play_quote(self.introQuote,squelch=True)
+        duration = self.game.base.play_quote(self.introQuote,squelch=True)
 
         # show the transition
         transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
@@ -149,7 +149,7 @@ class Bart(ep.EP_Mode):
             self.defeatValue *= 2
             self.deathTally = 0
             # activate the drop targets
-            self.game.bad_guys.setup_targets()
+            self.delay(delay=duration,handler=self.game.bad_guys.setup_targets)
             # set them all to true
             self.activeBossPosse = [0,1,2,3]
         else:
@@ -424,3 +424,5 @@ class Bart(ep.EP_Mode):
         for dude in self.activeBossPosse:
             self.game.bad_guys.target_down(dude)
         self.activeBossPosse = []
+        # kill the bossfight so gun modes are available again
+        self.bossFight = False
