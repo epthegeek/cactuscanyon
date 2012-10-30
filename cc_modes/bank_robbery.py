@@ -498,7 +498,7 @@ class BankRobbery(ep.EP_Mode):
 
     def abort_display(self):
         # if we're done, we should quit
-        if True not in self.isActive:
+        if True not in self.isActive or not self.running:
             self.end_bank_robbery()
         self.cancel_delayed("Display")
         self.layer = None
