@@ -37,6 +37,12 @@ class SuperFilter(game.Mode):
             self.game.skill_shot.super_hit()
         return game.SwitchStop
 
+    def sw_leftLoopBottom_active(self,sw):
+        # if we hit the bottom of the left loop, and it's not active
+        if self.game.skill_shot.active != 1:
+            # then fail
+            self.game.skill_shot.super_hit()
+
     def sw_leftRampEnter_active(self,sw):
         if self.game.skill_shot.active == 2:
             self.game.skill_shot.super_hit(made=True)

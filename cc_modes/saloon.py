@@ -193,8 +193,8 @@ class Saloon(ep.EP_Mode):
             self.game.lamps.shootToCollect.enable()
         if self.game.show_tracking('gunfightStatus') == 'READY':
             if self.game.base.guns_allowed():
-                self.game.lamps.rightGunfightPin.enable()
-                self.game.lamps.leftGunfightPin.enable()
+                self.game.lamps.rightGunfightPin.schedule(0x00FF00FF)
+                self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
         if self.game.show_tracking('drunkMultiballStatus') == "READY":
             self.game.lamps.bountySaloon.disable()
             self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
@@ -459,7 +459,7 @@ class Saloon(ep.EP_Mode):
         self.update_lamps()
         if callback != None:
             print "I GOT A GUNFIGHT CALLBACK"
-            self.delay(delay=2,handler=callback)
+            self.delay("Callback",delay=2,handler=callback)
         self.delay(delay=2,handler=self.clear_layer)
         if self.busy:
             print "Light Gunfight - Delay timer for unbusy"
