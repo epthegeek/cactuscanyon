@@ -420,6 +420,7 @@ class Bart(ep.EP_Mode):
             self.game.saloon.busy = False
 
     def abort_display(self):
+        self.clear_layer()
         self.cancel_delayed("Display")
 
 

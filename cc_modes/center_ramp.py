@@ -218,7 +218,7 @@ class CenterRamp(ep.EP_Mode):
             # turn it on
             self.layer = animLayer
             # set the delay for the award
-            self.delay(name="Display",delay=myWait,handler=self.show_award_text)
+            self.delay("Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 2:
             self.train_stage_two(score=150000)
@@ -275,10 +275,10 @@ class CenterRamp(ep.EP_Mode):
         # swap in the new layer
         transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         # clear in 3 seconds
-        self.delay(name="Display",delay=2,handler=self.clear_layer)
+        self.delay("Display",delay=2,handler=self.clear_layer)
         # show combo display if the chain is high enough
         if self.game.combos.chain > 2:
-            self.delay(name="Display",delay=2,handler=self.game.combos.display)
+            self.delay("Display",delay=2,handler=self.game.combos.display)
 
     def train_stage_two(self,score):
         self.awardString = "STOP TRAIN"
@@ -295,7 +295,7 @@ class CenterRamp(ep.EP_Mode):
         # turn it on
         self.layer = animLayer
         # set the delay for the award
-        self.delay(name="Display",delay=myWait,handler=self.show_award_text)
+        self.delay("Display",delay=myWait,handler=self.show_award_text)
 
     def train_victory(self):
         start_value = self.game.increase_tracking('adventureCompleteValue',5000)
@@ -332,7 +332,7 @@ class CenterRamp(ep.EP_Mode):
         self.awardPoints = str(ep.format_score(value))
         self.game.score_with_bonus(value)
 
-def abort_display(self):
+    def abort_display(self):
         self.clear_layer()
         self.cancel_delayed("Display")
 
