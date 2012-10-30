@@ -406,7 +406,7 @@ class Saloon(ep.EP_Mode):
             rank = self.game.show_tracking('rank')
             duration = self.game.base.priority_quote(self.rankSounds[rank+1])
             # if we've made it to marshall, multiball should start
-            if rank + 1 == 4:
+            if rank + 1 == 4 and self.game.marshall_multiball not in self.game.modes:
                 self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
         else:
             self.game.base.priority_quote(self.game.assets.quote_bountyCollected)
