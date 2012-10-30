@@ -64,8 +64,14 @@ class SuperFilter(game.Mode):
     # right ramp make
     def sw_rightRampMake_active(self,sw):
         self.game.skill_shot.super_hit()
+    # right ramp enter
+    def sw_rightRampEnter_active(self,sw):
+        self.game.skill_shot.super_hit()
     # right loop top
     def sw_rightLoopTop_active(self,sw):
+        self.game.skill_shot.super_hit()
+    # right loop bottom
+    def sw_rightLoopBottom_active(self,sw):
         self.game.skill_shot.super_hit()
     # mine entrance
     def sw_mineEntrance_active(self,sw):

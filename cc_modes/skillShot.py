@@ -390,6 +390,7 @@ class SkillShot(ep.EP_Mode):
             self.game.add_bonus(1200)
             # turn on the right quickdraw
             self.game.saloon.light_gunfight(self.game.skill_shot.start_gameplay)
+            self.super = False
             return
 
         # drunk multiball
@@ -407,12 +408,14 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom = "YOUR TRAIN"
             # load the mode so the train starts moving
             self.game.modes.add(self.game.move_your_train)
+            self.super = False
 
         # cva
         elif self.selectedPrizes[5:] == "T":
             awardStringTop = "COWBOYS"
             awardStringBottom = "VS ALIENS"
             self.game.set_tracking("cvaStatus", "READY")
+            self.super = False
 
         # call the lamp update so the prize is shown properly
         self.game.update_lamps()
