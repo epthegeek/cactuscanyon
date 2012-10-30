@@ -354,6 +354,9 @@ class Bart(ep.EP_Mode):
         self.delay("Display",delay=myWait,handler=self.clear_layer)
         # count the dude
         self.deathTally += 1
+        # if death tally makes it to 4, kill the bossfight flag
+        if self.deathTally >= 4:
+            self.bossFight = False
         # score points - dudes worth 20,000
         self.game.score(25000)
         # increase the shot value and defeat value
