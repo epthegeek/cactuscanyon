@@ -1151,6 +1151,7 @@ class Assets():
         self.dmd_fireworks = dmd.Animation().load(self.dmd_path+'fireworks.dmd')
 
         self.dmd_marshallBorder = dmd.Animation().load(self.dmd_path+'marshall-border.dmd')
+        self.dmd_marshallHighScoreFrame = dmd.Animation().load(self.dmd_path+'marshall-highscore-frame.dmd')
 
         self.dmd_boss = dmd.Animation().load(self.dmd_path+'boss.dmd')
         self.dmd_bossHit = dmd.Animation().load(self.dmd_path+'boss-hit.dmd')

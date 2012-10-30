@@ -288,6 +288,16 @@ class Attract(ep.EP_Mode):
                         # add it to the stack
                         self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH})
 
+                # generate screens for marshall multiball
+                if category.game_data_key == 'MarshallHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque=False,frame=self.game.assets.dmd_marshallHighScoreFrame.frames[0])
+                    text = str(index+1) + ") " + score.inits + " " + score_str
+                    initsLine = dmd.TextLayer(64,22,self.game.assets.font_7px_az,"center",opaque=False).set_text(text)
+                    scoreLine = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("OLD TIME PINBALL")
+                    combined = dmd.GroupedLayer(128,32,[backdrop,initsLine,scoreLine])
+                    # add it to the stack
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST})
+
                 # generate a screen for the quickdraw high score champ
                 if category.game_data_key == 'QuickdrawChampHighScoreData':
                     backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_quickdrawStill.frames[0])

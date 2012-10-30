@@ -33,6 +33,10 @@ ClassicHighScoreData:
 - {date: 'Sun Oct  3 16:22:47 2010', inits: JCT, score: 300000}
 - {date: 'Sun Oct  3 15:04:27 2010', inits: ABI, score: 200000}
 - {date: 'Sun Oct  3 22:05:01 2010', inits: EMM, score: 100000}
+MarshallHighScoreData:
+- {date: 'Sun Oct  3 17:38:46 2010', inits: OIC, score: 500}
+- {date: 'Sun Oct  3 17:44:49 2010', inits: LIZ, score: 400}
+- {date: 'Sun Oct  3 16:22:47 2010', inits: JCT, score: 300}
 RiverBankHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
 QuickdrawChampHighScoreData:

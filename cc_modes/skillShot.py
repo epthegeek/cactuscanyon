@@ -326,7 +326,7 @@ class SkillShot(ep.EP_Mode):
             # play the appropriate rank quote
             duration = self.game.base.priority_quote(self.rankSounds[newRank])
             # if we've made it to marshall, that should start
-            if newRank == 4 and:
+            if newRank == 4:
                 self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
 
         elif self.selectedPrizes[5:] == "L":
