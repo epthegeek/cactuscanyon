@@ -35,12 +35,12 @@ class EP_Mode(game.Mode):
 
     # wait for busy to be over routine
     def wait_until_unbusy(self,myHandler):
-        print "BUSY LOOP WAIT - BUSY IS " + str(self.busy)
+        #print "BUSY LOOP WAIT - BUSY IS " + str(self.busy)
         if not self.busy:
-            print myHandler
+            #print myHandler
             myHandler()
         else:
-            print "BUSY LOOP - SETTING A NEW DELAY"
+            #print "BUSY LOOP - SETTING A NEW DELAY"
             self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
 
     # standard clear layer
