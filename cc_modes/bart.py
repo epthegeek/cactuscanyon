@@ -217,10 +217,7 @@ class Bart(ep.EP_Mode):
         self.game.score(self.hitValue)
         # flash the light and move the dude
         # a flourish lampshow
-        if self.bossFight:
-            myCallback = None
-        else:
-            myCallback = self.game.update_lamps
+        myCallback = self.game.update_lamps
         self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=myCallback)
         # display the info
         # register the hit
@@ -250,7 +247,7 @@ class Bart(ep.EP_Mode):
         # play a fancy lamp show
         self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
         # if we're boss fighting, go to that display
-        if self.bossFight:
+        if self.brother == "BOSS":
             self.boss_damage_display()
         else:
             self.display_damage_one()
@@ -262,7 +259,7 @@ class Bart(ep.EP_Mode):
         # tick up the global count as well
         globalTotal = self.game.increase_tracking('bartsDefeatedTotal')
         # this bart total counts just regualr barts
-        if not self.bossFight:
+        if self.brother != "BOSS":
             self.game.increase_tracking('regularBartsDefeated')
         # move bart
         self.animate(1)
