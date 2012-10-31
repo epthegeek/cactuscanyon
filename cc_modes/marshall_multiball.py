@@ -67,10 +67,10 @@ class MarshallMultiball(ep.EP_Mode):
         # play the quote
         duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
 
-        self.delay(delay=duration+0.2,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
-        self.delay(delay=duration+0.8,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
-        self.delay(delay=duration+1.4,handler=self.game.sound.play,param=self.game.assets.sfx_chimeIntro)
-        self.delay(delay=duration+2,handler=self.start)
+        self.delay("Operational",delay=duration+0.2,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
+        self.delay("Operational",delay=duration+0.8,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
+        self.delay("Operational",delay=duration+1.4,handler=self.game.sound.play,param=self.game.assets.sfx_chimeIntro)
+        self.delay("Operational",delay=duration+2,handler=self.start)
 
 
     def ball_drained(self):
@@ -78,6 +78,7 @@ class MarshallMultiball(ep.EP_Mode):
             print "WELL MMB KNOWS IT IS RUNNING"
             if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
                 self.game.base.busy = True
+                self.cancel_delayed("Operational")
                 self.end_mmb()
 
     # lamps
