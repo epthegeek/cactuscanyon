@@ -43,6 +43,7 @@ class MoveYourTrain(ep.EP_Mode):
         # move the train to the middle of the track
         # set a stop point for the encoder
         self.game.train.stopAt = 100
+        print "Stop train at value: " + str(self.game.train.stopAt)
         # move the train forward
         self.game.train.fast_forward()
         # set the horizontal offset to starting point
@@ -163,6 +164,7 @@ class MoveYourTrain(ep.EP_Mode):
             if self.shots % 10 == 0:
                 self.game.sound.play(self.game.assets.quote_mytTaunt)
             self.game.train.stopAt = 20
+            print "Stop train at value: " + str(self.game.train.stopAt)
             if direction == "left":
                 self.move_display("left")
                 self.game.train.fast_forward()
