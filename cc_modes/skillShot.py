@@ -55,7 +55,7 @@ class SkillShot(ep.EP_Mode):
         self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
         self.active = 0
         # check the generosity setting
-        if self.game.user_settings['Machine (Standard)']['Skillshot Boosts'] == 'Easy':
+        if self.game.user_settings['Gameplay (Feature)']['Skillshot Boosts'] == 'Easy':
             self.easy = True
         else:
             self.easy = False
