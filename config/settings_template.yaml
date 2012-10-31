@@ -171,6 +171,9 @@ Gameplay (Feature):
   'Showdown Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Skilshot Boosts':
+    options: ['Easy','Hard']
+    default: 'Easy'
   'Polly Dies Animation':
     options: ['Show','Hide']
     default: 'Show'

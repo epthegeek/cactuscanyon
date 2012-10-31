@@ -54,6 +54,11 @@ class SkillShot(ep.EP_Mode):
                            self.game.assets.quote_rankUpMarshall]
         self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
         self.active = 0
+        # check the generosity setting
+        if self.game.user_settings['Machine (Standard)']['Skillshot Boosts'] == 'Easy':
+            self.easy = True
+        else:
+            self.easy = False
 
     def ball_drained(self):
         # if somehow all the balls go away and this crap is still running, it should unload. SRSLY.
@@ -236,9 +241,14 @@ class SkillShot(ep.EP_Mode):
             awardStringTop = "BANK ROBBERY"
             awardStringBottom = "BOOST"
             # set the bank ramp to completed
-            self.game.set_tracking('rightRampStage',3)
-            self.game.score(250000)
-            self.game.add_bonus(100000)
+            if self.easy:
+                self.game.set_tracking('rightRampStage',3)
+                self.game.score(250000)
+                self.game.add_bonus(100000)
+            else:
+                self.game.increase_tracking('rightRampStage')
+                self.game.score(100000)
+                self.game.add_bonus(50000)
 
         elif self.selectedPrizes[5:] == "D":
             self.game.score(20)
@@ -277,17 +287,28 @@ class SkillShot(ep.EP_Mode):
         elif self.selectedPrizes[5:] == "F":
             awardStringTop = "RIVER RESCUE"
             awardStringBottom = "BOOST"
-            self.game.set_tracking('leftRampStage',3)
-            self.game.score(250000)
-            self.game.add_bonus(100000)
+            if self.easy:
+                self.game.set_tracking('leftRampStage',3)
+                self.game.score(250000)
+                self.game.add_bonus(100000)
+            else:
+                self.game.increase_tracking('leftRampStage')
+                self.game.score(100000)
+                self.game.add_bonus(50000)
 
         elif self.selectedPrizes[5:] == "G":
             # This one is the right loop
             awardStringTop = "TRICK SHOTS"
-            awardStringBottom = "COMPLETE"
-            self.game.set_tracking('rightLoopStage',4)
-            self.game.score(250000)
-            self.game.add_bonus(100000)
+            awardStringBottom = "BOOST"
+            if self.easy:
+                self.game.set_tracking('rightLoopStage',4)
+                self.game.score(250000)
+                self.game.add_bonus(100000)
+            else:
+                self.game.increase_tracking('rightLoopStage')
+                self.game.score(100000)
+                self.game.add_bonus(50000)
+
 
         elif self.selectedPrizes[5:] == "H":
             # This one is the quickdraw
@@ -301,10 +322,16 @@ class SkillShot(ep.EP_Mode):
         elif self.selectedPrizes[5:] == "I":
             # this one is the left loop
             awardStringTop = "BUCK N BRONCO"
-            awardStringBottom ="COMPLETE"
-            self.game.set_tracking('leftLoopStage',4)
-            self.game.score(250000)
-            self.game.add_bonus(100000)
+            awardStringBottom ="BOOST"
+            if self.easy:
+                self.game.set_tracking('leftLoopStage',4)
+                self.game.score(250000)
+                self.game.add_bonus(100000)
+            else:
+                self.game.increase_tracking('leftLoopStage')
+                self.game.score(100000)
+                self.game.add_bonus(50000)
+
 
         elif self.selectedPrizes[5:] == "J":
             awardStringTop = "EXTRA BALL"
@@ -339,9 +366,14 @@ class SkillShot(ep.EP_Mode):
         elif self.selectedPrizes[5:] == "M":
             awardStringTop = "TRAIN RESCUE"
             awardStringBottom = "BOOST"
-            self.game.set_tracking('centerRampStage',3)
-            self.game.score(250000)
-            self.game.add_bonus(100000)
+            if self.easy:
+                self.game.set_tracking('centerRampStage',3)
+                self.game.score(250000)
+                self.game.add_bonus(100000)
+            else:
+                self.game.increase_tracking('centerRampStage')
+                self.game.score(100000)
+                self.game.add_bonus(50000)
 
         elif self.selectedPrizes[5:] == "N":
             self.game.score(1000000)
