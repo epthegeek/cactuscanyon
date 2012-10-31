@@ -388,9 +388,8 @@ class SkillShot(ep.EP_Mode):
             self.layer = None
             self.game.score(50000)
             self.game.add_bonus(1200)
-            # turn on the right quickdraw
-            self.game.saloon.light_gunfight(self.game.skill_shot.start_gameplay)
             self.super = False
+            self.game.saloon.light_gunfight(self.game.skill_shot.start_gameplay)
             return
 
         # drunk multiball

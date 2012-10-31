@@ -344,7 +344,7 @@ class Interrupter(ep.EP_Mode):
         self.delay("Cut In",delay=timer,handler=self.clear_layer)
 
     # this throws a message if the coin door is opened
-    def sw_coinDoorClosed_inactive(self):
+    def sw_coinDoorClosed_inactive(self,sw):
         line1 = dmd.TextLayer(128/2, 3, self.game.assets.font_7px_az, "center", opaque=True).set_text("COIN DOOR OPEN")
         line2 = dmd.TextLayer(128/2, 15, self.game.assets.font_7px_az, "center", opaque=False).set_text("HIGH VOLTAGE DISABLED")
         self.layer = dmd.GroupedLayer(128,32,[line1,line2])

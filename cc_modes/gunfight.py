@@ -159,7 +159,7 @@ class Gunfight(ep.EP_Mode):
         mask.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[backdrop,mask,title])
         # after a delay pan down to the dude
-        self.delay("Operational",name="pan",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
+        self.delay("Operational",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
 
     def won(self):
         self.win = True

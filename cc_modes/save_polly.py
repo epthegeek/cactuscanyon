@@ -95,11 +95,12 @@ class SavePolly(ep.EP_Mode):
             self.halt_train()
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
-    def sw_minePopper_active_for_390ms(self,sw):
+    def sw_minePopper_active_for_350ms(self,sw):
+        print "TTTT Mine Popper Register"
         if not self.halted:
             self.halt_train()
 
-    def sw_saloonPopper_active_for_290ms(self,sw):
+    def sw_saloonPopper_active_for_250ms(self,sw):
         if not self.halted:
             self.halt_train()
 
@@ -266,7 +267,7 @@ class SavePolly(ep.EP_Mode):
                 transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
 
             # set a delay to start the train again
-            self.delay(delay=1.5,handler=self.pause_timer,param=time)
+            self.delay("Pause Timer",delay=1.5,handler=self.pause_timer,param=time)
 
     def pause_timer(self,time):
         # if the timer is at 0 start the train up again
