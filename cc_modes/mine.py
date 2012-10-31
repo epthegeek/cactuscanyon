@@ -381,7 +381,7 @@ class Mine(ep.EP_Mode):
         # callback process for calling from skill shot
         if callback:
             self.delay(delay=myWait,handler=callback)
-        self.delay(delay=myWait,handler=self.clear_layer)
+        self.delay("Display",delay=myWait,handler=self.clear_layer)
         print "EXTRA BALL LIT"
 
     def collect_extra_ball(self,type=0):

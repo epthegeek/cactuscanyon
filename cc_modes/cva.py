@@ -726,7 +726,7 @@ class CvA(ep.EP_Mode):
             self.delay(delay=theDelay,handler=self.switch_modes,param="SHIP")
         elif self.aliensKilledRound == 2:
             print "WAVE 2 NOW"
-            self.delay(delay=theDelay,handler=self.teleport_aliens,param=2)
+            self.delay("Aliens",delay=theDelay,handler=self.teleport_aliens,param=2)
         else:
             self.delay("Display",delay=theDelay,handler=self.update_display)
 
