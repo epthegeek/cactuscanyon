@@ -148,7 +148,7 @@ class Gunfight(ep.EP_Mode):
         # play the intro riff
         myWait = self.game.sound.play(self.game.assets.music_gunfightIntro)
         # delayed play the drum roll
-        self.delay(delay=myWait,handler=self.game.base.music_on,param=self.game.assets.music_drumRoll)
+        self.delay("Operational",delay=myWait,handler=self.game.base.music_on,param=self.game.assets.music_drumRoll)
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_gunfightStart)
         # display the clouds with gunfight text
@@ -159,7 +159,7 @@ class Gunfight(ep.EP_Mode):
         mask.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[backdrop,mask,title])
         # after a delay pan down to the dude
-        self.delay(name="pan",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
+        self.delay("Operational",name="pan",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
 
     def won(self):
         self.win = True
@@ -186,16 +186,16 @@ class Gunfight(ep.EP_Mode):
         # cancel the lose delay
         self.cancel_delayed("Gunfight Lost")
         self.game.sound.play(self.game.assets.sfx_gunfightShot)
-        self.delay(delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
+        self.delay("Operational",delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
         # this plays the quoteToPlay decided above - separates ranking up from marhsall wins
-        self.delay(delay=0.3,handler=self.game.base.priority_quote,param=quoteToPlay)
+        self.delay("Operational",delay=0.3,handler=self.game.base.priority_quote,param=quoteToPlay)
         # play the animation
         anim = self.game.assets.dmd_dudeShotShouldersUp
         myWait = len(anim.frames) / 10.0
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
         # after the animation, display the win
-        self.delay(delay=myWait,handler=self.display_win,param=newrank)
+        self.delay("Operational",delay=myWait,handler=self.display_win,param=newrank)
 
     def display_win(self,newrank):
         ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
@@ -211,7 +211,7 @@ class Gunfight(ep.EP_Mode):
         textLine3 = dmd.TextLayer(64, 20, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString3)
         textLine4 = dmd.TextLayer(64, 26, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString4)
         self.layer = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,textLine4])
-        self.delay(delay=2,handler=self.end_gunfight)
+        self.delay("Operational",delay=2,handler=self.end_gunfight)
 
     def lost(self):
         print "Gunfight - Lost routine"
@@ -251,6 +251,7 @@ class Gunfight(ep.EP_Mode):
             else:
                 pass
         self.game.bad_guys.update_lamps()
+        self.cancel_delayed("Operational")
         # unload
         self.unload()
 
@@ -260,7 +261,7 @@ class Gunfight(ep.EP_Mode):
         myWait = len(anim.frames) / 60 + 1.3
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=1)
         self.layer = animLayer
-        self.delay(name="eyes",delay=myWait,handler=self.gunfight_intro_eyes,param=badGuys)
+        self.delay("Operational",delay=myWait,handler=self.gunfight_intro_eyes,param=badGuys)
 
     def gunfight_intro_eyes(self,badGuys):
         # pop up the first bad guy and remove it from the array
@@ -275,7 +276,7 @@ class Gunfight(ep.EP_Mode):
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
         # after a delay pass to the hands with the pop order
-        self.delay(name="hands",delay=1.1,handler=self.gunfight_intro_hands,param=badGuys)
+        self.delay(name="Operational",delay=1.1,handler=self.gunfight_intro_hands,param=badGuys)
         # and drop the current one
         self.delay(delay=1.1,handler=self.game.bad_guys.target_down,param=enemy)
 
@@ -293,8 +294,8 @@ class Gunfight(ep.EP_Mode):
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
         # after a delay pass to the feet with the pop order
-        self.delay(name="boots",delay=1.1,handler=self.gunfight_intro_boots,param=badGuys)
-        self.delay(delay=1.1,handler=self.game.bad_guys.target_down,param=enemy)
+        self.delay("Operational",delay=1.1,handler=self.gunfight_intro_boots,param=badGuys)
+        self.delay("Operational",delay=1.1,handler=self.game.bad_guys.target_down,param=enemy)
 
     def gunfight_intro_boots(self,badGuys):
         # pop the third bad guy
@@ -308,8 +309,8 @@ class Gunfight(ep.EP_Mode):
         boots = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_gunfightBoots.frames[0])
         self.layer = boots
         # after a delay - pass to the final setp
-        self.delay(name="draw",delay=1.1,handler=self.gunfight_intro_draw,param=badGuys)
-        self.delay(delay=1.1,handler=self.game.bad_guys.target_down,param=enemy)
+        self.delay("Operational",delay=1.1,handler=self.gunfight_intro_draw,param=badGuys)
+        self.delay("Operational",delay=1.1,handler=self.game.bad_guys.target_down,param=enemy)
 
     def gunfight_intro_draw(self,badGuys):
         # pop the last bad guy
@@ -322,14 +323,14 @@ class Gunfight(ep.EP_Mode):
         self.starting = False
         # play the 4 bells
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
-        self.delay(delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
+        self.delay("Operational",delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
         # run the animation
         anim = self.game.assets.dmd_gunfightBoots
         myWait = len(anim.frames) / 10.0
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
         # pass one last time to the release
-        self.delay(name="release",delay=myWait,handler=self.gunfight_release)
+        self.delay("Operational",delay=myWait,handler=self.gunfight_release)
 
     def gunfight_release(self):
         # play the draw quote
@@ -344,7 +345,7 @@ class Gunfight(ep.EP_Mode):
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost
-        self.delay(name="Gunfight Lost",delay=4,handler=self.lost)
+        self.delay("Gunfight Lost",delay=4,handler=self.lost)
 
     def mode_stopped(self):
         self.running = False
