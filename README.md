@@ -1,7 +1,7 @@
 Cactus Canyon Continued
 =======================
 
-A P-ROC Project.  Written by a less-than-amateur.  Seriously, this is the first OOP I've ever done, so my code is probably garbage.  Try not to laugh.
+A P-ROC Project.  Written by an amateur.  Seriously, this is the first OOP I've ever done, so my code is probably garbage.  Try not to laugh.
 
 This is built on the shoulders of giants
 ========================================
@@ -12,3 +12,8 @@ It's not all here
 =================
 
 There's other stuff involved.  The DMD graphics and sounds aren't in here.  So, this won't run as is.
+
+Disclaimer type stuff
+=====================
+
+I can't be blamed for anything you do with this code.  If you take it and use it for something, that's on you. I make no guarantees of any kind as to function or performance.
