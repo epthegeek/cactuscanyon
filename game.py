@@ -113,6 +113,12 @@ class CCGame(game.BasicGame):
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'MarshallHighScoreData'
+        cat.titles = ['Masrhall Pinball']
+        cat.score_for_player = lambda player: self.show_tracking('marshallBest')
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
         cat.game_data_key = 'QuickdrawChampHighScoreData'
         cat.titles = ['Quickdraw Champ']
         cat.score_for_player = lambda player: self.show_tracking('quickdrawsWon')

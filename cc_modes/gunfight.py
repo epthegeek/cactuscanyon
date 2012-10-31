@@ -246,7 +246,6 @@ class Gunfight(ep.EP_Mode):
         # if we're at marshall, and it hasn't run yet, do the MM if nothing else is running
         if self.game.show_tracking('rank') == 4 and self.game.show_tracking('marshallMultiballRun') == False:
             if True not in self.game.show_tracking('stackLevel'):
-                # disabled marshall multiball for now
                 self.delay(delay=waitTime,handler=self.game.base.kickoff_marshall)
             else:
                 pass

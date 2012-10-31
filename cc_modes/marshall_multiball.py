@@ -42,8 +42,6 @@ class MarshallMultiball(ep.EP_Mode):
         self.completedSets = 0
         # for the mine/saloon
         self.activeHole = 0
-        # For the rank lamps
-        self.rankHits = [False,False,False,False,False]
         # for the badge points
         self.badgeHits = 0
         # 'jackpot' mode
@@ -58,6 +56,13 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.sound.stop_music()
         # kill the lights
         self.update_lamps()
+        # chase the rank lamps
+        self.game.lamps.rankStranger.schedule(0xFFF00000)
+        self.game.lamps.rankPartner.schedule(0x0FFF0000)
+        self.game.lamps.rankDeputy.schedule(0x000FFF00)
+        self.game.lamps.rankSheriff.schedule(0x0000FFF0)
+        self.game.lamps.rankMarshall.schedule(0x00000FFF)
+
 
         # play the quote
         duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
@@ -69,8 +74,6 @@ class MarshallMultiball(ep.EP_Mode):
 
 
     def ball_drained(self):
-        print "HEY MMB, A BALL DRAINED, PAY ATTENTION"
-        print "THERE ARE " + str(self.game.trough.num_balls_in_play) + " BALLS IN PLAY"
         if self.running:
             print "WELL MMB KNOWS IT IS RUNNING"
             if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
@@ -187,24 +190,6 @@ class MarshallMultiball(ep.EP_Mode):
             self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
             self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
             self.game.lamps.rightRampCombo.schedule(0x00FF00FF)
-        # rank lights - if true for position, enable
-        if self.rankHits[0]:
-            self.game.lamps.rankStranger.enable()
-        if self.rankHits[1]:
-            self.game.lamps.rankPartner.enable()
-        if self.rankHits[2]:
-            self.game.lamps.rankDeputy.enable()
-        if self.rankHits[3]:
-            self.game.lamps.rankSheriff.enable()
-        if self.rankHits[4]:
-            self.game.lamps.rankMarshall.enable()
-        # if jackpot they all flash
-        if self.jackpot:
-            self.game.lamps.rankStranger.schedule(0xFFF00000)
-            self.game.lamps.rankPartner.schedule(0x0FFF0000)
-            self.game.lamps.rankDeputy.schedule(0x000FFF00)
-            self.game.lamps.rankSheriff.schedule(0x0000FFF0)
-            self.game.lamps.rankMarshall.schedule(0x00000FFF)
         # badge lights
         if self.badgeHits >= 1:
             self.game.lamps.starMotherlode.enable()
@@ -249,7 +234,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.leftLoopLevel == 6:
             self.leftLoopLevel = 0
             # turn on the rank light for this shot
-            self.light_rank(0)
+            self.light_badge()
         return game.SwitchStop
 
     # left ramp
@@ -264,7 +249,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.leftLoopLevel == 6:
             self.leftLoopLevel = 0
             # turn on the rank light for this shot
-            self.light_rank(1)
+            self.light_badge()
         return game.SwitchStop
 
     def sw_leftRampMake_active(self,sw):
@@ -285,7 +270,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.centerRampLevel == 6:
             self.centerRampLevel = 0
             # turn on the rank light for this shot
-            self.light_rank(2)
+            self.light_badge()
         return game.SwitchStop
 
     #right loop
@@ -304,7 +289,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.rightLoopLevel == 6:
             self.rightLoopLevel = 0
             # turn on the rank light for this shot
-            self.light_rank(3)
+            self.light_badge()
 
         return game.SwitchStop
 
@@ -323,7 +308,7 @@ class MarshallMultiball(ep.EP_Mode):
         if self.rightRampLevel == 6:
             self.rightRampLevel = 0
             # turn on the rank light for this shot
-            self.light_rank(4)
+            self.light_badge()
 
         return game.SwitchStop
 
@@ -518,15 +503,6 @@ class MarshallMultiball(ep.EP_Mode):
     def score(self,points):
         self.pointTotal += points
 
-    def light_rank(self,shot):
-        # set that light to true
-        self.rankHits[shot] = True
-        # if they're all lit now, then light a badge point
-        if False not in self.rankHits:
-            self.light_badge()
-        # and update the lights
-        self.update_lamps()
-
     def light_badge(self):
         # increase the lit badge points
         self.badgeHits += 1
@@ -550,7 +526,6 @@ class MarshallMultiball(ep.EP_Mode):
         # if jackpots are ending, reset some things
         else:
             self.badgeHits = 0
-            self.rankHits = [False,False,False,False,False]
 
     def jackpot_shot(self):
         # all main shots in jakcpot mode score 5000
