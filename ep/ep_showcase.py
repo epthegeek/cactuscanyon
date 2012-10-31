@@ -52,8 +52,8 @@ FILL_FONT = [font_showcase_fill_0,
 class EP_Showcase(object):
 
     def make_string(self,ll,ur,fill,x=64,y=0,align="center",isOpaque=False,text="",isTransparent=False,condensed=False):
-        print "MY TEXT: " + text
-        print "ALIGN: " + str(align)
+        #print "MY TEXT: " + text
+        #print "ALIGN: " + str(align)
         if condensed:
             LL_FONT[ll].tracking = -1
             UR_FONT[ur].tracking = -1
