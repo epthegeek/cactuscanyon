@@ -86,6 +86,8 @@ class CvA(ep.EP_Mode):
         # set the mode
         self.mode = "SHIP"
         self.saucerMoving = False
+        # ship starts at 4 seconds per pause
+        self.shipTimer = 4
         # reset the direction - should always start going left
         if self.direction[0] != "LEFT":
         # flip the direction of the ship
@@ -568,7 +570,7 @@ class CvA(ep.EP_Mode):
         # update the lamps
         self.update_mode_lamps()
         # start a timer to move the ship again
-        self.ship_timer(4)
+        self.ship_timer(self.shipTimer)
 
     def ship_timer(self,time):
         # a simple countdown loop to move the ship
@@ -603,6 +605,13 @@ class CvA(ep.EP_Mode):
             self.update_display()
 
     def next_saucer(self,go=False):
+        # increase the speed with kills
+        if self.saucerHits >= 2 and self.saucerHits <= 3:
+            self.shipTimer = 3
+        elif self.saucerHits >= 4 and self.saucerHits <= 5:
+            self.shipTimer = 2
+        elif self.saucerHits >= 6:
+            self.shipTimer = 1
         # flip the direction of the ship
         self.direction.reverse()
         # set the starting position of the ship
