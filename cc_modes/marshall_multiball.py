@@ -54,7 +54,10 @@ class MarshallMultiball(ep.EP_Mode):
         self.bonusLanes = [False,False]
         # kill the music
         self.game.sound.stop_music()
-        # kill the lights
+        # turn off all the lights
+        for lamp in self.game.lamps.items_tagged('Playfield'):
+            lamp.disable()
+        # set up the main lights
         self.update_lamps()
         # chase the rank lamps
         self.game.lamps.rankStranger.schedule(0xFFF00000)
@@ -67,10 +70,7 @@ class MarshallMultiball(ep.EP_Mode):
         # play the quote
         duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
 
-        self.delay("Operational",delay=duration+0.2,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
-        self.delay("Operational",delay=duration+0.8,handler=self.game.sound.play,param=self.game.assets.sfx_chime3000)
-        self.delay("Operational",delay=duration+1.4,handler=self.game.sound.play,param=self.game.assets.sfx_chimeIntro)
-        self.delay("Operational",delay=duration+2,handler=self.start)
+        self.delay("Operational",delay=duration+0.2,handler=self.start)
 
 
     def ball_drained(self):
@@ -215,8 +215,40 @@ class MarshallMultiball(ep.EP_Mode):
 
     def disable_lamps(self):
     # turn off all the lights
-        for lamp in self.game.lamps.items_tagged('Playfield'):
-            lamp.disable()
+        self.game.lamps.leftLoopBuckNBronco.disable()
+        self.game.lamps.leftLoopWildRide.disable()
+        self.game.lamps.leftLoopRideEm.disable()
+        self.game.lamps.leftLoopJackpot.disable()
+        self.game.lamps.leftLoopCombo.disable()
+        self.game.lamps.leftRampWhiteWater.disable()
+        self.game.lamps.leftRampWaterfall.disable()
+        self.game.lamps.leftRampSavePolly.disable()
+        self.game.lamps.leftRampJackpot.disable()
+        self.game.lamps.leftRampCombo.disable()
+        self.game.lamps.centerRampCatchTrain.disable()
+        self.game.lamps.centerRampStopTrain.disable()
+        self.game.lamps.centerRampSavePolly.disable()
+        self.game.lamps.centerRampJackpot.disable()
+        self.game.lamps.centerRampCombo.disable()
+        self.game.lamps.rightLoopGoodShot.disable()
+        self.game.lamps.rightLoopGunslinger.disable()
+        self.game.lamps.rightLoopMarksman.disable()
+        self.game.lamps.rightLoopJackpot.disable()
+        self.game.lamps.rightLoopCombo.disable()
+        self.game.lamps.rightRampSoundAlarm.disable()
+        self.game.lamps.rightRampShootOut.disable()
+        self.game.lamps.rightRampSavePolly.disable()
+        self.game.lamps.rightRampJackpot.disable()
+        self.game.lamps.rightRampCombo.disable()
+        self.game.lamps.starMotherlode.disable()
+        self.game.lamps.starCombo.disable()
+        self.game.lamps.starBartBrothers.disable()
+        self.game.lamps.starShowdown.disable()
+        self.game.lamps.starStampede.disable()
+        self.game.lamps.starHighNoon.disable()
+        self.game.lamps.leftBonusLane.disable()
+        self.game.lamps.rightBonusLane.disable()
+
 
     # switches
     # left loop
@@ -345,24 +377,28 @@ class MarshallMultiball(ep.EP_Mode):
 
     # beer mug
     def sw_beerMug_active(self,sw):
-        self.register(250)
+        self.register(300)
         return game.SwitchStop
 
     # quickdraw targets
     def sw_topLeftStandUp_active(self,sw):
         self.register(10)
+        self.game.bad_guys.target_up(0)
         return game.SwitchStop
 
     def sw_bottomLeftStandUp_active(self,sw):
         self.register(100)
+        self.game.bad_guys.target_up(1)
         return game.SwitchStop
 
     def sw_topRightStandUp_active(self,sw):
         self.register(10)
+        self.game.bad_guys.target_up(2)
         return game.SwitchStop
 
     def sw_bottomRightStandUp_active(self,sw):
         self.register(100)
+        self.game.bad_guys.target_up(3)
         return game.SwitchStop
 
     # slingshots
@@ -392,7 +428,7 @@ class MarshallMultiball(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_minePopper_active_for_390ms(self,sw):
-        self.register(10)
+        self.register(50)
         return game.SwitchStop
 
     # saloon
@@ -400,11 +436,11 @@ class MarshallMultiball(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_saloonBart_active(self,sw):
-        self.register(10)
+        self.register(50)
         return game.SwitchStop
 
     def sw_saloonPopper_active_for_290ms(self,sw):
-        self.register(10)
+        self.register(20)
         return game.SwitchStop
 
 
@@ -432,13 +468,13 @@ class MarshallMultiball(ep.EP_Mode):
         if shot == 1:
             self.register(10)
         elif shot == 2:
-            self.register(20)
+            self.register(50)
         elif shot == 3:
-            self.register(30)
+            self.register(100)
         elif shot == 4:
-            self.register(300)
-        elif shot == 5:
             self.register(500)
+        elif shot == 5:
+            self.register(1000)
         elif shot == 6:
             self.register(2500)
             # and count the completion
@@ -457,48 +493,48 @@ class MarshallMultiball(ep.EP_Mode):
         elif value == 30:
             self.game.sound.play(self.game.assets.sfx_chime30)
             self.score(30)
+        elif value == 50:
+            self.game.sound.play(self.game.assets.sfx_chime50)
+            self.score(50)
         elif value == 100:
             self.game.sound.play(self.game.assets.sfx_chime100)
             self.score(100)
         elif value == 200:
             self.game.sound.play(self.game.assets.sfx_chime200)
             self.score(200)
-        elif value == 250:
-            self.game.sound.play(self.game.assets.sfx_chime250)
-            self.score(250)
         elif value == 300:
             self.game.sound.play(self.game.assets.sfx_chime300)
-            self.score(310)
+            self.score(300)
         elif value == 500:
             self.game.sound.play(self.game.assets.sfx_chime500)
-            self.score(510)
+            self.score(500)
         elif value == 750:
             self.game.sound.play(self.game.assets.sfx_chimeOut)
             self.score(750)
         elif value == 1000:
             self.game.sound.play(self.game.assets.sfx_chime1000)
-            self.score(1020)
+            self.score(1000)
         elif value == 1500:
             self.game.sound.play(self.game.assets.sfx_chime1500)
-            self.score(1530)
+            self.score(1500)
         elif value == 2000:
             self.game.sound.play(self.game.assets.sfx_chime2000)
-            self.score(2070)
+            self.score(2000)
         elif value == 2500:
             self.game.sound.play(self.game.assets.sfx_chime2500)
-            self.score(2520)
+            self.score(2500)
         elif value == 3000:
             self.game.sound.play(self.game.assets.sfx_chime3000)
-            self.score(3030)
+            self.score(3000)
         elif value == 3500:
             self.game.sound.play(self.game.assets.sfx_chime3500)
-            self.score(3570)
+            self.score(3500)
         elif value == 4500:
             self.game.sound.play(self.game.assets.sfx_chime4500)
-            self.score(4510)
+            self.score(4500)
         elif value == 5000:
             self.game.sound.play(self.game.assets.sfx_chime5000)
-            self.score(5030)
+            self.score(5000)
 
     # score points
     def score(self,points):
@@ -549,6 +585,9 @@ class MarshallMultiball(ep.EP_Mode):
                 self.register(500)
             # and update the lamps
             self.update_lamps()
+
+    def hit_bad_guy(self,target):
+        self.register(3000)
 
     # finish up
     def end_mmb(self):

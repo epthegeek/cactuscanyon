@@ -148,6 +148,9 @@ class BadGuys(ep.EP_Mode):
         elif self.game.bart.bossFight:
             print "FIGHTING BOSS BART - TARGET DIVERTS"
             self.game.bart.boss_target_hit(target)
+        # bandits in goldmine
+        elif self.game.show_tracking('mineStatus') == "RUNNING":
+            self.game.gm_multiball.hit_bandit(target)
         # Otherwise, if all badguys are dead, we're in a showdown
         elif self.game.show_tracking('showdownStatus') == "RUNNING":
             print "SHOWDOWN RUNNING OMG"
@@ -155,12 +158,12 @@ class BadGuys(ep.EP_Mode):
             # showdown stuff would go here
         elif self.game.show_tracking('ambushStatus') == "RUNNING":
             self.game.ambush.hit(target)
-        # bandits in goldmine
-        elif self.game.show_tracking('mineStatus') == "RUNNING":
-            self.game.gm_multiball.hit_bandit(target)
         # cva
         elif self.game.show_tracking('cvaStatus') == "RUNNING":
             self.game.cva.hit_alien(target)
+        # marshall multiball
+        elif self.game.marshall_multiball.running:
+            self.game.marshall_multiball.hit_bad_guy(target)
         # option 3 is a gunfight
         else:
             # if the gunfight is still starting up, do nothing
