@@ -157,7 +157,8 @@ class Bart(ep.EP_Mode):
             # if there's only 1 hit to defeat this bart, set the status to last
             if self.hitsThisBart == 1:
                 self.game.set_tracking('bartStatus',"LAST")
-        self.delay("Display",delay=1.5,handler=self.clear_layer)
+        self.delay("Display",delay=duration,handler=self.clear_layer)
+        self.delay(delay=duration,handler=self.game.saloon.unbusy)
 
 
     def setup(self):
@@ -311,7 +312,7 @@ class Bart(ep.EP_Mode):
          # light gunfight?
         self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
         # clear the layer
-        self.delay("Display",delay=myWait,handler=self.clear_layer,param=True)
+        self.delay("Display",delay=myWait,handler=self.clear_layer)
 
     def display_damage_one(self):
         print "MADE IT TO DAMAGE ONE"
@@ -326,6 +327,7 @@ class Bart(ep.EP_Mode):
         layerTwo = dmd.GroupedLayer(128,32,[self.wantedFrameB,self.textLayer])
         transition = ep.EP_Transition(self,layerOne,layerTwo,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         self.delay("Display",delay = 1.5,handler=self.clear_layer)
+        self.delay(delay=1.5,handler=self.game.saloon.unbusy)
 
     ## BOSS FIGHT STUFF
 
@@ -373,6 +375,7 @@ class Bart(ep.EP_Mode):
         self.layer = dmd.GroupedLayer(128,32,[self.wantedFrameB,self.textLayer])
         # delay a loop back to the boss display
         self.delay("Display",delay = 2,handler=self.clear_layer)
+        self.delay(delay=2,handler=self.game.saloon.unbusy)
 
     ## OTHER BITS
 
@@ -409,12 +412,8 @@ class Bart(ep.EP_Mode):
         # pulse the flasher light
         self.game.coils.saloonFlasher.pulse(ep.FLASHER_PULSE)
 
-    def clear_layer(self,stayBusy = False):
-
+    def clear_layer(self):
         self.layer = None
-        # bart ties directly to the saloon - when this layer clears it frees up the busy flag on the saloon
-        if not stayBusy:
-            self.game.saloon.busy = False
 
     def abort_display(self):
         self.clear_layer()
