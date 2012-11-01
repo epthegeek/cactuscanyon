@@ -177,7 +177,7 @@ class RiverChase(ep.EP_Mode):
             self.layer = animLayer
 
             # loop back for the title card
-            self.delay(delay=myWait,handler=self.start_river_chase,param=2)
+            self.delay("Operational",delay=myWait,handler=self.start_river_chase,param=2)
         if step == 2:
             # set up the title card
             titleCard = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_rotrTitle.frames[0])
@@ -185,7 +185,7 @@ class RiverChase(ep.EP_Mode):
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
             self.delay("Get Going",delay=2,handler=self.in_progress)
-            self.delay(delay=2,handler=self.game.base.play_quote,param=self.game.assets.quote_rotrIntro)
+            self.delay("Operational",delay=2,handler=self.game.base.play_quote,param=self.game.assets.quote_rotrIntro)
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause
@@ -226,7 +226,7 @@ class RiverChase(ep.EP_Mode):
                 # otherwise ...
                 else:
                     # set up a delay to come back in 1 second with the lowered time
-                    self.delay(name="Mode Timer",delay=0.1,handler=self.in_progress)
+                    self.delay("Mode Timer",delay=0.1,handler=self.in_progress)
 
     def halt(self):
         print "HALTING -- BUMPERS/MINE/SALOON"
@@ -244,7 +244,9 @@ class RiverChase(ep.EP_Mode):
     def polly_saved(self):
         self.game.score(500000)
         self.running = False
-        self.dispatch_delayed()
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Display")
+        self.cancel_delayed("Operational")
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
@@ -254,7 +256,9 @@ class RiverChase(ep.EP_Mode):
     # fail
     def polly_died(self):
         self.running = False
-        self.dispatch_delayed()
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Display")
+        self.cancel_delayed("Operational")
         self.end_river_chase()
 
     def win_display(self,step=1):

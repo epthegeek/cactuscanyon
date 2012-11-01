@@ -80,7 +80,7 @@ class Showdown(ep.EP_Mode):
         animLayer.add_frame_listener(11,self.game.lightning,param="left")
         # setup the display
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.get_going)
+        self.delay("Operational",delay=myWait,handler=self.get_going)
         self.taunt_timer()
 
     def taunt_timer(self):
@@ -91,11 +91,11 @@ class Showdown(ep.EP_Mode):
             # play a taunt quote
             self.game.base.play_quote(self.game.assets.quote_mobTaunt)
             self.tauntTimer = 0
-        self.delay(name="Taunt Timer",delay=1,handler=self.taunt_timer)
+        self.delay("Taunt Timer",delay=1,handler=self.taunt_timer)
 
     def get_going(self):
         myWait = self.game.base.play_quote(self.game.assets.quote_showdown)
-        self.delay(delay=myWait,handler=self.game.base.play_quote,param=self.game.assets.quote_mobStart)
+        self.delay("Operational",delay=myWait,handler=self.game.base.play_quote,param=self.game.assets.quote_mobStart)
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
@@ -103,7 +103,7 @@ class Showdown(ep.EP_Mode):
         #self.showdown_reset_guys()
         self.new_rack_pan()
         # drop the post
-        self.delay(delay=1.5,handler=self.posts[self.activeSide].disable)
+        self.delay("Operational",delay=1.5,handler=self.posts[self.activeSide].disable)
 
 
     def add_ball(self):
@@ -135,7 +135,7 @@ class Showdown(ep.EP_Mode):
         animLayer.add_frame_listener(11,self.game.lightning,param="right")
         # turn it on
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.new_rack_pan)
+        self.delay("Operational",delay=myWait,handler=self.new_rack_pan)
 
 
     def new_rack_pan(self):
@@ -153,7 +153,7 @@ class Showdown(ep.EP_Mode):
             script.append({'seconds':time,'layer':showdownStill})
         showdownPan = dmd.ScriptedLayer(128,32,script)
         self.layer = showdownPan
-        self.delay(delay=1.5,handler=self.new_rack_display)
+        self.delay("Operational",delay=1.5,handler=self.new_rack_display)
 
     def new_rack_display(self):
         # if 2 balls are in play add another
@@ -268,9 +268,9 @@ class Showdown(ep.EP_Mode):
         myWait = len(shotguy.frames) / 10.0
         if self.deathTally % 4 == 0:
             print "THEY'RE ALL DEAD JIM"
-            self.delay(delay=myWait,handler=self.new_rack)
+            self.delay("Operational",delay=myWait,handler=self.new_rack)
         else:
-            self.delay(delay=myWait,handler=self.game.interrupter.showdown_hit,param=self.showdownValue)
+            self.delay("Operational",delay=myWait,handler=self.game.interrupter.showdown_hit,param=self.showdownValue)
 
     def end_showdown(self):
         # drop all teh targets
@@ -319,7 +319,7 @@ class Showdown(ep.EP_Mode):
         self.layer = combined
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_mobEnd)
-        self.delay(name="Display",delay=2,handler=self.clear_layer)
+        self.delay("Display",delay=2,handler=self.clear_layer)
         # reset the showdown points for next time
         self.game.set_tracking('showdownPoints',0)
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
@@ -332,4 +332,7 @@ class Showdown(ep.EP_Mode):
     def mode_stopped(self):
         self.running = False
         print "SHOWDOWN IS DISPATCHING DELAYS"
-        self.dispatch_delayed()
+        self.cancel_delayed("Operational")
+        self.cancel_delayed("Display")
+        self.cancel_delayed("Taunt Timer")
+        self.clear_layer()

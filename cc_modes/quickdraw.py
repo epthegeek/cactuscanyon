@@ -133,7 +133,7 @@ class Quickdraw(ep.EP_Mode):
         self.game.sound.stop_music()
         # start the mode music
         self.game.sound.play(self.game.assets.music_quickdrawBumper)
-        self.delay(name="quickdraw music",delay=1.3,handler=self.game.base.music_on,param=self.game.assets.music_quickdraw)
+        self.delay("Operational",delay=1.3,handler=self.game.base.music_on,param=self.game.assets.music_quickdraw)
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_quickdrawStart)
         # pop that sucker up
@@ -158,7 +158,7 @@ class Quickdraw(ep.EP_Mode):
         self.portion = ((self.points / 10) / int(self.runtime * 5) * 10) - 370
         # queue up a delay for when the timer should run out if the mode hasn't been won
         # then start the timer after a 1 second grace period
-        self.delay(name="Grace",delay=1.5,handler=self.timer,param=self.target)
+        self.delay("Grace",delay=1.5,handler=self.timer,param=self.target)
 
     def timer(self,target):
         # ok, so this has to control the score and display?
@@ -183,7 +183,7 @@ class Quickdraw(ep.EP_Mode):
             # make it active
             self.layer = dmd.GroupedLayer(128,32,[self.animLayer,scoreLayer])
             # delay the next iteration
-            self.delay(name="Timer Delay", delay = 0.2, handler = self.timer, param=target)
+            self.delay("Timer Delay", delay = 0.2, handler = self.timer, param=target)
 
     def pause(self):
         self.paused = True
@@ -237,7 +237,7 @@ class Quickdraw(ep.EP_Mode):
         self.game.set_tracking('badGuysDead',"True",target)
         self.game.bad_guys.update_lamps()
         # stall a bit, then do the rest of the winning
-        self.delay(delay=0.5,handler=self.finish_win,param=dudesDead)
+        self.delay("Operational",delay=0.5,handler=self.finish_win,param=dudesDead)
 
     def finish_win(self,dudesDead):
         # play a quote
@@ -245,10 +245,10 @@ class Quickdraw(ep.EP_Mode):
         # if this is the 4th one , and we're not at the EB max, then light extra ball
         if dudesDead == 4 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             # call the extra ball lit with a callback to the check bounty routine after
-            self.delay(delay=duration,handler=self.game.mine.light_extra_ball,param=self.game.quickdraw.check_bounty)
+            self.delay("Operational",delay=duration,handler=self.game.mine.light_extra_ball,param=self.game.quickdraw.check_bounty)
         # any other case, just go to check bounty
         else:
-            self.delay(delay=duration,handler=self.check_bounty)
+            self.delay("Operational",delay=duration,handler=self.check_bounty)
 
     def check_bounty(self):
         # if the bounty isn't lit, light bounty - should these stack?
@@ -259,7 +259,7 @@ class Quickdraw(ep.EP_Mode):
             # run the light bounty
             self.game.saloon.light_bounty()
             # shutdown wait to cover the bounty display
-            self.delay(delay=1.6,handler=self.end_quickdraw)
+            self.delay("Operational",delay=1.6,handler=self.end_quickdraw)
         else:
             self.end_quickdraw()
 
@@ -307,4 +307,6 @@ class Quickdraw(ep.EP_Mode):
     def mode_stopped(self):
         self.running = False
         print "QUICKDRAW IS DISPATCHING DELAYS"
-        self.dispatch_delayed()
+        self.cancel_delayed("Operational")
+        self.cancel_delayed("Timer Delay")
+        self.cancel_delayed("Grace")

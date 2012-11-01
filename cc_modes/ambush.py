@@ -162,7 +162,7 @@ class Ambush(ep.EP_Mode):
         animLayer.add_frame_listener(11,self.lightning,param="left")
         # setup the display
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.intro_quote)
+        self.delay("Ambush",delay=myWait,handler=self.intro_quote)
 
     def taunt_timer(self):
         # tick up by one
@@ -172,18 +172,18 @@ class Ambush(ep.EP_Mode):
             # play a taunt quote
             self.game.base.play_quote(self.game.assets.quote_mobTaunt)
             self.tauntTimer = 0
-        self.delay(name="Taunt Timer",delay=1,handler=self.taunt_timer)
+        self.delay("Taunt Timer",delay=1,handler=self.taunt_timer)
 
     def intro_quote(self):
         myWait = self.game.base.play_quote(self.game.assets.quote_ambush)
-        self.delay(delay=myWait,handler=self.get_going)
+        self.delay("Ambush",delay=myWait,handler=self.get_going)
 
     def get_going(self):
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
         self.game.base.music_on(self.game.assets.music_showdown)
-        self.delay(delay=0.5,handler=self.game.base.play_quote,param=self.game.assets.quote_mobStart)
+        self.delay("Ambush",delay=0.5,handler=self.game.base.play_quote,param=self.game.assets.quote_mobStart)
         # add two dudes - one here, one later
         self.is_busy()
         self.add_guys(1)
@@ -191,8 +191,8 @@ class Ambush(ep.EP_Mode):
         self.posts[self.activeSide].disable()
 
         # delay adding the second guy for 2 seconds to stagger them a bit
-        self.delay(delay=2,handler=self.add_guys,param=1)
-        self.delay(delay=2,handler=self.taunt_timer)
+        self.delay("Ambush",delay=2,handler=self.add_guys,param=1)
+        self.delay("Ambush",delay=2,handler=self.taunt_timer)
 
     def add_guys(self,amount):
         # for adding dudes to the ambush
@@ -210,7 +210,7 @@ class Ambush(ep.EP_Mode):
         self.update_display()
         # if there are some left, repeat in 1 second to avoid popping them all up at once
         if amount != 0:
-            self.delay(name="Add Guys",delay=.5,handler=self.add_guys,param=amount)
+            self.delay("Add Guys",delay=.5,handler=self.add_guys,param=amount)
         else:
             self.unbusy()
 
@@ -261,7 +261,7 @@ class Ambush(ep.EP_Mode):
             self.guy_escapes(target)
         # if he has time left, come back later
         else:
-            self.delay(name=self.targetNames[target],delay=1,handler=self.targetTimer,param=target)
+            self.delay(self.targetNames[target],delay=1,handler=self.targetTimer,param=target)
 
     def poller(self):
         # this checks how many guys are up and adds more if needed
@@ -322,7 +322,7 @@ class Ambush(ep.EP_Mode):
             activeLayers.append(escapeLayers[escaped])
             amount = self.LOSE - self.misses
             self.game.base.red_flasher_flourish()
-            self.delay(delay=0.5,handler=self.game.interrupter.dude_escaped,param=amount)
+            self.delay("Ambush",delay=0.5,handler=self.game.interrupter.dude_escaped,param=amount)
 
         combined = dmd.GroupedLayer(128,32,activeLayers)
         combined.composite_op = "blacksrc"
@@ -354,7 +354,7 @@ class Ambush(ep.EP_Mode):
                 for dude in range(0,4,1):
                     self.cancel_delayed(self.targetNames[dude])
                 # then close up shop in 1.5 seconds to give the display time to finish up
-                self.delay(delay=1.5,handler=self.end_ambush)
+                self.delay("Ambush",delay=1.5,handler=self.end_ambush)
             else:
                 self.delay(name="Poller",delay=1.5,handler=self.poller)
 
@@ -459,7 +459,7 @@ class Ambush(ep.EP_Mode):
             self.game.base.play_quote(self.game.assets.quote_gunFail)
         else:
             self.game.base.play_quote(self.game.assets.quote_mobEnd)
-        self.delay(name="Display",delay=2,handler=self.clear_layer)
+        self.delay("Display",delay=2,handler=self.clear_layer)
         # reset the showdown points for next time
         self.game.set_tracking('ambushPoints',0)
 
@@ -469,12 +469,18 @@ class Ambush(ep.EP_Mode):
         self.game.base.busy = False
 
         # unload the mode
-        self.delay(delay=2.1,handler=self.unload)
+        self.delay("Ambush",delay=2.1,handler=self.unload)
 
     def mode_stopped(self):
         self.running = False
         print "AMBUSH IS DISPATCHING DELAYS"
-        self.dispatch_delayed()
+        self.cancel_delayed("Poller")
+        for i in (0,4,1):
+            self.cancel_delayed(self.targetTimer[i])
+        self.cancel_delayed("Display")
+        self.cancel_delayed("Ambush")
+        self.cancel_delayed("Add Guys")
+        self.cancel_delayed("Taunt Timer")
 
     def deactivate_guy(self,target):
         print "DEACTIVATING BAD GUY: " + str(target)

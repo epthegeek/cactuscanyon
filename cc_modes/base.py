@@ -53,7 +53,7 @@ class BaseGameMode(ep.EP_Mode):
         # set the number for tumbleweed hits to start cva
         self.tumbleweedShots = self.game.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA']
         ## cancel the closing song delay, just in case
-        self.game.interrupter.dispatch_delayed()
+        self.game.interrupter.cancel_delayed("Attract Fade")
         # and update the lamps
         self.game.update_lamps()
 

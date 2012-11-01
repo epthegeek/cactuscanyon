@@ -348,7 +348,7 @@ class Gunfight(ep.EP_Mode):
 
     def mode_stopped(self):
         self.running = False
-        print "GUNFIGHT IS DISPATCHING DELAYS"
-        self.dispatch_delayed()
+        self.cancel_delayed("Operational")
+        self.cancel_delayed("Display")
         self.starting = False
 

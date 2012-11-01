@@ -196,7 +196,7 @@ class SavePolly(ep.EP_Mode):
             self.infoLayer.composite_op = "blacksrc"
 
             # loop back for the title card
-            self.delay(delay=myWait,handler=self.start_save_polly,param=2)
+            self.delay("Operational",delay=myWait,handler=self.start_save_polly,param=2)
         if step == 2:
             # set up the title card
             titleCard = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ttttBanner.frames[0])
@@ -237,7 +237,7 @@ class SavePolly(ep.EP_Mode):
             # otherwise ...
             else:
                 # set up a delay to come back in 1 second with the lowered time
-                self.delay(name="Mode Timer",delay=0.1,handler=self.in_progress)
+                self.delay("Mode Timer",delay=0.1,handler=self.in_progress)
 
     # for a ramp hit - time and if advanced or not are conditional for side vs center ramps
     def pause_train(self,advanced=False):
@@ -254,7 +254,7 @@ class SavePolly(ep.EP_Mode):
             if not advanced:
                 time = 5
                 # play the pause display
-                self.delay(delay=1.5,handler=self.game.sound.play,param=self.cows[0])
+                self.delay("Operational",delay=1.5,handler=self.game.sound.play,param=self.cows[0])
                 # swap for the next shot
                 self.cows.reverse()
                 # setup the display
@@ -281,7 +281,7 @@ class SavePolly(ep.EP_Mode):
             # if not, tick off one
             time -= 1
             # then reschedule 1 second later with the new time
-            self.delay(name="Pause Timer",delay=1,handler=self.pause_timer,param=time)
+            self.delay("Pause Timer",delay=1,handler=self.pause_timer,param=time)
 
     def halt_train(self):
         print "HALTING TRAIN IN BUMPERS/MINE"
@@ -338,7 +338,10 @@ class SavePolly(ep.EP_Mode):
         self.won = True
         self.running = False
         self.game.train.stop()
-        self.dispatch_delayed()
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Operational")
+        self.cancel_delayed("Display")
+        self.cancel_delayed("Pause Timer")
         # play the train stopping animation and some sounds
         anim = self.game.assets.dmd_pollyOnTracks
         # math out the wait
@@ -359,7 +362,7 @@ class SavePolly(ep.EP_Mode):
         # play the train stop noise
         self.game.sound.play(self.game.assets.sfx_trainStop)
         # set the delay for the award
-        self.delay(delay=myWait,handler=self.give_award)
+        self.delay("Operational",delay=myWait,handler=self.give_award)
 
     def give_award(self):
         if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
@@ -408,7 +411,7 @@ class SavePolly(ep.EP_Mode):
             self.layer = combined
             duration = self.game.sound.play(self.game.assets.sfx_glumRiff)
             self.delay("Display",delay=duration,handler=self.clear_layer)
-            self.delay(delay=duration,handler=self.polly_finished)
+            self.delay("Operational",delay=duration,handler=self.polly_finished)
 
     def polly_finished(self):
         # stop the polly music
@@ -449,4 +452,8 @@ class SavePolly(ep.EP_Mode):
 
     def mode_stopped(self):
         print "SAVE POLLY IS DISPATCHING DELAYS"
-        self.dispatch_delayed()
+        self.cancel_delayed("Display")
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Operational")
+        self.cancel_delayed("Pause Timer")
+        self.clear_layer()
