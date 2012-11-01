@@ -85,6 +85,7 @@ class BankRobbery(ep.EP_Mode):
 
 
     def ball_drained(self):
+        print "Bank robbery thinks the ball drained"
         if self.game.trough.num_balls_in_play == 0:
             if self.running:
                 self.game.base.busy = True
@@ -498,8 +499,8 @@ class BankRobbery(ep.EP_Mode):
 
     def abort_display(self):
         # if we're done, we should quit
-        if True not in self.isActive or not self.running:
-            self.end_bank_robbery()
+#        if True not in self.isActive or not self.running:
+ #           self.end_bank_robbery()
         self.cancel_delayed("Display")
         self.layer = None
 
