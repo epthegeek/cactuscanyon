@@ -17,3 +17,5 @@ Disclaimer type stuff
 =====================
 
 I can't be blamed for anything you do with this code.  If you take it and use it for something, that's on you. I make no guarantees of any kind as to function or performance.
+
+This project is not affiliated with, or endorsed by WMS Gaming and/or whomever it is that currently holds the rights to the pinball properties under the Bally name.

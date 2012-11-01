@@ -107,6 +107,9 @@ class CvA(ep.EP_Mode):
         for mode in self.game.ep_modes:
             if getattr(mode, "abort_display", None):
                 mode.abort_display()
+        # if there's a quickdraw running, shut it down
+        if self.game.quickdraw.running:
+            self.game.quickdraw.lost(self.game.quickdraw.side)
 
     def update_mode_lamps(self):
         # update the lamps
