@@ -242,7 +242,7 @@ class Interrupter(ep.EP_Mode):
             # default three line display
             self.tld("BONUS INFO:", textString2, textString3)
         if self.page == 3:
-        # hits left to light drunk multiball
+        # Multiball/Mine information
             locked = self.game.show_tracking('ballsLocked')
             if locked == 1:
                 textString2 = str(locked) + " BALL LOCKED"
@@ -252,6 +252,7 @@ class Interrupter(ep.EP_Mode):
             textString3 = str(shots) + " MINE SHOTS TOTAL"
             # stock three line display
             self.tld("MINE STATUS:", textString2, textString3)
+        # drunk multiball status
         if self.page == 4:
             # hits left to light drunk multiball
             left = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball'] - self.game.show_tracking('beerMugHits')
@@ -264,6 +265,8 @@ class Interrupter(ep.EP_Mode):
                 # default three line display
             self.tld("BEER MUG:",textString2,textString3)
             # circle back and clear the layer
+        # combos information ?
+
         self.delay(name="Display",delay=3,handler=self.status)
 
     def tld(self,textString1,textString2,textString3):
