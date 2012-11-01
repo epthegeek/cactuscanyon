@@ -615,3 +615,5 @@ class MarshallMultiball(ep.EP_Mode):
     def mode_stopped(self):
         # turn the lights back on
         self.game.update_lamps()
+        # kill the drop targets
+        self.game.bad_guys.drop_targets()
