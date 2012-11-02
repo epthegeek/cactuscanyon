@@ -35,12 +35,6 @@ class BaseGameMode(ep.EP_Mode):
     def __init__(self, game,priority):
         super(BaseGameMode, self).__init__(game, priority)
         self.ball_starting = True
-        # rank - set up the bulb list
-        self.rankLamps = [self.game.lamps.rankStranger,
-                          self.game.lamps.rankPartner,
-                          self.game.lamps.rankDeputy,
-                          self.game.lamps.rankSheriff,
-                          self.game.lamps.rankMarshall]
         self.current_music = self.game.assets.music_mainTheme
         self.unbusy()
         self.active_quotes = []
@@ -163,19 +157,12 @@ class BaseGameMode(ep.EP_Mode):
         # extra ball
         if self.game.current_player().extra_balls > 0:
             self.game.lamps.shootAgain.enable()
-        # the rank lights
-        rank = self.game.show_tracking('rank')
-        # loop through 0 through current rank and turn the lamps on
-        for lamp in range(0,(rank +1),1):
-            self.rankLamps[lamp].enable()
         # if the bozo ball is on, flash the outlanes
         if self.game.show_tracking('bozoBall'):
             self.game.lamps.rightOutSpecial.schedule(0x0F0F0F0F)
             self.game.lamps.leftOutGunfight.schedule(0x0F0F0F0F)
 
     def disable_lamps(self):
-        for lamp in self.rankLamps:
-            lamp.disable()
         self.game.lamps.leftQuickdraw.disable()
         self.game.lamps.bottomRightQuickdraw.disable()
         self.game.lamps.topRightQuickdraw.disable()

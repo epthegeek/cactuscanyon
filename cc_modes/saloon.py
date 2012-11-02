@@ -28,11 +28,6 @@ class Saloon(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(Saloon, self).__init__(game, priority)
-        self.rankSounds = [self.game.assets.quote_rankUpPartner,
-                           self.game.assets.quote_rankUpPartner,
-                           self.game.assets.quote_rankUpDeputy,
-                           self.game.assets.quote_rankUpSheriff,
-                           self.game.assets.quote_rankUpMarshall]
         self.smacked = False
 
     def mode_started(self):
@@ -347,8 +342,7 @@ class Saloon(ep.EP_Mode):
         elif self.bountyPrize == 'rank':
             prizeText = "RANK"
             prizeText2 = "INCREASED"
-            self.prizeHandler = self.game.increase_tracking
-            self.prizeParam = 'rank'
+            self.prizeHandler = self.game.badge.increase_rank
         elif self.bountyPrize == 'points250k':
             prizeText = "250,000"
             self.prizeHandler = self.game.score
@@ -402,15 +396,7 @@ class Saloon(ep.EP_Mode):
         # play a lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.game.update_lamps)
         # play the quote
-        if self.prizeParam == 'rank':
-            rank = self.game.show_tracking('rank')
-            duration = self.game.base.priority_quote(self.rankSounds[rank+1])
-            # if we've made it to marshall, multiball should start
-            if rank + 1 == 4 and self.game.marshall_multiball not in self.game.modes:
-                self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
-        else:
-            self.game.base.priority_quote(self.game.assets.quote_bountyCollected)
-
+        self.game.base.priority_quote(self.game.assets.quote_bountyCollected)
         # then clear the layer and kick the ball out
         self.delay(delay = myWait,handler=self.finish_up)
 

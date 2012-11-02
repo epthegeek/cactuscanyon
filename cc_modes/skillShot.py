@@ -47,11 +47,6 @@ class SkillShot(ep.EP_Mode):
                                 self.game.lamps.centerRampStopTrain,
                                 self.game.lamps.centerRampSavePolly,
                                 self.game.lamps.centerRampJackpot]
-        self.rankSounds = [self.game.assets.quote_rankUpPartner,
-                           self.game.assets.quote_rankUpPartner,
-                           self.game.assets.quote_rankUpDeputy,
-                           self.game.assets.quote_rankUpSheriff,
-                           self.game.assets.quote_rankUpMarshall]
         self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
         self.active = 0
         # check the generosity setting
@@ -347,14 +342,9 @@ class SkillShot(ep.EP_Mode):
         elif self.selectedPrizes[5:] == "K":
             # this one is the rank
             awardStringTop = "RANK INCREASED"
-            newRank = self.game.increase_tracking('rank')
-            ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
-            awardStringBottom = "TO " + ranks[newRank]
-            # play the appropriate rank quote
-            duration = self.game.base.priority_quote(self.rankSounds[newRank])
-            # if we've made it to marshall, that should start
-            if newRank == 4:
-                self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
+            # call the rank increase, which returns title and time
+            newRank,duration = self.game.badge.increase_rank()
+            awardStringBottom = "TO " + newRank
 
         elif self.selectedPrizes[5:] == "L":
             self.game.score_with_bonus(1000)
