@@ -355,6 +355,8 @@ class CvA(ep.EP_Mode):
 
             # set the running flag
             self.game.set_tracking("cvaStatus", "RUNNING")
+            # and the local running flag
+            self.running = True
             self.game.update_lamps()
             # trap the ball if needed
             if entry == "inlane":
@@ -844,6 +846,8 @@ class CvA(ep.EP_Mode):
         self.game.set_tracking('stackLevel',False,5)
         # turn off the running flag
         self.game.set_tracking("cvaStatus","OPEN")
+        # turn off the local running flag
+        self.running = False
         # turn off the base busy
         self.game.base.busy = False
         # put the lights back to normal

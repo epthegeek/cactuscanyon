@@ -476,7 +476,7 @@ class Ambush(ep.EP_Mode):
         print "AMBUSH IS DISPATCHING DELAYS"
         self.cancel_delayed("Poller")
         for i in (0,4,1):
-            self.cancel_delayed(self.targetTimer[i])
+            self.cancel_delayed(self.targetNames[i])
         self.cancel_delayed("Display")
         self.cancel_delayed("Ambush")
         self.cancel_delayed("Add Guys")

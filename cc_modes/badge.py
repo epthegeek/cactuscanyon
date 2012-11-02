@@ -143,6 +143,7 @@ class Badge(ep.EP_Mode):
         # if we're at less than 4, increase
         if rank < 4:
             newRank = self.game.increase_tracking('rank')
+        # if we're not, set this arbitrary number
         else:
             newRank = 999
         ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
@@ -152,10 +153,11 @@ class Badge(ep.EP_Mode):
             # if we didn't increase rank, just use the quickdraw win quotes
             if newRank == 999:
                 quote = self.game.assets.quote_quickdrawWin
+            # if we did increase rank, the sound matches the rank
             else:
                 type = random.choice([self.rankSounds,self.winQuotes])
                 quote = type[newRank]
-        # anything tha tisn't a gunfight uses the rank specific congrats all the time
+        # anything that isn't a gunfight uses the rank specific congrats all the time
         else:
             quote = self.rankSounds[newRank]
 

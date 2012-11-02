@@ -606,7 +606,8 @@ class MarshallMultiball(ep.EP_Mode):
         # turn the music back on
         if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
-
+        # check bionic - to cover marshall required
+        self.game.badge.check_bionic()
         # turn off the base busy flag
         self.game.base.busy = False
         # unload
