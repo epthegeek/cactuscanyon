@@ -140,14 +140,15 @@ class Badge(ep.EP_Mode):
     def increase_rank(self,gunfight=False):
         # for updating the rank lights
         rank = self.game.show_tracking('rank')
+        ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHALL"]
         # if we're at less than 4, increase
         if rank < 4:
             newRank = self.game.increase_tracking('rank')
+            rankTitle = ranks[newRank]
         # if we're not, set this arbitrary number
         else:
             newRank = 999
-        ranks = ["STRANGER", "PARTNER", "DEPUTY", "SHERIFF", "MARSHAL"]
-        rankTitle = ranks[newRank]
+            rankTitle = ranks[4]
         # play the appropriate rank quote
         if gunfight:
             # if we didn't increase rank, just use the quickdraw win quotes
