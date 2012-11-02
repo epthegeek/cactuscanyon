@@ -279,10 +279,11 @@ class CvA(ep.EP_Mode):
 
     # the mine
     def sw_minePopper_active_for_390ms(self,sw):
-        self.game.score_with_bonus(2530)
-        # kick the ball
-        self.game.mountain.eject()
-        return game.SwitchStop
+        if not self.game.mountain.busy:
+            self.game.score_with_bonus(2530)
+            # kick the ball
+            self.game.mountain.eject()
+            return game.SwitchStop
 
     # the saloon
     def sw_saloonPopper_active_for_290ms(self,sw):
@@ -416,6 +417,7 @@ class CvA(ep.EP_Mode):
             if self.entry == "inlane":
                 self.posts[self.side].disable()
             elif self.entry == "mine":
+                self.game.mountain.unbusy()
                 self.game.mountain.eject()
             elif self.entry == "saloon":
                 self.game.saloon.kick()

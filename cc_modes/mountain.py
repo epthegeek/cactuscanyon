@@ -58,9 +58,12 @@ class Mountain(ep.EP_Mode):
         self.game.mine.update_lamps()
 
     def eject(self):
-        print "MINE EJECTING"
+        if self.busy:
+            print "MOUNTAIN BUSY, PASSING"
+            return
         # flash the light and then kick out if there's a ball in there
         if self.game.switches.minePopper.is_active():
+            print "MINE EJECTING"
             self.flash()
             self.delay(delay=0.03,handler=self.kick)
 
