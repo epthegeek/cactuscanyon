@@ -317,6 +317,7 @@ class Interrupter(ep.EP_Mode):
             animLayer.opaque = True
             animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lowBoom)
             animLayer.add_frame_listener(4,self.game.trough.launch_balls,param=1)
+            animLayer.add_frame_listener(4,self.game.ball_starting)
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.shoot_again,param=3)
         if step == 3:
@@ -327,7 +328,6 @@ class Interrupter(ep.EP_Mode):
             combined = dmd.GroupedLayer(128,32,[imageLayer,textLine1,textLine2])
             self.layer = combined
             self.delay(delay = 1.5,handler=self.clear_layer)
-            self.delay(delay = 1.5,handler=self.game.ball_starting)
 
     def train_disabled(self):
         line1 = dmd.TextLayer(128/2, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("TRAIN DISABLED")
