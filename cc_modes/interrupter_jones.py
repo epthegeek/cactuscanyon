@@ -224,7 +224,7 @@ class Interrupter(ep.EP_Mode):
         # first, tick up the page
         self.page += 1
         # roll back around if we get over the number of pages
-        if self.page > 4:
+        if self.page > 6:
             self.page = 1
         # then show some junk based on what page we're on
         if self.page == 1:
@@ -265,7 +265,29 @@ class Interrupter(ep.EP_Mode):
                 # default three line display
             self.tld("BEER MUG:",textString2,textString3)
             # circle back and clear the layer
-        # combos information ?
+        # combos information
+        if self.page == 5:
+            # combos to light badge
+            needed = self.game.user_settings['Gameplay (Feature)']['Combos for Star']
+            # combos so far
+            have = self.game.show_traking('combos')
+            left = needed - have
+            if left <= 0:
+                textString2 = str(have) + " COMBOS"
+                textString3 = "BADGE IS LIT!"
+            else:
+                textString2 = str(have) + " COMBOS"
+                textString3 = str(left) + " MORE FOR BADGE"
+            self.tld("COMBO SHOTS:",textString2,textString3)
+        # Kills so far
+        if self.page == 6:
+            # quickdraws so far
+            quickdrawKills = self.game.show_tracking('quickdrawsWon')
+            # gunfights
+            gunfightKills = self.game.show_tracking('gunfightsWon')
+            textString2 = "QUICKDRAWS: " + str(quickdrawKills)
+            textString3 = "GUNFIGHTS: " + str(gunfightKills)
+            self.tld("GUN BATTLE WINS:",textString2,textString3)
 
         self.delay(name="Display",delay=3,handler=self.status)
 
