@@ -27,6 +27,11 @@ class GoldMine(ep.EP_Mode):
     def __init__(self,game,priority):
         super(GoldMine, self).__init__(game,priority)
         self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine,self.game.combos]
+        motherlodeDifficulty = self.game.user_settings['Gameplay (Feature)']['Motherlode Badge Requirement']
+        if motherlodeDifficulty == 'Easy':
+            self.motherlodesForStar = 1
+        else:
+            self.motherlodesForStar = 3
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -403,7 +408,7 @@ class GoldMine(ep.EP_Mode):
         self.game.set_tracking('motherlodeMultiplier',1)
 
         # if we've collected 3 regular motherlodes, or any motherload with a multiplier, then light the badge
-        if motherlodes >= 3 or myMultiplier > 1:
+        if motherlodes >= self.motherlodesForStar or myMultiplier > 1:
             # set the star flag for motherlode - it's 0
             self.game.badge.update(0)
         # update the lamps

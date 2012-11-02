@@ -171,6 +171,12 @@ Gameplay (Feature):
   'Showdown Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Motherlode Requirement Difficulty':
+    options: ['Easy','Normal']
+    default: 'Normal'
+  'Marshall Required for Bionic':
+    options: ['Yes','No']
+    default: 'No'
   'Skillshot Boosts':
     options: ['Easy','Hard']
     default: 'Easy'
