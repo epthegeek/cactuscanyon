@@ -317,7 +317,7 @@ class Interrupter(ep.EP_Mode):
             animLayer.opaque = True
             animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lowBoom)
             animLayer.add_frame_listener(4,self.game.trough.launch_balls,param=1)
-            animLayer.add_frame_listener(4,self.game.ball_starting)
+            animLayer.add_frame_listener(5,self.game.ball_starting)
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.shoot_again,param=3)
         if step == 3:

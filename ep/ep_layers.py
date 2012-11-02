@@ -62,7 +62,12 @@ class EP_AnimatedLayer(dmd.layers.AnimatedLayer):
         for frame_listener in self.frame_listeners:
             (index, listener,param) = frame_listener
             if index >= 0 and self.frame_pointer == index:
-                listener(param)
+                if param != None:
+                    listener(param)
+                else:
+                    listener()
             elif self.frame_pointer == (len(self.frames) + index):
-                listener(param)
-
+                if param != None:
+                    listener(param)
+                else:
+                    listener()
