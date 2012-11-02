@@ -122,7 +122,7 @@ class Badge(ep.EP_Mode):
         # if all the lights are on, it's bionic bart tiome
         if False not in self.game.show_tracking('starStatus'):
             # is marshall rank required?
-            if marshallRequired:
+            if self.marshallRequired:
                 # if it is, are we there yet?
                 if rank < 4:
                     # if not, bail

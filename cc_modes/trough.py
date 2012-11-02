@@ -176,6 +176,12 @@ class Trough(Mode):
                         self.num_balls_in_play -= 1
                     if self.drain_callback:
                         self.drain_callback()
+        # if there aren't any balls in play
+        else:
+            if self.launch_in_progress:
+                print "WHAT THE - NO BALLS IN PLAY, and we're launching - try again"
+                self.cancel_delayed("Bounce Delay")
+                self.common_launch_code()
 
     # Count the number of balls in the trough by counting active trough switches.
     def num_balls(self):
@@ -228,7 +234,8 @@ class Trough(Mode):
             # go to a hold pattern to wait for the shooter lane
             # if after 2 seconds the shooter lane hasn't been hit we should try again
             if not self.game.fakePinProc:
-                self.delay("Bounce Delay",delay=2,handler=self.fallback_loop)
+#                self.delay("Bounce Delay",delay=2,handler=self.fallback_loop)
+                self.delay("Bounce Delay",delay=2,handler=self.finish_launch)
             # if we are under fakepinproc, proceed immediately to ball in play
             else:
                 self.finish_launch()
@@ -263,10 +270,16 @@ class Trough(Mode):
             if self.launch_callback:
                 self.launch_callback()
 
-    def sw_shooterLane_active_for_50ms(self,sw):
+    def sw_shooterLane_active_for_80ms(self,sw):
         print "SOLID LAUNCH, GOOD TO GO"
         # if we're ejecting - process the launch
         if self.launch_in_progress:
             # kill the fallback loop
+            self.cancel_delayed("Bounce Delay")
+            self.finish_launch()
+
+    def sw_skillBowl_active(self,sw):
+        if self.launch_in_progress:
+            print "SKILLBOWL FINISHING LAUNCH"
             self.cancel_delayed("Bounce Delay")
             self.finish_launch()
