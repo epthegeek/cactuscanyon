@@ -317,6 +317,8 @@ class GoldMine(ep.EP_Mode):
         attack = self.game.increase_tracking('banditAttacks')
         # show some display
         self.layer = ep.EP_Showcase().make_string(1,2,3,text="BANDITS")
+        # play a quote
+        self.game.base.priority_quote(self.game.assets.quote_ambushUrge)
         # pop up some targets
         available = [0,1,2,3]
         # the first few attacks are less than 4 guys
