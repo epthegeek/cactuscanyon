@@ -109,7 +109,7 @@ class Trough(Mode):
         self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
 
     def check_switches(self):
-        print "CHECKING SWITCHES"
+        print "CHECKING SWITCHES - Balls in play: " + str(self.num_balls_in_play)
         if self.num_balls_in_play > 0:
             print "THERE'S A BALL IN PLAY"
             # Base future calculations on how many balls the machine
@@ -184,6 +184,7 @@ class Trough(Mode):
         for switch in self.position_switchnames:
             if self.game.switches[switch].is_active():
                 ball_count += 1
+                print "Active trough switch: " + str(switch)
         return ball_count
 
     def is_full(self):

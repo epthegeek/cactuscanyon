@@ -110,6 +110,8 @@ class Badge(ep.EP_Mode):
     def update(self,point):
         # update for the new award
         self.game.set_tracking('starStatus',True,point)
+        print "BADGE STATUS: "
+        print self.game.show_tracking('starStatus')
         # check if bionic is ready
         self.check_bionic()
         # update the lamps no matter what

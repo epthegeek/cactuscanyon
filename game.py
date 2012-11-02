@@ -399,6 +399,7 @@ class CCGame(game.BasicGame):
     # Empty callback just incase a ball drains into the trough before another
      # drain_callback can be installed by a gameplay mode.
     def ball_drained(self):
+        print "BALL DRAINED ROUTINE RUNNING"
         # if we're not ejecting a new ball, then it really drained
         if not self.trough.launch_in_progress:
             # Tell every mode a ball has drained by calling the ball_drained function if it exists
