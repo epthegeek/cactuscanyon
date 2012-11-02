@@ -433,6 +433,8 @@ class Mine(ep.EP_Mode):
             self.layer = animLayer
             # after a delay, play the ending
             self.delay("Collecting",delay=myWait,handler=self.extra_ball_ending)
+            # update lamps to turn on the EB light
+            self.game.base.update_lamps()
 
     def extra_ball_ending(self,isLong=True):
         # play a quote
@@ -453,8 +455,6 @@ class Mine(ep.EP_Mode):
         self.delay(delay=3,handler=self.clear_layer)
         self.delay(delay=3,handler=self.unbusy)
         self.delay(delay=3,handler=self.game.restore_music)
-        # update lamps to turn on the EB light
-        self.game.base.update_lamps()
 
     def abort_extra_ball(self):
         self.collectingEB = False

@@ -922,3 +922,10 @@ class BaseGameMode(ep.EP_Mode):
     def sw_phantomSwitch_active(self,sw):
         self.game.trough.num_balls_in_play = 0
         self.game.ball_drained()
+
+    def sw_phantomSwitch2_active(self,sw):
+        print "ADDING FREE EXTRA BALL"
+        # free instant extra ball
+        self.game.current_player().extra_balls += 1
+        # update the lamps to show extra ball
+        self.update_lamps()

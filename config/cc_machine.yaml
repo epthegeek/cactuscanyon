@@ -57,6 +57,8 @@ PRSwitches:
         number: SD8
 
     #Regular Switches
+    phantomSwitch2:
+        number: S11
     startButton:
         number: S13
     plumbBobTilt:
