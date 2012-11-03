@@ -296,7 +296,11 @@ class LeftLoop(ep.EP_Mode):
         else:
             awardTextTop.set_text(self.awardString)
             awardTextBottom.set_text(self.awardPoints)
-            # combine them
+        # combine them
+        if self.layer == None:
+            self.layer = self.game.assets.dmd_blank
+            self.layer.composite_op = "blacksrc"
+
         completeFrame = dmd.GroupedLayer(128, 32, [self.layer,awardTextTop,awardTextBottom])
         # swap in the new layer
         self.transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_SLIDEOVER,self.direction)

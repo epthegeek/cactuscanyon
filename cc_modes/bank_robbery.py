@@ -404,6 +404,9 @@ class BankRobbery(ep.EP_Mode):
         awardTextTop.set_text(awardTextString)
         awardTextBottom.set_text(awardScoreString)
         # combine them
+        if self.layer == None:
+            self.layer = self.game.assets.dmd_blank
+            self.layer.composite_op = "blacksrc"
         completeFrame = dmd.GroupedLayer(128, 32, [self.layer,awardTextTop,awardTextBottom])
         # swap in the new layer
         return completeFrame
