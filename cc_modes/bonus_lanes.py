@@ -137,8 +137,7 @@ class BonusLanes(ep.EP_Mode):
         awardTextBottom.set_text(str(self.game.show_tracking('bonusX')) + "X")
         # combine the text onto the held cactus animation
         if self.layer == None:
-            self.layer = self.game.assets.dmd_blank
-            self.layer.composite_op = "blacksrc"
+            self.layer = self.no_layer()
 
         newLayer = dmd.GroupedLayer(128, 32, [self.layer,awardTextTop,awardTextBottom])
         # set the layer active

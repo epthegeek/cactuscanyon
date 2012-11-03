@@ -347,8 +347,7 @@ class RightRamp(ep.EP_Mode):
             #awardTextmask.set_text(self.awardPoints)
         # combine them
         if self.layer == None:
-            self.layer = self.game.assets.dmd_blank
-            self.layer.composite_op = "blacksrc"
+            self.layer = self.no_layer()
 
         completeFrame = dmd.GroupedLayer(128, 32, [self.layer,awardTextTop,awardTextBottom])
         # swap in the new layer

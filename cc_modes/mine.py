@@ -350,8 +350,7 @@ class Mine(ep.EP_Mode):
         textLine = dmd.TextLayer(128/2, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL " + str(self.game.show_tracking('ballsLocked')) + " LOCKED")
         textLine.composite_op = "blacksrc"
         if self.layer == None:
-            self.layer = self.game.assets.dmd_blank
-            self.layer.composite_op = "blacksrc"
+            self.layer = self.no_layer()
 
         self.layer = dmd.GroupedLayer(128,32,[self.layer,textLine])
         # kick the ball (if there's a ball in there) out and clear the layer

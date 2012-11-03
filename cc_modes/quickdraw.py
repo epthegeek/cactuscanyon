@@ -179,9 +179,7 @@ class Quickdraw(ep.EP_Mode):
             # update the score text layer
             scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))
             if self.layer == None:
-                self.layer = self.game.assets.dmd_blank
-                self.layer.composite_op = "blacksrc"
-
+                self.layer = self.no_layer()
 
             self.layer = dmd.GroupedLayer(128,32,[self.layer,scoreLayer])
             # update the group layer

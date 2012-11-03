@@ -313,7 +313,7 @@ class RightLoop(ep.EP_Mode):
         self.transition.callback = self.clear_layer()
 
     def tumbleweed_display(self,value,combo):
-        banner = banner = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tumbleweedBanner.frames[0])
+        banner = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tumbleweedBanner.frames[0])
         scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6)
         # load up the animation
         anim = self.game.assets.dmd_tumbleweedLeft

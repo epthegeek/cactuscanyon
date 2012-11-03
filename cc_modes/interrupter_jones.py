@@ -270,7 +270,7 @@ class Interrupter(ep.EP_Mode):
             # combos to light badge
             needed = self.game.user_settings['Gameplay (Feature)']['Combos for Star']
             # combos so far
-            have = self.game.show_traking('combos')
+            have = self.game.show_tracking('combos')
             left = needed - have
             if left <= 0:
                 textString2 = str(have) + " COMBOS"

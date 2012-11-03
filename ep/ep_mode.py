@@ -61,3 +61,9 @@ class EP_Mode(game.Mode):
     # simple mode shutdown
     def unload(self):
         self.game.modes.remove(self)
+
+    # if there's no layer, and it's wanted for a group, return a blank one
+    def no_layer(self):
+        blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
+        blank.composite_op = "blacksrc"
+        return blank

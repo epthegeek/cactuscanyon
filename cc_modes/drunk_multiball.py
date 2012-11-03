@@ -282,8 +282,7 @@ class DrunkMultiball(ep.EP_Mode):
         wordsLayer.composite_op = "blacksrc"
 
         if self.layer == None:
-            self.layer = self.game.assets.dmd_blank
-            self.layer.composite_op = "blacksrc"
+            self.layer = self.no_layer()
 
         combined = dmd.GroupedLayer(128,32,[self.layer,wordsLayer,beerLayer])
         self.cancel_delayed("Display")
