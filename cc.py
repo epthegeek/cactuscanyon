@@ -44,10 +44,17 @@ def main():
 
     config = 0
     game = None
-    fakePinProc = (len(sys.argv) > 1 and sys.argv[1] == 'fakepinproc')
+    fakePinProc = (len(sys.argv) > 1 and 'fakepinproc' in sys.argv)
+    recording = (len(sys.argv) > 1 and 'record' in sys.argv)
+    playback = (len(sys.argv) > 1 and 'playback' in sys.argv)
+
+    if playback:
+        # this covers if fakepinproc was not specified
+        fakePinProc = True
+
     try:
         # create the game object
-        game = CCGame(machineType,fakePinProc)
+        game = CCGame(machineType,fakePinProc,recording,playback)
         # set the game's config path
         game.yamlpath = yaml_path
         # fire off the setup

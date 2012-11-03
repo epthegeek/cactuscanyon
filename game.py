@@ -41,16 +41,23 @@ settings_defaults_path = curr_file_path + "/config/settings_template.yaml"
 user_settings_path = curr_file_path + "/config/user_settings.yaml"
 
 ## Subclass BasicGame to create the main game
-class CCGame(game.BasicGame):
-    def __init__(self,machineType, fakePinProc = False):
+#class CCGame(game.BasicGame):
+class CCGame(game.BasicRecordableGame):
+    def __init__(self,machineType, fakePinProc = False,recording = False,playback = False):
         if (fakePinProc):
-            config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
+            if playback:
+                config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROCPlayback'
+            else:
+                config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
             self.fakePinProc = True
         else:
             self.fakePinProc = False
         self.restart = False
 
         super(CCGame, self).__init__(machineType)
+        if recording:
+            print "I'M RECORDING"
+            self.start_recording()
         self.load_config('cc_machine.yaml')
         self.sound = sound.SoundController(self)
         self.lampctrl = lamps.LampController(self)
