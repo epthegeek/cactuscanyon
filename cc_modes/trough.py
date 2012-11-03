@@ -112,10 +112,32 @@ class Trough(Mode):
         print "CHECKING SWITCHES - Balls in play: " + str(self.num_balls_in_play)
         if self.num_balls_in_play > 0:
             print "THERE'S A BALL IN PLAY"
+            # how many balls should the machine have
+            num_current_machine_balls = self.game.num_balls_total
+            # how many balls in in the trough now
+            temp_num_balls = self.num_balls()
+            if self.launch_in_progress:
+                print "And we're trying to launch another one."
+                # check if we had a drain RIGHT while trying to launch
+                if self.temp_num_balls + self.num_balls_in_play == num_current_machine_balls + 1:
+                    print "whoa, we're out of whack here"
+                    # set the balls in play to zero
+                    self.num_balls_in_play = 0
+                    # add a ball to launch
+                    self.num_balls_to_launch += 1
+                    # kill the bounce delay
+                    self.cancel_delayed("Bounce Delay")
+                    # and launch again
+                    self.common_launch_code()
+                    return
+                # and check for a bounceback
+                elif self.temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
+                    print "multiball launch fell back in?"
+                    self.cancel_delayed("Bounce Delay")
+                    self.common_launch_code()
+                    return
             # Base future calculations on how many balls the machine
             # thinks are currently installed.
-            num_current_machine_balls = self.game.num_balls_total
-            temp_num_balls = self.num_balls()
             if self.ball_save_active:
                 print "BALL SAVE IS ACTIVE"
                 if self.num_balls_to_save:
