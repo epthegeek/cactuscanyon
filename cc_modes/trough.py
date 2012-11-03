@@ -119,7 +119,7 @@ class Trough(Mode):
             if self.launch_in_progress:
                 print "And we're trying to launch another one."
                 # check if we had a drain RIGHT while trying to launch
-                if self.temp_num_balls + self.num_balls_in_play == num_current_machine_balls + 1:
+                if temp_num_balls + self.num_balls_in_play == num_current_machine_balls + 1:
                     print "whoa, we're out of whack here"
                     # set the balls in play to zero
                     self.num_balls_in_play = 0
@@ -131,7 +131,7 @@ class Trough(Mode):
                     self.common_launch_code()
                     return
                 # and check for a bounceback
-                elif self.temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
+                elif temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
                     print "multiball launch fell back in?"
                     self.cancel_delayed("Bounce Delay")
                     self.common_launch_code()
