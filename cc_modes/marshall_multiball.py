@@ -78,6 +78,7 @@ class MarshallMultiball(ep.EP_Mode):
             print "WELL MMB KNOWS IT IS RUNNING"
             if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
                 self.game.base.busy = True
+                self.game.base.queued += 1
                 self.cancel_delayed("Operational")
                 self.end_mmb()
 
@@ -610,6 +611,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.badge.check_bionic()
         # turn off the base busy flag
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # unload
         self.unload()
 

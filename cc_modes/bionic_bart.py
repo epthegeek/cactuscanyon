@@ -45,6 +45,7 @@ class BionicBart(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('bionicStatus') == "RUNNING":
             self.cancel_delayed("Display")
             self.game.base.busy = True
+            self.game.base.queued += 1
             print "BALL DRAINED - BIONIC IS ENDING"
             self.bionic_failed()
 
@@ -630,5 +631,6 @@ class BionicBart(ep.EP_Mode):
         self.game.saloon.kick()
         # unset the base busy flag
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # unload the mode
         self.unload()

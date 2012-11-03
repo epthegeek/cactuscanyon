@@ -59,6 +59,7 @@ class CvA(ep.EP_Mode):
                       self.game.lamps.badGuyL1,
                       self.game.lamps.badGuyL2,
                       self.game.lamps.badGuyL3]
+        self.finishing = False
 
 
     def ball_drained(self):
@@ -69,6 +70,7 @@ class CvA(ep.EP_Mode):
                     self.cancel_delayed("Display")
                     self.finishing = True
                     self.game.base.busy = True
+                    self.game.base.queued += 1
                     self.end_cva()
 
 
@@ -868,6 +870,7 @@ class CvA(ep.EP_Mode):
         # and then unload
         # turn off the base busy
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # and the finishing flag
         self.finishing = False
         self.unload()

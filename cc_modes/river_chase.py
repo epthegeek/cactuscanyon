@@ -63,6 +63,7 @@ class RiverChase(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 0:
             if self.running:
                 self.game.base.busy = True
+                self.game.base.queued += 1
                 self.polly_died()
 
 
@@ -355,6 +356,7 @@ class RiverChase(ep.EP_Mode):
             self.game.base.check_stampede()
             # unset the busy flag
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # turn the music back on
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:

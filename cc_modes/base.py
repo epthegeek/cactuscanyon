@@ -108,13 +108,13 @@ class BaseGameMode(ep.EP_Mode):
             self.game.ball_search.disable()
             # turn off the flippers
             self.game.enable_flippers(False)
-            # unload the modes
-            self.remove_modes()
             if self.game.show_tracking('tiltStatus') < 3:
                 # go check the bonus - after that we'll finish the ball
                 # delay 1 second to give other modes time too set the busy if needed
                 self.delay(delay=1,handler=self.check_bonus)
             else:
+                # unload the modes
+                self.remove_modes()
                 self.layer = None
                 self.game.ball_ended()
 
@@ -802,9 +802,13 @@ class BaseGameMode(ep.EP_Mode):
 
     def check_bonus(self):
         # we have to wait until other things finish
-        self.wait_until_unbusy(self.do_bonus)
+        #self.wait_until_unbusy(self.do_bonus)
+        self.wait_for_queue(self.do_bonus)
 
     def do_bonus(self):
+        # unload the modes
+        self.remove_modes()
+
         # do the bonus right up front so it's on the score
         bonus_points = self.game.show_tracking('bonus') * self.game.show_tracking('bonusX')
         # add the points to the score
@@ -932,3 +936,4 @@ class BaseGameMode(ep.EP_Mode):
         self.game.current_player().extra_balls += 1
         # update the lamps to show extra ball
         self.update_lamps()
+

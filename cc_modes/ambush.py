@@ -124,6 +124,7 @@ class Ambush(ep.EP_Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('ambushStatus') == "RUNNING":
             self.game.base.busy = True
+            self.game.base.queued += 1
             self.end_ambush()
 
     def start_ambush(self,side):
@@ -467,7 +468,7 @@ class Ambush(ep.EP_Mode):
         self.game.badge.update(3)
         # unset the base busy flag
         self.game.base.busy = False
-
+        self.game.base.queued -= 1
         # unload the mode
         self.delay("Ambush",delay=2.1,handler=self.unload)
 

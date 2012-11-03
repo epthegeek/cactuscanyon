@@ -55,6 +55,7 @@ class Stampede(ep.EP_Mode):
     # if we're dropping down to one ball, and stampede is running - do stuff
         if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('centerRampStage') == 89:
             self.game.base.busy = True
+            self.game.base.queued += 1
             self.end_stampede()
 
     ### switches
@@ -247,6 +248,7 @@ class Stampede(ep.EP_Mode):
         self.game.badge.update(4)
         # unset the base busy flag
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # clear the stack layer
         self.game.set_tracking('stackLevel',False,4)
         # turn the main music back on

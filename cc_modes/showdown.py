@@ -45,6 +45,7 @@ class Showdown(ep.EP_Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('showdownStatus') == "RUNNING":
             self.game.base.busy = True
+            self.game.base.queued += 1
             self.end_showdown()
 
     def start_showdown(self,side):
@@ -325,7 +326,7 @@ class Showdown(ep.EP_Mode):
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # unset the base busy flag
         self.game.base.busy = False
-
+        self.game.base.queued -= 1
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)
 

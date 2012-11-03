@@ -52,6 +52,7 @@ class DrunkMultiball(ep.EP_Mode):
             self.end_save()
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
             self.game.base.busy = True
+            self.game.base.queued += 1
             self.end_drunk()
 
     ### switches
@@ -333,6 +334,7 @@ class DrunkMultiball(ep.EP_Mode):
         # remove the switch blocker
         self.game.switch_blocker('remove')
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # unload the mode
         self.unload()
 
