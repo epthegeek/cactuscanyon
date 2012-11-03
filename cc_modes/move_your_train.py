@@ -100,15 +100,15 @@ class MoveYourTrain(ep.EP_Mode):
 
     def intro_display(self,step = 1,side =0):
         if step == 1:
-            moveLayer = ep.EP_Showcase().make_string(1,3,0,text="MOVE")
+            moveLayer = self.game.showcase.make_string(1,3,0,text="MOVE")
             self.layer = moveLayer
             self.delay(delay=1,handler=self.intro_display,param=2)
         if step == 2:
-            yourLayer = ep.EP_Showcase().make_string(1,3,0,text="YOUR")
+            yourLayer = self.game.showcase.make_string(1,3,0,text="YOUR")
             self.layer = yourLayer
             self.delay(delay=1,handler=self.intro_display,param=3)
         if step == 3:
-            trainLayer = ep.EP_Showcase().make_string(1,3,0,text="TRAIN")
+            trainLayer = self.game.showcase.make_string(1,3,0,text="TRAIN")
             self.layer = trainLayer
             self.delay(delay=1,handler=self.get_going,param=side)
 

@@ -97,7 +97,24 @@ class Assets():
 
         self.font_marshallScore = dmd.Font(self.dmd_path + "Font_Reel.dmd")
 
-        # CC Sounds
+        # showcase fonts
+        self.font_showcase_ll_0 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Outline_LL_0.dmd")
+        self.font_showcase_ll_1 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Outline_LL_1.dmd")
+        self.font_showcase_ll_2 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Outline_LL_2.dmd")
+        self.font_showcase_ll_3 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Outline_LL_3.dmd")
+
+        self.font_showcase_ur_0 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Outline_UR_0.dmd")
+        self.font_showcase_ur_1 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Outline_UR_1.dmd")
+        self.font_showcase_ur_2 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Outline_UR_2.dmd")
+        self.font_showcase_ur_3 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Outline_UR_3.dmd")
+
+        self.font_showcase_fill_0 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Fill_0.dmd")
+        self.font_showcase_fill_1 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Fill_1.dmd")
+        self.font_showcase_fill_2 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Fill_2.dmd")
+        self.font_showcase_fill_3 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Fill_3.dmd")
+
+
+# CC Sounds
         # Sound Effects
         self.sfx_ballEnd = 'sfx_ballEnd'
         self.game.sound.register_sound(self.sfx_ballEnd,self.sfx_path + "006-sfx-ball-end.wav")

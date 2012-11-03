@@ -55,6 +55,7 @@ class CCGame(game.BasicGame):
         self.sound = sound.SoundController(self)
         self.lampctrl = lamps.LampController(self)
         self.assets = Assets(self)
+        self.showcase = ep.EP_Showcase(self)
 
         ## This resets the color mapping so my 1 value pixels are black - even on composite - HUGE WIN!
         self.proc.set_dmd_color_mapping([0,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
