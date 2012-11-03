@@ -62,12 +62,14 @@ class CvA(ep.EP_Mode):
 
 
     def ball_drained(self):
-        # if we lose all but one the ball the mode ends
-        if self.game.trough.num_balls_in_play == 1 or self.game.trough.num_balls_in_play == 0:
-            if self.game.show_tracking('cvaStatus') == "RUNNING":
-                self.cancel_delayed("Display")
-                self.game.base.busy = True
-                self.end_cva()
+        if not self.finishing:
+            # if we lose all but one the ball the mode ends
+            if self.game.trough.num_balls_in_play == 1 or self.game.trough.num_balls_in_play == 0:
+                if self.game.show_tracking('cvaStatus') == "RUNNING":
+                    self.cancel_delayed("Display")
+                    self.finishing = True
+                    self.game.base.busy = True
+                    self.end_cva()
 
 
     def mode_started(self):
@@ -850,8 +852,6 @@ class CvA(ep.EP_Mode):
         self.game.set_tracking("cvaStatus","OPEN")
         # turn off the local running flag
         self.running = False
-        # turn off the base busy
-        self.game.base.busy = False
         # put the lights back to normal
         self.game.update_lamps()
         # turn the music back on if appropriate
@@ -866,6 +866,10 @@ class CvA(ep.EP_Mode):
         # and reset the tracking to 0
         self.game.set_tracking('tumbleweedHits',0)
         # and then unload
+        # turn off the base busy
+        self.game.base.busy = False
+        # and the finishing flag
+        self.finishing = False
         self.unload()
 
     def taunt_timer(self,counter = 0):

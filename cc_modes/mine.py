@@ -41,6 +41,7 @@ class Mine(ep.EP_Mode):
         self.hold = False
         self.callback = None
         self.collectingEB = False
+        self.lockAnimation = False
 
     def mode_started(self):
         self.update_lamps()
@@ -259,6 +260,7 @@ class Mine(ep.EP_Mode):
         # reset the mine hits
         self.game.set_tracking('mineHits', 0)
         # play the appropriate lock animation
+        self.lockAnimation = True
         if myBallsLocked == 1:
             self.play_ball_one_lock_anim()
         else:
@@ -308,9 +310,9 @@ class Mine(ep.EP_Mode):
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         # play the animation
         self.layer = animLayer
-        self.delay(delay=1,handler=self.game.base.play_quote,param=self.game.assets.quote_pollyHelp)
-        self.delay(name="Display",delay=myWait,handler=self.lock_display_text)
-        self.delay(delay=myWait+2.1,handler=self.game.restore_music)
+        self.lockedNumber = 1
+        self.delay("Lock Anim",delay=1,handler=self.game.base.play_quote,param=self.game.assets.quote_pollyHelp)
+        self.delay("Display",delay=myWait,handler=self.lock_display_text)
 
     def play_ball_two_lock_anim(self):
         self.cancel_delayed("Display")
@@ -331,8 +333,14 @@ class Mine(ep.EP_Mode):
 
         # play the animation
         self.layer = animLayer
-        self.delay(name="Display",delay=myWait,handler=self.lock_display_text,param=2)
-        self.delay(delay=myWait+2.1,handler=self.game.restore_music)
+        self.lockedNumber = 2
+        self.delay("Display",delay=myWait,handler=self.lock_display_text,param=self.lockedNumber)
+
+    def abort_lock_animation(self):
+        self.cancel_delayed("Display")
+        self.cancel_delayed("Lock Anim")
+        self.lockAnimation = False
+        self.lock_display_text(self.lockedNumber)
 
     def lock_display_text(self,lock=1):
         if lock == 1:
@@ -346,6 +354,7 @@ class Mine(ep.EP_Mode):
         if self.game.switches.minePopper.is_active():
             self.delay(delay=2,handler=self.game.mountain.eject)
         self.delay(name="Display",delay=2,handler=self.clear_layer)
+        self.delay(delay=2.1,handler=self.game.restore_music)
         #if we had a callback, process that - it's for the skillshot ending
         if self.callback:
             self.delay(delay=2,handler=self.callback)

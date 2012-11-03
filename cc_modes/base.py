@@ -623,6 +623,9 @@ class BaseGameMode(ep.EP_Mode):
             # if the long form extra ball thing is running, kill that
             elif self.game.mine.collectingEB:
                 self.game.mine.abort_extra_ball()
+            # if the mine lock animation is running, kill that
+            elif self.game.mine.lockAnimation:
+                self.game.mine.abort_lock_animation()
             else:
                 pass
         # if no balls in play, don't do this.
