@@ -109,7 +109,7 @@ class Gunfight(ep.EP_Mode):
                 mode.abort_display()
 
         # set the level 1 stack flag
-        self.game.set_tracking('stackLevel',True,0)
+        self.game.stack_level(0,True)
         # turn off the lights
         self.game.set_tracking('lampStatus',"OFF")
         self.game.gi_control("OFF")
@@ -225,7 +225,7 @@ class Gunfight(ep.EP_Mode):
         if self.game.show_tracking('bartStatus') == "DEAD":
             self.game.set_tracking('bartStatus',"OPEN")
         # turn off the level one flag
-        self.game.set_tracking('stackLevel',False,0)
+        self.game.stack_level(0,False)
         # turn the main game music back on if a second level mode isn't running
         # start up the main theme again if a higher level mode isn't running
         stackLevel = self.game.show_tracking('stackLevel')

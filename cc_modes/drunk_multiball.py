@@ -96,7 +96,7 @@ class DrunkMultiball(ep.EP_Mode):
         print "STARTING DRUNK ASS MULTIBALL"
         self.running = True
         # set the stack level
-        self.game.set_tracking('stackLevel',True,3)
+        self.game.stack_level(3,True)
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "RUNNING")
         # update the lamps
@@ -326,7 +326,7 @@ class DrunkMultiball(ep.EP_Mode):
         # reset the mug hits for next time
         self.game.set_tracking('beerMugHits',0)
         # set the stack flag back off
-        self.game.set_tracking('stackLevel',False,3)
+        self.game.stack_level(3,False)
         stackLevel = self.game.show_tracking('stackLevel')
         # stop the music if there isn't a higher mode running
         if True not in stackLevel[4:]:

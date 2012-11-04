@@ -55,7 +55,7 @@ class Showdown(ep.EP_Mode):
         self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
 
         # set the layer tracking
-        self.game.set_tracking('stackLevel',True,1)
+        self.game.stack_level(1,True)
         # set the showdown tracking
         self.game.set_tracking('showdownStatus', "RUNNING")
         # kill the GI
@@ -307,7 +307,7 @@ class Showdown(ep.EP_Mode):
         if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
             # turn off the level 1 flag
-        self.game.set_tracking('stackLevel',False,1)
+        self.game.stack_level(1,False)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
         textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)

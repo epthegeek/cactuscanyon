@@ -51,7 +51,7 @@ class BionicBart(ep.EP_Mode):
 
     def mode_started(self):
         # set the stack level
-        self.game.set_tracking('stackLevel',True,6)
+        self.game.stack_level(6,True)
         # set up the standard display stuff
         script = []
         idleLayer1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[0])
@@ -621,7 +621,7 @@ class BionicBart(ep.EP_Mode):
         # as is tradition
         self.layer = None
         # clear the stack level
-        self.game.set_tracking('stackLevel',False,6)
+        self.game.stack_level(6,False)
         # Turn the lights back on
         self.game.update_lamps()
         # turn the main music back on

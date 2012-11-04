@@ -80,7 +80,7 @@ class Stampede(ep.EP_Mode):
         # reset the jackpot count, just in case
         self.jackpots = 0
         # set the stack layer
-        self.game.set_tracking('stackLevel',True,4)
+        self.game.stack_level(4,True)
         # stop the current music
         self.game.sound.stop_music()
         # turn on a starting jackpot
@@ -250,7 +250,7 @@ class Stampede(ep.EP_Mode):
         self.game.base.busy = False
         self.game.base.queued -= 1
         # clear the stack layer
-        self.game.set_tracking('stackLevel',False,4)
+        self.game.stack_level(4,False)
         # turn the main music back on
         if True not in stackLevel[5:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)

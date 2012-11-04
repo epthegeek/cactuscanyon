@@ -641,6 +641,12 @@ class CCGame(game.BasicRecordableGame):
         p = self.current_player()
         p.player_stats[item].reverse()
 
+    def stack_level(self,level,value):
+        # just a routine for setting the stack level
+        self.set_tracking('stackLevel',value,level)
+        # that also calls a base lamp update
+        self.base.update_lamps()
+
     # score with bonus
     def score_with_bonus(self, points,percent=7):
         """Convenience method to add *points* to the current player."""

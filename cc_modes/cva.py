@@ -76,7 +76,7 @@ class CvA(ep.EP_Mode):
 
     def mode_started(self):
         # set the stack level
-        self.game.set_tracking('stackLevel',True,5)
+        self.game.stack_level(5,True)
         # resetting defaults
         # the transitions fail if they're too close together - this is for putting a 1 second delay in between
         self.beat = 0
@@ -849,7 +849,7 @@ class CvA(ep.EP_Mode):
         # play the ending quote
         self.game.base.priority_quote(self.game.assets.quote_cvaEnd)
         # set the stack level
-        self.game.set_tracking('stackLevel',False,5)
+        self.game.stack_level(5,False)
         # turn off the running flag
         self.game.set_tracking("cvaStatus","OPEN")
         # turn off the local running flag

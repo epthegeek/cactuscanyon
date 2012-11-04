@@ -31,7 +31,7 @@ class MarshallMultiball(ep.EP_Mode):
         # reset the points
         self.pointTotal = 0
         self.running = True
-        self.game.set_tracking('stackLevel',True,5)
+        self.game.stack_level(5,True)
         # set a bunch of defaults
         self.leftLoopLevel = 0
         self.leftRampLevel = 0
@@ -606,7 +606,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.score(self.pointTotal)
         # kill the running flag
         self.running = False
-        self.game.set_tracking('stackLevel',False,5)
+        self.game.stack_level(5,False)
         # turn the music back on
         if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
