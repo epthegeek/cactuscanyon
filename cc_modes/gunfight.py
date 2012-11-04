@@ -53,6 +53,7 @@ class Gunfight(ep.EP_Mode):
     def mode_started(self):
         self.running = True
         self.win = False
+        self.wipe_delays()
 
     # kill switches - they check win first, in case the ball glanced off a bad guy and then hit a target
     def sw_leftRampEnter_active(self,sw):
@@ -336,7 +337,6 @@ class Gunfight(ep.EP_Mode):
 
     def mode_stopped(self):
         self.running = False
-        self.cancel_delayed("Operational")
-        self.cancel_delayed("Display")
+        self.wipe_delays()
         self.starting = False
 

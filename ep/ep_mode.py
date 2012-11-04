@@ -67,3 +67,6 @@ class EP_Mode(game.Mode):
         blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
         blank.composite_op = "blacksrc"
         return blank
+
+    def wipe_delays(self):
+        self.__delayed = []
