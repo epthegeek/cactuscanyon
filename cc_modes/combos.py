@@ -42,6 +42,10 @@ class Combos(ep.EP_Mode):
         self.myTimer = 0
         self.chain = 1
 
+    def ball_drained(self):
+        if self.game.trough.num_balls_in_play == 0:
+            self.disable_lamps()
+
     def update_lamps(self):
         if self.game.marshall_multiball.running:
             return

@@ -65,6 +65,9 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.lamps.rankDeputy.schedule(0x000FFF00)
         self.game.lamps.rankSheriff.schedule(0x0000FFF0)
         self.game.lamps.rankMarshall.schedule(0x00000FFF)
+        # if there's a quickdraw running, shut it down
+        if self.game.quickdraw.running:
+            self.game.quickdraw.lost(self.game.quickdraw.side)
 
 
         # play the quote

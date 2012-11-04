@@ -152,6 +152,7 @@ class SavePolly(ep.EP_Mode):
         if step == 1:
             # set the level 1 stack flag
             self.game.set_tracking('stackLevel',True,2)
+            self.game.base.update_lamps()
             # set the running flag
             self.running = True
             # clear any running music

@@ -239,6 +239,7 @@ class Quickdraw(ep.EP_Mode):
         # update the bad guys
         self.game.set_tracking('badGuysDead',"True",target)
         self.game.bad_guys.update_lamps()
+        self.game.base.update_lamps()
         # stall a bit, then do the rest of the winning
         self.delay("Operational",delay=0.5,handler=self.finish_win,param=dudesDead)
 

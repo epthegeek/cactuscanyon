@@ -126,34 +126,35 @@ class BaseGameMode(ep.EP_Mode):
         if status != "ON" or \
            self.game.show_tracking('bionicStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING":
-            return        
-        # left side - either the playfield light is on or blinking, or the inlane light is on
-        left = self.game.show_tracking('quickdrawStatus',0)
-        if left == 'OPEN':
-            self.game.lamps.leftQuickdraw.enable()
-        elif left == 'TOP' or left == 'BOT':
-            self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
-        elif left == 'READY' and self.guns_allowed():
-            self.game.lamps.leftReturnQuickdraw.schedule(0x00FF00FF)
-        else:
-            pass
-        # right has 2 lights so if unhit the light appropriate is on, or the inlane if ready
-        right = self.game.show_tracking('quickdrawStatus',1)
-        if right == 'OPEN':
-            self.game.lamps.topRightQuickdraw.enable()
-            self.game.lamps.bottomRightQuickdraw.enable()
-        elif right == 'TOP':
-            self.game.lamps.bottomRightQuickdraw.enable()
-        elif right == 'BOT':
-            self.game.lamps.topRightQuickdraw.enable()
-        elif right == 'READY' and self.guns_allowed():
-            self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
-        else:
-            pass
-        ## on a second pass thorugh the returns - if showdown is ready, flash 'em
-        if self.game.show_tracking('showdownStatus') == "READY" or self.game.show_tracking('ambushStatus') == "READY":
-            self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
-            self.game.lamps.leftReturnQuickdraw.schedule(0xF0F0F0F0)
+            return
+        if self.guns_allowed():
+            # left side - either the playfield light is on or blinking, or the inlane light is on
+            left = self.game.show_tracking('quickdrawStatus',0)
+            if left == 'OPEN':
+                self.game.lamps.leftQuickdraw.enable()
+            elif left == 'TOP' or left == 'BOT':
+                self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
+            elif left == 'READY' and self.guns_allowed():
+                self.game.lamps.leftReturnQuickdraw.schedule(0x00FF00FF)
+            else:
+                pass
+            # right has 2 lights so if unhit the light appropriate is on, or the inlane if ready
+            right = self.game.show_tracking('quickdrawStatus',1)
+            if right == 'OPEN':
+                self.game.lamps.topRightQuickdraw.enable()
+                self.game.lamps.bottomRightQuickdraw.enable()
+            elif right == 'TOP':
+                self.game.lamps.bottomRightQuickdraw.enable()
+            elif right == 'BOT':
+                self.game.lamps.topRightQuickdraw.enable()
+            elif right == 'READY' and self.guns_allowed():
+                self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
+            else:
+                pass
+             ## on a second pass thorugh the returns - if showdown is ready, flash 'em
+            if self.game.show_tracking('showdownStatus') == "READY" or self.game.show_tracking('ambushStatus') == "READY":
+                self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
+                self.game.lamps.leftReturnQuickdraw.schedule(0xF0F0F0F0)
         # extra ball
         if self.game.current_player().extra_balls > 0:
             self.game.lamps.shootAgain.enable()

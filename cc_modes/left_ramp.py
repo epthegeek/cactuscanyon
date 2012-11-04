@@ -261,9 +261,6 @@ class LeftRamp(ep.EP_Mode):
                 value = start_value / 10
             self.awardPoints = str(ep.format_score(value))
             self.game.score_with_bonus(value)
-            # play sounds
-            # play the river ramp sound
-            self.game.base.play_quote(self.game.assets.quote_victory)
             # play animation if we're not in a combo after level 4
             if combo:
                 self.layer = None
