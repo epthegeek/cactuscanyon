@@ -144,10 +144,10 @@ class Trough(Mode):
                     num_balls_to_save = self.num_balls_to_save()
                 else:
                     num_balls_to_save = 0
-
+                print "TROUGH SAVING " + str(num_balls_to_save) + " BALLS"
                 # Calculate how many balls shouldn't be in the
                 # trough assuming one just drained
-                num_balls_out = self.num_balls_locked + (num_balls_to_save - 1)
+                num_balls_out = num_balls_to_save - 1
                 # Translate that to how many balls should be in
                 # the trough if one is being saved.
                 balls_in_trough = num_current_machine_balls - num_balls_out
@@ -166,37 +166,32 @@ class Trough(Mode):
                 print "BALL SAVE IS NOT ACTIVE"
                 # Calculate how many balls should be in the trough
                 # for various conditions.
-                num_trough_balls_if_ball_ending = num_current_machine_balls - self.num_balls_locked
+                # ball ends when all balls are in the trough CC has no playfield locks, so those don't factor in
+                num_trough_balls_if_ball_ending = num_current_machine_balls
+                # If total number minus one are in the trough - that means the multiball should end, if we're off track, catch that by force
                 num_trough_balls_if_multiball_ending = num_trough_balls_if_ball_ending - 1
+                # I'm not sure what purpose this one serves, really - from the original trough code
                 num_trough_balls_if_multiball_drain = num_trough_balls_if_ball_ending -  (self.num_balls_in_play - 1)
 
-                # The ball should end if all of the balls
-                # are in the trough.
-             #   if temp_num_balls == num_current_machine_balls or temp_num_balls == num_trough_balls_if_ball_ending:
+                # The ball should end if all of the balls are in the trough.
                 if temp_num_balls == num_current_machine_balls:
                     self.num_balls_in_play = 0
                     if self.drain_callback:
-                        print "THE TROUGH THINKS IT DRAINED"
+                        print "THE TROUGH IS FULL, BALL SAVE IN ACTIVE, ENDING BALL"
                         self.drain_callback()
                 # Multiball is ending if all but 1 ball are in the trough.
-                # Shouldn't need this, but it fixes situations where
-                # num_balls_in_play tracking
-                # fails, and those situations are still occuring.
-             #   elif temp_num_balls == num_trough_balls_if_multiball_ending:
-             #       self.num_balls_in_play = 1
-             #       if self.drain_callback:
-             #           print "THE TROUGH THINKS MULTIBALL IS ENDING"
-             #           self.drain_callback()
-                # Otherwise, another ball from multiball is draining
-                # if the trough gets one more than it would have if
-                # all num_balls_in_play are not in the trough.
-                elif temp_num_balls == num_trough_balls_if_multiball_drain:
-                    # Fix num_balls_in_play if too low.
-                  #  if self.num_balls_in_play < 3:
-                  #      self.num_balls_in_play = 2
-                    # otherwise subtract 1
-                  #  else:
-                    self.num_balls_in_play -= 1
+                elif temp_num_balls == num_trough_balls_if_multiball_ending:
+                    # force the balls in play to 1 just to catch stray errors
+                    self.num_balls_in_play = 1
+                    if self.drain_callback:
+                        print "THE TROUGH IS FORCING MULTIBALL ENDING"
+                        self.drain_callback()
+                # If all other conditions aren't met, just set the number of balls in play to what matches current
+                # and call the drain callback
+                else:
+                    print "END OF THE TROUGH LINE - ALL OTHER CONDITIONS PASSED"
+                    self.num_balls_in_play = num_current_machine_balls - temp_num_balls
+                    print "SETTING BALLS IN PLAY TO: " + str(self.num_balls_in_play)
                     if self.drain_callback:
                         self.drain_callback()
         # if there aren't any balls in play
@@ -242,6 +237,8 @@ class Trough(Mode):
           """
         print "I SHOULD LAUNCH A BALL NOW"
         self.num_balls_to_launch += num
+        if stealth:
+            self.num_balls_to_stealth_launch += num
         if not self.launch_in_progress:
             self.launch_in_progress = True
             if callback:
@@ -257,7 +254,6 @@ class Trough(Mode):
             # go to a hold pattern to wait for the shooter lane
             # if after 2 seconds the shooter lane hasn't been hit we should try again
             if not self.game.fakePinProc:
-#                self.delay("Bounce Delay",delay=2,handler=self.fallback_loop)
                 self.delay("Bounce Delay",delay=1.5,handler=self.finish_launch)
             # if we are under fakepinproc, proceed immediately to ball in play
             else:
@@ -277,7 +273,12 @@ class Trough(Mode):
         # tick down the balls to launch
         self.num_balls_to_launch -= 1
         print "BALL LAUNCHED - left to launch: " +str(self.num_balls_to_launch)
-        self.num_balls_in_play += 1
+        # Only increment num_balls_in_play if there are no more
+        # stealth launches to complete.
+        if self.num_balls_to_stealth_launch > 0:
+            self.num_balls_to_stealth_launch -= 1
+        else:
+            self.num_balls_in_play += 1
         print "IN PLAY: " + str(self.num_balls_in_play)
         # If more balls need to be launched, delay 1 second
         if self.num_balls_to_launch > 0:
