@@ -78,6 +78,9 @@ class Trough(Mode):
 
         self.balls_to_autoplunge = 0
 
+        # set the current total number of balls at start
+        self.last_ball_count = self.game.num_balls_total
+
     #self.debug()
 
     def debug(self):
@@ -180,20 +183,31 @@ class Trough(Mode):
                         print "THE TROUGH IS FULL, BALL SAVE IN ACTIVE, ENDING BALL"
                         self.drain_callback()
                 # Multiball is ending if all but 1 ball are in the trough.
-                elif temp_num_balls == num_trough_balls_if_multiball_ending:
+             #   elif temp_num_balls == num_trough_balls_if_multiball_ending:
                     # force the balls in play to 1 just to catch stray errors
-                    self.num_balls_in_play = 1
-                    if self.drain_callback:
-                        print "THE TROUGH IS FORCING MULTIBALL ENDING"
-                        self.drain_callback()
+
+              #      self.num_balls_in_play = 1
+               #     if self.drain_callback:
+                #        print "THE TROUGH IS FORCING MULTIBALL ENDING"
+                 #       self.drain_callback()
                 # If all other conditions aren't met, just set the number of balls in play to what matches current
                 # and call the drain callback
                 else:
                     print "END OF THE TROUGH LINE - ALL OTHER CONDITIONS PASSED"
-                    self.num_balls_in_play = num_current_machine_balls - temp_num_balls
-                    print "SETTING BALLS IN PLAY TO: " + str(self.num_balls_in_play)
-                    if self.drain_callback:
-                        self.drain_callback()
+                 #   self.num_balls_in_play = num_current_machine_balls - temp_num_balls
+                  #  print "SETTING BALLS IN PLAY TO: " + str(self.num_balls_in_play)
+                    if self.count_is == "HIGHER":
+                        print "THERE ARE MORE BALLS IN THE TROUGH - CALL A DRAIN"
+                        if self.drain_callback:
+                            # tick the count down one
+                            self.num_balls_in_play -= 1
+                            # call a drain
+                            self.drain_callback()
+                            print "BALLS NOW IN PLAY: " + str(self.num_balls_in_play)
+                    elif self.count_is == "LOWER":
+                        print "THE BALL COUNT IS LOWER"
+                        if temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
+                            print "EVERYTHING ADDS UP - IGNORING"
         # if there aren't any balls in play
         else:
             if self.launch_in_progress:
@@ -211,6 +225,17 @@ class Trough(Mode):
             if self.game.switches[switch].is_active():
                 ball_count += 1
                 print "Active trough switch: " + str(switch)
+        # check if the ball count went up or down
+        if ball_count < self.last_ball_count:
+            self.count_is = "LOWER"
+            print "THE BALL COUNT WENT DOWN"
+        elif ball_count == self.last_ball_count:
+            self.count_is = "SAME"
+            print "THE BALL COUNT STAYED THE SAME"
+        else:
+            self.count_is = "HIGHER"
+            print "THE BALL COUNT WENT UP"
+        self.last_ball_count = ball_count
         return ball_count
 
     def is_full(self):
@@ -270,6 +295,7 @@ class Trough(Mode):
         self.common_launch_code()
 
     def finish_launch(self):
+        self.launch_in_progress = False
         # tick down the balls to launch
         self.num_balls_to_launch -= 1
         print "BALL LAUNCHED - left to launch: " +str(self.num_balls_to_launch)
@@ -285,7 +311,6 @@ class Trough(Mode):
             self.delay(name='launch', event_type=None, delay=2.0,\
                 handler=self.common_launch_code)
         else:
-            self.launch_in_progress = False
             if self.launch_callback:
                 self.launch_callback()
 
