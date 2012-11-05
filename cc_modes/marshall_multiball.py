@@ -70,8 +70,8 @@ class MarshallMultiball(ep.EP_Mode):
         # play the quote
         duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
 
-        self.delay("Operational",delay=duration+0.2,handler=self.start)
-
+        self.start()
+        self.delay("Operational",delay=duration+0.2,self.game.base.music_on,param=self.game.assets.music_drunkMultiball)
 
     def ball_drained(self):
         if self.running:
