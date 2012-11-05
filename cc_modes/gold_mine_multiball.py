@@ -345,6 +345,9 @@ class GoldMine(ep.EP_Mode):
         self.delay(delay=1.5,handler=self.bandits_begin)
 
     def bandits_begin(self):
+        # play one of the ambush urge quotes
+        picked = random.choice(self.game.assets.quote_ambushUrge,self.game.assets.quote_mobStart)
+        self.game.base.play_quote(picked)
         # kick the ball out
         self.game.mountain.kick()
         # and start it
