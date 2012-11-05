@@ -100,7 +100,7 @@ class Quickdraw(ep.EP_Mode):
 
     def start_quickdraw(self,side):
         # set the stack flag
-        self.game.set_tracking('stackLevel',True,0)
+        self.game.stack_level(0,True)
 
         # cancel any other displays
         for mode in self.game.ep_modes:
@@ -178,6 +178,9 @@ class Quickdraw(ep.EP_Mode):
             self.points -= self.portion
             # update the score text layer
             scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))
+            if self.layer == None:
+                self.layer = self.no_layer()
+
             self.layer = dmd.GroupedLayer(128,32,[self.layer,scoreLayer])
             # update the group layer
             # make it active
@@ -236,6 +239,7 @@ class Quickdraw(ep.EP_Mode):
         # update the bad guys
         self.game.set_tracking('badGuysDead',"True",target)
         self.game.bad_guys.update_lamps()
+        self.game.base.update_lamps()
         # stall a bit, then do the rest of the winning
         self.delay("Operational",delay=0.5,handler=self.finish_win,param=dudesDead)
 
@@ -296,7 +300,7 @@ class Quickdraw(ep.EP_Mode):
         # turn the main music back on - if a second level mode isn't running
         print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
             # turn the level 1 flag off
-        self.game.set_tracking('stackLevel',False,0)
+        self.game.stack_level(0,False)
         if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
             # full lamp update

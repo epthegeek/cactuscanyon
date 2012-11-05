@@ -52,6 +52,7 @@ class DrunkMultiball(ep.EP_Mode):
             self.end_save()
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
             self.game.base.busy = True
+            self.game.base.queued += 1
             self.end_drunk()
 
     ### switches
@@ -95,7 +96,7 @@ class DrunkMultiball(ep.EP_Mode):
         print "STARTING DRUNK ASS MULTIBALL"
         self.running = True
         # set the stack level
-        self.game.set_tracking('stackLevel',True,3)
+        self.game.stack_level(3,True)
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "RUNNING")
         # update the lamps
@@ -280,6 +281,9 @@ class DrunkMultiball(ep.EP_Mode):
         wordsLayer.frame_time = 3
         wordsLayer.composite_op = "blacksrc"
 
+        if self.layer == None:
+            self.layer = self.no_layer()
+
         combined = dmd.GroupedLayer(128,32,[self.layer,wordsLayer,beerLayer])
         self.cancel_delayed("Display")
         self.layer = combined
@@ -322,7 +326,7 @@ class DrunkMultiball(ep.EP_Mode):
         # reset the mug hits for next time
         self.game.set_tracking('beerMugHits',0)
         # set the stack flag back off
-        self.game.set_tracking('stackLevel',False,3)
+        self.game.stack_level(3,False)
         stackLevel = self.game.show_tracking('stackLevel')
         # stop the music if there isn't a higher mode running
         if True not in stackLevel[4:]:
@@ -333,6 +337,7 @@ class DrunkMultiball(ep.EP_Mode):
         # remove the switch blocker
         self.game.switch_blocker('remove')
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # unload the mode
         self.unload()
 

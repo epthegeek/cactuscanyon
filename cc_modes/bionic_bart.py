@@ -45,12 +45,13 @@ class BionicBart(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('bionicStatus') == "RUNNING":
             self.cancel_delayed("Display")
             self.game.base.busy = True
+            self.game.base.queued += 1
             print "BALL DRAINED - BIONIC IS ENDING"
             self.bionic_failed()
 
     def mode_started(self):
         # set the stack level
-        self.game.set_tracking('stackLevel',True,6)
+        self.game.stack_level(6,True)
         # set up the standard display stuff
         script = []
         idleLayer1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[0])
@@ -620,7 +621,7 @@ class BionicBart(ep.EP_Mode):
         # as is tradition
         self.layer = None
         # clear the stack level
-        self.game.set_tracking('stackLevel',False,6)
+        self.game.stack_level(6,False)
         # Turn the lights back on
         self.game.update_lamps()
         # turn the main music back on
@@ -630,5 +631,6 @@ class BionicBart(ep.EP_Mode):
         self.game.saloon.kick()
         # unset the base busy flag
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # unload the mode
         self.unload()

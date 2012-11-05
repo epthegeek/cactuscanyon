@@ -70,6 +70,7 @@ class SavePolly(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 0:
             if self.game.show_tracking("centerRampStage") == 99:
                 self.game.base.busy = True
+                self.game.base.queued += 1
                 self.polly_died()
 
     # bonus lanes pause save polly
@@ -150,7 +151,7 @@ class SavePolly(ep.EP_Mode):
     def start_save_polly(self,step=1):
         if step == 1:
             # set the level 1 stack flag
-            self.game.set_tracking('stackLevel',True,2)
+            self.game.stack_level(2,True)
             # set the running flag
             self.running = True
             # clear any running music
@@ -433,12 +434,13 @@ class SavePolly(ep.EP_Mode):
     def end_save_polly(self):
         print "ENDING SAVE POLLY"
         # turn the level 1 stack flag back off
-        self.game.set_tracking('stackLevel',False,2)
+        self.game.stack_level(2,False)
         # check to see if stampede is ready - if we're not ending due to ball fail
         if self.game.trough.num_balls_in_play != 0:
             self.game.base.check_stampede()
         # unset the busy flag
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # turn the music back on
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:

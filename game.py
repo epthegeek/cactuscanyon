@@ -41,20 +41,28 @@ settings_defaults_path = curr_file_path + "/config/settings_template.yaml"
 user_settings_path = curr_file_path + "/config/user_settings.yaml"
 
 ## Subclass BasicGame to create the main game
-class CCGame(game.BasicGame):
-    def __init__(self,machineType, fakePinProc = False):
+#class CCGame(game.BasicGame):
+class CCGame(game.BasicRecordableGame):
+    def __init__(self,machineType, fakePinProc = False,recording = False,playback = False):
         if (fakePinProc):
-            config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
+            if playback:
+                config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROCPlayback'
+            else:
+                config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
             self.fakePinProc = True
         else:
             self.fakePinProc = False
         self.restart = False
 
         super(CCGame, self).__init__(machineType)
+        if recording:
+            print "I'M RECORDING"
+            self.start_recording()
         self.load_config('cc_machine.yaml')
         self.sound = sound.SoundController(self)
         self.lampctrl = lamps.LampController(self)
         self.assets = Assets(self)
+        self.showcase = ep.EP_Showcase(self)
 
         ## This resets the color mapping so my 1 value pixels are black - even on composite - HUGE WIN!
         self.proc.set_dmd_color_mapping([0,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
@@ -632,6 +640,12 @@ class CCGame(game.BasicGame):
     def invert_tracking(self,item):
         p = self.current_player()
         p.player_stats[item].reverse()
+
+    def stack_level(self,level,value):
+        # just a routine for setting the stack level
+        self.set_tracking('stackLevel',value,level)
+        # that also calls a base lamp update
+        self.base.update_lamps()
 
     # score with bonus
     def score_with_bonus(self, points,percent=7):

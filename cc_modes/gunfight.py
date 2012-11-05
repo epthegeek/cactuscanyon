@@ -45,7 +45,6 @@ class Gunfight(ep.EP_Mode):
         self.starting = False
 
     def ball_drained(self):
-        print "GUNFIGHT - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
             print "GUNFIGHT BALL DRAINED ROUTINE"
             self.lost()
@@ -53,6 +52,7 @@ class Gunfight(ep.EP_Mode):
     def mode_started(self):
         self.running = True
         self.win = False
+        self.wipe_delays()
 
     # kill switches - they check win first, in case the ball glanced off a bad guy and then hit a target
     def sw_leftRampEnter_active(self,sw):
@@ -109,7 +109,7 @@ class Gunfight(ep.EP_Mode):
                 mode.abort_display()
 
         # set the level 1 stack flag
-        self.game.set_tracking('stackLevel',True,0)
+        self.game.stack_level(0,True)
         # turn off the lights
         self.game.set_tracking('lampStatus',"OFF")
         self.game.gi_control("OFF")
@@ -225,7 +225,7 @@ class Gunfight(ep.EP_Mode):
         if self.game.show_tracking('bartStatus') == "DEAD":
             self.game.set_tracking('bartStatus',"OPEN")
         # turn off the level one flag
-        self.game.set_tracking('stackLevel',False,0)
+        self.game.stack_level(0,False)
         # turn the main game music back on if a second level mode isn't running
         # start up the main theme again if a higher level mode isn't running
         stackLevel = self.game.show_tracking('stackLevel')
@@ -336,7 +336,6 @@ class Gunfight(ep.EP_Mode):
 
     def mode_stopped(self):
         self.running = False
-        self.cancel_delayed("Operational")
-        self.cancel_delayed("Display")
+        self.wipe_delays()
         self.starting = False
 

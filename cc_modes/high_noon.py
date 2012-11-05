@@ -90,11 +90,11 @@ class HighNoon(ep.EP_Mode):
         self.cancel_delayed("Display")
         thisOne = random.choice(["A","B","C"])
         if thisOne == "A":
-            self.layer = ep.EP_Showcase().punch_out(0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False,hold=2)
+            self.layer = self.game.showcase.punch_out(0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False,hold=2)
         elif thisOne == "B":
-            self.layer = ep.EP_Showcase().blink_fill(2,2,1,3,0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False)
+            self.layer = self.game.showcase.blink_fill(2,2,1,3,0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False)
         else:
-            self.layer = ep.EP_Showcase().chase_outline(3,2,1,0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False,hold=2)
+            self.layer = self.game.showcase.chase_outline(3,2,1,0.1,isOpaque=True,text="JACKPOT",isTransparent=False,condensed=False,hold=2)
         self.delay("Display",delay=1.5,handler=self.update_display)
 
     # bad guy targets
@@ -191,7 +191,7 @@ class HighNoon(ep.EP_Mode):
             self.game.set_tracking('lampStatus', "OFF")
             self.game.update_lamps()
 
-            self.game.set_tracking('stackLevel',True,6)
+            self.game.stack_level(6,True)
             self.game.set_tracking('highNoonStatus',"RUNNING")
             # church bell
             anim = self.game.assets.dmd_bellTower
@@ -388,7 +388,7 @@ class HighNoon(ep.EP_Mode):
             animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_fireworks2)
             animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_fireworks3)
             animLayer.composite_op = "blacksrc"
-            wordsLayer = ep.EP_Showcase().make_string(1,2,3,text="VICTORY")
+            wordsLayer = self.game.showcase.make_string(1,2,3,text="VICTORY")
             combined = dmd.GroupedLayer(128,32,[wordsLayer,animLayer])
             self.layer = combined
         else:
@@ -552,7 +552,7 @@ class HighNoon(ep.EP_Mode):
         self.game.set_tracking('leftLoopStatus',1)
         self.game.set_tracking('rightLoopStatus',1)
         # clear the stack level
-        self.game.set_tracking('stackLevel',False,6)
+        self.game.stack_level(6,False)
         # turn the flippers back on
         self.game.enable_flippers(True)
         # turn the lights back on

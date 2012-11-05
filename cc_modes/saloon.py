@@ -343,6 +343,7 @@ class Saloon(ep.EP_Mode):
             prizeText = "RANK"
             prizeText2 = "INCREASED"
             self.prizeHandler = self.game.badge.increase_rank
+            self.prizeParam = False
         elif self.bountyPrize == 'points250k':
             prizeText = "250,000"
             self.prizeHandler = self.game.score

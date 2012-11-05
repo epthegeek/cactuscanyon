@@ -25,6 +25,7 @@ class EP_Mode(game.Mode):
         self.busy = False
         self.POSTS = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
         self.running = False
+        self.queued = 0
 
     # busy flag set and unset
     def is_busy(self):
@@ -43,6 +44,16 @@ class EP_Mode(game.Mode):
             #print "BUSY LOOP - SETTING A NEW DELAY"
             self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
 
+    def wait_for_queue(self,myHandler):
+    # if the queue is clear move ahead
+        if self.queued <= 0:
+            # reset to zero, just to be sure
+            self.queued = 0
+            # then do this thing
+            myHandler()
+        else:
+            self.delay(delay=0.5,handler=self.wait_for_queue,param=myHandler)
+
     # standard clear layer
     def clear_layer(self):
         self.layer = None
@@ -50,3 +61,12 @@ class EP_Mode(game.Mode):
     # simple mode shutdown
     def unload(self):
         self.game.modes.remove(self)
+
+    # if there's no layer, and it's wanted for a group, return a blank one
+    def no_layer(self):
+        blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
+        blank.composite_op = "blacksrc"
+        return blank
+
+    def wipe_delays(self):
+        self.__delayed = []

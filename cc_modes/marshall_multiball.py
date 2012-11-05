@@ -31,7 +31,7 @@ class MarshallMultiball(ep.EP_Mode):
         # reset the points
         self.pointTotal = 0
         self.running = True
-        self.game.set_tracking('stackLevel',True,5)
+        self.game.stack_level(5,True)
         # set a bunch of defaults
         self.leftLoopLevel = 0
         self.leftRampLevel = 0
@@ -65,6 +65,9 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.lamps.rankDeputy.schedule(0x000FFF00)
         self.game.lamps.rankSheriff.schedule(0x0000FFF0)
         self.game.lamps.rankMarshall.schedule(0x00000FFF)
+        # if there's a quickdraw running, shut it down
+        if self.game.quickdraw.running:
+            self.game.quickdraw.lost(self.game.quickdraw.side)
 
 
         # play the quote
@@ -78,6 +81,7 @@ class MarshallMultiball(ep.EP_Mode):
             print "WELL MMB KNOWS IT IS RUNNING"
             if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
                 self.game.base.busy = True
+                self.game.base.queued += 1
                 self.cancel_delayed("Operational")
                 self.end_mmb()
 
@@ -602,7 +606,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.score(self.pointTotal)
         # kill the running flag
         self.running = False
-        self.game.set_tracking('stackLevel',False,5)
+        self.game.stack_level(5,False)
         # turn the music back on
         if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
@@ -610,6 +614,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.badge.check_bionic()
         # turn off the base busy flag
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # unload
         self.unload()
 

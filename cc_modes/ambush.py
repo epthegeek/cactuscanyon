@@ -124,6 +124,7 @@ class Ambush(ep.EP_Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('ambushStatus') == "RUNNING":
             self.game.base.busy = True
+            self.game.base.queued += 1
             self.end_ambush()
 
     def start_ambush(self,side):
@@ -135,7 +136,7 @@ class Ambush(ep.EP_Mode):
         # kill the music
         self.game.sound.stop_music()
         # set the layer tracking
-        self.game.set_tracking('stackLevel',True,1)
+        self.game.stack_level(1,True)
         # set the showdown tracking
         self.game.set_tracking('ambushStatus', "RUNNING")
         # kill the GI
@@ -441,8 +442,8 @@ class Ambush(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
-        # turn off the level 0 flag
-        self.game.set_tracking('stackLevel',False,1)
+        # turn off the level 1 flag
+        self.game.stack_level(1,False)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
         textLine1 = dmd.TextLayer(76, 2, self.game.assets.font_7px_bold_az, "center", opaque=False)
@@ -467,7 +468,7 @@ class Ambush(ep.EP_Mode):
         self.game.badge.update(3)
         # unset the base busy flag
         self.game.base.busy = False
-
+        self.game.base.queued -= 1
         # unload the mode
         self.delay("Ambush",delay=2.1,handler=self.unload)
 

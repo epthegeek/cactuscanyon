@@ -22,47 +22,50 @@ import os
 curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
 DMD_PATH = curr_file_path + "/../dmd/"
 
-font_showcase_ll_0 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_LL_0.dmd")
-font_showcase_ll_1 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_LL_1.dmd")
-font_showcase_ll_2 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_LL_2.dmd")
-font_showcase_ll_3 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_LL_3.dmd")
-LL_FONT = [font_showcase_ll_0,
-           font_showcase_ll_1,
-           font_showcase_ll_2,
-           font_showcase_ll_3]
-
-font_showcase_ur_0 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_UR_0.dmd")
-font_showcase_ur_1 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_UR_1.dmd")
-font_showcase_ur_2 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_UR_2.dmd")
-font_showcase_ur_3 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Outline_UR_3.dmd")
-UR_FONT = [font_showcase_ur_0,
-           font_showcase_ur_1,
-           font_showcase_ur_2,
-           font_showcase_ur_3]
-
-font_showcase_fill_0 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Fill_0.dmd")
-font_showcase_fill_1 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Fill_1.dmd")
-font_showcase_fill_2 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Fill_2.dmd")
-font_showcase_fill_3 = dmd.Font(DMD_PATH + "Font_Custom_Showcase_Fill_3.dmd")
-FILL_FONT = [font_showcase_fill_0,
-             font_showcase_fill_1,
-             font_showcase_fill_2,
-             font_showcase_fill_3]
 
 class EP_Showcase(object):
+    def __init__(self,game):
+        self.game = game
+        font_showcase_ll_0 = self.game.assets.font_showcase_ll_0
+        font_showcase_ll_1 = self.game.assets.font_showcase_ll_1
+        font_showcase_ll_2 = self.game.assets.font_showcase_ll_2
+        font_showcase_ll_3 = self.game.assets.font_showcase_ll_3
+        self.LL_FONT = [font_showcase_ll_0,
+                   font_showcase_ll_1,
+                   font_showcase_ll_2,
+                   font_showcase_ll_3]
+
+        font_showcase_ur_0 = self.game.assets.font_showcase_ur_0
+        font_showcase_ur_1 = self.game.assets.font_showcase_ur_1
+        font_showcase_ur_2 = self.game.assets.font_showcase_ur_2
+        font_showcase_ur_3 = self.game.assets.font_showcase_ur_3
+        self.UR_FONT = [font_showcase_ur_0,
+                        font_showcase_ur_1,
+                        font_showcase_ur_2,
+                        font_showcase_ur_3]
+
+        font_showcase_fill_0 = self.game.assets.font_showcase_fill_0
+        font_showcase_fill_1 = self.game.assets.font_showcase_fill_1
+        font_showcase_fill_2 = self.game.assets.font_showcase_fill_2
+        font_showcase_fill_3 = self.game.assets.font_showcase_fill_3
+        self.FILL_FONT = [font_showcase_fill_0,
+                          font_showcase_fill_1,
+                          font_showcase_fill_2,
+                          font_showcase_fill_3]
+
 
     def make_string(self,ll,ur,fill,x=64,y=0,align="center",isOpaque=False,text="",isTransparent=False,condensed=False):
         #print "MY TEXT: " + text
         #print "ALIGN: " + str(align)
         if condensed:
-            LL_FONT[ll].tracking = -1
-            UR_FONT[ur].tracking = -1
-            FILL_FONT[fill].tracking = -1
-        lowerLeftLayer = dmd.TextLayer(x, y, LL_FONT[ll], align, opaque=False).set_text(text)
+            self.LL_FONT[ll].tracking = -1
+            self.UR_FONT[ur].tracking = -1
+            self.FILL_FONT[fill].tracking = -1
+        lowerLeftLayer = dmd.TextLayer(x, y, self.LL_FONT[ll], align, opaque=False).set_text(text)
         lowerLeftLayer.composite_op = "blacksrc"
-        upperRightLayer = dmd.TextLayer(x,y, UR_FONT[ur], align, opaque=False).set_text(text)
+        upperRightLayer = dmd.TextLayer(x,y, self.UR_FONT[ur], align, opaque=False).set_text(text)
         upperRightLayer.composite_op = "blacksrc"
-        fillLayer = dmd.TextLayer(x, y, FILL_FONT[fill], align, opaque=False).set_text(text)
+        fillLayer = dmd.TextLayer(x, y, self.FILL_FONT[fill], align, opaque=False).set_text(text)
         fillLayer.composite_op="blacksrc"
         myLayer = dmd.GroupedLayer(128,32,[lowerLeftLayer,upperRightLayer,fillLayer])
         myLayer.opaque = isOpaque
@@ -70,21 +73,21 @@ class EP_Showcase(object):
             myLayer.composite_op = "blacksrc"
         # reset the tracking if we shifted it ?
         if condensed:
-            LL_FONT[ll].tracking = 0
-            UR_FONT[ur].tracking = 0
-            FILL_FONT[fill].tracking = 0
+            self.LL_FONT[ll].tracking = 0
+            self.UR_FONT[ur].tracking = 0
+            self.FILL_FONT[fill].tracking = 0
         return myLayer
 
     def make_thin_string(self,fill,x=64,y=0,align="center",isOpaque=False,text="",isTransparent=False,condensed=False):
         # set the spacing
-        FILL_FONT[fill].tracking = -2
+        self.FILL_FONT[fill].tracking = -2
         # if condensed, make it even bigger
         if condensed:
-            FILL_FONT[fill].tracking = -3
+            self.FILL_FONT[fill].tracking = -3
         # make the string
-        myLayer = dmd.TextLayer(x, y, FILL_FONT[fill], align, opaque=False).set_text(text)
+        myLayer = dmd.TextLayer(x, y, self.FILL_FONT[fill], align, opaque=False).set_text(text)
         # unset the tracking
-        FILL_FONT[fill].tracking = 0
+        self.FILL_FONT[fill].tracking = 0
         if isTransparent:
             myLayer.composite_op = "blacksrc"
         # set the opaque as requested

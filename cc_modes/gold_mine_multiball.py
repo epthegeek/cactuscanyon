@@ -52,6 +52,7 @@ class GoldMine(ep.EP_Mode):
     # if we're dropping down to one ball, and goldmine multiball is running - do stuff
         if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('mineStatus') == "RUNNING":
             self.game.base.busy = True
+            self.game.base.queued += 1
             self.end_multiball()
 
     ### switches
@@ -102,7 +103,7 @@ class GoldMine(ep.EP_Mode):
 
     def start_multiball(self):
         # set the stack level flag - since right now only GM Multiball is on stack 3
-        self.game.set_tracking('stackLevel',True,4)
+        self.game.stack_level(4,True)
         print "MULTIBALL STARTING"
         # kill the music
         print "start multiball IS KILLING THE MUSIC"
@@ -316,7 +317,7 @@ class GoldMine(ep.EP_Mode):
         # tick up the number of bandit attacks
         attack = self.game.increase_tracking('banditAttacks')
         # show some display
-        self.layer = ep.EP_Showcase().make_string(1,2,3,text="BANDITS")
+        self.layer = self.game.showcase.make_string(1,2,3,text="BANDITS")
         # play a quote
         self.game.base.priority_quote(self.game.assets.quote_ambushUrge)
         # pop up some targets
@@ -344,6 +345,9 @@ class GoldMine(ep.EP_Mode):
         self.delay(delay=1.5,handler=self.bandits_begin)
 
     def bandits_begin(self):
+        # play one of the ambush urge quotes
+        picked = random.choice(self.game.assets.quote_ambushUrge,self.game.assets.quote_mobStart)
+        self.game.base.play_quote(picked)
         # kick the ball out
         self.game.mountain.kick()
         # and start it
@@ -487,8 +491,9 @@ class GoldMine(ep.EP_Mode):
             self.game.base.music_on(self.game.assets.music_mainTheme)
         # unset the busy flag
         self.game.base.busy = False
+        self.game.base.queued -= 1
         # set the stack flag back off
-        self.game.set_tracking('stackLevel',False,4)
+        self.game.stack_level(4,False)
         #refresh the mine lights
         self.game.update_lamps()
         # reset some junk

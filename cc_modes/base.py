@@ -108,13 +108,13 @@ class BaseGameMode(ep.EP_Mode):
             self.game.ball_search.disable()
             # turn off the flippers
             self.game.enable_flippers(False)
-            # unload the modes
-            self.remove_modes()
             if self.game.show_tracking('tiltStatus') < 3:
                 # go check the bonus - after that we'll finish the ball
                 # delay 1 second to give other modes time too set the busy if needed
                 self.delay(delay=1,handler=self.check_bonus)
             else:
+                # unload the modes
+                self.remove_modes()
                 self.layer = None
                 self.game.ball_ended()
 
@@ -126,34 +126,35 @@ class BaseGameMode(ep.EP_Mode):
         if status != "ON" or \
            self.game.show_tracking('bionicStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING":
-            return        
-        # left side - either the playfield light is on or blinking, or the inlane light is on
-        left = self.game.show_tracking('quickdrawStatus',0)
-        if left == 'OPEN':
-            self.game.lamps.leftQuickdraw.enable()
-        elif left == 'TOP' or left == 'BOT':
-            self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
-        elif left == 'READY' and self.guns_allowed():
-            self.game.lamps.leftReturnQuickdraw.schedule(0x00FF00FF)
-        else:
-            pass
-        # right has 2 lights so if unhit the light appropriate is on, or the inlane if ready
-        right = self.game.show_tracking('quickdrawStatus',1)
-        if right == 'OPEN':
-            self.game.lamps.topRightQuickdraw.enable()
-            self.game.lamps.bottomRightQuickdraw.enable()
-        elif right == 'TOP':
-            self.game.lamps.bottomRightQuickdraw.enable()
-        elif right == 'BOT':
-            self.game.lamps.topRightQuickdraw.enable()
-        elif right == 'READY' and self.guns_allowed():
-            self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
-        else:
-            pass
-        ## on a second pass thorugh the returns - if showdown is ready, flash 'em
-        if self.game.show_tracking('showdownStatus') == "READY" or self.game.show_tracking('ambushStatus') == "READY":
-            self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
-            self.game.lamps.leftReturnQuickdraw.schedule(0xF0F0F0F0)
+            return
+        if self.guns_allowed():
+            # left side - either the playfield light is on or blinking, or the inlane light is on
+            left = self.game.show_tracking('quickdrawStatus',0)
+            if left == 'OPEN':
+                self.game.lamps.leftQuickdraw.enable()
+            elif left == 'TOP' or left == 'BOT':
+                self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
+            elif left == 'READY' and self.guns_allowed():
+                self.game.lamps.leftReturnQuickdraw.schedule(0x00FF00FF)
+            else:
+                pass
+            # right has 2 lights so if unhit the light appropriate is on, or the inlane if ready
+            right = self.game.show_tracking('quickdrawStatus',1)
+            if right == 'OPEN':
+                self.game.lamps.topRightQuickdraw.enable()
+                self.game.lamps.bottomRightQuickdraw.enable()
+            elif right == 'TOP':
+                self.game.lamps.bottomRightQuickdraw.enable()
+            elif right == 'BOT':
+                self.game.lamps.topRightQuickdraw.enable()
+            elif right == 'READY' and self.guns_allowed():
+                self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
+            else:
+                pass
+             ## on a second pass thorugh the returns - if showdown is ready, flash 'em
+            if self.game.show_tracking('showdownStatus') == "READY" or self.game.show_tracking('ambushStatus') == "READY":
+                self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
+                self.game.lamps.leftReturnQuickdraw.schedule(0xF0F0F0F0)
         # extra ball
         if self.game.current_player().extra_balls > 0:
             self.game.lamps.shootAgain.enable()
@@ -623,6 +624,9 @@ class BaseGameMode(ep.EP_Mode):
             # if the long form extra ball thing is running, kill that
             elif self.game.mine.collectingEB:
                 self.game.mine.abort_extra_ball()
+            # if the mine lock animation is running, kill that
+            elif self.game.mine.lockAnimation:
+                self.game.mine.abort_lock_animation()
             else:
                 pass
         # if no balls in play, don't do this.
@@ -650,12 +654,12 @@ class BaseGameMode(ep.EP_Mode):
 
     ### shooter lane stuff
 
-    def sw_shooterLane_active_for_300ms(self,sw):
+    def sw_shooterLane_active_for_500ms(self,sw):
         # if we're dealing with a saved ball, plunge like the wind
         if self.game.trough.balls_to_autoplunge > 0:
             print "AUTOPLUNGE, MF"
             self.game.trough.balls_to_autoplunge -= 1
-            self.game.coils.autoPlunger.pulse(40)
+            self.game.coils.autoPlunger.pulse(30)
 
 
     def sw_shooterLane_inactive_for_100ms(self,sw):
@@ -799,9 +803,13 @@ class BaseGameMode(ep.EP_Mode):
 
     def check_bonus(self):
         # we have to wait until other things finish
-        self.wait_until_unbusy(self.do_bonus)
+        #self.wait_until_unbusy(self.do_bonus)
+        self.wait_for_queue(self.do_bonus)
 
     def do_bonus(self):
+        # unload the modes
+        self.remove_modes()
+
         # do the bonus right up front so it's on the score
         bonus_points = self.game.show_tracking('bonus') * self.game.show_tracking('bonusX')
         # add the points to the score
@@ -823,7 +831,7 @@ class BaseGameMode(ep.EP_Mode):
         # and clear the running total
         self.runningTotal = 0
         # throw up a  layer that says bonus as an interstitial
-        self.layer = ep.EP_Showcase().blink_fill(2,2,3,1,0.3,isOpaque=True,text="BONUS")
+        self.layer = self.game.showcase.blink_fill(2,2,3,1,0.3,isOpaque=True,text="BONUS")
         # then 1.5 seconds later, move on
         self.delay("Bonus Display",delay=1.5,handler=self.display_bonus,param=times)
 
@@ -929,3 +937,4 @@ class BaseGameMode(ep.EP_Mode):
         self.game.current_player().extra_balls += 1
         # update the lamps to show extra ball
         self.update_lamps()
+
