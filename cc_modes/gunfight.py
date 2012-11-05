@@ -45,7 +45,6 @@ class Gunfight(ep.EP_Mode):
         self.starting = False
 
     def ball_drained(self):
-        print "GUNFIGHT - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
             print "GUNFIGHT BALL DRAINED ROUTINE"
             self.lost()

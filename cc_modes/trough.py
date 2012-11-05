@@ -208,6 +208,10 @@ class Trough(Mode):
                         print "THE BALL COUNT IS LOWER"
                         if temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
                             print "EVERYTHING ADDS UP - IGNORING"
+                        else:
+                            print "Trough - Something screwed up"
+                            print "Balls in trough: " + str(temp_num_balls)
+                            print "Balls in play: " + str(self.num_balls_in_play)
         # if there aren't any balls in play
         else:
             if self.launch_in_progress:
