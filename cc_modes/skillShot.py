@@ -227,7 +227,6 @@ class SkillShot(ep.EP_Mode):
         # stop the music
         self.game.sound.stop_music()
         # play the sound
-        ## TODO might need to move this to specific awards
         self.game.sound.play(self.game.assets.sfx_flourish7)
 
         # award the prize -
@@ -352,7 +351,6 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom = "INCREASED +3"
             self.game.increase_tracking('bonusX',3)
 
-        # TODO need to ajust this perhaps - for handling polly peril
         elif self.selectedPrizes[5:] == "M":
             awardStringTop = "TRAIN RESCUE"
             awardStringBottom = "BOOST"

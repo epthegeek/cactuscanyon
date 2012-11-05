@@ -199,7 +199,6 @@ class RightRamp(ep.EP_Mode):
             if getattr(mode, "abort_display", None):
                 mode.abort_display()
 
-        # TODO these all need fleshing out with sounds and final animations
         stage = self.game.show_tracking('rightRampStage')
         if stage == 1:
             ## set the text lines for the display later

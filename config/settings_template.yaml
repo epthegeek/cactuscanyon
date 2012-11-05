@@ -162,6 +162,10 @@ Gameplay (Feature):
     options: [15,60]
     increments: 5
     default: 30
+  'Marshall Jackpot Timer':
+    options: [5,60]
+    increments: 5
+    default: 15
   'Quickdraws Lit Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'

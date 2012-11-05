@@ -180,7 +180,7 @@ class CCGame(game.BasicRecordableGame):
         cat.titles = ['Combo Champ']
         self.highscore_categories.append(cat)
 
-        ## TODO later - and combo champ? ambush champ? ramp champ?
+        ## TODO later - and combo champ? ambush champ? ramp champ? engineer?
 
         for category in self.highscore_categories:
             category.load_from_game(self)

@@ -136,7 +136,6 @@ class InitialEntryMode(Mode):
         self.animate_to_index(new_index, inc)
 
     def letter_accept(self):
-        # TODO: Add 'back'/erase/end
         letter = self.letters[self.current_letter_index]
         if letter == self.char_back:
             if len(self.inits) > 0:

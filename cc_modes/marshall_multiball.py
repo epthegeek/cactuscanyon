@@ -26,6 +26,7 @@ class MarshallMultiball(ep.EP_Mode):
     def __init__(self,game,priority):
         super(MarshallMultiball, self).__init__(game,priority)
         self.backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_marshallBorder.frames[0])
+        self.jackpotTimer = self.game.user_settings['Gameplay (Feature)']['Marshall Jackpot Timer']
 
     def mode_started(self):
         # reset the points
@@ -74,7 +75,7 @@ class MarshallMultiball(ep.EP_Mode):
         duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
 
         self.start()
-        self.delay("Operational",delay=duration+0.2,self.game.base.music_on,param=self.game.assets.music_drunkMultiball)
+        self.delay("Operational",delay=duration+0.2,handler=self.game.base.music_on,param=self.game.assets.music_drunkMultiball)
 
     def ball_drained(self):
         if self.running:
@@ -560,8 +561,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.update_lamps()
         # if jackpot is active, set the timer to turn it off
         if self.jackpot == True:
-            # TODO make this a configurable timer
-            self.delay(delay=20,handler=self.jackpot_mode,param=False)
+            self.delay(delay=self.jackpotTimer,handler=self.jackpot_mode,param=False)
             # fire off the big bell
             self.game.sound.play(self.game.assets.sfx_churchBell)
         # if jackpots are ending, reset some things

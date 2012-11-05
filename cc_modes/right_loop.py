@@ -282,7 +282,6 @@ class RightLoop(ep.EP_Mode):
         awardTextBottom.set_text(self.awardPoints)
         completeFrame = dmd.GroupedLayer(128, 32, [animLayer,awardTextTop,awardTextBottom])
         self.layer = completeFrame
-        ## TODO this delay doesn't seem to be working
         self.delay(name="Display",delay=2,handler=self.clear_layer)
 
 

@@ -321,7 +321,6 @@ class SavePolly(ep.EP_Mode):
         else:
             # score points
             self.game.score(self.shotValue)
-            # TODO play some sound?
             # setup the display
             border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_tracksBorder.frames[0])
             pollyTitle = dmd.TextLayer(64, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")

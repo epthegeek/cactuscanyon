@@ -217,7 +217,6 @@ class DrunkMultiball(ep.EP_Mode):
         self.delay(name="Display",delay=0.2,handler=self.update_display)
 
     def light_jackpot(self):
-        # TODO add handling for all jackpots lit !
         # pick a jackpot
         thisOne = random.choice(self.availableJackpots)
         # take it out of the available and make it active
@@ -230,7 +229,6 @@ class DrunkMultiball(ep.EP_Mode):
 
         print "LIGHTING JACKPOT"
         anim = self.game.assets.dmd_dmb
-        #myWait = len(anim.frames) / 7.5
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
         animLayer.frame_time = 8
@@ -247,7 +245,6 @@ class DrunkMultiball(ep.EP_Mode):
         wordsLayer.frame_time = 6
         wordsLayer.opaque = True
 
-        #textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOT ADDED")
         combined = dmd.GroupedLayer(128,32,[wordsLayer,animLayer])
         self.cancel_delayed("Display")
         self.layer = combined
@@ -264,7 +261,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.lamps.gi02.schedule(0x0FF00FF0,cycle_seconds=1)
         self.game.lamps.gi03.schedule(0x00FF00FF,cycle_seconds=1)
 
-        # score some points - TODO maybe make this double or more if all the jackpots got lit before collecting
+        # score some points
         self.game.score(5000000)
         # load up the animation
         anim = self.game.assets.dmd_beerSlide

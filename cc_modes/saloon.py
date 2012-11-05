@@ -224,7 +224,6 @@ class Saloon(ep.EP_Mode):
         # otherwise clear the layer, as we may be coming from a saloon hit and have junk on the screen
         else:
             self.clear_layer()
-            # TODO kick the ball out here
             self.kick()
 
     def light_bounty(self,callback=None):

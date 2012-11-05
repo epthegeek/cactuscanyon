@@ -234,7 +234,6 @@ class Mine(ep.EP_Mode):
 
 
     def light_multiball(self):
-        ## TODO sounds?
         # set the multiball status
         print "MULTIBALL IS LIT"
         self.game.set_tracking('mineStatus', "READY")
