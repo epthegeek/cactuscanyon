@@ -167,7 +167,7 @@ class Badge(ep.EP_Mode):
         duration = self.game.base.priority_quote(quote)
         # if we're now at rank 4, then start marshall multiball
         if newRank == 4:
-            self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
+                self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
         # update the lamps
         self.update_lamps()
         # return the new rank and duration

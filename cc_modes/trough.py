@@ -204,6 +204,14 @@ class Trough(Mode):
                             # call a drain
                             self.drain_callback()
                             print "BALLS NOW IN PLAY: " + str(self.num_balls_in_play)
+                    elif self.count_is == "SAME":
+                        # in this case, we may have caught a launch too close to a drain
+                        # if we subtract the number in play, from the number in the trough
+                        # and get a number more than 0 there's a correction to do
+                        strays = temp_num_balls - self.num_balls_in_play
+                        if strays > 0:
+                            print "FIXING " + str(strays) + " STRAY BALLS"
+                            self.launch_balls(strays,stealth=True)
                     elif self.count_is == "LOWER":
                         print "THE BALL COUNT IS LOWER"
                         if temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
