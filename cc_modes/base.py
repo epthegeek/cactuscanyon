@@ -558,11 +558,9 @@ class BaseGameMode(ep.EP_Mode):
         # flash the back left flasher per hit
         self.game.coils.backLeftFlasher.pulse(30)
         if hits == 125:
-            # display the super jets display
-            pass
+            self.game.interrupter.bumpers_increased(25000)
         elif hits == 250:
-            # display the mega jets display
-            pass
+            self.game.interrupter.bumpers_increased(50000)
         if self.game.show_tracking('cvaStatus') == "RUNNING":
             self.game.score(5250)
             self.game.base.play_quote(self.game.assets.sfx_cvaBumper)
@@ -575,13 +573,13 @@ class BaseGameMode(ep.EP_Mode):
             self.display_bumper(hits,"SUPER")
         elif hits >= 125 and hits < 250:
             # if we're in super jets the score is more
-            self.game.score(50000)
+            self.game.score(25000)
             # and the sound is an explosion
             self.game.sound.play(self.game.assets.sfx_smallExplosion)
             self.display_bumper(hits,"MEGA")
         elif hits >= 250:
             # mega jets
-            self.game.score(500000)
+            self.game.score(50000)
             # and the sound is the futuristic ricochet
             self.game.sound.play(self.game.assets.sfx_futuristicRicochet)
 

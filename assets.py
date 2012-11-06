@@ -893,8 +893,11 @@ class Assets():
         self.quote_marshallMultiball = 'quote_marshallMultiball'
         self.game.sound.register_sound(self.quote_marshallMultiball, self.quotes_path + "544-marshall-multiball.wav")
 
+        self.quote_yippie = 'quote_yippie'
+        self.game.sound.register_sound(self.quote_yippie, self.quotes_path + "1959-yip-yip-yippie.wav")
+        self.game.sound.register_sound(self.quote_yippie, self.quotes_path + "1957-woohoo-yippie.wav")
 
-    # Music
+        # Music
         self.music_drumRiff = 'music_drumRiff'
         self.game.sound.register_sound(self.music_drumRiff, self.music_path + "001-drum-lead-in.wav")
         self.music_shooterLaneGroove = 'music_shooterLaneGroove'
@@ -985,6 +988,7 @@ class Assets():
         self.dmd_gunsBorder = dmd.Animation().load(self.dmd_path +'guns-border.dmd')
         self.dmd_woodcutBorder = dmd.Animation().load(self.dmd_path +'woodcut-border.dmd')
         self.dmd_cactusBorder = dmd.Animation().load(self.dmd_path +'cactus-border.dmd')
+        self.dmd_singleCactusBorder = dmd.Animation().load(self.dmd_path + 'single-cactus-border.dmd')
         self.dmd_weaveBorder = dmd.Animation().load(self.dmd_path +'weave-border.dmd')
         self.dmd_skullsBorder = dmd.Animation().load(self.dmd_path+'skulls-border.dmd')
         self.dmd_singleCowboyBorder = dmd.Animation().load(self.dmd_path +'single-cowboy-border.dmd')

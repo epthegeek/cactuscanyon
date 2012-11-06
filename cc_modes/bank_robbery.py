@@ -36,6 +36,7 @@ class BankRobbery(ep.EP_Mode):
         self.won = False
         self.flashers = [self.game.coils.backLeftFlasher,self.game.coils.backRightFlasher,self.game.coils.middleRightFlasher]
 
+        script = []
         # set up the text layer
         textString = "< SAVE POLLY PAUSED >"
         textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)

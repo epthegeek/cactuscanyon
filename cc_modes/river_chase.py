@@ -33,6 +33,7 @@ class RiverChase(ep.EP_Mode):
         self.won = False
         self.distance_value = int(30.0 / self.shotsToWin)
 
+        script = []
         # set up the text layer
         textString = "< SAVE POLLY PAUSED >"
         textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)

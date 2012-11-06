@@ -375,3 +375,22 @@ class Interrupter(ep.EP_Mode):
         self.layer = dmd.GroupedLayer(128,32,[line1,line2])
         self.game.base.repeat_ding(3)
         self.delay(delay=3,handler=self.clear_layer)
+
+    # Jets increased display
+    def bumpers_increased(self,value):
+        backdrop = dmd.FrameLayer(opaque=True,frame=self.game.assets.dmd_singleCactusBorder.frames[0])
+        topLine = dmd.TextLayer(60,1,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JET BUMPERS VALUE")
+        increasedLine1 = dmd.TextLayer(60,8,self.game.assets.font_12px_az, "center", opaque=False).set_text("INCREASED")
+        increasedLine2 = dmd.TextLayer(60,8,self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("INCREASED")
+        increasedLine1.composite_op = "blacksrc"
+        increasedLine2.composite_op = "blacksrc"
+        pointsLine = dmd.TextLayer(60,18,self.game.assets.font_12px_az_outline,"center",opaque=False).set_text(str(ep.format_score(value)))
+        pointsLine.composite_op = "blacksrc"
+        script = []
+        layer1 = dmd.GroupedLayer(128,32,[backdrop,topLine,increasedLine1,pointsLine])
+        layer2 = dmd.GroupedLayer(128,32,[backdrop,topLine,pointsLine,increasedLine2])
+        script.append({'seconds':0.3,'layer':layer1})
+        script.append({'seconds':0.3,'layer':layer2})
+        self.game.base.play_quote(self.game.assets.quote_yippie)
+        self.layer = dmd.ScriptedLayer(128,32,script)
+        self.delay("Display",delay=2,handler=self.clear_layer)
