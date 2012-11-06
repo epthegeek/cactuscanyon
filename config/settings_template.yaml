@@ -178,6 +178,9 @@ Gameplay (Feature):
   'Motherlode Requirement Difficulty':
     options: ['Easy','Normal']
     default: 'Normal'
+  'Gold Mine Multiball Restart':
+    options: ['Yes','No']
+    default: 'Yes'
   'Marshall Required for Bionic':
     options: ['Yes','No']
     default: 'No'

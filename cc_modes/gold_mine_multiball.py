@@ -35,8 +35,9 @@ class GoldMine(ep.EP_Mode):
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
+        self.restartFlag = False
+        self.restarted = False
         self.game.switch_blocker('add')
-
         self.motherlodeValue = 0
         self.displayMotherlodeValue = 0
         self.counter = 0
@@ -44,16 +45,37 @@ class GoldMine(ep.EP_Mode):
         self.bandits = False
         self.banditTimer = 0
         self.banditsUp = 0
+        self.jackpots = 0
         # reset the jackpots to false to prevent lights until the mode really starts
         for i in range(0,5,1):
             self.game.set_tracking('jackpotStatus',False,i)
+        self.restartTimer = 10
+        # check the difficulty setting for restart
+        value = self.game.user_settings['Gameplay (Feature)']['Gold Mine Multiball Restart']
+        if value == "No":
+            # if not allowed, set the flag to true right from the start
+            self.restarted = True
 
     def ball_drained(self):
-    # if we're dropping down to one ball, and goldmine multiball is running - do stuff
-        if self.game.trough.num_balls_in_play in (1,0) and self.game.show_tracking('mineStatus') == "RUNNING":
+        # if we're dropping down to one ball, and goldmine multiball is running - do stuff
+        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('mineStatus') == "RUNNING":
             self.game.base.busy = True
             self.game.base.queued += 1
             self.end_multiball()
+        elif self.game.trough.num_balls_in_play == 1:
+            if self.game.show_tracking('mineStatus') == "RUNNING" and not self.restarted:
+                self.restartFlag = True
+                self.restarted = True
+                self.cancel_delayed("Display")
+                self.game.sound.play_music(self.game.assets.music_tensePiano1,loops=-1)
+                self.clear_layer()
+                self.game.update_lamps()
+                self.restart_option()
+            # otherwise, end just like no ball action
+            else:
+                self.game.base.busy = True
+                self.game.base.queued += 1
+                self.end_multiball()
 
     ### switches
     def sw_leftLoopTop_active(self,sw):
@@ -204,6 +226,11 @@ class GoldMine(ep.EP_Mode):
             self.abort_display()
             # award the points
             self.game.score(500000)
+            # count the jackpot
+            self.jackpots += 1
+            # if we get 3 or more, no restart
+            if self.jackpots >= 3:
+                self.restarted = True
             # increase the motherlode value
             self.motherlodeValue += 250000
             # see if the multiplier goes up
@@ -260,7 +287,16 @@ class GoldMine(ep.EP_Mode):
             self.delay(name="Display",delay=1.5,handler=handler)
 
     def mine_shot(self):
-        if self.game.show_tracking('motherlodeLit'):
+        # if we're restarting - do that
+        if self.restartFlag:
+            self.restartFlag = False
+            self.cancel_delayed("Restart Timer")
+            self.cancel_delayed("Restart Music")
+            # play the quote
+            self.game.base.priority_quote(self.game.assets.quote_multiball)
+            self.get_going()
+
+        elif self.game.show_tracking('motherlodeLit'):
             # if motherlode is lit, collect it on the first multiball, otherwise divert to the bandits
             if self.game.show_tracking('goldMineStarted') >= 2:
                 self.bandits = True
@@ -392,10 +428,12 @@ class GoldMine(ep.EP_Mode):
         self.game.set_tracking('motherlodeLit', False)
         # clear the display
         self.abort_display()
-        # add one to the motherlodes collected
+        # add one to the motherlodes collected - this resets with badge
         motherlodes = self.game.increase_tracking('motherlodesCollected')
-        # and one to the total motherlodes for good measure
+        # and one to the total motherlodes for good measure - this one is persistent for the game
         self.game.increase_tracking('motherlodesCollectedTotal')
+        # set the restarted flag to kill the restart option
+        self.restarted = True
         # check the multiplier value
         myMultiplier = self.game.show_tracking('motherlodeMultiplier')
         # award the points - motherlode value X multiplier
@@ -469,7 +507,36 @@ class GoldMine(ep.EP_Mode):
         else:
             self.delay(delay=1,handler=self.award_motherlode,param=times)
 
+
+    def restart_option(self):
+        # this loops while we wait for a restart, if there is one
+        self.restartTimer -= 1
+        if self.restartTimer <= 0:
+            self.restartFlag = False
+            self.end_multiball()
+        else:
+            if self.restartTimer == 2:
+                self.game.sound.play_music(self.game.assets.music_tensePiano2,loops=-1)
+            print "RESTART DISPLAY"
+            backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
+            awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_5px_AZ,justify="center",opaque=False)
+            timeText = dmd.TextLayer(64,17,self.game.assets.font_9px_az,justify="center",opaque=False)
+            timeText.composite_op = "blacksrc"
+            awardTextTop.set_text("SHOOT THE MINE")
+            awardTextBottom.set_text("TO RESTART MULTIBALL")
+            if self.restartTimer == 1:
+                textLine = "1 SECOND"
+            else:
+                textLine = str(self.restartTimer) + " SECONDS"
+            timeText.set_text(textLine,blink_frames=4)
+            combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom,timeText])
+            self.layer = combined
+            self.delay(name="Restart Timer",delay=1.0,handler=self.restart_option)
+
     def end_multiball(self):
+        self.cancel_delayed("Restart Music")
+        self.cancel_delayed("Restart Timer")
         self.running = False
         # clear the layer
         self.layer = None

@@ -941,10 +941,10 @@ class Assets():
         self.sfx_cvaLoop = 'sfx_cvaLoop'
         self.game.sound.register_sound(self.sfx_cvaLoop, self.music_path + "bangarang-loop.wav")
 
-        #self.music_tensePiano1 = 'music_tensePiano1'
-        #self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
-        #self.music_tensePiano2 = 'music_tensePiano2'
-        #self.game.sound.register_music(self.music_tensePiano2, self.music_path + "096-tense-piano-2.wav")
+        self.music_tensePiano1 = 'music_tensePiano1'
+        self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
+        self.music_tensePiano2 = 'music_tensePiano2'
+        self.game.sound.register_music(self.music_tensePiano2, self.music_path + "096-tense-piano-2.wav")
         #self.music_tensePiano3 = 'music_tensePiano3'
         #self.game.sound.register_music(self.music_tensePiano3, self.music_path + "095-tense-piano-3.wav")
 

@@ -51,7 +51,7 @@ class CenterRamp(ep.EP_Mode):
             return
 
         # check goldmine active status
-        if self.game.show_tracking('mineStatus') == "RUNNING":
+        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
             if self.game.show_tracking('jackpotStatus',2):
                 self.game.lamps.centerRampJackpot.schedule(0x0F0FFE00)
                 self.game.lamps.centerRampSavePolly.schedule(0x0F0F1F30)

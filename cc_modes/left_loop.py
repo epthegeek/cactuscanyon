@@ -59,7 +59,7 @@ class LeftLoop(ep.EP_Mode):
             self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
             return
         ## goldmine check - if stack level 2 is true, it's on
-        if self.game.show_tracking('mineStatus') == "RUNNING":
+        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
             # check if this jackpot shot is active
             if self.game.show_tracking('jackpotStatus',0):
                 self.game.lamps.leftLoopJackpot.schedule(0x0F0FFE00)

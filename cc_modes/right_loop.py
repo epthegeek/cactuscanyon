@@ -53,7 +53,7 @@ class RightLoop(ep.EP_Mode):
             return
 
         # goldmine active check
-        if self.game.show_tracking('mineStatus') == "RUNNING":
+        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
             if self.game.show_tracking('jackpotStatus',3):
                 self.game.lamps.rightLoopJackpot.schedule(0x0F0FFE00)
                 self.game.lamps.rightLoopMarksman.schedule(0x0F0F1F30)

@@ -53,7 +53,7 @@ class LeftRamp(ep.EP_Mode):
             return
 
         # check for goldmine multiball
-        if self.game.show_tracking('mineStatus') == "RUNNING":
+        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
             if self.game.show_tracking('jackpotStatus',1):
                 self.game.lamps.leftRampJackpot.schedule(0x0F0FFE00)
                 self.game.lamps.leftRampSavePolly.schedule(0x0F0F1F30)
