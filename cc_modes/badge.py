@@ -36,6 +36,8 @@ class Badge(ep.EP_Mode):
                           self.game.lamps.rankSheriff,
                           self.game.lamps.rankMarshall]
         marshallRequirement = self.game.user_settings['Gameplay (Feature)']['Marshall Required for Bionic']
+        self.marshallValue = self.game.user_settings['Gameplay (Feature)']['Marshall Multiball']
+
         if marshallRequirement == "Yes":
             self.marshallRequired = True
         else:
@@ -165,8 +167,8 @@ class Badge(ep.EP_Mode):
             quote = self.rankSounds[newRank]
 
         duration = self.game.base.priority_quote(quote)
-        # if we're now at rank 4, then start marshall multiball
-        if newRank == 4:
+        # if we're now at rank 4, then start marshall multiball - if it's turned on
+        if newRank == 4 and self.marshallValue == 'Enabled':
                 self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
         # update the lamps
         self.update_lamps()

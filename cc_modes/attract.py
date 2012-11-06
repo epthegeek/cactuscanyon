@@ -35,6 +35,7 @@ class Attract(ep.EP_Mode):
         self.timer = 3
         self.NOISY_COUNT = self.game.user_settings['Gameplay (Feature)']['Number of attract sounds to play']
         self.NOISY_DELAY = self.game.user_settings['Gameplay (Feature)']['Attract sound delay time']
+        self.marshallValue = self.game.user_settings['Gameplay (Feature)']['Marshall Multiball']
 
     def mode_started(self):
 
@@ -289,7 +290,7 @@ class Attract(ep.EP_Mode):
                         self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH})
 
                 # generate screens for marshall multiball
-                if category.game_data_key == 'MarshallHighScoreData':
+                if category.game_data_key == 'MarshallHighScoreData' and self.marshallValue == 'Enabled':
                     backdrop = dmd.FrameLayer(opaque=False,frame=self.game.assets.dmd_marshallHighScoreFrame.frames[0])
                     text = str(index+1) + ") " + score.inits + " " + score_str
                     initsLine = dmd.TextLayer(64,22,self.game.assets.font_7px_az,"center",opaque=False).set_text(text)
