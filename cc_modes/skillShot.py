@@ -54,6 +54,8 @@ class SkillShot(ep.EP_Mode):
             self.easy = True
         else:
             self.easy = False
+        self.mytValue = self.game.user_settings['Gameplay (Feature)']['Move Your Train Mode']
+
 
     def ball_drained(self):
         # if somehow all the balls go away and this crap is still running, it should unload. SRSLY.
@@ -147,7 +149,8 @@ class SkillShot(ep.EP_Mode):
             if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
                 prizes.append("J")
             # move your train
-            prizes.append("S")
+            if self.mytValue == 'Enabled':
+                prizes.append("S")
             # cva
             prizes.append("T")
 

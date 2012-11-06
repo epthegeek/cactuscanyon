@@ -158,6 +158,9 @@ Gameplay (Feature):
     options: [2,10]
     increments: 1
     default: 3
+  'Move Your Train Mode':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
   'Move Your Train Timer':
     options: [15,60]
     increments: 5

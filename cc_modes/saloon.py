@@ -29,6 +29,8 @@ class Saloon(ep.EP_Mode):
     def __init__(self, game,priority):
         super(Saloon, self).__init__(game, priority)
         self.smacked = False
+        self.mytValue = self.game.user_settings['Gameplay (Feature)']['Move Your Train Mode']
+
 
     def mode_started(self):
         self.unbusy()
@@ -278,7 +280,7 @@ class Saloon(ep.EP_Mode):
         #   9 - + 1 Million Bonus
         prizes.append('points1Mil')
         # 10 - Move your train - only add if polly isn't running
-        if not self.game.peril and self.game.move_your_train not in self.game.modes:
+        if not self.game.peril and self.game.move_your_train not in self.game.modes and self.mytValue == 'Enabled':
             prizes.append('moveYourTrain')
         # so as of this point we have a prizes list to use
         # and pick one of those at random
