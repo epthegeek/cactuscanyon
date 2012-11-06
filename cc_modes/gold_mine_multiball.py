@@ -49,7 +49,8 @@ class GoldMine(ep.EP_Mode):
         # reset the jackpots to false to prevent lights until the mode really starts
         for i in range(0,5,1):
             self.game.set_tracking('jackpotStatus',False,i)
-        self.restartTimer = 10
+        # set the restart timer based on user settings
+        self.restartTimer = self.game.user_settings['Gameplay (Feature)']['Gold Mine Restart Timer']
         # check the difficulty setting for restart
         value = self.game.user_settings['Gameplay (Feature)']['Gold Mine Multiball Restart']
         if value == "No":

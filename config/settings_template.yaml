@@ -181,6 +181,10 @@ Gameplay (Feature):
   'Gold Mine Multiball Restart':
     options: ['Yes','No']
     default: 'Yes'
+  'Gold Mine Restart Timer':
+    options: [5,15]
+    increments: 1
+    default: 8
   'Marshall Required for Bionic':
     options: ['Yes','No']
     default: 'No'
@@ -211,20 +215,3 @@ Gameplay (Feature):
     options: [1,10]
     increments: 1
     default: 2
-Network:
-  'IP Address':
-    options: [0,255]
-    increments: 1
-    default: 0
-  'Subnet':
-    options: [0,255]
-    increments: 1
-    default: 0
-  'Gateway':
-    options: [0,255]
-    increments: 1
-    default: 0
-  'Tournament Server':
-    options: [0,255]
-    increments: 1
-    default: 0
