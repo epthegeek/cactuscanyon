@@ -13,8 +13,9 @@
 ## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
 ## Original Cactus Canyon software by Matt Coriale
 ##
-## This is basically the stock PyProc trough - I just added a bunch of "print"s to
-## Help me understand what it was doing
+## This is a heavily modified copy of the trough code from pyprocgame - I added a bunch of "print"s to
+## Help me understand what it was doing, and re-worked a bunch of it to make it make more sense
+## to me
 
 from procgame.game import Mode
 
@@ -139,8 +140,7 @@ class Trough(Mode):
                     self.cancel_delayed("Bounce Delay")
                     self.common_launch_code()
                     return
-            # Base future calculations on how many balls the machine
-            # thinks are currently installed.
+            #  Ball saver on situations
             if self.ball_save_active:
                 print "BALL SAVE IS ACTIVE"
                 if self.num_balls_to_save:
@@ -182,20 +182,10 @@ class Trough(Mode):
                     if self.drain_callback:
                         print "THE TROUGH IS FULL, BALL SAVE IN ACTIVE, ENDING BALL"
                         self.drain_callback()
-                # Multiball is ending if all but 1 ball are in the trough.
-             #   elif temp_num_balls == num_trough_balls_if_multiball_ending:
-                    # force the balls in play to 1 just to catch stray errors
-
-              #      self.num_balls_in_play = 1
-               #     if self.drain_callback:
-                #        print "THE TROUGH IS FORCING MULTIBALL ENDING"
-                 #       self.drain_callback()
-                # If all other conditions aren't met, just set the number of balls in play to what matches current
-                # and call the drain callback
+                # otherwise there's thinking to do
                 else:
                     print "END OF THE TROUGH LINE - ALL OTHER CONDITIONS PASSED"
-                 #   self.num_balls_in_play = num_current_machine_balls - temp_num_balls
-                  #  print "SETTING BALLS IN PLAY TO: " + str(self.num_balls_in_play)
+                    # if the ball count went up ...
                     if self.count_is == "HIGHER":
                         print "THERE ARE MORE BALLS IN THE TROUGH - CALL A DRAIN"
                         if self.drain_callback:
@@ -204,6 +194,7 @@ class Trough(Mode):
                             # call a drain
                             self.drain_callback()
                             print "BALLS NOW IN PLAY: " + str(self.num_balls_in_play)
+                    # if the ball count hasn't changed ...
                     elif self.count_is == "SAME":
                         # in this case, we may have caught a launch too close to a drain
                         # if we subtract the number in play, from the number in the trough
@@ -212,6 +203,7 @@ class Trough(Mode):
                         if strays > 0:
                             print "FIXING " + str(strays) + " STRAY BALLS"
                             self.launch_balls(strays,stealth=True)
+                    # if the ball count went down just do a sanity check
                     elif self.count_is == "LOWER":
                         print "THE BALL COUNT IS LOWER"
                         if temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
@@ -300,11 +292,6 @@ class Trough(Mode):
         else:
             self.delay(name='launch', event_type=None, delay=1.0,\
                 handler=self.common_launch_code)
-
-    def fallback_loop(self):
-        # if the eject didn't work, we're back to the launch code again
-        print "LAUNCH FAILED? TRYING AGAIN"
-        self.common_launch_code()
 
     def finish_launch(self):
         self.launch_in_progress = False
