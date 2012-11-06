@@ -36,6 +36,19 @@ class BankRobbery(ep.EP_Mode):
         self.won = False
         self.flashers = [self.game.coils.backLeftFlasher,self.game.coils.backRightFlasher,self.game.coils.middleRightFlasher]
 
+        # set up the text layer
+        textString = "< SAVE POLLY PAUSED >"
+        textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+        script.append({'seconds':0.3,'layer':textLayer})
+        # set up the alternating blank layer
+        blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
+        blank.composite_op = "blacksrc"
+        script.append({'seconds':0.3,'layer':blank})
+        # make a script layer with the two
+        self.pauseView = dmd.ScriptedLayer(128,32,script)
+        self.pauseView.composite_op = "blacksrc"
+
+
     def mode_started(self):
         # fire up the switch block if it's not already loaded
         self.game.switch_blocker('add')
@@ -312,8 +325,7 @@ class BankRobbery(ep.EP_Mode):
         self.cancel_delayed("Get Going")
         # set the flag
         self.halted = True
-        textString = "< SAVE POLLY PAUSED >"
-        self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+        self.layer = self.pauseView
 
 
     # success
