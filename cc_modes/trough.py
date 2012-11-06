@@ -15,7 +15,8 @@
 ##
 ## This is a heavily modified copy of the trough code from pyprocgame - I added a bunch of "print"s to
 ## Help me understand what it was doing, and re-worked a bunch of it to make it make more sense
-## to me
+## to me - mostly in the 'checking swtiches' section.  And made changes to deal with balls
+## bouncing back in to the trough after launch
 
 from procgame.game import Mode
 
