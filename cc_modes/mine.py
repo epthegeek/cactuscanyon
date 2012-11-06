@@ -53,7 +53,7 @@ class Mine(ep.EP_Mode):
         self.disable_lamps()
         ## if status is off, we bail here
         lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING":
+        if lampStatus != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING" or self.game.show_tracking('cvaStatus') == 'RUNNING':
             return
 
         stackLevel = self.game.show_tracking('stackLevel')
