@@ -453,8 +453,5 @@ class SavePolly(ep.EP_Mode):
 
     def mode_stopped(self):
         print "SAVE POLLY IS DISPATCHING DELAYS"
-        self.cancel_delayed("Display")
-        self.cancel_delayed("Mode Timer")
-        self.cancel_delayed("Operational")
-        self.cancel_delayed("Pause Timer")
+        self.wipe_delays()
         self.clear_layer()

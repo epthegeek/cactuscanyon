@@ -311,6 +311,4 @@ class Quickdraw(ep.EP_Mode):
     def mode_stopped(self):
         self.running = False
         print "QUICKDRAW IS DISPATCHING DELAYS"
-        self.cancel_delayed("Operational")
-        self.cancel_delayed("Timer Delay")
-        self.cancel_delayed("Grace")
+        self.wipe_delays()

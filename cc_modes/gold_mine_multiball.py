@@ -536,8 +536,7 @@ class GoldMine(ep.EP_Mode):
             self.delay(name="Restart Timer",delay=1.0,handler=self.restart_option)
 
     def end_multiball(self):
-        self.cancel_delayed("Restart Music")
-        self.cancel_delayed("Restart Timer")
+        self.wipe_delays()
         self.running = False
         # clear the layer
         self.layer = None

@@ -41,12 +41,12 @@ class BallSearch(Mode):
 
     def enable(self):
         self.enabled = 1;
-	print "--> BALL SEARCH ENABLED <--"
+        print "--> BALL SEARCH ENABLED <--"
         self.reset('None')
 
     def disable(self):
         self.stop(None)
-	print "-->> BALL SEARCH DISABLED <<--"
+        print "-->> BALL SEARCH DISABLED <<--"
         self.enabled = 0;
 
     def reset(self,sw):
@@ -72,16 +72,16 @@ class BallSearch(Mode):
 
             if schedule_search:
                 self.cancel_delayed(name='ball_search_countdown');
-		#print "--> Scheduling new ball search timer <--"
-		#print "--> countdown_time: " + str(self.countdown_time)
+        #print "--> Scheduling new ball search timer <--"
+        #print "--> countdown_time: " + str(self.countdown_time)
                 self.delay(name='ball_search_countdown', event_type=None, delay=self.countdown_time, handler=self.perform_search, param=0)
-		#print self.__delayed
+        #print self.__delayed
 
     def stop(self,sw):
         self.cancel_delayed(name='ball_search_countdown');
 
     def perform_search(self, completion_wait_time, completion_handler = None):
-	print "DO A BARREL ROLL! - er, BALL SEARCH!"
+        print "DO A BARREL ROLL! - er, BALL SEARCH!"
         if (completion_wait_time != 0):
             self.game.set_status("Balls Missing") # Replace with permanent message
         delay = .150
@@ -92,9 +92,9 @@ class BallSearch(Mode):
 
         # home the mountain
         self.game.mountain.reset_toy()
-	# drop the gunfight posts
-	self.game.coils.leftGunFightPost.disable()
-	self.game.coils.rightGunFightPost.disable()
+        # drop the gunfight posts
+        self.game.coils.leftGunFightPost.disable()
+        self.game.coils.rightGunFightPost.disable()
 
         if (completion_wait_time != 0):
             pass

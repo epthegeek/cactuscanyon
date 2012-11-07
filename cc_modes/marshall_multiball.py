@@ -623,3 +623,4 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.update_lamps()
         # kill the drop targets
         self.game.bad_guys.drop_targets()
+        self.wipe_delays()

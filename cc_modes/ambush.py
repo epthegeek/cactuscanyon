@@ -474,14 +474,11 @@ class Ambush(ep.EP_Mode):
 
     def mode_stopped(self):
         self.running = False
+        # clear all delays
+        self.wipe_delays()
         print "AMBUSH IS DISPATCHING DELAYS"
-        self.cancel_delayed("Poller")
         for i in range (0,4,1):
             self.cancel_delayed(self.targetNames[i])
-        self.cancel_delayed("Display")
-        self.cancel_delayed("Ambush")
-        self.cancel_delayed("Add Guys")
-        self.cancel_delayed("Taunt Timer")
 
     def deactivate_guy(self,target):
         print "DEACTIVATING BAD GUY: " + str(target)

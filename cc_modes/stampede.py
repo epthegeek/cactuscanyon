@@ -257,7 +257,7 @@ class Stampede(ep.EP_Mode):
         # remove the switch blocker
         self.game.switch_blocker('remove')
         # unload the mode
-        self.unload()
+        self.delay(delay=2,handler=self.unload)
 
     def abort_display(self):
         self.cancel_delayed('Display')

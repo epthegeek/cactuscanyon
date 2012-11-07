@@ -333,7 +333,5 @@ class Showdown(ep.EP_Mode):
     def mode_stopped(self):
         self.running = False
         print "SHOWDOWN IS DISPATCHING DELAYS"
-        self.cancel_delayed("Operational")
-        self.cancel_delayed("Display")
-        self.cancel_delayed("Taunt Timer")
+        self.wipe_delays()
         self.clear_layer()

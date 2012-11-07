@@ -567,6 +567,8 @@ class HighNoon(ep.EP_Mode):
         # turn the GI back on
         self.game.gi_control("ON")
         # unload the mode
+        # clear the delays if any
+        self.wipe_delays()
         self.unload()
 
     def church_bell(self,rings=12):

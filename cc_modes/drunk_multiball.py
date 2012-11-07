@@ -306,7 +306,7 @@ class DrunkMultiball(ep.EP_Mode):
     def end_drunk(self):
         print "ENDING DRUNK MULTIBALL"
         self.running = False
-        self.cancel_delayed("Display")
+        self.wipe_delays()
         self.clear_layer()
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "OPEN")

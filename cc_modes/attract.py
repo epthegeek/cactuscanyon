@@ -385,7 +385,6 @@ class Attract(ep.EP_Mode):
 
     def mode_stopped(self):
         print "DELETING ATTRACT DELAYS"
-        self.cancel_delayed("slideshow_timer")
-        self.cancel_delayed("Noisy")
+        self.wipe_delays()
         # rese the noisy flag
         self.noisy = True
