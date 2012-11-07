@@ -185,6 +185,8 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.base.priority_quote(self.game.assets.quote_playerThree)
             elif len(self.game.players) == 4:
                 self.game.base.priority_quote(self.game.assets.quote_playerFour)
+                # if we get to the fourth player, the start button should go out
+                self.game.lamps.startButton.disable()
         self.game.interrupter.add_player()
         ## -- set the last switch hit --
         ep.last_switch = "startButton"

@@ -56,7 +56,6 @@ class Mine(ep.EP_Mode):
         if lampStatus != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING" or self.game.show_tracking('cvaStatus') == 'RUNNING':
             return
 
-        stackLevel = self.game.show_tracking('stackLevel')
 
         eb = self.game.show_tracking('extraBallsPending')
         if eb > 0:
