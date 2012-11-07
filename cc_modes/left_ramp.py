@@ -27,7 +27,6 @@ class LeftRamp(ep.EP_Mode):
         super(LeftRamp, self).__init__(game, priority)
         # Set up the sounds
         # set up the animations
-        self.game = game
         self.border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_woodcutBorder.frames[0])
 
     def mode_started(self):
