@@ -24,7 +24,6 @@
 
 
 from procgame import *
-from assets import *
 import ep
 import random
 import time

@@ -16,12 +16,9 @@
 ##
 ## The playfield toy train
 ##
-from procgame import *
-from assets import *
-import cc_modes
 import ep
 
-class Train(game.Mode):
+class Train(ep.EP_Mode):
     """Cactus Canyon Interrupter Jones"""
     def __init__(self, game, priority):
         super(Train, self).__init__(game, priority)

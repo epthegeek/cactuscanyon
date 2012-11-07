@@ -23,7 +23,6 @@
 ## after collecting jackpots, or maybe after all 5 are lit, shooting the saloon should do something
 
 from procgame import *
-import cc_modes
 import ep
 import random
 

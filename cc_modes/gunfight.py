@@ -22,7 +22,6 @@
 ###                          |___/
 ###
 from procgame import *
-import cc_modes
 import ep
 import random
 

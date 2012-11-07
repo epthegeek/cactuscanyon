@@ -20,8 +20,6 @@
 ##
 
 from procgame import *
-from assets import *
-import cc_modes
 import ep
 import locale
 import random

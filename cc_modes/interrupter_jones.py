@@ -19,8 +19,6 @@
 ##
 
 from procgame import *
-from assets import *
-import cc_modes
 import ep
 
 class Interrupter(ep.EP_Mode):

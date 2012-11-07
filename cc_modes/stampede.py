@@ -14,8 +14,6 @@
 ## Original Cactus Canyon software by Matt Coriale
 ##
 from procgame import *
-from assets import *
-import cc_modes
 import ep
 import random
 

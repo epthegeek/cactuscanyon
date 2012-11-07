@@ -17,11 +17,7 @@
 # This mode is just a big switch list to trap action for the super skill shot
 #
 
-from procgame import *
-import cc_modes
-import random
-import ep
-
+from procgame import game
 
 class SuperFilter(game.Mode):
     """Game mode for controlling the skill shot"""

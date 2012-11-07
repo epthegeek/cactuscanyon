@@ -22,6 +22,7 @@ import inspect
 class EP_Mode(game.Mode):
     def __init__(self, game, priority):
         super(EP_Mode, self).__init__(game, priority)
+        self.game = game
         self.busy = False
         self.POSTS = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
         self.running = False

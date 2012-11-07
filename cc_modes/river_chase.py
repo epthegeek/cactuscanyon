@@ -19,7 +19,6 @@
 ###
 
 from procgame import *
-import cc_modes
 import ep
 
 class RiverChase(ep.EP_Mode):

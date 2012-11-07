@@ -18,7 +18,6 @@
 ##
 
 from procgame import *
-import cc_modes
 import ep
 
 class RightLoop(ep.EP_Mode):

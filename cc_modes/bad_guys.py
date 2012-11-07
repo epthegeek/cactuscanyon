@@ -28,11 +28,7 @@
 ##     Lamps = badGuyL#
 ##     Coils = badGuyC#
 
-from procgame import *
-import cc_modes
 import ep
-import random
-import procgame
 
 class BadGuys(ep.EP_Mode):
     """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """

@@ -16,7 +16,6 @@
 
 
 from procgame import *
-import cc_modes
 import ep
 
 class MoveYourTrain(ep.EP_Mode):

@@ -22,8 +22,6 @@
 ###
 
 from procgame import *
-from assets import *
-import cc_modes
 import ep
 
 class Combos(ep.EP_Mode):

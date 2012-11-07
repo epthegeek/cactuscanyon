@@ -16,9 +16,7 @@
 ##
 
 from procgame import *
-import cc_modes
 import ep
-import random
 
 class CvA(ep.EP_Mode):
     """CvA code """

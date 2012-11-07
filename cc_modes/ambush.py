@@ -23,7 +23,6 @@
 
 
 from procgame import *
-import cc_modes
 import ep
 import random
 
@@ -31,6 +30,7 @@ class Ambush(ep.EP_Mode):
     """Showdown code """
     def __init__(self,game,priority):
         super(Ambush, self).__init__(game,priority)
+        self.game = game
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
 
         self.targetNames = ['Left','Left Center','Right Center','Right']

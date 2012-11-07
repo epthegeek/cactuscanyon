@@ -19,7 +19,6 @@
 ##
 
 from procgame import *
-import cc_modes
 import ep
 
 class Mine(ep.EP_Mode):

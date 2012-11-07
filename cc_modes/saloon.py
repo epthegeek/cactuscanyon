@@ -19,10 +19,8 @@
 ##
 
 from procgame import *
-import cc_modes
 import ep
 import random
-import locale
 
 class Saloon(ep.EP_Mode):
     """Game mode for controlling the skill shot"""

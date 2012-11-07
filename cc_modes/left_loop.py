@@ -18,8 +18,7 @@
 ## An always on mode, but separated for readability
 ##
 
-from procgame import *
-import cc_modes
+from procgame import dmd
 import ep
 
 class LeftLoop(ep.EP_Mode):

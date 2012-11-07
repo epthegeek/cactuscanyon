@@ -18,10 +18,7 @@
 # to allow stacked modes to share the shots - but not progress the basic ramp shots.
 #
 
-from procgame import *
-import cc_modes
-import random
-import ep
+from procgame import game
 
 class SwitchBlock(game.Mode):
     """This is to load between the low ramp basic shots and higher level stackable modes"""

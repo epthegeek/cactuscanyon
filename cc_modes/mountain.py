@@ -16,9 +16,6 @@
 ##
 ## The playfield toy mountain
 ##
-from procgame import *
-from assets import *
-import cc_modes
 import ep
 
 class Mountain(ep.EP_Mode):

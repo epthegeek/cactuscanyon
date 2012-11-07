@@ -15,8 +15,6 @@
 ##
 # for controlling the status of the badge
 
-from procgame import *
-import cc_modes
 import ep
 import random
 

@@ -23,9 +23,7 @@
 
 
 from procgame import *
-import cc_modes
 import ep
-import random
 
 class Showdown(ep.EP_Mode):
     """Showdown code """

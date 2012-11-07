@@ -14,7 +14,6 @@
 ## Original Cactus Canyon software by Matt Coriale
 ##
 from procgame.game import Mode
-from procgame import dmd
 
 class BallSearch(Mode):
     """Ball Search mode."""
