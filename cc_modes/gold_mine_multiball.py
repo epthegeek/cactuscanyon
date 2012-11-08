@@ -105,6 +105,7 @@ class GoldMine(ep.EP_Mode):
             self.game.increase_tracking('jackpotsCollected')
             # and update the lamps for that shot
             self.gmShots[shot].update_lamps()
+            self.game.combos.update_lamps()
             # and then award it properly
             self.jackpot_hit()
         # if it wasn't then do something else
@@ -280,6 +281,7 @@ class GoldMine(ep.EP_Mode):
                 # and refresh all the lamps
                 for shot in self.gmShots:
                     shot.update_lamps()
+                self.game.combos.update_lamps()
 
             else:
                 handler = self.main_display

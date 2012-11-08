@@ -321,10 +321,10 @@ PRLamps:
         tags: Playfield,Main
     rightRampCombo:
         number: L38
-        tags: Playfield,Main
+        tags: Playfield
     rightLoopCombo:
         number: L41
-        tags: Playfield,Main
+        tags: Playfield
     rightLoopJackpot:
         number: L42
         tags: Playfield,Main
@@ -369,7 +369,7 @@ PRLamps:
         tags: Playfield,Main
     centerRampCombo:
         number: L58
-        tags: Playfield,Main
+        tags: Playfield
     leftRampWhiteWater:
         number: L61
         tags: Playfield,Main
@@ -384,7 +384,7 @@ PRLamps:
         tags: Playfield,Main
     leftRampCombo:
         number: L65
-        tags: Playfield,Main
+        tags: Playfield
     rightReturnQuickdraw:
         number: L66
         tags: Playfield,Main
@@ -405,7 +405,7 @@ PRLamps:
         tags: Playfield,Main
     leftLoopCombo:
         number: L74
-        tags: Playfield,Main
+        tags: Playfield
     leftLoopJackpot:
         number: L75
         tags: Playfield,Main
