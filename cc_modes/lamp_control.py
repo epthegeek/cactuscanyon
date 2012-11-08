@@ -70,8 +70,6 @@ class LampControl(ep.EP_Mode):
         # this is the big mother.  Called any time playfield lamps should change.
         # first, disable the lamps
         self.disable_lamps()
-        # then - check if lamps are disabled
-        status = self.game.show_tracking('lampStatus')
 
         # if CvA is running - Only update the main shots, everything else stays dark
         if self.game.cva.running:
@@ -100,6 +98,12 @@ class LampControl(ep.EP_Mode):
             self.bad_guys(True)
             return
 
+        # then - check if lamps are disabled
+        status = self.game.show_tracking('lampStatus')
+        ## if status is off, we bail here
+        if status == "OFF":
+            return
+
         mineStatus = self.game.show_tracking('mineStatus')
 
         # main shots - basic update
@@ -125,10 +129,6 @@ class LampControl(ep.EP_Mode):
 
         # if drunk multiball s running, bail here to keep most of the lights dark
         if self.game.drunk_multiball.running:
-            return
-
-        ## if status is off, we bail here
-        if status == "OFF":
             return
 
         # update the bonus lanes
@@ -253,6 +253,7 @@ class LampControl(ep.EP_Mode):
             self.game.lamps.leftOutGunfight.schedule(0x0F0F0F0F)
 
         # bad guys
+        # if showdown or ambush are running, don't show the dead guy lights - even though they should be off
         if self.game.showdown.running or self.game.ambush.running:
             activeMode = True
         else:

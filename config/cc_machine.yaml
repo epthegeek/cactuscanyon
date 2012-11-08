@@ -309,34 +309,34 @@ PRLamps:
         tags: Playfield,Main
     rightRampSoundAlarm:
         number: L34
-        tags: Playfield,Main
+        tags: Playfield,Main,rightRamp
     rightRampShootOut:
         number: L35
-        tags: Playfield,Main
+        tags: Playfield,Main,rightRamp
     rightRampSavePolly:
         number: L36
-        tags: Playfield,Main
+        tags: Playfield,Main,rightRamp
     rightRampJackpot:
         number: L37
-        tags: Playfield,Main
+        tags: Playfield,Main,rightRamp
     rightRampCombo:
         number: L38
-        tags: Playfield
+        tags: Playfield,rightRamp
     rightLoopCombo:
         number: L41
-        tags: Playfield
+        tags: Playfield,rightLoop
     rightLoopJackpot:
         number: L42
-        tags: Playfield,Main
+        tags: Playfield,Main,rightLoop
     rightLoopMarksman:
         number: L43
-        tags: Playfield,Main
+        tags: Playfield,Main,rightLoop
     rightLoopGunslinger:
         number: L44
-        tags: Playfield,Main
+        tags: Playfield,Main,rightLoop
     rightLoopGoodShot:
         number: L45
-        tags: Playfield,Main
+        tags: Playfield,Main,rightLoop
     leftReturnQuickdraw:
         number: L46
         tags: Playfield,Main
@@ -357,34 +357,34 @@ PRLamps:
         tags: Playfield,Main
     centerRampCatchTrain:
         number: L54
-        tags: Playfield,Main
+        tags: Playfield,Main,centerRamp
     centerRampStopTrain:
         number: L55
-        tags: Playfield,Main
+        tags: Playfield,Main,centerRamp
     centerRampSavePolly:
         number: L56
-        tags: Playfield,Main
+        tags: Playfield,Main,centerRamp
     centerRampJackpot:
         number: L57
-        tags: Playfield,Main
+        tags: Playfield,Main,centerRamp
     centerRampCombo:
         number: L58
-        tags: Playfield
+        tags: Playfield,centerRamp
     leftRampWhiteWater:
         number: L61
-        tags: Playfield,Main
+        tags: Playfield,Main,leftRamp
     leftRampWaterfall:
         number: L62
-        tags: Playfield,Main
+        tags: Playfield,Main,leftRamp
     leftRampSavePolly:
         number: L63
-        tags: Playfield,Main
+        tags: Playfield,Main,leftRamp
     leftRampJackpot:
         number: L64
-        tags: Playfield,Main
+        tags: Playfield,Main,leftRamp
     leftRampCombo:
         number: L65
-        tags: Playfield
+        tags: Playfield,leftRamp
     rightReturnQuickdraw:
         number: L66
         tags: Playfield,Main
@@ -405,19 +405,19 @@ PRLamps:
         tags: Playfield,Main
     leftLoopCombo:
         number: L74
-        tags: Playfield
+        tags: Playfield,leftLoop
     leftLoopJackpot:
         number: L75
-        tags: Playfield,Main
+        tags: Playfield,Main,leftLoop
     leftLoopRideEm:
         number: L76
-        tags: Playfield,Main
+        tags: Playfield,Main,leftLoop
     leftLoopWildRide:
         number: L77
-        tags: Playfield,Main
+        tags: Playfield,Main,leftLoop
     leftLoopBuckNBronco:
         number: L78
-        tags: Playfield,Main
+        tags: Playfield,Main,leftLoop
     starBartBrothers:
         number: L81
         tags: Playfield,Main
