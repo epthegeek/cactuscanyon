@@ -127,10 +127,6 @@ class LampControl(ep.EP_Mode):
         else:
             self.update_bigFive()
 
-        # if drunk multiball s running, bail here to keep most of the lights dark
-        if self.game.drunk_multiball.running:
-            return
-
         # update the bonus lanes
         self.bonus_lanes(External=False)
 
