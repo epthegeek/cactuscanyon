@@ -98,7 +98,7 @@ class Tracking(game.Player):
         self.player_stats['bountyCollected'] = 0
         self.player_stats['isBountyLit'] = False
 
-        self.player_stats['rank'] = 3
+        self.player_stats['rank'] = 1
         self.player_stats['combos'] = 0
         # needed for being able to reset the star
         self.player_stats['combosTotal'] = 0

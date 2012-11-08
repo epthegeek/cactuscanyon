@@ -193,6 +193,11 @@ class Trough(ep.EP_Mode):
                         if self.drain_callback:
                             # tick the count down one
                             self.num_balls_in_play -= 1
+                            # sanity check
+                            if self.num_balls_in_play + temp_num_balls > num_current_machine_balls:
+                                print "Crap, too many balls accounted for. In play now: " + str(self.num_balls_in_play) + " -- correcting"
+                                self.num_balls_in_play = num_current_machine_balls - temp_num_balls
+                                print "Balls in play is now: " + str(self.num_balls_in_play)
                             # call a drain
                             self.drain_callback()
                             print "BALLS NOW IN PLAY: " + str(self.num_balls_in_play)
