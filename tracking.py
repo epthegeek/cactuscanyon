@@ -22,7 +22,7 @@
 ##
 ## All the tracking defaults piggybacked onto the player object
 ##
-from procgame import *
+from procgame import game
 
 class Tracking(game.Player):
     """Object for tracking player stats - instantiates with add player"""

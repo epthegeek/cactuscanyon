@@ -19,7 +19,7 @@
 ## the stuff from his that I am using
 ##
 
-from procgame import *
+from procgame import dmd
 import ep
 import sys
 
