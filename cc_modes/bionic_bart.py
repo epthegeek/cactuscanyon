@@ -168,7 +168,7 @@ class BionicBart(ep.EP_Mode):
                 else:
                     show = self.game.assets.lamp_leftToRight
 
-                self.game.lampctrl.play_show(show, repeat=False,callback=self.game.update_lamps)
+                self.game.lampctrl.play_show(show, repeat=False,callback=self.lamp_update)
 
                # if we're up to the required shots, load the weapon
                 if self.shots >= self.shotsToLoad:
@@ -208,11 +208,7 @@ class BionicBart(ep.EP_Mode):
         if amount == 3:
             self.activeShots = [1,4]
         # update the lamps
-        self.update_shot_lamps()
-
-    def update_shot_lamps(self):
-        for mode in self.shotModes:
-            mode.update_lamps()
+        self.lamp_update()
 
     def start_bionic(self):
         # kill the music
@@ -227,8 +223,7 @@ class BionicBart(ep.EP_Mode):
         # step 1
         if step == 1:
             # kill the lights!
-            for lamp in self.game.lamps:
-                lamp.disable()
+            self.game.lamp_control.disable_all_lamps()
             # kill the GI
             self.game.gi_control("OFF")
             # play the 'deal with this' quote
@@ -284,7 +279,7 @@ class BionicBart(ep.EP_Mode):
             # set the active shots
             self.activate_shots(2)
             # update the lamps to turn the rest back on
-            self.game.update_lamps()
+            self.lamp_update()
             # kick the ball out
             self.game.saloon.kick()
 
@@ -338,9 +333,7 @@ class BionicBart(ep.EP_Mode):
         # set the flag
         self.loaded = True
         # update lamps
-        self.game.saloon.update_lamps()
-        for shot in self.shotModes:
-            shot.update_lamps()
+        self.lamp_update()
         # next round takes more hits - max at 3 for now
         if self.shotsToLoad < 3:
             self.shotsToLoad += 1
@@ -408,7 +401,7 @@ class BionicBart(ep.EP_Mode):
         if step == 1:
             # turn off loaded and the lights
             self.loaded = False
-            self.game.saloon.update_lamps()
+            self.lamp_update()
             anim = self.game.assets.dmd_burstWipe
             myWait = len(anim.frames) / 14.0
             # set the animation
@@ -425,7 +418,7 @@ class BionicBart(ep.EP_Mode):
                 self.bionic_defeated()
             else:
                 # a flourish lampshow
-                self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.game.update_lamps)
+                self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.lamp_update)
                 self.delay(delay=myWait,handler=self.hit,param=2)
         if step == 2:
             # pick a random banner to use
@@ -567,7 +560,7 @@ class BionicBart(ep.EP_Mode):
         else:
         # a flourish lampshow
             self.game.gi_control("OFF")
-            self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.game.update_lamps)
+            self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.lamp_update)
 
 
     def bionic_failed(self):
@@ -622,7 +615,7 @@ class BionicBart(ep.EP_Mode):
         # clear the stack level
         self.game.stack_level(6,False)
         # Turn the lights back on
-        self.game.update_lamps()
+        self.lamp_update()
         # turn the main music back on
         if self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)

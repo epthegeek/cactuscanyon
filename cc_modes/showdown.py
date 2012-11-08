@@ -300,7 +300,7 @@ class Showdown(ep.EP_Mode):
             # reset the badguy UP tracking just in case
         for i in range (0,4,1):
             self.game.set_tracking('badGuyUp',False,i)
-        self.game.bad_guys.update_lamps()
+        self.lamp_update()
         # start up the main theme again if a higher level mode isn't running
         if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)

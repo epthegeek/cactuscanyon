@@ -360,7 +360,7 @@ class EP_Mode(object):
         self.__delayed = []
 
     def lamp_update(self):
-        self.game.lamp_control.update_lamps()
+        self.game.lamp_control.update()
 
     # Data structure used by the __accepted_switches array:
     class AcceptedSwitch:

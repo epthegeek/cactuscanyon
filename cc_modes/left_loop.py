@@ -37,106 +37,10 @@ class LeftLoop(ep.EP_Mode):
         self.anims.append({'layer':anim3,'direction':ep.EP_Transition.PARAM_EAST})
 
     def mode_started(self):
-        self.update_lamps()
+        self.game.lamp_control.left_loop()
 
     def mode_stopped(self):
-        self.disable_lamps()
-
-    def update_lamps(self):
-        self.disable_lamps()
-        ## if status is off, we bail here
-        lampStatus = self.game.show_tracking('lampStatus')
-        # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
-            return
-
-        ## high noon check
-        if self.game.show_tracking('highNoonStatus') == "RUNNING":
-            self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
-            self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
-            self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
-            self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
-            return
-        ## goldmine check - if stack level 2 is true, it's on
-        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
-            # check if this jackpot shot is active
-            if self.game.show_tracking('jackpotStatus',0):
-                self.game.lamps.leftLoopJackpot.schedule(0x0F0FFE00)
-                self.game.lamps.leftLoopRideEm.schedule(0x0F0F1F30)
-                self.game.lamps.leftLoopWildRide.schedule(0x0F0F03F1)
-                self.game.lamps.leftLoopBuckNBronco.schedule(0x0F0F007F)
-            return
-
-            # drunk multiball
-        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
-        ## right ramp is #4 in the stampede jackpot list
-            if 'leftLoop' in self.game.drunk_multiball.active:
-                self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
-                self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
-                self.game.lamps.leftLoopWildRide.schedule(0xF0F0F0F0)
-                self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
-            return
-
-        # bionic bart
-        if self.game.show_tracking('bionicStatus') == "RUNNING":
-            if 0 in self.game.bionic.activeShots:
-                self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
-            return
-
-        # cva
-        if self.game.show_tracking('cvaStatus') == "RUNNING":
-            if self.game.cva.activeShot == 0:
-                self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
-                self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
-            return
-
-        stage = self.game.show_tracking('leftLoopStage')
-
-        if stage == 1:
-            # blink the first light
-            self.game.lamps.leftLoopBuckNBronco.schedule(0x0F0F0F0F)
-        elif stage == 2:
-            # first light on
-            self.game.lamps.leftLoopBuckNBronco.enable()
-            # blink the second
-            self.game.lamps.leftLoopWildRide.schedule(0x0F0F0F0F)
-        elif stage == 3:
-            # first two on
-            self.game.lamps.leftLoopBuckNBronco.enable()
-            self.game.lamps.leftLoopWildRide.enable()
-            # blink the third
-            self.game.lamps.leftLoopRideEm.schedule(0x0F0F0F0F)
-        # this is completed
-        elif stage == 4:
-            # all three on
-            self.game.lamps.leftLoopBuckNBronco.enable()
-            self.game.lamps.leftLoopWildRide.enable()
-            self.game.lamps.leftLoopRideEm.enable()
-        ## 89 is stampede
-        elif stage == 89:
-        ## left loop is #0 in the stampede jackpot list
-            if self.game.stampede.active == 0:
-                self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
-                self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
-                self.game.lamps.leftLoopWildRide.schedule(0xF0F0F0F0)
-                self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
-            # if not active, just turn on the jackpot light only
-            else:
-                self.game.lamps.leftLoopJackpot.schedule(0xFF00FF00)
-
-        else:
-            pass
-
-    def disable_lamps(self):
-        self.game.lamps.leftLoopBuckNBronco.disable()
-        self.game.lamps.leftLoopWildRide.disable()
-        self.game.lamps.leftLoopRideEm.disable()
-        self.game.lamps.leftLoopJackpot.disable()
+        self.game.lamp_control.left_loop('Disable')
 
     def sw_leftLoopBottom_active(self,sw):
         # low end of the loop
@@ -168,7 +72,7 @@ class LeftLoop(ep.EP_Mode):
                 # pulse the coil to open the gate
                 self.game.coils.rightLoopGate.pulse(240)
                 # play a lampshow
-                self.game.lampctrl.play_show(self.game.assets.lamp_leftToRight, repeat=False,callback=self.game.update_lamps)
+                self.game.lampctrl.play_show(self.game.assets.lamp_leftToRight, repeat=False,callback=self.lamp_update)
             ## if the combo timer is on:
             if self.game.combos.myTimer > 0:
                 # register the combo and reset the timer
@@ -238,8 +142,7 @@ class LeftLoop(ep.EP_Mode):
             self.game.lamps.leftLoopWildRide.schedule(0x0FF00FF0)
             self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
             # update the lamps
-            self.delay(delay=1,handler=self.update_lamps)
-            self.game.center_ramp.update_lamps()
+            self.delay(delay=1,handler=self.lamp_update)
             # if we're complete, check the stampede tally
             if newstage == 4:
                 self.game.base.check_stampede()

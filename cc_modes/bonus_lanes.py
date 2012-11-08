@@ -33,26 +33,6 @@ class BonusLanes(ep.EP_Mode):
         # reset the bonus multiplier
         self.game.set_tracking('bonusX',1)
 
-    def update_lamps(self):
-        # skip entirely if MBB is running or cva is running
-        if self.game.marshall_multiball.running or self.game.cva.running:
-            return
-        # reset first
-        self.disable_lamps()
-        status = self.game.show_tracking('lampStatus')
-        ## if status is off, we bail here
-        if status != "ON":
-            return
-            # bonus lanes
-        if self.game.show_tracking('bonusLaneStatus',0) == 'ON':
-            self.game.lamps.leftBonusLane.enable()
-        if self.game.show_tracking('bonusLaneStatus',1) == 'ON':
-            self.game.lamps.rightBonusLane.enable()
-
-    def disable_lamps(self):
-        self.game.lamps.leftBonusLane.disable()
-        self.game.lamps.rightBonusLane.disable()
-
     def sw_leftBonusLane_active(self,sw):
         self.hit(0)
         ## -- set the last switch hit --
@@ -70,7 +50,7 @@ class BonusLanes(ep.EP_Mode):
         if stat == "OFF":
             # set the status to on for the lane that got hit
             self.game.set_tracking('bonusLaneStatus',"ON",side)
-            self.update_lamps()
+            self.lamp_update.bonus_lanes(True)
             # light the light
             # points for lighting bonus lane
             self.game.score(35000)
@@ -93,7 +73,7 @@ class BonusLanes(ep.EP_Mode):
 
     def flip(self):
         self.game.invert_tracking('bonusLaneStatus')
-        self.update_lamps()
+        self.game.lamp_control.bonus_lanes(True)
 
     def is_time_to_increase(self):
         # if neither one is off, IT IS TIME
@@ -122,7 +102,7 @@ class BonusLanes(ep.EP_Mode):
         # turn both lights off
         self.game.set_tracking('bonusLaneStatus',"OFF",0)
         self.game.set_tracking('bonusLaneStatus',"OFF",1)
-        self.delay(delay=1,handler=self.update_lamps)
+        self.delay(delay=1,handler=self.game.lamp_control.bonus_lanes,param=True)
         # after the delay, show the award
         self.delay(name="Display",delay=myWait,handler=self.show_bonus_award)
 

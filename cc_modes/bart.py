@@ -217,8 +217,7 @@ class Bart(ep.EP_Mode):
         self.game.score(self.hitValue)
         # flash the light and move the dude
         # a flourish lampshow
-        myCallback = self.game.update_lamps
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=myCallback)
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.lamp_update)
         # display the info
         # register the hit
         # increase the hits on bart - and store the new amount
@@ -245,7 +244,7 @@ class Bart(ep.EP_Mode):
         self.textLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3,textLayer4])
         self.textLayer.composite_op = "blacksrc"
         # play a fancy lamp show
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.lamp_update)
         # if we're boss fighting, go to that display
         if self.brother == "BOSS":
             self.boss_damage_display()
@@ -288,7 +287,7 @@ class Bart(ep.EP_Mode):
         # reset the hits on bart
         self.game.set_tracking('bartHits',0)
         # play a fancy lampshow
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.game.update_lamps)
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, False, self.lamp_update)
         # kill the bossfight flag just to cover if it's on
         if self.bossFight == True:
             self.bossFight = False

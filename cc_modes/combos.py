@@ -42,46 +42,7 @@ class Combos(ep.EP_Mode):
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
-            self.disable_lamps()
-
-    def update_lamps(self):
-        if self.game.marshall_multiball.running:
-            return
-
-        self.disable_lamps()
-
-        # high noon check
-        if self.game.show_tracking('highNoonStatus') == "RUNNING":
-            for lamp in self.comboLights:
-                lamp.schedule(0x00FF00FF)
-            return
-        # if status is multiball ...
-        if self.game.show_tracking('mineStatus') == "RUNNING":
-            # loop through and turn on the appropriate lights
-            for i in range(0,5,1):
-                if self.game.show_tracking('jackpotStatus',i):
-                    self.comboLights[i].schedule(0x0F0FF000)
-            return
-        ## if status is anything other than ON bail here
-        if self.game.show_tracking('lampStatus') != "ON":
-            return
-
-        # if timer is greater than 2, slow blink
-        if self.myTimer > 2:
-            for myLamp in self.comboLights:
-                myLamp.schedule(0x0000FFFF)
-        # if timer is AT 2, speed it up
-        elif self.myTimer == 2:
-            for myLamp in self.comboLights:
-                myLamp.schedule(0x00FF00FF)
-        # one second left, speed it up even more
-        elif self.myTimer == 1:
-            for myLamp in self.comboLights:
-                myLamp.schedule(0x0F0F0F0F)
-          
-    def disable_lamps(self):
-        for myLamp in self.comboLights:
-            myLamp.disable()
+            self.game.lamp_control.disable_combos()
 
     def timer(self):
         # just to be sure
@@ -93,11 +54,11 @@ class Combos(ep.EP_Mode):
         if self.myTimer <= 0:
             self.end()
         else:
-            self.update_lamps()
+            self.lamp_update()
             self.delay(name="Combo Timer",delay=1,handler=self.timer)
     
     def end(self):
-        self.update_lamps()
+        self.lamp_update()
         #print "Combos have ENDED"
     
     def start(self):
@@ -108,7 +69,7 @@ class Combos(ep.EP_Mode):
         # set the timer at the max settings from the game
         self.myTimer = self.default
         # turn the lights on
-        self.update_lamps()
+        self.lamp_update()
         #loop to the timer
         self.delay(name="Combo Timer",delay=1,handler=self.timer)
         # send this back to what called it for use in determining if in a combo or not

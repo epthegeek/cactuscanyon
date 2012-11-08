@@ -267,7 +267,7 @@ PRLamps:
         tags: Playfield,Main
     starMotherlode:
         number: L16
-        tags: Playfield,Main
+        tags: Playfield,Badge
     leftBonusLane:
         number: L17
         tags: Playfield
@@ -396,13 +396,13 @@ PRLamps:
         tags: Playfield,Main
     starStampede:
         number: L71
-        tags: Playfield,Main
+        tags: Playfield,Badge
     starCombo:
         number: L72
-        tags: Playfield,Main
+        tags: Playfield,Badge
     starHighNoon:
         number: L73
-        tags: Playfield,Main
+        tags: Playfield,Badge
     leftLoopCombo:
         number: L74
         tags: Playfield,leftLoop
@@ -420,13 +420,13 @@ PRLamps:
         tags: Playfield,Main,leftLoop
     starBartBrothers:
         number: L81
-        tags: Playfield,Main
+        tags: Playfield,Badge
     shootAgain:
         number: L82
         tags: Playfield,Main
     starShowdown:
         number: L83
-        tags: Playfield,Main
+        tags: Playfield,Badge
     badGuyL1:
         number: L84
         tags: Playfield

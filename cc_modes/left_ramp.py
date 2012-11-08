@@ -30,125 +30,10 @@ class LeftRamp(ep.EP_Mode):
         self.border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_woodcutBorder.frames[0])
 
     def mode_started(self):
-        self.update_lamps()
+        self.game.lamp_control.left_ramp()
 
     def mode_stopped(self):
-        self.disable_lamps()
-
-    def update_lamps(self):
-        self.disable_lamps()
-        ## if status is off, we bail here
-        lampStatus = self.game.show_tracking('lampStatus')
-        # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
-            return
-        ## high noon check
-        if self.game.show_tracking('highNoonStatus') == "RUNNING":
-            self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
-            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
-            self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
-            self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
-            return
-
-        # check for goldmine multiball
-        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
-            if self.game.show_tracking('jackpotStatus',1):
-                self.game.lamps.leftRampJackpot.schedule(0x0F0FFE00)
-                self.game.lamps.leftRampSavePolly.schedule(0x0F0F1F30)
-                self.game.lamps.leftRampWaterfall.schedule(0x0F0F03F1)
-                self.game.lamps.leftRampWhiteWater.schedule(0x0F0F007F)
-            return
-            # drunk multiball
-        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
-        ## right ramp is #4 in the stampede jackpot list
-            if 'leftRamp' in self.game.drunk_multiball.active:
-                self.game.lamps.leftRampJackpot.schedule(0xF000F000)
-                self.game.lamps.leftRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.leftRampWaterfall.schedule(0xF0F0F0F0)
-                self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
-            return
-        # save polly
-        if self.game.save_polly.running:
-            self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
-            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
-            self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
-            return
-        # river chase
-        if self.game.river_chase.running:
-            # all three shots are equal in river chase
-            self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
-            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
-            self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
-            return
-        # bank robbery
-        if self.game.bank_robbery.running:
-            if self.game.bank_robbery.isActive[0]:
-                self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
-                self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
-                self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
-            return
-
-        # bionic bart
-        if self.game.show_tracking('bionicStatus') == "RUNNING":
-            if 1 in self.game.bionic.activeShots:
-                self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
-                self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
-                self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
-                self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
-            return
-
-        # cva
-        if self.game.show_tracking('cvaStatus') == "RUNNING":
-            if self.game.cva.activeShot == 1:
-                self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
-                self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
-                self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
-                self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
-            return
-
-        stage = self.game.show_tracking('leftRampStage')
-
-        print "RAMP STAGE SANITY CHECK: " + str(stage)
-        if stage == 1:
-            # blink the first light
-            self.game.lamps.leftRampWhiteWater.schedule(0x0F0F0F0F)
-        elif stage == 2:
-            # first light on
-            self.game.lamps.leftRampWhiteWater.enable()
-            # blink the second
-            self.game.lamps.leftRampWaterfall.schedule(0x0F0F0F0F)
-        elif stage == 3:
-            # first two on
-            self.game.lamps.leftRampWhiteWater.enable()
-            self.game.lamps.leftRampWaterfall.enable()
-            # blink the third
-            self.game.lamps.leftRampSavePolly.schedule(0x0F0F0F0F)
-        # this is completed - pulse the 3rd light
-        elif stage == 5:
-            # two on
-            self.game.lamps.leftRampWhiteWater.enable()
-            self.game.lamps.leftRampWaterfall.enable()
-            self.game.lamps.leftRampSavePolly.enable()
-        # stampede
-        elif stage == 89:
-        ## left ramp is #1 in the stampede jackpot list
-            if self.game.stampede.active == 1:
-                self.game.lamps.leftRampJackpot.schedule(0xF000F000)
-                self.game.lamps.leftRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.leftRampWaterfall.schedule(0xF0F0F0F0)
-                self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
-            # if not active, just turn on the jackpot light only
-            else:
-                self.game.lamps.leftRampJackpot.schedule(0xFF00FF00)
-
-        else:
-            pass
-
-    def disable_lamps(self):
-        self.game.lamps.leftRampWhiteWater.disable()
-        self.game.lamps.leftRampWaterfall.disable()
-        self.game.lamps.leftRampSavePolly.disable()
-        self.game.lamps.leftRampJackpot.disable()
+        self.game.lamp_control.left_ramp('Disable')
 
     def sw_leftRampEnter_active(self,sw):
         # hitting this switch counts as a made ramp - really
@@ -274,7 +159,7 @@ class LeftRamp(ep.EP_Mode):
             self.game.lamps.leftRampWaterfall.schedule(0x0FF00FF0)
             self.game.lamps.leftRampSavePolly.schedule(0xFF00FF00)
             # update the lamps
-            self.delay(delay=1,handler=self.update_lamps)
+            self.delay(delay=1,handler=self.lamp_update)
             print "CHECING TRACKING Left ramp LR: " + str(self.game.show_tracking('leftRampStage'))
 
     # for now since this doesn't blink there's just one step

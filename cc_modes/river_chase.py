@@ -177,11 +177,7 @@ class RiverChase(ep.EP_Mode):
             # clear any running music
             print "start_river_chase IS KILLING THE MUSIC"
             self.game.sound.stop_music()
-            self.game.right_ramp.update_lamps()
-            self.game.center_ramp.update_lamps()
-            self.game.left_ramp.update_lamps()
-            self.game.saloon.update_lamps()
-
+            self.lamp_update()
 
             # start the music
             self.game.base.music_on(self.game.assets.music_pollyPeril)
@@ -356,7 +352,7 @@ class RiverChase(ep.EP_Mode):
         self.layer = None
         # set the tracking on the ramps
         self.game.set_tracking('leftRampStage',5)
-        self.game.update_lamps()
+        self.lamp_update()
         self.end_save_polly()
 
     # clean up and exit

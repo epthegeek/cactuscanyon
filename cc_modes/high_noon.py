@@ -188,7 +188,7 @@ class HighNoon(ep.EP_Mode):
             self.game.sound.stop_music()
             # turn off the lights
             self.game.set_tracking('lampStatus', "OFF")
-            self.game.update_lamps()
+            self.lamp_update()
 
             self.game.stack_level(6,True)
             self.game.set_tracking('highNoonStatus',"RUNNING")
@@ -317,7 +317,7 @@ class HighNoon(ep.EP_Mode):
         self.game.base.play_quote(self.game.assets.quote_highNoonStart)
         # TODO set all the shots to a status # ?
         # update the lamps
-        self.game.update_lamps()
+        self.lamp_update()
         # turn the ball search back on
         self.game.ball_search.enable()
 
@@ -371,7 +371,7 @@ class HighNoon(ep.EP_Mode):
         self.game.bad_guys.drop_targets()
         # turn the lights off
         self.game.set_tracking('lampStatus',"OFF")
-        self.game.update_lamps()
+        self.lamp_update()
         # kill the GI
         self.game.gi_control("OFF")
         # lampshow down wipe
@@ -559,7 +559,7 @@ class HighNoon(ep.EP_Mode):
         self.game.enable_flippers(True)
         # turn the lights back on
         self.game.set_tracking('lampStatus',"ON")
-        self.game.update_lamps()
+        self.lamp_update()
         # launch a ball
         print "END HIGH NOON BALL LAUNCH"
         self.game.trough.launch_balls(1)

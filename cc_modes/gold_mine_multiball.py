@@ -69,7 +69,7 @@ class GoldMine(ep.EP_Mode):
                 self.cancel_delayed("Display")
                 self.game.sound.play_music(self.game.assets.music_tensePiano1,loops=-1)
                 self.clear_layer()
-                self.game.update_lamps()
+                self.lamp_update()
                 self.restart_option()
             # otherwise, end just like no ball action
             else:
@@ -104,8 +104,7 @@ class GoldMine(ep.EP_Mode):
             # and add one to the jackpots collected
             self.game.increase_tracking('jackpotsCollected')
             # and update the lamps for that shot
-            self.gmShots[shot].update_lamps()
-            self.game.combos.update_lamps()
+            self.lamp_update()
             # and then award it properly
             self.jackpot_hit()
         # if it wasn't then do something else
@@ -181,8 +180,7 @@ class GoldMine(ep.EP_Mode):
         for i in range(0,5,1):
             self.game.set_tracking('jackpotStatus',True,i)
         # update the lamps
-        for shot in self.gmShots:
-            shot.update_lamps()
+        self.lamp_update()
         # kill the intro music and start the multiball music
         self.game.sound.stop_music()
         self.game.base.music_on(self.game.assets.music_goldmineMultiball)
@@ -279,9 +277,7 @@ class GoldMine(ep.EP_Mode):
                 for i in range(0,5,1):
                     self.game.set_tracking('jackpotStatus',True,i)
                 # and refresh all the lamps
-                for shot in self.gmShots:
-                    shot.update_lamps()
-                self.game.combos.update_lamps()
+                self.lamp_update()
 
             else:
                 handler = self.main_display
@@ -423,7 +419,7 @@ class GoldMine(ep.EP_Mode):
             self.game.set_tracking('motherlodeLit', False)
             # and turn off the bandits flag here
             self.bandits = False
-        self.update_lamps()
+        self.lamp_update()
 
     def collect_motherlode(self):
         # turn motherlode off
@@ -458,7 +454,7 @@ class GoldMine(ep.EP_Mode):
             # set the star flag for motherlode - it's 0
             self.game.badge.update(0)
         # update the lamps
-        self.game.update_lamps()
+        self.lamp_update()
         # reset a counter
         self.counter = 0
         # play a quote based on the multiplier
@@ -563,7 +559,7 @@ class GoldMine(ep.EP_Mode):
         # set the stack flag back off
         self.game.stack_level(4,False)
         #refresh the mine lights
-        self.game.update_lamps()
+        self.lamp_update()
         # reset some junk
         self.banditTimer = 0
         self.banditsUp = 0

@@ -90,9 +90,7 @@ class Stampede(ep.EP_Mode):
             print "SETTING TRACKING FOR:" + shot
             self.game.set_tracking(shot,89)
         # udpate the lamps
-        for shot in self.shotModes:
-            print "UPDATING LAMPS FOR STAMPEDE"
-            shot.update_lamps()
+        self.lamp_update()
 
         # start the timer for the moving jackpot
         self.jackpot_shift()
@@ -207,8 +205,7 @@ class Stampede(ep.EP_Mode):
         if self.active >= 5:
             self.active = 0
         # update the lamps
-        for shot in self.shotModes:
-            shot.update_lamps()
+        self.lamp_update()
         # then come back in 6 seconds and do it all over again
         self.delay(name="Timer",delay=6,handler=self.jackpot_shift)
 
@@ -241,8 +238,7 @@ class Stampede(ep.EP_Mode):
         for each in self.shots:
             self.game.set_tracking(each,1)
         # and update the lamps
-        for mode in self.shotModes:
-            mode.update_lamps()
+        self.lamp_update()
         # badge light - stampede is 4
         self.game.badge.update(4)
         # unset the base busy flag

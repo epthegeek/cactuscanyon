@@ -48,7 +48,7 @@ class BaseGameMode(ep.EP_Mode):
         ## cancel the closing song delay, just in case
         self.game.interrupter.cancel_delayed("Attract Fade")
         # and update the lamps
-        self.game.update_lamps()
+        self.lamp_update()
 
     def mode_stopped(self):
         # Ensure flippers are disabled
@@ -116,61 +116,6 @@ class BaseGameMode(ep.EP_Mode):
                 self.remove_modes()
                 self.layer = None
                 self.game.ball_ended()
-
-    def update_lamps(self):
-        # reset first
-        self.disable_lamps()
-        status = self.game.show_tracking('lampStatus')
-        ## if status is off, we bail here
-        if status != "ON" or \
-           self.game.show_tracking('bionicStatus') == "RUNNING" or \
-           self.game.show_tracking('cvaStatus') == "RUNNING":
-            return
-        if self.guns_allowed():
-            # left side - either the playfield light is on or blinking, or the inlane light is on
-            left = self.game.show_tracking('quickdrawStatus',0)
-            if left == 'OPEN':
-                self.game.lamps.leftQuickdraw.enable()
-            elif left == 'TOP' or left == 'BOT':
-                self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
-            elif left == 'READY' and self.guns_allowed():
-                self.game.lamps.leftReturnQuickdraw.schedule(0x00FF00FF)
-            else:
-                pass
-            # right has 2 lights so if unhit the light appropriate is on, or the inlane if ready
-            right = self.game.show_tracking('quickdrawStatus',1)
-            if right == 'OPEN':
-                self.game.lamps.topRightQuickdraw.enable()
-                self.game.lamps.bottomRightQuickdraw.enable()
-            elif right == 'TOP':
-                self.game.lamps.bottomRightQuickdraw.enable()
-            elif right == 'BOT':
-                self.game.lamps.topRightQuickdraw.enable()
-            elif right == 'READY' and self.guns_allowed():
-                self.game.lamps.rightReturnQuickdraw.schedule(0x00FF00FF)
-            else:
-                pass
-             ## on a second pass thorugh the returns - if showdown is ready, flash 'em
-            if self.game.show_tracking('showdownStatus') == "READY" or self.game.show_tracking('ambushStatus') == "READY":
-                self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
-                self.game.lamps.leftReturnQuickdraw.schedule(0xF0F0F0F0)
-        # extra ball
-        if self.game.current_player().extra_balls > 0:
-            self.game.lamps.shootAgain.enable()
-        # if the bozo ball is on, flash the outlanes
-        if self.game.show_tracking('bozoBall'):
-            self.game.lamps.rightOutSpecial.schedule(0x0F0F0F0F)
-            self.game.lamps.leftOutGunfight.schedule(0x0F0F0F0F)
-
-    def disable_lamps(self):
-        self.game.lamps.leftQuickdraw.disable()
-        self.game.lamps.bottomRightQuickdraw.disable()
-        self.game.lamps.topRightQuickdraw.disable()
-        self.game.lamps.leftReturnQuickdraw.disable()
-        self.game.lamps.rightReturnQuickdraw.disable()
-        self.game.lamps.shootAgain.disable()
-        self.game.lamps.rightOutSpecial.disable()
-        self.game.lamps.leftOutGunfight.disable()
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
@@ -264,7 +209,7 @@ class BaseGameMode(ep.EP_Mode):
         self.game.set_tracking('beerMugHits',self.mug_shots)
         # enable the multiball
         self.game.set_tracking('drunkMultiballStatus', "READY")
-        self.game.saloon.update_lamps()
+        self.lamp_update()
         textLine1 = ep.pulse_text(self,51,1,"DRUNK")
         textLine2 = ep.pulse_text(self,51,12,"MULTIBALL")
         textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")
@@ -773,7 +718,7 @@ class BaseGameMode(ep.EP_Mode):
         else:
             # will also need to do something with lights here
             self.game.set_tracking('quickdrawStatus',position,side)
-            self.update_lamps()
+            self.lamp_update()
 
     def light_quickdraw(self,side=9):
         # this is for handling a call to light quickdraw with no side favor the right
@@ -790,7 +735,7 @@ class BaseGameMode(ep.EP_Mode):
         self.game.base.play_quote(self.game.assets.quote_quickdrawLit)
         # set the status for the hit side to READY
         self.game.set_tracking('quickdrawStatus',"READY",side)
-        self.update_lamps()
+        self.lamp_update()
 
     ###
     ###  ____
@@ -939,5 +884,5 @@ class BaseGameMode(ep.EP_Mode):
         # free instant extra ball
         self.game.current_player().extra_balls += 1
         # update the lamps to show extra ball
-        self.update_lamps()
+        self.lamp_update()
 

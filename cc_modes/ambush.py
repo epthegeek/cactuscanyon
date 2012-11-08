@@ -141,8 +141,7 @@ class Ambush(ep.EP_Mode):
         # kill the GI
         self.game.gi_control("OFF")
         # turn off the bad guy lights
-        for lamp in self.lamps:
-            lamp.disable()
+        self.game.lamp_control.disable_bad_guys()
         # things, they go here
         self.deathTally = 0
         # play a startup animation
@@ -436,7 +435,8 @@ class Ambush(ep.EP_Mode):
             # reset the badguy UP tracking just in case
         for i in range (0,4,1):
             self.game.set_tracking('badGuyUp',False,i)
-        self.game.bad_guys.update_lamps()
+        # update the lamps
+        self.lamp_update()
         # start up the main theme again if a higher level mode isn't running
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:

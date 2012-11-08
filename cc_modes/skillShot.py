@@ -442,7 +442,7 @@ class SkillShot(ep.EP_Mode):
             self.super = False
 
         # call the lamp update so the prize is shown properly
-        self.game.update_lamps()
+        self.lamp_update()
 
         self.award_display(awardStringTop,awardStringBottom)
 
@@ -526,7 +526,7 @@ class SkillShot(ep.EP_Mode):
         self.game.sound.stop_music()
         # turn off the table lights
         self.game.set_tracking('lampStatus',"OFF")
-        self.game.update_lamps()
+        self.lamp_update()
         # pick a jackpot
         choices = [1,2,3]
         self.active = random.choice(choices)
@@ -576,7 +576,7 @@ class SkillShot(ep.EP_Mode):
         self.game.sound.stop_music()
         # turn the lights back on
         self.game.set_tracking('lampStatus',"ON")
-        self.game.update_lamps()
+        self.lamp_update()
         if made:
             # award the prize
             self.skillshot_award()

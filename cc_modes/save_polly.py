@@ -158,11 +158,7 @@ class SavePolly(ep.EP_Mode):
             self.game.sound.stop_music()
             # set the center to crazy stage
             self.game.set_tracking('centerRampStage',99)
-            self.game.right_ramp.update_lamps()
-            self.game.center_ramp.update_lamps()
-            self.game.left_ramp.update_lamps()
-            # update the saloon lamps
-            self.game.saloon.update_lamps()
+            self.lamp_update()
 
             # start the music
             self.game.base.music_on(self.game.assets.music_pollyPeril)
@@ -426,7 +422,7 @@ class SavePolly(ep.EP_Mode):
         # set the tracking on the ramps
         # this is mostly for the lights
         self.game.set_tracking('centerRampStage',5)
-        self.game.update_lamps()
+        self.lamp_update()
         self.end_save_polly()
 
     # clean up and exit

@@ -32,7 +32,7 @@ class DrunkMultiball(ep.EP_Mode):
         super(DrunkMultiball, self).__init__(game,priority)
         anim = self.game.assets.dmd_dmbIdle
         self.overlay = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=8)
-        self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
+        self.shotModes = [self.game.lamp_control.left_loop,self.game.lamp_control.right_loop,self.game.lamp_control.left_ramp,self.game.lamp_control.center_ramp,self.game.lamp_control.right_ramp]
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         self.availableJackpots = ['leftLoop','leftRamp','centerRamp','rightLoop','rightRamp']
         # an animation for use in the intro
@@ -98,8 +98,6 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.stack_level(3,True)
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "RUNNING")
-        # update the lamps
-        self.game.saloon.update_lamps()
         # disable the flippers
         self.game.enable_flippers(False)
         # enable the inverted flippers
@@ -109,8 +107,7 @@ class DrunkMultiball(ep.EP_Mode):
         # turn the GI off
         self.game.gi_control("OFF")
         # update the lamps
-        for mode in self.shotModes:
-            mode.update_lamps()
+        self.lamp_update()
         # play the drunk multiball song
         self.game.base.music_on(self.game.assets.music_drunkMultiball)
         # show some screens about the mode
@@ -228,8 +225,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.active.append(thisOne)
         print self.active
         # and update the lamps
-        for mode in self.shotModes:
-            mode.update_lamps()
+        self.lamp_update()
 
         print "LIGHTING JACKPOT"
         anim = self.game.assets.dmd_dmb
@@ -259,7 +255,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.active.remove(shot)
         self.availableJackpots.append(shot)
         # update the lamps for the hit ramp
-        mode.update_lamps()
+        mode('Disable')
         # flash some lights
         self.game.lamps.gi01.schedule(0xFF00FF00,cycle_seconds=1)
         self.game.lamps.gi02.schedule(0x0FF00FF0,cycle_seconds=1)
@@ -318,8 +314,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.enable_inverted_flippers(False)
         self.game.enable_flippers(True)
         # reset the lamps
-        for mode in self.shotModes:
-            mode.update_lamps()
+        self.lamp_update()
         # clear the layer
         self.layer = None
         # turn the GI back on

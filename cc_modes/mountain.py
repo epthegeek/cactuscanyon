@@ -52,7 +52,7 @@ class Mountain(ep.EP_Mode):
     def flash(self):
         self.game.coils.mineFlasher.pulse(30)
         # run the mine lamp update to turn the flasher back on if needed
-        self.game.mine.update_lamps()
+        self.lamp_update()
 
     def eject(self):
         if self.busy:

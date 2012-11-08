@@ -113,11 +113,6 @@ class CvA(ep.EP_Mode):
         if self.game.quickdraw.running:
             self.game.quickdraw.lost(self.game.quickdraw.side)
 
-    def update_mode_lamps(self):
-        # update the lamps
-        for mode in self.shotModes:
-            mode.update_lamps()
-
     ### Jackpot switches
 
     def sw_leftLoopTop_active(self,sw):
@@ -178,7 +173,7 @@ class CvA(ep.EP_Mode):
             # null the active shot
             self.activeShot = 9
             # update the lamps to turn them off
-            self.update_mode_lamps()
+            self.lamp_update()
             # count the hit
             self.saucerHits += 1
             # cancel the move timer
@@ -360,7 +355,7 @@ class CvA(ep.EP_Mode):
             self.game.set_tracking("cvaStatus", "RUNNING")
             # and the local running flag
             self.running = True
-            self.game.update_lamps()
+            self.lamp_update()
             # trap the ball if needed
             if entry == "inlane":
                 self.posts[onSide].patter(on_time=2,off_time=6,original_on_time=30)
@@ -469,7 +464,7 @@ class CvA(ep.EP_Mode):
         self.position = 5
         self.stopAt = self.positions[self.position]
         # update the lamps
-        self.update_mode_lamps()
+        self.lamp_update()
         # position the space ship
         # delay a move to the next spot
         # reassign the blank layer for later use
@@ -577,7 +572,7 @@ class CvA(ep.EP_Mode):
         # set the next stop at
         self.stopAt = self.positions[self.position]
         # update the lamps
-        self.update_mode_lamps()
+        self.lamp_update()
         # start a timer to move the ship again
         self.ship_timer(self.shipTimer)
 
@@ -597,7 +592,7 @@ class CvA(ep.EP_Mode):
             # turn off the active shot
             self.activeShot = 9
             # and update the lamps
-            self.update_mode_lamps()
+            self.lamp_update()
             # set up the next saucer
             self.next_saucer()
             # reset the round count of aliens
@@ -763,7 +758,7 @@ class CvA(ep.EP_Mode):
 
     def saucer_hit_display(self):
         # lampshow
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.game.update_lamps)
+        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.lamp_update)
         anim = self.game.assets.dmd_cvaLargeShipExplodes
         myWait = len(anim.frames) / 10.0
         animLayer = ep.EP_AnimatedLayer(anim)
@@ -853,7 +848,7 @@ class CvA(ep.EP_Mode):
         # turn off the local running flag
         self.running = False
         # put the lights back to normal
-        self.game.update_lamps()
+        self.lamp_update()
         # turn the music back on if appropriate
         # turn the music back on
         if True not in stackLevel[6:] and self.game.trough.num_balls_in_play != 0:

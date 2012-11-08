@@ -53,39 +53,6 @@ class BadGuys(ep.EP_Mode):
     def mode_stopped(self):
         self.kill_power()
 
-    def update_lamps(self):
-        self.disable_lamps()
-        # bail immediately if showdown or ambush is running
-        if self.game.show_tracking('showdownStatus') == "RUNNING" or\
-           self.game.show_tracking('ambushStatus') == "RUNNING" or\
-           self.game.show_tracking('cvaStatus') == "RUNNING":
-            return
-        # reset first
-        # bail if lights are off
-        status = self.game.show_tracking('lampStatus')
-        if status != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING":
-            return
-        # high noon
-        status = self.game.show_tracking('highNoonStatus')
-        if status == "RUNNING":
-            print "HIGH NOON IS RUNNING -- FLASH ALL THE THINGS"
-            for lamp in range(0,4,1):
-                self.lamps[lamp].schedule(0x0F0F0F0F)
-            return
-        # bad guy lights hopefully this sets any lamp that returns true to be on
-        for lamp in range(0,4,1):
-            status = self.game.show_tracking('badGuysDead',lamp)
-            active = self.game.show_tracking('badGuyUp',lamp)
-            if status:
-                self.lamps[lamp].enable()
-            if active:
-                self.lamps[lamp].schedule(0x00FF00FF)
-
-    def disable_lamps(self):
-        for lamp in self.lamps:
-            lamp.disable()
-
-
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
         if self.game.show_tracking('badGuyUp',0):

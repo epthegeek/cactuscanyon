@@ -66,7 +66,11 @@ class LampControl(ep.EP_Mode):
         # this gets scheduled in some instances too, so for good measure
         self.game.coils.mineFlasher.disable()
 
-    def update_lamps(self):
+    def update(self):
+        # marhsall multiball is a whole separate thing - dont run this when it's running
+        if self.game.marshall_multiball.running:
+            return
+
         # this is the big mother.  Called any time playfield lamps should change.
         # first, disable the lamps
         self.disable_lamps()
@@ -92,14 +96,12 @@ class LampControl(ep.EP_Mode):
         bionicStatus = self.game.show_tracking('bionicStatus')
         # If bionic bart is running, run a subset and return
         if bionicStatus == "RUNNING":
-            # chase the badge
-            self.badge('Chase')
             # if loaded, flash the saloon
-            if self.game.bionic.loaded:
+           if self.game.bionic.loaded:
                 self.saloon_flash()
-            # Run the big five
-            self.update_bigFive('Bionic')
-            return
+           # Run the big five
+           self.update_bigFive('Bionic')
+           return
 
         #  _   _ _       _       _   _
         # | | | (_) __ _| |__   | \ | | ___   ___  _ __
@@ -113,7 +115,7 @@ class LampControl(ep.EP_Mode):
             self.update_bigFive('highNoon')
             self.combos('highNoon')
             self.badge('On')
-            self.bad_guys(True)
+            self.bad_guys()
             return
 
         # then - check if lamps are disabled
@@ -312,10 +314,9 @@ class LampControl(ep.EP_Mode):
         #                                  |___/
         # if showdown or ambush are running, don't show the dead guy lights - even though they should be off
         if self.game.showdown.running or self.game.ambush.running:
-            activeMode = True
+            pass
         else:
-            activeMode = False
-        self.bad_guys(activeMode)
+            self.bad_guys()
 
     # This is a combo routine for the 5 main shots
     def update_bigFive(self,mode='Base'):
@@ -391,6 +392,9 @@ class LampControl(ep.EP_Mode):
             else:
                 self.game.lamps.leftLoopJackpot.schedule(0xFF00FF00)
 
+        elif mode == "Disable":
+            for lamp in self.game.lamps.items_tagged('leftLoop'):
+                lamp.disable()
 
         ## This is the base mode if all else passes
         else:
@@ -487,6 +491,10 @@ class LampControl(ep.EP_Mode):
             self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+
+        elif mode == "Disable":
+            for lamp in self.game.lamps.items_tagged('leftRamp'):
+                lamp.disable()
 
         else:
             stage = self.game.show_tracking('leftRampStage')
@@ -588,6 +596,10 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.centerRampStopTrain.schedule(0x0000FFFF)
                 self.game.lamps.centerRampCatchTrain.schedule(0xFF0000FF)
 
+        elif mode == "Disable":
+            for lamp in self.game.lamps.items_tagged('centerRamp'):
+                lamp.disable()
+
         else:
             stage = self.game.show_tracking('centerRampStage')
 
@@ -675,6 +687,10 @@ class LampControl(ep.EP_Mode):
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.rightLoopJackpot.schedule(0xFF00FF00)
+
+        elif mode == "Disable":
+            for lamp in self.game.lamps.items_tagged('rightLoop'):
+                lamp.disable()
 
         else:
             stage = self.game.show_tracking('rightLoopStage')
@@ -768,6 +784,10 @@ class LampControl(ep.EP_Mode):
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
 
+        elif mode == "Disable":
+            for lamp in self.game.lamps.items_tagged('rightRamp'):
+                lamp.disable()
+
         else:
             stage = self.game.show_tracking('rightRampStage')
 
@@ -802,8 +822,7 @@ class LampControl(ep.EP_Mode):
     #
     def combos(self,mode='Timer'):
         # kill 'em first - they're not in the main shutoff
-        for myLamp in self.comboLights:
-            myLamp.disable()
+        self.disable_combos()
 
         if mode == 'Timer':
             value = self.game.combos.myTimer
@@ -837,6 +856,11 @@ class LampControl(ep.EP_Mode):
         else:
             pass
 
+    def disable_combos(self):
+        for myLamp in self.comboLights:
+            myLamp.disable()
+
+
     #  ____            _
     # | __ )  __ _  __| | __ _  ___
     # |  _ \ / _` |/ _` |/ _` |/ _ \
@@ -844,6 +868,7 @@ class LampControl(ep.EP_Mode):
     # |____/ \__,_|\__,_|\__, |\___|
     #                    |___/
     def badge(self,mode='Level'):
+        self.disable_badge()
 
         if mode == 'Level':
             # turn on all the badge lights that have been earned
@@ -873,6 +898,11 @@ class LampControl(ep.EP_Mode):
                 self.starLamps[lamp].enable()
         else:
             pass
+
+    def disable_badge(self):
+        for lamp in self.game.lamps.items_tagged('Badge'):
+            lamp.disable()
+
 
     #  ____             _
     # |  _ \ __ _ _ __ | | __
@@ -905,22 +935,25 @@ class LampControl(ep.EP_Mode):
     # | |_) | (_| | (_| | | |_| | |_| | |_| \__ \
     # |____/ \__,_|\__,_|  \____|\__,_|\__, |___/
     #                                  |___/
-    def bad_guys(self,activeMode = False):
+    def bad_guys(self):
         # first disable, they're not in the common wipe
-        for lamp in self.badGuyLamps:
-            lamp.disable()
+        self.disable_bad_guys()
 
         # Then, turn on lights accordingly
         for lamp in range(0,4,1):
             status = self.game.show_tracking('badGuysDead',lamp)
             active = self.game.show_tracking('badGuyUp',lamp)
             # if the guy is dead, his light is on solid - if we're not in high noon or stampede
-            if not activeMode:
-                if status:
-                    self.badGuyLamps[lamp].enable()
+            if status:
+                self.badGuyLamps[lamp].enable()
             # if the guy is active (which he might be also, even if dead, based on mode) flash it
             if active:
                 self.badGuyLamps[lamp].schedule(0x00FF00FF)
+
+    def disable_bad_guys(self):
+        for lamp in self.badGuyLamps:
+            lamp.disable()
+
 
     #   ____                          _
     #  | __ )  ___  _ __  _   _ ___  | |    __ _ _ __   ___  ___

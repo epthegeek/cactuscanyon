@@ -155,54 +155,6 @@ class Saloon(ep.EP_Mode):
         else:
             self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
 
-    def update_lamps(self):
-        self.disable_lamps()
-        ## if status is off, we bail here
-        if self.game.show_tracking('lampStatus') == "OFF" or \
-            self.game.show_tracking('cvaStatus') == "RUNNING":
-            return
-
-        # flash the saloon arrow if bionic bart is ready
-        bionicStatus = self.game.show_tracking('bionicStatus')
-        if bionicStatus == "READY":
-            self.game.lamps.saloonArrow.schedule(0xF0F0F0F0)
-            self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
-        # flash bount and arrow if running and loaded
-        elif bionicStatus == "RUNNING":
-            if self.game.bionic.loaded:
-                self.game.lamps.saloonArrow.schedule(0x00FF00FF)
-                self.game.lamps.bountySaloon.schedule(0x00FF00FF)
-            return
-
-        beacon = False
-        if self.game.show_tracking('bartStatus') == 'RUNNING' or self.game.show_tracking('bartStatus') == 'LAST':
-            if bionicStatus != "READY" and bionicStatus != "RUNNING":
-                self.game.lamps.saloonArrow.enable()
-        if self.game.show_tracking('isBountyLit'):
-            self.game.lamps.bountySaloon.schedule(0xFF00FF00)
-            self.game.lamps.bountyBeacon.enable()
-            beacon = True
-        if self.game.show_tracking('extraBallsPending') > 0:
-            beacon = True
-        if beacon:
-            self.game.lamps.shootToCollect.enable()
-        if self.game.show_tracking('gunfightStatus') == 'READY':
-            if self.game.base.guns_allowed():
-                self.game.lamps.rightGunfightPin.schedule(0x00FF00FF)
-                self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
-        if self.game.show_tracking('drunkMultiballStatus') == "READY":
-            self.game.lamps.bountySaloon.disable()
-            self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
-
-    def disable_lamps(self):
-        self.game.lamps.saloonArrow.disable()
-        self.game.lamps.bountySaloon.disable()
-        self.game.lamps.shootToCollect.disable()
-        self.game.lamps.bountyBeacon.disable()
-        self.game.lamps.jackpotBeacon.disable()
-        self.game.lamps.rightGunfightPin.disable()
-        self.game.lamps.leftGunfightPin.disable()
-
     def clear_layer(self):
         self.layer = None
         self.unbusy()
@@ -238,7 +190,7 @@ class Saloon(ep.EP_Mode):
         # play a voice clip about the bounty being ready
         self.game.base.play_quote(self.game.assets.quote_bountyLit)
         # lights and whatnot
-        self.update_lamps()
+        self.lamp_update()
         self.delay(delay=1.6,handler=self.clear_layer)
         # if we got a callback - do that - its for skillshot ending
         if callback:
@@ -394,7 +346,7 @@ class Saloon(ep.EP_Mode):
             awardTextMiddle.set_text(prizeText)
             self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextMiddle,awardTextTop,animLayer])
         # play a lampshow
-        self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.game.update_lamps)
+        self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.lamp_update)
         # play the quote
         self.game.base.priority_quote(self.game.assets.quote_bountyCollected)
         # then clear the layer and kick the ball out
@@ -410,8 +362,7 @@ class Saloon(ep.EP_Mode):
         else:
             self.prizeHandler()
         # update lamps
-        self.update_lamps()
-        self.game.base.update_lamps()
+        self.lamp_update()
 
         # for anything other than move your train, kick the ball out
         if self.bountyPrize != "moveYourTrain":
@@ -442,7 +393,7 @@ class Saloon(ep.EP_Mode):
         self.game.base.priority_quote(self.game.assets.quote_gunfightLit)
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
-        self.update_lamps()
+        self.lamp_update()
         if callback != None:
             print "I GOT A GUNFIGHT CALLBACK"
             self.delay("Callback",delay=2,handler=callback)

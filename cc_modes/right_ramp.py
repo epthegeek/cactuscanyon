@@ -28,124 +28,10 @@ class RightRamp(ep.EP_Mode):
         # Set up the sounds
 
     def mode_started(self):
-        self.update_lamps()
+        self.game.lamp_control.right_ramp()
 
     def mode_stopped(self):
-        self.disable_lamps()
-
-    def update_lamps(self):
-        self.disable_lamps()
-        ## if status is multiball check the jackpot and take actions
-        lampStatus = self.game.show_tracking('lampStatus')
-        # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
-            return
-
-        ## high noon check
-        if self.game.show_tracking('highNoonStatus') == "RUNNING":
-            self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
-            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
-            self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
-            self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
-            return
-
-        # goldmine multiball check
-        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
-            if self.game.show_tracking('jackpotStatus',4):
-                self.game.lamps.rightRampJackpot.schedule(0x0F0FFE00)
-                self.game.lamps.rightRampSavePolly.schedule(0x0F0F1F30)
-                self.game.lamps.rightRampShootOut.schedule(0x0F0F03F1)
-                self.game.lamps.rightRampSoundAlarm.schedule(0x0F0F007F)
-            return
-
-        # drunk multiball
-        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
-        ## right ramp is #4 in the stampede jackpot list
-            if 'rightRamp' in self.game.drunk_multiball.active:
-                self.game.lamps.rightRampJackpot.schedule(0xF000F000)
-                self.game.lamps.rightRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.rightRampShootOut.schedule(0xF0F0F0F0)
-                self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
-            return
-
-        # save polly
-        if self.game.save_polly.running:
-            self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
-            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
-            self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
-            return
-        # river chase
-        if self.game.river_chase.running:
-            self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
-            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
-            self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
-            return
-        # bank robbery
-        if self.game.bank_robbery.running:
-            if self.game.bank_robbery.isActive[2]:
-                self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
-                self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
-                self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
-            return
-        # bionic bart
-        if self.game.show_tracking('bionicStatus') == "RUNNING":
-            if 4 in self.game.bionic.activeShots:
-                self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
-                self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
-                self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
-                self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
-            return
-
-        # cva
-        if self.game.show_tracking('cvaStatus') == "RUNNING":
-            if self.game.cva.activeShot == 4:
-                self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
-                self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
-                self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
-                self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
-            return
-
-        stage = self.game.show_tracking('rightRampStage')
-
-        if stage == 1:
-            # blink the first light
-            self.game.lamps.rightRampSoundAlarm.schedule(0x0F0F0F0F)
-        elif stage == 2:
-            # first light on
-            self.game.lamps.rightRampSoundAlarm.enable()
-            # blink the second
-            self.game.lamps.rightRampShootOut.schedule(0x0F0F0F0F)
-        elif stage == 3:
-            # first two on
-            self.game.lamps.rightRampSoundAlarm.enable()
-            self.game.lamps.rightRampShootOut.enable()
-            # blink the third
-            self.game.lamps.rightRampSavePolly.schedule(0x0F0F0F0F)
-        # this is completed - pulse the 3rd light
-        elif stage == 5:
-            # three on
-            self.game.lamps.rightRampSoundAlarm.enable()
-            self.game.lamps.rightRampShootOut.enable()
-            self.game.lamps.rightRampSavePolly.enable()
-        elif stage == 89:
-        ## right ramp is #4 in the stampede jackpot list
-            if self.game.stampede.active == 4:
-                self.game.lamps.rightRampJackpot.schedule(0xF000F000)
-                self.game.lamps.rightRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.rightRampShootOut.schedule(0xF0F0F0F0)
-                self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
-            # if not active, just turn on the jackpot light only
-            else:
-                self.game.lamps.rightRampJackpot.schedule(0xFF00FF00)
-
-        else:
-            pass
-
-    def disable_lamps(self):
-        self.game.lamps.rightRampSoundAlarm.disable()
-        self.game.lamps.rightRampShootOut.disable()
-        self.game.lamps.rightRampSavePolly.disable()
-        self.game.lamps.rightRampJackpot.disable()
+        self.game.lamp_control.right_ramp('Disable')
 
     def sw_rightRampEnter_active(self,sw):
         # play the switch sound
@@ -286,8 +172,7 @@ class RightRamp(ep.EP_Mode):
             self.game.lamps.rightRampShootOut.schedule(0x0FF00FF0)
             self.game.lamps.rightRampSavePolly.schedule(0xFF00FF00)
             # update the lamps
-            self.delay(delay=1,handler=self.update_lamps)
-            self.game.center_ramp.update_lamps()
+            self.delay(delay=1,handler=self.lamp_update)
 
     def anim_bank_victory(self):
         if self.game.bank_robbery.won:

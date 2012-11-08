@@ -51,46 +51,6 @@ class Badge(ep.EP_Mode):
                           self.game.assets.quote_gunfightWinSheriff,
                           self.game.assets.quote_gunfightWinMarshall]
 
-    def update_lamps(self):
-        # reset first
-        self.disable_lamps()
-        status = self.game.show_tracking('lampStatus')
-        ## if status is off, we bail here
-        if status == "OFF" or self.game.show_tracking('cvaStatus') == "RUNNING":
-            return
-
-        # star lamps for high noon
-        for lamp in range(0,5,1):
-            if self.game.show_tracking('starStatus',lamp) == True:
-                self.starLamps[lamp].enable()
-        # bionic bart ready chases the lights
-        status = self.game.show_tracking('bionicStatus')
-        if status == "READY" or status == "RUNNING":
-            self.game.lamps.starMotherlode.schedule(0xFFE0FFE0)
-            self.game.lamps.starCombo.schedule(0xFF07FF07)
-            self.game.lamps.starBartBrothers.schedule(0xF83FF83F)
-            self.game.lamps.starShowdown.schedule(0x81FF81FF)
-            self.game.lamps.starStampede.schedule(0x0FFE0FFE)
-        # center of high noon
-        if self.game.show_tracking('highNoonStatus') == "READY":
-            self.game.lamps.starHighNoon.schedule(0x00FF00FF)
-            for lamp in range(0,5,1):
-                if self.game.show_tracking('starStatus',lamp) == True:
-                    self.starLamps[lamp].schedule(0xFF00FF00)
-        # the rank lights
-        rank = self.game.show_tracking('rank')
-        # loop through 0 through current rank and turn the lamps on
-        for lamp in range(0,(rank +1),1):
-            self.rankLamps[lamp].enable()
-
-
-    def disable_lamps(self):
-        for lamp in self.starLamps:
-            lamp.disable()
-        for lamp in self.rankLamps:
-            lamp.disable()
-        self.game.lamps.starHighNoon.disable()
-
     def reset(self):
         # reset the badge progress
         # set all 5 points to false
@@ -103,7 +63,7 @@ class Badge(ep.EP_Mode):
         self.game.set_tracking('bartsDefeated',0)
         # reset the motherlodes count
         self.game.set_tracking('motherlodesCollected',0)
-        self.update_lamps()
+        self.game.lamp_control.badge()
 
     def update(self,point):
         # update for the new award
@@ -112,8 +72,8 @@ class Badge(ep.EP_Mode):
         print self.game.show_tracking('starStatus')
         # check if bionic is ready
         self.check_bionic()
-        # update the lamps no matter what
-        self.update_lamps()
+        # update the badge lamps no matter what
+        self.game.lamp_control.badge()
 
     def check_bionic(self):
         print "Checking if bionic bart is ready"
@@ -128,14 +88,12 @@ class Badge(ep.EP_Mode):
             # if we didn't bail, then it's safe to ready bionic bart
             self.game.set_tracking('bionicStatus',"READY")
             # if bart goes ready, update the saloon lights to flash the arrow
-            self.game.saloon.update_lamps()
+            self.lamp_update()
 
     def light_high_noon(self):
         self.game.set_tracking('highNoonStatus', "READY")
-        # update the mine lamps to flash the lock arrow
-        self.game.mine.update_lamps()
-        # then update local lamps
-        self.update_lamps()
+        # call the full lamp update
+        self.lamp_update()
 
     def increase_rank(self,gunfight=False):
         # for updating the rank lights
@@ -166,7 +124,7 @@ class Badge(ep.EP_Mode):
         # if we're now at rank 4, then start marshall multiball - if it's turned on
         if newRank == 4 and self.marshallValue == 'Enabled':
                 self.delay(delay=duration+0.2,handler=self.game.base.kickoff_marshall)
-        # update the lamps
-        self.update_lamps()
+        # update the rank lamps
+        self.game.lamp_control.rank_level()
         # return the new rank and duration
         return rankTitle,duration

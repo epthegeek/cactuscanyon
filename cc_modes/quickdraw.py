@@ -237,8 +237,7 @@ class Quickdraw(ep.EP_Mode):
         self.game.score(self.points)
         # update the bad guys
         self.game.set_tracking('badGuysDead',"True",target)
-        self.game.bad_guys.update_lamps()
-        self.game.base.update_lamps()
+        self.lamp_update()
         # stall a bit, then do the rest of the winning
         self.delay("Operational",delay=0.5,handler=self.finish_win,param=dudesDead)
 
@@ -303,7 +302,7 @@ class Quickdraw(ep.EP_Mode):
         if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
             # full lamp update
-        self.game.update_lamps()
+        self.lamp_update()
         # remove the mode
         self.unload()
 

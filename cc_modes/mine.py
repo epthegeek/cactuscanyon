@@ -42,50 +42,6 @@ class Mine(ep.EP_Mode):
         self.collectingEB = False
         self.lockAnimation = False
 
-    def mode_started(self):
-        self.update_lamps()
-
-    def mode_stopped(self):
-        self.disable_lamps()
-
-    def update_lamps(self):
-        self.disable_lamps()
-        ## if status is off, we bail here
-        lampStatus = self.game.show_tracking('lampStatus')
-        if lampStatus != "ON" or self.game.show_tracking('bionicStatus') == "RUNNING" or self.game.show_tracking('cvaStatus') == 'RUNNING':
-            return
-
-
-        eb = self.game.show_tracking('extraBallsPending')
-        if eb > 0:
-            self.game.lamps.extraBallLitBeacon.enable()
-            self.game.lamps.extraBall.schedule(0x0F0F0F0F)
-        status = self.game.show_tracking('highNoonStatus')
-        if status == "READY":
-            self.game.lamps.mineLock.schedule(0x00FF00FF)
-            self.game.coils.mineFlasher.schedule(0x00010001)
-            return
-        status = self.game.show_tracking('mineStatus')
-        if status == "LOCK":
-            self.game.lamps.mineLock.enable()
-        # if there is an active 0 or 1 mode, we don't allow multiball to start, so skip the light
-        elif status == "READY":
-            self.game.lamps.mineLock.schedule(0x0F0F0F0F)
-        # if there's an extra ball waiting, and the mine status multiball is not running, flash the light
-        if eb > 0 and status != "RUNNING":
-            self.game.coils.mineFlasher.schedule(0x00100000)
-        # if multiball is running and motherload is available - or we're restarting - flash the light in the mine and blink the lock arrow
-        if status == "RUNNING":
-            if self.game.show_tracking('motherlodeLit') or self.game.gm_multiball.restartFlag:
-                self.game.coils.mineFlasher.schedule(0x00010001)
-                self.game.lamps.mineLock.schedule(0x0F0F0F0F)
-
-    def disable_lamps(self):
-        self.game.lamps.extraBallLitBeacon.disable()
-        self.game.lamps.extraBall.disable()
-        self.game.lamps.mineLock.disable()
-        self.game.coils.mineFlasher.disable()
-
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
         # somehow this falls through despite switch stop
@@ -228,7 +184,7 @@ class Mine(ep.EP_Mode):
         duration = self.game.base.priority_quote(self.game.assets.quote_lockLit)
         print "LOCK IS LIT ... AND SO AM I"
         ## then kick the ball
-        self.update_lamps()
+        self.lamp_update()
         self.delay(delay=duration + 0.5,handler=self.game.mountain.eject)
 
 
@@ -240,7 +196,7 @@ class Mine(ep.EP_Mode):
         self.game.set_tracking('mineHits', 0)
         # play a sound?
         # show some display?
-        self.update_lamps()
+        self.lamp_update()
         # then kick the ball
         self.game.mountain.eject()
 
@@ -280,7 +236,7 @@ class Mine(ep.EP_Mode):
         else:
             self.game.mountain.reset_toy()
 
-        self.update_lamps()
+        self.lamp_update()
 
     def start_multiball(self):
         # tag on another ball to the locked total, even though it's not really referred to as a lock
@@ -366,8 +322,6 @@ class Mine(ep.EP_Mode):
         # add the ball to the pending extra balls
         derp = self.game.increase_tracking('extraBallsPending')
         print "EXTRA BALLS PENDING: " + str(derp)
-        # turn the light on
-        self.update_lamps()
         # setup  a bunch of text
         textLine1 = dmd.TextLayer(28, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("EXTRA")
         textLine2 = dmd.TextLayer(28, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("BALL")
@@ -388,7 +342,7 @@ class Mine(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_extraBallLit)
-        self.update_lamps()
+        self.lamp_update()
         # callback process for calling from skill shot
         if callback:
             self.delay(delay=myWait,handler=callback)
@@ -405,7 +359,7 @@ class Mine(ep.EP_Mode):
         print "Extra balls total: " + str(ebt)
         # take one off of the pending total
         self.game.decrease_tracking('extraBallsPending')
-        self.update_lamps()
+        self.lamp_update()
         # add one to the pending the player for use - using the framework standard for storing extra_balls
         self.game.current_player().extra_balls += 1
         # if they've already gotten an extra ball - it should divert to the short version
@@ -444,7 +398,7 @@ class Mine(ep.EP_Mode):
             # after a delay, play the ending
             self.delay("Collecting",delay=myWait,handler=self.extra_ball_ending)
             # update lamps to turn on the EB light
-            self.game.base.update_lamps()
+            self.lamp_update()
 
     def extra_ball_ending(self,isLong=True):
         # play a quote

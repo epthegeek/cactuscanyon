@@ -112,7 +112,7 @@ class Gunfight(ep.EP_Mode):
         # turn off the lights
         self.game.set_tracking('lampStatus',"OFF")
         self.game.gi_control("OFF")
-        self.game.update_lamps()
+        self.lamp_update()
         if side == 0:
             self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
         else:
@@ -231,7 +231,7 @@ class Gunfight(ep.EP_Mode):
         if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
             self.game.base.music_on(self.game.assets.music_mainTheme)
 
-        self.game.bad_guys.update_lamps()
+        self.lamp_update()
         self.cancel_delayed("Operational")
         # unload
         self.unload()

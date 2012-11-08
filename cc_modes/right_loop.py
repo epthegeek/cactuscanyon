@@ -30,106 +30,10 @@ class RightLoop(ep.EP_Mode):
         self.weedsForCvA = 3
 
     def mode_started(self):
-        self.update_lamps()
+        self.game.lamp_control.right_loop()
 
     def mode_stopped(self):
-        self.disable_lamps()
-
-    def update_lamps(self):
-        self.disable_lamps()
-        ## if status is multiball check the jackpot and take actions
-        lampStatus = self.game.show_tracking('lampStatus')
-        # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
-            return
-
-        ## high noon check
-        if self.game.show_tracking('highNoonStatus') == "RUNNING":
-            self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
-            self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
-            self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
-            self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
-            return
-
-        # goldmine active check
-        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
-            if self.game.show_tracking('jackpotStatus',3):
-                self.game.lamps.rightLoopJackpot.schedule(0x0F0FFE00)
-                self.game.lamps.rightLoopMarksman.schedule(0x0F0F1F30)
-                self.game.lamps.rightLoopGunslinger.schedule(0x0F0F03F1)
-                self.game.lamps.rightLoopGoodShot.schedule(0x0F0F007F)
-            return
-            # drunk multiball
-        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
-        ## right ramp is #4 in the stampede jackpot list
-            if 'rightLoop' in self.game.drunk_multiball.active:
-                self.game.lamps.rightLoopJackpot.schedule(0xF000F000)
-                self.game.lamps.rightLoopMarksman.schedule(0xFF00FF00)
-                self.game.lamps.rightLoopGunslinger.schedule(0xF0F0F0F0)
-                self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
-            return
-
-        # bionic bart
-        if self.game.show_tracking('bionicStatus') == "RUNNING":
-            if 3 in self.game.bionic.activeShots:
-                self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
-                self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
-                self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
-                self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
-            return
-
-        # cva
-        if self.game.show_tracking('cvaStatus') == "RUNNING":
-            if self.game.cva.activeShot == 3:
-                self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
-                self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
-                self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
-                self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
-            return
-
-
-        stage = self.game.show_tracking('rightLoopStage')
-
-        if stage == 1:
-            # blink the first light
-            self.game.lamps.rightLoopGoodShot.schedule(0x0F0F0F0F)
-        elif stage == 2:
-            # first light on
-            self.game.lamps.rightLoopGoodShot.enable()
-            # blink the second
-            self.game.lamps.rightLoopGunslinger.schedule(0x0F0F0F0F)
-        elif stage == 3:
-            # first two on
-            self.game.lamps.rightLoopGoodShot.enable()
-            self.game.lamps.rightLoopGunslinger.enable()
-            # blink the third
-            self.game.lamps.rightLoopMarksman.schedule(0x0F0F0F0F)
-        # this is completed
-        elif stage == 4:
-            # all three on
-            self.game.lamps.rightLoopGoodShot.enable()
-            self.game.lamps.rightLoopGunslinger.enable()
-            self.game.lamps.rightLoopMarksman.enable()
-        # stampede
-        elif stage == 89:
-        ## right loop is #3 in the stampede jackpot list
-            if self.game.stampede.active == 3:
-                self.game.lamps.rightLoopJackpot.schedule(0xF000F000)
-                self.game.lamps.rightLoopMarksman.schedule(0xFF00FF00)
-                self.game.lamps.rightLoopGunslinger.schedule(0xF0F0F0F0)
-                self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
-            # if not active, just turn on the jackpot light only
-            else:
-                self.game.lamps.rightLoopJackpot.schedule(0xFF00FF00)
-
-        else:
-            pass
-
-    def disable_lamps(self):
-        self.game.lamps.rightLoopGoodShot.disable()
-        self.game.lamps.rightLoopGunslinger.disable()
-        self.game.lamps.rightLoopMarksman.disable()
-        self.game.lamps.rightLoopJackpot.disable()
+        self.game.lamp_control.right_loop('Disable')
 
     def sw_rightLoopBottom_active(self,sw):
         # low end of the loop
@@ -164,7 +68,7 @@ class RightLoop(ep.EP_Mode):
                     # pulse the coil to open the gate
                     self.game.coils.leftLoopGate.pulse(240)
                     # play a lampshow
-                    self.game.lampctrl.play_show(self.game.assets.lamp_rightToLeft, repeat=False,callback=self.game.update_lamps)
+                    self.game.lampctrl.play_show(self.game.assets.lamp_rightToLeft, repeat=False,callback=self.lamp_update)
                     ## if the combo timer is on:
                 if self.game.combos.myTimer > 0:
                     # register the combo and reset the timer
@@ -265,7 +169,7 @@ class RightLoop(ep.EP_Mode):
             self.game.lamps.rightLoopGunslinger.schedule(0x0FF00FF0)
             self.game.lamps.rightLoopMarksman.schedule(0xFF00FF00)
             # update the lamps
-            self.delay(delay=1,handler=self.update_lamps)
+            self.delay(delay=1,handler=self.lamp_update)
             # if we're now complete, check stampede
             if newstage == 4:
                 self.game.base.check_stampede()

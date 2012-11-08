@@ -28,127 +28,10 @@ class CenterRamp(ep.EP_Mode):
         self.border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tracksBorder.frames[0])
 
     def mode_started(self):
-        self.update_lamps()
+        self.game.lamp_control.center_ramp()
 
     def mode_stopped(self):
-        self.disable_lamps()
-
-    def update_lamps(self):
-        self.disable_lamps()
-        ## if status is multiball check the jackpot and take actions
-        lampStatus = self.game.show_tracking('lampStatus')
-            # we bail here if the others don't match and it's not "ON"
-        if lampStatus != "ON":
-            return
-
-        ## high noon check
-        if self.game.show_tracking('highNoonStatus') == "RUNNING":
-            self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
-            self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
-            self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
-            self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
-            return
-
-        # check goldmine active status
-        if self.game.show_tracking('mineStatus') == "RUNNING" and not self.game.gm_multiball.restartFlag:
-            if self.game.show_tracking('jackpotStatus',2):
-                self.game.lamps.centerRampJackpot.schedule(0x0F0FFE00)
-                self.game.lamps.centerRampSavePolly.schedule(0x0F0F1F30)
-                self.game.lamps.centerRampStopTrain.schedule(0x0F0F03F1)
-                self.game.lamps.centerRampCatchTrain.schedule(0x0F0F007F)
-            return
-
-        # drunk multiball
-        if self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
-        ## right ramp is #4 in the stampede jackpot list
-            if 'centerRamp' in self.game.drunk_multiball.active:
-                self.game.lamps.centerRampJackpot.schedule(0xF000F000)
-                self.game.lamps.centerRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.centerRampStopTrain.schedule(0xF0F0F0F0)
-                self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
-            return
-
-        # bionic bart
-        if self.game.show_tracking('bionicStatus') == "RUNNING":
-            if 2 in self.game.bionic.activeShots:
-                self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
-                self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
-                self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
-                self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
-            return
-
-        # cva
-        if self.game.show_tracking('cvaStatus') == "RUNNING":
-            if self.game.cva.activeShot == 2:
-                self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
-                self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
-                self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
-                self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
-            return
-
-            # river chase
-        if self.game.river_chase.running:
-            self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
-            self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
-            self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
-            return
-
-        # bank robbery
-        if self.game.bank_robbery.running:
-            if self.game.bank_robbery.isActive[1]:
-                self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
-                self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
-                self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
-            return
-
-        stage = self.game.show_tracking('centerRampStage')
-
-        if stage == 1:
-            # blink the first light
-            self.game.lamps.centerRampCatchTrain.schedule(0x0F0F0F0F)
-        elif stage == 2:
-            # first light on
-            self.game.lamps.centerRampCatchTrain.enable()
-            # blink the second
-            self.game.lamps.centerRampStopTrain.schedule(0x0F0F0F0F)
-        elif stage == 3:
-            # first two on
-            self.game.lamps.centerRampCatchTrain.enable()
-            self.game.lamps.centerRampStopTrain.enable()
-            # blink the third
-            self.game.lamps.centerRampSavePolly.schedule(0x0F0F0F0F)
-
-        # this is after polly peril - all three on
-        elif stage == 5:
-        # after polly, before stampede all three stay on
-            self.game.lamps.centerRampCatchTrain.enable()
-            self.game.lamps.centerRampStopTrain.enable()
-            self.game.lamps.centerRampSavePolly.enable()
-        # save polly
-        elif stage == 99:
-            self.game.lamps.centerRampSavePolly.schedule(0x00FFFF00)
-            self.game.lamps.centerRampStopTrain.schedule(0x0000FFFF)
-            self.game.lamps.centerRampCatchTrain.schedule(0xFF0000FF)
-        # stampede
-        elif stage == 89:
-        ## center ramp is #2 in the stampede jackpot list
-            if self.game.stampede.active == 2:
-                self.game.lamps.centerRampJackpot.schedule(0xF000F000)
-                self.game.lamps.centerRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.centerRampStopTrain.schedule(0xF0F0F0F0)
-                self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
-            # if not active, just turn on the jackpot light only
-            else:
-                self.game.lamps.centerRampJackpot.schedule(0xFF00FF00)
-
-        else:
-            pass
-
-    def disable_lamps(self):
-        self.game.lamps.centerRampCatchTrain.disable()
-        self.game.lamps.centerRampStopTrain.disable()
-        self.game.lamps.centerRampSavePolly.disable()
-        self.game.lamps.centerRampJackpot.disable()
+        self.game.lamp_control.center_ramp('Disable')
 
     def sw_centerRampEnter_active(self,sw):
         # play the switch sound
@@ -253,7 +136,7 @@ class CenterRamp(ep.EP_Mode):
             self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
             self.game.lamps.centerRampStopTrain.schedule(0x0FF00FF0)
             self.game.lamps.centerRampSavePolly.schedule(0xFF00FF00)
-            self.delay(delay=1,handler=self.update_lamps)
+            self.delay(delay=1,handler=self.lamp_update)
 
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):
