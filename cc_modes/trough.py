@@ -210,6 +210,10 @@ class Trough(ep.EP_Mode):
                         if strays > 0:
                             print "FIXING " + str(strays) + " STRAY BALLS"
                             self.launch_balls(strays,stealth=True)
+                        if strays < 0:
+                            print "WHAAAA? We're over?  RESET"
+                            self.num_balls_in_play = num_current_machine_balls - temp_num_balls
+                            self.drain_callback()
                     # if the ball count went down just do a sanity check
                     elif self.count_is == "LOWER":
                         print "THE BALL COUNT IS LOWER"
