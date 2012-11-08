@@ -15,7 +15,7 @@
 ##
 ##
 
-from procgame import *
+from procgame import dmd,game
 import ep
 
 class CvA(ep.EP_Mode):

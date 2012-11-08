@@ -16,7 +16,7 @@
 ##
 ## The Marshall Multiball
 
-from procgame import *
+from procgame import dmd,game
 import ep
 
 class MarshallMultiball(ep.EP_Mode):

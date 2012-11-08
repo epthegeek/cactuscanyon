@@ -18,8 +18,7 @@
 ### Save Poor Polly from getting run over by the train!
 ###
 
-from procgame import *
-import cc_modes
+from procgame import dmd
 import ep
 
 class SavePolly(ep.EP_Mode):
@@ -249,6 +248,7 @@ class SavePolly(ep.EP_Mode):
             # stop the train from moving
             self.game.train.stop()
             # if the thing that sent us here advanced save polly, we pause for 3 seconds
+            time = 0
             if advanced:
                 time = 3
             # if we're not advancing, there's more to do

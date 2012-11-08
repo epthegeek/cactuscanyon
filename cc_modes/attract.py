@@ -19,7 +19,7 @@
 ##  As well as listening for the start button and flippers
 ##
 
-from procgame import *
+from procgame import dmd
 import ep
 import locale
 import random
@@ -259,6 +259,10 @@ class Attract(ep.EP_Mode):
         # This big mess generates frames for the attract loop based on high score data.
         # Read the categories
         for category in self.game.highscore_categories:
+            title = None # just pre-sets to make the IDE happy
+            initLine1 = None
+            scoreLine1 = None
+
             for index, score in enumerate(category.scores):
                 score_str = locale.format("%d", score.score, True) # Add commas to the score.
 

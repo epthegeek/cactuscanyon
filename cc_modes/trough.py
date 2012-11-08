@@ -18,9 +18,10 @@
 ## to me - mostly in the 'checking swtiches' section.  And made changes to deal with balls
 ## bouncing back in to the trough after launch
 
-from procgame.game import Mode
+#from procgame.game import Mode
+import ep
 
-class Trough(Mode):
+class Trough(ep.EP_Mode):
     """Manages trough by providing the following functionality:
 
          - Keeps track of the number of balls in play
@@ -40,7 +41,7 @@ class Trough(Mode):
          'shooter_lane_switchname': Name of the switch in the shooter lane.  This is checked before a new ball is ejected.
          'drain_callback': Optional - Name of method to be called when a ball drains (and isn't saved).
      """
-    def __init__(self, game, position_switchnames, eject_switchname, eject_coilname,\
+    def __init__(self, game, position_switchnames, eject_switchname, eject_coilname,
                  early_save_switchnames, shooter_lane_switchname, drain_callback=None):
         super(Trough, self).__init__(game, 90)
         self.position_switchnames = position_switchnames
@@ -70,10 +71,10 @@ class Trough(Mode):
 
         self.ball_save_active = False
 
-        """ Callback called when a ball is saved.  Used optionally only when ball save is enabled (by a call to :meth:`Trough.enable_ball_save`).  Set externally if a callback should be used. """
+        #""" Callback called when a ball is saved.  Used optionally only when ball save is enabled (by a call to :meth:`Trough.enable_ball_save`).  Set externally if a callback should be used. """
         self.ball_save_callback = None
 
-        """ Method to get the number of balls to save.  Set externally when using ball save logic."""
+        #""" Method to get the number of balls to save.  Set externally when using ball save logic."""
         self.num_balls_to_save = None
 
         self.launch_callback = None
@@ -291,7 +292,7 @@ class Trough(Mode):
 
         # Otherwise, wait 1 second before trying again.
         else:
-            self.delay(name='launch', event_type=None, delay=1.0,\
+            self.delay(name='launch', event_type=None, delay=1.0,
                 handler=self.common_launch_code)
 
     def finish_launch(self):
@@ -308,7 +309,7 @@ class Trough(Mode):
         print "IN PLAY: " + str(self.num_balls_in_play)
         # If more balls need to be launched, delay 1 second
         if self.num_balls_to_launch > 0:
-            self.delay(name='launch', event_type=None, delay=2.0,\
+            self.delay(name='launch', event_type=None, delay=2.0,
                 handler=self.common_launch_code)
         else:
             if self.launch_callback:

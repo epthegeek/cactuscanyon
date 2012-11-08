@@ -18,7 +18,7 @@
 ### Save Poor Polly from getting run over by the train!
 ###
 
-from procgame import *
+from procgame import dmd
 import random
 import ep
 

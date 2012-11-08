@@ -22,7 +22,7 @@
 ###
 
 
-from procgame import *
+from procgame import dmd
 import ep
 
 class Showdown(ep.EP_Mode):

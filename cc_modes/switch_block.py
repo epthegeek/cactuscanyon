@@ -19,8 +19,9 @@
 #
 
 from procgame import game
+import ep
 
-class SwitchBlock(game.Mode):
+class SwitchBlock(ep.EP_Mode):
     """This is to load between the low ramp basic shots and higher level stackable modes"""
     def __init__(self, game,priority):
         super(SwitchBlock, self).__init__(game, priority)

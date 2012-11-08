@@ -22,7 +22,7 @@
 ###
 
 
-from procgame import *
+from procgame import dmd
 import ep
 import random
 

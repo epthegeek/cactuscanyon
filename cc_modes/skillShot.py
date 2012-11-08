@@ -17,7 +17,7 @@
 ## The Skill Shot mode for working the lasso ramp awards
 ##
 
-from procgame import *
+from procgame import dmd
 import random
 import ep
 
@@ -216,7 +216,7 @@ class SkillShot(ep.EP_Mode):
             elif self.active == 2:
                 awardStringTop = "SHOOT LEFT RAMP"
                 quote = self.game.assets.quote_leftRampSS
-            elif self.active == 3:
+            else:
                 awardStringTop = "SHOOT CENTER RAMP"
                 quote = self.game.assets.quote_centerRampSS
             awardStringBottom = "FOR AWARD"
@@ -230,6 +230,9 @@ class SkillShot(ep.EP_Mode):
         self.game.sound.stop_music()
         # play the sound
         self.game.sound.play(self.game.assets.sfx_flourish7)
+
+        awardStringTop = None
+        awardStringBottom = None
 
         # award the prize -
         if self.selectedPrizes[5:] == "C":

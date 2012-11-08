@@ -21,7 +21,7 @@
 ###  \____\___/|_| |_| |_|_.__/ \___/|___/
 ###
 
-from procgame import *
+from procgame import dmd
 import ep
 
 class Combos(ep.EP_Mode):

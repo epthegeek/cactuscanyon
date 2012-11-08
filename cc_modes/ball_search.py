@@ -13,17 +13,19 @@
 ## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
 ## Original Cactus Canyon software by Matt Coriale
 ##
-from procgame.game import Mode
+import ep
 
-class BallSearch(Mode):
+class BallSearch(ep.EP_Mode):
     """Ball Search mode."""
     def __init__(self, game, priority, countdown_time, coils=[], reset_switches=[], stop_switches=[], enable_switch_names=[], special_handler_modes=[]):
+        super(BallSearch, self).__init__(game,priority)
         self.stop_switches = stop_switches
         self.countdown_time = countdown_time
         self.coils = coils
         self.special_handler_modes = special_handler_modes
-        self.enabled = 0;
-        Mode.__init__(self, game, 8)
+        self.enable_switch_names = enable_switch_names
+        self.enabled = 0
+        #Mode.__init__(self, game, 8)
         for switch in reset_switches:
             self.add_switch_handler(name=str(switch), event_type=str(reset_switches[switch]), delay=None, handler=self.reset)
         # The disable_switch_names identify the switches that, when closed,
@@ -39,14 +41,14 @@ class BallSearch(Mode):
     #		self.stop(0)
 
     def enable(self):
-        self.enabled = 1;
+        self.enabled = 1
         print "--> BALL SEARCH ENABLED <--"
         self.reset('None')
 
     def disable(self):
         self.stop(None)
         print "-->> BALL SEARCH DISABLED <<--"
-        self.enabled = 0;
+        self.enabled = 0
 
     def reset(self,sw):
         if self.enabled:
@@ -55,7 +57,6 @@ class BallSearch(Mode):
             for coil in self.coils:
                 self.cancel_delayed('ball_search_coil1')
             self.cancel_delayed('start_special_handler_modes')
-            self.cancel_delayed
             schedule_search = 1
             for switch in self.stop_switches:
 
@@ -70,14 +71,11 @@ class BallSearch(Mode):
                     schedule_search = 0
 
             if schedule_search:
-                self.cancel_delayed(name='ball_search_countdown');
-        #print "--> Scheduling new ball search timer <--"
-        #print "--> countdown_time: " + str(self.countdown_time)
+                self.cancel_delayed(name='ball_search_countdown')
                 self.delay(name='ball_search_countdown', event_type=None, delay=self.countdown_time, handler=self.perform_search, param=0)
-        #print self.__delayed
 
     def stop(self,sw):
-        self.cancel_delayed(name='ball_search_countdown');
+        self.cancel_delayed(name='ball_search_countdown')
 
     def perform_search(self, completion_wait_time, completion_handler = None):
         print "DO A BARREL ROLL! - er, BALL SEARCH!"
@@ -98,7 +96,7 @@ class BallSearch(Mode):
         if (completion_wait_time != 0):
             pass
         else:
-            self.cancel_delayed(name='ball_search_countdown');
+            self.cancel_delayed(name='ball_search_countdown')
             self.delay(name='ball_search_countdown', event_type=None, delay=self.countdown_time, handler=self.perform_search, param=0)
 
     def pop_coil(self,coil):

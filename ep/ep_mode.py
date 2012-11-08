@@ -14,10 +14,9 @@
 ## Original Cactus Canyon software by Matt Coriale
 ##
 
+from procgame import dmd
 import time
 import re
-import copy
-import logging
 import uuid
 
 # Documented in game.rst:
@@ -149,7 +148,7 @@ class EP_Mode(object):
             return
         d = {'name':name, 'type':et, 'delay':delay, 'handler':handler, 'param':sw}
         if d not in self.__accepted_switches:
-            self.__accepted_switches.append(Mode.AcceptedSwitch(name=name, event_type=et, delay=delay, handler=handler, param=sw))
+            self.__accepted_switches.append(EP_Mode.AcceptedSwitch(name=name, event_type=et, delay=delay, handler=handler, param=sw))
 
     def status_str(self):
         return self.__class__.__name__
@@ -192,7 +191,7 @@ class EP_Mode(object):
             event_type = {'closed':1, 'open':2}[event_type]
         if name == None:
             name = 'anon_delay'+str(uuid.uuid1())
-        self.__delayed.append(Mode.Delayed(name=name, time=time.time()+delay, handler=handler, event_type=event_type, param=param))
+        self.__delayed.append(EP_Mode.Delayed(name=name, time=time.time()+delay, handler=handler, event_type=event_type, param=param))
         try:
             self.__delayed.sort(lambda x, y: int((x.time - y.time)*100))
         except TypeError, ex:

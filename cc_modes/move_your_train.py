@@ -15,7 +15,7 @@
 ##
 
 
-from procgame import *
+from procgame import dmd
 import ep
 
 class MoveYourTrain(ep.EP_Mode):

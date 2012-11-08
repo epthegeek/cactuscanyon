@@ -13,7 +13,7 @@
 ## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
 ## Original Cactus Canyon software by Matt Coriale
 ##
-from procgame import *
+from procgame import dmd
 import ep
 import random
 

@@ -18,7 +18,7 @@
 ## Crutched on myPinball's IJ match routine heavily.
 ##
 
-from procgame import *
+from procgame import dmd
 import random
 import ep
 

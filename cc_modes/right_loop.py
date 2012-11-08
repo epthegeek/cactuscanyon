@@ -17,7 +17,7 @@
 ## Mode for handling the right loop
 ##
 
-from procgame import *
+from procgame import dmd
 import ep
 
 class RightLoop(ep.EP_Mode):

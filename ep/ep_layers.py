@@ -18,7 +18,6 @@
 ## I tweaked it to add params for frame listeners
 ##
 from procgame import *
-from time import *
 
 class EP_UpdateLayer(dmd.dmd.Layer):
 
@@ -71,3 +70,8 @@ class EP_AnimatedLayer(dmd.layers.AnimatedLayer):
                     listener(param)
                 else:
                     listener()
+
+    def set_target_position(self, x, y):
+        """Setter for :attr:`target_x` and :attr:`target_y`."""
+        self.target_x = x
+        self.target_y = y

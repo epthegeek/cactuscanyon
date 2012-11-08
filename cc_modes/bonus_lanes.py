@@ -21,7 +21,7 @@
 ### |____/ \___/|_| |_|\__,_|___/ |_____\__,_|_| |_|\___||___/
 ###
 ###
-from procgame import *
+from procgame import dmd
 import ep
 
 class BonusLanes(ep.EP_Mode):

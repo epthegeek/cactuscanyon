@@ -18,7 +18,7 @@
 ## The intent is to have this be an always on mode, but to separate the code for readability
 ##
 
-from procgame import *
+from procgame import dmd
 import ep
 
 class CenterRamp(ep.EP_Mode):

@@ -23,7 +23,7 @@
 ## HMMMM
 
 
-from procgame import *
+from procgame import dmd
 import ep
 import random
 import time
@@ -467,8 +467,8 @@ class BaseGameMode(ep.EP_Mode):
         # this is for turning the guns back on if the conditions are good
         if True in self.game.show_tracking('stackLevel') or self.game.skill_shot.super or self.game.bart.bossFight:
         # if any stack level is active, new gunfight action is not allowed
-            return False
             print "Guns not allowed right now"
+            return False
         else:
             print "Guns allowed right now"
             return True
@@ -589,7 +589,7 @@ class BaseGameMode(ep.EP_Mode):
         if nextup == "SUPER":
             textString1 = "< " + str(125 - hits) + " MORE HITS >"
             textString2 = "< FOR SUPER JETS >"
-        elif nextup == "MEGA":
+        else:
             textString1 = "<" + str(250 - hits) + " MORE HITS >"
             textString2 = "< FOR  MEGA  JETS >"
         textLayer1 = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString1)

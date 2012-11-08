@@ -18,7 +18,7 @@
 ##  of the regular display for things that are important
 ##
 
-from procgame import *
+from procgame import dmd
 import ep
 
 class Interrupter(ep.EP_Mode):

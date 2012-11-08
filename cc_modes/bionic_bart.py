@@ -21,7 +21,7 @@
 ## |____/|_|\___/|_| |_|_|\___| |____/ \__,_|_|   \__|
 ##
 
-from procgame import *
+from procgame import dmd,game
 import ep
 import random
 
@@ -165,7 +165,7 @@ class BionicBart(ep.EP_Mode):
                 elif shot == 3:
                     show = self.game.assets.lamp_rightToLeft
                 # right ramp
-                elif shot == 4:
+                else:
                     show = self.game.assets.lamp_leftToRight
 
                 self.game.lampctrl.play_show(show, repeat=False,callback=self.game.update_lamps)
@@ -378,11 +378,11 @@ class BionicBart(ep.EP_Mode):
             anim = self.game.assets.dmd_bionicGunLoad
             string = "NEW AMMO"
             sound = self.game.assets.sfx_orchestraSet
-        if amount == 2:
+        elif amount == 2:
             anim = self.game.assets.dmd_bionicGunUnload
             string = "UNLOADED"
             sound = self.game.assets.sfx_orchestraBump2
-        if amount == 3:
+        else:
             anim = self.game.assets.dmd_bionicGunOpen
             string = "GUN OPEN"
             sound = self.game.assets.sfx_orchestraBump1

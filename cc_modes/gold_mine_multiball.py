@@ -17,7 +17,7 @@
 ## The Gold Mine Multiball
 ##
 
-from procgame import *
+from procgame import dmd
 import ep
 import random
 

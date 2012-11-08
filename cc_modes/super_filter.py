@@ -16,10 +16,10 @@
 #
 # This mode is just a big switch list to trap action for the super skill shot
 #
-
 from procgame import game
+import ep
 
-class SuperFilter(game.Mode):
+class SuperFilter(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(SuperFilter, self).__init__(game, priority)

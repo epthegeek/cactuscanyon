@@ -21,7 +21,7 @@
 ###  \__\_\\__,_|_|\___|_|\_\__,_|_|  \__,_| \_/\_/
 ###
 
-from procgame import *
+from procgame import dmd
 import ep
 import random
 

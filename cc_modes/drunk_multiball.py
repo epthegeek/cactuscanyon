@@ -22,7 +22,7 @@
 ## hitting the beer mug lights jackpots
 ## after collecting jackpots, or maybe after all 5 are lit, shooting the saloon should do something
 
-from procgame import *
+from procgame import dmd,game
 import ep
 import random
 
@@ -147,6 +147,7 @@ class DrunkMultiball(ep.EP_Mode):
         ## show some junk about how the mode works
         if step == 1:
             flippers = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_flippers1.frames[0])
+            arrow = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_flippers1.frames[0])
         elif step == 2 or step == 4 or step == 6 or step == 8 or step == 10:
             flippers = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_flippers2.frames[0])
             arrowOne = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_rightArrow1.frames[0])
@@ -161,6 +162,10 @@ class DrunkMultiball(ep.EP_Mode):
             arrowThree = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_leftArrow3.frames[0])
             arrow = dmd.ScriptedLayer(128,32,[{'seconds':0.15,'layer':arrowOne},{'seconds':0.15,'layer':arrowTwo},{'seconds':0.15,'layer':arrowThree}])
             arrow.composite_op = "blacksrc"
+        else:
+            # just to make the syntax checking happy
+            flippers = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_flippers1.frames[0])
+            arrow = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_flippers1.frames[0])
 
         flippers.composite_op = "blacksrc"
 

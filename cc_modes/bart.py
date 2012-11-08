@@ -22,7 +22,7 @@
 ### |____/ \__,_|_|   \__| |____/|_|  \___/ \__|_| |_|\___|_|  |___/
 ###
 
-from procgame import *
+from procgame import dmd
 import ep
 import random
 import locale

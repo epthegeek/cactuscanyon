@@ -122,7 +122,7 @@ class Badge(ep.EP_Mode):
             # is marshall rank required?
             if self.marshallRequired:
                 # if it is, are we there yet?
-                if rank < 4:
+                if self.game.show_tracking('rank') < 4:
                     # if not, bail
                     return
             # if we didn't bail, then it's safe to ready bionic bart

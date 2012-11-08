@@ -18,7 +18,7 @@
 ## for now it's just popping the ball back out of the mine if it gets in there
 ##
 
-from procgame import *
+from procgame import dmd
 import ep
 
 class Mine(ep.EP_Mode):

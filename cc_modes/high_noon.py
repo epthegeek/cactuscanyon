@@ -17,7 +17,7 @@
 ## The High Noon Multiball
 ##
 
-from procgame import *
+from procgame import dmd,game
 import ep
 import random
 
@@ -215,6 +215,8 @@ class HighNoon(ep.EP_Mode):
 
     # intro sequence
     def intro(self,step=1):
+        composite = None
+
         if step == 1 or step == 3 or step == 5 or step == 7 or step == 9:
             # burst wipe the current layer
             anim = self.game.assets.dmd_burstWipe
@@ -391,6 +393,7 @@ class HighNoon(ep.EP_Mode):
             combined = dmd.GroupedLayer(128,32,[wordsLayer,animLayer])
             self.layer = combined
         else:
+            myWait = 3
             textLayer1 = dmd.TextLayer(64,4,self.game.assets.font_10px_AZ, "center", opaque=True).set_text("THEY")
             textLayer2 = dmd.TextLayer(64,18,self.game.assets.font_10px_AZ, "center", opaque=False).set_text("ESCAPED")
             combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
