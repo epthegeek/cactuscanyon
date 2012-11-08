@@ -359,6 +359,8 @@ class EP_Mode(object):
     def wipe_delays(self):
         self.__delayed = []
 
+    def lamp_update(self):
+        self.game.lamp_control.update_lamps()
 
     # Data structure used by the __accepted_switches array:
     class AcceptedSwitch:

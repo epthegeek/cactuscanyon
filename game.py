@@ -196,6 +196,7 @@ class CCGame(game.BasicRecordableGame):
         super(CCGame,self).reset()
 
         # Create the objects for the basic modes
+        self.lamp_control = cc_modes.LampControl(game=self,priority=4)
         self.base = cc_modes.BaseGameMode(game=self,priority=4)
         self.attract_mode = cc_modes.Attract(game=self,priority=5)
         self.train = cc_modes.Train(game=self,priority=6)
@@ -301,6 +302,7 @@ class CCGame(game.BasicRecordableGame):
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
         # Add in the modes that are active at start
+        self.modes.add(self.lamp_control)
         self.modes.add(self.trough)
         self.modes.add(self.ball_save)
         self.modes.add(self.ball_search)
