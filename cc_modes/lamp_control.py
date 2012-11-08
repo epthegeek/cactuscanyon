@@ -71,12 +71,24 @@ class LampControl(ep.EP_Mode):
         # first, disable the lamps
         self.disable_lamps()
 
+        #   ____        _
+        #  / ___|_   __/ \
+        # | |   \ \ / / _ \
+        # | |___ \ V / ___ \
+        #  \____| \_/_/   \_\
+        #
         # if CvA is running - Only update the main shots, everything else stays dark
         if self.game.cva.running:
             # update the main 5 shots, and bail
             self.update_bigFive('CvA')
             return
 
+        #  ____  _             _        ____             _
+        # | __ )(_) ___  _ __ (_) ___  | __ )  __ _ _ __| |_
+        # |  _ \| |/ _ \| '_ \| |/ __| |  _ \ / _` | '__| __|
+        # | |_) | | (_) | | | | | (__  | |_) | (_| | |  | |_
+        # |____/|_|\___/|_| |_|_|\___| |____/ \__,_|_|   \__|
+        #
         bionicStatus = self.game.show_tracking('bionicStatus')
         # If bionic bart is running, run a subset and return
         if bionicStatus == "RUNNING":
@@ -89,6 +101,12 @@ class LampControl(ep.EP_Mode):
             self.update_bigFive('Bionic')
             return
 
+        #  _   _ _       _       _   _
+        # | | | (_) __ _| |__   | \ | | ___   ___  _ __
+        # | |_| | |/ _` | '_ \  |  \| |/ _ \ / _ \| '_ \
+        # |  _  | | (_| | | | | | |\  | (_) | (_) | | | |
+        # |_| |_|_|\__, |_| |_| |_| \_|\___/ \___/|_| |_|
+        #          |___/
         highNoonStatus = self.game.show_tracking('highNoonStatus')
         if highNoonStatus == "RUNNING":
         # if high noon is running, run a subset
@@ -141,7 +159,13 @@ class LampControl(ep.EP_Mode):
 
         # Down here is the basic stuff
 
-        # badge lamps
+        #   ____            _
+        #  | __ )  __ _  __| | __ _  ___
+        #  |  _ \ / _` |/ _` |/ _` |/ _ \
+        #  | |_) | (_| | (_| | (_| |  __/
+        #  |____/ \__,_|\__,_|\__, |\___|
+        #                     |___/
+        #
         # If bionic is ready, then the badge lights chase
         if bionicStatus == "READY":
             self.badge('Chase')
@@ -155,7 +179,12 @@ class LampControl(ep.EP_Mode):
         # the rank lamps - enable based on curent rank
         self.rank_level()
 
-        # Quickdraw lamp bits
+        #   ___        _      _       _
+        #  / _ \ _   _(_) ___| | ____| |_ __ __ ___      _____
+        # | | | | | | | |/ __| |/ / _` | '__/ _` \ \ /\ / / __|
+        # | |_| | |_| | | (__|   < (_| | | | (_| |\ V  V /\__ \
+        #  \__\_\\__,_|_|\___|_|\_\__,_|_|  \__,_| \_/\_/ |___/
+        #
         gunsAllowed = self.game.base.guns_allowed()
         left = self.game.show_tracking('quickdrawStatus',0)
         right = self.game.show_tracking('quickdrawStatus',1)
@@ -185,7 +214,13 @@ class LampControl(ep.EP_Mode):
         if right == 'BOT':
             self.game.lamps.topRightQuickdraw.enable()
 
-        # mine
+
+        #   __  __ _
+        #  |  \/  (_)_ __   ___
+        #  | |\/| | | '_ \ / _ \
+        #  | |  | | | | | |  __/
+        #  |_|  |_|_|_| |_|\___|
+        #
         # if there's an extra ball pending, flash the light at the mine
         if ebPending > 0:
             self.game.lamps.extraBall.schedule(0x0F0F0F0F)
@@ -201,8 +236,13 @@ class LampControl(ep.EP_Mode):
             self.game.coils.mineFlasher.schedule(0x00010001)
             self.game.lamps.mineLock.schedule(0x0F0F0F0F)
 
-
-        # saloon
+        #
+        #  ____        _
+        # / ___|  __ _| | ___   ___  _ __
+        # \___ \ / _` | |/ _ \ / _ \| '_ \
+        #  ___) | (_| | | (_) | (_) | | | |
+        # |____/ \__,_|_|\___/ \___/|_| |_|
+        #
         # if bionic is ready, both lights flash fast
         if bionicStatus == "READY":
             self.saloon_flash(1)
@@ -215,8 +255,12 @@ class LampControl(ep.EP_Mode):
             if bionicStatus != "READY":
                 self.game.lamps.saloonArrow.enable()
 
+        #  ____                                ____ _           _
+        # | __ )  ___  __ _  ___ ___  _ __    / ___| |_   _ ___| |_ ___ _ __
+        # |  _ \ / _ \/ _` |/ __/ _ \| '_ \  | |   | | | | / __| __/ _ \ '__|
+        # | |_) |  __/ (_| | (_| (_) | | | | | |___| | |_| \__ \ ||  __/ |
+        # |____/ \___|\__,_|\___\___/|_| |_|  \____|_|\__,_|___/\__\___|_|
 
-        # beacon cluster
         beacon = False
         # if a bounty is lit - flash the saloon and turn on the beacon light
         if self.game.show_tracking('isBountyLit'):
@@ -231,7 +275,13 @@ class LampControl(ep.EP_Mode):
         if beacon:
             self.game.lamps.shootToCollect.enable()
 
-        # extra ball
+        #
+        #  ____  _                 _        _               _
+        # / ___|| |__   ___   ___ | |_     / \   __ _  __ _(_)_ __
+        # \___ \| '_ \ / _ \ / _ \| __|   / _ \ / _` |/ _` | | '_ \
+        #  ___) | | | | (_) | (_) | |_   / ___ \ (_| | (_| | | | | |
+        # |____/|_| |_|\___/ \___/ \__| /_/   \_\__, |\__,_|_|_| |_|
+        #                                       |___/
         # if ball saver is on, flash
         if self.game.trough.ball_save_active:
             self.game.lamps.shootAgain.schedule(0x00FF00FF)
@@ -242,13 +292,24 @@ class LampControl(ep.EP_Mode):
         else:
             pass
 
-        # outlanes
+        #   ___        _   _
+        #  / _ \ _   _| |_| | __ _ _ __   ___  ___
+        # | | | | | | | __| |/ _` | '_ \ / _ \/ __|
+        # | |_| | |_| | |_| | (_| | | | |  __/\__ \
+        #  \___/ \__,_|\__|_|\__,_|_| |_|\___||___/
+        #
         # if the bozo ball is on, flash the outlanes
         if self.game.show_tracking('bozoBall'):
             self.game.lamps.rightOutSpecial.schedule(0x0F0F0F0F)
             self.game.lamps.leftOutGunfight.schedule(0x0F0F0F0F)
 
-        # bad guys
+        #
+        #  ____            _    ____
+        # | __ )  __ _  __| |  / ___|_   _ _   _ ___
+        # |  _ \ / _` |/ _` | | |  _| | | | | | / __|
+        # | |_) | (_| | (_| | | |_| | |_| | |_| \__ \
+        # |____/ \__,_|\__,_|  \____|\__,_|\__, |___/
+        #                                  |___/
         # if showdown or ambush are running, don't show the dead guy lights - even though they should be off
         if self.game.showdown.running or self.game.ambush.running:
             activeMode = True
@@ -256,7 +317,7 @@ class LampControl(ep.EP_Mode):
             activeMode = False
         self.bad_guys(activeMode)
 
-
+    # This is a combo routine for the 5 main shots
     def update_bigFive(self,mode='Base'):
         # polly only updates the main 3 - run the other 2 as base
         if mode == "Polly":
@@ -269,6 +330,12 @@ class LampControl(ep.EP_Mode):
             for handler in self.bigFive:
                 handler(mode)
 
+    #  _          __ _     _
+    # | |    ___ / _| |_  | |    ___   ___  _ __
+    # | |   / _ \ |_| __| | |   / _ \ / _ \| '_ \
+    # | |__|  __/  _| |_  | |__| (_) | (_) | |_) |
+    # |_____\___|_|  \__| |_____\___/ \___/| .__/
+    #                                      |_|
     def left_loop(self,mode='Base'):
         # the left loop collection of lights
         ## high noon
@@ -352,6 +419,12 @@ class LampControl(ep.EP_Mode):
             else:
                 pass
 
+    #  _          __ _     ____
+    # | |    ___ / _| |_  |  _ \ __ _ _ __ ___  _ __
+    # | |   / _ \ |_| __| | |_) / _` | '_ ` _ \| '_ \
+    # | |__|  __/  _| |_  |  _ < (_| | | | | | | |_) |
+    # |_____\___|_|  \__| |_| \_\__,_|_| |_| |_| .__/
+    #                                          |_|
     def left_ramp(self,mode='Base'):
         # the left ramp collection of lights
         ## high noon check
@@ -439,6 +512,12 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.leftRampWaterfall.enable()
                 self.game.lamps.leftRampSavePolly.enable()
 
+    #   ____           _              ____
+    #  / ___|___ _ __ | |_ ___ _ __  |  _ \ __ _ _ __ ___  _ __
+    # | |   / _ \ '_ \| __/ _ \ '__| | |_) / _` | '_ ` _ \| '_ \
+    # | |__|  __/ | | | ||  __/ |    |  _ < (_| | | | | | | |_) |
+    #  \____\___|_| |_|\__\___|_|    |_| \_\__,_|_| |_| |_| .__/
+    #                                                     |_|
     def center_ramp(self,mode='Base'):
         # the center ramp collection of lights
         ## high noon check
@@ -536,6 +615,12 @@ class LampControl(ep.EP_Mode):
             else:
                 pass
 
+    #  ____  _       _     _     _
+    # |  _ \(_) __ _| |__ | |_  | |    ___   ___  _ __
+    # | |_) | |/ _` | '_ \| __| | |   / _ \ / _ \| '_ \
+    # |  _ <| | (_| | | | | |_  | |__| (_) | (_) | |_) |
+    # |_| \_\_|\__, |_| |_|\__| |_____\___/ \___/| .__/
+    #          |___/                             |_|
     def right_loop(self,mode='Base'):
         # the right loop collection of lights
         ## high noon check
@@ -615,6 +700,12 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.rightLoopGunslinger.enable()
                 self.game.lamps.rightLoopMarksman.enable()
 
+    #  ____  _       _     _     ____
+    # |  _ \(_) __ _| |__ | |_  |  _ \ __ _ _ __ ___  _ __
+    # | |_) | |/ _` | '_ \| __| | |_) / _` | '_ ` _ \| '_ \
+    # |  _ <| | (_| | | | | |_  |  _ < (_| | | | | | | |_) |
+    # |_| \_\_|\__, |_| |_|\__| |_| \_\__,_|_| |_| |_| .__/
+    #          |___/                                 |_|
     def right_ramp(self,mode='Base'):
         # the right ramp collection of lights
         ## high noon check
@@ -703,6 +794,12 @@ class LampControl(ep.EP_Mode):
             else:
                 pass
 
+    #   ____                _
+    #  / ___|___  _ __ ___ | |__   ___  ___
+    # | |   / _ \| '_ ` _ \| '_ \ / _ \/ __|
+    # | |__| (_) | | | | | | |_) | (_) \__ \
+    #  \____\___/|_| |_| |_|_.__/ \___/|___/
+    #
     def combos(self,mode='Timer'):
         # kill 'em first - they're not in the main shutoff
         for myLamp in self.comboLights:
@@ -740,7 +837,12 @@ class LampControl(ep.EP_Mode):
         else:
             pass
 
-
+    #  ____            _
+    # | __ )  __ _  __| | __ _  ___
+    # |  _ \ / _` |/ _` |/ _` |/ _ \
+    # | |_) | (_| | (_| | (_| |  __/
+    # |____/ \__,_|\__,_|\__, |\___|
+    #                    |___/
     def badge(self,mode='Level'):
 
         if mode == 'Level':
@@ -772,6 +874,12 @@ class LampControl(ep.EP_Mode):
         else:
             pass
 
+    #  ____             _
+    # |  _ \ __ _ _ __ | | __
+    # | |_) / _` | '_ \| |/ /
+    # |  _ < (_| | | | |   <
+    # |_| \_\__,_|_| |_|_|\_\
+    #
     def rank_level(self):
         rank = self.game.show_tracking('rank')
         # loop through 0 through current rank and turn the lamps on
@@ -791,7 +899,12 @@ class LampControl(ep.EP_Mode):
         self.game.lamps.rightGunfightPin.schedule(0x00FF00FF)
         self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
 
-
+    #  ____            _    ____
+    # | __ )  __ _  __| |  / ___|_   _ _   _ ___
+    # |  _ \ / _` |/ _` | | |  _| | | | | | / __|
+    # | |_) | (_| | (_| | | |_| | |_| | |_| \__ \
+    # |____/ \__,_|\__,_|  \____|\__,_|\__, |___/
+    #                                  |___/
     def bad_guys(self,activeMode = False):
         # first disable, they're not in the common wipe
         for lamp in self.badGuyLamps:
@@ -809,6 +922,12 @@ class LampControl(ep.EP_Mode):
             if active:
                 self.badGuyLamps[lamp].schedule(0x00FF00FF)
 
+    #   ____                          _
+    #  | __ )  ___  _ __  _   _ ___  | |    __ _ _ __   ___  ___
+    #  |  _ \ / _ \| '_ \| | | / __| | |   / _` | '_ \ / _ \/ __|
+    #  | |_) | (_) | | | | |_| \__ \ | |__| (_| | | | |  __/\__ \
+    #  |____/ \___/|_| |_|\__,_|___/ |_____\__,_|_| |_|\___||___/
+    #
     def bonus_lanes(self,External=True):
         # reset first
         self.game.lamps.leftBonusLane.disable()
