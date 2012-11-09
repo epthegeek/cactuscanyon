@@ -227,9 +227,23 @@ class Trough(ep.EP_Mode):
                         if temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
                             print "EVERYTHING ADDS UP - IGNORING"
                         else:
-                            print "Trough - Something screwed up"
-                            print "Balls in trough: " + str(temp_num_balls)
+                            print "Counted in trough: " + str(temp_num_balls)
                             print "Balls in play: " + str(self.num_balls_in_play)
+                            counted_balls_in_play = num_current_machine_balls - temp_num_balls
+                            print "Balls in play should be: " + str(counted_balls_in_play)
+                            difference = self.num_balls_in_play - counted_balls_in_play
+                            # in this case, we may have caught a launch too close to a drain
+                            # if we subtract the number in play, from the number in the trough
+                            # and get a number more than 0 there's a correction to do
+                            if difference == 0:
+                                print "EVERYTHING ADDS UP, GOOD TO GO"
+                            elif difference > 0:
+                                print "There are more balls in play counted"
+                                print "Resetting to counted number"
+                                self.launch_balls(difference,stealth=True)
+                            elif difference < 0:
+                                print "Ball count shows BIP should be higher than it is"
+                                self.num_balls_in_play = counted_balls_in_play
         # if there aren't any balls in play
         else:
             if self.launch_in_progress:
