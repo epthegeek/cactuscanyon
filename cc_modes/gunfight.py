@@ -322,7 +322,7 @@ class Gunfight(ep.EP_Mode):
         # turn the GI back on
         self.game.set_tracking('lampStatus', "ON")
         self.game.gi_control("ON")
-        self.game.update_lamps()
+        self.lamp_update()
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost

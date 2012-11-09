@@ -310,6 +310,7 @@ class EP_Mode(object):
 
     def __str__(self):
         return "%s  pri=%d" % (type(self).__name__, self.priority)
+
     def update_lamps(self):
         """Called by the GameController re-apply active lamp schedules"""
         pass

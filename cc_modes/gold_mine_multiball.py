@@ -311,7 +311,7 @@ class GoldMine(ep.EP_Mode):
             # if not, turn some junk on because it should be
             self.game.set_tracking('motherlodeLit',True)
             self.game.mountain.run()
-            self.game.mine.update_lamps()
+            self.lamp_update()
             self.game.base.play_quote(self.game.assets.quote_motherlodeLit)
 
     def check_multiplier(self):

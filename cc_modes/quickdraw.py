@@ -293,8 +293,7 @@ class Quickdraw(ep.EP_Mode):
                 print "SHOWDOWN STATUS IS READY"
             else:
                 self.game.set_tracking('ambushStatus',"READY")
-        self.game.bad_guys.update_lamps()
-        self.game.base.update_lamps()
+        self.lamp_update()
         # turn the main music back on - if a second level mode isn't running
         print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
             # turn the level 1 flag off
