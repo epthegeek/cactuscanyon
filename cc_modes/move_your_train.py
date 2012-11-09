@@ -230,7 +230,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.running = False
         # reset the train
         self.game.train.stop_at = 0
-        self.game.train.reset_toy()
+        self.game.train.reset_toy(type=2)
         # turn the status to off
         self.game.set_tracking("mytStatus", "OPEN")
         # unload

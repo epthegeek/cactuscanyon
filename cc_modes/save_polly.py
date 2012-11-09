@@ -418,7 +418,7 @@ class SavePolly(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
-        self.game.train.reset_toy(step=2)
+        self.game.train.reset_toy(type=2)
         # turn off the polly display
         self.layer = None
         # set the tracking on the ramps

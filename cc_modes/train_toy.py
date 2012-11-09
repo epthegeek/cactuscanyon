@@ -96,14 +96,19 @@ class Train(ep.EP_Mode):
             self.inMotion = True
             self.game.coils.trainReverse.patter(on_time=6,off_time=6)
 
-    def reset_toy(self,step=1):
+    def reset_toy(self,step=1,type=1):
         # set the reset flag
         self.trainReset = True
 
         if step == 1:
             print("Resetting Train - Step 1")
             # move the train forward
-            self.fast_forward()
+            if type == 1:
+                self.fast_forward()
+            if type == 2:
+                # on type 2, only move forward if the switch is currently held down
+                if self.game.switches.trainHome.is_active():
+                    self.fast_forward()
             # delay a stop, and step 2 of the check
             self.delay(delay=1,handler=self.stop)
             self.delay(delay=1.5,handler=self.reset_toy,param=2)
@@ -114,7 +119,8 @@ class Train(ep.EP_Mode):
                 self.game.coils.trainForward.disable()
                 self.inMotion = True
                 self.game.coils.trainReverse.enable()
-                #self.reverse()
+            else:
+                print "Game thinks the train is home already"
 
     def progress(self):
         return self.trainProgress
