@@ -9,9 +9,9 @@ from loader import *
 game_locale = config.value_for_key_path('std_locale')
 locale.setlocale(locale.LC_ALL, game_locale) # en_GB Used to put commas in the score.
 
-
-machine_config_path = 'config/cc_machine.yaml'
-fnt_path = "/data/proc/cactuscanyon/shared/dmd/"
+curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
+machine_config_path = curr_file_path + '/config/cc_machine.yaml'
+fnt_path = curr_file_path + "/shared/dmd/"
 
 
 class Game(game.BasicGame):
