@@ -31,6 +31,7 @@ class GoldMine(ep.EP_Mode):
             self.motherlodesForStar = 1
         else:
             self.motherlodesForStar = 3
+        self.restartFlag = False
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded

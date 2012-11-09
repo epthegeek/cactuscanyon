@@ -50,7 +50,7 @@ class BonusLanes(ep.EP_Mode):
         if stat == "OFF":
             # set the status to on for the lane that got hit
             self.game.set_tracking('bonusLaneStatus',"ON",side)
-            self.lamp_update.bonus_lanes(True)
+            self.game.lamp_control.bonus_lanes(True)
             # light the light
             # points for lighting bonus lane
             self.game.score(35000)

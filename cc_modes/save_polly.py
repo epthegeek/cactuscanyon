@@ -334,10 +334,12 @@ class SavePolly(ep.EP_Mode):
         self.won = True
         self.running = False
         self.game.train.stop()
-        self.cancel_delayed("Mode Timer")
-        self.cancel_delayed("Operational")
-        self.cancel_delayed("Display")
-        self.cancel_delayed("Pause Timer")
+        # kill the lights on the three ramps
+        self.game.lamp_control.leftRamp('Base')
+        self.game.lamp_control.centerRamp('Base')
+        self.game.lamp_control.rightRamp('Base')
+
+        self.wipe_delays()
         # play the train stopping animation and some sounds
         anim = self.game.assets.dmd_pollyOnTracks
         # math out the wait

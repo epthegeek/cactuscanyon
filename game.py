@@ -390,7 +390,7 @@ class CCGame(game.BasicRecordableGame):
         if self.current_player().game_time < 120 and self.ball == self.balls_per_game:
             self.base.enable_bozo_ball()
         # update the lamps
-        self.update_lamps()
+        self.lamp_control.update()
 
     def launch_callback(self):
         pass
@@ -647,7 +647,7 @@ class CCGame(game.BasicRecordableGame):
         # just a routine for setting the stack level
         self.set_tracking('stackLevel',value,level)
         # that also calls a base lamp update
-        self.base.update_lamps()
+        self.lamp_control.update()
 
     # score with bonus
     def score_with_bonus(self, points,percent=7):

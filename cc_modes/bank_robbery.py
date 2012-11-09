@@ -333,6 +333,10 @@ class BankRobbery(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
+        # kill the lights on the three ramps
+        self.game.lamp_control.leftRamp('Base')
+        self.game.lamp_control.centerRamp('Base')
+        self.game.lamp_control.rightRamp('Base')
         self.win_display()
 
     # fail

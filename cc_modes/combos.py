@@ -35,6 +35,7 @@ class Combos(ep.EP_Mode):
                             self.game.lamps.leftLoopCombo,
                             self.game.lamps.rightLoopCombo]
         self.default = self.game.user_settings['Gameplay (Feature)']['Combo Timer']
+        self.myTimer = 0
 
     def mode_started(self):
         self.myTimer = 0
