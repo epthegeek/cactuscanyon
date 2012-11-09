@@ -203,17 +203,24 @@ class Trough(ep.EP_Mode):
                             print "BALLS NOW IN PLAY: " + str(self.num_balls_in_play)
                     # if the ball count hasn't changed ...
                     elif self.count_is == "SAME":
+                        print "Trough count stayed the same"
+                        print "Counted in trough: " + str(temp_num_balls)
+                        print "Balls in play: " + str(self.num_balls_in_play)
+                        counted_balls_in_play = num_current_machine_balls - temp_num_balls
+                        print "Balls in play should be: " + str(counted_balls_in_play)
+                        difference = self.num_balls_in_play - counted_balls_in_play
                         # in this case, we may have caught a launch too close to a drain
                         # if we subtract the number in play, from the number in the trough
                         # and get a number more than 0 there's a correction to do
-                        strays = temp_num_balls - self.num_balls_in_play
-                        if strays > 0:
-                            print "FIXING " + str(strays) + " STRAY BALLS"
-                            self.launch_balls(strays,stealth=True)
-                        if strays < 0:
-                            print "WHAAAA? We're over?  RESET"
-                            self.num_balls_in_play = num_current_machine_balls - temp_num_balls
-                            self.drain_callback()
+                        if difference == 0:
+                            print "EVERYTHING ADDS UP, GOOD TO GO"
+                        elif difference > 0:
+                            print "There are more balls in play counted"
+                            print "Resetting to counted number"
+                            self.launch_balls(difference,stealth=True)
+                        elif difference < 0:
+                            print "Ball count shows BIP should be higher than it is"
+                            self.num_balls_in_play = counted_balls_in_play
                     # if the ball count went down just do a sanity check
                     elif self.count_is == "LOWER":
                         print "THE BALL COUNT IS LOWER"
