@@ -825,8 +825,11 @@ class LampControl(ep.EP_Mode):
         self.disable_combos()
 
         if mode == 'Timer':
+            # if goldmine is running, don't do this
+            if self.game.gm_multiball.running:
+                return
             value = self.game.combos.myTimer
-        # if timer is greater than 2, slow blink
+            # if timer is greater than 2, slow blink
             if value > 2:
                 for myLamp in self.comboLights:
                     myLamp.schedule(0x0000FFFF)
