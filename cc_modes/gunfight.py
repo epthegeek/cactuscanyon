@@ -176,6 +176,8 @@ class Gunfight(ep.EP_Mode):
         rankTitle,duration = self.game.badge.increase_rank(True)
         # the melodic flourish noise
         self.delay("Operational",delay=0.2,handler=self.game.sound.play,param=self.game.assets.sfx_gunfightFlourish)
+        # flash the guns
+        self.game.base.guns_flash(1)
         # play the animation
         anim = self.game.assets.dmd_dudeShotShouldersUp
         myWait = len(anim.frames) / 10.0

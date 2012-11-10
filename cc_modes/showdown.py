@@ -261,6 +261,8 @@ class Showdown(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,self.guyLayers)
         combined.composite_op = "blacksrc"
         self.layer = combined
+        # flash the guns
+        self.game.base.guns_flash(1)
         # play a shot sound
         self.game.sound.play(self.game.assets.sfx_gunfightShot)
         # if the 4 dudes are dead, reset them

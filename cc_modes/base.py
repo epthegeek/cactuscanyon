@@ -886,3 +886,8 @@ class BaseGameMode(ep.EP_Mode):
         # update the lamps to show extra ball
         self.lamp_update()
 
+
+    def guns_flash(self,type=1):
+        if type == 1:
+            self.game.coils.leftGunFlasher.schedule(0x00101010,cycle_seconds=1)
+            self.game.coils.rightGunFlasher.schedule(0x00010101,cycle_seconds=1)
