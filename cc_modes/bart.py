@@ -347,6 +347,8 @@ class Bart(ep.EP_Mode):
         myWait = len(anim.frames) / 10.0 + 1
         # play a shot sound
         self.game.sound.play(self.game.assets.sfx_quickdrawHit)
+        # flash the guns
+        self.game.base.guns_flash(1)
         # delay clearing display
         self.delay("Display",delay=myWait,handler=self.clear_layer)
         # count the dude
