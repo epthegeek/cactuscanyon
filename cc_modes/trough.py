@@ -261,6 +261,7 @@ class Trough(ep.EP_Mode):
             if self.game.switches[switch].is_active():
                 ball_count += 1
                 print "Active trough switch: " + str(switch)
+        print "balls counted: " + str(ball_count)
         # check if the ball count went up or down
         if ball_count < self.last_ball_count:
             self.count_is = "LOWER"
@@ -275,6 +276,7 @@ class Trough(ep.EP_Mode):
         return ball_count
 
     def is_full(self):
+        print "Checking if trough is full"
         return self.num_balls() == self.game.num_balls_total
 
     # Either initiate a new launch or add another ball to the count of balls

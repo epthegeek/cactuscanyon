@@ -92,8 +92,9 @@ class BallSearch(ep.EP_Mode):
         # drop the gunfight posts
         self.game.coils.leftGunFightPost.disable()
         self.game.coils.rightGunFightPost.disable()
-        # kill the drop targets
-        self.game.bad_guys.drop_targets()
+        # kill the drop targets - if the game is running
+        if self.game.base in self.game.modes():
+            self.game.bad_guys.drop_targets()
 
         if (completion_wait_time != 0):
             pass
