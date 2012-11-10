@@ -45,10 +45,10 @@ class Loader(game.Mode):
         print "Selection: " + str(self.selection) 
         # PYPROC is at position 2 on the list
         if self.selection ==1:
-	    print "launching willams"	
+            print "launching willams"
             self.launch_williams(self.selection)
         else:
-	    print "launching ccc"
+            print "launching ccc"
             self.launch_ccc()
 
     def sw_flipperLwL_active(self, sw):
@@ -64,7 +64,7 @@ class Loader(game.Mode):
         ## TODO - change this working directory
         #os.chdir("/data/")
         #os.system(r"pinmamep "+self.runners[choice][15:21]+" -window -p-roc proc/cactuscanyon/config/cc_machine.yaml -skip_disclaimer -skip_gameinfo")
-	os.system("/data/runpinmame /data/cc_13 /data/proc/cactuscanyon/config/cc_machine.yaml")
+        os.system("/data/runpinmame /data/cc_13 /data/proc/cactuscanyon/config/cc_machine.yaml")
 
         #Pinmame executable was:
         # - Quit by a delete on the keyboard
