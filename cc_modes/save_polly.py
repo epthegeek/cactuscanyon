@@ -335,9 +335,9 @@ class SavePolly(ep.EP_Mode):
         self.running = False
         self.game.train.stop()
         # kill the lights on the three ramps
-        self.game.lamp_control.leftRamp('Base')
-        self.game.lamp_control.centerRamp('Base')
-        self.game.lamp_control.rightRamp('Base')
+        self.game.lamp_control.left_ramp('Base')
+        self.game.lamp_control.center_ramp('Base')
+        self.game.lamp_control.right_ramp('Base')
 
         self.wipe_delays()
         # play the train stopping animation and some sounds

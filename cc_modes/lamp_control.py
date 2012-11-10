@@ -826,7 +826,7 @@ class LampControl(ep.EP_Mode):
 
         if mode == 'Timer':
             # if goldmine is running, don't do this
-            if self.game.gm_multiball.running:
+            if self.game.gm_multiball.running or self.game.gunfight.running:
                 return
             value = self.game.combos.myTimer
             # if timer is greater than 2, slow blink
