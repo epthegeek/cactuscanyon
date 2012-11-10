@@ -35,27 +35,24 @@ class Loader(game.Mode):
         pass
 
     def select(self,dir=0):
-        self.selection+=dir
-
-        if self.selection<0:
-            self.selection=len(self.versions)-1
-
-        if self.selection==len(self.versions):
-            self.selection=0
+        self.selection=dir
 
         self.text3_layer.set_text(self.runners[self.selection])
         self.text2_layer.set_text(self.versions[self.selection],blink_frames=20)
 
 
     def sw_startButton_active(self, sw):
+        print "Selection: " + str(self.selection) 
         # PYPROC is at position 2 on the list
-        if self.selection < 2:
+        if self.selection ==1:
+	    print "launching willams"	
             self.launch_williams(self.selection)
         else:
+	    print "launching ccc"
             self.launch_ccc()
 
     def sw_flipperLwL_active(self, sw):
-        self.select(dir=-1)
+        self.select(dir=0)
 
     def sw_flipperLwR_active(self, sw):
         self.select(dir=1)
@@ -65,9 +62,9 @@ class Loader(game.Mode):
         # Call the pinmame executable to take over from here, further execution of Python code is halted.
         # Positions 15 to 21 in the runner string contain the ROM name, so strip that out
         ## TODO - change this working directory
-        os.chdir("/data/");
-        os.system(r"pinmamep "+self.runners[choice][15:21]+" -window -p-roc proc/cactuscanyon/config/cc_machine.yaml -skip_disclaimer -skip_gameinfo")
-
+        #os.chdir("/data/")
+        #os.system(r"pinmamep "+self.runners[choice][15:21]+" -window -p-roc proc/cactuscanyon/config/cc_machine.yaml -skip_disclaimer -skip_gameinfo")
+	os.system("/data/runpinmame /data/cc_13 /data/proc/cactuscanyon/config/cc_machine.yaml")
 
         #Pinmame executable was:
         # - Quit by a delete on the keyboard

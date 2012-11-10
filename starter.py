@@ -39,11 +39,11 @@ class Game(game.BasicGame):
         # now and during a user initiated reset.
         self.reset()
 
-    def enable_flippers(self,enable):
-        if enable:
-            self.coils.flipperEnable.pulse(0)
-        else:
-            self.coils.flipperEnable.disable()
+#    def enable_flippers(self,enable):
+#        if enable:
+#            self.coils.flipperEnable.pulse(0)
+#        else:
+#            self.coils.flipperEnable.disable()
 
     def reset(self):
         # Reset the entire game framework
