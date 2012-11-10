@@ -50,7 +50,7 @@ class Mountain(ep.EP_Mode):
         self.game.coils.minePopper.pulse(20)
 
     def flash(self):
-        self.game.coils.mineFlasher.pulse(30)
+        self.game.coils.mineFlasher.schedule(0x00010101,cycle_seconds=1)
         # run the mine lamp update to turn the flasher back on if needed
         self.lamp_update()
 
@@ -61,7 +61,7 @@ class Mountain(ep.EP_Mode):
         # flash the light and then kick out if there's a ball in there
         if self.game.switches.minePopper.is_active():
             print "MINE EJECTING"
-            self.flash()
+            self.game.coils.mineFlasher.schedule(0x01010101,cycle_seconds=1)
             self.delay(delay=0.03,handler=self.kick)
 
     def stop(self):

@@ -341,6 +341,7 @@ class Trough(ep.EP_Mode):
         print "IN PLAY: " + str(self.num_balls_in_play)
         # If more balls need to be launched, delay 1 second
         if self.num_balls_to_launch > 0:
+            print "More balls to launch: " + str(self.num_balls_to_launch) + " - adding delay"
             self.delay(name='launch', event_type=None, delay=2.0,
                 handler=self.common_launch_code)
         else:

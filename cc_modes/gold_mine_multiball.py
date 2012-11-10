@@ -381,7 +381,8 @@ class GoldMine(ep.EP_Mode):
 
     def bandits_begin(self):
         # play one of the ambush urge quotes
-        picked = random.choice(self.game.assets.quote_ambushUrge,self.game.assets.quote_mobStart)
+        quotes = [self.game.assets.quote_ambushUrge,self.game.assets.quote_mobStart]
+        picked = random.choice(quotes)
         self.game.base.play_quote(picked)
         # kick the ball out
         self.game.mountain.kick()
