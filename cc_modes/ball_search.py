@@ -25,6 +25,11 @@ class BallSearch(ep.EP_Mode):
         self.special_handler_modes = special_handler_modes
         self.enable_switch_names = enable_switch_names
         self.enabled = 0
+        self.badGuyCoils = [self.game.coils.badGuyC0,
+                      self.game.coils.badGuyC1,
+                      self.game.coils.badGuyC2,
+                      self.game.coils.badGuyC3]
+
         #Mode.__init__(self, game, 8)
         for switch in reset_switches:
             self.add_switch_handler(name=str(switch), event_type=str(reset_switches[switch]), delay=None, handler=self.reset)
@@ -93,8 +98,8 @@ class BallSearch(ep.EP_Mode):
         self.game.coils.leftGunFightPost.disable()
         self.game.coils.rightGunFightPost.disable()
         # kill the drop targets - if the game is running
-        if self.game.base in self.game.modes():
-            self.game.bad_guys.drop_targets()
+        for coil in self.badGuyCoils:
+            coil.disable()
 
         if (completion_wait_time != 0):
             pass
