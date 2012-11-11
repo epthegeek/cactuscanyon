@@ -143,7 +143,7 @@ class BadGuys(ep.EP_Mode):
         # new coil raise based on research with on o-scope by jim (jvspin)
         self.coils[target].patter(on_time=2,off_time=2)
         # hold the raise pulse for a bit longer
-        self.delay(self.coilStrings[target],delay=0.5,handler=self.target_hold,param=target)
+        self.delay(self.coilStrings[target],delay=0.6,handler=self.target_hold,param=target)
         self.lamps[target].schedule(0x00FF00FF)
         # trying a new way to activate
         #self.delay(delay=0.1,handler=self.target_activate,param=target)
