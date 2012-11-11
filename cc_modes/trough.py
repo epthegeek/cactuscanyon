@@ -262,6 +262,9 @@ class Trough(ep.EP_Mode):
             if self.game.switches[switch].is_active():
                 ball_count += 1
                 print "Active trough switch: " + str(switch)
+        if self.game.switches.troughEject.is_active():
+            print "There's a ball stacked up in the way of the eject opto"
+            ball_count += 1
         print "balls counted: " + str(ball_count)
         # check if the ball count went up or down
         if ball_count < self.last_ball_count:
@@ -274,8 +277,6 @@ class Trough(ep.EP_Mode):
             self.count_is = "HIGHER"
             print "THE BALL COUNT WENT UP"
         self.last_ball_count = ball_count
-        if self.game.switches.troughEject.is_active():
-            print "There's a ball stacked up in the way of the eject opto"
         return ball_count
 
     def is_full(self):
