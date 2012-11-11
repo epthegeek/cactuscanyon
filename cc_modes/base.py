@@ -39,6 +39,13 @@ class BaseGameMode(ep.EP_Mode):
         self.active_quotes = []
         # for aborting thebonus display
         self.doingBonus = False
+        # skippable drunk multiball?
+        #skip_dmb = self.game.user_settings['Gameplay (Feature)']['Can skip Drunk Multiball Intro']
+        #if skip_dmb == 'Yes':
+        #    self.skipDrunk = True
+        #else:
+        #    self.skipDrunk = False
+        self.skipDrunk = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Can skip Drunk Multiball Intro']
 
     def mode_started(self):
         # set the number for the hits to the beer mug to start drunk multiball
@@ -562,6 +569,8 @@ class BaseGameMode(ep.EP_Mode):
     def sw_flipperLwL_active(self,sw):
         # if both flippers are hit, kill the bonus
         if self.game.switches.flipperLwL.is_active():
+            print "Both flippers pressed"
+            print "Skipdrunk = " + str(self.skipDrunk) + " DMB Starting = " + str(self.game.drunk_multiball.starting)
             # if the bonus is active, kill that
             if self.doingBonus:
                 self.abort_bonus()
@@ -571,6 +580,8 @@ class BaseGameMode(ep.EP_Mode):
             # if the mine lock animation is running, kill that
             elif self.game.mine.lockAnimation:
                 self.game.mine.abort_lock_animation()
+            elif self.game.drunk_multiball.starting and self.skipDrunk:
+                self.game.drunk_multiball.abort_intro()
             else:
                 pass
         # if no balls in play, don't do this.

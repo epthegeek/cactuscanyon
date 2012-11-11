@@ -38,6 +38,7 @@ class DrunkMultiball(ep.EP_Mode):
         # an animation for use in the intro
         anim = self.game.assets.dmd_reverse
         self.underLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
+        self.starting = False
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -114,6 +115,8 @@ class DrunkMultiball(ep.EP_Mode):
         self.banner()
 
     def banner(self):
+        # set a starting flag
+        self.starting = True
         # setup the pour mask
         # load up the animation
         anim = self.game.assets.dmd_pourMask
@@ -129,7 +132,7 @@ class DrunkMultiball(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[words,pour,mug])
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_pour)
-        self.delay(delay=1.3,handler=self.bannerTwo)
+        self.delay("Operational",delay=1.3,handler=self.bannerTwo)
 
     def bannerTwo(self):
         self.game.base.play_quote(self.game.assets.quote_drunkDrinkToThat)
@@ -138,7 +141,7 @@ class DrunkMultiball(ep.EP_Mode):
         words = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_drunkMultiball.frames[0])
         combined = dmd.GroupedLayer(128,32,[words,mug])
         self.layer = combined
-        self.delay(delay=1,handler=self.intro_display)
+        self.delay("Operational",delay=1,handler=self.intro_display)
 
     def intro_display(self,step=1):
         ## show some junk about how the mode works
@@ -178,11 +181,17 @@ class DrunkMultiball(ep.EP_Mode):
             combined = dmd.GroupedLayer(128,32,[self.underLayer,flippers,arrow])
         self.layer=combined
         if step <= 5:
-            self.delay(delay=1,handler=self.intro_display,param=step+1)
+            self.delay("Operational",delay=1,handler=self.intro_display,param=step+1)
         else:
-            self.delay(delay=1,handler=self.get_going)
+            self.delay("Operational",delay=1,handler=self.get_going)
+
+    def abort_intro(self):
+        self.starting = False
+        self.cancel_delayed("Operational")
+        self.get_going()
 
     def get_going(self):
+        self.starting = False
         # turn off the saloon busy flag - should process check bounty and kick the ball out
         self.game.saloon.busy = False
         # eject more ball

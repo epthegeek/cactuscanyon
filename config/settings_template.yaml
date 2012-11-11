@@ -200,6 +200,9 @@ Gameplay (Feature):
   'Polly Dies Animation':
     options: ['Show','Hide']
     default: 'Show'
+  'Can skip Drunk Multiball Intro':
+    options: ['Yes','No']
+    default: 'No'
   'Tumbleweeds for CVA':
     options: [2,20]
     increments: 1
