@@ -248,8 +248,9 @@ class Trough(ep.EP_Mode):
         else:
             if self.launch_in_progress:
                 print "WHAT THE - NO BALLS IN PLAY, and we're launching - try again?"
-                if self.num_balls() == 4:
-                    print "If tell back in, try again"
+                # experiental condition for lanny's case where I don't think the balls settled
+                if self.num_balls() == 4 or self.game.switches.troughEject.is_active():
+                    print "It fell back in, try again"
                     self.cancel_delayed("Bounce Delay")
                     self.common_launch_code()
 
@@ -273,6 +274,8 @@ class Trough(ep.EP_Mode):
             self.count_is = "HIGHER"
             print "THE BALL COUNT WENT UP"
         self.last_ball_count = ball_count
+        if self.game.switches.troughEject.is_active():
+            print "There's a ball stacked up in the way of the eject opto"
         return ball_count
 
     def is_full(self):
