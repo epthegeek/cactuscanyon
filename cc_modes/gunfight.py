@@ -303,8 +303,6 @@ class Gunfight(ep.EP_Mode):
         # need this for the lost
         self.enemy = enemy
         self.game.bad_guys.target_up(enemy)
-        # kill the starting flag
-        self.starting = False
         # play the 4 bells
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
         self.delay("Operational",delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
@@ -326,6 +324,8 @@ class Gunfight(ep.EP_Mode):
         self.game.set_tracking('lampStatus', "ON")
         self.game.gi_control("ON")
         self.lamp_update()
+        # kill the starting flag
+        self.starting = False
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # set a named timer for gunfight lost
