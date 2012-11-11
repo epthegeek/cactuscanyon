@@ -38,6 +38,7 @@ class BadGuys(ep.EP_Mode):
                       self.game.coils.badGuyC1,
                       self.game.coils.badGuyC2,
                       self.game.coils.badGuyC3]
+        self.coilStrings = ["Hold 0","Hold 1","Hold 2","Hold 3"]
         self.lamps = [self.game.lamps.badGuyL0,
                        self.game.lamps.badGuyL1,
                        self.game.lamps.badGuyL2,
@@ -141,6 +142,8 @@ class BadGuys(ep.EP_Mode):
        # self.coils[target].patter(on_time=10,off_time=10,original_on_time=18)
         # new coil raise based on research with on o-scope by jim (jvspin)
         self.coils[target].patter(on_time=2,off_time=2)
+        # hold the raise pulse for a bit longer
+        self.delay(self.coilStrings[target],delay=0.5,handler=self.target_hold,param=target)
         self.lamps[target].schedule(0x00FF00FF)
         # trying a new way to activate
         #self.delay(delay=0.1,handler=self.target_activate,param=target)
@@ -148,7 +151,12 @@ class BadGuys(ep.EP_Mode):
         if self.game.fakePinProc:
             self.target_activate(target)
 
+    def target_hold(self,target):
+        self.coils[target].patter(on_time=2,off_time=10)
+
     def target_down(self,target):
+        # cancel the hold delay, just in case
+        self.cancel_delayed(self.coilStrings[target])
         #print "DEACTIVATING TARGET " + str(target)
         # we'll still deactivate when the coil goes off, just to maintain sync
         status = self.game.show_tracking('highNoonStatus')
@@ -162,7 +170,8 @@ class BadGuys(ep.EP_Mode):
         if self.game.show_tracking('badGuyUp',target) == False:
             print "ACTIVATING TARGET " + str(target)
             # switch to new alternate patter for holding target
-            self.coils[target].patter(on_time=2,off_time=10)
+            # TRYING THIS IN A NEW METHOD
+            # self.coils[target].patter(on_time=2,off_time=10)
             self.game.set_tracking('badGuyUp',True,target)
 
     def setup_targets(self):
