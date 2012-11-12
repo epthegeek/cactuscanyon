@@ -3,6 +3,7 @@ from procgame import dmd
 import os
 import shutil
 from distutils import dir_util
+import sys
 
 class ServiceModeSkeleton(ep.EP_Mode):
     """Service Mode List base class."""
@@ -21,6 +22,8 @@ class ServiceModeSkeleton(ep.EP_Mode):
 
     def mode_stopped(self):
         self.game.sound.play('service_exit')
+        if self.game.service_mode not in self.game.modes and self.game.usb_update:
+            sys.exit(42)
 
     def disable(self):
         pass
@@ -157,7 +160,7 @@ class DoUpdate(ServiceModeList):
     def copy_files(self):
             dir_util.copy_tree(self.myLocation,self.game.game_location)
             self.item_layer.set_text("FINISHED")
-            self.instruction_layer.set_text("REBOOT GAME FOR NEW CODE")
+            self.instruction_layer.set_text("")
 
 class UpdateItem:
     """Service Mode."""
