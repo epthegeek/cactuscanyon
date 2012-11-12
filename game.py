@@ -53,6 +53,11 @@ class CCGame(game.BasicRecordableGame):
         else:
             self.fakePinProc = False
         self.restart = False
+        if config.values['usb_update']:
+            self.usb_update = config.values['usb_update']
+        if self.usb_update:
+            self.usb_location = config.values['usb_location']
+            self.game_location = config.values['game_location']
 
         super(CCGame, self).__init__(machineType)
         if recording:
@@ -90,8 +95,10 @@ class CCGame(game.BasicRecordableGame):
     def setup(self):
         """docstring for setup"""
         # load up the game data Game data
+        print "Loading game data"
         self.load_game_data(game_data_defaults_path, user_game_data_path)
         # and settings Game settings
+        print "Loading game settings"
         self.load_settings(settings_defaults_path, user_settings_path)
 
         # Set the balls per game per the user settings
@@ -264,7 +271,7 @@ class CCGame(game.BasicRecordableGame):
         self.score_display.font_18x12 = self.assets.font_score_x12
 
         # Setup and instantiate service mode
-        self.service_mode = service.ServiceMode(self,100,self.assets.font_tiny7,[])
+        self.service_mode = ep.ep_service.ServiceMode(self,100,self.assets.font_tiny7,[])
 
         # set up an array of the modes
         self.ep_modes = [self.base,

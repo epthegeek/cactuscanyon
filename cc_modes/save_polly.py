@@ -382,7 +382,7 @@ class SavePolly(ep.EP_Mode):
             #if we're showing the full animation, do that now
             if self.showDeathAnimation == 'Show':
 
-                self.game.base.play_quote(self.game.assets.quote_pollyStop)
+                self.game.base.priority_quote(self.game.assets.quote_pollyStop)
                 anim = self.game.assets.dmd_pollyMurder
                 animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True, opaque=True,repeat=False,frame_time=6)
                 myWait = len(anim.frames) / 10.0
