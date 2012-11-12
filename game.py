@@ -53,8 +53,7 @@ class CCGame(game.BasicRecordableGame):
         else:
             self.fakePinProc = False
         self.restart = False
-        if config.values['usb_update']:
-            self.usb_update = config.values['usb_update']
+        self.usb_update = config.value_for_key_path(keypath='usb_update', default=False)
         if self.usb_update:
             self.usb_location = config.values['usb_location']
             self.game_location = config.values['game_location']
