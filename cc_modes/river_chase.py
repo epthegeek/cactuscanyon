@@ -254,9 +254,7 @@ class RiverChase(ep.EP_Mode):
     def polly_saved(self):
         self.game.score(500000)
         self.running = False
-        self.cancel_delayed("Mode Timer")
-        self.cancel_delayed("Display")
-        self.cancel_delayed("Operational")
+        self.wipe_delays()
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
             self.game.sound.stop_music()
@@ -265,15 +263,12 @@ class RiverChase(ep.EP_Mode):
         self.game.lamp_control.left_ramp('Base')
         self.game.lamp_control.center_ramp('Base')
         self.game.lamp_control.right_ramp('Base')
-
         self.win_display()
 
     # fail
     def polly_died(self):
         self.running = False
-        self.cancel_delayed("Mode Timer")
-        self.cancel_delayed("Display")
-        self.cancel_delayed("Operational")
+        self.wipe_delays()
         self.end_river_chase()
 
     def win_display(self,step=1):

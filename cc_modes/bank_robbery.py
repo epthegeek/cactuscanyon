@@ -315,20 +315,21 @@ class BankRobbery(ep.EP_Mode):
         self.in_progress()
 
     def halt(self):
-        print "HALTING -- BUMPERS/MINE/SALOON"
-        # cancel delays
-        self.cancel_delayed("Mode Timer")
-        # this is the initial delay - have to include it in case of a straight shot to the mine off the ramp
-        self.cancel_delayed("Get Going")
-        # set the flag
-        self.halted = True
-        self.layer = self.pauseView
+        # if guys are still alive, halt
+        if True in self.isActive:
+            print "HALTING -- BUMPERS/MINE/SALOON"
+            # cancel delays
+            self.cancel_delayed("Mode Timer")
+            # this is the initial delay - have to include it in case of a straight shot to the mine off the ramp
+            self.cancel_delayed("Get Going")
+            # set the flag
+            self.halted = True
+            self.layer = self.pauseView
 
 
     # success
     def polly_saved(self):
         self.game.score(750000)
-        self.running = False
         self.cancel_delayed("Mode Timer")
         stackLevel = self.game.show_tracking('stackLevel')
         if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
@@ -341,7 +342,6 @@ class BankRobbery(ep.EP_Mode):
 
     # fail
     def polly_died(self):
-        self.running = False
         self.cancel_delayed("Mode Timer")
         self.end_bank_robbery()
 
@@ -386,7 +386,7 @@ class BankRobbery(ep.EP_Mode):
                 self.game.interrupter.cut_in(completeFrame,1)
             else:
                 self.layer = completeFrame
-            self.delay(name="Display",delay=2,handler=self.end_bank_robbery)
+            self.delay(name="Operational",delay=2,handler=self.end_bank_robbery)
             # show combo display if the chain is high enough
             if self.game.combos.chain > 1:
                 self.delay(name="Display",delay=2,handler=self.game.combos.display)
@@ -426,6 +426,7 @@ class BankRobbery(ep.EP_Mode):
         return completeFrame
 
     def end_bank_robbery(self):
+        self.running = False
         # stop the polly music
         print "end_bank_robbery IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
@@ -518,8 +519,8 @@ class BankRobbery(ep.EP_Mode):
 
     def abort_display(self):
         # if we're done, we should quit
-#        if True not in self.isActive or not self.running:
- #           self.end_bank_robbery()
+        if True not in self.isActive and self.running:
+           self.end_bank_robbery()
         self.cancel_delayed("Display")
         self.layer = None
 

@@ -103,8 +103,8 @@ class Stampede(ep.EP_Mode):
         self.delay(name="Display",delay=myWait,handler=self.main_display)
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_stampedeStart)
-        # start the music for stampede
-        self.game.base.music_on(self.game.assets.music_stampede)
+        # start the music for stampede - delay this music start in case a quickdraw started at the same time
+        self.delay(delay=1.5,handler=self.game.base.music_on,param=self.game.assets.music_stampede)
         # launch some more balls
         if self.game.trough.num_balls_in_play < 3:
             total = 3 - self.game.trough.num_balls_in_play

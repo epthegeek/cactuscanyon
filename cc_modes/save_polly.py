@@ -281,6 +281,8 @@ class SavePolly(ep.EP_Mode):
             self.delay("Pause Timer",delay=1,handler=self.pause_timer,param=time)
 
     def halt_train(self):
+        if self.won or self.modeTimer <= 0:
+            return
         print "HALTING TRAIN IN BUMPERS/MINE"
         # cancel delays
         self.cancel_delayed("Mode Timer")
@@ -332,7 +334,6 @@ class SavePolly(ep.EP_Mode):
     # success
     def polly_saved(self):
         self.won = True
-        self.running = False
         self.game.train.stop()
         # kill the lights on the three ramps
         self.game.lamp_control.left_ramp('Base')
@@ -376,7 +377,6 @@ class SavePolly(ep.EP_Mode):
     def polly_died(self,step=1):
         print "OMG POLLY IS DEAD"
         if step == 1:
-            self.running = False
             # stop the train
             self.game.train.stop()
             #if we're showing the full animation, do that now
@@ -412,6 +412,7 @@ class SavePolly(ep.EP_Mode):
             self.delay("Operational",delay=duration,handler=self.polly_finished)
 
     def polly_finished(self):
+        self.running = False
         # stop the polly music
         print "polly_finished IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
@@ -453,3 +454,6 @@ class SavePolly(ep.EP_Mode):
         print "SAVE POLLY IS DISPATCHING DELAYS"
         self.wipe_delays()
         self.clear_layer()
+        if self.running:
+            if self.won or self.modeTimer <= 0:
+                self.polly_finished()
