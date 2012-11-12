@@ -157,7 +157,7 @@ class DoUpdate(ServiceModeList):
     def copy_files(self):
             dir_util.copy_tree(self.myLocation,self.game.game_location)
             self.item_layer.set_text("FINISHED")
-            self.instruction_layer.set_text("")
+            self.instruction_layer.set_text("REBOOT GAME FOR NEW CODE")
 
 class UpdateItem:
     """Service Mode."""
