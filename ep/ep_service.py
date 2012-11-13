@@ -95,11 +95,11 @@ class ServiceMode(ServiceModeList):
         self.tests = Tests(self.game, self.priority+1, font, extra_tests)
         self.items = [self.tests]
         if len(self.game.settings) > 0:
-            print "Service - Adding Settings"
+            #print "Service - Adding Settings"
             self.settings = Settings(self.game, self.priority+1, font, 'Settings', self.game.settings)
             self.items.append(self.settings)
         if len(self.game.game_data) > 0:
-            print "Service - Adding statistics"
+            #print "Service - Adding statistics"
             self.statistics = Statistics(self.game, self.priority+1, font, 'Statistics', self.game.game_data)
             self.items.append(self.statistics)
         if self.game.usb_update:
@@ -272,7 +272,7 @@ class Statistics(ServiceModeList):
         self.items = []
         for section in itemlist:
             if section == "Audits":
-                print "adding " + section
+                #print "adding " + section
                 self.items.append( StatsDisplay( self.game, priority + 1, font, str(section),itemlist[section] ))
 
 class StatsDisplay(ServiceModeList):
@@ -282,7 +282,7 @@ class StatsDisplay(ServiceModeList):
         self.name = name
         self.value_layer = dmd.TextLayer(128/2, 22, font, "center")
         self.items = []
-        print itemlist
+        #print itemlist
         for item in sorted(itemlist.iterkeys()):
                 self.items.append( StatsItem(str(item), itemlist[item]) )
         self.layer = dmd.GroupedLayer(128, 32, [self.title_layer, self.item_layer, self.value_layer])
