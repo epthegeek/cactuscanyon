@@ -169,6 +169,10 @@ class UpdateItem:
     def __init__(self, name):
         self.name = name
 
+    def disable(self):
+        pass
+
+
 class Tests(ServiceModeList):
     """Service Mode."""
     def __init__(self, game, priority, font, extra_tests=[]):
