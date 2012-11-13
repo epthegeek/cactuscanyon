@@ -256,7 +256,7 @@ class SwitchTest(ServiceModeSkeleton):
 
     def switch_handler(self, sw):
         if (sw.state):
-            self.game.sound.play('service_switch_edge')
+            self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
         self.item_layer.set_text(sw.name + ' - ' + str(sw.state))
         return True
 
@@ -343,7 +343,7 @@ class SwitchTest(ServiceModeSkeleton):
 
     def switch_handler(self, sw):
         if (sw.state):
-            self.game.sound.play('service_switch_edge')
+            self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
         self.item_layer.set_text(sw.name + ' - ' + str(sw.state))
         return True
 
@@ -412,7 +412,7 @@ class SettingsEditor(ServiceModeList):
             self.state = 'nav'
             self.instruction_layer.set_text("Change saved")
             self.delay(name='change_complete', event_type=None, delay=1, handler=self.change_complete)
-            self.game.sound.play('service_save')
+            self.game.sound.play(self.game.assets.sfx_menuSave)
             self.game.user_settings[self.name][self.item.name]=self.item.value
             self.stop_blinking = True
             self.game.save_settings()
@@ -428,7 +428,7 @@ class SettingsEditor(ServiceModeList):
             self.state = 'nav'
             self.value_layer.set_text(str(self.item.value))
             self.stop_blinking = True
-            self.game.sound.play('service_cancel')
+            self.game.sound.play(self.game.assets.sfx_menuCancel)
             self.instruction_layer.set_text("Change cancelled")
             self.delay(name='change_complete', event_type=None, delay=1, handler=self.change_complete)
 
