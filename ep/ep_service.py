@@ -18,10 +18,10 @@ class ServiceModeSkeleton(ep.EP_Mode):
 
     def mode_started(self):
         self.title_layer.set_text(str(self.name))
-        self.game.sound.play('service_enter')
+        self.game.sound.play(self.game.assets.sfx_serviceStart)
 
     def mode_stopped(self):
-        self.game.sound.play('service_exit')
+        self.game.sound.play(self.game.assets.sfx_menuExit)
         if self.game.service_mode not in self.game.modes and self.game.usb_update:
             sys.exit(42)
 
@@ -63,7 +63,7 @@ class ServiceModeList(ServiceModeSkeleton):
             self.item.disable()
             if (self.iterator < self.max):
                 self.iterator += 1
-            self.game.sound.play('service_next')
+            self.game.sound.play(self.game.assets.sfx_menuUp)
             self.change_item()
         return True
 
@@ -72,7 +72,7 @@ class ServiceModeList(ServiceModeSkeleton):
             self.item.disable()
             if (self.iterator > 0):
                 self.iterator -= 1
-            self.game.sound.play('service_previous')
+            self.game.sound.play(self.game.assets.sfx_menuDown)
             self.change_item()
         elif self.no_exit_switch:
             self.exit()
@@ -145,7 +145,7 @@ class DoUpdate(ServiceModeList):
         super(DoUpdate, self).mode_started()
 
     def mode_stopped(self):
-        self.game.sound.play('service_exit')
+        self.game.sound.play(self.game.assets.sfx_menuExit)
 
     def sw_enter_active(self,sw):
         print "Derp"
@@ -155,6 +155,8 @@ class DoUpdate(ServiceModeList):
             self.item_layer.set_text("COPYING FILES")
             self.instruction_layer.set_text("DO NOT POWER OFF")
             self.delay(delay=1,handler=self.copy_files)
+        else:
+            self.game.sound.play(self.game.assets.sfx_menuReject)
         return True
 
     def copy_files(self):
@@ -389,7 +391,7 @@ class SettingsEditor(ServiceModeList):
         super(SettingsEditor, self).mode_started()
 
     def mode_stopped(self):
-        self.game.sound.play('service_exit')
+        self.game.sound.play(self.game.assets.sfx_menuExit)
 
     def sw_enter_active(self, sw):
         if not self.no_exit_switch:
@@ -439,7 +441,7 @@ class SettingsEditor(ServiceModeList):
             self.item.disable()
             if (self.iterator < self.max):
                 self.iterator += 1
-            self.game.sound.play('service_next')
+            self.game.sound.play(self.game.assets.sfx_menuUp)
             self.change_item()
         else:
             if self.option_index < (len(self.item.options) - 1):
@@ -460,7 +462,7 @@ class SettingsEditor(ServiceModeList):
             self.item.disable()
             if (self.iterator > 0):
                 self.iterator -= 1
-            self.game.sound.play('service_previous')
+            self.game.sound.play(self.game.assets.sfx_menuDown)
             self.change_item()
         else:
             if self.option_index > 0:

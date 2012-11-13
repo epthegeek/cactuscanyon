@@ -393,6 +393,19 @@ class Assets():
 
         self.sfx_chimeOut = 'sfx_chimeOut'
         self.game.sound.register_sound(self.sfx_chimeOut, self.sfx_path + "Bell-100-10-1000.wav")
+
+        self.sfx_serviceStart = 'sfx_serviceStart'
+        self.game.sound.register_sound(self.sfx_serviceStart, self.sfx_path + "989-sfx-service-startup.wav")
+        self.sfx_menuUp = 'sfx_menuUp'
+        self.game.sound.register_sound(self.sfx_menuUp, self.sfx_path + "985-sfx-menu-up.wav")
+        self.sfx_menuDown = 'sfx_menuDown'
+        self.game.sound.register_sound(self.sfx_menuDown, self.sfx_path + "986-sfx-menu-down.wav")
+        self.sfx_menuEnter = 'sfx_menuEnter'
+        self.game.sound.register_sound(self.sfx_menuEnter, self.sfx_path + "987-sfx-menu-enter.wav")
+        self.sfx_menuExit = 'sfx_menuExit'
+        self.game.sound.register_sound(self.sfx_menuExit, self.sfx_path + "988-sfx-menu-exit.wav")
+        self.sfx_menuReject = 'sfx_menuReject'
+        self.game.sound.register_sound(self.sfx_menuReject, self.sfx_path + "982-sfx-menu-reject.wav")
     # Quotes
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
