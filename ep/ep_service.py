@@ -124,6 +124,9 @@ class DoUpdate(ServiceModeList):
         self.okToUpdate = False
         self.items = []
         # list the contents of the USB path
+
+    def mode_started(self):
+        super(DoUpdate, self).mode_started()
         dirs = os.listdir(self.game.usb_location)
         # check them all for the update files
         for directory in dirs:
@@ -140,9 +143,6 @@ class DoUpdate(ServiceModeList):
             print "Didn't find the update"
             self.name = "FILES UPDATE"
             self.items.append( UpdateItem("FILES NOT FOUND"))
-
-    def mode_started(self):
-        super(DoUpdate, self).mode_started()
 
     def mode_stopped(self):
         self.game.sound.play(self.game.assets.sfx_menuExit)
