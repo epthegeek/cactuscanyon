@@ -106,7 +106,7 @@ class Interrupter(ep.EP_Mode):
             return
         # otherwise, party on
         # play a quote
-        self.game.base.play_quote(self.game.assets.quote_dontMove)
+        self.game.base.priority_quote(self.game.assets.quote_dontMove)
         # show some display
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_skyline.frames[0])
         myLayer = dmd.TextLayer(128/2,14, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("BALL SAVED")
