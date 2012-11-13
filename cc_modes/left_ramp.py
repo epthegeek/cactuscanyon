@@ -205,6 +205,8 @@ class LeftRamp(ep.EP_Mode):
             textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
             textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
             combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+            self.game.sound.play(self.game.assets.sfx_glumRiff)
+
             self.layer = combined
             myWait = 1.5
 

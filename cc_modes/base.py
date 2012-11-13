@@ -569,8 +569,8 @@ class BaseGameMode(ep.EP_Mode):
     def sw_flipperLwL_active(self,sw):
         # if both flippers are hit, kill the bonus
         if self.game.switches.flipperLwL.is_active():
-            print "Both flippers pressed"
-            print "Skipdrunk = " + str(self.skipDrunk) + " DMB Starting = " + str(self.game.drunk_multiball.starting)
+            #print "Both flippers pressed"
+            #print "Skipdrunk = " + str(self.skipDrunk) + " DMB Starting = " + str(self.game.drunk_multiball.starting)
             # if the bonus is active, kill that
             if self.doingBonus:
                 self.abort_bonus()

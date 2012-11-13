@@ -78,6 +78,9 @@ class SuperFilter(ep.EP_Mode):
     # mine entrance
     def sw_mineEntrance_active(self,sw):
         self.game.skill_shot.super_hit()
+    # mine poppper
+    def sw_minePopper_active_for_100ms(self,sw):
+        self.game.skill_shot.super_hit()
     # saloon gate
     def sw_saloonGate_active(self,sw):
         self.game.skill_shot.super_hit()

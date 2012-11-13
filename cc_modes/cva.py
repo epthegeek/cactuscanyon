@@ -111,6 +111,7 @@ class CvA(ep.EP_Mode):
                 mode.abort_display()
         # if there's a quickdraw running, shut it down
         if self.game.quickdraw.running:
+            print "aborting running quickdraw for CVA"
             self.game.quickdraw.lost(self.game.quickdraw.side)
 
     ### Jackpot switches
@@ -704,44 +705,45 @@ class CvA(ep.EP_Mode):
         self.taunt_timer()
 
     def hit_alien(self,target):
-        # flasher flourish
-        self.game.base.red_flasher_flourish()
-        # cancel the display
-        self.cancel_delayed("Display")
-        # remove the dead alien
-        print "REMOVE ALIEN - " + str(target)
-        self.activeAliens.remove(target)
-        # count the kill
-        self.aliensKilled += 1
-        # and count it for the round
-        self.aliensKilledRound += 1
-        # do the display of the dying
-        anim = self.game.assets.dmd_cvaShot
-        myWait = len(anim.frames) / 10.0
-        animLayer = ep.EP_AnimatedLayer(anim)
-        animLayer.hold=True
-        animLayer.frame_time = 6
-        animLayer.composite_op = "blacksrc"
-        myString = self.point_value("ALIEN")
-        self.game.score(myString)
-        # add the points to the running total
-        self.alienPoints += myString
-        titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("ALIEN KILLED")
-        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
-        combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
-        self.layer = combined
-        self.delay(delay=0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaGroan)
-        self.game.sound.play(self.game.assets.sfx_cvaAlienHit)
-        # delay the normal display and next saucer
-        theDelay = myWait + 1.5
-        # if all 4 are dead, we change modes to the ship
-        if self.aliensKilledRound == 4:
-            self.delay(delay=theDelay,handler=self.switch_modes,param="SHIP")
-        elif self.aliensKilledRound == 2:
-            print "WAVE 2 NOW"
-            self.delay("Aliens",delay=theDelay,handler=self.teleport_aliens,param=2)
-        else:
-            self.delay("Display",delay=theDelay,handler=self.update_display)
+        if target in self.activeAliens:
+            # flasher flourish
+            self.game.base.red_flasher_flourish()
+            # cancel the display
+            self.cancel_delayed("Display")
+            # remove the dead alien
+            print "REMOVE ALIEN - " + str(target)
+            self.activeAliens.remove(target)
+            # count the kill
+            self.aliensKilled += 1
+            # and count it for the round
+            self.aliensKilledRound += 1
+            # do the display of the dying
+            anim = self.game.assets.dmd_cvaShot
+            myWait = len(anim.frames) / 10.0
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold=True
+            animLayer.frame_time = 6
+            animLayer.composite_op = "blacksrc"
+            myString = self.point_value("ALIEN")
+            self.game.score(myString)
+            # add the points to the running total
+            self.alienPoints += myString
+            titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("ALIEN KILLED")
+            scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
+            combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
+            self.layer = combined
+            self.delay(delay=0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaGroan)
+            self.game.sound.play(self.game.assets.sfx_cvaAlienHit)
+            # delay the normal display and next saucer
+            theDelay = myWait + 1.5
+            # if all 4 are dead, we change modes to the ship
+            if self.aliensKilledRound == 4:
+                self.delay(delay=theDelay,handler=self.switch_modes,param="SHIP")
+            elif self.aliensKilledRound == 2:
+                print "WAVE 2 NOW"
+                self.delay("Aliens",delay=theDelay,handler=self.teleport_aliens,param=2)
+            else:
+                self.delay("Display",delay=theDelay,handler=self.update_display)
 
 
     def point_value(self,type):
