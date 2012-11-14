@@ -624,6 +624,20 @@ class BaseGameMode(ep.EP_Mode):
         # kill the player number display if active
         self.game.interrupter.abort_player_number()
 
+    def sw_shooterLane_active_for_3s(self):
+        if self.game.drunk_multiball.running:
+            self.autoplunge_correct("Drunk Multiball")
+        elif self.game.gm_multiball.running:
+            self.autoplunge_correct("Goldmine Multiball")
+        elif self.game.cva.running:
+            self.autoplunge_correct("Cowboys VS Aliens")
+        elif self.game.stampede.running:
+            self.autoplunge_correct("Stampede Multiball")
+        elif self.game.marshall_multiball.running:
+            self.autoplunge_correct("Marshall Multiball")
+        else:
+            pass
+
     def sw_shooterLane_active_for_5s(self,sw):
         status = self.game.show_tracking('highNoonStatus')
         if status == "RUNNING" or status == "FINISH":
@@ -901,8 +915,13 @@ class BaseGameMode(ep.EP_Mode):
         # update the lamps to show extra ball
         self.lamp_update()
 
-
     def guns_flash(self,type=1):
         if type == 1:
             self.game.coils.leftGunFlasher.schedule(0x00101010,cycle_seconds=1)
             self.game.coils.rightGunFlasher.schedule(0x00010101,cycle_seconds=1)
+
+    def autoplunge_correct(self,string):
+        # if it's still there now, and there's supposed to be balls in play - launch
+        if self.game.switches.shooterLane.is_active() and self.game.trough.num_balls_in_play > 0:
+            print "AUTO PLUNGE CORRECTION - Triggered by " + string
+            self.game.coils.autoPlunger.pulse(20)
