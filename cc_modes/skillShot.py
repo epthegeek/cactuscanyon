@@ -581,6 +581,8 @@ class SkillShot(ep.EP_Mode):
             # award the prize
             self.skillshot_award()
         else:
+            # clear the prizes
+            self.selectedPrizes = ""
             duration = self.game.base.priority_quote(self.game.assets.quote_superFail)
             self.start_gameplay(duration)
 
