@@ -249,17 +249,17 @@ class BankRobbery(ep.EP_Mode):
             if self.have_won:
                 self.have_won = False
                 # delay for the dude getting shot animation to finish
-                self.delay(delay=self.deathWait,handler=self.polly_saved)
+                self.delay("Mode Timer",delay=self.deathWait,handler=self.polly_saved)
             # how about any guy?
             if self.banner:
                 self.banner = False
                 # if we need to show a dude killed banner, do that
-                self.delay(delay=self.deathWait,handler=self.banner_display)
+                self.delay("Mode Timer",delay=self.deathWait,handler=self.banner_display)
             # is a guy shooting?
             if self.shooting:
                 self.shooting = False
                 # set a delay to put the plain guy back after
-                self.delay(delay=self.shotWait,handler=self.end_shot_sequence)
+                self.delay("Mode Timer",delay=self.shotWait,handler=self.end_shot_sequence)
             # both of those bail before ticking down the timer and looping back
 
             ## tick down the timer
@@ -415,7 +415,7 @@ class BankRobbery(ep.EP_Mode):
         # activate it
         self.layer = banner
         # delay a return to in progress
-        self.delay(delay=1.5,handler=self.in_progress)
+        self.delay("Mode Timer",delay=1.5,handler=self.in_progress)
 
     def build_display(self,awardTextString,awardScoreString):
         # create the two text lines
