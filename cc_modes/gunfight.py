@@ -113,6 +113,7 @@ class Gunfight(ep.EP_Mode):
         self.game.set_tracking('lampStatus',"OFF")
         self.game.gi_control("OFF")
         self.game.lamp_control.disable_bad_guys()
+        self.game.lamp_control.disable_bonus_lanes()
         self.lamp_update()
         if side == 0:
             self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)

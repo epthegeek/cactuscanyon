@@ -966,8 +966,7 @@ class LampControl(ep.EP_Mode):
     #
     def bonus_lanes(self,External=True):
         # reset first
-        self.game.lamps.leftBonusLane.disable()
-        self.game.lamps.rightBonusLane.disable()
+        self.disable_bonus_lanes()
 
         # if it was an external call just to the bonus lanes, make sure they should be on
         if External:
@@ -985,3 +984,6 @@ class LampControl(ep.EP_Mode):
         if self.game.show_tracking('bonusLaneStatus',1) == 'ON':
             self.game.lamps.rightBonusLane.enable()
 
+    def disable_bonus_lanes(self):
+        self.game.lamps.leftBonusLane.disable()
+        self.game.lamps.rightBonusLane.disable()
