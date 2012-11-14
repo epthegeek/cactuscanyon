@@ -57,7 +57,7 @@ class Saloon(ep.EP_Mode):
             return
 
         # if cva is ready, we do that - if guns or less is running
-        if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:]:
+        if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:] and not self.game.bart.bossFight:
             self.wait_until_unbusy(self.start_cva)
             return
 

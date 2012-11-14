@@ -93,7 +93,7 @@ class Mine(ep.EP_Mode):
         print stackLevel
 
         # if cva is ready, we do that - as long as no mode above guns is running
-        if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:]:
+        if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:] and not self.game.bart.bossFight:
             self.game.mountain.busy = True
             self.game.modes.add(self.game.cva)
             self.game.cva.intro(entry = "mine")
