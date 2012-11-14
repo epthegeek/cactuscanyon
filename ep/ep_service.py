@@ -95,11 +95,11 @@ class ServiceMode(ServiceModeList):
         self.tests = Tests(self.game, self.priority+1, font, extra_tests)
         self.items = [self.tests]
         if len(self.game.settings) > 0:
-            print "Service - Adding Settings"
+            #print "Service - Adding Settings"
             self.settings = Settings(self.game, self.priority+1, font, 'Settings', self.game.settings)
             self.items.append(self.settings)
         if len(self.game.game_data) > 0:
-            print "Service - Adding statistics"
+            #print "Service - Adding statistics"
             self.statistics = Statistics(self.game, self.priority+1, font, 'Statistics', self.game.game_data)
             self.items.append(self.statistics)
         if self.game.usb_update:
@@ -256,7 +256,7 @@ class SwitchTest(ServiceModeSkeleton):
 
     def switch_handler(self, sw):
         if (sw.state):
-            self.game.sound.play('service_switch_edge')
+            self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
         self.item_layer.set_text(sw.name + ' - ' + str(sw.state))
         return True
 
@@ -272,7 +272,7 @@ class Statistics(ServiceModeList):
         self.items = []
         for section in itemlist:
             if section == "Audits":
-                print "adding " + section
+                #print "adding " + section
                 self.items.append( StatsDisplay( self.game, priority + 1, font, str(section),itemlist[section] ))
 
 class StatsDisplay(ServiceModeList):
@@ -282,7 +282,7 @@ class StatsDisplay(ServiceModeList):
         self.name = name
         self.value_layer = dmd.TextLayer(128/2, 22, font, "center")
         self.items = []
-        print itemlist
+        #print itemlist
         for item in sorted(itemlist.iterkeys()):
                 self.items.append( StatsItem(str(item), itemlist[item]) )
         self.layer = dmd.GroupedLayer(128, 32, [self.title_layer, self.item_layer, self.value_layer])
@@ -343,7 +343,7 @@ class SwitchTest(ServiceModeSkeleton):
 
     def switch_handler(self, sw):
         if (sw.state):
-            self.game.sound.play('service_switch_edge')
+            self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
         self.item_layer.set_text(sw.name + ' - ' + str(sw.state))
         return True
 
@@ -412,7 +412,7 @@ class SettingsEditor(ServiceModeList):
             self.state = 'nav'
             self.instruction_layer.set_text("Change saved")
             self.delay(name='change_complete', event_type=None, delay=1, handler=self.change_complete)
-            self.game.sound.play('service_save')
+            self.game.sound.play(self.game.assets.sfx_menuSave)
             self.game.user_settings[self.name][self.item.name]=self.item.value
             self.stop_blinking = True
             self.game.save_settings()
@@ -428,7 +428,7 @@ class SettingsEditor(ServiceModeList):
             self.state = 'nav'
             self.value_layer.set_text(str(self.item.value))
             self.stop_blinking = True
-            self.game.sound.play('service_cancel')
+            self.game.sound.play(self.game.assets.sfx_menuCancel)
             self.instruction_layer.set_text("Change cancelled")
             self.delay(name='change_complete', event_type=None, delay=1, handler=self.change_complete)
 

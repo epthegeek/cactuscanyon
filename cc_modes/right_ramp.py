@@ -194,6 +194,8 @@ class RightRamp(ep.EP_Mode):
             textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
             combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
             self.layer = combined
+            self.game.sound.play(self.game.assets.sfx_glumRiff)
+
             myWait = 1.5
 
         self.delay(name="Display",delay=myWait,handler=self.blink_award_text)

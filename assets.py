@@ -406,6 +406,12 @@ class Assets():
         self.game.sound.register_sound(self.sfx_menuExit, self.sfx_path + "988-sfx-menu-exit.wav")
         self.sfx_menuReject = 'sfx_menuReject'
         self.game.sound.register_sound(self.sfx_menuReject, self.sfx_path + "982-sfx-menu-reject.wav")
+        self.sfx_menuCancel = 'sfx_menuCancel'
+        self.game.sound.register_sound(self.sfx_menuCancel, self.sfx_path + "983-sfx-menu-cancel.wav")
+        self.sfx_menuSwitchEdge = 'sfx_menuSwitchEdge'
+        self.game.sound.register_sound(self.sfx_menuSwitchEdge, self.sfx_path + "980-sfx-menu-switch-edge.wav")
+        self.sfx_menuSave = 'sfx_menuSave'
+        self.game.sound.register_sound(self.sfx_menuSave, self.sfx_path + "984-sfx-menu-save.wav")
     # Quotes
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
@@ -1189,7 +1195,6 @@ class Assets():
         self.dmd_bossHit = dmd.Animation().load(self.dmd_path+'boss-hit.dmd')
         
         # Shared Paths
-        self.shared_sound_path = curr_file_path + "/shared/sound/"
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"
 
         # Shared Fonts
@@ -1207,11 +1212,3 @@ class Assets():
         self.font_07x4 = dmd.Font(self.shared_dmd_path + "Font07x4.dmd")
         self.font_07x5 = dmd.Font(self.shared_dmd_path + "Font07x5.dmd")
 
-        # Shared Sounds
-        self.game.sound.register_sound('service_enter', self.shared_sound_path + "menu_in.wav")
-        self.game.sound.register_sound('service_exit', self.shared_sound_path + "menu_out.wav")
-        self.game.sound.register_sound('service_next', self.shared_sound_path + "next_item.wav")
-        self.game.sound.register_sound('service_previous', self.shared_sound_path + "previous_item.wav")
-        self.game.sound.register_sound('service_switch_edge', self.shared_sound_path + "switch_edge.wav")
-        self.game.sound.register_sound('service_save', self.shared_sound_path + "save.wav")
-        self.game.sound.register_sound('service_cancel', self.shared_sound_path + "cancel.wav")

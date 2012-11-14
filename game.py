@@ -59,13 +59,15 @@ class CCGame(game.BasicRecordableGame):
             self.game_location = config.values['game_location']
 
         super(CCGame, self).__init__(machineType)
-        if recording:
-            print "I'M RECORDING"
-            self.start_recording()
         self.load_config('cc_machine.yaml')
         self.sound = sound.SoundController(self)
         self.lampctrl = lamps.LampController(self)
         self.assets = Assets(self)
+
+        if recording:
+            print "I'M RECORDING"
+            self.start_recording()
+
         self.showcase = ep.EP_Showcase(self)
 
         ## This resets the color mapping so my 1 value pixels are black - even on composite - HUGE WIN!
