@@ -223,7 +223,7 @@ class Ambush(ep.EP_Mode):
             # loop through and cancel all the target timers
             for target in range(0,4,1):
                 if self.badGuyTimer[target] != 0 and self.badGuyTimer[target] != None:
-                    print "CANCEL TIMER: " + self.targetNames[target] + " HAD: " + str(self.badGuyTimer[target])
+                    #print "CANCEL TIMER: " + self.targetNames[target] + " HAD: " + str(self.badGuyTimer[target])
                     self.cancel_delayed(self.targetNames[target])
             #textString = "< AMBUSH PAUSED >"
             #self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
@@ -233,7 +233,7 @@ class Ambush(ep.EP_Mode):
         for target in range(0,4,1):
             # loop through and restart any timer that has value
             if self.badGuyTimer[target] != 0 and self.badGuyTimer[target] != None:
-                print "RESTARTING TARGET: " + str(target) + " TIME: " + str(self.badGuyTimer[target])
+                #print "RESTARTING TARGET: " + str(target) + " TIME: " + str(self.badGuyTimer[target])
                 self.targetTimer(target)
         self.update_display()
 
@@ -241,7 +241,7 @@ class Ambush(ep.EP_Mode):
         # tick one off the timer for that target
         if self.badGuyTimer[target] > 0:
             self.badGuyTimer[target] -= 1
-        print "TIMER WORKING ON TARGET: " + str(target) + " - TIME: " + str(self.badGuyTimer[target])
+        #print "TIMER WORKING ON TARGET: " + str(target) + " - TIME: " + str(self.badGuyTimer[target])
         # if we're down to 2 seconds speed the light up and maybe play a quote
         if self.badGuyTimer[target] == 2:
             self.lamps[target].schedule(0x0F0F0F0F)

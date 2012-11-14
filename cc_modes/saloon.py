@@ -48,6 +48,14 @@ class Saloon(ep.EP_Mode):
             self.kick()
             return
 
+        # Divert here for bionic bart if ready - unless something above guns is running
+        if self.game.show_tracking('bionicStatus') == "READY" and True not in stackLevel[1:]:
+            # if any of the polly modes is running, bail
+            self.game.modes.add(self.game.bionic)
+            self.game.bionic.start_bionic()
+            # then break out of the rest of this action
+            return
+
         # if cva is ready, we do that - if guns or less is running
         if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:]:
             self.wait_until_unbusy(self.start_cva)
@@ -78,24 +86,17 @@ class Saloon(ep.EP_Mode):
             else:
                 pass
 
-        # Divert here for bionic bart if ready - unless something above guns is running
-        if self.game.show_tracking('bionicStatus') == "READY" and True not in stackLevel[1:]:
-            # if any of the polly modes is running, bail
-            self.game.modes.add(self.game.bionic)
-            self.game.bionic.start_bionic()
-            # then break out of the rest of this action
-            return
-        else:
-            ## if it it counts as a hit so we have to do that first
-            if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop" and not self.smacked:          
+        ## if it it counts as a hit so we have to do that first
+        if ep.last_switch != "saloonBart" and ep.last_switch != "rightLoopTop" and not self.smacked:
             # set the busy flag
-                self.is_busy()
-                # then hit bart
-                self.game.bart.hit(True)
-            # now we check the bounty after an appropriate delay.
-            self.wait_until_unbusy(self.check_bounty)
-            ## -- set the last switch hit --
-            ep.last_switch = "saloonPopper"
+            self.is_busy()
+            # then hit bart
+            self.game.bart.hit(True)
+
+        # now we check the bounty after an appropriate delay.
+        self.wait_until_unbusy(self.check_bounty)
+        ## -- set the last switch hit --
+        ep.last_switch = "saloonPopper"
 
     def unsmack(self):
         self.smacked = False

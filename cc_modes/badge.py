@@ -57,6 +57,7 @@ class Badge(ep.EP_Mode):
         print "RESETTING BADGE STATUS"
         for i in range(0,5,1):
             self.game.set_tracking('starStatus',"False",i)
+        print self.game.show_tracking('starStatus')
         # reset the combos
         self.game.set_tracking('combos',0)
         # reset the barts defeated

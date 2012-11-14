@@ -419,10 +419,10 @@ class BaseGameMode(ep.EP_Mode):
         # this is for turning the guns back on if the conditions are good
         if True in self.game.show_tracking('stackLevel') or self.game.skill_shot.super or self.game.bart.bossFight:
         # if any stack level is active, new gunfight action is not allowed
-            print "Guns not allowed right now"
+            #print "Guns not allowed right now"
             return False
         else:
-            print "Guns allowed right now"
+            #print "Guns allowed right now"
             return True
 
 
