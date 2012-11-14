@@ -46,6 +46,7 @@ class BaseGameMode(ep.EP_Mode):
         #else:
         #    self.skipDrunk = False
         self.skipDrunk = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Can skip Drunk Multiball Intro']
+        self.drunkStacking = 'Enabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball Stacking']
 
     def mode_started(self):
         # set the number for the hits to the beer mug to start drunk multiball
@@ -646,6 +647,9 @@ class BaseGameMode(ep.EP_Mode):
                 print "CVA, BB, or High Noon Running - no stampede"
                 pass
             else:
+                # if DMB is running and stacking is disabled, don't allow it to start
+                if self.game.drunk_multiball.running and not self.drunkStacking:
+                    pass
                 # this check hopefully prevents concurrent checks from colliding
                 if self.game.stampede not in self.game.modes:
                     self.game.modes.add(self.game.stampede)

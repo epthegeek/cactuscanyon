@@ -137,9 +137,13 @@ class RightRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
 
         elif stage == 3:
-            self.game.increase_tracking('rightRampStage')
-            self.game.modes.add(self.game.bank_robbery)
-            self.game.bank_robbery.start_bank_robbery()
+            # if drunk stacking isn't allowed - don't start save polly
+            if self.game.drunk_multiball.running and not self.game.base.drunkStacking:
+                self.score_with_bonus(50000)
+            else:
+                self.game.increase_tracking('rightRampStage')
+                self.game.modes.add(self.game.bank_robbery)
+                self.game.bank_robbery.start_bank_robbery()
 
 
     ## for now, anything above 3 is 'complete'

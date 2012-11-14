@@ -165,6 +165,9 @@ Gameplay (Feature):
     options: [15,60]
     increments: 5
     default: 30
+  'Drunk Multiball Stacking':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
   'Marshall Multiball':
     options: ['Enabled','Disabled']
     default: 'Enabled'

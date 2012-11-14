@@ -110,6 +110,9 @@ class CenterRamp(ep.EP_Mode):
         # if move your train is running, don't start save polly
             if self.game.move_your_train.running:
                 return
+            # if drunk multiball is running - dont' start polly if stacking is off
+            elif self.game.drunk_multiball.running and not self.game.base.drunkStacking:
+                self.score_with_bonus(50000)
             else:
                 self.game.increase_tracking('centerRampStage')
                 self.game.modes.add(self.game.save_polly)

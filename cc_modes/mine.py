@@ -123,7 +123,11 @@ class Mine(ep.EP_Mode):
                 if True in stackLevel[5:]:
                     self.game.mountain.kick()
                 else:
-                    self.start_multiball()
+                    # if DMB is running, and stacking is disabled - don't start Goldmine
+                    if self.game.drunk_multiball.running and not self.game.base.drunkStacking:
+                        self.game.mountain.kick()
+                    else:
+                        self.start_multiball()
             # not start multiball? ok, lock ball perhaps?
             elif self.game.show_tracking('mineStatus') == "LOCK":
                 self.lock_ball()

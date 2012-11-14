@@ -128,10 +128,14 @@ class LeftRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 3:
-            # stage 3 now starts river chase
-            self.game.increase_tracking('leftRampStage')
-            self.game.modes.add(self.game.river_chase)
-            self.game.river_chase.start_river_chase()
+            # if drunk stacking isn't allowed - don't start save polly
+            if self.game.drunk_multiball.running and not self.game.base.drunkStacking:
+                self.score_with_bonus(50000)
+            else:
+                # stage 3 now starts river chase
+                self.game.increase_tracking('leftRampStage')
+                self.game.modes.add(self.game.river_chase)
+                self.game.river_chase.start_river_chase()
 
         else:
             start_value = self.game.increase_tracking('adventureCompleteValue',5000)
