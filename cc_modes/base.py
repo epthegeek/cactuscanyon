@@ -614,7 +614,7 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.trough.balls_to_autoplunge > 0:
             print "AUTOPLUNGE, MF"
             self.game.trough.balls_to_autoplunge -= 1
-            self.game.coils.autoPlunger.pulse(30)
+            self.game.coils.autoPlunger.pulse(20)
 
 
     def sw_shooterLane_inactive_for_100ms(self,sw):
