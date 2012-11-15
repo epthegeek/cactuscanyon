@@ -624,7 +624,7 @@ class BaseGameMode(ep.EP_Mode):
         # kill the player number display if active
         self.game.interrupter.abort_player_number()
 
-    def sw_shooterLane_active_for_3s(self):
+    def sw_shooterLane_active_for_3s(self,sw):
         if self.game.drunk_multiball.running:
             self.autoplunge_correct("Drunk Multiball")
         elif self.game.gm_multiball.running:
@@ -659,6 +659,9 @@ class BaseGameMode(ep.EP_Mode):
             stackLevel = self.game.show_tracking('stackLevel')
             if True in stackLevel[5:]:
                 print "CVA, BB, or High Noon Running - no stampede"
+                pass
+            elif self.game.gunfight.running:
+                print "Stampede check: Gunfight in the way, check later"
                 pass
             else:
                 # if DMB is running and stacking is disabled, don't allow it to start
@@ -905,7 +908,7 @@ class BaseGameMode(ep.EP_Mode):
                     self.game.modes.add(self.game.marshall_multiball)
 
     def sw_phantomSwitch_active(self,sw):
-        self.game.trough.num_balls_in_play = 1
+        self.game.trough.num_balls_in_play = 0
         self.game.ball_drained()
 
     def sw_phantomSwitch2_active(self,sw):

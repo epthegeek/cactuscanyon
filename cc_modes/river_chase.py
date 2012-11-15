@@ -158,6 +158,8 @@ class RiverChase(ep.EP_Mode):
         if self.shotsSoFar == self.shotsToWin:
             # winner winner, chicken dinner
             self.polly_saved()
+            # this has to be reset or the display abort screws with stuff later
+            self.shotsSoFar = 0
         else:
             # set the banner flag
             self.banner = True
@@ -358,6 +360,7 @@ class RiverChase(ep.EP_Mode):
         self.layer = None
         # set the tracking on the ramps
         self.game.set_tracking('leftRampStage',5)
+        self.shotsSoFar = 0
         self.lamp_update()
         self.end_save_polly()
 

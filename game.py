@@ -46,8 +46,10 @@ class CCGame(game.BasicRecordableGame):
     def __init__(self,machineType, fakePinProc = False,recording = False,playback = False):
         if (fakePinProc):
             if playback:
+                self.playback = True
                 config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROCPlayback'
             else:
+                self.playback = False
                 config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
             self.fakePinProc = True
         else:
