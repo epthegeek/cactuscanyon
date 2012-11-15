@@ -226,15 +226,6 @@ class Attract(ep.EP_Mode):
     def sw_exit_active(self, sw):
         return True
 
-    # Outside of the service mode, up/down control audio volume.
-    def sw_down_active(self, sw):
-        volume = self.game.sound.volume_down()
-        return True
-
-    def sw_up_active(self, sw):
-        volume = self.game.sound.volume_up()
-        return True
-
     # Start button starts a game if the trough is full.  Otherwise it
     # initiates a ball search.
     # This is probably a good place to add logic to detect completely lost balls.

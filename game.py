@@ -62,6 +62,7 @@ class CCGame(game.BasicRecordableGame):
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
+        ## init the sound
         self.sound = sound.SoundController(self)
         self.lampctrl = lamps.LampController(self)
         self.assets = Assets(self)
@@ -103,6 +104,12 @@ class CCGame(game.BasicRecordableGame):
         # and settings Game settings
         print "Loading game settings"
         self.load_settings(settings_defaults_path, user_settings_path)
+
+        # set the volume per the settings
+        self.sound.music_offset = self.user_settings['Sound']['Music volume offset']
+        volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
+        print "Setting initial volume: " + str(volume_to_set)
+        self.sound.set_volume(volume_to_set)
 
         # Set the balls per game per the user settings
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']
@@ -802,3 +809,27 @@ class CCGame(game.BasicRecordableGame):
                 self.modes.remove(self.switch_block)
         else:
             pass
+
+    def volume_up(self):
+        """ """
+        if not self.sound.enabled: return
+        #print "Current Volume: " + str(self.sound.volume)
+        if self.sound.volume <= 0.9:
+            self.sound.volume += 0.1
+            #print "new math value: " + str(self.sound.volume)
+            self.sound.set_volume(self.sound.volume)
+            #print "10 value: " + str(self.sound.volume*10)
+            #print "Int value: " + str(int(self.sound.volume*10))
+        return self.sound.volume*10
+
+    def volume_down(self):
+        """ """
+        if not self.sound.enabled: return
+        #print "Current Volume: " + str(self.sound.volume)
+        if self.sound.volume >= 0.2:
+            self.sound.volume -= 0.1
+            #print "new math value: " + str(self.sound.volume)
+            self.sound.set_volume(self.sound.volume)
+            #print "10 value: " + str(self.sound.volume*10)
+            #print "Int value: " + str(int(self.sound.volume*10))
+        return self.sound.volume*10

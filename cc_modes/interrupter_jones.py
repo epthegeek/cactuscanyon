@@ -28,6 +28,7 @@ class Interrupter(ep.EP_Mode):
         self.rotator = [True,False,False,False,False]
         self.statusDisplay = "Off"
         self.page = 0
+        self.playing = False
 
     def display_player_number(self,idle=False):
         # if the skillshot display is busy, we don't trample on it
@@ -392,3 +393,61 @@ class Interrupter(ep.EP_Mode):
         self.game.base.play_quote(self.game.assets.quote_yippie)
         self.layer = dmd.ScriptedLayer(128,32,script)
         self.delay("Display",delay=2,handler=self.clear_layer)
+
+    # volume controls
+    # Outside of the service mode, up/down control audio volume.
+    def sw_down_active(self, sw):
+        print "Volume Down"
+        if self.game.service_mode not in self.game.modes:
+            # set the volume down one
+            volume = self.game.volume_down()
+            # save the value
+            print "New volume: " + str(int(volume))
+            self.game.user_settings['Sound']['Initial volume']= int(volume)
+            self.game.save_settings()
+            # if we're not in a game, turn on some music and throw a display
+            self.volume_display(int(volume))
+            return True
+
+    def sw_up_active(self, sw):
+        print "Volume Up"
+        if self.game.service_mode not in self.game.modes:
+            # set the volume up one
+            volume = self.game.volume_up()
+            print "New volume: " + str(int(volume))
+            self.game.user_settings['Sound']['Initial volume'] = int(volume)
+            self.game.save_settings()
+            self.volume_display(int(volume))
+            return True
+
+    def volume_display(self,volume):
+        # cancel any previous delay
+        self.cancel_delayed("Volume")
+        # start a song if one isn't already playing
+        if not self.playing and self.game.base not in self.game.modes:
+            self.playing = True
+            self.game.sound.play_music(self.game.assets.music_shooterLaneGroove,loops=-1)
+        # throw some display action
+        topLine = dmd.TextLayer(64,3,self.game.assets.font_7px_az, "center", opaque=True)
+        string = "VOLUME: " + str(volume)
+        topLine.set_text(string)
+        volumeLine = dmd.TextLayer(64,13,self.game.assets.font_13px_score, "center", opaque=False)
+        volumeString = ""
+        while len(volumeString) < volume:
+            volumeString += "A"
+        while len(volumeString) < 10:
+            volumeString += "B"
+        volumeString += "C"
+        volumeLine.set_text(volumeString)
+        self.layer = dmd.GroupedLayer(128,32,[topLine,volumeLine])
+        # set a delay to cancel
+        self.delay("Volume",delay = 2,handler=self.clear_volume_display)
+
+    def clear_volume_display(self):
+        # turn the music off
+        if self.game.base not in self.game.modes:
+            self.game.sound.stop_music()
+        # turn off the playing flag
+        self.playing = False
+        # clear the layer
+        self.clear_layer()
