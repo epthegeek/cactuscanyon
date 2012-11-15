@@ -39,6 +39,11 @@ class Match(ep.EP_Mode):
 
     def mode_started(self):
         self.winners = 0
+        self.zeroLayer.set_text("0",blink_frames=0)
+        self.p1Layer.set_text("",blink_frames=0)
+        self.p2Layer.set_text("",blink_frames=0)
+        self.p3Layer.set_text("",blink_frames=0)
+        self.p4Layer.set_text("",blink_frames=0)
 
     def run_match(self):
         self.game.sound.play(self.game.assets.sfx_ragtimePiano)
