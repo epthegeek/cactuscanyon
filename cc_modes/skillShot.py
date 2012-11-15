@@ -168,14 +168,29 @@ class SkillShot(ep.EP_Mode):
         # if we're not in the super skillshot, update the display right away
         if not self.super:
             print "UPDATING LAYER AFTER PRIZE GENERATE"
-            self.update_layer()
+            #self.update_layer()
+            self.intro_display()
+
+
+    def intro_display(self):
+        # copy the score layer
+        scoreLayer = self.game.score_display.layer
+        self.layer = scoreLayer
+        self.delay("Display",delay=1.5,handler=self.intro_transition)
+
+    def intro_transition(self):
+        prizeDisplay = self.generate_layer()
+        ep.EP_Transition(self,self.layer,prizeDisplay,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_SOUTH,callback=self.update_layer)
 
     def update_layer(self):
         # cancel any display delays - for the super startup anim
         self.cancel_delayed("Display")
         # set up the text layer of prizes
+        self.layer = self.generate_layer()
+
+    def generate_layer(self):
         prizeList = dmd.TextLayer(self.x, 1, self.game.assets.font_skillshot, "right", opaque=True).set_text(self.selectedPrizes)
-        self.layer = dmd.GroupedLayer(128, 32, [prizeList,self.mask, self.lasso])
+        return dmd.GroupedLayer(128, 32, [prizeList,self.mask, self.lasso])
 
     # if the ramp switch gets hit - shift the prizes over
     # take the last prize off the string and stick it back on the front
