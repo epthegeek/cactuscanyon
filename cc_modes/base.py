@@ -661,8 +661,8 @@ class BaseGameMode(ep.EP_Mode):
                 print "CVA, BB, or High Noon Running - no stampede"
                 pass
             elif self.game.gunfight.running:
-                print "Stampede check: Gunfight in the way, check later"
-                pass
+                print "Stampede check: Gunfight in the way, delaying to try again"
+                self.delay(delay=2,handler=self.check_stampede)
             else:
                 # if DMB is running and stacking is disabled, don't allow it to start
                 if self.game.drunk_multiball.running and not self.drunkStacking:
