@@ -102,7 +102,7 @@ class Stampede(ep.EP_Mode):
         # toss to the main display after the animation
         self.delay(name="Display",delay=myWait,handler=self.main_display)
         # play a quote
-        self.game.base.play_quote(self.game.assets.quote_stampedeStart)
+        self.game.base.priority_quote(self.game.assets.quote_stampedeStart)
         # start the music for stampede - delay this music start in case a quickdraw started at the same time
         self.delay(delay=1.5,handler=self.game.base.music_on,param=self.game.assets.music_stampede)
         # launch some more balls
