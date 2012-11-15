@@ -42,6 +42,7 @@ class Gunfight(ep.EP_Mode):
                           self.game.assets.quote_gunfightWinMarshall]
         self.win = False
         self.starting = False
+        self.shooting = False
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
@@ -94,6 +95,15 @@ class Gunfight(ep.EP_Mode):
             print "Gunfight - right loop bottom killed it"
             self.lost()
 
+    def sw_flipperLwL_active(self,sw):
+        if self.shooting and self.activeSide == 0:
+            self.game.sound.play(self.game.assets.sfx_explosion11)
+            self.game.coils.leftGunFlasher.pulse(30)
+
+    def sw_flipperLwR_active(self,sw):
+        if self.shooting and self.activeSide == 1:
+            self.game.sound.play(self.game.assets.sfx_explosion11)
+            self.game.coils.rightGunFlasher.pulse(30)
 
     def start_gunfight(self,side):
         self.starting = True
@@ -164,6 +174,7 @@ class Gunfight(ep.EP_Mode):
 
     def won(self):
         self.win = True
+        self.shooting = False
         # set some tracking
         self.game.increase_tracking('gunfightsWon')
         print "GUNFIGHT WON IS KILLING THE MUSIC"
@@ -205,6 +216,7 @@ class Gunfight(ep.EP_Mode):
         self.delay("Operational",delay=2,handler=self.end_gunfight)
 
     def lost(self):
+        self.shooting = False
         print "Gunfight - Lost routine"
         # cancel the delay, in case a switch sent us here
         self.cancel_delayed("Gunfight Lost")
@@ -329,11 +341,14 @@ class Gunfight(ep.EP_Mode):
         self.starting = False
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
+        # set the shooting flag
+        self.shooting = True
         # set a named timer for gunfight lost
         self.delay("Gunfight Lost",delay=4,handler=self.lost)
 
     def mode_stopped(self):
         self.running = False
+        self.shooting = False
         self.wipe_delays()
         self.starting = False
 
