@@ -192,7 +192,10 @@ class GoldMine(ep.EP_Mode):
         # set up the display during multiball
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_multiballFrame.frames[0])
         # title line
-        titleLine = dmd.TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("GOLD MINE MULTIBALL")
+        titleString = "GOLD MINE MULTIBALL"
+        if self.game.drunk_multiball.running:
+            titleString = "DRUNK MINE MULTIBALL"
+        titleLine = dmd.TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString)
         # score line
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
@@ -213,7 +216,10 @@ class GoldMine(ep.EP_Mode):
         if self.bandits:
             jackString = "TIME REMAINING: " + str(self.banditTimer)
         else:
-            jackString = "JACKPOTS = 500,000"
+            if self.game.drunk_multiball.running:
+                jackString = "JACKPOTS = 1,000,000"
+            else:
+                jackString = "JACKPOTS = 500,000"
         jackpotLine = dmd.TextLayer(128/2,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(jackString)
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,scoreLine,motherLine,jackpotLine])
         self.layer = combined
@@ -225,7 +231,11 @@ class GoldMine(ep.EP_Mode):
             # clear the display
             self.abort_display()
             # award the points
-            self.game.score(500000)
+            points = 500000
+            if self.game.drunk_multiball.running:
+                points += 500000
+            self.game.score(points)
+
             # count the jackpot
             self.jackpots += 1
             # if we get 3 or more, no restart
@@ -233,6 +243,8 @@ class GoldMine(ep.EP_Mode):
                 self.restarted = True
             # increase the motherlode value
             self.motherlodeValue += 250000
+            if self.game.drunk_multiball.running:
+                self.motherlodeValue += 250000
             # see if the multiplier goes up
             self.multiplier = self.check_multiplier()
             # play the animation
@@ -266,7 +278,10 @@ class GoldMine(ep.EP_Mode):
             awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
             awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
             awardTextTop.set_text("MULTIBALL JACKPOT")
-            awardTextBottom.set_text("500,000",blink_frames=4)
+            bottomString = "500,000"
+            if self.game.drunk_multiball.running:
+                bottomString = "1,000,000"
+            awardTextBottom.set_text(bottomString,blink_frames=4)
             combined = dmd.GroupedLayer(128,32,[awardTextTop,awardTextBottom])
             self.layer = combined
             # turn on the motherlode if needed
