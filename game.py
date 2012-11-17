@@ -62,6 +62,8 @@ class CCGame(game.BasicRecordableGame):
             self.game_location = config.values['game_location']
         # optional real knocker setting
         self.useKnocker = config.value_for_key_path(keypath='use_knocker', default=False)
+        if self.useKnocker:
+            print "Knocker Config Found!"
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
