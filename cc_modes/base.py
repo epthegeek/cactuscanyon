@@ -939,11 +939,14 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.trough.launch_balls(1,stealth=True)
 
     # knocker
-    def knock(self,value):
+    def knock(self,value,realOnly = False):
         if self.game.useKnocker:
             self.game.coils.knocker.pulse(20)
         else:
-            self.game.sound.play(self.game.assets.sfx_knocker)
+            if realOnly:
+                pass
+            else:
+                self.game.sound.play(self.game.assets.sfx_knocker)
         value -= 1
         # if there's more than one, come back
         if value > 0:

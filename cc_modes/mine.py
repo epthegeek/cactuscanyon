@@ -405,6 +405,8 @@ class Mine(ep.EP_Mode):
             self.lamp_update()
 
     def extra_ball_ending(self,isLong=True):
+        # hit the knocker
+        self.game.base.knock(1,realOnly = True)
         # play a quote
         if isLong:
             # play this quote

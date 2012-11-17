@@ -408,6 +408,8 @@ class BionicBart(ep.EP_Mode):
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold=True
             animLayer.frame_time = 4
+            # hit the knocker
+            self.game.base.knock(1,realOnly=True)
             self.game.sound.play(self.game.assets.sfx_explosion11)
             self.layer = animLayer
             # move the hat and bart
