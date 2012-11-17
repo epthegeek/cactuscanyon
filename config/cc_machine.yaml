@@ -204,6 +204,8 @@ PRCoils:
         number: C05
     minePopper:
         number: C06
+    knocker:
+        number: C07
     saloonPopper:
         number: C08
     troughEject:

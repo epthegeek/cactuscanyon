@@ -928,3 +928,23 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.switches.shooterLane.is_active() and self.game.trough.num_balls_in_play > 0:
             print "AUTO PLUNGE CORRECTION - Triggered by " + string
             self.game.coils.autoPlunger.pulse(20)
+
+    # this is to try to catch if a ball should have launched when the door was open
+    def sw_coinDoorClosed_active(self,sw):
+        print ("Checking ball count on door close")
+        if self.game.trough.num_balls_in_play != 0:
+            ball_count = self.game.trough.num_balls()
+            if ball_count == 4:
+                print ("The trough is full, but there should be a ball in play. Stealth Launch")
+                self.game.trough.launch_balls(1,stealth=True)
+
+    # knocker
+    def knock(self,value):
+        if self.game.useKnocker:
+            self.game.coils.knocker.pulse(20)
+        else:
+            self.game.sound.play(self.game.assets.sfx_knocker)
+        value -= 1
+        # if there's more than one, come back
+        if value > 0:
+            self.delay(delay=0.5,handler=self.knock,param=value)

@@ -55,10 +55,13 @@ class CCGame(game.BasicRecordableGame):
         else:
             self.fakePinProc = False
         self.restart = False
+        # optional USB updater config settings
         self.usb_update = config.value_for_key_path(keypath='usb_update', default=False)
         if self.usb_update:
             self.usb_location = config.values['usb_location']
             self.game_location = config.values['game_location']
+        # optional real knocker setting
+        self.useKnocker = config.value_for_key_path(keypath='use_knocker', default=False)
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
@@ -107,7 +110,8 @@ class CCGame(game.BasicRecordableGame):
 
         # set the volume per the settings
         self.sound.music_offset = self.user_settings['Sound']['Music volume offset']
-        volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
+        print "Setting initial offset: " + str(self.sound.music_offset)
+        volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10)
         print "Setting initial volume: " + str(volume_to_set)
         self.sound.set_volume(volume_to_set)
 
@@ -833,3 +837,4 @@ class CCGame(game.BasicRecordableGame):
             #print "10 value: " + str(self.sound.volume*10)
             #print "Int value: " + str(int(self.sound.volume*10))
         return self.sound.volume*10
+

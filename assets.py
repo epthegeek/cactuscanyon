@@ -412,6 +412,10 @@ class Assets():
         self.game.sound.register_sound(self.sfx_menuSwitchEdge, self.sfx_path + "980-sfx-menu-switch-edge.wav")
         self.sfx_menuSave = 'sfx_menuSave'
         self.game.sound.register_sound(self.sfx_menuSave, self.sfx_path + "984-sfx-menu-save.wav")
+
+        self.sfx_knocker = 'sfx_knocker'
+        self.game.sound.register_sound(self.sfx_knocker, self.sfx_path + "knocker.wav")
+
     # Quotes
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
@@ -915,6 +919,7 @@ class Assets():
         self.quote_yippie = 'quote_yippie'
         self.game.sound.register_sound(self.quote_yippie, self.quotes_path + "1959-yip-yip-yippie.wav")
         self.game.sound.register_sound(self.quote_yippie, self.quotes_path + "1957-woohoo-yippie.wav")
+
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

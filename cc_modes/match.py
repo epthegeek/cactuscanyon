@@ -118,8 +118,7 @@ class Match(ep.EP_Mode):
             bottlesLayer.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,bottlesLayer])
             self.layer = combined
-            # TODO play the knocker once for each winner
-            #self.game.knock(self.winners)
+            self.game.base.knock(self.winners)
 
         # Then delay for 2 seconds and shut 'er down
         self.delay(delay=2,handler=self.finish_up)
