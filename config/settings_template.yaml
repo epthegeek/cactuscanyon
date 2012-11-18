@@ -184,6 +184,9 @@ Gameplay (Feature):
     options: [5,60]
     increments: 5
     default: 15
+  'Marshall Multiball Music':
+    options: ['Yes','No']
+    default: 'No'
   'Quickdraws Lit Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'

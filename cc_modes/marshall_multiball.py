@@ -74,7 +74,9 @@ class MarshallMultiball(ep.EP_Mode):
         # start a ball saver
         self.game.ball_save.start(num_balls_to_save=1, time=8, now=True, allow_multiple_saves=False)
         self.start()
-        self.delay("Operational",delay=duration+0.2,handler=self.game.base.music_on,param=self.game.assets.music_drunkMultiball)
+        # music is optional based on a setting
+        if self.game.user_settings['Gameplay (Feature)']['Marshall Multiball Music'] == 'Yes':
+            self.delay("Operational",delay=duration+0.2,handler=self.game.base.music_on,param=self.game.assets.music_drunkMultiball)
 
     def ball_drained(self):
         if self.running:
