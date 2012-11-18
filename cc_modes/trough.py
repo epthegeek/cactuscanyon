@@ -122,6 +122,7 @@ class Trough(ep.EP_Mode):
             num_current_machine_balls = self.game.num_balls_total
             # how many balls in in the trough now
             temp_num_balls = self.num_balls()
+            print "Check Switched - launch status: " + str(self.launch_in_progress)
             if self.launch_in_progress:
                 print "And we're trying to launch another one."
                 # check if we had a drain RIGHT while trying to launch
@@ -308,7 +309,9 @@ class Trough(ep.EP_Mode):
             self.num_balls_to_stealth_launch += num
         if not self.launch_in_progress:
             self.launch_in_progress = True
+            print "Launch status: " + str(self.launch_in_progress)
             if callback:
+                print "Launch Callback attempted"
                 self.launch_callback = callback
             self.common_launch_code()
 
@@ -321,9 +324,11 @@ class Trough(ep.EP_Mode):
             # go to a hold pattern to wait for the shooter lane
             # if after 2 seconds the shooter lane hasn't been hit we should try again
             if not self.game.fakePinProc:
+                print "Trough - scheduling the bounce delay"
                 self.delay("Bounce Delay",delay=1.5,handler=self.finish_launch)
             # if we are under fakepinproc, proceed immediately to ball in play
             else:
+                print "Fakepinproc - Finishing Launch"
                 self.finish_launch()
 
         # Otherwise, wait 1 second before trying again.
@@ -332,6 +337,7 @@ class Trough(ep.EP_Mode):
                 handler=self.common_launch_code)
 
     def finish_launch(self):
+        print "Finishing Launch"
         self.launch_in_progress = False
         # tick down the balls to launch
         self.num_balls_to_launch -= 1
