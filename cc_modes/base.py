@@ -45,7 +45,7 @@ class BaseGameMode(ep.EP_Mode):
         #    self.skipDrunk = True
         #else:
         #    self.skipDrunk = False
-        self.skipDrunk = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Can skip Drunk Multiball Intro']
+        self.skipDrunk = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball Intro Skip']
         self.drunkStacking = 'Enabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball Stacking']
 
     def mode_started(self):

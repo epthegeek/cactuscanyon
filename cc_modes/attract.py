@@ -31,7 +31,7 @@ class Attract(ep.EP_Mode):
     def __init__(self, game, priority):
         super(Attract, self).__init__(game, priority)
         self.timer = 3
-        self.NOISY_COUNT = self.game.user_settings['Gameplay (Feature)']['Number of attract sounds to play']
+        self.NOISY_COUNT = self.game.user_settings['Gameplay (Feature)']['Attract sounds to play']
         self.NOISY_DELAY = self.game.user_settings['Gameplay (Feature)']['Attract sound delay time']
         self.marshallValue = self.game.user_settings['Gameplay (Feature)']['Marshall Multiball']
 
