@@ -26,7 +26,7 @@ class GoldMine(ep.EP_Mode):
     def __init__(self,game,priority):
         super(GoldMine, self).__init__(game,priority)
         self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine,self.game.combos]
-        motherlodeDifficulty = self.game.user_settings['Gameplay (Feature)']['Motherlode Requirement Difficulty']
+        motherlodeDifficulty = self.game.user_settings['Gameplay (Feature)']['Motherlode Badge Difficulty']
         if motherlodeDifficulty == 'Easy':
             self.motherlodesForStar = 1
         else:

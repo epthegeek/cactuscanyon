@@ -27,7 +27,7 @@ class SavePolly(ep.EP_Mode):
         super(SavePolly, self).__init__(game,priority)
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Save Polly Shots - Train']
         self.showDeathAnimation = self.game.user_settings['Gameplay (Feature)']['Polly Dies Animation']
-        self.winsRequired = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Polly Wins Required']
+        self.winsRequired = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Save Polly Wins Required']
         self.running = False
         self.halted = False
         self.won = False
