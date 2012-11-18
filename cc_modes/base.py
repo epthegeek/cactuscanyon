@@ -130,6 +130,7 @@ class BaseGameMode(ep.EP_Mode):
         # if we're on the first ball and there are less than four players, add one.
         if self.game.ball == 1 and len(self.game.players) < 4:
             self.game.add_player()
+            self.game.order_mobs()
             # and play a soundbyte
             if len(self.game.players) == 2:
                 self.game.base.priority_quote(self.game.assets.quote_playerTwo)

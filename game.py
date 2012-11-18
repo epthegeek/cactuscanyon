@@ -350,6 +350,7 @@ class CCGame(game.BasicRecordableGame):
         super(CCGame,self).start_game()
         # Add the first player
         self.add_player()
+        self.order_mobs()
         # load the base game mode
         self.modes.add(self.base)
         # Start the ball.  This includes ejecting a ball from the trough.
@@ -842,3 +843,11 @@ class CCGame(game.BasicRecordableGame):
             #print "Int value: " + str(int(self.sound.volume*10))
         return setting
 
+
+    def order_mobs(self):
+        # set which mob mode comes first
+        mobSetting = "Ambush" == self.user_settings['Gameplay (Feature)']['Ambush or Showdown First']
+        if mobSetting:
+            print "User settings put Ambush first - adjusting for player"
+            self.set_tracking('ambushStatus',"OPEN")
+            self.set_tracking('showdownStatus',"OVER")

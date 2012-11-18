@@ -465,8 +465,11 @@ class Ambush(ep.EP_Mode):
         # reset the showdown points for next time
         self.game.set_tracking('ambushPoints',0)
 
-        # award the badge light - showdown/ambush is 3
-        self.game.badge.update(3)
+        # should we update the badge with ambush?
+        badge = "Yes" == self.user_settings['Machine (Standard)']['Ambush Awards Badge']
+        if badge:
+            # award the badge light - showdown/ambush is 3
+            self.game.badge.update(3)
         # unset the base busy flag
         self.game.base.busy = False
         self.game.base.queued -= 1

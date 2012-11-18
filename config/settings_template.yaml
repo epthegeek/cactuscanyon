@@ -99,7 +99,7 @@ Highscore:
     increments: 50000000
     default: 350000000
 Gameplay (Feature):
-  'Number of attract sounds to play':
+  'Attract sounds to play':
     options: [3,10]
     increments: 1
     default: 3
@@ -138,9 +138,12 @@ Gameplay (Feature):
     options: [3,15]
     increments: 1
     default: 3
-  'Ambush Awards Showdown Badge':
+  'Ambush Awards Badge':
     options: ['Yes','No']
     default: 'No'
+  'Ambush or Showdown First':
+    options: ['Ambush','Showdown']
+    default: 'Showdown'
   'Save Polly Shots - Train':
     options: [2,15]
     increments: 1
@@ -190,7 +193,7 @@ Gameplay (Feature):
   'Showdown Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
-  'Motherlode Requirement Difficulty':
+  'Motherlode Badge Difficulty':
     options: ['Easy','Normal']
     default: 'Normal'
   'Gold Mine Multiball Restart':
@@ -209,7 +212,7 @@ Gameplay (Feature):
   'Polly Dies Animation':
     options: ['Show','Hide']
     default: 'Show'
-  'Can skip Drunk Multiball Intro':
+  'Drunk Multiball Intro Skip':
     options: ['Yes','No']
     default: 'No'
   'Tumbleweeds for CVA':
