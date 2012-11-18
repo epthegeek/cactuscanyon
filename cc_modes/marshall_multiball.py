@@ -71,7 +71,8 @@ class MarshallMultiball(ep.EP_Mode):
 
         # play the quote
         duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
-
+        # start a ball saver
+        self.game.ball_save.start(num_balls_to_save=1, time=8, now=True, allow_multiple_saves=False)
         self.start()
         self.delay("Operational",delay=duration+0.2,handler=self.game.base.music_on,param=self.game.assets.music_drunkMultiball)
 
