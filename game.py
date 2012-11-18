@@ -359,6 +359,8 @@ class CCGame(game.BasicRecordableGame):
         self.statusOK = True
 
     def start_ball(self):
+        # reset the autoplunger count
+        self.trough.balls_to_autoplunge = 0
         # run the start_ball from proc.game.BasicGame
         super(CCGame, self).start_ball()
 
@@ -410,7 +412,7 @@ class CCGame(game.BasicRecordableGame):
         # and all the other modes
         print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
         self.base.load_modes()
-        # if we're under 2 minutes and on the last ball, enable BOZOBALL (tm)
+        # if we're under 2 minutes and on the last ball, enable BOZO BALL (tm)
         if self.current_player().game_time < 120 and self.ball == self.balls_per_game:
             self.base.enable_bozo_ball()
         # update the lamps
