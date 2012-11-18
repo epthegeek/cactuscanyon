@@ -59,8 +59,7 @@ class BallSearch(ep.EP_Mode):
         if self.enabled:
             # Stop delayed coil activations in case a ball search has
             # already started.
-            for coil in self.coils:
-                self.cancel_delayed('ball_search_coil1')
+            self.cancel_delayed('search_coils')
             self.cancel_delayed('start_special_handler_modes')
             schedule_search = 1
             for switch in self.stop_switches:
@@ -73,13 +72,16 @@ class BallSearch(ep.EP_Mode):
                 state_str = str(self.stop_switches[switch])
                 m = getattr(sw, 'is_%s' % (state_str))
                 if m():
+                    print "BALL SEARCH NULL - BALL ON STOP SWITCH"
                     schedule_search = 0
 
             if schedule_search:
                 self.cancel_delayed(name='ball_search_countdown')
+                print "BALL SEARCH: Scheduling new countdown"
                 self.delay(name='ball_search_countdown', event_type=None, delay=self.countdown_time, handler=self.perform_search, param=0)
 
     def stop(self,sw):
+        print "Ball Search - Stop Switch"
         self.cancel_delayed(name='ball_search_countdown')
 
     def perform_search(self, completion_wait_time, completion_handler = None):
@@ -88,7 +90,7 @@ class BallSearch(ep.EP_Mode):
             self.game.set_status("Balls Missing") # Replace with permanent message
         delay = .150
         for coil in self.coils:
-            self.delay(name='ball_search_coil1', event_type=None, delay=delay, handler=self.pop_coil, param=str(coil))
+            self.delay(name='search_coils', event_type=None, delay=delay, handler=self.pop_coil, param=str(coil))
             delay = delay + .150
         self.delay(name='start_special_handler_modes', event_type=None, delay=delay, handler=self.start_special_handler_modes)
 

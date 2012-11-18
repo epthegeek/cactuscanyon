@@ -449,14 +449,13 @@ PRLamps:
 PRBallSave:
     pulseCoils: [minePopper, saloonPopper, leftJetBumper, rightJetBumper, bottomJetBumper,moveBart, moveBartHat,moveBart]
     resetSwitches:
-        shooterLane: open
         rightOutlane: open
         leftOutlane: open
         rightReturnLane: open
         leftReturnLane: open
-        rightRampMake: open
+        rightRampEnter: open
         leftRampEnter: open
-        centerRampMake: open
+        centerRampEnter: open
         leftLoopBottom: open
         rightLoopBottom: open
         mineEntrance: open
