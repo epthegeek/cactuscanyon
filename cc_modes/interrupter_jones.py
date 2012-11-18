@@ -402,11 +402,11 @@ class Interrupter(ep.EP_Mode):
             # set the volume down one
             volume = self.game.volume_down()
             # save the value
-            print "New volume: " + str(int(volume))
-            self.game.user_settings['Sound']['Initial volume']= int(volume)
+            print "New volume: " + str(volume)
+            self.game.user_settings['Sound']['Initial volume']= volume
             self.game.save_settings()
             # if we're not in a game, turn on some music and throw a display
-            self.volume_display(int(volume))
+            self.volume_display(volume)
             return True
 
     def sw_up_active(self, sw):
@@ -414,10 +414,10 @@ class Interrupter(ep.EP_Mode):
         if self.game.service_mode not in self.game.modes:
             # set the volume up one
             volume = self.game.volume_up()
-            print "New volume: " + str(int(volume))
-            self.game.user_settings['Sound']['Initial volume'] = int(volume)
+            print "New volume: " + str(volume)
+            self.game.user_settings['Sound']['Initial volume'] = volume
             self.game.save_settings()
-            self.volume_display(int(volume))
+            self.volume_display(volume)
             return True
 
     def volume_display(self,volume):

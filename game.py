@@ -820,23 +820,25 @@ class CCGame(game.BasicRecordableGame):
         """ """
         if not self.sound.enabled: return
         #print "Current Volume: " + str(self.sound.volume)
-        if self.sound.volume <= 0.9:
-            self.sound.volume += 0.1
+        setting = self.user_settings['Sound']['Initial volume']
+        if setting <= 9:
+            setting += 1
             #print "new math value: " + str(self.sound.volume)
-            self.sound.set_volume(self.sound.volume)
+            self.sound.set_volume(setting / 10.0)
             #print "10 value: " + str(self.sound.volume*10)
             #print "Int value: " + str(int(self.sound.volume*10))
-        return self.sound.volume*10
+        return setting
 
     def volume_down(self):
         """ """
         if not self.sound.enabled: return
         #print "Current Volume: " + str(self.sound.volume)
-        if self.sound.volume >= 0.2:
-            self.sound.volume -= 0.1
+        setting = self.user_settings['Sound']['Initial volume']
+        if setting >= 2:
+            setting -= 1
             #print "new math value: " + str(self.sound.volume)
-            self.sound.set_volume(self.sound.volume)
+            self.sound.set_volume(setting / 10.0)
             #print "10 value: " + str(self.sound.volume*10)
             #print "Int value: " + str(int(self.sound.volume*10))
-        return self.sound.volume*10
+        return setting
 
