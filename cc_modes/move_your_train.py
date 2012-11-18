@@ -112,11 +112,13 @@ class MoveYourTrain(ep.EP_Mode):
             self.delay(delay=1,handler=self.get_going,param=side)
 
     def get_going(self,side):
+        self.idle_display()
         # update the display
         self.main_display()
-        # drop the post and/or kick the ball
-        for post in self.POSTS:
-            post.disable()
+        # drop the post and/or kick the ball - be weary of gunfight starting at teh same time on an inlane
+        if not self.game.gunfight.running:
+            for post in self.POSTS:
+                post.disable()
         if not self.postUse:
             self.game.saloon.kick()
         else:
@@ -202,6 +204,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.trainLayer.composite_op = "blacksrc"
 
     def set_position(self,value=0):
+        print "MYT - Setting offset to " + str(value)
         # for setting the offset for the train layers
         self.trainOffset = value
 
