@@ -177,7 +177,8 @@ class Attract(ep.EP_Mode):
         # page the attract animation
         self.run_animation_loop()
         # if noisy, play a noise and count it
-        if self.noisy:
+        attractSounds = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Sounds']
+        if self.noisy and attractSounds:
             # play a sound
             self.play_random()
             # increment the count

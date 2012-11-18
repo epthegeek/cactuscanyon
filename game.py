@@ -553,8 +553,10 @@ class CCGame(game.BasicRecordableGame):
         self.modes.add(banner_mode)
         # play the music
         duration = self.sound.play(self.assets.music_highScoreLead)
-        # follow up with the music
-        self.interrupter.delayed_music_on(wait=duration,song=self.assets.music_goldmineMultiball)
+        # follow up with the music if enabled
+        attractMusic = 'Yes' == self.user_settings['Gameplay (Feature)']['Attract Mode Music']
+        if attractMusic:
+            self.interrupter.delayed_music_on(wait=duration,song=self.assets.music_goldmineMultiball)
 
     def highscore_banner_complete(self, banner_mode, highscore_entry_mode):
         self.modes.remove(banner_mode)
