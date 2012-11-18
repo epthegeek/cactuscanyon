@@ -73,10 +73,10 @@ class BallSearch(ep.EP_Mode):
                 state_str = str(self.stop_switches[switch])
                 m = getattr(sw, 'is_%s' % (state_str))
                 if m():
-                    print "BALL SEARCH NULL - BALL ON STOP SWITCH"
+                    #print "BALL SEARCH NULL - BALL ON STOP SWITCH"
                     schedule_search = 0
-                    print "Rescheduling a check in 2 seconds"
-                    self.delay("stoppedReset",delay=2,handler=self.reset)
+                    #print "Rescheduling a check in 2 seconds"
+                    self.delay("stoppedReset",delay=2,handler=self.reset,param="Ding")
 
             if schedule_search:
                 self.cancel_delayed(name='ball_search_countdown')
@@ -84,10 +84,10 @@ class BallSearch(ep.EP_Mode):
                 self.delay(name='ball_search_countdown', event_type=None, delay=self.countdown_time, handler=self.perform_search, param=0)
 
     def stop(self,sw):
-        print "Ball Search - Stop Switch"
+        #print "Ball Search - Stop Switch"
         self.cancel_delayed(name='ball_search_countdown')
         # delay a reset call - so it will restart after a stop switch
-        self.delay("stoppedReset",delay=2,handler=self.reset)
+        self.delay("stoppedReset",delay=2,handler=self.reset,param="Ding")
 
     def perform_search(self, completion_wait_time, completion_handler = None):
         print "DO A BARREL ROLL! - er, BALL SEARCH!"
