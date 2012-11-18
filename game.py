@@ -113,7 +113,7 @@ class CCGame(game.BasicRecordableGame):
         # set the volume per the settings
         self.sound.music_offset = self.user_settings['Sound']['Music volume offset']
         print "Setting initial offset: " + str(self.sound.music_offset)
-        volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10)
+        volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
         print "Setting initial volume: " + str(volume_to_set)
         self.sound.set_volume(volume_to_set)
 
