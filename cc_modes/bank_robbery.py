@@ -442,7 +442,12 @@ class BankRobbery(ep.EP_Mode):
             self.game.sound.stop_music()
         self.layer = None
         # set the tracking on the ramps
-        self.game.set_tracking('rightRampStage',5)
+        # if wins are required, and player did not win, reset ramp to stage 1
+        if self.game.save_polly.winsRequired and not self.won:
+            self.game.set_tracking('rightRampStage',1)
+        # if wins are not required then the ramp goes to 'done' even if lost
+        else:
+            self.game.set_tracking('rightRampStage',5)
         self.lamp_update()
         self.end_save_polly()
 

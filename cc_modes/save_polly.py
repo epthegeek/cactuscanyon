@@ -27,6 +27,7 @@ class SavePolly(ep.EP_Mode):
         super(SavePolly, self).__init__(game,priority)
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Save Polly Shots - Train']
         self.showDeathAnimation = self.game.user_settings['Gameplay (Feature)']['Polly Dies Animation']
+        self.winsRequired = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Polly Wins Required']
         self.running = False
         self.halted = False
         self.won = False
@@ -423,8 +424,12 @@ class SavePolly(ep.EP_Mode):
         # turn off the polly display
         self.layer = None
         # set the tracking on the ramps
-        # this is mostly for the lights
-        self.game.set_tracking('centerRampStage',5)
+        # if wins are required, and player did not win, reset ramp to stage 1
+        if self.winsRequired and not self.won:
+            self.game.set_tracking('centerRampStage',1)
+        # if wins are not required then the ramp goes to 'done' even if lost
+        else:
+            self.game.set_tracking('centerRampStage',5)
         self.lamp_update()
         self.end_save_polly()
 
