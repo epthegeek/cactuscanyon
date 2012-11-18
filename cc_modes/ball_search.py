@@ -56,6 +56,7 @@ class BallSearch(ep.EP_Mode):
         self.enabled = 0
 
     def reset(self,sw):
+        self.cancel_delayed("stoppedReset")
         if self.enabled:
             # Stop delayed coil activations in case a ball search has
             # already started.
@@ -74,6 +75,8 @@ class BallSearch(ep.EP_Mode):
                 if m():
                     print "BALL SEARCH NULL - BALL ON STOP SWITCH"
                     schedule_search = 0
+                    print "Rescheduling a check in 2 seconds"
+                    self.delay("stoppedReset",delay=2,handler=self.reset)
 
             if schedule_search:
                 self.cancel_delayed(name='ball_search_countdown')
@@ -83,6 +86,8 @@ class BallSearch(ep.EP_Mode):
     def stop(self,sw):
         print "Ball Search - Stop Switch"
         self.cancel_delayed(name='ball_search_countdown')
+        # delay a reset call - so it will restart after a stop switch
+        self.delay("stoppedReset",delay=2,handler=self.reset)
 
     def perform_search(self, completion_wait_time, completion_handler = None):
         print "DO A BARREL ROLL! - er, BALL SEARCH!"
