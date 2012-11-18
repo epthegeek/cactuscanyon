@@ -203,6 +203,7 @@ class EP_Mode(object):
 
     def cancel_delayed(self, name):
         """Removes the given named delays from the delayed list, cancelling their execution."""
+        #print "Cancelling Delayed: " + str(name)
         if type(name) == list:
             for n in name:
                 self.cancel_delayed(n)

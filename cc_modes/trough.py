@@ -132,15 +132,15 @@ class Trough(ep.EP_Mode):
                     self.num_balls_in_play = 0
                     # add a ball to launch
                     self.num_balls_to_launch += 1
-                    # kill the bounce delay
-                    self.cancel_delayed("Bounce Delay")
+                    # kill the Bounce_Delay
+                    self.cancel_delayed("Bounce_Delay")
                     # and launch again
                     self.common_launch_code()
                     return
                 # and check for a bounceback
                 elif temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
                     print "multiball launch fell back in?"
-                    self.cancel_delayed("Bounce Delay")
+                    self.cancel_delayed("Bounce_Delay")
                     self.common_launch_code()
                     return
             #  Ball saver on situations
@@ -252,7 +252,7 @@ class Trough(ep.EP_Mode):
                 # experiental condition for lanny's case where I don't think the balls settled
                 if self.num_balls() == 4 or self.game.switches.troughEject.is_active():
                     print "It fell back in, try again"
-                    self.cancel_delayed("Bounce Delay")
+                    self.cancel_delayed("Bounce_Delay")
                     self.common_launch_code()
 
     # Count the number of balls in the trough by counting active trough switches.
@@ -324,8 +324,8 @@ class Trough(ep.EP_Mode):
             # go to a hold pattern to wait for the shooter lane
             # if after 2 seconds the shooter lane hasn't been hit we should try again
             if not self.game.fakePinProc:
-                print "Trough - scheduling the bounce delay"
-                self.delay("Bounce Delay",delay=1.5,handler=self.finish_launch)
+                print "Trough - scheduling the Bounce_Delay"
+                self.delay("Bounce_Delay",delay=2,handler=self.finish_launch)
             # if we are under fakepinproc, proceed immediately to ball in play
             else:
                 print "Fakepinproc - Finishing Launch"
@@ -363,6 +363,6 @@ class Trough(ep.EP_Mode):
         # if we're ejecting - process the launch
         if self.launch_in_progress:
             # kill the fallback loop
-            self.cancel_delayed("Bounce Delay")
+            self.cancel_delayed("Bounce_Delay")
             self.finish_launch()
 

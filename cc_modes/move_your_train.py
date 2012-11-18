@@ -225,6 +225,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.delay(delay=2,handler=self.end)
 
     def end(self):
+        print "Ending Move Your Train"
         self.clear_layer()
         # turn off the running flag
         self.running = False
