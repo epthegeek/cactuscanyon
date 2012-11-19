@@ -900,9 +900,9 @@ class BaseGameMode(ep.EP_Mode):
         bulb.pulse(30)
 
     # for starting marshall multiball, so other modes can reference it and then quit if necessary
-    def kickoff_marshall(self):
-        # if we haven't already run marshall multiball
-        if not self.game.show_tracking('marshallMultiballRun'):
+    def kickoff_marshall(self,super=False):
+        # if we haven't already run marshall multiball - or if it's coming from the super skill shot
+        if not self.game.show_tracking('marshallMultiballRun') or super:
             # and nothing else is running
             if True not in self.game.show_tracking('stackLevel'):
                 if self.game.marshall_multiball not in self.game.modes:
