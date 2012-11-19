@@ -144,6 +144,9 @@ class SkillShot(ep.EP_Mode):
             # drunk multiball
             if self.game.show_tracking('drunkMultiballStatus') != "READY":
                 prizes.append("R")
+            # marshall multiball - if it hasn't already run
+            if self.game.show_tracking('marshallMultiballRun') != "True":
+                prizes.append("U")
             # extra ball
             if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
                 prizes.append("J")
@@ -454,6 +457,13 @@ class SkillShot(ep.EP_Mode):
             awardStringTop = "COWBOYS"
             awardStringBottom = "VS ALIENS"
             self.game.set_tracking("cvaStatus", "READY")
+            self.super = False
+
+        # marshall multiball
+        elif self.selectedPrizes[5:] == "U":
+            awardStringTop = "MARSHALL"
+            awardStringBottom = "MULTIBALL"
+            self.game.base.kickoff_marshall(True)
             self.super = False
 
         # call the lamp update so the prize is shown properly

@@ -454,7 +454,7 @@ class MarshallMultiball(ep.EP_Mode):
         # startup
     def start(self):
         # tag this player as having run the MB so it doesn't repeat - if we're actually at rank 4
-        if self.game.show_tracking('Rank') == 4:
+        if self.game.show_tracking('rank') == 4:
             self.game.set_tracking('marshallMultiballRun',True)
         # launch an extra ball
         if self.game.trough.num_balls_in_play < 2:
