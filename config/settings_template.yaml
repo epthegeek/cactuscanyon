@@ -32,19 +32,13 @@ Machine (Standard):
     options: [0,10]
     increments: 1
     default: 2
-  'Maximum Extra Balls/Ball In Play':
-    options: [0,10]
-    increments: 1
-    default: 0
-  'Allow Dim Illumination':
-    options: ['Yes','No']
-    default: 'No'
-  'No Bonus Flips':
-    options: ['Yes','No']
-    default: 'No'
   'Game Restart':
     options: [True,False]
     default: True
+  'Flipper Pulse':
+    options: [10,15,20,25,30]
+    increments: 5
+    default: 20
 Sound:
   'Initial volume':
     options: [1,2,3,4,5,6,7,8,9,10]

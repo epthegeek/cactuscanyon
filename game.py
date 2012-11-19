@@ -119,6 +119,8 @@ class CCGame(game.BasicRecordableGame):
 
         # Set the balls per game per the user settings
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']
+        # Flipper pulse strength
+        self.flipperPulse = self.user_settings['Machine (Standard)']['Flipper Pulse']
 
         # set up the ball search
         self.setup_ball_search()
@@ -716,6 +718,36 @@ class CCGame(game.BasicRecordableGame):
     def save_settings(self):
         super(CCGame,self).save_settings(user_settings_path)
 
+    ### Standard flippers
+    def enable_flippers(self, enable):
+        """Enables or disables the flippers AND bumpers."""
+
+        for flipper in self.config['PRFlippers']:
+            self.logger.info("Programming flipper %s", flipper)
+            main_coil = self.coils[flipper+'Main']
+            self.logger.info("Enabling WPC style flipper")
+            hold_coil = self.coils[flipper+'Hold']
+            switch_num = self.switches[flipper].number
+
+            drivers = []
+            if enable:
+                drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
+                drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
+                self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
+
+            drivers = []
+            if enable:
+                drivers += [pinproc.driver_state_disable(main_coil.state())]
+                drivers += [pinproc.driver_state_disable(hold_coil.state())]
+
+            self.proc.switch_update_rule(switch_num, 'open_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
+
+            if not enable:
+                main_coil.disable()
+                hold_coil.disable()
+
+        self.enable_bumpers(enable)
+
     ### Flipper inversion
 
     def enable_inverted_flippers(self, enable):
@@ -732,40 +764,26 @@ class CCGame(game.BasicRecordableGame):
 
             self.logger.info("Programming inverted flipper %s", flipper)
             main_coil = self.coils[inverted+'Main']
-            if self.coils.has_key(inverted+'Hold'):
-                style = 'wpc'
-                self.logger.info("Enabling WPC style flipper")
-                hold_coil = self.coils[inverted+'Hold']
-            else:
-                self.logger.info("Enabling Stern style flipper")
-                style = 'stern'
+            self.logger.info("Enabling WPC style flipper")
+            hold_coil = self.coils[inverted+'Hold']
             switch_num = self.switches[flipper].number
 
             drivers = []
             if enable:
-                if style == 'wpc':
-                    drivers += [pinproc.driver_state_pulse(main_coil.state(), main_coil.default_pulse_time)]
-                    drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
-                else:
-                    drivers += [pinproc.driver_state_patter(main_coil.state(), 2, 18, main_coil.default_pulse_time, True)]
+                drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
+                drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
             self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
             drivers = []
             if enable:
                 drivers += [pinproc.driver_state_disable(main_coil.state())]
-                if style == 'wpc':
-                    drivers += [pinproc.driver_state_disable(hold_coil.state())]
+                drivers += [pinproc.driver_state_disable(hold_coil.state())]
 
             self.proc.switch_update_rule(switch_num, 'open_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
             if not enable:
                 main_coil.disable()
-                if style == 'wpc':
-                    hold_coil.disable()
-
-        # Enable the flipper relay on wpcAlphanumeric machines
-        if self.machine_type == pinproc.MachineTypeWPCAlphanumeric:
-            self.enable_alphanumeric_flippers(enable)
+                hold_coil.disable()
 
         self.enable_bumpers(enable)
 
