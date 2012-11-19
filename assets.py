@@ -416,6 +416,13 @@ class Assets():
         self.sfx_knocker = 'sfx_knocker'
         self.game.sound.register_sound(self.sfx_knocker, self.sfx_path + "knocker.wav")
 
+        self.sfx_glassSmash = 'sfx_glassSmash'
+        self.game.sound.register_sound(self.sfx_glassSmash,self.sfx_path + "267-sfx-glass-smash.wav")
+        self.sfx_pianoRiff = 'sfx_pianoRiff'
+        self.game.sound.register_sound(self.sfx_pianoRiff, self.sfx_path + "043-sfx-piano-cymbal.wav")
+        self.sfx_matchRiff = 'sfx_matchRiff'
+        self.game.sound.register_sound(self.sfx_matchRiff, self.sfx_path + "038-sfx-match-riff.wav")
+
     # Quotes
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
@@ -965,6 +972,8 @@ class Assets():
         self.sfx_cvaLoop = 'sfx_cvaLoop'
         self.game.sound.register_sound(self.sfx_cvaLoop, self.music_path + "bangarang-loop.wav")
 
+        self.music_lastCall = 'music_lastCall'
+        self.game.sound.register_music(self.music_lastCall, self.music_path + "The_Entertainer.wav")
         self.music_tensePiano1 = 'music_tensePiano1'
         self.game.sound.register_music(self.music_tensePiano1, self.music_path + "098-tense-piano-1.wav")
         self.music_tensePiano2 = 'music_tensePiano2'
@@ -1019,6 +1028,7 @@ class Assets():
         self.dmd_singleCowboyBorderRight = dmd.Animation().load(self.dmd_path+'cowboy-border-right.dmd')
         self.dmd_singleCowboySidewaysBorder = dmd.Animation().load(self.dmd_path+'single-cowboy-sideways-border.dmd')
         self.dmd_mineEntranceBorder = dmd.Animation().load(self.dmd_path +'mine-entrance-border.dmd')
+        self.dmd_simpleBorder = dmd.Animation().load(self.dmd_path + 'simple_border.dmd')
         self.dmd_skyline = dmd.Animation().load(self.dmd_path+'skyline.dmd')
         self.dmd_escaped = dmd.Animation().load(self.dmd_path +'escaped.dmd')
 
@@ -1198,6 +1208,10 @@ class Assets():
 
         self.dmd_boss = dmd.Animation().load(self.dmd_path+'boss.dmd')
         self.dmd_bossHit = dmd.Animation().load(self.dmd_path+'boss-hit.dmd')
+
+        self.dmd_lastCall = dmd.Animation().load(self.dmd_path+'last_call.dmd')
+        self.dmd_beerFill = dmd.Animation().load(self.dmd_path+'beer-fill.dmd')
+
         
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"

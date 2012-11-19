@@ -42,6 +42,7 @@ class Saloon(ep.EP_Mode):
         self.saloon_shot()
 
     def saloon_shot(self):
+        print "saloon shot"
         stackLevel = self.game.show_tracking('stackLevel')
         # if MMB is running, just kick out
         if self.game.marshall_multiball.running:
@@ -77,6 +78,12 @@ class Saloon(ep.EP_Mode):
                 self.wait_until_unbusy(self.game.drunk_multiball.start_drunk)
                 return
 
+        # if last call is running - call that hit and bail
+        if self.game.last_call.running:
+            print "saloon passing to last call"
+            self.game.last_call.saloon_hit()
+            return
+
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
         if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus'):
             if True in stackLevel:
@@ -102,6 +109,10 @@ class Saloon(ep.EP_Mode):
         self.smacked = False
 
     def sw_saloonBart_active(self,sw):
+        # if last call is running - crank dat
+        if self.game.last_call.running:
+            self.game.last_call.bart_toy_hit()
+            return
         # set a timer flag about the hit
         self.smacked = True
         self.delay("Smack Delay",delay=2,handler=self.unsmack)

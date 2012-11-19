@@ -172,3 +172,6 @@ class Tracking(game.Player):
 
         self.player_stats['marshallBest'] = 0
         self.player_stats['marshallMultiballRun'] = False
+
+        # collect points for last call
+        self.player_stats['lastCallTotal'] = 0

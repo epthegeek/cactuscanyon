@@ -280,6 +280,8 @@ class CCGame(game.BasicRecordableGame):
         self.high_noon = cc_modes.HighNoon(game=self,priority=90)
         # move your train
         self.move_your_train = cc_modes.MoveYourTrain(game=self,priority=90)
+        # last call
+        self.last_call = cc_modes.LastCall(game=self,priority=90)
         # skillshot switch filter
         self.super_filter = cc_modes.SuperFilter(game=self,priority = 200)
         # Interrupter Jones
@@ -440,6 +442,10 @@ class CCGame(game.BasicRecordableGame):
         print "BALL DRAINED ROUTINE RUNNING"
         # if we're not ejecting a new ball, then it really drained
         if not self.trough.launch_in_progress:
+            # New abort for Last Call
+            if self.last_call in self.modes:
+                self.last_call.ball_drained()
+                return
             # Tell every mode a ball has drained by calling the ball_drained function if it exists
             if self.trough.num_balls_in_play == 0:
                 # kill all the display layers
@@ -526,13 +532,16 @@ class CCGame(game.BasicRecordableGame):
         super(CCGame, self).game_ended()
 
         # remove the base game mode
-        self.modes.remove(self.base)
+        # self.modes.remove(self.base)
 
         # divert to the match before high score entry
         self.modes.add(self.match)
         self.match.run_match()
 
     def run_highscore(self):
+        # Remove the base mode here now instead - so that it's still available for last call
+        self.modes.remove(self.base)
+
         ## TODO need to add some crap here to see if there's a high score to enter - and play the lead in
         # High Score Stuff
         self.seq_manager = highscore.EntrySequenceManager(game=self, priority=2)

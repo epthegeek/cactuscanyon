@@ -572,21 +572,8 @@ class BaseGameMode(ep.EP_Mode):
         # if both flippers are hit, kill the bonus
         if self.game.switches.flipperLwL.is_active():
             #print "Both flippers pressed"
-            #print "Skipdrunk = " + str(self.skipDrunk) + " DMB Starting = " + str(self.game.drunk_multiball.starting)
-            # if the bonus is active, kill that
-            if self.doingBonus:
-                self.abort_bonus()
-            # if the long form extra ball thing is running, kill that
-            elif self.game.mine.collectingEB:
-                self.game.mine.abort_extra_ball()
-            # if the mine lock animation is running, kill that
-            elif self.game.mine.lockAnimation:
-                self.game.mine.abort_lock_animation()
-            elif self.game.drunk_multiball.starting and self.skipDrunk:
-                self.game.drunk_multiball.abort_intro()
-            else:
-                pass
-        # if no balls in play, don't do this.
+            self.dub_flip()
+        # if no balls in play, don't do anything else.
         if self.game.trough.num_balls_in_play == 0:
             return
         # toggle the bonus lane
@@ -596,20 +583,35 @@ class BaseGameMode(ep.EP_Mode):
         # if both flippers are hit kill the bonus
         if self.game.switches.flipperLwR.is_active():
             # if the bonus is active, kill that
-            if self.doingBonus:
-                self.abort_bonus()
-            # if the long form extra ball thing is running, kill that
-            elif self.game.mine.collectingEB:
-                self.game.mine.abort_extra_ball()
-            else:
-                pass
-        # if no balls in play, don't do this.
+            self.dub_flip()
+        # if no balls in play, don't do anything else.
         if self.game.trough.num_balls_in_play == 0:
             return
         # toggle the bonus lane
         self.game.bonus_lanes.flip()
 
-    ### shooter lane stuff
+    def dub_flip(self):
+        # if doing the bonus, abort
+        if self.doingBonus:
+            self.abort_bonus()
+        # if the long form extra ball thing is running, kill that
+        elif self.game.mine.collectingEB:
+            self.game.mine.abort_extra_ball()
+        # if the mine lock animation is running, kill that
+        elif self.game.mine.lockAnimation:
+            self.game.mine.abort_lock_animation()
+        # if doing the DMB animation and disable is config'd - abort
+        elif self.game.drunk_multiball.starting and self.skipDrunk:
+            self.game.drunk_multiball.abort_intro()
+        # kickoff last call
+        elif self.game.last_call.starting:
+            self.game.last_call.starting = False
+            self.game.last_call.get_going()
+        else:
+            pass
+
+
+### shooter lane stuff
 
     def sw_shooterLane_active_for_500ms(self,sw):
         # if we're dealing with a saved ball, plunge like the wind

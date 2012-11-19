@@ -118,6 +118,11 @@ class LampControl(ep.EP_Mode):
             self.bad_guys()
             return
 
+        ## Last call
+        if self.game.last_call.running:
+            self.update_bigFive('lastCall')
+            return
+
         # then - check if lamps are disabled
         status = self.game.show_tracking('lampStatus')
         ## if status is off, we bail here
@@ -362,6 +367,13 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
                 self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
 
+        # last call
+        elif mode == 'lastCall':
+            self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
+            self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+
         # drunk multiball
         elif mode == "Drunk":
             if 'leftLoop' in self.game.drunk_multiball.active:
@@ -453,6 +465,13 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
                 self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
+
+        # last call
+        elif mode == "lastCall":
+            self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+            self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+            self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+            self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
 
         # drunk multiball
         elif mode == "Drunk":
@@ -550,6 +569,10 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
                 self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
+
+        # last call
+        elif mode == "lastCall":
+            pass
 
         # drunk multiball
         elif mode == "Drunk":
@@ -658,6 +681,13 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
                 self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
 
+        # last call
+        elif mode == "lastCall":
+            self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+            self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
+
         # drunk multiball
         elif mode == "Drunk":
             ## right ramp is #4 in the stampede jackpot list
@@ -746,6 +776,13 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
                 self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
                 self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+
+        # last call
+        elif mode == "lastCall":
+            self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
+            self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+            self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+            self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
 
         # drunk multiball
         elif mode == "Drunk":

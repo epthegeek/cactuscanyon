@@ -59,6 +59,7 @@ class SkillShot(ep.EP_Mode):
     def ball_drained(self):
         # if somehow all the balls go away and this crap is still running, it should unload. SRSLY.
         if self.game.trough.num_balls_in_play == 0:
+            self.wipe_delays()
             self.unload()
 
     def mode_started(self):
