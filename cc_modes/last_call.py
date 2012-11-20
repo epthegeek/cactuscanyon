@@ -55,6 +55,8 @@ class LastCall(ep.EP_Mode):
                 print "Ending Last call"
                 # then turn on ending mode
                 self.ending = True
+                # cancel the main display updates
+                self.cancel_delayed("Display")
                 # and call the end of round
                 self.end_round()
 
@@ -64,7 +66,7 @@ class LastCall(ep.EP_Mode):
             # track it, because why not
             self.game.increase_tracking('beerMugHitsTotal')
             # bump up the shotvalue
-            self.shotValue += 100000
+            self.shotValue += 50000
             # score some points
             self.score(2530)
             # play a sound effect
@@ -350,7 +352,7 @@ class LastCall(ep.EP_Mode):
 
     def ball_collection(self):
         # holding pattern until the balls are all back
-        if self.game.trough.is_full():
+        if self.game.trough.is_full() or self.game.fakePinProc:
             self.end()
         else:
             self.delay("Operational",delay=2,handler=self.ball_collection)
@@ -373,12 +375,29 @@ class LastCall(ep.EP_Mode):
         self.game.stack_level(6,False)
         # stop the music
         self.game.sound.stop_music()
-        textLine1 = dmd.TextLayer(64, 9, self.game.assets.font_9px_az, "center", opaque=False).set_text("FINAL TOTAL")
-        self.layer = dmd.GroupedLayer(128,32,[self.backdrop,textLine1])
-        self.delay("Operational",delay=2,handler=self.show_scores)
+        textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("FINAL TOTALS:")
+        playerCount = len(self.game.players)
+        if playerCount == 1:
+            playerLine1 = dmd.TextLayer(64, 16, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(str(ep.format_score(self.game.players[0].score)))
+            combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1])
+        elif playerCount == 2:
+            playerLine1 = dmd.TextLayer(64, 12, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)))
+            playerLine2 = dmd.TextLayer(64, 20, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)))
+            combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1,playerLine2])
+        elif playerCount == 3:
+            playerLine1 = dmd.TextLayer(4, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)))
+            playerLine2 = dmd.TextLayer(4, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)))
+            playerLine3 = dmd.TextLayer(68, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("3) " + str(ep.format_score(self.game.players[2].score)))
+            combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1,playerLine2,playerLine3])
+        else:
+            playerLine1 = dmd.TextLayer(4, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)))
+            playerLine2 = dmd.TextLayer(4, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)))
+            playerLine3 = dmd.TextLayer(68, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("3) " + str(ep.format_score(self.game.players[2].score)))
+            playerLine4 = dmd.TextLayer(68, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("4) " + str(ep.format_score(self.game.players[3].score)))
+            combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1,playerLine2,playerLine3,playerLine4])
 
-    def show_scores(self):
-        self.layer = None
+
+        self.layer = combined
         self.delay("Operational",delay=3,handler=self.shutdown)
 
     def shutdown(self):

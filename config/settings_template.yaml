@@ -164,10 +164,6 @@ Gameplay (Feature):
   'Move Your Train Mode':
     options: ['Enabled','Disabled']
     default: 'Enabled'
-  'Move Your Train Timer':
-    options: [15,60]
-    increments: 5
-    default: 30
   'Drunk Multiball Stacking':
     options: ['Enabled','Disabled']
     default: 'Enabled'
@@ -221,15 +217,4 @@ Gameplay (Feature):
     default: 'Yes'
   'Attract Mode Music':
     options: ['Yes','No']
-    default: 'No'
-  'Outlane Ball Save':
-    options: ['Yes','No']
-    default: 'No'
-  'Game Ballsaves':
-    options: [1,10]
-    increments: 1
-    default: 3
-  'Multiball Ballsaves':
-    options: [1,10]
-    increments: 1
-    default: 2
+    default: 'Yes'

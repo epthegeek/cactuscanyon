@@ -64,6 +64,8 @@ class CCGame(game.BasicRecordableGame):
         self.useKnocker = config.value_for_key_path(keypath='use_knocker', default=False)
         if self.useKnocker:
             print "Knocker Config Found!"
+        # used to prevent the high score entry from restarting the music
+        self.soundIntro = False
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
@@ -568,11 +570,10 @@ class CCGame(game.BasicRecordableGame):
         banner_mode.layer = dmd.ScriptedLayer(width=128, height=32, script=[{'seconds':2.0, 'layer':combined}])
         banner_mode.layer.on_complete = lambda: self.highscore_banner_complete(banner_mode=banner_mode, highscore_entry_mode=mode)
         self.modes.add(banner_mode)
-        # play the music
-        duration = self.sound.play(self.assets.music_highScoreLead)
-        # follow up with the music if enabled
-        attractMusic = 'Yes' == self.user_settings['Gameplay (Feature)']['Attract Mode Music']
-        if attractMusic:
+        # play the music - if it hasn't started yet
+        if not self.soundIntro:
+            self.soundIntro = True
+            duration = self.sound.play(self.assets.music_highScoreLead)
             self.interrupter.delayed_music_on(wait=duration,song=self.assets.music_goldmineMultiball)
 
     def highscore_banner_complete(self, banner_mode, highscore_entry_mode):
@@ -583,6 +584,8 @@ class CCGame(game.BasicRecordableGame):
         self.modes.remove(mode)
         # Stop the music
         self.sound.stop_music()
+        # turn off the sound intro flag
+        self.soundIntro = False
         # set a busy flag so that the start button won't restart the game right away
         self.endBusy = True
         # re-add the attract mode
@@ -602,7 +605,10 @@ class CCGame(game.BasicRecordableGame):
         self.save_game_data()
 
         # play the closing song
-        self.interrupter.closing_song(duration)
+        # follow up with the music if enabled
+        attractMusic = 'Yes' == self.user_settings['Gameplay (Feature)']['Attract Mode Music']
+        if attractMusic:
+            self.interrupter.closing_song(duration)
 
     def save_game_data(self):
         super(CCGame, self).save_game_data(user_game_data_path)
