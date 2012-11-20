@@ -33,6 +33,7 @@ class LastCall(ep.EP_Mode):
         self.ending = False
         self.backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_simpleBorder.frames[0])
         self.startValue = 200000
+        self.showDub = False
 
     def mode_started(self):
         # reload the basemodes for switch help
@@ -42,10 +43,9 @@ class LastCall(ep.EP_Mode):
         # set up the info layer
         infoLine1 = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("BEER MUG RAISES JACKPOTS")
         infoLine2 = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SALOON RESETS JACKPOTS")
-        self.infoLayer = dmd.ScriptedLayer(128,32,[{'seconds':3,'layer':infoLine1},{'seconds':3,'layer':infoLine2}])
+        infoLine3 = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("CENTER RAMP 2X WHEN LIT")
+        self.infoLayer = dmd.ScriptedLayer(128,32,[{'seconds':2,'layer':infoLine1},{'seconds':2,'layer':infoLine2},{'seconds':2,'layer':infoLine3}])
         self.infoLayer.composite_op = "blacksrc"
-
-
 
     def ball_drained(self):
         # if we get down to one ball or less
@@ -163,8 +163,10 @@ class LastCall(ep.EP_Mode):
         # score points
         if double:
             points = self.shotValue * 2
+            self.showDub = True
         else:
             points = self.shotValue
+            self.showDub = False
 
         self.score(points)
 
@@ -198,14 +200,28 @@ class LastCall(ep.EP_Mode):
         self.enable_double()
 
     def jackpot_score(self,points=0):
+        if self.showDub:
+            double = True
+            self.showDub = False
+        else:
+            double = False
         self.game.sound.play(self.game.assets.sfx_orchestraSpike)
-        scoreString = str(ep.format_score(points))
-        scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString)
-        scoreLine.composite_op = "blacksrc"
+        scoreString = str(ep.format_score(points)) + "*"
+        print "Score string: " + scoreString
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])
-        combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine])
+        if double:
+            scoreLine1 = dmd.TextLayer(64,2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("DOUBLE<")
+            scoreLine1.composite_op = "blacksrc"
+            scoreLine2 = dmd.TextLayer(64,15, self.game.assets.font_12px_az_outline, "center",opaque=False).set_text(scoreString)
+            scoreLine2.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine1,scoreLine2])
+        else:
+            scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString)
+            scoreLine.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine])
+
         self.layer = combined
-        self.delay(name="Display",delay=1,handler=self.update_display)
+        self.delay(name="Display",delay=1,handler=self.main_display)
 
     def sw_centerRampMake_active(self,sw):
         if self.double:
@@ -213,6 +229,23 @@ class LastCall(ep.EP_Mode):
             self.jackpot_shot(double=True)
             self.disable_double()
         return game.SwitchStop
+
+
+    def sw_leftJetBumper_active(self,sw):
+        self.bumper_hit()
+        return game.SwitchStop
+
+    def sw_rightJetBumper_active(self,sw):
+        self.bumper_hit()
+        return game.SwitchStop
+
+    def sw_bottomJetBumper_active(self,sw):
+        self.bumper_hit()
+        return game.SwitchStop
+
+    def bumper_hit(self):
+        self.score(2530)
+        self.game.soundl.play(self.game.assets.sfx_punch)
 
     ## actual mode stuff
 
@@ -228,7 +261,7 @@ class LastCall(ep.EP_Mode):
         anim = self.game.assets.dmd_lastCall
         introLayer = ep.EP_AnimatedLayer(anim)
         introLayer.hold = True
-        introLayer.frame_time = 6
+        introLayer.frame_time = 8
         introLayer.opaque = False
         introLayer.repeat = False
         introLayer.composite_op = "blacksrc"
@@ -236,7 +269,7 @@ class LastCall(ep.EP_Mode):
         introLayer.add_frame_listener(14, self.game.sound.play,param=self.game.assets.sfx_glassSmash)
         introLayer.add_frame_listener(19, self.game.sound.play,param=self.game.assets.sfx_pianoRiff)
         textLayer = dmd.TextLayer(64, 8, self.game.assets.font_12px_az, "center", opaque=False).set_text("LAST CALL")
-        myWait = (len(anim.frames) / 10.0) + 2
+        myWait = (len(anim.frames) / 7.5) + 2
         combined = dmd.GroupedLayer(128,32,[self.backdrop,textLayer,introLayer])
         self.layer = combined
         # kick off the music
@@ -282,7 +315,6 @@ class LastCall(ep.EP_Mode):
         scoreLine = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
         scoreLine.composite_op = "blacksrc"
 
-        textString = "BEER MUG RAISES JACKPOTS"
         if self.ending:
             textString = "ENDING LAST CALL"
             infoLine = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString)
@@ -309,6 +341,10 @@ class LastCall(ep.EP_Mode):
         textLine2 = dmd.TextLayer(64, 15, self.game.assets.font_9px_az, "center", opaque=False).set_text(str(ep.format_score(totalscore)),blink_frames=8)
         combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,textLine2])
         self.layer = combined
+        # turn off the playfield lights
+        for lamp in self.game.lamps.items_tagged('Playfield'):
+            lamp.disable()
+
         # wait until all the balls are back in the trough
         self.delay("Operational",delay=3,handler=self.ball_collection)
 
@@ -318,10 +354,6 @@ class LastCall(ep.EP_Mode):
             self.end()
         else:
             self.delay("Operational",delay=2,handler=self.ball_collection)
-
-    def final_display(self):
-        # show the final player score
-        pass
 
     def end(self):
         # turn off the ending flag
@@ -354,6 +386,10 @@ class LastCall(ep.EP_Mode):
         self.game.run_highscore()
         # then unload
         self.unload()
+
+    def mode_stopped(self):
+        # clear any remaining delays
+        self.wipe_delays()
 
     def score(self,points):
         # score the points regular style
