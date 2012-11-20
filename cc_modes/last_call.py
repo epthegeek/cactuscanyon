@@ -298,6 +298,8 @@ class LastCall(ep.EP_Mode):
     def get_going(self):
         # turn off the starting flag, just in case
         self.starting = False
+        # Turn on the flippers
+        self.game.enable_flippers(True)
         # update the lamps
         self.lamp_update()
         # cancel the start delay
