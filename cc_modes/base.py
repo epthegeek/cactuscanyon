@@ -921,6 +921,14 @@ class BaseGameMode(ep.EP_Mode):
         # update the lamps to show extra ball
         self.lamp_update()
 
+    def sw_phantomSwitch3_active(self,sw):
+        print ""
+        print "******************************"
+        print "* SOMETHING ODD/BAD HAPPENED *"
+        print "*   JUST BEFORE THIS POINT   *"
+        print "******************************"
+        print ""
+
     def guns_flash(self,type=1):
         if type == 1:
             self.game.coils.leftGunFlasher.schedule(0x00101010,cycle_seconds=1)

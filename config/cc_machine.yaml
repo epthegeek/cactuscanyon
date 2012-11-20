@@ -59,6 +59,8 @@ PRSwitches:
     #Regular Switches
     phantomSwitch2:
         number: S11
+    phantomSwitch3:
+        number: S12
     startButton:
         number: S13
     plumbBobTilt:
