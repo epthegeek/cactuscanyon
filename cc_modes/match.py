@@ -28,10 +28,10 @@ class Match(ep.EP_Mode):
         super(Match, self).__init__(game, priority)
         self.digitLayer = dmd.TextLayer(76,13, self.game.assets.font_13px_thin_score, "center")
         self.zeroLayer = dmd.TextLayer(88,13, self.game.assets.font_13px_thin_score, "center").set_text("0")
-        self.p1Layer = dmd.TextLayer(13, 1, self.game.assets.font_7px_az, "right", opaque=False)
-        self.p2Layer = dmd.TextLayer(13, 9, self.game.assets.font_7px_az, "right", opaque=False)
-        self.p3Layer = dmd.TextLayer(13, 17, self.game.assets.font_7px_az, "right", opaque=False)
-        self.p4Layer = dmd.TextLayer(13, 25, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p1Layer = dmd.TextLayer(13, 0, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p2Layer = dmd.TextLayer(13, 8, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p3Layer = dmd.TextLayer(13, 16, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p4Layer = dmd.TextLayer(13, 24, self.game.assets.font_7px_az, "right", opaque=False)
         self.playerDigits = [0,0,0,0]
         self.playerLayers=[self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer]
 

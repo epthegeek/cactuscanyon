@@ -267,7 +267,7 @@ class LastCall(ep.EP_Mode):
         introLayer.opaque = False
         introLayer.repeat = False
         introLayer.composite_op = "blacksrc"
-        introLayer.add_frame_listener(5, self.game.sound.play,param=self.game.assets.quote_whatThe)
+        introLayer.add_frame_listener(6, self.game.sound.play,param=self.game.assets.quote_whatThe)
         introLayer.add_frame_listener(14, self.game.sound.play,param=self.game.assets.sfx_glassSmash)
         introLayer.add_frame_listener(19, self.game.sound.play,param=self.game.assets.sfx_pianoRiff)
         textLayer = dmd.TextLayer(64, 8, self.game.assets.font_12px_az, "center", opaque=False).set_text("LAST CALL")
