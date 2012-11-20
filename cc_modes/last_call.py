@@ -17,10 +17,9 @@
 ## The Last Call Multiball
 ##
 
-## basic gist
-## inverted flippers
-## hitting the beer mug lights jackpots
-## after collecting jackpots, or maybe after all 5 are lit, shooting the saloon should do something
+## This multiball is a match award only
+## Happens after regular gameplay
+## Ends when you get down to one ball.
 
 from procgame import dmd,game
 import ep
@@ -303,10 +302,22 @@ class LastCall(ep.EP_Mode):
 
     def end_round(self):
         # turn off the flippers
+        self.game.enable_flippers(False)
         # show the final score display
+        textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("LAST CALL TOTAL:")
+        totalscore = self.game.show_tracking('lastCallTotal')
+        textLine2 = dmd.TextLayer(64, 15, self.game.assets.font_9px_az, "center", opaque=False).set_text(str(ep.format_score(totalscore)),blink_frames=8)
+        combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,textLine2])
+        self.layer = combined
         # wait until all the balls are back in the trough
-        # then call endto check if ther are more players
-        pass
+        self.delay("Operational",delay=3,handler=self.ball_collection)
+
+    def ball_collection(self):
+        # holding pattern until the balls are all back
+        if self.game.trough.is_full():
+            self.end()
+        else:
+            self.delay("Operational",delay=2,handler=self.ball_collection)
 
     def final_display(self):
         # show the final player score
@@ -330,6 +341,15 @@ class LastCall(ep.EP_Mode):
         self.game.stack_level(6,False)
         # stop the music
         self.game.sound.stop_music()
+        textLine1 = dmd.TextLayer(64, 9, self.game.assets.font_9px_az, "center", opaque=False).set_text("FINAL TOTAL")
+        self.layer = dmd.GroupedLayer(128,32,[self.backdrop,textLine1])
+        self.delay("Operational",delay=2,handler=self.show_scores)
+
+    def show_scores(self):
+        self.layer = None
+        self.delay("Operational",delay=3,handler=self.shutdown)
+
+    def shutdown(self):
         # kick off the high score entry
         self.game.run_highscore()
         # then unload

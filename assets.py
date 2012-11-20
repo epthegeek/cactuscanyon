@@ -1030,6 +1030,7 @@ class Assets():
         self.dmd_mineEntranceBorder = dmd.Animation().load(self.dmd_path +'mine-entrance-border.dmd')
         self.dmd_simpleBorder = dmd.Animation().load(self.dmd_path + 'simple_border.dmd')
         self.dmd_skyline = dmd.Animation().load(self.dmd_path+'skyline.dmd')
+        self.dmd_bartender = dmd.Animation().load(self.dmd_path + 'bartender.dmd')
         self.dmd_escaped = dmd.Animation().load(self.dmd_path +'escaped.dmd')
 
         self.dmd_tombstone = dmd.Animation().load(self.dmd_path+'tombstone.dmd')

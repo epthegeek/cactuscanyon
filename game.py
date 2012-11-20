@@ -152,6 +152,12 @@ class CCGame(game.BasicRecordableGame):
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'LastCallHighScoreData'
+        cat.titles = ['Last Call Champ']
+        cat.score_for_player = lambda player: self.show_tracking('lastCallTotal')
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
         cat.game_data_key = 'QuickdrawChampHighScoreData'
         cat.titles = ['Quickdraw Champ']
         cat.score_for_player = lambda player: self.show_tracking('quickdrawsWon')

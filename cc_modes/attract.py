@@ -377,6 +377,15 @@ class Attract(ep.EP_Mode):
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
                     self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 
+                # Generate a screen for last call
+                if category.game_data_key == 'LastCallHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque = False, frame=self.game.assets.dmd_bartender.frames[0])
+                    title = dmd.TextLayer(80,2, self.game.assets.font_5px_bold_AZ, "center",opaque=False).set_text("LAST CALL CHAMP")
+                    initLine1 = dmd.TextLayer(80,7, self.game.assets.font_12px_az, "center",opaque=False).set_text(score.inits)
+                    scoreLine1 = dmd.TextLayer(80,22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str)
+                    combined = dmd.GroupedLayer(128,32,[backdrop,title,initLine1,scoreLine1])
+                    self.layers.append({'layer':combined, 'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
     def mode_stopped(self):
         print "DELETING ATTRACT DELAYS"
         self.wipe_delays()
