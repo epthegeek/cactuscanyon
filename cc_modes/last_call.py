@@ -174,6 +174,8 @@ class LastCall(ep.EP_Mode):
 
         # play a quote
         self.game.base.priority_quote(self.game.assets.quote_jackpot)
+        # flash some lights
+        self.game.base.red_flasher_flourish()
         # do a display
         # load up the animation
         anim = self.game.assets.dmd_beerSlide
@@ -339,6 +341,8 @@ class LastCall(ep.EP_Mode):
     def end_round(self):
         # turn off the flippers
         self.game.enable_flippers(False)
+        # play a cheer
+        self.game.sound.play(self.sfx_cheers)
         # show the final score display
         textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("LAST CALL TOTAL:")
         totalscore = self.game.show_tracking('lastCallTotal')

@@ -274,6 +274,7 @@ class Assets():
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "109-sfx-ricochet-2.wav")
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "111-sfx-ricochet-3.wav")
         self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "319-sfx-ricochet-4.wav")
+        self.game.sound.register_sound(self.sfx_ricochetSet, self.sfx_path + "159-sfx-new-ricochet-set.wav")
 
         self.sfx_cheers = 'sfx_cheers'
         self.game.sound.register_sound(self.sfx_cheers, self.sfx_path + "167-sfx-crowd-cheer-3.wav")
