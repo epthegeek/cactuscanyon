@@ -348,6 +348,8 @@ class LastCall(ep.EP_Mode):
         self.game.enable_flippers(enable=False)
         # play a cheer
         self.game.sound.play(self.game.assets.sfx_cheers)
+        # stop the music
+        self.game.sound.play_music(self.game.assets.music_lastCallEnd,loops=1)
         # show the final score display
         textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("LAST CALL TOTAL:")
         totalscore = self.game.show_tracking('lastCallTotal')
