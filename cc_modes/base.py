@@ -570,7 +570,7 @@ class BaseGameMode(ep.EP_Mode):
     ## Flipper switch detection for flipping the bonus lanes
     def sw_flipperLwL_active(self,sw):
         # if both flippers are hit, kill the bonus
-        if self.game.switches.flipperLwL.is_active():
+        if self.game.switches.flipperLwR.is_active():
             #print "Both flippers pressed"
             self.dub_flip()
         # if no balls in play, don't do anything else.
@@ -581,7 +581,7 @@ class BaseGameMode(ep.EP_Mode):
 
     def sw_flipperLwR_active(self,sw):
         # if both flippers are hit kill the bonus
-        if self.game.switches.flipperLwR.is_active():
+        if self.game.switches.flipperLwL.is_active():
             # if the bonus is active, kill that
             self.dub_flip()
         # if no balls in play, don't do anything else.
@@ -613,7 +613,7 @@ class BaseGameMode(ep.EP_Mode):
 
 ### shooter lane stuff
 
-    def sw_shooterLane_active_for_500ms(self,sw):
+    def sw_shooterLane_active_for_300ms(self,sw):
         # if we're dealing with a saved ball, plunge like the wind
         if self.game.trough.balls_to_autoplunge > 0:
             print "AUTOPLUNGE, MF"

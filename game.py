@@ -541,6 +541,8 @@ class CCGame(game.BasicRecordableGame):
 
         # remove the base game mode
         # self.modes.remove(self.base)
+        # turn the flippers off
+        self.enable_flippers(enable=False)
 
         # divert to the match before high score entry
         self.modes.add(self.match)
@@ -694,11 +696,12 @@ class CCGame(game.BasicRecordableGame):
         p = self.current_player()
         p.player_stats[item].reverse()
 
-    def stack_level(self,level,value):
+    def stack_level(self,level,value,lamps=True):
         # just a routine for setting the stack level
         self.set_tracking('stackLevel',value,level)
         # that also calls a base lamp update
-        self.lamp_control.update()
+        if lamps:
+            self.lamp_control.update()
 
     # score with bonus
     def score_with_bonus(self, points,percent=7):
@@ -754,7 +757,7 @@ class CCGame(game.BasicRecordableGame):
             if enable:
                 drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
                 drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
-                self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
+            self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
             drivers = []
             if enable:

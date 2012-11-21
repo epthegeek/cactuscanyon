@@ -80,7 +80,7 @@ class BallSearch(ep.EP_Mode):
 
             if schedule_search:
                 self.cancel_delayed(name='ball_search_countdown')
-                print "BALL SEARCH: Scheduling new countdown"
+                #print "BALL SEARCH: Scheduling new countdown"
                 self.delay(name='ball_search_countdown', event_type=None, delay=self.countdown_time, handler=self.perform_search, param=0)
 
     def stop(self,sw):

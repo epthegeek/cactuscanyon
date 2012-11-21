@@ -139,10 +139,8 @@ class Trough(ep.EP_Mode):
                     return
                 # and check for a bounceback
                 elif temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
-                    print "multiball launch fell back in?"
-                    self.cancel_delayed("Bounce_Delay")
-                    self.common_launch_code()
-                    return
+                    print "This adds up, we're good"
+                    return 'ignore'
             #  Ball saver on situations
             if self.ball_save_active:
                 print "BALL SAVE IS ACTIVE"
@@ -319,6 +317,7 @@ class Trough(ep.EP_Mode):
     def common_launch_code(self):
         # Only kick out another ball if the last ball is gone from the
         # shooter lane.
+        print "Launch action loop"
         if self.game.switches[self.shooter_lane_switchname].is_inactive():
             self.game.coils[self.eject_coilname].pulse(30)
             # go to a hold pattern to wait for the shooter lane
@@ -333,12 +332,12 @@ class Trough(ep.EP_Mode):
 
         # Otherwise, wait 1 second before trying again.
         else:
+            print "Shooter lane busy - reschedule"
             self.delay(name='launch', event_type=None, delay=1.0,
                 handler=self.common_launch_code)
 
     def finish_launch(self):
         print "Finishing Launch"
-        self.launch_in_progress = False
         # tick down the balls to launch
         self.num_balls_to_launch -= 1
         print "BALL LAUNCHED - left to launch: " +str(self.num_balls_to_launch)
@@ -355,6 +354,7 @@ class Trough(ep.EP_Mode):
             self.delay(name='launch', event_type=None, delay=2.0,
                 handler=self.common_launch_code)
         else:
+            self.launch_in_progress = False
             if self.launch_callback:
                 self.launch_callback()
 

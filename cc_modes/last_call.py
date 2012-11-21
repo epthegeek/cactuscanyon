@@ -46,6 +46,7 @@ class LastCall(ep.EP_Mode):
         infoLine3 = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("CENTER RAMP 2X WHEN LIT")
         self.infoLayer = dmd.ScriptedLayer(128,32,[{'seconds':2,'layer':infoLine1},{'seconds':2,'layer':infoLine2},{'seconds':2,'layer':infoLine3}])
         self.infoLayer.composite_op = "blacksrc"
+        self.double = False
 
     def ball_drained(self):
         # if we get down to one ball or less
@@ -127,6 +128,8 @@ class LastCall(ep.EP_Mode):
             self.game.saloon.kick()
             # back to the main display in 2 seconds
             self.delay("Display",delay=2, handler=self.main_display)
+        if self.ending:
+            self.game.saloon.kick()
 
     def sw_leftBonusLane_active(self,sw):
         self.bonus_hit()
@@ -260,7 +263,7 @@ class LastCall(ep.EP_Mode):
 
     def intro(self):
         # set a stack level, mostly to kill the inlanes
-        self.game.stack_level(6,True)
+        self.game.stack_level(6,True,lamps=False)
         # play the startup animation
         anim = self.game.assets.dmd_lastCall
         introLayer = ep.EP_AnimatedLayer(anim)
@@ -301,7 +304,7 @@ class LastCall(ep.EP_Mode):
         # turn off the starting flag, just in case
         self.starting = False
         # Turn on the flippers
-        self.game.enable_flippers(True)
+        self.game.enable_flippers(enable=True)
         # update the lamps
         self.lamp_update()
         # cancel the start delay
@@ -312,7 +315,7 @@ class LastCall(ep.EP_Mode):
         # turn on the main display loop
         self.main_display()
 
-    def main_display(self):
+    def main_display(self,loop = True):
         # cancel any display loop - if there is one
         self.cancel_delayed("Display")
         # set up the display during multiball
@@ -337,16 +340,12 @@ class LastCall(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[self.backdrop,scoreLine,infoLine,jackpotLine])
         self.layer = combined
         # loop back in .2 to update
-        self.delay(name="Display",delay=0.2,handler=self.main_display)
+        if not loop:
+            self.delay(name="Display",delay=0.2,handler=self.main_display)
 
     def end_round(self):
         # turn off the flippers
-        self.game.enable_flippers(False)
-        # and kill them in case they're up
-        self.game.coils.flipperLwRMain.disable()
-        self.game.coils.flipperLwRHold.disable()
-        self.game.coils.flipperLwLMain.disable()
-        self.game.coils.flipperLwLHold.disable()
+        self.game.enable_flippers(enable=False)
         # play a cheer
         self.game.sound.play(self.game.assets.sfx_cheers)
         # show the final score display
@@ -384,7 +383,7 @@ class LastCall(ep.EP_Mode):
 
     def finish_up(self):
         self.running = False
-        self.game.stack_level(6,False)
+        self.game.stack_level(6,False,lamps=False)
         # stop the music
         self.game.sound.stop_music()
         textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("FINAL TOTALS:")
