@@ -145,8 +145,8 @@ class SkillShot(ep.EP_Mode):
             # drunk multiball
             if self.game.show_tracking('drunkMultiballStatus') != "READY":
                 prizes.append("R")
-            # marshall multiball - if it hasn't already run
-            if self.game.show_tracking('marshallMultiballRun') != "True":
+            # marshall multiball - if it hasn't already run and it is enabled
+            if self.game.show_tracking('marshallMultiballRun') != "True" and self.game.badge.marshallValue == 'Enabled':
                 prizes.append("U")
             # extra ball
             if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
