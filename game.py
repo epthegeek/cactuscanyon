@@ -701,7 +701,10 @@ class CCGame(game.BasicRecordableGame):
         self.set_tracking('stackLevel',value,level)
         # that also calls a base lamp update
         if lamps:
+            print "Stack set updating the lamps"
             self.lamp_control.update()
+        else:
+            print "Stack set not updating thh lamps"
 
     # score with bonus
     def score_with_bonus(self, points,percent=7):

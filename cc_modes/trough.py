@@ -181,7 +181,7 @@ class Trough(ep.EP_Mode):
                 if temp_num_balls == num_current_machine_balls:
                     self.num_balls_in_play = 0
                     if self.drain_callback:
-                        print "THE TROUGH IS FULL, BALL SAVE IN ACTIVE, ENDING BALL"
+                        print "THE TROUGH IS FULL, BALL SAVE INACTIVE, ENDING BALL"
                         self.drain_callback()
                 # otherwise there's thinking to do
                 else:

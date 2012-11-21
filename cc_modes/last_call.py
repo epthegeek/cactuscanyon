@@ -263,7 +263,7 @@ class LastCall(ep.EP_Mode):
 
     def intro(self):
         # set a stack level, mostly to kill the inlanes
-        self.game.stack_level(6,True,lamps=False)
+        self.game.stack_level(6,value=True,lamps=False)
         # play the startup animation
         anim = self.game.assets.dmd_lastCall
         introLayer = ep.EP_AnimatedLayer(anim)
@@ -385,7 +385,7 @@ class LastCall(ep.EP_Mode):
 
     def finish_up(self):
         self.running = False
-        self.game.stack_level(6,False,lamps=False)
+        self.game.stack_level(6,value=False,lamps=False)
         # stop the music
         self.game.sound.stop_music()
         textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("FINAL TOTALS:")
