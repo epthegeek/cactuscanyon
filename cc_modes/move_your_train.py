@@ -48,7 +48,7 @@ class MoveYourTrain(ep.EP_Mode):
         # set the horizontal offset to starting point
         self.set_position()
         # set the time for the mode
-        self.timeLimit = self.game.user_settings['Gameplay (Feature)']['Move Your Train Timer']
+#        self.timeLimit = self.game.user_settings['Gameplay (Feature)']['Move Your Train Timer']
         # set the status to ready
         self.game.set_tracking("mytStatus", "READY")
         self.shots = 0

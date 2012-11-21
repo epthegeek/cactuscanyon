@@ -249,7 +249,7 @@ class LastCall(ep.EP_Mode):
 
     def bumper_hit(self):
         self.score(2530)
-        self.game.soundl.play(self.game.assets.sfx_punch)
+        self.game.sound.play(self.game.assets.sfx_punch)
 
     ## actual mode stuff
 
@@ -307,6 +307,7 @@ class LastCall(ep.EP_Mode):
         # cancel the start delay
         self.cancel_delayed("Start Delay")
         # launch some balls
+        self.game.trough.balls_to_autoplunge = 3
         self.game.trough.launch_balls(3)
         # turn on the main display loop
         self.main_display()
@@ -341,8 +342,13 @@ class LastCall(ep.EP_Mode):
     def end_round(self):
         # turn off the flippers
         self.game.enable_flippers(False)
+        # and kill them in case they're up
+        self.game.coils.flipperLwRMain.disable()
+        self.game.coils.flipperLwRHold.disable()
+        self.game.coils.flipperLwLMain.disable()
+        self.game.coils.flipperLwLHold.disable()
         # play a cheer
-        self.game.sound.play(self.sfx_cheers)
+        self.game.sound.play(self.game.assets.sfx_cheers)
         # show the final score display
         textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("LAST CALL TOTAL:")
         totalscore = self.game.show_tracking('lastCallTotal')

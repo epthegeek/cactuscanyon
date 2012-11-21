@@ -71,6 +71,7 @@ class SavePolly(ep.EP_Mode):
             if self.game.show_tracking("centerRampStage") == 99:
                 self.game.base.busy = True
                 self.game.base.queued += 1
+                self.cancel_delayed("Mode Timer")
                 self.polly_died()
 
     # bonus lanes pause save polly
