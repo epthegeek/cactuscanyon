@@ -948,6 +948,8 @@ class Assets():
         self.game.sound.register_music(self.music_multiball_intro, self.music_path + "026-multiball-intro-music.wav")
         self.music_pollyPeril = 'music_pollyPeril'
         self.game.sound.register_music(self.music_pollyPeril, self.music_path + "031-polly-peril.wav")
+        self.music_altPeril = 'music_altPeril'
+        self.game.sound.register_music(self.music_altPeril, self.music_path + "cowboy.wav")
         self.music_highScoreLead = 'music_highScoreLead'
         self.game.sound.register_sound(self.music_highScoreLead, self.music_path + "044-high-score-entry-lead.wav")
         self.music_goldmineMultiball = 'music_goldmineMultiball'

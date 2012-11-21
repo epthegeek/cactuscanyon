@@ -386,12 +386,10 @@ class LastCall(ep.EP_Mode):
     def finish_up(self):
         self.running = False
         self.game.stack_level(6,value=False,lamps=False)
-        # stop the music
-        self.game.sound.stop_music()
         textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("FINAL TOTALS:")
         playerCount = len(self.game.players)
         if playerCount == 1:
-            playerLine1 = dmd.TextLayer(64, 16, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(str(ep.format_score(self.game.players[0].score)))
+            playerLine1 = dmd.TextLayer(64, 15, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.game.players[0].score)))
             combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1])
         elif playerCount == 2:
             playerLine1 = dmd.TextLayer(64, 12, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)))
