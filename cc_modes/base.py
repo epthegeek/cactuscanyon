@@ -616,8 +616,8 @@ class BaseGameMode(ep.EP_Mode):
     def sw_shooterLane_active_for_300ms(self,sw):
         # if we're dealing with a saved ball, plunge like the wind
         if self.game.trough.balls_to_autoplunge > 0:
-            print "AUTOPLUNGE, MF"
             self.game.trough.balls_to_autoplunge -= 1
+            print "AUTOPLUNGE, MF - Left to autoplunge " + str(self.game.trough.balls_to_autoplunge)
             self.game.coils.autoPlunger.pulse(20)
 
 
@@ -638,6 +638,8 @@ class BaseGameMode(ep.EP_Mode):
             self.autoplunge_correct("Stampede Multiball")
         elif self.game.marshall_multiball.running:
             self.autoplunge_correct("Marshall Multiball")
+        elif self.game.last_call.running:
+            self.autoplunge_correct("Last Call")
         else:
             pass
 
@@ -911,7 +913,7 @@ class BaseGameMode(ep.EP_Mode):
                     self.game.modes.add(self.game.marshall_multiball)
 
     def sw_phantomSwitch_active(self,sw):
-        self.game.trough.num_balls_in_play = 0
+        self.game.trough.num_balls_in_play = 1
         self.game.ball_drained()
 
     def sw_phantomSwitch2_active(self,sw):
@@ -948,6 +950,11 @@ class BaseGameMode(ep.EP_Mode):
             if ball_count == 4:
                 print ("The trough is full, but there should be a ball in play. Stealth Launch")
                 self.game.trough.launch_balls(1,stealth=True)
+            # clear the saloon and mine
+            if self.game.switches.minePopper.is_active():
+                self.game.mountain.eject()
+            if self.game.switches.saloonPopper.is_active():
+                self.game.saloon.kick()
 
     # knocker
     def knock(self,value,realOnly = False):

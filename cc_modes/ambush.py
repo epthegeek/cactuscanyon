@@ -466,7 +466,7 @@ class Ambush(ep.EP_Mode):
         self.game.set_tracking('ambushPoints',0)
 
         # should we update the badge with ambush?
-        badge = "Yes" == self.game.user_settings['Machine (Standard)']['Ambush Awards Badge']
+        badge = "Yes" == self.game.user_settings['Gameplay (Feature)']['Ambush Awards Badge']
         if badge:
             # award the badge light - showdown/ambush is 3
             self.game.badge.update(3)

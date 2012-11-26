@@ -36,7 +36,7 @@ Machine (Standard):
     options: [True,False]
     default: True
   'Flipper Pulse':
-    options: [25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40]
+    options: [25,40]
     increments: 1
     default: 30
 Sound:

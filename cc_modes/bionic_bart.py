@@ -49,6 +49,7 @@ class BionicBart(ep.EP_Mode):
             self.bionic_failed()
 
     def mode_started(self):
+        print "Starting bionic bart battle"
         # set the stack level
         self.game.stack_level(6,True)
         # set up the standard display stuff
@@ -148,6 +149,7 @@ class BionicBart(ep.EP_Mode):
         self.game.squelch_music()
         # if the shot is active, register it as such
         if shot in self.activeShots:
+            print "Bionic Bart active shot hit " + str(shot)
             if self.loaded == False:
                 self.shots += 1
                 # play a lamp show based on shot number
@@ -398,6 +400,7 @@ class BionicBart(ep.EP_Mode):
 
 
     def hit(self,step=1):
+        print "Hitting bionic bart"
         if step == 1:
             # turn off loaded and the lights
             self.loaded = False
