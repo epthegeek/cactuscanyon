@@ -39,6 +39,10 @@ Machine (Standard):
     options: [25,40]
     increments: 1
     default: 30
+  'Drop Target Boost':
+    options: [0,30]
+    increments: 5
+    default: 0
 Sound:
   'Initial volume':
     options: [1,2,3,4,5,6,7,8,9,10]

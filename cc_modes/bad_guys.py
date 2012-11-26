@@ -45,6 +45,7 @@ class BadGuys(ep.EP_Mode):
                        self.game.lamps.badGuyL3]
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
+        self.on_time = self.game.user_settings['Machine (Standard)']['Drop Target Boost']
 
     def ball_drained(self):
     # just in case, drop all the coils when ball ends
@@ -141,7 +142,7 @@ class BadGuys(ep.EP_Mode):
         print self.game.show_tracking('badGuyUp')
        # self.coils[target].patter(on_time=10,off_time=10,original_on_time=18)
         # new coil raise based on research with on o-scope by jim (jvspin)
-        self.coils[target].patter(on_time=2,off_time=2)
+        self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
         # hold the raise pulse for a bit longer
         self.delay(self.coilStrings[target],delay=0.6,handler=self.target_hold,param=target)
         self.lamps[target].schedule(0x00FF00FF)
