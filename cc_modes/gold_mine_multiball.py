@@ -46,6 +46,7 @@ class GoldMine(ep.EP_Mode):
         self.banditTimer = 0
         self.banditsUp = 0
         self.jackpots = 0
+        self.halted = False
         # reset the jackpots to false to prevent lights until the mode really starts
         for i in range(0,5,1):
             self.game.set_tracking('jackpotStatus',False,i)
@@ -80,20 +81,76 @@ class GoldMine(ep.EP_Mode):
 
     ### switches
     def sw_leftLoopTop_active(self,sw):
-        self.process_shot(0)
+        if not self.restartFlag:
+            self.process_shot(0)
 
     def sw_leftRampEnter_active(self, sw):
-        self.process_shot(1)
+        if not self.restartFlag:
+            self.process_shot(1)
 
     def sw_centerRampMake_active(self, sw):
-        self.process_shot(2)
+        if not self.restartFlag:
+            self.process_shot(2)
 
     def sw_rightLoopTop_active(self, sw):
-        if not self.game.bart.moving:
+        if not self.game.bart.moving and not self.restartFlag:
             self.process_shot(3)
 
     def sw_rightRampMake_active(self, sw):
-        self.process_shot(4)
+        if not self.restartFlag:
+            self.process_shot(4)
+
+    # bumpers for restart pause
+    def sw_leftJetBumper_active(self,sw):
+        if not self.halted and self.restartFlag:
+            self.halt()
+
+    def sw_rightJetBumper_active(self,sw):
+        if not self.halted and self.restartFlag:
+            self.halt()
+
+    def sw_bottomJetBumper_active(self,sw):
+        if not self.halted and self.restartFlag:
+            self.halt()
+
+    # mine for restart pause
+    def sw_minePopper_active_for_150ms(self,sw):
+        if not self.halted and self.restartFlag:
+            self.halt()
+
+    # saloon popper for restart pause
+    def sw_saloonPopper_active_for_150ms(self,sw):
+        if not self.halted and self.restartFlag:
+            self.halt()
+
+    # bonus lanes restart pause
+    def sw_leftBonusLane_active(self,sw):
+        if not self.halted and self.restartFlag:
+            self.halt()
+
+    def sw_rightBonusLane_active(self,sw):
+        if not self.halted and self.restartFlag:
+            self.halt()
+
+    # the halt routine
+    def halt(self):
+        self.halted = True
+        self.cancel_delayed("Restart Timer")
+        self.restart_hold_display()
+
+    # restart switches - jet bumpers exit and saloon clear
+    def sw_jetBumpersExit_active(self,sw):
+        if self.halted and self.restartFlag:
+            self.remove_halt()
+
+    def sw_saloonPopper_inactive(self,sw):
+        if self.halted and self.restartFlag:
+            self.remove_halt()
+
+    # restart the timer after 1.5 seconds
+    def remove_halt(self):
+        self.halted = False
+        self.delay("Restart Timer",delay=1.5,handler=self.restart_option)
 
     def process_shot(self,shot):
         # we've hit a potential jackpot
@@ -548,6 +605,19 @@ class GoldMine(ep.EP_Mode):
             combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom,timeText])
             self.layer = combined
             self.delay(name="Restart Timer",delay=1.0,handler=self.restart_option)
+
+    def restart_hold_display(self):
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
+        awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_5px_AZ,justify="center",opaque=False)
+        timeText = dmd.TextLayer(64,17,self.game.assets.font_9px_az,justify="center",opaque=False)
+        timeText.composite_op = "blacksrc"
+        awardTextTop.set_text("SHOOT THE MINE")
+        awardTextBottom.set_text("TO RESTART MULTIBALL")
+        textLine = "PAUSED"
+        timeText.set_text(textLine,blink_frames=4)
+        combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom,timeText])
+        self.layer = combined
 
     def end_multiball(self):
         self.wipe_delays()
