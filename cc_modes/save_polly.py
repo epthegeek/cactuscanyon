@@ -31,12 +31,14 @@ class SavePolly(ep.EP_Mode):
         self.running = False
         self.halted = False
         self.won = False
+        self.paused = False
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
         self.game.switch_blocker('add')
         # set the polly indicator
         self.game.peril = True
+        self.paused = False
         self.shotsSoFar = 0
         self.cows = [self.game.assets.sfx_cow1, self.game.assets.sfx_cow2]
         self.modeTimer = 0
@@ -241,6 +243,7 @@ class SavePolly(ep.EP_Mode):
     def pause_train(self,advanced=False):
         if self.running:
             print "PAUSE TRAIN"
+            self.paused = True
             # kill the in progress timer
             self.cancel_delayed("Mode Timer")
             # stop the train from moving
@@ -272,6 +275,7 @@ class SavePolly(ep.EP_Mode):
         # if the timer is at 0 start the train up again
         if time <= 0:
             print "RESUMING POLLY"
+            self.paused = False
             self.in_progress()
         else:
             print "POLLY PAUSED: " + str(time)
@@ -460,6 +464,7 @@ class SavePolly(ep.EP_Mode):
         print "SAVE POLLY IS DISPATCHING DELAYS"
         self.wipe_delays()
         self.clear_layer()
+        self.paused = False
         if self.running:
             if self.won or self.modeTimer <= 0:
                 self.polly_finished()

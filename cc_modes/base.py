@@ -698,7 +698,10 @@ class BaseGameMode(ep.EP_Mode):
         ep.last_shot = None
 
     def sw_bottomLeftStandUp_active(self,sw):
-        self.quickdraw_hit('BOT',0)
+        if self.game.save_polly.paused:
+            self.game.interrupter.mad_cow()
+        else:
+            self.quickdraw_hit('BOT',0)
         ## -- set the last switch hit --
         ep.last_switch = "bottomLeftStandup"
         ## kill the combo shot chain
@@ -712,7 +715,10 @@ class BaseGameMode(ep.EP_Mode):
         ep.last_shot = None
 
     def sw_bottomRightStandUp_active(self,sw):
-        self.quickdraw_hit('BOT',1)
+        if self.game.save_polly.paused:
+            self.game.interrupter.mad_cow()
+        else:
+            self.quickdraw_hit('BOT',1)
         ## -- set the last switch hit --
         ep.last_switch = "bottomRightStandup"
         ## kill the combo shot chain

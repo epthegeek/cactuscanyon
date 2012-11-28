@@ -1218,6 +1218,7 @@ class Assets():
         self.dmd_lastCall = dmd.Animation().load(self.dmd_path+'last_call.dmd')
         self.dmd_beerFill = dmd.Animation().load(self.dmd_path+'beer-fill.dmd')
 
+        self.dmd_cows = dmd.Animation().load(self.dmd_path+'crazy_cows.dmd')
         
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"

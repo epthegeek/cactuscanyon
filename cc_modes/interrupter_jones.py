@@ -20,6 +20,7 @@
 
 from procgame import dmd
 import ep
+import random
 
 class Interrupter(ep.EP_Mode):
     """Cactus Canyon Interrupter Jones"""
@@ -393,6 +394,33 @@ class Interrupter(ep.EP_Mode):
         self.game.base.play_quote(self.game.assets.quote_yippie)
         self.layer = dmd.ScriptedLayer(128,32,script)
         self.delay("Display",delay=2,handler=self.clear_layer)
+
+    # mad cow display
+    def mad_cow(self,step=1):
+        backdrop = ep.EP_AnimatedLayer(self.game.assets.dmd_cows)
+        backdrop.hold = False
+        backdrop.repeat = True
+        backdrop.frame_time = 6
+        backdrop.opaque = True
+        if step == 1:
+            noises = [self.game.assets.sfx_cow1,self.game.assets.sfx_cow2]
+            sound = random.choice(noises)
+            self.game.sound.play(sound)
+            textLine1 = dmd.TextLayer(64,1,self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("MAD",blink_frames=15)
+            textLine2 = dmd.TextLayer(64,16,self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("COW",blink_frames=15)
+            textLine1.composite_op = "blacksrc"
+            textLine2.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+            self.layer = combined
+            self.delay("Display",delay=1.5,handler=self.mad_cow,param=2)
+        elif step == 2:
+            textLine1 = dmd.TextLayer(64,9,self.game.assets.font_12px_az_outline, "center",opaque=False).set_text("50,000")
+            textLine1.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[backdrop,textLine1])
+            self.layer = combined
+            self.delay("Display",delay=1.5,handler=self.clear_layer)
+        else:
+            pass
 
     # volume controls
     # Outside of the service mode, up/down control audio volume.
