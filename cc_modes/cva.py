@@ -877,13 +877,13 @@ class CvA(ep.EP_Mode):
         self.delay("Taunt",delay=1,handler=self.taunt_timer,param=counter)
 
     def gi_flutter(self):
-        print "GI FLUTTER"
+        #print "GI FLUTTER"
         self.game.lamps.gi01.schedule(0x000C0F0F,cycle_seconds=1)
         self.game.lamps.gi02.schedule(0x000C0F0F,cycle_seconds=1)
         self.game.lamps.gi03.schedule(0x000C0F0F,cycle_seconds=1)
 
     def gi_bloom(self,duration):
-        print "GI BLOOM"
+        #print "GI BLOOM"
         self.delay("Bloom",delay=duration,handler=self.gi_bloom,param=duration)
         self.game.lamps.gi01.schedule(0x00000FFF,cycle_seconds=1)
         self.game.lamps.gi02.schedule(0x00000FFF,cycle_seconds=1)

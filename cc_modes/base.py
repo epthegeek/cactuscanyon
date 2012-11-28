@@ -728,7 +728,7 @@ class BaseGameMode(ep.EP_Mode):
           stat == "READY" or  \
           stat == position or \
           self.game.show_tracking('bionicStatus') == "RUNNING":
-            print "QUICKDRAW IS RUNNING OR LIT"
+            #print "QUICKDRAW IS RUNNING OR LIT"
             # register a lit hit
             self.quickdraw_lit_hit()
         # otherwise quickdraw is NOT running or LIT
@@ -913,7 +913,7 @@ class BaseGameMode(ep.EP_Mode):
                     self.game.modes.add(self.game.marshall_multiball)
 
     def sw_phantomSwitch_active(self,sw):
-        self.game.trough.num_balls_in_play = 1
+        self.game.trough.num_balls_in_play = 0
         self.game.ball_drained()
 
     def sw_phantomSwitch2_active(self,sw):

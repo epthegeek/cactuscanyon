@@ -38,6 +38,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.running = False
 
     def mode_started(self):
+        print "Beginning Move Your Train"
         self.postUse = False
         # move the train to the middle of the track
         # set a stop point for the encoder
