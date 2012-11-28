@@ -905,12 +905,15 @@ class BaseGameMode(ep.EP_Mode):
 
     # for starting marshall multiball, so other modes can reference it and then quit if necessary
     def kickoff_marshall(self,super=False):
+        print "Marshall Multiball Kickoff Attempt"
         # if we haven't already run marshall multiball - or if it's coming from the super skill shot
         if not self.game.show_tracking('marshallMultiballRun') or super:
             # and nothing else is running
             if True not in self.game.show_tracking('stackLevel'):
                 if self.game.marshall_multiball not in self.game.modes:
                     self.game.modes.add(self.game.marshall_multiball)
+            else:
+                print "Game is busy - Marshall Kickoff Passing"
 
     def sw_phantomSwitch_active(self,sw):
         self.game.trough.num_balls_in_play = 0

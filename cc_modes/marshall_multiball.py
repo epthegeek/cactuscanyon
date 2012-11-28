@@ -27,6 +27,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.jackpotTimer = self.game.user_settings['Gameplay (Feature)']['Marshall Jackpot Timer']
 
     def mode_started(self):
+        print "Starting Marshall Multiball"
         # reset the points
         self.pointTotal = 0
         self.running = True
