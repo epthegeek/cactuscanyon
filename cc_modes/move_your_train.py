@@ -134,6 +134,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.layer = combined
 
     def move_display(self,direction):
+        print "Moving Train " + str(direction)
         # set the train layer
         if direction == "left":
             self.set_train_layer("left",self.trainOffset)
@@ -154,7 +155,7 @@ class MoveYourTrain(ep.EP_Mode):
             self.delay(delay=self.animWait,handler=self.win)
         else:
             # set a delay to go back to idle for all other cases
-            self.delay(name="Display",delay=self.animWait,handler=self.idle_display)
+            self.delay(name="Operational",delay=self.animWait,handler=self.idle_display)
 
     def move_train(self,direction):
         print "TRAIN STATUS:" + str(self.game.train.inMotion)
@@ -177,7 +178,7 @@ class MoveYourTrain(ep.EP_Mode):
                 if self.trainOffset > 0:
                     self.move_display("right")
                     self.game.train.fast_reverse()
-            elif self.trainOffset < 0:
+                elif self.trainOffset < 0:
                     self.move_display("left")
                     self.game.train.fast_forward()
             else:
@@ -185,6 +186,7 @@ class MoveYourTrain(ep.EP_Mode):
 
 
     def idle_display(self):
+        print "TRain Idle display"
         # set the train layer to idle
         self.set_train_layer("idle",self.trainOffset)
         # blow the wistle
