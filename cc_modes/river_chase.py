@@ -322,7 +322,7 @@ class RiverChase(ep.EP_Mode):
             else:
                 # swap in the new layer
                 self.layer = completeFrame
-            self.delay(name="Display",delay=2,handler=self.end_river_chase)
+            self.delay(name="Operational",delay=2,handler=self.end_river_chase)
             # show combo display if the chain is high enough
             if self.game.combos.chain > 1:
                 self.delay(name="Display",delay=2,handler=self.game.combos.display)
