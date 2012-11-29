@@ -295,9 +295,6 @@ class GoldMine(ep.EP_Mode):
 
             # count the jackpot
             self.jackpots += 1
-            # if we get 3 or more, no restart
-            if self.jackpots >= 3:
-                self.restarted = True
             # increase the motherlode value
             self.motherlodeValue += 250000
             if self.game.drunk_multiball.running:
@@ -504,8 +501,6 @@ class GoldMine(ep.EP_Mode):
         motherlodes = self.game.increase_tracking('motherlodesCollected')
         # and one to the total motherlodes for good measure - this one is persistent for the game
         self.game.increase_tracking('motherlodesCollectedTotal')
-        # set the restarted flag to kill the restart option
-        self.restarted = True
         # check the multiplier value
         myMultiplier = self.game.show_tracking('motherlodeMultiplier')
         # award the points - motherlode value X multiplier
@@ -527,6 +522,8 @@ class GoldMine(ep.EP_Mode):
         if motherlodes >= self.motherlodesForStar or myMultiplier > 1:
             # set the star flag for motherlode - it's 0
             self.game.badge.update(0)
+            # if we met the requirements for the badge, don't offer restart
+            self.restarted = True
         # update the lamps
         self.lamp_update()
         # reset a counter
