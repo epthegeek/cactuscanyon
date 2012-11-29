@@ -25,6 +25,7 @@ class CenterRamp(ep.EP_Mode):
     """Cactus Canyon Center Ramp Mode"""
     def __init__(self, game, priority):
         super(CenterRamp, self).__init__(game, priority)
+        self.myID = "Center Ramp"
         self.border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tracksBorder.frames[0])
 
     def mode_started(self):

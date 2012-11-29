@@ -29,6 +29,7 @@ class BionicBart(ep.EP_Mode):
     """Bionic Bart code """
     def __init__(self,game,priority):
         super(BionicBart, self).__init__(game,priority)
+        self.myID = "Bionic Bart"
         self.hitsToDefeat = self.game.user_settings['Gameplay (Feature)']['Shots to defeat Bionic Bart']
         self.shotModes = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.saloon]
         self.banners = [self.game.assets.dmd_bamBanner,
@@ -214,7 +215,7 @@ class BionicBart(ep.EP_Mode):
 
     def start_bionic(self):
         # kill the music
-        self.game.sound.stop_music()
+        self.stop_music()
         # set bionic to running
         self.game.set_tracking('bionicStatus',"RUNNING")
         # kick off the intro
@@ -276,7 +277,7 @@ class BionicBart(ep.EP_Mode):
             self.delay(delay = duration, handler=self.intro,param=6)
         if step == 6:
             # start the music
-            self.game.base.music_on(self.game.assets.music_bionicBart)
+            self.music_on(self.game.assets.music_bionicBart)
             self.update_display()
             # set the active shots
             self.activate_shots(2)
@@ -489,7 +490,7 @@ class BionicBart(ep.EP_Mode):
             self.game.set_tracking('bionicStatus', "DEAD")
 
             # stop the music
-            self.game.sound.stop_music()
+            self.stop_music()
             # load up the defeated animation
             anim = self.game.assets.dmd_bionicDeath
             # set the animation
@@ -623,7 +624,7 @@ class BionicBart(ep.EP_Mode):
         self.lamp_update()
         # turn the main music back on
         if self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+            self.music_on(self.game.assets.music_mainTheme)
         # kick the ball if it's held
         self.game.saloon.kick()
         # unset the base busy flag

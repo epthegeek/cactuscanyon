@@ -26,6 +26,7 @@ class Match(ep.EP_Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Match, self).__init__(game, priority)
+        self.myID = "Match"
         self.digitLayer = dmd.TextLayer(76,13, self.game.assets.font_13px_thin_score, "center")
         self.zeroLayer = dmd.TextLayer(88,13, self.game.assets.font_13px_thin_score, "center").set_text("0")
         self.p1Layer = dmd.TextLayer(13, 0, self.game.assets.font_7px_az, "right", opaque=False)

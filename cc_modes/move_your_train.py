@@ -21,6 +21,7 @@ import ep
 class MoveYourTrain(ep.EP_Mode):
     def __init__(self,game,priority):
         super(MoveYourTrain, self).__init__(game,priority)
+        self.myID = "Move Your Train"
         # train idle animation
         self.animIdle = self.game.assets.dmd_trainOnTracks
         # train moving right animation

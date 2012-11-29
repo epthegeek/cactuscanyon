@@ -30,6 +30,7 @@ class DrunkMultiball(ep.EP_Mode):
     """Drunk multiball mode ... """
     def __init__(self,game,priority):
         super(DrunkMultiball, self).__init__(game,priority)
+        self.myID = "Drunk Multiball"
         anim = self.game.assets.dmd_dmbIdle
         self.overlay = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=8)
         self.shotModes = [self.game.lamp_control.left_loop,self.game.lamp_control.right_loop,self.game.lamp_control.left_ramp,self.game.lamp_control.center_ramp,self.game.lamp_control.right_ramp]
@@ -42,7 +43,7 @@ class DrunkMultiball(ep.EP_Mode):
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
-        self.game.switch_blocker('add')
+        self.game.switch_blocker('add',self.myID)
         # reset the jackpots
         self.active = []
 
@@ -104,13 +105,13 @@ class DrunkMultiball(ep.EP_Mode):
         # enable the inverted flippers
         self.game.enable_inverted_flippers(True)
         # stop the music
-        self.game.sound.stop_music()
+        self.stop_music()
         # turn the GI off
         self.game.gi_control("OFF")
         # update the lamps
         self.lamp_update()
         # play the drunk multiball song
-        self.game.base.music_on(self.game.assets.music_drunkMultiball)
+        self.music_on(self.game.assets.music_drunkMultiball)
         # show some screens about the mode
         self.banner()
 
@@ -332,15 +333,14 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.set_tracking('beerMugHits',0)
         # set the stack flag back off
         self.game.stack_level(3,False)
-        stackLevel = self.game.show_tracking('stackLevel')
-        # stop the music if there isn't a higher mode running
-        if True not in stackLevel[4:]:
-            self.game.sound.stop_music()
-            # tick up the shots needed for next time
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+        # kill the music
+        self.stop_music(slice=4)
+        # restat the main music
+        self.music_on(self.game.assets.music_mainTheme,mySlice=4)
+        # tick up the shots needed for next time
         self.game.base.mug_shots += 3
         # remove the switch blocker
-        self.game.switch_blocker('remove')
+        self.game.switch_blocker('remove',self.myID)
         self.game.base.busy = False
         self.game.base.queued -= 1
         # unload the mode

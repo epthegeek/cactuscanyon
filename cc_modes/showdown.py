@@ -29,6 +29,7 @@ class Showdown(ep.EP_Mode):
     """Showdown code """
     def __init__(self,game,priority):
         super(Showdown, self).__init__(game,priority)
+        self.myID = "Showdown"
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
         # read the difficulty setting from the options
         self.difficulty = self.game.user_settings['Gameplay (Feature)']['Showdown Difficulty']
@@ -98,7 +99,7 @@ class Showdown(ep.EP_Mode):
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
-        self.game.base.music_on(self.game.assets.music_showdown)
+        self.music_on(self.game.assets.music_showdown)
         #self.showdown_reset_guys()
         self.new_rack_pan()
         # drop the post
@@ -278,9 +279,7 @@ class Showdown(ep.EP_Mode):
         self.game.bad_guys.drop_targets()
         # kill the music - if nothing else is running
         # start up the main theme again if a higher level mode isn't running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
-            self.game.sound.stop_music()
+        self.stop_music(slice=2)
         # tally some score?
         # award the badge light - showdown/ambush is 3
         self.game.badge.update(3)
@@ -304,9 +303,8 @@ class Showdown(ep.EP_Mode):
             self.game.set_tracking('badGuyUp',False,i)
         self.lamp_update()
         # start up the main theme again if a higher level mode isn't running
-        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
-            # turn off the level 1 flag
+        self.music_on(self.game.assets.music_mainTheme,mySlice=2)
+        # turn off the level 1 flag
         self.game.stack_level(1,False)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])

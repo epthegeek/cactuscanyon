@@ -82,6 +82,7 @@ class EP_Mode(object):
         self.POSTS = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
         self.running = False
         self.queued = 0
+        self.myID = "Unknown"
 
     def __scan_switch_handlers(self):
         # Format: sw_popperL_open_for_200ms(self, sw):
@@ -351,6 +352,33 @@ class EP_Mode(object):
     # simple mode shutdown
     def unload(self):
         self.game.modes.remove(self)
+
+    # music stopper with output
+    def stop_music(self,slice =0,execute=True):
+        # if given a slice number to check - do that
+        if slice != 0:
+            stackLevel = self.game.show_tracking('stackLevel')
+            # if there are balls in play and nothing active above the set slice, then kill the music
+            if True not in stackLevel[slice:] and self.game.trough.num_balls_in_play != 0:
+                pass
+            else:
+                print "Music stop called by " + str(self.myID) + " But passed - Busy"
+                execute = False
+        # if the execute flag is still true, stop the msuic
+        if execute:
+            print str(self.myID) + " is stopping the music"
+            self.game.sound.stop_music()
+
+    def music_on(self,song,mySlice=0):
+        # if a song was passed, send that along
+        if song:
+            self.game.music_on(song,caller=self.myID,slice=mySlice)
+        # otherwise, just tag with the current ID and slice and play the current
+        else:
+            self.game.music_on(caller=self.myID,slice=mySlice)
+
+    def delayed_music_on(self,wait,song=None):
+        self.delay(delay=wait, handler=self.music_on,param=song)
 
     # if there's no layer, and it's wanted for a group, return a blank one
     def no_layer(self):

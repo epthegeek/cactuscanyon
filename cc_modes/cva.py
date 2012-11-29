@@ -22,6 +22,7 @@ class CvA(ep.EP_Mode):
     """CvA code """
     def __init__(self,game,priority):
         super(CvA, self).__init__(game,priority)
+        self.myID = "Cowboys VS Aliens"
         # the shots and their modes for ship mode
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
@@ -364,11 +365,11 @@ class CvA(ep.EP_Mode):
             self.entry = entry
             self.side = onSide
             # start the music
-            self.game.sound.stop_music()
+            self.stop_music()
             # intro section
             duration = self.game.sound.play(self.game.assets.music_cvaIntro)
             # main loop
-            self.delay(delay=duration,handler=self.game.base.music_on,param=self.game.assets.music_cvaLoop)
+            self.delay(delay=duration,handler=self.music_on,param=self.game.assets.music_cvaLoop)
             self.delay(delay=duration,handler=self.gi_bloom,param=4.35)
             self.delay(delay=duration,handler=self.intro,param=3)
             # load a blank frame to fade in from
@@ -789,7 +790,7 @@ class CvA(ep.EP_Mode):
         # and the display delay
         self.cancel_delayed("Display")
         # stop the music
-        self.game.sound.stop_music()
+        self.stop_music()
         # kill the drop targets
         self.game.bad_guys.kill_power()
         # do the final display
@@ -852,9 +853,7 @@ class CvA(ep.EP_Mode):
         # put the lights back to normal
         self.lamp_update()
         # turn the music back on if appropriate
-        # turn the music back on
-        if True not in stackLevel[6:] and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+        self.music_on(self.game.assets.music_mainTheme,mySlice=6)
 
         # reset the saucer x just in case
         self.saucerX = 104

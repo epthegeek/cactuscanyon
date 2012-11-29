@@ -25,6 +25,7 @@ class HighNoon(ep.EP_Mode):
     """Ooooh no, it's HIIIIIIGH Noon """
     def __init__(self,game,priority):
         super(HighNoon, self).__init__(game,priority)
+        self.myID = "High Noon"
         self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine]
         self.killed = 0
         self.myTimer = 0
@@ -172,7 +173,7 @@ class HighNoon(ep.EP_Mode):
     def timer(self,seconds):
         # if we're out of time, end
         if seconds <= 0:
-            self.game.sound.stop_music()
+            self.stop_music()
             self.finish_up()
         else:
             seconds -= 1
@@ -185,7 +186,7 @@ class HighNoon(ep.EP_Mode):
             # turn off ball search because this takes a while
             self.game.ball_search.disable()
             # kill the music
-            self.game.sound.stop_music()
+            self.stop_music()
             # turn off the lights
             self.game.set_tracking('lampStatus', "OFF")
             self.lamp_update()
@@ -227,7 +228,7 @@ class HighNoon(ep.EP_Mode):
             animLayer.composite_op = "blacksrc"
             if step == 1:
                 duration2 = self.game.sound.play(self.game.assets.music_highNoonLead)
-                self.delay(delay=duration2,handler=self.game.base.music_on,param=self.game.assets.music_highNoon)
+                self.delay(delay=duration2,handler=self.music_on,param=self.game.assets.music_highNoon)
 
                 composite = dmd.GroupedLayer(128,32,[self.banner,animLayer])
             if step == 3:
@@ -354,7 +355,7 @@ class HighNoon(ep.EP_Mode):
         # cancel the church bell
         self.cancel_delayed("Church Bell")
         # kill the music
-        self.game.sound.stop_music()
+        self.stop_music()
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_highNoonWin)
         self.finish_up()
@@ -433,7 +434,7 @@ class HighNoon(ep.EP_Mode):
         if step == 1:
             print "HIGH NOON JACKPOT TALLY"
             # start the drum roll
-            self.game.base.music_on(self.game.assets.music_drumRoll)
+            self.music_on(self.game.assets.music_drumRoll)
             myDelay = 0.2
             self.tally(title="JACKPOT",amount=self.jackpots,value=250000,frame_delay=myDelay,callback=self.final_display,step=2)
             musicWait = myDelay * self.jackpots + 1
@@ -445,7 +446,7 @@ class HighNoon(ep.EP_Mode):
         if step == 2:
             print "HIGH NOON BAD GUY TALLY"
             # start the drum roll
-            self.game.base.music_on(self.game.assets.music_drumRoll)
+            self.music_on(self.game.assets.music_drumRoll)
             myDelay = 0.2
             self.tally(title="BAD GUY",amount=self.killed,value=500000,frame_delay=myDelay,callback=self.final_display,step=3)
             musicWait = myDelay * self.killed + 1

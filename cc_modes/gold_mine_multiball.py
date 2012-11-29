@@ -25,6 +25,7 @@ class GoldMine(ep.EP_Mode):
     """Mining for great justice - For the Gold Mine Multiball, and ... ? """
     def __init__(self,game,priority):
         super(GoldMine, self).__init__(game,priority)
+        self.myID = "Gold Mine Multiball"
         self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine,self.game.combos]
         motherlodeDifficulty = self.game.user_settings['Gameplay (Feature)']['Motherlode Badge Difficulty']
         if motherlodeDifficulty == 'Easy':
@@ -37,7 +38,7 @@ class GoldMine(ep.EP_Mode):
         # fire up the switch block if it's not already loaded
         self.restartFlag = False
         self.restarted = False
-        self.game.switch_blocker('add')
+        self.game.switch_blocker('add',self.myID)
         self.motherlodeValue = 0
         self.displayMotherlodeValue = 0
         self.counter = 0
@@ -186,10 +187,9 @@ class GoldMine(ep.EP_Mode):
         self.game.stack_level(4,True)
         print "MULTIBALL STARTING"
         # kill the music
-        print "start multiball IS KILLING THE MUSIC"
-        self.game.sound.stop_music()
+        self.stop_music()
         # play the multiball intro music
-        self.game.base.music_on(self.game.assets.music_multiball_intro)
+        self.music_on(self.game.assets.music_multiball_intro)
         self.intro_animation()
 
     def intro_animation(self):
@@ -240,8 +240,8 @@ class GoldMine(ep.EP_Mode):
         # update the lamps
         self.lamp_update()
         # kill the intro music and start the multiball music
-        self.game.sound.stop_music()
-        self.game.base.music_on(self.game.assets.music_goldmineMultiball)
+        self.stop_music()
+        self.music_on(self.game.assets.music_goldmineMultiball)
         # kick into the MB display
         self.main_display()
 
@@ -634,12 +634,11 @@ class GoldMine(ep.EP_Mode):
         self.game.set_tracking('mineStatus','OPEN')
         print "MULTIBALL ENDED"
         # start the music back up
-        stackLevel = self.game.show_tracking('stackLevel')
         # if save polly is running, turn that on instead
         if self.game.peril:
-            self.game.base.music_on(self.game.assets.music_pollyPeril)
-        elif True not in stackLevel[5:] and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+            self.music_on(self.game.assets.music_pollyPeril)
+        else:
+            self.music_on(self.game.assets.music_mainTheme,mySlice=5)
         # unset the busy flag
         self.game.base.busy = False
         self.game.base.queued -= 1
@@ -653,7 +652,7 @@ class GoldMine(ep.EP_Mode):
         self.bandits = False
         self.game.bad_guys.drop_targets()
         # remove the switch blocker
-        self.game.switch_blocker('remove')
+        self.game.switch_blocker('remove',self.myID)
         # unload the mode
         self.unload()
 

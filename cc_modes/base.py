@@ -33,6 +33,7 @@ class BaseGameMode(ep.EP_Mode):
     """docstring for AttractMode"""
     def __init__(self, game,priority):
         super(BaseGameMode, self).__init__(game, priority)
+        self.myID = "Base"
         self.ball_starting = True
         self.current_music = self.game.assets.music_mainTheme
         self.unbusy()
@@ -107,8 +108,7 @@ class BaseGameMode(ep.EP_Mode):
             for lamp in self.game.lamps.items_tagged('Playfield'):
                 lamp.disable()
             # stop the music
-            print "game.ball_drained IS KILLING THE MUSIC"
-            self.game.sound.stop_music()
+            self.stop_music()
             # play the ball end riff
             self.game.sound.play(self.game.assets.sfx_ballEnd)
             # turn off ball save
@@ -243,15 +243,30 @@ class BaseGameMode(ep.EP_Mode):
 ### /_/   \_\__,_|\__,_|_|\___/  |____/|_|\__|___/
 ###
 
-    def music_on(self,song=None):
-            # if a song is passed, set that to the active song
-            # if not, just re-activate the current
-            if song:
-                self.current_music = song
-            self.game.sound.play_music(self.current_music, loops=-1)
+    #def music_on(self,song=None,caller="Not Specified",slice=0,execute=True):
+    #    # if given a slice number to check - do that
+    #    if slice != 0:
+    #        stackLevel = self.game.show_tracking('stackLevel')
+    #        # if there are balls in play and nothing active above the set slice, then kill the music
+    #        if True not in stackLevel[slice:] and self.game.trough.num_balls_in_play != 0:
+    #            pass
+    #        else:
+    #            print "Music stop called by " + str(caller) + " But passed - Busy"
+    #            execute = False
+    #
+    #    if execute:
+    #        # if a song is passed, set that to the active song
+    #        if song:
+    #            print str(caller) + " changed song to " + str(song)
+    #            self.current_music = song
+    #        # if not, just re-activate the current
+    #        else:
+    #            print str(caller) + " restarting current song"
+    #        # then start it up
+    #        self.game.sound.play_music(self.current_music, loops=-1)
 
-    def delayed_music_on(self,wait,song=None):
-        self.delay(delay=wait, handler=self.music_on,param=song)
+    #def delayed_music_on(self,wait,song=None):
+    #    self.delay(delay=wait, handler=self.music_on,param=song)
 
     # modified version of play voice from procgame.sound that stores a list of active quotes
     # even though more than one shouldn't be possible given the time checking
@@ -352,7 +367,7 @@ class BaseGameMode(ep.EP_Mode):
             if self.game.switches.saloonPopper.is_active():
                 self.game.coils.saloonPopper.pulse(30)
         #play sound
-        self.game.sound.stop_music()
+        self.stop_music()
         self.game.sound.play(self.game.assets.sfx_spinDown)
         #play video ?
 

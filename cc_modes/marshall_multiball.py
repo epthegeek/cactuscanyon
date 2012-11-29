@@ -23,6 +23,7 @@ class MarshallMultiball(ep.EP_Mode):
     """Marshall Multiball for when player achieves maximum rank """
     def __init__(self,game,priority):
         super(MarshallMultiball, self).__init__(game,priority)
+        self.myID = "Marshall Multiball"
         self.backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_marshallBorder.frames[0])
         self.jackpotTimer = self.game.user_settings['Gameplay (Feature)']['Marshall Jackpot Timer']
 
@@ -53,7 +54,7 @@ class MarshallMultiball(ep.EP_Mode):
         # bonus lanes
         self.bonusLanes = [False,False]
         # kill the music
-        self.game.sound.stop_music()
+        self.stop_music()
         # turn off all the lights
         for lamp in self.game.lamps.items_tagged('Playfield'):
             lamp.disable()
@@ -77,7 +78,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.start()
         # music is optional based on a setting
         if self.game.user_settings['Gameplay (Feature)']['Marshall Multiball Music'] == 'Yes':
-            self.delay("Operational",delay=duration+0.2,handler=self.game.base.music_on,param=self.game.assets.music_drunkMultiball)
+            self.delay("Operational",delay=duration+0.2,handler=self.music_on,param=self.game.assets.music_drunkMultiball)
 
     def ball_drained(self):
         if self.running:
@@ -612,7 +613,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.game.stack_level(5,False)
         # turn the music back on
         if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+            self.music_on(self.game.assets.music_mainTheme)
         # check bionic - to cover marshall required
         self.game.badge.check_bionic()
         # turn off the base busy flag

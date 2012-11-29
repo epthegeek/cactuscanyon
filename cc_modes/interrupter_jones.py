@@ -26,6 +26,7 @@ class Interrupter(ep.EP_Mode):
     """Cactus Canyon Interrupter Jones"""
     def __init__(self, game, priority):
         super(Interrupter, self).__init__(game, priority)
+        self.myID = "Interrupter Jones"
         self.rotator = [True,False,False,False,False]
         self.statusDisplay = "Off"
         self.page = 0
@@ -118,7 +119,7 @@ class Interrupter(ep.EP_Mode):
         self.delay(delay=1,handler=self.clear_layer)
 
     def closing_song(self,duration):
-        self.delay(delay=duration+1,handler=self.game.base.music_on,param=self.game.assets.music_goldmineMultiball)
+        self.delay(delay=duration+1,handler=self.music_on,param=self.game.assets.music_goldmineMultiball)
         # set a 2 second delay to allow the start button to work again
         self.delay(delay=duration+2,handler=self.enable_start)
         # and set a delay to fade it out after 2 minutes
@@ -343,17 +344,6 @@ class Interrupter(ep.EP_Mode):
         self.game.base.repeat_ding(3)
         self.delay(delay=2,handler=self.clear_layer)
 
-    # delayed music on used by highscore
-    def delayed_music_on(self,wait,song=None):
-        self.delay(delay=wait, handler=self.music_on,param=song)
-
-    def music_on(self,song=None):
-        # if a song is passed, set that to the active song
-        # if not, just re-activate the current
-        if song:
-            self.current_music = song
-        self.game.sound.play_music(self.current_music, loops=-1)
-
     def add_player(self):
         # show the score layer for a second
         self.layer = self.game.score_display.layer
@@ -474,7 +464,7 @@ class Interrupter(ep.EP_Mode):
     def clear_volume_display(self):
         # turn the music off
         if self.game.base not in self.game.modes:
-            self.game.sound.stop_music()
+            self.stop_music()
         # turn off the playing flag
         self.playing = False
         # clear the layer

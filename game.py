@@ -67,12 +67,14 @@ class CCGame(game.BasicRecordableGame):
         # used to prevent the high score entry from restarting the music
         self.soundIntro = False
 
+
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
         ## init the sound
         self.sound = sound.SoundController(self)
         self.lampctrl = lamps.LampController(self)
         self.assets = Assets(self)
+        self.current_music = self.assets.music_mainTheme
 
         if recording:
             print "I'M RECORDING"
@@ -854,22 +856,47 @@ class CCGame(game.BasicRecordableGame):
             self.squelched = False
             pygame.mixer.music.set_volume(self.previousVolume)
 
+    def music_on(self,song=None,caller="Not Specified",slice=0,execute=True):
+    # if given a slice number to check - do that
+        if slice != 0:
+            stackLevel = self.show_tracking('stackLevel')
+            # if there are balls in play and nothing active above the set slice, then kill the music
+            if True not in stackLevel[slice:] and self.trough.num_balls_in_play != 0:
+                pass
+            else:
+                print "Music stop called by " + str(caller) + " But passed - Busy"
+                execute = False
+
+        if execute:
+            # if a song is passed, set that to the active song
+            if song:
+                print str(caller) + " changed song to " + str(song)
+                self.current_music = song
+            # if not, just re-activate the current
+            else:
+                print str(caller) + " restarting current song"
+                # then start it up
+            self.sound.play_music(self.current_music, loops=-1)
+
+
     # switch blocker load and unload - checks to be sure if it should do what it is told
-    def switch_blocker(self,function):
+    def switch_blocker(self,function,caller):
         if function == 'add':
-            print "Switch Blocker Add Call"
+            print "Switch Blocker Add Call from " + str(caller)
             if self.switch_block not in self.modes:
                 print "Switch Blocker Added"
                 self.modes.add(self.switch_block)
+            else:
+                print "Switch Blocker Already Present"
         elif function == 'remove':
-            print "Switch Blocker Remove Call"
+            print "Switch Blocker Remove Call from " + str(caller)
             stackLevel = self.show_tracking('stackLevel')
             if True not in stackLevel[2:]:
                 print "Switch Blocker Removed"
                 self.modes.remove(self.switch_block)
-        else:
-            print "Switch Blocker NOT removed due to stack level"
-            pass
+            else:
+                print "Switch Blocker NOT removed due to stack level"
+                pass
 
     def volume_up(self):
         """ """

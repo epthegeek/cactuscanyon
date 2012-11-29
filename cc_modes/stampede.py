@@ -21,6 +21,7 @@ class Stampede(ep.EP_Mode):
     """Cactus Canyon Stampede"""
     def __init__(self, game, priority):
         super(Stampede, self).__init__(game, priority)
+        self.myID = "Stampede"
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
         # set up the cows layer
@@ -47,7 +48,7 @@ class Stampede(ep.EP_Mode):
             if getattr(mode, "abort_display", None):
                 mode.abort_display()
         # fire up the switch block if it's not already loaded
-        self.game.switch_blocker('add')
+        self.game.switch_blocker('add',self.myID)
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
@@ -81,7 +82,7 @@ class Stampede(ep.EP_Mode):
         self.game.stack_level(4,True)
         self.running = True
         # stop the current music
-        self.game.sound.stop_music()
+        self.stop_music()
         # turn on a starting jackpot
         choices = [0,1,2,3,4]
         self.active = random.choice(choices)
@@ -104,7 +105,7 @@ class Stampede(ep.EP_Mode):
         # play a quote
         self.game.base.priority_quote(self.game.assets.quote_stampedeStart)
         # start the music for stampede - delay this music start in case a quickdraw started at the same time
-        self.delay(delay=1.5,handler=self.game.base.music_on,param=self.game.assets.music_stampede)
+        self.delay(delay=1.5,handler=self.music_on,param=self.game.assets.music_stampede)
         # launch some more balls
         if self.game.trough.num_balls_in_play < 3:
             total = 3 - self.game.trough.num_balls_in_play
@@ -210,11 +211,9 @@ class Stampede(ep.EP_Mode):
         self.delay(name="Timer",delay=6,handler=self.jackpot_shift)
 
     def end_stampede(self):
-        stackLevel = self.game.show_tracking('stackLevel')
         print "ENDING S T A M P E D E"
         # stop the music
-        if True not in stackLevel[5:]:
-         self.game.sound.stop_music()
+        self.stop_music(slice=5)
         # do a final display
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_skullsBorder.frames[0])
@@ -249,10 +248,9 @@ class Stampede(ep.EP_Mode):
         self.running = False
         self.lamp_update()
         # turn the main music back on
-        if True not in stackLevel[5:] and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+        self.music_on(self.game.assets.music_mainTheme,mySlice=5)
         # remove the switch blocker
-        self.game.switch_blocker('remove')
+        self.game.switch_blocker('remove',self.myID)
         # unload the mode
         self.delay(delay=2,handler=self.unload)
 

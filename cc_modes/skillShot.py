@@ -26,6 +26,7 @@ class SkillShot(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(SkillShot, self).__init__(game, priority)
+        self.myID = "SkillShot"
         # the lasso layer for overlaying on the icons
         self.lasso = dmd.TextLayer(129, 1, self.game.assets.font_skillshot, "right", opaque=False).set_text("A")
         self.lasso.composite_op = "blacksrc"
@@ -74,7 +75,7 @@ class SkillShot(ep.EP_Mode):
             # play a random voice call from a pre-set collection
             self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_welcomes)
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
-        self.delay(delay=duration,handler=self.game.base.music_on,param=self.game.assets.music_shooterLaneGroove)
+        self.delay(delay=duration,handler=self.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
 
     def generate_prizes(self):
@@ -246,7 +247,7 @@ class SkillShot(ep.EP_Mode):
 
     def skillshot_award(self):
         # stop the music
-        self.game.sound.stop_music()
+        self.stop_music()
         # play the sound
         self.game.sound.play(self.game.assets.sfx_flourish7)
 
@@ -536,7 +537,7 @@ class SkillShot(ep.EP_Mode):
         self.super = False
         # start the main game music
         if True not in self.game.show_tracking('stackLevel'):
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+            self.music_on(self.game.assets.music_mainTheme)
         # check if the award finished stampede
         self.game.base.check_stampede()
         # unload in 2 seconds - to give
@@ -549,7 +550,7 @@ class SkillShot(ep.EP_Mode):
         # cancel the idle timer from interrupter jones
         self.game.interrupter.cancel_idle()
         # turn off the music
-        self.game.sound.stop_music()
+        self.stop_music()
         # turn off the table lights
         self.game.set_tracking('lampStatus',"OFF")
         self.lamp_update()
@@ -590,7 +591,7 @@ class SkillShot(ep.EP_Mode):
         # turn it on
         self.layer = combined
         self.game.base.priority_quote(self.game.assets.quote_superSkillShot)
-        self.delay(delay=myWait,handler=self.game.base.music_on,param=self.game.assets.music_drumRoll)
+        self.delay(delay=myWait,handler=self.music_on,param=self.game.assets.music_drumRoll)
         # show the prizes
         self.delay(name="Display",delay=myWait+1,handler=self.update_layer)
         self.delay(delay=myWait+1,handler=self.unbusy)
@@ -599,7 +600,7 @@ class SkillShot(ep.EP_Mode):
         # unload the switch trap
         self.game.modes.remove(self.game.super_filter)
         # kill the drum roll
-        self.game.sound.stop_music()
+        self.stop_music()
         # turn the lights back on
         self.game.set_tracking('lampStatus',"ON")
         self.lamp_update()

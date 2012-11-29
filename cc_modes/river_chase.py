@@ -25,6 +25,7 @@ class RiverChase(ep.EP_Mode):
     """Polly Peril - Rescue on the River"""
     def __init__(self,game,priority):
         super(RiverChase, self).__init__(game,priority)
+        self.myID = "River Chase"
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Save Polly Shots - River']
         self.shotsSoFar = 0
         self.running = False
@@ -47,7 +48,7 @@ class RiverChase(ep.EP_Mode):
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
-        self.game.switch_blocker('add')
+        self.game.switch_blocker('add',self.myID)
         self.game.peril = True
         self.shotsSoFar = 0
         # position for the horse
@@ -177,12 +178,11 @@ class RiverChase(ep.EP_Mode):
             # set the running flag
             self.running = True
             # clear any running music
-            print "start_river_chase IS KILLING THE MUSIC"
-            self.game.sound.stop_music()
+            self.stop_music()
             self.lamp_update()
 
             # start the music
-            self.game.base.music_on(self.game.assets.music_altPeril)
+            self.music_on(self.game.assets.music_altPeril)
             # run the animation
             anim = self.game.assets.dmd_pollyIntro
             myWait = len(anim.frames) / 30
@@ -257,9 +257,7 @@ class RiverChase(ep.EP_Mode):
         self.game.score(500000)
         self.running = False
         self.wipe_delays()
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-            self.game.sound.stop_music()
+        self.stop_music(slice=3)
         self.won = True
         # kill the lights on the three ramps
         self.game.lamp_control.left_ramp('Base')
@@ -351,12 +349,8 @@ class RiverChase(ep.EP_Mode):
         self.delay("Display",delay=1.5,handler=self.in_progress)
 
     def end_river_chase(self):
-        # stop the polly music
-        print "end_river_chase IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-            self.game.sound.stop_music()
+        self.stop_music(slice=3)
         self.layer = None
         # set the tracking on the ramps
         if self.game.save_polly.winsRequired and not self.won:
@@ -380,12 +374,10 @@ class RiverChase(ep.EP_Mode):
         self.game.base.busy = False
         self.game.base.queued -= 1
         # turn the music back on
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+        self.music_on(self.game.assets.music_mainTheme,mySlice=3)
         self.game.peril = False
         # remove the switch blocker
-        self.game.switch_blocker('remove')
+        self.game.switch_blocker('remove',self.myID)
         # unload the mode
         self.unload()
 

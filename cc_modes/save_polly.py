@@ -25,6 +25,7 @@ class SavePolly(ep.EP_Mode):
     """Polly Peril - Tied to the Tracks"""
     def __init__(self,game,priority):
         super(SavePolly, self).__init__(game,priority)
+        self.myID = "Tied to the Tracks"
         self.shotsToWin = self.game.user_settings['Gameplay (Feature)']['Save Polly Shots - Train']
         self.showDeathAnimation = self.game.user_settings['Gameplay (Feature)']['Polly Dies Animation']
         self.winsRequired = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Save Polly Wins Required']
@@ -35,7 +36,7 @@ class SavePolly(ep.EP_Mode):
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
-        self.game.switch_blocker('add')
+        self.game.switch_blocker('add',self.myID)
         # set the polly indicator
         self.game.peril = True
         self.paused = False
@@ -158,14 +159,13 @@ class SavePolly(ep.EP_Mode):
             # set the running flag
             self.running = True
             # clear any running music
-            print "start_save_polly IS KILLING THE MUSIC"
-            self.game.sound.stop_music()
+            self.stop_music()
             # set the center to crazy stage
             self.game.set_tracking('centerRampStage',99)
             self.lamp_update()
 
             # start the music
-            self.game.base.music_on(self.game.assets.music_pollyPeril)
+            self.music_on(self.game.assets.music_pollyPeril)
             # reset the train
             self.game.train.reset_toy(step=2)
             # run the animation
@@ -397,15 +397,11 @@ class SavePolly(ep.EP_Mode):
                 self.delay("Display",delay=myWait,handler=self.polly_died,param=2)
             # if not, just move on to polly finished
             else:
-                stackLevel = self.game.show_tracking('stackLevel')
-                if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-                    self.game.sound.stop_music()
+                self.stop_music(slice=3)
                 self.clear_layer()
                 self.polly_finished()
         if step == 2:
-            stackLevel = self.game.show_tracking('stackLevel')
-            if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-                self.game.sound.stop_music()
+            self.stop_music(slice=3)
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
             awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False).set_text("POLLY")
             awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False).set_text("DIED*")
@@ -419,12 +415,9 @@ class SavePolly(ep.EP_Mode):
 
     def polly_finished(self):
         self.running = False
-        # stop the polly music
-        print "polly_finished IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-            self.game.sound.stop_music()
+        # stop the polly music
+        self.stop_music(slice=3)
         self.game.train.reset_toy(type=2)
         # turn off the polly display
         self.layer = None
@@ -450,13 +443,11 @@ class SavePolly(ep.EP_Mode):
         self.game.base.busy = False
         self.game.base.queued -= 1
         # turn the music back on
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[2:] and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+        self.music_on(self.game.assets.music_mainTheme,mySlice=2)
         # turn off the polly indicator
         self.game.peril = False
         # remove the switch blocker
-        self.game.switch_blocker('remove')
+        self.game.switch_blocker('remove',self.myID)
         # unload the mode
         self.unload()
 

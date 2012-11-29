@@ -280,7 +280,7 @@ class LastCall(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[self.backdrop,textLayer,introLayer])
         self.layer = combined
         # kick off the music
-        self.delay("Operational",delay=myWait,handler=self.game.base.music_on,param=self.game.assets.music_lastCall)
+        self.delay("Operational",delay=myWait,handler=self.music_on,param=self.game.assets.music_lastCall)
         # kick off the player start
         self.delay("Operational",delay=myWait,handler=self.start)
 

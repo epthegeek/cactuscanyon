@@ -30,6 +30,7 @@ class Attract(ep.EP_Mode):
     """Cactus Canyon AttractMode"""
     def __init__(self, game, priority):
         super(Attract, self).__init__(game, priority)
+        self.myID = "Attract"
         self.timer = 3
         self.NOISY_COUNT = self.game.user_settings['Gameplay (Feature)']['Attract sounds to play']
         self.NOISY_DELAY = self.game.user_settings['Gameplay (Feature)']['Attract sound delay time']
@@ -240,7 +241,7 @@ class Attract(ep.EP_Mode):
                 # kill the lampshow
                 self.game.lampctrl.stop_show()
                 # kill the music in case the 'end of game' song is playing
-                self.game.sound.stop_music()
+                self.stop_music()
                 # Initialize game
                 self.game.start_game()
             else:

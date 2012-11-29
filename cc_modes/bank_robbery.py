@@ -26,6 +26,7 @@ class BankRobbery(ep.EP_Mode):
     """Polly Peril - Hostage at the bank"""
     def __init__(self,game,priority):
         super(BankRobbery, self).__init__(game,priority)
+        self.myID = "Bank Robbery"
         self.running = False
         self.halted = False
         self.position = [-49,-4,43]
@@ -51,7 +52,7 @@ class BankRobbery(ep.EP_Mode):
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
-        self.game.switch_blocker('add')
+        self.game.switch_blocker('add',self.myID)
 
         self.game.peril = True
         # point value for shots
@@ -196,12 +197,11 @@ class BankRobbery(ep.EP_Mode):
             # set the running flag
             self.running = True
             # clear any running music
-            print "start_bank_robbery IS KILLING THE MUSIC"
-            self.game.sound.stop_music()
+            self.stop_music()
             self.lamp_update()
 
             # start the music
-            self.game.base.music_on(self.game.assets.music_altPeril)
+            self.music_on(self.game.assets.music_altPeril)
             # run the animation
             anim = self.game.assets.dmd_pollyIntro
             myWait = len(anim.frames) / 30
@@ -331,9 +331,8 @@ class BankRobbery(ep.EP_Mode):
     def polly_saved(self):
         self.game.score(750000)
         self.cancel_delayed("Mode Timer")
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-            self.game.sound.stop_music()
+        # stop the music
+        self.stop_music(slice=3)
         # kill the lights on the three ramps
         self.game.lamp_control.left_ramp('Base')
         self.game.lamp_control.center_ramp('Base')
@@ -434,12 +433,9 @@ class BankRobbery(ep.EP_Mode):
 
     def end_bank_robbery(self):
         self.running = False
-        # stop the polly music
-        print "end_bank_robbery IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-            self.game.sound.stop_music()
+        # stop the polly music
+        self.stop_music(slice=3)
         self.layer = None
         # set the tracking on the ramps
         # if wins are required, and player did not win, reset ramp to stage 1
@@ -463,12 +459,10 @@ class BankRobbery(ep.EP_Mode):
         self.game.base.busy = False
         self.game.base.queued -= 1
         # turn the music back on
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[3:] and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+        self.music_on(self.game.assets.music_mainTheme,mySlice=3)
         self.game.peril = False
         # remove the switch blocker
-        self.game.switch_blocker('remove')
+        self.game.switch_blocker('remove',self.myID)
         # unload the mode
         self.unload()
 

@@ -29,6 +29,7 @@ class Gunfight(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Gunfight, self).__init__(game,priority)
+        self.myID = "Gunfight"
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
         self.rankUps = [self.game.assets.quote_rankUpPartner,
                         self.game.assets.quote_rankUpPartner,
@@ -151,15 +152,12 @@ class Gunfight(ep.EP_Mode):
         badGuys.append(enemy)
         print badGuys
         # stop the music
-        print "START GUNFIGHT IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
-            self.game.sound.stop_music()
+        self.stop_music(slice=1)
         # play the intro riff
         myWait = self.game.sound.play(self.game.assets.music_gunfightIntro)
         # delayed play the drum roll
-        self.delay("Operational",delay=myWait,handler=self.game.base.music_on,param=self.game.assets.music_drumRoll)
+        self.delay("Operational",delay=myWait,handler=self.music_on,param=self.game.assets.music_drumRoll)
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_gunfightStart)
         # display the clouds with gunfight text
@@ -177,11 +175,8 @@ class Gunfight(ep.EP_Mode):
         self.shooting = False
         # set some tracking
         self.game.increase_tracking('gunfightsWon')
-        print "GUNFIGHT WON IS KILLING THE MUSIC"
         # only kill the music if there's not a higher level running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
-            self.game.sound.stop_music()
+        self.stop_music(slice=1)
         # cancel the lose delay
         self.cancel_delayed("Gunfight Lost")
         self.game.sound.play(self.game.assets.sfx_gunfightShot)
@@ -223,10 +218,7 @@ class Gunfight(ep.EP_Mode):
         # drop the bad guy
         self.game.bad_guys.target_down(self.enemy)
         # only kill the music if there's not a higher level running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
-            print "GUNFIGHT LOST IS KILLING THE MUSIC"
-            self.game.sound.stop_music()
+        self.stop_music(slice=1)
         # play a quote
         duration = self.game.base.play_quote(self.game.assets.quote_gunFail)
         # shut things down
@@ -243,9 +235,7 @@ class Gunfight(ep.EP_Mode):
         self.game.stack_level(0,False)
         # turn the main game music back on if a second level mode isn't running
         # start up the main theme again if a higher level mode isn't running
-        stackLevel = self.game.show_tracking('stackLevel')
-        if True not in stackLevel[1:] and self.game.trough.num_balls_in_play != 0:
-            self.game.base.music_on(self.game.assets.music_mainTheme)
+        self.music_on(self.game.assets.music_mainTheme,mySlice=1)
 
         self.lamp_update()
         self.cancel_delayed("Operational")
