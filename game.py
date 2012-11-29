@@ -857,13 +857,18 @@ class CCGame(game.BasicRecordableGame):
     # switch blocker load and unload - checks to be sure if it should do what it is told
     def switch_blocker(self,function):
         if function == 'add':
+            print "Switch Blocker Add Call"
             if self.switch_block not in self.modes:
+                print "Switch Blocker Added"
                 self.modes.add(self.switch_block)
         elif function == 'remove':
+            print "Switch Blocker Remove Call"
             stackLevel = self.show_tracking('stackLevel')
             if True not in stackLevel[2:]:
+                print "Switch Blocker Removed"
                 self.modes.remove(self.switch_block)
         else:
+            print "Switch Blocker NOT removed due to stack level"
             pass
 
     def volume_up(self):
