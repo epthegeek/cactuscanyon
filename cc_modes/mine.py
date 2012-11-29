@@ -405,6 +405,8 @@ class Mine(ep.EP_Mode):
             self.lamp_update()
 
     def extra_ball_ending(self,isLong=True):
+        # reset the collecting flagg for later
+        self.collectingEB = False
         # hit the knocker
         self.game.base.knock(1,realOnly = True)
         # play a quote
@@ -427,6 +429,7 @@ class Mine(ep.EP_Mode):
         self.delay(delay=3,handler=self.game.restore_music)
 
     def abort_extra_ball(self):
+        print "Aborting extra ball display"
         self.collectingEB = False
         self.clear_layer()
         self.cancel_delayed("Collecting")
