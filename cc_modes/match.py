@@ -55,8 +55,8 @@ class Match(ep.EP_Mode):
         # grab the last two digits of the scores  ... somehow?
         self.generate_digits()
         ## TODO REMOVE THIS -- TEMPORARY ## Make player one win
-        self.selection = self.playerDigits[0]
-        self.digitLayer.set_text(self.selection)
+        #self.selection = self.playerDigits[0]
+        #self.digitLayer.set_text(self.selection)
         ## TODO REMOVE THIS -- TEMPORARY ## Make player one win
         # put up the end of the scores
         # put up the bottles
