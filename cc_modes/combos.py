@@ -91,13 +91,13 @@ class Combos(ep.EP_Mode):
 
     def add_combo(self):
         # increase the combos
-        self.game.increase_tracking('combos')
+        combosForStar = self.game.increase_tracking('combos')
         # and the global total
-        comboTotal = self.game.increase_tracking('combosTotal')
+        self.game.increase_tracking('combosTotal')
         # then see if it's time to light the badge
         print "COMBOS: " + str(comboTotal)
         # if we've got enough combos to light the badge, do that
-        if comboTotal == self.game.user_settings['Gameplay (Feature)']['Combos for Star']:
+        if combosForStar == self.game.user_settings['Gameplay (Feature)']['Combos for Star']:
             ## actually award the badge - combos is # 1
             self.game.badge.update(1)
 
