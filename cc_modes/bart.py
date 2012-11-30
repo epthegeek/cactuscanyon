@@ -297,15 +297,15 @@ class Bart(ep.EP_Mode):
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_weaveBorder.frames[0])
         textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
         textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
-        if globalTotal < self.bartsForStar:
-            thetext = str(self.bartsForStar - total) + " MORE FOR BADGE"
+        if total < self.bartsForStar:
+            theText = str(self.bartsForStar - total) + " MORE FOR BADGE"
         elif globalTotal == self.bartsForStar:
-            thetext = "BADGE COLLECTED!"
+            theText = "BADGE COLLECTED!"
             # actually collect the badge - barts defeated is 2
             self.game.badge.update(2)
         else:
-            thetext = str(globalTotal) + " DEFEATED!"
-        textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(thetext)
+            theText = str(globalTotal) + " DEFEATED!"
+        textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
          # light gunfight?
         self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
