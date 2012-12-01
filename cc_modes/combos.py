@@ -93,7 +93,7 @@ class Combos(ep.EP_Mode):
         # increase the combos
         combosForStar = self.game.increase_tracking('combos')
         # and the global total
-        self.game.increase_tracking('combosTotal')
+        comboTotal = self.game.increase_tracking('combosTotal')
         # then see if it's time to light the badge
         print "COMBOS: " + str(comboTotal)
         # if we've got enough combos to light the badge, do that
