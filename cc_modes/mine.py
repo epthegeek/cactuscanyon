@@ -301,6 +301,7 @@ class Mine(ep.EP_Mode):
         self.lock_display_text(self.lockedNumber)
 
     def lock_display_text(self,lock=1):
+        self.lockAnimation = False
         if lock == 1:
             self.game.sound.play(self.game.assets.sfx_orchestraRiff)
         if lock == 2:
