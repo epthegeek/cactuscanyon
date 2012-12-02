@@ -75,6 +75,7 @@ class SavePolly(ep.EP_Mode):
                 self.game.base.busy = True
                 self.game.base.queued += 1
                 self.cancel_delayed("Mode Timer")
+                self.cancel_delayed("Pause Timer")
                 self.polly_died()
 
     # bonus lanes pause save polly
