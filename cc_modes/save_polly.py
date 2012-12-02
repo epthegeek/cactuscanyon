@@ -112,14 +112,14 @@ class SavePolly(ep.EP_Mode):
     def sw_saloonPopper_inactive(self,sw):
         if self.running and self.halted:
             self.halted = False
-            self.in_progress()
+            self.delay("Resume",delay=1,handler=self.in_progress)
 
     # resume when exit
     def sw_jetBumpersExit_active(self,sw):
         if self.running and self.halted:
             # kill the halt flag
             self.halted = False
-            self.in_progress()
+            self.delay("Resume",delay=1,handler=self.in_progress)
 
     def sw_centerRampMake_active(self,sw):
         # kill the mode timer until x
@@ -290,6 +290,7 @@ class SavePolly(ep.EP_Mode):
         if self.won or self.modeTimer <= 0:
             return
         print "HALTING TRAIN IN BUMPERS/MINE"
+        self.cancel_delayed("Resume")
         # cancel delays
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
