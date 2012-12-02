@@ -655,6 +655,8 @@ class BaseGameMode(ep.EP_Mode):
             self.autoplunge_correct("Marshall Multiball")
         elif self.game.last_call.running:
             self.autoplunge_correct("Last Call")
+        elif self.game.showdown.running:
+            self.autoplunge_correct("Showdown")
         else:
             pass
 
