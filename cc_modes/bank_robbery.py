@@ -353,7 +353,7 @@ class BankRobbery(ep.EP_Mode):
 
     def win_display(self,step=1):
         if step == 1:
-            self.game.base.play_quote(self.game.assets.quote_victory)
+            self.game.base.priority_quote(self.game.assets.quote_victory)
             # frame layer of the dead guy
             self.layer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ourHero.frames[0])
             self.delay("Display",delay=0.5,handler=self.win_display,param=2)
