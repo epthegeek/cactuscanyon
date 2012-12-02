@@ -416,7 +416,7 @@ class Mine(ep.EP_Mode):
             self.game.base.priority_quote(self.game.assets.quote_extraBallGuy)
         else:
             # play this other quote
-            self.game.base.play_quote(self.game.assets.quote_extraBallSet)
+            self.game.base.priority_quote(self.game.assets.quote_extraBallSet)
         # play a music riff
         self.game.sound.play(self.game.assets.sfx_ebFlourish)
         # setup the backdrop
