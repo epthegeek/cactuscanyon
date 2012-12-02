@@ -406,7 +406,10 @@ class CCGame(game.BasicRecordableGame):
         self.set_tracking('bumperHits',0)
         # reset the player bonus
         self.set_tracking('bonus', 0)
-        # launch a ball, unless there is one in the shooter lane already 
+        # reset the train just in case - type 2, should only back the train up if it's out
+        self.game.train.stop_at = 0
+        self.game.train.reset_toy(type=2)
+        # launch a ball, unless there is one in the shooter lane already
         if not self.switches.shooterLane.is_active():
             self.trough.launch_balls(1) # eject a ball into the shooter lane
         else:
