@@ -357,7 +357,10 @@ class CvA(ep.EP_Mode):
             self.game.set_tracking("cvaStatus", "RUNNING")
             # and the local running flag
             self.running = True
+            self.game.lamp_control.disable_bad_guys()
+            self.game.lamp_control.disable.bonus_lanes()
             self.lamp_update()
+
             # trap the ball if needed
             if entry == "inlane":
                 self.posts[onSide].patter(on_time=2,off_time=6,original_on_time=30)
