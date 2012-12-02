@@ -304,7 +304,7 @@ class BankRobbery(ep.EP_Mode):
             # WAT?
             pass
         # play a shot sound
-        self.game.sound.play(self.game.assets.sfx_gunfightShot)
+        self.game.sound.play(self.game.assets.sfx_gunShot)
         # set a won flag if they're all dead
         if True not in self.isActive:
             self.have_won = True

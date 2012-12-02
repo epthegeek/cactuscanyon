@@ -194,6 +194,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_bountyCollected, self.sfx_path + "045-sfx-bounty-collected.wav")
         self.sfx_gunCock = 'sfx_gunCock'
         self.game.sound.register_sound(self.sfx_gunCock, self.sfx_path + "391-sfx-gun-cock.wav")
+        self.sfx_gunShot = 'sfx_gunShot'
+        self.game.sound.register_sound(self.sfx_gunShot, self.sfx_path + "183-sfx-clear-gunshot.wav")
         self.sfx_gunfightShot = 'sfx_gunfightShot'
         self.game.sound.register_sound(self.sfx_gunfightShot, self.sfx_path + "339-sfx-gunfight-hit.wav")
         self.sfx_gunfightFlourish = 'sfx_gunfightFlourish'
