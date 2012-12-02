@@ -815,8 +815,9 @@ class LampControl(ep.EP_Mode):
 
         # save polly
         elif mode == "Polly":
-            if not self.game.bank_robbery.isActive[2]:
-                return
+            if self.game.bank_robbery.running:
+                if not self.game.bank_robbery.isActive[2]:
+                    return
             self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
