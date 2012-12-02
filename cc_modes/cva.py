@@ -359,6 +359,7 @@ class CvA(ep.EP_Mode):
             self.running = True
             self.game.lamp_control.disable_bad_guys()
             self.game.lamp_control.disable_bonus_lanes()
+            self.game.lamp_control.disbable_badge()
             self.lamp_update()
 
             # trap the ball if needed
@@ -802,44 +803,56 @@ class CvA(ep.EP_Mode):
         alienBorder = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cvaAliensBorder.frames[0])
         # blank script
         script = []
-        # set the saucer title line
-        if self.saucerHits == 1:
-            textStringOne = "1 SAUCER DESTROYED"
+        # Do the saucer bit, if any saucers were destroyed
+        if self.saucerHits > 0:
+            # set the saucer title line
+            if self.saucerHits == 1:
+                textStringOne = "1 SAUCER DESTROYED"
+            else:
+                textStringOne = str(self.saucerHits) + " SAUCERS DESTROYED"
+            titleLayerOne = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
+            titleLayerOne.set_text(textStringOne)
+            # set the saucer score line
+            scoreLayerOne = ep.pulse_text(self,64,14,ep.format_score(self.saucerPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+            # build the layer
+            pageOne = dmd.GroupedLayer(128,32,[shipBorder,titleLayerOne,scoreLayerOne])
+            # add it to the script
+            script.append({'layer':pageOne,'seconds':1.5})
+        # do the aliens bit if any aliens were destroyed
+        if self.aliensKilled > 0:
+            # set the aliens title line
+            if self.aliensKilled == 1:
+                textStringTwo = "1 ALIEN KILLED"
+            else:
+                textStringTwo = str(self.aliensKilled) + " ALIENS KILLED"
+            titleLayerTwo = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
+            titleLayerTwo.set_text(textStringTwo)
+            # set the aliens score line
+            scoreLayerTwo = ep.pulse_text(self,64,14,ep.format_score(self.alienPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+            # build the layer
+            pageTwo = dmd.GroupedLayer(128,32,[alienBorder,titleLayerTwo,scoreLayerTwo])
+            # add it to the script
+            script.append({'layer':pageTwo,'seconds':1.5})
+        # if either exist, start the script
+        if script:
+            # setup the script layer
+            summary = dmd.ScriptedLayer(128,32,script)
+            # and activate
+            self.layer = summary
+            myDelay = 1.5
+            # play a cheer noise
+            self.game.sound.play(self.game.assets.sfx_cvaFinalRiff)
+            self.delay(delay=0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
+            # if we hit both parts - play a second riff
+            if self.saucerHits > 0 and self.aliensKilled > 0:
+                self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaFinalRiff)
+                self.delay(delay=2,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
+                myDelay = 3
+
+            self.delay(delay = myDelay,handler=self.finish_up)
+        # if neither exist - go straight to finishing up
         else:
-            textStringOne = str(self.saucerHits) + " SAUCERS DESTROYED"
-        titleLayerOne = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
-        titleLayerOne.set_text(textStringOne)
-        # set the saucer score line
-        scoreLayerOne = ep.pulse_text(self,64,14,ep.format_score(self.saucerPoints),align="center",myOpaque=True,size="12px",timing=0.1)
-        # build the layer
-        pageOne = dmd.GroupedLayer(128,32,[shipBorder,titleLayerOne,scoreLayerOne])
-        # add it to the script
-        script.append({'layer':pageOne,'seconds':1.5})
-        # set the aliens title line
-        if self.aliensKilled == 1:
-            textStringTwo = "1 ALIEN KILLED"
-        else:
-            textStringTwo = str(self.aliensKilled) + " ALIENS KILLED"
-        titleLayerTwo = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
-        titleLayerTwo.set_text(textStringTwo)
-        # set the aliens score line
-        scoreLayerTwo = ep.pulse_text(self,64,14,ep.format_score(self.alienPoints),align="center",myOpaque=True,size="12px",timing=0.1)
-        # build the layer
-        pageTwo = dmd.GroupedLayer(128,32,[alienBorder,titleLayerTwo,scoreLayerTwo])
-        # add it to the script
-        script.append({'layer':pageTwo,'seconds':1.5})
-        # setup the script layer
-        summary = dmd.ScriptedLayer(128,32,script)
-        # and activate
-        self.layer = summary
-        # play a cheer noise
-        self.game.sound.play(self.game.assets.sfx_cvaFinalRiff)
-        self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaFinalRiff)
-        # and delay the second one
-        self.delay(delay=0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
-        self.delay(delay=2,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
-        # finish up after 3 seconds
-        self.delay(delay = 3,handler=self.finish_up)
+            self.finish_up()
 
     def finish_up(self):
         stackLevel = self.game.show_tracking('stackLevel')
