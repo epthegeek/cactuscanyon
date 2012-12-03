@@ -359,7 +359,7 @@ class CvA(ep.EP_Mode):
             self.running = True
             self.game.lamp_control.disable_bad_guys()
             self.game.lamp_control.disable_bonus_lanes()
-            self.game.lamp_control.disbable_badge()
+            self.game.lamp_control.disable_badge()
             self.lamp_update()
 
             # trap the ball if needed
