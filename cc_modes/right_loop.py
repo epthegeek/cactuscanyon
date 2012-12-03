@@ -158,6 +158,8 @@ class RightLoop(ep.EP_Mode):
             if left == 0:
                 # enable cva
                 self.game.set_tracking('cvaStatus',"READY")
+                # play the quote
+                self.game.base.play_quote(self.game.assets.quote_niceLoopin)
             self.game.score_with_bonus(points)
             self.tumbleweed_display(points,combo)
 

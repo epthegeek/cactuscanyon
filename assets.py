@@ -930,6 +930,11 @@ class Assets():
         self.game.sound.register_sound(self.quote_yippie, self.quotes_path + "1959-yip-yip-yippie.wav")
         self.game.sound.register_sound(self.quote_yippie, self.quotes_path + "1957-woohoo-yippie.wav")
 
+        self.quote_mineOpen = 'quote_mineOpen'
+        self.game.sound.register_sound(self.quote_mineOpen, self.quotes_path + "1183-quote-mayor-mine-is-wide-open.wav")
+        self.quote_niceLoopin = 'quote_niceLoopin'
+        self.game.sound.register_sound(self.quote_niceLoopin, self.quotes_path + "1120-quote-mayor-nice-loopin-sir.wav")
+
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

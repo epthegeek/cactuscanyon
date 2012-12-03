@@ -199,6 +199,7 @@ class Mine(ep.EP_Mode):
         # clear the hits to light
         self.game.set_tracking('mineHits', 0)
         # play a sound?
+        self.game.base.priority_quote(self.game.assets.quote_mineOpen)
         # show some display?
         self.lamp_update()
         # then kick the ball
