@@ -56,7 +56,7 @@ class Badge(ep.EP_Mode):
         # set all 5 points to false
         print "RESETTING BADGE STATUS"
         for i in range(0,5,1):
-            self.game.set_tracking('starStatus',"False",i)
+            self.game.set_tracking('starStatus',False,i)
         print self.game.show_tracking('starStatus')
         # reset the combos
         self.game.set_tracking('combos',0)
@@ -78,8 +78,9 @@ class Badge(ep.EP_Mode):
 
     def check_bionic(self):
         print "Checking if bionic bart is ready"
-        # if all the lights are on, it's bionic bart tiome
+        # if all the lights are on, it's bionic bart time
         if False not in self.game.show_tracking('starStatus'):
+            print "Don't see a False - setting BB to ready"
             # is marshall rank required?
             if self.marshallRequired:
                 # if it is, are we there yet?
@@ -90,6 +91,8 @@ class Badge(ep.EP_Mode):
             self.game.set_tracking('bionicStatus',"READY")
             # if bart goes ready, update the saloon lights to flash the arrow
             self.lamp_update()
+        else:
+            print "Bart is not ready yet - Badge incomplete"
 
     def light_high_noon(self):
         self.game.set_tracking('highNoonStatus', "READY")
