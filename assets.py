@@ -674,6 +674,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "1193-mayor-miss-polly-tracks-2.wav")
         self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "1193-mayor-miss-polly-tracks.wav")
         self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "mayor-bart-boys-tied-miss-polly-to-the-tracks.wav")
+        self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "822-polly-im-tied-to-the-track.wav")
+        self.game.sound.register_sound(self.quote_ttttIntro, self.quotes_path + "849-polly-why-do-they-always-tie-me-to-the-tracks.wav")
 
         self.quote_rotrIntro = 'quote_rotrIntro'
         self.game.sound.register_sound(self.quote_rotrIntro, self.quotes_path + "mayor-they-went-down-to-the-river.wav")
