@@ -299,7 +299,7 @@ class Bart(ep.EP_Mode):
         textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
         if total < self.bartsForStar:
             theText = str(self.bartsForStar - total) + " MORE FOR BADGE"
-        elif globalTotal == self.bartsForStar:
+        elif total == self.bartsForStar:
             theText = "BADGE COLLECTED!"
             # actually collect the badge - barts defeated is 2
             self.game.badge.update(2)
