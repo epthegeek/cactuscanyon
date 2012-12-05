@@ -38,7 +38,8 @@ class BionicBart(ep.EP_Mode):
                         self.game.assets.dmd_powBanner,
                         self.game.assets.dmd_whamBanner,
                         self.game.assets.dmd_zoinkBanner]
-
+        self.ballSave = "Enabled" == self.game.user_settings['Gameplay (Feature)']['Bionic Bart Ball Save']
+        self.saveDuration = self.game.user_settings['Gameplay (Feature)']['Bionic Bart Ball Save Timer']
 
     def ball_drained(self):
         # if we lose all the balls the battle is lost
@@ -285,6 +286,9 @@ class BionicBart(ep.EP_Mode):
             self.lamp_update()
             # kick the ball out
             self.game.saloon.kick()
+            # start a ball save if configured
+            if self.ballSave:
+                self.game.ball_save.start(num_balls_to_save=1, time=self.saveDuration, now=True, allow_multiple_saves=False)
 
     def update_display(self):
         self.cancel_delayed("Display")
@@ -464,6 +468,9 @@ class BionicBart(ep.EP_Mode):
             self.activate_shots(self.shotsToLoad - self.shots)
             # kick the ball
             self.game.saloon.kick()
+            # start a ball save if configured
+            if self.ballSave:
+                self.game.ball_save.start(num_balls_to_save=1, time=self.saveDuration, now=True, allow_multiple_saves=False)
 
     def miss(self,step=1):
         if step == 1:

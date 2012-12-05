@@ -165,6 +165,13 @@ Gameplay (Feature):
     options: [2,10]
     increments: 1
     default: 3
+  'Bionic Bart Ball Save':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Bionic Bart Ball Save Timer':
+    options: [5,40]
+    increments: 5
+    default: 15
   'Move Your Train Mode':
     options: ['Enabled','Disabled']
     default: 'Enabled'
