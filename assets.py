@@ -234,6 +234,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cow1, self.sfx_path + "321-sfx-cow-1.wav")
         self.sfx_cow2 = 'sfx_cow2'
         self.game.sound.register_sound(self.sfx_cow2, self.sfx_path + "323-sfx-cow-2.wav")
+        self.sfx_cow3 = 'sfx_cow3'
+        self.game.sound.register_sound(self.sfx_cow3, self.sfx_path + "00-sfx-cow-3.wav")
         self.sfx_lockTwoMinecart = 'sfx_lockTwoMinecart'
         self.game.sound.register_sound(self.sfx_lockTwoMinecart, self.sfx_path + "243-sfx-lock-2-minecart.wav")
         self.sfx_lockTwoFlourish = 'sfx_lockTwoFlourish'
@@ -1228,6 +1230,7 @@ class Assets():
         self.dmd_beerFill = dmd.Animation().load(self.dmd_path+'beer-fill.dmd')
 
         self.dmd_cows = dmd.Animation().load(self.dmd_path+'crazy_cows.dmd')
+        self.dmd_moother = dmd.Animation().load(self.dmd_path+'moother.dmd')
         
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"
