@@ -33,6 +33,7 @@ class GoldMine(ep.EP_Mode):
         else:
             self.motherlodesForStar = 3
         self.restartFlag = False
+        self.moo = False
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -47,6 +48,7 @@ class GoldMine(ep.EP_Mode):
         self.banditTimer = 0
         self.banditsUp = 0
         self.jackpots = 0
+        self.moo = False
         self.halted = False
         # reset the jackpots to false to prevent lights until the mode really starts
         for i in range(0,5,1):
@@ -495,6 +497,10 @@ class GoldMine(ep.EP_Mode):
     def collect_motherlode(self):
         # turn motherlode off
         self.game.set_tracking('motherlodeLit', False)
+        # Check mootherlode
+        j = self.game.show_tracking('jackpotStatus')
+        if not j[0] and j[1] and j[2] and not j[3] and j[4]:
+            self.moo = True
         # clear the display
         self.abort_display()
         # add one to the motherlodes collected - this resets with badge
@@ -546,7 +552,30 @@ class GoldMine(ep.EP_Mode):
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         myWait = len(anim.frames) / 10.0
         self.layer = animLayer
-        self.delay(delay=myWait,handler=self.award_motherlode,param=multiplier)
+        if self.moo:
+            self.moo = False
+            self.delay(delay=myWait,handler=self.award_mootherlode,param=multiplier)
+        else:
+            self.delay(delay=myWait,handler=self.award_motherlode,param=multiplier)
+
+    def award_mootherlode(self,times):
+        moo = times + 3
+        mooLayer = ep.EP_AnimatedLayer(self.game.assets.dmd_moother)
+        mooLayer.frame_time = 4
+        mooLayer.opaque = True
+        mooLayer.repeat = True
+        mooLayer.hold = False
+        scoreText = moo * self.displayMotherlodeValue
+        self.game.score(scoreText)
+        mooText = dmd.TextLayer(70,12,self.game.assets.font_12px_az_outline,"center",opaque=False)
+        mooText.composite_op = "blacksrc"
+        mooText.set_text(str(ep.format_score(scoreText)),blink_frames=12)
+        combined = dmd.GroupedLayer(128,32,[mooLayer,mooText])
+        self.game.sound.play(self.game.assets.sfx_cow3)
+        self.layer = combined
+        self.delay("Display",delay=3,handler=self.main_display)
+        self.game.mountain.kick()
+        self.bandits = False
 
     def award_motherlode(self,times):
         # tick the counter up
