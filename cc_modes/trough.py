@@ -49,6 +49,7 @@ class Trough(ep.EP_Mode):
         self.eject_coilname = eject_coilname
         self.shooter_lane_switchname = shooter_lane_switchname
         self.drain_callback = drain_callback
+        self.eject_sw_count = 0
 
         # Install switch handlers.
         # Use a delay of 750ms which should ensure balls are settled.
@@ -318,6 +319,8 @@ class Trough(ep.EP_Mode):
         # Only kick out another ball if the last ball is gone from the
         # shooter lane.
         print "Launch action loop"
+        # set the trough eject switch count to zero
+        self.eject_sw_count = 0
         if self.game.switches[self.shooter_lane_switchname].is_inactive():
             self.game.coils[self.eject_coilname].pulse(30)
             # go to a hold pattern to wait for the shooter lane
@@ -366,3 +369,14 @@ class Trough(ep.EP_Mode):
             self.cancel_delayed("Bounce_Delay")
             self.finish_launch()
 
+    def sw_troughEject_active(self,sw):
+        self.eject_sw_count += 1
+        print "Trough Eject switch count: " + str(self.eject_sw_count)
+        if self.eject_sw_count > 1:
+            print "We're over on eject count - ball fell back in"
+            # cancel the check switches
+            self.cancel_delayed('check_switches')
+            # cancel the delay loop
+            self.cancel_delayed('Bounce_Delay')
+            # retry the ball launch
+            self.common_launch_code()
