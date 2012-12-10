@@ -113,11 +113,18 @@ class Trough(ep.EP_Mode):
     # the delay will call the real handler (check_switches).
     def position_switch_handler(self, sw):
         self.cancel_delayed('check_switches')
-        self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
+        if self.eject_coilname > 1:
+            pass
+        else:
+            self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
 
     def check_switches(self):
         print "CHECKING SWITCHES - Balls in play: " + str(self.num_balls_in_play)
-        if self.num_balls_in_play > 0:
+        if self.eject_sw_count > 1:
+            print "Passing check switches - eject count more than 1"
+            pass
+
+        elif self.num_balls_in_play > 0:
             print "THERE'S A BALL IN PLAY"
             # how many balls should the machine have
             num_current_machine_balls = self.game.num_balls_total
