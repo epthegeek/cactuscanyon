@@ -113,9 +113,10 @@ class Trough(ep.EP_Mode):
     # the delay will call the real handler (check_switches).
     def position_switch_handler(self, sw):
         self.cancel_delayed('check_switches')
-        if self.eject_coilname > 1:
+        if self.eject_sw_count > 1:
             pass
         else:
+	    #print "Schedule switch check delay"
             self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
 
     def check_switches(self):
@@ -348,6 +349,8 @@ class Trough(ep.EP_Mode):
 
     def finish_launch(self):
         print "Finishing Launch"
+	# set the eject hits to zero
+	self.eject_sw_count = 0
         # tick down the balls to launch
         self.num_balls_to_launch -= 1
         print "BALL LAUNCHED - left to launch: " +str(self.num_balls_to_launch)
@@ -368,7 +371,7 @@ class Trough(ep.EP_Mode):
             if self.launch_callback:
                 self.launch_callback()
 
-    def sw_shooterLane_active_for_80ms(self,sw):
+    def sw_shooterLane_active_for_100ms(self,sw):
         print "SOLID LAUNCH, GOOD TO GO"
         # if we're ejecting - process the launch
         if self.launch_in_progress:
@@ -382,8 +385,11 @@ class Trough(ep.EP_Mode):
         if self.eject_sw_count > 1:
             print "We're over on eject count - ball fell back in"
             # cancel the check switches
-            self.cancel_delayed('check_switches')
+            #self.cancel_delayed('check_switches')
             # cancel the delay loop
-            self.cancel_delayed('Bounce_Delay')
+            #self.cancel_delayed('Bounce_Delay')
+	    self.wipe_delays()
             # retry the ball launch
-            self.common_launch_code()
+            self.delay("Retry",delay=2,handler=self.common_launch_code)
+        else:
+            print "That's one"
