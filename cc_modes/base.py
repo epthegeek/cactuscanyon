@@ -1000,3 +1000,8 @@ class BaseGameMode(ep.EP_Mode):
         # if there's more than one, come back
         if value > 0:
             self.delay(delay=0.5,handler=self.knock,param=value)
+
+    def abort_display(self):
+        # fix the audio volume if it's down
+        if self.game.squelched:
+            self.game.restore_music()

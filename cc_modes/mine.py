@@ -448,5 +448,3 @@ class Mine(ep.EP_Mode):
 
 
 
-
-
