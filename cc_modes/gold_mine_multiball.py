@@ -229,9 +229,13 @@ class GoldMine(ep.EP_Mode):
         self.running = True
         # kick the ball out of the mine
         self.game.mountain.eject()
-        # launch up to 2 more balls
-        if self.game.trough.num_balls_in_play < 3:
-            total = 3 - self.game.trough.num_balls_in_play
+        # launch up to 2 more balls - or more if drunk multiball or stampede is also running
+        if self.game.drunk_multiball.running or self.game.stampede.running:
+            ballNumber = 4
+        else:
+            ballNumber = 3
+        if self.game.trough.num_balls_in_play < ballNumber:
+            total = ballNumber - self.game.trough.num_balls_in_play
             # turn on the autoplunge
             print("Goldmine Multiball - Launching " + str(total) + "balls")
             self.game.trough.balls_to_autoplunge = total
