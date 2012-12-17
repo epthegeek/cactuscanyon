@@ -24,6 +24,7 @@ class Mountain(ep.EP_Mode):
         super(Mountain, self).__init__(game, priority)
         self.mineReset = False
         self.inMotion = False
+        self.kickStrength = self.game.user_settings['Machine (Standard)']['Mine Kicker Strength']
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -47,7 +48,7 @@ class Mountain(ep.EP_Mode):
             self.inMotion = False
 
     def kick(self):
-        self.game.coils.minePopper.pulse(20)
+        self.game.coils.minePopper.pulse(self.kickStrength)
 
     def flash(self):
         self.game.coils.mineFlasher.schedule(0x00000025,cycle_seconds=1)
