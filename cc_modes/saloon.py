@@ -244,6 +244,9 @@ class Saloon(ep.EP_Mode):
         # 10 - Move your train - only add if polly isn't running
         if not self.game.peril and self.game.move_your_train not in self.game.modes and self.mytValue == 'Enabled':
             prizes.append('moveYourTrain')
+        # 11 - 30 second ball save
+        if not self.game.trough.ball_save_active:
+            prizes.append('ballSave')
         # so as of this point we have a prizes list to use
         # and pick one of those at random
         self.bountyPrize = random.choice(prizes)
@@ -328,6 +331,10 @@ class Saloon(ep.EP_Mode):
             self.prizeHandler = self.game.move_your_train.start
             # null the param flag
             self.prizeParam = False
+        elif self.bountyPrize == 'ballSave':
+            prizeText = "30 SEC"
+            prizeText2 = "BALL SAVER"
+            self.game.ball_save.start(num_balls_to_save=1, time=30, now=True, allow_multiple_saves=False)
         else:
             prizeText = "WTF"
             print "WTF BOUNTY: " + self.bountyPrize
