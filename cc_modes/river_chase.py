@@ -385,6 +385,7 @@ class RiverChase(ep.EP_Mode):
     def abort_display(self):
         # if we're done, we should quit
         if self.shotsSoFar >= self.shotsToWin and self.running:
+            self.running = False
             self.end_river_chase()
         self.cancel_delayed("Display")
         self.layer = None

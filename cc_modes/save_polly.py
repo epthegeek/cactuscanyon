@@ -460,4 +460,5 @@ class SavePolly(ep.EP_Mode):
         self.paused = False
         if self.running:
             if self.won or self.modeTimer <= 0:
+                self.running = False
                 self.polly_finished()
