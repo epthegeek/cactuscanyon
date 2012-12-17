@@ -215,6 +215,8 @@ class Bart(ep.EP_Mode):
 
         # score the points
         self.game.score(self.hitValue)
+        # add some bonus
+        self.game.add_bonus(25000)
         # flash the light and move the dude
         # a flourish lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.lamp_update)
@@ -284,6 +286,8 @@ class Bart(ep.EP_Mode):
             self.game.increase_tracking('currentBart')
             # score some points
         self.game.score(self.defeatValue)
+        # add some bonus
+        self.game.add_bonus(150000)
         # reset the hits on bart
         self.game.set_tracking('bartHits',0)
         # play a fancy lampshow

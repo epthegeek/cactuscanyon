@@ -202,6 +202,7 @@ class Gunfight(ep.EP_Mode):
         # award some points
         points = 750000
         self.game.score(points)
+        self.game.add_bonus(100000)
         # show the win screen
         textLine1 = dmd.TextLayer(64, 0, self.game.assets.font_7px_bold_az, "center", opaque=True).set_text("BAD GUY SHOT!")
         textLine2 = ep.pulse_text(self,64,9,ep.format_score(points))

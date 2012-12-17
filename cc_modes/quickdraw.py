@@ -234,6 +234,8 @@ class Quickdraw(ep.EP_Mode):
         # stuff specific to winning
         # score the points
         self.game.score(self.points)
+        # add some bonus
+        self.game.add_bonus(50000)
         # update the bad guys
         self.game.set_tracking('badGuysDead',"True",target)
         self.lamp_update()
