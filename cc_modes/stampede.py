@@ -92,6 +92,8 @@ class Stampede(ep.EP_Mode):
             self.game.set_tracking(shot,89)
         # udpate the lamps
         self.lamp_update()
+        # If the multiball ball savers are a thing, do that
+        self.game.base.multiball_saver()
 
         # start the timer for the moving jackpot
         self.jackpot_shift()

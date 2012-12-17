@@ -426,6 +426,9 @@ class CvA(ep.EP_Mode):
                 self.game.saloon.kick()
 
             self.delay(delay=myWait,handler = self.get_going)
+            # If the multiball ball savers are a thing, do that
+            self.game.base.multiball_saver()
+
 
     def one_beat(self):
         self.beat += 1

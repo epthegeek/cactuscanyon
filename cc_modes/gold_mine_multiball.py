@@ -250,6 +250,8 @@ class GoldMine(ep.EP_Mode):
         self.music_on(self.game.assets.music_goldmineMultiball)
         # kick into the MB display
         self.main_display()
+        # If the multiball ball savers are a thing, do that
+        self.game.base.multiball_saver()
 
     def main_display(self):
         # set up the display during multiball

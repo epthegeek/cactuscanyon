@@ -48,6 +48,9 @@ class BaseGameMode(ep.EP_Mode):
         #    self.skipDrunk = False
         self.skipDrunk = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball Intro Skip']
         self.drunkStacking = 'Enabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball Stacking']
+        # Multiball ball saver flag
+        self.multiballSaver = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Multiball Ball Savers']
+        self.multiballSaverTimer = self.game.user_settings['Gameplay (Feature)']['Multiball Savers Timer']
 
     def mode_started(self):
         # set the number for the hits to the beer mug to start drunk multiball
@@ -1005,3 +1008,14 @@ class BaseGameMode(ep.EP_Mode):
         # fix the audio volume if it's down
         if self.game.squelched:
             self.game.restore_music()
+
+
+    # multiball saver
+    def multiball_saver(self):
+        # if multiball ball savers are not enabled - do nothing
+        if not self.multiballSaver:
+            pass
+        else:
+            # if a ball save is not already active
+            if not self.game.trough.ball_save_active:
+                self.game.ball_save.start(num_balls_to_save=1, time=self.multiballSaverTimer, now=True, allow_multiple_saves=False)

@@ -73,8 +73,8 @@ class MarshallMultiball(ep.EP_Mode):
 
         # play the quote
         duration = self.game.base.priority_quote(self.game.assets.quote_marshallMultiball)
-        # start a ball saver
-        self.game.ball_save.start(num_balls_to_save=1, time=8, now=True, allow_multiple_saves=False)
+        # If the multiball ball savers are a thing, do that
+        self.game.base.multiball_saver()
         self.start()
         # music is optional based on a setting
         if self.game.user_settings['Gameplay (Feature)']['Marshall Multiball Music'] == 'Yes':

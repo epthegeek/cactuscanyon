@@ -80,6 +80,8 @@ class Showdown(ep.EP_Mode):
         animLayer.add_frame_listener(11,self.game.lightning,param="left")
         # setup the display
         self.layer = animLayer
+        # If the multiball ball savers are a thing, do that
+        self.game.base.multiball_saver()
         self.delay("Operational",delay=myWait,handler=self.get_going)
         self.taunt_timer()
 

@@ -214,6 +214,13 @@ Gameplay (Feature):
   'Marshall Required for Bionic':
     options: ['Yes','No']
     default: 'No'
+  'Multiball Ball Savers':
+    options: ['Yes','No']
+    default: 'No'
+  'Multiball Savers Timer':
+    options: [5,30]
+    increments: 5
+    default: 10
   'Skillshot Boosts':
     options: ['Easy','Hard']
     default: 'Easy'
