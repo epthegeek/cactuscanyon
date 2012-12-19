@@ -53,12 +53,16 @@ class Train(ep.EP_Mode):
         # each time it hits increment the train progress
         self.trainProgress += 1
         if self.stopAt > 0:
+            # if progress exceeds stop at
             if self.trainProgress >= self.stopAt:
-                # reset stop at so it doesn't interfere
-                self.stopAt = 0
-                # reset the progress
-                self.trainProgress = 0
+                # stop the train
                 self.stop()
+                # reset stop at so it doesn't interfere
+                self.delay("Zero",delay=0.5,handler=self.zero_out)
+
+    def zero_out(self):
+        self.stopAt = 0
+        self.trainProgress = 0
 
     def move(self):
         if not self.trainDisabled:

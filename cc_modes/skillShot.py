@@ -245,7 +245,7 @@ class SkillShot(ep.EP_Mode):
 
             self.award_display(awardStringTop,awardStringBottom,start=False)
 
-    def skillshot_award(self):
+    def skillshot_award(self,switch=0):
         # stop the music
         self.stop_music()
         # play the sound
@@ -452,6 +452,9 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom = "YOUR TRAIN"
             # load the mode so the train starts moving
             self.game.modes.add(self.game.move_your_train)
+            # if we hit the left loop, call start for MYT after a delay
+            if switch == 1:
+                self.delay("Operational",delay=1.5,handler=self.game.move_your_train.start)
             self.super = False
 
         # cva
@@ -596,7 +599,7 @@ class SkillShot(ep.EP_Mode):
         self.delay(name="Display",delay=myWait+1,handler=self.update_layer)
         self.delay(delay=myWait+1,handler=self.unbusy)
 
-    def super_hit(self,made=None):
+    def super_hit(self,made=None,switch=0):
         # unload the switch trap
         self.game.modes.remove(self.game.super_filter)
         # kill the drum roll
@@ -606,7 +609,7 @@ class SkillShot(ep.EP_Mode):
         self.lamp_update()
         if made:
             # award the prize
-            self.skillshot_award()
+            self.skillshot_award(switch)
         else:
             # clear the prizes
             self.selectedPrizes = ""

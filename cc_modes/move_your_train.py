@@ -40,6 +40,8 @@ class MoveYourTrain(ep.EP_Mode):
 
     def mode_started(self):
         print "Beginning Move Your Train"
+        # set the status to ready
+        self.game.set_tracking("mytStatus", "READY")
         self.postUse = False
         # move the train to the middle of the track
         # set a stop point for the encoder
@@ -51,8 +53,6 @@ class MoveYourTrain(ep.EP_Mode):
         self.set_position()
         # set the time for the mode
 #        self.timeLimit = self.game.user_settings['Gameplay (Feature)']['Move Your Train Timer']
-        # set the status to ready
-        self.game.set_tracking("mytStatus", "READY")
         self.shots = 0
 
     def ball_drained(self):
@@ -159,6 +159,8 @@ class MoveYourTrain(ep.EP_Mode):
             self.delay(name="Operational",delay=self.animWait,handler=self.idle_display)
 
     def move_train(self,direction):
+        # cancel the zero out if one is pending
+        self.game.train.cancel_delayed("Zero")
         print "TRAIN STATUS:" + str(self.game.train.inMotion)
         # if we're not currently moving, then we can move again - tweak for running in fakepinproc?
         if not self.game.train.inMotion or self.game.fakePinProc:

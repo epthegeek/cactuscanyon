@@ -28,7 +28,7 @@ class SuperFilter(ep.EP_Mode):
 
     def sw_leftLoopTop_active(self,sw):
         if self.game.skill_shot.active == 1:
-            self.game.skill_shot.super_hit(made=True)
+            self.game.skill_shot.super_hit(made=True,switch=1)
         else:
             self.game.skill_shot.super_hit()
         return game.SwitchStop
@@ -41,14 +41,14 @@ class SuperFilter(ep.EP_Mode):
 
     def sw_leftRampEnter_active(self,sw):
         if self.game.skill_shot.active == 2:
-            self.game.skill_shot.super_hit(made=True)
+            self.game.skill_shot.super_hit(made=True,switch=2)
         else:
             self.game.skill_shot.super_hit()
         return game.SwitchStop
 
     def sw_centerRampMake_active(self,sw):
         if self.game.skill_shot.active == 3:
-            self.game.skill_shot.super_hit(made=True)
+            self.game.skill_shot.super_hit(made=True,switch=3)
         else:
             self.game.skill_shot.super_hit()
         return game.SwitchStop

@@ -406,14 +406,14 @@ class BaseGameMode(ep.EP_Mode):
             print "PASSING - Guns disabled"
             print self.game.show_tracking('stackLevel')
         # Everything beyond this point only registers if there's no other mode running - so no stack checking is needed
-        # cva
-        elif self.game.show_tracking('cvaStatus') == "READY":
-            self.game.modes.add(self.game.cva)
-            self.game.cva.intro(entry="inlane",onSide = side)
         # move your train
         elif self.game.show_tracking('mytStatus') == "READY":
             # if MYT is ready, start it and raise the post to catch the ball
             self.game.move_your_train.start(True,side)
+        # cva
+        elif self.game.show_tracking('cvaStatus') == "READY":
+            self.game.modes.add(self.game.cva)
+            self.game.cva.intro(entry="inlane",onSide = side)
         # if guns are allowed, and showdown is ready do that
         elif self.game.show_tracking('showdownStatus') == "READY":
             self.game.modes.add(self.game.showdown)
