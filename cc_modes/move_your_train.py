@@ -89,6 +89,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.move_train("center")
 
     def start(self,postTrap = False,side=0):
+        print "Move your train actual start"
         if postTrap:
             self.postUse = True
             # raise the right post to hold the ball - to trap the ball after the skillshot win
