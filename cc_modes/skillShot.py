@@ -153,7 +153,7 @@ class SkillShot(ep.EP_Mode):
             if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
                 prizes.append("J")
             # move your train
-            if self.mytValue == 'Enabled':
+            if self.mytValue == 'Enabled' and self.game.move_your_train not in self.game.modes:
                 prizes.append("S")
             # cva
             prizes.append("T")

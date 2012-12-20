@@ -1231,7 +1231,7 @@ class Assets():
 
         self.dmd_cows = dmd.Animation().load(self.dmd_path+'crazy_cows.dmd')
         self.dmd_moother = dmd.Animation().load(self.dmd_path+'moother.dmd')
-        
+
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"
 
