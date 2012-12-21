@@ -905,6 +905,9 @@ class BaseGameMode(ep.EP_Mode):
     def enable_bozo_ball(self):
         self.game.set_tracking('bozoBall',True)
 
+    def disable_bozo_ball(self):
+        self.game.set_tracking('bozoBall',False)
+
     def collect_bozo_ball(self):
         self.is_busy()
         # add a fake pending extra ball

@@ -426,6 +426,9 @@ class Mine(ep.EP_Mode):
         textLine.composite_op = "blacksrc"
         myLayer = dmd.GroupedLayer(128,32,[backdrop,textLine])
         self.layer = myLayer
+        # turn off the bozo ball if it's on
+        if self.game.show_tracking('bozoBall'):
+            self.game.base.disable_bozo_ball()
         self.delay(delay=3,handler=self.clear_layer)
         self.delay(delay=3,handler=self.unbusy)
         self.delay(delay=3,handler=self.game.restore_music)
