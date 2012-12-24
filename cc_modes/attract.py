@@ -23,6 +23,7 @@ from procgame import dmd
 import ep
 import locale
 import random
+import sys
 
 locale.setlocale(locale.LC_ALL, "")
 
