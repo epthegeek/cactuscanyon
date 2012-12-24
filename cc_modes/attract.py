@@ -237,7 +237,7 @@ class Attract(ep.EP_Mode):
 
     def sw_startButton_active(self, sw):
         # if both flipper buttons are pressed, power down
-        if self.game.switches.flipperLwR.is_active() and self.game.switches.flipperLwL.is_active():
+        if self.game.switches.flipperLwR.is_active() and self.game.switches.flipperLwL.is_active() and self.game.buttonShutdown:
             sys.exit(69)
         else:
             # If the trough is full start a game - if the end of game delay isn't active

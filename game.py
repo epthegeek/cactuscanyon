@@ -68,6 +68,7 @@ class CCGame(game.BasicRecordableGame):
         self.soundIntro = False
         self.resetFlag = config.value_for_key_path(keypath='reset_flag', default=False)
         self.shutdownFlag = config.value_for_key_path(keypath='shutdown_flag',default=False)
+        self.buttonShutdown = config.value_for_key_path(keypath='power_button_combo', default=False)
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
