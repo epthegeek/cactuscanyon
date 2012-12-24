@@ -66,7 +66,8 @@ class CCGame(game.BasicRecordableGame):
             print "Knocker Config Found!"
         # used to prevent the high score entry from restarting the music
         self.soundIntro = False
-
+        self.resetFlag = config.value_for_key_path(keypath='reset_flag', default=False)
+        self.shutdownFlag = config.value_for_key_path(keypath='shutdown_flag',default=False)
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')

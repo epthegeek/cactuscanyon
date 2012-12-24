@@ -22,8 +22,9 @@ class ServiceModeSkeleton(ep.EP_Mode):
 
     def mode_stopped(self):
         self.game.sound.play(self.game.assets.sfx_menuExit)
-        if self.game.service_mode not in self.game.modes and self.game.usb_update:
-            sys.exit(42)
+        if self.game.service_mode not in self.game.modes:
+            if self.game.usb_update or self.game.restartFlag:
+                sys.exit(42)
 
     def disable(self):
         pass
@@ -105,6 +106,40 @@ class ServiceMode(ServiceModeList):
         if self.game.usb_update:
             self.update = Update(self.game,self.priority+1, font, 'Update')
             self.items.append(self.update)
+        if self.game.shutdownFlag:
+            self.shutdown = Shutdown(self.game,self.priority+1, font, 'Shutdown')
+            self.items.append(self.shutdown)
+
+class Shutdown(ServiceModeList):
+    def __init__(self, game, priority, font, title):
+        super(Shutdown, self).__init__(game,priority, font)
+        self.name = title
+        self.items = []
+        self.do_shutdown = DoShutdown(self.game,self.priority+1, font)
+        self.items.append(self.do_shutdown)
+
+class ShutdownItem:
+    """Service Mode."""
+    def __init__(self, name):
+        self.name = name
+
+    def disable(self):
+        pass
+
+class DoShutdown(ServiceModeList):
+    def __init__(self,game,priority, font):
+        super(DoShutdown,self).__init__(game,priority,font)
+        self.name = "PRESS ENTER TO CONFIRM"
+        self.items = []
+        self.items.append( ShutdownItem("ONE MORE TO POWER OFF"))
+
+    def mode_started(self):
+        super(DoShutdown, self).mode_started()
+
+    def sw_enter_active(self,sw):
+        print "Powering off"
+        # exit with error code 69
+        sys.exit(69)
 
 class Update(ServiceModeList):
     """USB Code Update"""
@@ -114,6 +149,7 @@ class Update(ServiceModeList):
         self.items = []
         self.do_update = DoUpdate(self.game,self.priority+1,font)
         self.items.append(self.do_update)
+
 
 class DoUpdate(ServiceModeList):
     """ USB Updater"""
