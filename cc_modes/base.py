@@ -51,7 +51,7 @@ class BaseGameMode(ep.EP_Mode):
         # Multiball ball saver flag
         self.multiballSaver = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Multiball Ball Savers']
         self.multiballSaverTimer = self.game.user_settings['Gameplay (Feature)']['Multiball Savers Timer']
-        self.autoplungeStrength = self.game.user_settings['Gameplay (Feature)']['Autoplunger Strength']
+        self.autoplungeStrength = self.game.user_settings['Machine (Standard)']['Autoplunger Strength']
 
     def mode_started(self):
         # set the number for the hits to the beer mug to start drunk multiball
