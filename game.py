@@ -32,6 +32,7 @@ import pygame
 import highscore
 import time
 import os
+import yaml
 
 curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
 ## Define the config file locations
@@ -937,3 +938,38 @@ class CCGame(game.BasicRecordableGame):
             print "User settings put Ambush first - adjusting for player"
             self.set_tracking('ambushStatus',"OPEN")
             self.set_tracking('showdownStatus',"OVER")
+
+
+    def load_settings(self, template_filename, user_filename):
+        """Loads the YAML game settings configuration file.  The game settings
+       describe operator configuration options, such as balls per game and
+       replay levels.
+       The *template_filename* provides default values for the game;
+       *user_filename* contains the values set by the user.
+
+       See also: :meth:`save_settings`
+       """
+        self.user_settings = {}
+        self.settings = yaml.load(open(template_filename, 'r'))
+        if os.path.exists(user_filename):
+            self.user_settings = yaml.load(open(user_filename, 'r'))
+            # check that we got something
+            if self.user_settings:
+                print "Found settings. All good"
+            else:
+                print "Settings broken, all bad, defaulting"
+                self.user_settings = {}
+
+        for section in self.settings:
+            for item in self.settings[section]:
+                if not section in self.user_settings:
+                    self.user_settings[section] = {}
+                    if 'default' in self.settings[section][item]:
+                        self.user_settings[section][item] = self.settings[section][item]['default']
+                    else:
+                        self.user_settings[section][item] = self.settings[section][item]['options'][0]
+                elif not item in self.user_settings[section]:
+                    if 'default' in self.settings[section][item]:
+                        self.user_settings[section][item] = self.settings[section][item]['default']
+                    else:
+                        self.user_settings[section][item] = self.settings[section][item]['options'][0]
