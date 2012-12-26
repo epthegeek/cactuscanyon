@@ -33,6 +33,7 @@ import highscore
 import time
 import os
 import yaml
+import copy
 
 curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
 ## Define the config file locations
@@ -973,3 +974,27 @@ class CCGame(game.BasicRecordableGame):
                         self.user_settings[section][item] = self.settings[section][item]['default']
                     else:
                         self.user_settings[section][item] = self.settings[section][item]['options'][0]
+
+    def load_game_data(self, template_filename, user_filename):
+        """Loads the YAML game data configuration file.  This file contains
+        transient information such as audits, high scores and other statistics.
+        The *template_filename* provides default values for the game;
+        *user_filename* contains the values set by the user.
+
+        See also: :meth:`save_game_data`
+        """
+        self.game_data = {}
+        template = yaml.load(open(template_filename, 'r'))
+        if os.path.exists(user_filename):
+            self.game_data = yaml.load(open(user_filename, 'r'))
+            # check that we got something
+            if self.game_data:
+                print "Found settings. All good"
+            else:
+                print "Settings broken, all bad, defaulting"
+                self.game_data = {}
+
+        if template:
+            for key, value in template.iteritems():
+                if key not in self.game_data:
+                       self.game_data[key] = copy.deepcopy(value)
