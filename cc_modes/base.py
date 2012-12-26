@@ -51,6 +51,7 @@ class BaseGameMode(ep.EP_Mode):
         # Multiball ball saver flag
         self.multiballSaver = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Multiball Ball Savers']
         self.multiballSaverTimer = self.game.user_settings['Gameplay (Feature)']['Multiball Savers Timer']
+        self.autoplungeStrength = self.game.user_settings['Gameplay (Feature)']['Autoplunger Strength']
 
     def mode_started(self):
         # set the number for the hits to the beer mug to start drunk multiball
@@ -636,7 +637,7 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.trough.balls_to_autoplunge > 0:
             self.game.trough.balls_to_autoplunge -= 1
             print "AUTOPLUNGE, MF - Left to autoplunge " + str(self.game.trough.balls_to_autoplunge)
-            self.game.coils.autoPlunger.pulse(20)
+            self.game.coils.autoPlunger.pulse(self.autoplungeStrength)
 
 
     def sw_shooterLane_inactive_for_100ms(self,sw):
@@ -977,7 +978,7 @@ class BaseGameMode(ep.EP_Mode):
         # if it's still there now, and there's supposed to be balls in play - launch
         if self.game.switches.shooterLane.is_active() and self.game.trough.num_balls_in_play > 0:
             print "AUTO PLUNGE CORRECTION - Triggered by " + string
-            self.game.coils.autoPlunger.pulse(20)
+            self.game.coils.autoPlunger.pulse(self.autoplungeStrength)
 
     # this is to try to catch if a ball should have launched when the door was open
     def sw_coinDoorClosed_active(self,sw):
