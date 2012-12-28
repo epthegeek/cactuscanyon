@@ -27,6 +27,7 @@ from procgame import dmd
 import ep
 import random
 import time
+import sys
 
 
 class BaseGameMode(ep.EP_Mode):
@@ -968,6 +969,10 @@ class BaseGameMode(ep.EP_Mode):
         print "*   JUST BEFORE THIS POINT   *"
         print "******************************"
         print ""
+
+    def sw_phantomSwitch4_active(self,sw):
+        print "Resetting"
+        sys.exit(42)
 
     def guns_flash(self,type=1):
         if type == 1:

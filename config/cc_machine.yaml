@@ -116,6 +116,8 @@ PRSwitches:
         number: S43
     topRightStandUp:
         number: S44
+    phantomSwitch4:
+        number: S45
     beerMug:
         number: S46
     leftBonusLane:
