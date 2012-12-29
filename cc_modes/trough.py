@@ -50,6 +50,7 @@ class Trough(ep.EP_Mode):
         self.shooter_lane_switchname = shooter_lane_switchname
         self.drain_callback = drain_callback
         self.eject_sw_count = 0
+        self.troughStrength = self.game.user_settings['Machine (Standard)']['Trough Eject Strength']
 
         # Install switch handlers.
         # Use a delay of 750ms which should ensure balls are settled.
@@ -116,7 +117,7 @@ class Trough(ep.EP_Mode):
         if self.eject_sw_count > 1:
             pass
         else:
-	    #print "Schedule switch check delay"
+        #print "Schedule switch check delay"
             self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
 
     def check_switches(self):
@@ -330,7 +331,7 @@ class Trough(ep.EP_Mode):
         # set the trough eject switch count to zero
         self.eject_sw_count = 0
         if self.game.switches[self.shooter_lane_switchname].is_inactive():
-            self.game.coils[self.eject_coilname].pulse(30)
+            self.game.coils[self.eject_coilname].pulse(self.troughStrength)
             # go to a hold pattern to wait for the shooter lane
             # if after 2 seconds the shooter lane hasn't been hit we should try again
             if not self.game.fakePinProc:
@@ -349,8 +350,8 @@ class Trough(ep.EP_Mode):
 
     def finish_launch(self):
         print "Finishing Launch"
-	# set the eject hits to zero
-	self.eject_sw_count = 0
+        # set the eject hits to zero
+        self.eject_sw_count = 0
         # tick down the balls to launch
         self.num_balls_to_launch -= 1
         print "BALL LAUNCHED - left to launch: " +str(self.num_balls_to_launch)
@@ -388,7 +389,7 @@ class Trough(ep.EP_Mode):
             #self.cancel_delayed('check_switches')
             # cancel the delay loop
             #self.cancel_delayed('Bounce_Delay')
-	    self.wipe_delays()
+            self.wipe_delays()
             # retry the ball launch
             self.delay("Retry",delay=2,handler=self.common_launch_code)
         else:
