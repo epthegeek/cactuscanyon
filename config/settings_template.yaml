@@ -51,7 +51,7 @@ Machine (Standard):
     options: [20,50]
     increments: 5
     default: 20
-  'Trough Strength':
+  'Trough Eject Strength':
     options: [20,50]
     increments: 5
     default: 30
