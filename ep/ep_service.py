@@ -22,8 +22,10 @@ class ServiceModeSkeleton(ep.EP_Mode):
 
     def mode_stopped(self):
         self.game.sound.play(self.game.assets.sfx_menuExit)
+        # save the data
+        self.game.save_game_data()
         if self.game.service_mode not in self.game.modes:
-            if self.game.usb_update or self.game.restartFlag:
+            if self.game.usb_update or self.game.resetFlag:
                 sys.exit(42)
 
     def disable(self):

@@ -119,15 +119,20 @@ class Interrupter(ep.EP_Mode):
         self.delay(delay=1,handler=self.clear_layer)
 
     def closing_song(self,duration):
-        self.delay(delay=duration+1,handler=self.music_on,param=self.game.assets.music_goldmineMultiball)
+        attractMusic = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Music']
+        if attractMusic:
+            print "Playing Closing Song"
+            self.delay(delay=duration+1,handler=self.music_on,param=self.game.assets.music_goldmineMultiball)
+            # and set a delay to fade it out after 2 minutes
+            self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music)
+            # new line to reset the volume after fade because it may affect new game
+            self.delay("Attract Fade",delay=60.5,handler=self.reset_volume)
         # set a 2 second delay to allow the start button to work again
+        print "Setting delay for start button"
         self.delay(delay=duration+2,handler=self.enable_start)
-        # and set a delay to fade it out after 2 minutes
-        self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music)
-        # new line to reset the volume after fade because it may affect new game
-        self.delay("Attract Fade",delay=60.5,handler=self.reset_volume)
 
     def enable_start(self):
+        print "Game start enabled again"
         self.game.endBusy = False
 
     def reset_volume(self):
@@ -469,3 +474,24 @@ class Interrupter(ep.EP_Mode):
         self.playing = False
         # clear the layer
         self.clear_layer()
+
+    def switch_warning(self,switches):
+        script = []
+        switchCount = len(switches)
+        # set up the text layer
+        textString = "< CHECK SWITCHES >"
+        textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+        textLayer.composite_op = 'blacksrc'
+        script.append({'seconds':1.8,'layer':textLayer})
+
+        # then loop through the bad switches
+        for i in range(0,switchCount,1):
+            name = switches[i]['switchName']
+            count = switches[i]['count']
+            textString = "< " + name + " >"
+            textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+            textLayer.composite_op = 'blacksrc'
+            script.append({'seconds':1.8,'layer':textLayer})
+        display = dmd.ScriptedLayer(128,32,script)
+        display.composite_op = "blacksrc"
+        self.layer = display

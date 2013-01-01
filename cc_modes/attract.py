@@ -39,6 +39,18 @@ class Attract(ep.EP_Mode):
 
     def mode_started(self):
 
+        # show the switch warning on the interrupter level if any switch hits the warning limit
+        warn = self.game.user_settings['Machine (Standard)']['Inactive Switch Warning']
+        bad_switches = []
+        for switch in self.game.game_data['SwitchHits']:
+            # if any switch is up to the warning level
+            if self.game.game_data['SwitchHits'][switch] >= warn:
+                # add it to the list of warning swtiches
+                bad_switches.append({'switchName':switch,'count':self.game.game_data['SwitchHits'][switch]})
+        # if we get here and there's something in bad switches, it's time to act
+        if bad_switches:
+            self.game.interrupter.switch_warning(bad_switches)
+
         ## Set up the layers to use
         ballyBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ballyBanner.frames[0])
 
@@ -240,6 +252,7 @@ class Attract(ep.EP_Mode):
         if self.game.switches.flipperLwR.is_active() and self.game.switches.flipperLwL.is_active() and self.game.buttonShutdown:
             sys.exit(69)
         else:
+            print "Attract start button got pressed"
             # If the trough is full start a game - if the end of game delay isn't active
             if not self.game.endBusy:
                 if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
@@ -247,6 +260,8 @@ class Attract(ep.EP_Mode):
                     self.game.lampctrl.stop_show()
                     # kill the music in case the 'end of game' song is playing
                     self.stop_music()
+                    # clear the interrupter layer
+                    self.game.interrupter.clear_layer()
                     # Initialize game
                     self.game.start_game()
                 else:

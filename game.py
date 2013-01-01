@@ -300,6 +300,8 @@ class CCGame(game.BasicRecordableGame):
         self.super_filter = cc_modes.SuperFilter(game=self,priority = 200)
         # Interrupter Jones
         self.interrupter = cc_modes.Interrupter(game=self,priority=200)
+        # Switch Hit Tracker
+        self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=201)
 
         ## try adding the score display font override
         self.score_display.font_18x12 = self.assets.font_score_x12
@@ -352,6 +354,7 @@ class CCGame(game.BasicRecordableGame):
         self.modes.add(self.mountain)
         self.modes.add(self.badge)
         self.modes.add(self.interrupter)
+        self.modes.add(self.switch_tracker)
 
     def start_game(self):
         # remove the attract mode
@@ -360,6 +363,10 @@ class CCGame(game.BasicRecordableGame):
         self.interrupter.cancel_delayed("Attract Fade")
         # tick up the audits
         self.game_data['Audits']['Games Started'] += 1
+        # tick up all the switch hit tracking by one
+        for switch in self.game_data['SwitchHits']:
+            self.game_data['SwitchHits'][switch] +=1
+            print switch + " " + str(self.game_data['SwitchHits'][switch])
         # turn off all the ligths
         for lamp in self.lamps:
             if 'gi' not in lamp.name:
@@ -616,10 +623,7 @@ class CCGame(game.BasicRecordableGame):
         self.save_game_data()
 
         # play the closing song
-        # follow up with the music if enabled
-        attractMusic = 'Yes' == self.user_settings['Gameplay (Feature)']['Attract Mode Music']
-        if attractMusic:
-            self.interrupter.closing_song(duration)
+        self.interrupter.closing_song(duration)
 
     def save_game_data(self):
         super(CCGame, self).save_game_data(user_game_data_path)
