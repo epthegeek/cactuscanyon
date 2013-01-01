@@ -608,9 +608,16 @@ class SkillShot(ep.EP_Mode):
         self.game.set_tracking('lampStatus',"ON")
         self.lamp_update()
         if made:
+            # if a multiball mode is starting from teh super skillshot - don't turn on ball save
+            if self.selectedPrizes[5:] == "T" or self.selectedPrizes[5:] == "U":
+                pass
+            else:
+                self.game.ball_save.start(num_balls_to_save=1, time=10, now=True, allow_multiple_saves=False)
             # award the prize
             self.skillshot_award(switch)
         else:
+            # start the ball saver
+            self.game.ball_save.start(num_balls_to_save=1, time=10, now=True, allow_multiple_saves=False)
             # clear the prizes
             self.selectedPrizes = ""
             duration = self.game.base.priority_quote(self.game.assets.quote_superFail)

@@ -155,11 +155,13 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.switches.shooterLane.is_active() and self.game.ball > 1:
             self.game.game_reset()
 
-    def sw_shooterLane_open_for_1s(self,sw):
+    def sw_shooterLane_open_for_3s(self,sw):
+        # don't start the ball saver if super skillshot is running
         if self.game.ballStarting:
             self.game.ballStarting = False
-            ball_save_time = 10
-            self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
+            if not self.game.skill_shot.super:
+                ball_save_time = 10
+                self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
 
     def sw_beerMug_active(self,sw):
         # track it, because why not
