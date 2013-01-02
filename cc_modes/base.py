@@ -112,6 +112,8 @@ class BaseGameMode(ep.EP_Mode):
             # turn off all the lights
             for lamp in self.game.lamps.items_tagged('Playfield'):
                 lamp.disable()
+            # Kill the mine flasher if it's on
+            self.game.coils.mineFlasher.disable()
             # stop the music
             self.stop_music()
             # play the ball end riff
