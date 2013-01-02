@@ -44,8 +44,8 @@ user_settings_path = curr_file_path + "/config/user_settings.yaml"
 
 ## Subclass BasicGame to create the main game
 #class CCGame(game.BasicGame):
-class CCGame(game.BasicRecordableGame):
-    def __init__(self,machineType, fakePinProc = False,recording = False,playback = False):
+class CCGame(game.BasicGame):
+    def __init__(self,machineType, fakePinProc = False):
         if (fakePinProc):
             if playback:
                 self.playback = True
@@ -80,9 +80,9 @@ class CCGame(game.BasicRecordableGame):
         self.assets = Assets(self)
         self.current_music = self.assets.music_mainTheme
 
-        if recording:
-            print "I'M RECORDING"
-            self.start_recording()
+        #if recording:
+        #    print "I'M RECORDING"
+        #    self.start_recording()
 
         self.showcase = ep.EP_Showcase(self)
 
