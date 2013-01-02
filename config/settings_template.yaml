@@ -38,7 +38,7 @@ Machine (Standard):
   'Flipper Pulse':
     options: [25,40]
     increments: 1
-    default: 30
+    default: 34
   'Drop Target Boost':
     options: [0,30]
     increments: 5
