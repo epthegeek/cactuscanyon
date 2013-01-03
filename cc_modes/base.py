@@ -232,7 +232,8 @@ class BaseGameMode(ep.EP_Mode):
         textLine2 = ep.pulse_text(self,51,12,"MULTIBALL")
         textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")
         self.repeat_ding(4)
-        self.game.base.play_quote(self.game.assets.quote_drunkMultiballLit)
+        duration = self.game.base.play_quote(self.game.assets.quote_drunkMultiballLit)
+        self.delay(delay=duration,handler=self.game.base.play_quote,param=self.game.assets.quote_shootSaloon)
         self.mug_display(textLine1,textLine2,textLine3)
         # so super can start gameplay
         if callback:

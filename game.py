@@ -47,12 +47,6 @@ user_settings_path = curr_file_path + "/config/user_settings.yaml"
 class CCGame(game.BasicGame):
     def __init__(self,machineType, fakePinProc = False):
         if (fakePinProc):
-            if playback:
-                self.playback = True
-                config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROCPlayback'
-            else:
-                self.playback = False
-                config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
             self.fakePinProc = True
         else:
             self.fakePinProc = False
@@ -80,9 +74,8 @@ class CCGame(game.BasicGame):
         self.assets = Assets(self)
         self.current_music = self.assets.music_mainTheme
 
-        #if recording:
-        #    print "I'M RECORDING"
-        #    self.start_recording()
+        # reset score display to mine
+        self.score_display = cc_modes.ScoreDisplay(self,0)
 
         self.showcase = ep.EP_Showcase(self)
 

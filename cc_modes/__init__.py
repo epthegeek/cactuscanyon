@@ -55,7 +55,8 @@ __all__ = [
     'marshall_multiball',
     'lamp_control',
     'last_call',
-    'switch_tracker'
+    'switch_tracker',
+    'score_display'
 ]
 from base import *
 from attract import *
@@ -98,3 +99,4 @@ from marshall_multiball import *
 from lamp_control import *
 from last_call import *
 from switch_tracker import *
+from score_display import *

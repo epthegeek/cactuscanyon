@@ -54,7 +54,7 @@ def main():
 
     try:
         # create the game object
-        game = CCGame(machineType,fakePinProc,recording,playback)
+        game = CCGame(machineType,fakePinProc)
         # set the game's config path
         game.yamlpath = yaml_path
         # fire off the setup

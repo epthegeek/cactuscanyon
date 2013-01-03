@@ -938,6 +938,17 @@ class Assets():
         self.game.sound.register_sound(self.quote_mineOpen, self.quotes_path + "1183-quote-mayor-mine-is-wide-open.wav")
         self.quote_niceLoopin = 'quote_niceLoopin'
         self.game.sound.register_sound(self.quote_niceLoopin, self.quotes_path + "1120-quote-mayor-nice-loopin-sir.wav")
+        self.quote_shootSaloon = 'quote_shootSaloon'
+        self.game.sound.register_sound(self.quote_shootSaloon, self.quotes_path + "1025-mayor-shoot-the-saloon.wav")
+
+        self.quote_4lights = 'quote_4lights'
+        self.game.sound.register_sound(self.quote_4lights, self.quotes_path + "1031-mayor-only-4-lights.wav")
+        self.quote_3lights = 'quote_3lights'
+        self.game.sound.register_sound(self.quote_3lights, self.quotes_path + "1032-mayor-only-3-lights.wav")
+        self.quote_2lights = 'quote_2lights'
+        self.game.sound.register_sound(self.quote_2lights, self.quotes_path + "1033-mayor-only-2-lights.wav")
+        self.quote_1light = 'quote_1light'
+        self.game.sound.register_sound(self.quote_1light, self.quotes_path + "1034-mayor-only-1-light.wav")
 
 
         # Music
@@ -1231,6 +1242,8 @@ class Assets():
 
         self.dmd_cows = dmd.Animation().load(self.dmd_path+'crazy_cows.dmd')
         self.dmd_moother = dmd.Animation().load(self.dmd_path+'moother.dmd')
+
+        self.dmd_1pBurnCycle = dmd.Animation().load(self.dmd_path+'1p_burn_cycle.dmd')
 
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"

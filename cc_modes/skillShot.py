@@ -47,6 +47,12 @@ class SkillShot(ep.EP_Mode):
                                 self.game.lamps.centerRampStopTrain,
                                 self.game.lamps.centerRampSavePolly,
                                 self.game.lamps.centerRampJackpot]
+        self.starQuotes = [False,
+                           self.game.assets.quote_1light,
+                           self.game.assets.quote_2lights,
+                           self.game.assets.quote_3lights,
+                           self.game.assets.quote_4lights,
+                           False]
         self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
         self.active = 0
         # check the generosity setting
@@ -74,6 +80,19 @@ class SkillShot(ep.EP_Mode):
             self.game.set_tracking('greeted',True)
             # play a random voice call from a pre-set collection
             self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_welcomes)
+        else:
+            # count the number of un-lit star points
+            points = self.game.show_tracking('starStatus')
+            left = 0
+            for value in points:
+                if not value:
+                    left += 1
+            print "Unlit badge points: " + str(left)
+            # set the quote based on left
+            theQuote = self.starQuotes[left]
+            # play a quote based on how many points are left
+            if theQuote:
+                self.delay(delay=0.3,handler=self.game.base.play_quote,param=theQuote)
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
         self.delay(delay=duration,handler=self.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
