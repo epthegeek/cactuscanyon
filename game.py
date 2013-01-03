@@ -43,7 +43,6 @@ settings_defaults_path = curr_file_path + "/config/settings_template.yaml"
 user_settings_path = curr_file_path + "/config/user_settings.yaml"
 
 ## Subclass BasicGame to create the main game
-#class CCGame(game.BasicGame):
 class CCGame(game.BasicGame):
     def __init__(self,machineType, fakePinProc = False):
         if (fakePinProc):

@@ -256,31 +256,6 @@ class BaseGameMode(ep.EP_Mode):
 ### /_/   \_\__,_|\__,_|_|\___/  |____/|_|\__|___/
 ###
 
-    #def music_on(self,song=None,caller="Not Specified",slice=0,execute=True):
-    #    # if given a slice number to check - do that
-    #    if slice != 0:
-    #        stackLevel = self.game.show_tracking('stackLevel')
-    #        # if there are balls in play and nothing active above the set slice, then kill the music
-    #        if True not in stackLevel[slice:] and self.game.trough.num_balls_in_play != 0:
-    #            pass
-    #        else:
-    #            print "Music stop called by " + str(caller) + " But passed - Busy"
-    #            execute = False
-    #
-    #    if execute:
-    #        # if a song is passed, set that to the active song
-    #        if song:
-    #            print str(caller) + " changed song to " + str(song)
-    #            self.current_music = song
-    #        # if not, just re-activate the current
-    #        else:
-    #            print str(caller) + " restarting current song"
-    #        # then start it up
-    #        self.game.sound.play_music(self.current_music, loops=-1)
-
-    #def delayed_music_on(self,wait,song=None):
-    #    self.delay(delay=wait, handler=self.music_on,param=song)
-
     # modified version of play voice from procgame.sound that stores a list of active quotes
     # even though more than one shouldn't be possible given the time checking
     def play_quote(self,key, loops=0, max_time=0, fade_ms=0,override=False,squelch=False):
