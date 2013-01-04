@@ -47,6 +47,7 @@ class CCGame(game.BasicGame):
     def __init__(self,machineType, fakePinProc = False):
         if (fakePinProc):
             self.fakePinProc = True
+            config.values['pinproc_class'] = 'procgame.fakepinproc.FakePinPROC'
         else:
             self.fakePinProc = False
         self.restart = False
