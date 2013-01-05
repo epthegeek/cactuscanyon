@@ -78,15 +78,15 @@ class ScoreDisplay(ep.EP_Mode):
         super(ScoreDisplay, self).__init__(game, priority)
         self.layer = ScoreLayer(128, 32, self)
         self.font_common = dmd.font_named("Font07x5.dmd")
-        self.font_18x12 = dmd.font_named("Font18x12.dmd")
-        self.font_18x11 = dmd.font_named("Font18x11.dmd")
-        self.font_18x10 = dmd.font_named("Font18x10.dmd")
-        self.font_14x10 = dmd.font_named("Font14x10.dmd")
-        self.font_14x9 = dmd.font_named("Font14x9.dmd")
-        self.font_14x8 = dmd.font_named("Font14x8.dmd")
-        self.font_09x5 = dmd.font_named("Font09x5.dmd")
-        self.font_09x6 = dmd.font_named("Font09x6.dmd")
-        self.font_09x7 = dmd.font_named("Font09x7.dmd")
+        self.font_18x12 = self.game.assets.font_score_x12
+        self.font_18x11 = self.game.assets.font_score_x11
+        self.font_18x10 = self.game.assets.font_score_x10
+        self.font_14x10 = self.game.assets.font_14x10
+        self.font_14x9 = self.game.assets.font_14x9
+        self.font_14x8 = self.game.assets.font_14x8
+        self.font_09x5 = self.game.assets.font_09x5
+        self.font_09x6 = self.game.assets.font_09x6
+        self.font_09x7 = self.game.assets.font_09x7
         self.set_left_players_justify(left_players_justify)
         anim = self.game.assets.dmd_1pBurnCycle
         self.burnLayer1p = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=3)

@@ -297,7 +297,7 @@ class CCGame(game.BasicGame):
         self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=201)
 
         ## try adding the score display font override
-        self.score_display.font_18x12 = self.assets.font_score_x12
+        #self.score_display.font_18x12 = self.assets.font_score_x12
 
         # Setup and instantiate service mode
         self.service_mode = ep.ep_service.ServiceMode(self,100,self.assets.font_tiny7,[])
