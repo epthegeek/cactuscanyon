@@ -27,6 +27,9 @@ import ep
 import random
 import locale
 
+# Used to put commas in the score.
+locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+
 class Bart(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):

@@ -19,6 +19,9 @@ import ep
 import locale
 from procgame import dmd
 
+# Used to put commas in the score.
+locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+
 class ScoreLayer(dmd.GroupedLayer):
     def __init__(self, width, height, mode):
         super(ScoreLayer, self).__init__(width, height, mode)
