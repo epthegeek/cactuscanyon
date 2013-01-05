@@ -26,7 +26,7 @@ import random
 import sys
 
 # Used to put commas in the score.
-locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+locale.setlocale(locale.LC_ALL, "")
 
 class Attract(ep.EP_Mode):
     """Cactus Canyon AttractMode"""

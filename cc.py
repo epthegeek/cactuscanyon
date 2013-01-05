@@ -30,7 +30,7 @@ from game import *
 import os
 
 # Used to put commas in the score.
-locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+locale.setlocale(locale.LC_ALL, "")
 
 # the config file
 curr_file_path = os.path.dirname(os.path.abspath( __file__ ))

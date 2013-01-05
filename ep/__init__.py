@@ -30,7 +30,7 @@ from ep_service import *
 import locale
 
 # Used to put commas in the score.
-locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
+locale.setlocale(locale.LC_ALL, "")
 
 
 DMD_PATH = "dmd/"
