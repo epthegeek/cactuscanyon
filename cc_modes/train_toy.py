@@ -52,6 +52,7 @@ class Train(ep.EP_Mode):
             self.trainDisabled = False
         # each time it hits increment the train progress
         self.trainProgress += 1
+        print "Train Progress: " + str(self.trainProgress)
         if self.stopAt > 0:
             # if progress exceeds stop at
             if self.trainProgress >= self.stopAt:

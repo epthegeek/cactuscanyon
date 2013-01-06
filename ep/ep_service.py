@@ -27,6 +27,8 @@ class ServiceModeSkeleton(ep.EP_Mode):
         if self.game.service_mode not in self.game.modes:
             if self.game.usb_update or self.game.resetFlag:
                 sys.exit(42)
+        if self.game.attract_mode in self.game.modes:
+            self.game.gi_control("ON")
 
     def disable(self):
         pass
