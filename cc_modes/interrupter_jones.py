@@ -501,6 +501,7 @@ class Interrupter(ep.EP_Mode):
         print "ENTERING SERVICE MODE"
         # clear the interrupter layer - just in case
         self.clear_layer()
+        self.game.lamp_control.disable_all_lamps()
         self.stop_music()
         for mode in self.game.mode_list:
             if mode in self.game.modes:
