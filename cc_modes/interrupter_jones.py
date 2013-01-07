@@ -503,7 +503,8 @@ class Interrupter(ep.EP_Mode):
         self.clear_layer()
         self.stop_music()
         for mode in self.game.mode_list:
-            self.game.modes.remove(mode)
+            if mode in self.game.modes:
+                self.game.modes.remove(mode)
             # then add the service mode
         self.game.modes.add(self.game.service_mode)
         return True
