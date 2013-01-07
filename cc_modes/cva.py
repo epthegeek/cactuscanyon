@@ -351,6 +351,7 @@ class CvA(ep.EP_Mode):
 
     def intro(self,step=1,entry="inlane",onSide = 0):
         if step == 1:
+            print "CVA started via " + str(entry)
             self.game.sound.play(self.game.assets.quote_cvaIntro)
 
             # set the running flag
