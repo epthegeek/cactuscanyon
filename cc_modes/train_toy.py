@@ -26,6 +26,10 @@ class Train(ep.EP_Mode):
         self.inMotion = False
         self.trainReset = False
         self.trainDisabled = True
+        self.mytStop = 100
+        self.mytIncrement = 20
+        self.ticksCounted = 0
+        self.calibrating = False
 
     def mode_started(self):
         # home the train
@@ -45,6 +49,9 @@ class Train(ep.EP_Mode):
                 self.game.interrupter.train_disabled()
 
     def sw_trainEncoder_active(self,sw):
+        # count ticks in the forward movement
+        if self.calibrating:
+            self.ticksCount += 1
         # this is the moving train
         # if this switch isn't working, the train will be disabled.
         # any registration of the encoder turns the train back on
@@ -110,6 +117,9 @@ class Train(ep.EP_Mode):
             # move the train forward
             immediate = False
             if type == 1:
+                # set the ticks counted to zero
+                self.ticksCounted = 0
+                self.calibrating = True
                 self.fast_forward()
             if type == 2:
                 # on type 2, only move forward if the switch is currently held down
@@ -126,6 +136,9 @@ class Train(ep.EP_Mode):
                 self.delay(delay=1.5,handler=self.reset_toy,param=2)
         if step == 2:
             print("Resetting Train - Step 2")
+            if self.calibrating:
+                self.calibrating = False
+                print "I counted " + str(self.ticksCounted) + " ticks of the encoder"
             # check this again because save polly requests the reset directly
             if not self.game.switches.trainHome.is_active():
                 self.game.coils.trainForward.disable()
