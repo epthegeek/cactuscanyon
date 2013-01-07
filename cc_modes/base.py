@@ -240,13 +240,13 @@ class BaseGameMode(ep.EP_Mode):
             self.delay(delay=1.7,handler=callback)
         self.delay(delay=1.7,handler=self.clear_layer)
 
-    # Allow service mode to be entered during a game.
-    def sw_enter_active(self, sw):
-        # clear the interrupter layer - just in case
-        self.game.interrupter.clear_layer()
-        # then add the service mode
-        self.game.modes.add(self.game.service_mode)
-        return True
+#    # Allow service mode to be entered during a game.
+#    def sw_enter_active(self, sw):
+#        # clear the interrupter layer - just in case
+#        self.game.interrupter.clear_layer()
+#        # then add the service mode
+#        self.game.modes.add(self.game.service_mode)
+#        return True
 
 ###
 ###     _             _ _         ____  _ _

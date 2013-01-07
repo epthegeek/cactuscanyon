@@ -68,6 +68,20 @@ class CCGame(game.BasicGame):
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
+
+    def setup(self):
+        # Instead of resetting everything here as well as when a user
+        # initiated reset occurs, do everything in self.reset() and call it
+        # now and during a user initiated reset.
+        ## This resets the color mapping so my 1 value pixels are black - even on composite - HUGE WIN!
+        self.proc.set_dmd_color_mapping([0,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
+
+        self.reset()
+
+    def reset(self):
+        # run the reset from proc.game.BasicGame
+        super(CCGame,self).reset()
+
         ## init the sound
         self.sound = sound.SoundController(self)
         self.lampctrl = lamps.LampController(self)
@@ -78,9 +92,6 @@ class CCGame(game.BasicGame):
         self.score_display = cc_modes.ScoreDisplay(self,0)
 
         self.showcase = ep.EP_Showcase(self)
-
-        ## This resets the color mapping so my 1 value pixels are black - even on composite - HUGE WIN!
-        self.proc.set_dmd_color_mapping([0,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
 
         # last switch variable for tracking
         self.lastSwitch = None
@@ -101,8 +112,6 @@ class CCGame(game.BasicGame):
         self.statusOK = False
         self.endBusy = False
 
-
-    def setup(self):
         """docstring for setup"""
         # load up the game data Game data
         print "Loading game data"
@@ -217,16 +226,6 @@ class CCGame(game.BasicGame):
         for category in self.highscore_categories:
             category.load_from_game(self)
 
-
-        # Instead of resetting everything here as well as when a user
-        # initiated reset occurs, do everything in self.reset() and call it
-        # now and during a user initiated reset.
-        self.reset()
-
-    def reset(self):
-        # run the reset from proc.game.BasicGame
-        super(CCGame,self).reset()
-
         # Create the objects for the basic modes
         self.lamp_control = cc_modes.LampControl(game=self,priority=4)
         self.base = cc_modes.BaseGameMode(game=self,priority=4)
@@ -334,6 +333,49 @@ class CCGame(game.BasicGame):
                          self.cva,
                          self.switch_block,
                          self.marshall_multiball]
+
+        self.mode_list = [self.ambush,
+                          self.attract_mode,
+                          self.bad_guys,
+                          self.badge,
+                          self.ball_search,
+                          self.bank_robbery,
+                          self.bart,
+                          self.base,
+                          self.bionic,
+                          self.bonus_lanes,
+                          self.center_ramp,
+                          self.combos,
+                          self.cva,
+                          self.drunk_multiball,
+                          self.gm_multiball,
+                          self.gunfight,
+                          self.high_noon,
+                          self.interrupter,
+                          self.lamp_control,
+                          self.last_call,
+                          self.left_loop,
+                          self.left_ramp,
+                          self.marshall_multiball,
+                          self.match,
+                          self.mine,
+                          self.mountain,
+                          self.move_your_train,
+                          self.quickdraw,
+                          self.right_loop,
+                          self.right_ramp,
+                          self.river_chase,
+                          self.saloon,
+                          self.save_polly,
+                          self.score_display,
+                          self.showdown,
+                          self.skill_shot,
+                          self.stampede,
+                          self.super_filter,
+                          self.switch_block,
+                          self.switch_tracker,
+                          self.train,
+                          self.trough]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
@@ -995,3 +1037,4 @@ class CCGame(game.BasicGame):
             for key, value in template.iteritems():
                 if key not in self.game_data:
                        self.game_data[key] = copy.deepcopy(value)
+

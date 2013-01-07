@@ -233,11 +233,11 @@ class Attract(ep.EP_Mode):
         pass
 
     # Enter service mode when the enter button is pushed.
-    def sw_enter_active(self, sw):
-        for lamp in self.game.lamps:
-            lamp.disable()
-        self.game.modes.add(self.game.service_mode)
-        return True
+    #def sw_enter_active(self, sw):
+    #    for lamp in self.game.lamps:
+    #        lamp.disable()
+    #    self.game.modes.add(self.game.service_mode)
+    #    return True
 
     def sw_exit_active(self, sw):
         return True

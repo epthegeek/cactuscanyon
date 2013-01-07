@@ -25,10 +25,13 @@ class ServiceModeSkeleton(ep.EP_Mode):
         # save the data
         self.game.save_game_data()
         if self.game.service_mode not in self.game.modes:
-            if self.game.usb_update or self.game.resetFlag:
+            print "Service Mode Exiting"
+            if self.game.usb_update:
+                print "Reloading to pull in new files"
                 sys.exit(42)
-        if self.game.attract_mode in self.game.modes:
-            self.game.gi_control("ON")
+            else:
+                print "Calling Reset"
+                self.game.reset()
 
     def disable(self):
         pass
