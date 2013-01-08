@@ -27,7 +27,11 @@ class Mountain(ep.EP_Mode):
         self.kickStrength = self.game.user_settings['Machine (Standard)']['Mine Kicker Strength']
         self.mineTicks = 0
         self.solidRun = False
-        self.stopPoints = [4,6,7,8]
+        difficulty = self.game.user_settings['Gameplay (Feature)']['Mine Opening Difficulty']
+        if difficulty == 'Easy':
+            self.stopPoints = [4,6,7,8]
+        else:
+            self.stopPoints = [1,2,3,4,5,6,7,8]
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:

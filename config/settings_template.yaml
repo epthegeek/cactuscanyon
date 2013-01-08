@@ -140,6 +140,9 @@ Gameplay (Feature):
     options: [2,10]
     increments: 1
     default: 3
+  'Mine Opening Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
   'Quickdraw Timer':
     options: [5,30]
     increments: 5
