@@ -79,7 +79,17 @@ class CCGame(game.BasicGame):
 
     def reset(self):
         # run the reset from proc.game.BasicGame
-        super(CCGame,self).reset()
+        #super(CCGame,self).reset()
+        # game reset stuff - copied in
+        """Reset the game state as a slam tilt might."""
+        self.ball = 0
+        self.old_players = []
+        self.old_players = self.players[:]
+        self.players = []
+        self.current_player_index = 0
+        self.modes.modes = []
+
+        # basic game reset stuff, copied in
 
         ## init the sound
         self.sound = sound.SoundController(self)
@@ -389,6 +399,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.badge)
         self.modes.add(self.interrupter)
         self.modes.add(self.switch_tracker)
+        self.modes.add(self.score_display)
 
     def start_game(self):
         # remove the attract mode

@@ -78,7 +78,9 @@ class Mine(ep.EP_Mode):
         ep.last_switch = "minePopper"
 
     def sw_mineEntrance_active(self,sw):
-        self.game.mountain.twitch()
+        # new routine to move the mine to open and stay there until hit
+        if self.game.mountain.mineTicks < 8 and not self.game.mountain.inMotion:
+            self.game.mountain.move()
         self.game.mountain.flash()
         # play the default sound
         self.game.sound.play(self.game.assets.sfx_mineEntrance)

@@ -197,6 +197,7 @@ class SkillShot(ep.EP_Mode):
 
 
     def intro_display(self):
+        print "Copying the score layer"
         # copy the score layer
         scoreLayer = self.game.score_display.layer
         self.layer = scoreLayer

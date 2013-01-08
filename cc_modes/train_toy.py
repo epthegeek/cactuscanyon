@@ -51,7 +51,7 @@ class Train(ep.EP_Mode):
     def sw_trainEncoder_active(self,sw):
         # count ticks in the forward movement
         if self.calibrating:
-            self.ticksCount += 1
+            self.ticksCounted += 1
         # this is the moving train
         # if this switch isn't working, the train will be disabled.
         # any registration of the encoder turns the train back on
@@ -59,7 +59,7 @@ class Train(ep.EP_Mode):
             self.trainDisabled = False
         # each time it hits increment the train progress
         self.trainProgress += 1
-        print "Train Progress: " + str(self.trainProgress)
+        #print "Train Progress: " + str(self.trainProgress)
         if self.stopAt > 0:
             # if progress exceeds stop at
             if self.trainProgress >= self.stopAt:
@@ -139,7 +139,11 @@ class Train(ep.EP_Mode):
             if self.calibrating:
                 self.calibrating = False
                 print "I counted " + str(self.ticksCounted) + " ticks of the encoder"
-            # check this again because save polly requests the reset directly
+                self.mytStop = int(self.ticksCounted * 3.4)
+                print "Setting stop point to " + str(self.mytStop)
+                self.mytIncrement = int(self.ticksCounted * 0.7)
+                print "Setting increment to " + str(self.mytIncrement)
+                # check this again because save polly requests the reset directly
             if not self.game.switches.trainHome.is_active():
                 self.game.coils.trainForward.disable()
                 self.inMotion = True

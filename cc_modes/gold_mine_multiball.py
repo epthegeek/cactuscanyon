@@ -660,6 +660,8 @@ class GoldMine(ep.EP_Mode):
         # turn motherlode off
         self.game.set_tracking('motherlodeLit', False)
         self.game.mountain.stop()
+        # reset the mountain to the home position
+        self.game.mountain.reset_toy()
         # reset the motherlode multiplier just in case
         self.game.set_tracking('motherlodeMultiplier',1)
         # set the status to open

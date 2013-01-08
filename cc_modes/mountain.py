@@ -25,6 +25,9 @@ class Mountain(ep.EP_Mode):
         self.mineReset = False
         self.inMotion = False
         self.kickStrength = self.game.user_settings['Machine (Standard)']['Mine Kicker Strength']
+        self.mineTicks = 0
+        self.solidRun = False
+        self.stopPoints = [4,6,7,8]
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -40,7 +43,25 @@ class Mountain(ep.EP_Mode):
         self.game.coils.mineMotor.disable()
         self.game.coils.mineFlasher.disable()
 
+    def stop(self):
+        self.game.coils.mineMotor.disable()
+        self.solidRun = False
+        self.inMotion = False
+
+    def move(self):
+        self.inMotion = True
+        self.game.coils.mineMotor.enable()
+
+    def sw_mineEncoder_active(self,sw):
+        self.mineTicks += 1
+        #print "Mine Encoder :" + str(self.mineTicks)
+        if not self.mineReset and not self.solidRun:
+            if self.mineTicks in self.stopPoints:
+                self.stop()
+
     def sw_mineHome_active(self,sw):
+        print "Mine Home Active, resetting ticks"
+        self.mineTicks = 0
         # if the switch is active and we're supposed to be resetting, then stop here
         if self.mineReset:
             self.game.coils.mineMotor.disable()
@@ -64,17 +85,15 @@ class Mountain(ep.EP_Mode):
             print "MINE EJECTING"
             self.game.coils.mineFlasher.schedule(0x0000002B,cycle_seconds=1)
             self.delay(delay=0.06,handler=self.kick)
+            # reset the mine
+            self.reset_toy()
 
     def stop(self):
         self.game.coils.mineMotor.disable()
         self.inMotion = False
 
-    def twitch(self):
-        # if the mine is already running for some reason, don't do the pulse
-        if not self.inMotion:
-            self.game.coils.mineMotor.pulse(255)
-
     def run(self):
+        self.solidRun = True
         self.game.coils.mineMotor.enable()
         self.inMotion = True
 

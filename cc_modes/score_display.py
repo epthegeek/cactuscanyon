@@ -51,11 +51,11 @@ class ScoreDisplay(ep.EP_Mode):
 
     font_common = None
     """Font used for the bottom status line text: ``'BALL 1  FREE PLAY'``.  Defaults to Font07x5.dmd."""
-    font_18x12 = None
+    #font_18x12 = None
     """Defaults to Font18x12.dmd."""
-    font_18x11 = None
+    #font_18x11 = None
     """Defaults to Font18x11.dmd."""
-    font_18x10 = None
+    #font_18x10 = None
     """Defaults to Font18x10.dmd."""
     font_14x10 = None
     """Defaults to Font14x10.dmd."""
@@ -78,9 +78,9 @@ class ScoreDisplay(ep.EP_Mode):
         super(ScoreDisplay, self).__init__(game, priority)
         self.layer = ScoreLayer(128, 32, self)
         self.font_common = dmd.font_named("Font07x5.dmd")
-        self.font_18x12 = self.game.assets.font_score_x12
-        self.font_18x11 = self.game.assets.font_score_x11
-        self.font_18x10 = self.game.assets.font_score_x10
+        #self.font_18x12 = self.game.assets.font_score_x12
+        #self.font_18x11 = self.game.assets.font_score_x11
+        #self.font_18x10 = self.game.assets.font_score_x10
         self.font_14x10 = self.game.assets.font_14x10
         self.font_14x9 = self.game.assets.font_14x9
         self.font_14x8 = self.game.assets.font_14x8
@@ -114,11 +114,11 @@ class ScoreDisplay(ep.EP_Mode):
     def font_for_score_single(self, score):
         """Returns the font to be used for displaying the given numeric score value in a single-player game."""
         if score <   1e10:
-            return self.font_18x12
+            return self.game.assets.font_score_x12
         elif score < 1e11:
-            return self.font_18x11
+            return self.game.assets.font_score_x11
         else:
-            return self.font_18x10
+            return self.game.assets.font_score_x10
 
     def font_for_score(self, score, is_active_player):
         """Returns the font to be used for displaying the given numeric score value in a 2, 3, or 4-player game."""
