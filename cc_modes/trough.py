@@ -52,14 +52,6 @@ class Trough(ep.EP_Mode):
         self.eject_sw_count = 0
         self.troughStrength = self.game.user_settings['Machine (Standard)']['Trough Eject Strength']
 
-        # Install switch handlers.
-        # Use a delay of 750ms which should ensure balls are settled.
-        for switch in position_switchnames:
-            self.add_switch_handler(name=switch, event_type='active', delay=None, handler=self.position_switch_handler)
-
-        for switch in position_switchnames:
-            self.add_switch_handler(name=switch, event_type='inactive', delay=None, handler=self.position_switch_handler)
-
         # Install early ball_save switch handlers.
         for switch in early_save_switchnames:
             self.add_switch_handler(name=switch, event_type='active', delay=None, handler=self.early_save_switch_handler)
@@ -82,11 +74,21 @@ class Trough(ep.EP_Mode):
         self.launch_callback = None
 
         self.balls_to_autoplunge = 0
+        self.ignore_next_drain = False
 
         # set the current total number of balls at start
         self.last_ball_count = self.game.num_balls_total
 
     #self.debug()
+
+    ## New Method - Only calling a switch count if the 4th spot activates for some reason.
+    def sw_troughBallFour_active(self,sw):
+        if self.ignore_next_drain:
+            self.ignore_next_drain = False
+            print "Ignoring this drain - Early Save Switch Activated"
+            pass
+        else:
+            self.position_switch_handler(sw)
 
     def debug(self):
         self.game.set_status(str(self.num_balls_in_play) + "," + str(self.num_balls_locked))
@@ -104,6 +106,7 @@ class Trough(ep.EP_Mode):
             if self.game.switches[self.eject_switchname].is_active():
                 self.balls_to_autoplunge += 1
                 self.launch_balls(1, self.ball_save_callback,stealth=True)
+                self.ignore_next_drain = True
 
     def mode_stopped(self):
         self.cancel_delayed('check_switches')
@@ -114,43 +117,24 @@ class Trough(ep.EP_Mode):
     # the delay will call the real handler (check_switches).
     def position_switch_handler(self, sw):
         self.cancel_delayed('check_switches')
-        if self.eject_sw_count > 1:
-            pass
-        else:
-        #print "Schedule switch check delay"
-            self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
+        self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
 
     def check_switches(self):
         print "CHECKING SWITCHES - Balls in play: " + str(self.num_balls_in_play)
         if self.eject_sw_count > 1:
             print "Passing check switches - eject count more than 1"
             pass
-
+        # If we're currently launching balls - skip the check - we'll check at the end of the launch cycle
+        elif self.launch_in_progress:
+            print "Passing check - Launch in progress"
+            pass
+        # If there's a ball currently in play
         elif self.num_balls_in_play > 0:
-            print "THERE'S A BALL IN PLAY"
             # how many balls should the machine have
             num_current_machine_balls = self.game.num_balls_total
             # how many balls in in the trough now
-            temp_num_balls = self.num_balls()
-            print "Check Switched - launch status: " + str(self.launch_in_progress)
-            if self.launch_in_progress:
-                print "And we're trying to launch another one."
-                # check if we had a drain RIGHT while trying to launch
-                if temp_num_balls + self.num_balls_in_play == num_current_machine_balls + 1:
-                    print "whoa, we're out of whack here"
-                    # set the balls in play to zero
-                    self.num_balls_in_play = 0
-                    # add a ball to launch
-                    self.num_balls_to_launch += 1
-                    # kill the Bounce_Delay
-                    self.cancel_delayed("Bounce_Delay")
-                    # and launch again
-                    self.common_launch_code()
-                    return
-                # and check for a bounceback
-                elif temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
-                    print "This adds up, we're good"
-                    return 'ignore'
+            counted_balls_in_trough = self.num_balls()
+            print "Check Switches - launch status: " + str(self.launch_in_progress)
             #  Ball saver on situations
             if self.ball_save_active:
                 print "BALL SAVE IS ACTIVE"
@@ -158,101 +142,42 @@ class Trough(ep.EP_Mode):
                     num_balls_to_save = self.num_balls_to_save()
                 else:
                     num_balls_to_save = 0
-                print "TROUGH SAVING " + str(num_balls_to_save) + " BALLS"
-                # Calculate how many balls shouldn't be in the
-                # trough assuming one just drained
-                num_balls_out = num_balls_to_save - 1
-                # Translate that to how many balls should be in
-                # the trough if one is being saved.
-                balls_in_trough = num_current_machine_balls - num_balls_out
-
-                if (temp_num_balls - self.num_balls_to_launch) >= balls_in_trough:
-                    print "CHECK SWITCHES THINKS THE BALL WAS SAVED"
-                    # tick up the autoplunge
-                    self.balls_to_autoplunge += 1
-                    self.launch_balls(1, self.ball_save_callback,stealth=True)
+                print "TROUGH SHOULD SAVE " + str(num_balls_to_save) + " BALLS"
+                # if the balls in play + the balls in the trough is higher than the total, we should save one
+                if counted_balls_in_trough + self.num_balls_in_play > num_current_machine_balls:
+                    print "Check Switches wants to save a ball"
+                    if num_balls_to_save > 0:
+                        # count the saved ball
+                        self.num_balls_to_save -= 1
+                        if self.num_balls_to_save == 0:
+                            print "Last saved ball - Turning off ball save"
+                            self.game.ball_save.disable()
+                        print "Left to save: " + str(self.num_balls_to_save)
+                        # and launch another one
+                        self.launch_balls(1, self.ball_save_callback,stealth=True)
+                    else:
+                        print "No more balls to save - turn off the ball saver before this happens?"
                 else:
-                    # If there are too few balls in the trough.
-                    # Ignore this one in an attempt to correct
-                    # the tracking.
+                    print "Ball save is on, but balls in play + balls in trough line up"
                     return 'ignore'
+            # if the ball save is NOT active, then we process it as a drain
             else:
                 print "BALL SAVE IS NOT ACTIVE"
-                # Calculate how many balls should be in the trough
-                # for various conditions.
-                # ball ends when all balls are in the trough CC has no playfield locks, so those don't factor in
-                num_trough_balls_if_ball_ending = num_current_machine_balls
-                # If total number minus one are in the trough - that means the multiball should end, if we're off track, catch that by force
-                num_trough_balls_if_multiball_ending = num_trough_balls_if_ball_ending - 1
-                # I'm not sure what purpose this one serves, really - from the original trough code
-                num_trough_balls_if_multiball_drain = num_trough_balls_if_ball_ending -  (self.num_balls_in_play - 1)
-
                 # The ball should end if all of the balls are in the trough.
-                if temp_num_balls == num_current_machine_balls:
+                if counted_balls_in_trough == num_current_machine_balls:
                     self.num_balls_in_play = 0
                     if self.drain_callback:
                         print "THE TROUGH IS FULL, BALL SAVE INACTIVE, ENDING BALL"
                         self.drain_callback()
                 # otherwise there's thinking to do
                 else:
-                    print "END OF THE TROUGH LINE - ALL OTHER CONDITIONS PASSED"
-                    # if the ball count went up ...
-                    if self.count_is == "HIGHER":
-                        print "THERE ARE MORE BALLS IN THE TROUGH - CALL A DRAIN"
-                        if self.drain_callback:
-                            # tick the count down one
-                            self.num_balls_in_play -= 1
-                            # sanity check
-                            if self.num_balls_in_play + temp_num_balls > num_current_machine_balls:
-                                print "Crap, too many balls accounted for. In play now: " + str(self.num_balls_in_play) + " -- correcting"
-                                self.num_balls_in_play = num_current_machine_balls - temp_num_balls
-                                print "Balls in play is now: " + str(self.num_balls_in_play)
-                            # call a drain
-                            self.drain_callback()
-                            print "BALLS NOW IN PLAY: " + str(self.num_balls_in_play)
-                    # if the ball count hasn't changed ...
-                    elif self.count_is == "SAME":
-                        print "Trough count stayed the same"
-                        print "Counted in trough: " + str(temp_num_balls)
-                        print "Balls in play: " + str(self.num_balls_in_play)
-                        counted_balls_in_play = num_current_machine_balls - temp_num_balls
-                        print "Balls in play should be: " + str(counted_balls_in_play)
-                        difference = self.num_balls_in_play - counted_balls_in_play
-                        # in this case, we may have caught a launch too close to a drain
-                        # if we subtract the number in play, from the number in the trough
-                        # and get a number more than 0 there's a correction to do
-                        if difference == 0:
-                            print "EVERYTHING ADDS UP, GOOD TO GO"
-                        elif difference > 0:
-                            print "There are more balls in play counted"
-                            print "Resetting to counted number"
-                            self.launch_balls(difference,stealth=True)
-                        elif difference < 0:
-                            print "Ball count shows BIP should be higher than it is"
-                            self.num_balls_in_play = counted_balls_in_play
-                    # if the ball count went down just do a sanity check
-                    elif self.count_is == "LOWER":
-                        print "THE BALL COUNT IS LOWER"
-                        if temp_num_balls + self.num_balls_in_play == num_current_machine_balls:
-                            print "EVERYTHING ADDS UP - IGNORING"
-                        else:
-                            print "Counted in trough: " + str(temp_num_balls)
-                            print "Balls in play: " + str(self.num_balls_in_play)
-                            counted_balls_in_play = num_current_machine_balls - temp_num_balls
-                            print "Balls in play should be: " + str(counted_balls_in_play)
-                            difference = self.num_balls_in_play - counted_balls_in_play
-                            # in this case, we may have caught a launch too close to a drain
-                            # if we subtract the number in play, from the number in the trough
-                            # and get a number more than 0 there's a correction to do
-                            if difference == 0:
-                                print "EVERYTHING ADDS UP, GOOD TO GO"
-                            elif difference > 0:
-                                print "There are more balls in play counted"
-                                print "Resetting to counted number"
-                                self.launch_balls(difference,stealth=True)
-                            elif difference < 0:
-                                print "Ball count shows BIP should be higher than it is"
-                                self.num_balls_in_play = counted_balls_in_play
+                    print "BALL DRAINED"
+                    if self.drain_callback:
+                        # Write off the drained balls
+                        self.num_balls_in_play = num_current_machine_balls - counted_balls_in_trough
+                        # call a drain
+                        self.drain_callback()
+                        print "BALLS NOW IN PLAY: " + str(self.num_balls_in_play)
         # if there aren't any balls in play
         else:
             if self.launch_in_progress:
@@ -318,9 +243,6 @@ class Trough(ep.EP_Mode):
         if not self.launch_in_progress:
             self.launch_in_progress = True
             print "Launch status: " + str(self.launch_in_progress)
-            if callback:
-                print "Launch Callback attempted"
-                self.launch_callback = callback
             self.common_launch_code()
 
     # This is the part of the ball launch code that repeats for multiple launches.
@@ -365,14 +287,27 @@ class Trough(ep.EP_Mode):
         # If more balls need to be launched, delay 1 second
         if self.num_balls_to_launch > 0:
             print "More balls to launch: " + str(self.num_balls_to_launch) + " - adding delay"
-            self.delay(name='launch', event_type=None, delay=2.0,
+            self.delay(name='launch', event_type=None, delay=1,
                 handler=self.common_launch_code)
         else:
             self.launch_in_progress = False
-            if self.launch_callback:
-                self.launch_callback()
+            actuallyInTrough = self.num_balls()
+            shouldBeInTrough = self.game.num_balls_total - self.num_balls_in_play
+            if shouldBeInTrough == actuallyInTrough:
+                print "Everything Adds up at the end of the launch."
+            elif shouldBeInTrough > actuallyInTrough:
+                print "There aren't as many balls in the trough as there should be"
+                print "Ball in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
+            else:
+                print "There are more balls in the trough than there should be"
+                print "Balls in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
+                print "Stealth launch to fix that"
+                num = shouldBeInTrough - actuallyInTrough
+                print "Launching: " + str(num)
+                self.balls_to_autoplunge = num
+                self.launch_balls(num,stealth=True)
 
-    def sw_shooterLane_active_for_100ms(self,sw):
+    def sw_shooterLane_active_for_200ms(self,sw):
         print "SOLID LAUNCH, GOOD TO GO"
         # if we're ejecting - process the launch
         if self.launch_in_progress:
@@ -385,12 +320,8 @@ class Trough(ep.EP_Mode):
         print "Trough Eject switch count: " + str(self.eject_sw_count)
         if self.eject_sw_count > 1:
             print "We're over on eject count - ball fell back in"
-            # cancel the check switches
-            #self.cancel_delayed('check_switches')
-            # cancel the delay loop
-            #self.cancel_delayed('Bounce_Delay')
-            self.wipe_delays()
+            self.cancel_delayed('Bounce_Delay')
             # retry the ball launch
-            self.delay("Retry",delay=2,handler=self.common_launch_code)
+            self.delay("Retry",delay=1,handler=self.common_launch_code)
         else:
             print "That's one"
