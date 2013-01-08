@@ -247,7 +247,7 @@ class BankRobbery(ep.EP_Mode):
 
             # did we just kill the last guy?
             if self.have_won:
-                self.have_won = False
+#                self.have_won = False
                 # delay for the dude getting shot animation to finish
                 self.delay("Mode Timer",delay=self.deathWait,handler=self.polly_saved)
             # how about any guy?
@@ -274,8 +274,9 @@ class BankRobbery(ep.EP_Mode):
                 self.polly_died()
             # otherwise ...
             else:
-                # set up a delay to come back in 1 second with the lowered time
-                self.delay(name="Mode Timer",delay=0.1,handler=self.in_progress)
+                if not self.have_won:
+                    # set up a delay to come back in 1 second with the lowered time
+                    self.delay(name="Mode Timer",delay=0.1,handler=self.in_progress)
 
     def kill_dude(self,shot):
         # if the guy died was about to shot, that should be stopped
@@ -332,7 +333,7 @@ class BankRobbery(ep.EP_Mode):
         self.game.score(750000)
         self.cancel_delayed("Mode Timer")
         # stop the music
-        self.stop_music(slice=3)
+        #self.stop_music(slice=3)
         # kill the lights on the three ramps
         self.game.lamp_control.left_ramp('Base')
         self.game.lamp_control.center_ramp('Base')
@@ -392,10 +393,10 @@ class BankRobbery(ep.EP_Mode):
                 self.game.interrupter.cut_in(completeFrame,1)
             else:
                 self.layer = completeFrame
-            self.delay(name="Operational",delay=2,handler=self.end_bank_robbery)
+            self.delay(name="Operational",delay=1.5,handler=self.end_bank_robbery)
             # show combo display if the chain is high enough
             if self.game.combos.chain > 1:
-                self.delay(name="Display",delay=2,handler=self.game.combos.display)
+                self.delay(name="Display",delay=1.5,handler=self.game.combos.display)
 
     def banner_display(self):
         # halt the mode timer for a second

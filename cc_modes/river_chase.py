@@ -257,7 +257,7 @@ class RiverChase(ep.EP_Mode):
         self.game.score(500000)
         self.running = False
         self.wipe_delays()
-        self.stop_music(slice=3)
+        #self.stop_music(slice=3)
         self.won = True
         # kill the lights on the three ramps
         self.game.lamp_control.left_ramp('Base')
