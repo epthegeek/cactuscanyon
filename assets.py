@@ -357,6 +357,8 @@ class Assets():
 
         self.sfx_glumRiff = 'sfx_glumRiff'
         self.game.sound.register_sound(self.sfx_glumRiff, self.sfx_path + "021-glum-riff.wav")
+        self.sfx_glumRiffShort = 'sfx_glumRiffShort'
+        self.game.sound.register_sound(self.sfx_glumRiffShort, self.sfx_path + "021-glum-riff-short.wav")
         self.snd_attractCollection = 'snd_attractCollection'
         self.game.sound.register_sound(self.snd_attractCollection, self.quotes_path + "1132-mayor-vote-cheetum.wav")
 

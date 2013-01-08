@@ -192,29 +192,18 @@ class LeftRamp(ep.EP_Mode):
     def anim_river_victory(self):
         if self.game.river_chase.won:
             print "RIVER VICTORY"
-            anim = self.game.assets.dmd_pollyVictory
-            myWait = len(anim.frames) / 8.57
-            animLayer = ep.EP_AnimatedLayer(anim)
-            animLayer.hold=True
-            animLayer.frame_time = 7
-            animLayer.opaque = True
-
-            animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_blow)
-            animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)
-            # play animation
-            self.layer = animLayer
-            self.game.sound.play(self.game.assets.sfx_leftRampEnter)
+            self.game.sound.play(self.game.assets.sfx_grinDing)
+            victoryLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_pollyVictory.frames[12])
+            self.layer = victoryLayer
         else:
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-            textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
-            textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
+            textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("YOU")
+            textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LOST!")
             combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
-            self.game.sound.play(self.game.assets.sfx_glumRiff)
+            self.game.sound.play(self.game.assets.sfx_glumRiffShort)
 
             self.layer = combined
-            myWait = 1.5
-
-        self.delay(name="Display",delay=myWait,handler=self.show_award_text)
+        self.delay(name="Display",delay=1,handler=self.show_award_text)
 
     def push_out(self):
         print "TRANSITION MF"
