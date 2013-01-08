@@ -1002,4 +1002,4 @@ class BaseGameMode(ep.EP_Mode):
         else:
             # if a ball save is not already active
             if not self.game.trough.ball_save_active:
-                self.game.ball_save.start(num_balls_to_save=1, time=self.multiballSaverTimer, now=True, allow_multiple_saves=False)
+                self.game.ball_save.start(num_balls_to_save=8, time=self.multiballSaverTimer, now=True, allow_multiple_saves=True)
