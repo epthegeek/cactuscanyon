@@ -695,6 +695,8 @@ class CvA(ep.EP_Mode):
         self.cancel_delayed("Display")
         # remove the teleporting aliens
         self.teleportingAliens = []
+        # flash some lights
+        self.game.base.red_flasher_flourish()
         # raise the targets
         for target in aliens:
             if target == "Zero":
