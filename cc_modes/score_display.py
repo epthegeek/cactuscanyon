@@ -51,24 +51,6 @@ class ScoreDisplay(ep.EP_Mode):
 
     font_common = None
     """Font used for the bottom status line text: ``'BALL 1  FREE PLAY'``.  Defaults to Font07x5.dmd."""
-    #font_18x12 = None
-    """Defaults to Font18x12.dmd."""
-    #font_18x11 = None
-    """Defaults to Font18x11.dmd."""
-    #font_18x10 = None
-    """Defaults to Font18x10.dmd."""
-    font_14x10 = None
-    """Defaults to Font14x10.dmd."""
-    font_14x9 = None
-    """Defaults to Font14x9.dmd."""
-    font_14x8 = None
-    """Defaults to Font14x8.dmd."""
-    font_09x5 = None
-    """Defaults to Font09x5.dmd."""
-    font_09x6 = None
-    """Defaults to Font09x6.dmd."""
-    font_09x7 = None
-    """Defaults to Font09x7.dmd."""
 
     credit_string_callback = None
     """If non-``None``, :meth:`update_layer` will call it with no parameters to get the credit string (usually FREE PLAY or CREDITS 1 or similar).
@@ -78,15 +60,6 @@ class ScoreDisplay(ep.EP_Mode):
         super(ScoreDisplay, self).__init__(game, priority)
         self.layer = ScoreLayer(128, 32, self)
         self.font_common = dmd.font_named("Font07x5.dmd")
-        #self.font_18x12 = self.game.assets.font_score_x12
-        #self.font_18x11 = self.game.assets.font_score_x11
-        #self.font_18x10 = self.game.assets.font_score_x10
-        self.font_14x10 = self.game.assets.font_14x10
-        self.font_14x9 = self.game.assets.font_14x9
-        self.font_14x8 = self.game.assets.font_14x8
-        self.font_09x5 = self.game.assets.font_09x5
-        self.font_09x6 = self.game.assets.font_09x6
-        self.font_09x7 = self.game.assets.font_09x7
         self.set_left_players_justify(left_players_justify)
         anim = self.game.assets.dmd_1pBurnCycle
         self.burnLayer1p = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=3)
@@ -124,18 +97,18 @@ class ScoreDisplay(ep.EP_Mode):
         """Returns the font to be used for displaying the given numeric score value in a 2, 3, or 4-player game."""
         if is_active_player:
             if score < 1e7:
-                return self.font_14x10
+                return self.game.assets.font_14x10
             if score < 1e8:
-                return self.font_14x9
+                return self.game.assets.font_14x9
             else:
-                return self.font_14x8
+                return self.game.assets.font_14x8
         else:
             if score < 1e7:
-                return self.font_09x7
+                return self.game.assets.font_09x7
             if score < 1e8:
-                return self.font_09x6
+                return self.game.assets.font_09x6
             else:
-                return self.font_09x5
+                return self.game.assets.font_09x5
 
     def pos_for_player(self, player_index, is_active_player):
         return self.score_posns[is_active_player][player_index]
