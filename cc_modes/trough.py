@@ -78,6 +78,7 @@ class Trough(ep.EP_Mode):
 
         # set the current total number of balls at start
         self.last_ball_count = self.game.num_balls_total
+        self.num_balls_to_save = 1
 
     #self.debug()
 
@@ -98,6 +99,8 @@ class Trough(ep.EP_Mode):
         """Used to enable/disable ball save logic."""
         print "SETTING ball_save_active to " + str(enable)
         self.ball_save_active = enable
+        self.num_balls_to_save = self.game.ball_save.num_balls_to_save
+        print "Balls to save: " + str(self.num_balls_to_save)
 
     def early_save_switch_handler(self, sw):
         if self.ball_save_active:
@@ -138,25 +141,19 @@ class Trough(ep.EP_Mode):
             #  Ball saver on situations
             if self.ball_save_active:
                 print "BALL SAVE IS ACTIVE"
-                if self.num_balls_to_save:
-                    num_balls_to_save = self.num_balls_to_save()
-                else:
-                    num_balls_to_save = 0
-                print "TROUGH SHOULD SAVE " + str(num_balls_to_save) + " BALLS"
+                print "TROUGH SHOULD SAVE " + str(self.num_balls_to_save) + " BALLS"
                 # if the balls in play + the balls in the trough is higher than the total, we should save one
                 if counted_balls_in_trough + self.num_balls_in_play > num_current_machine_balls:
                     print "Check Switches wants to save a ball"
-                    if num_balls_to_save > 0:
-                        # count the saved ball
-                        self.num_balls_to_save -= 1
-                        if self.num_balls_to_save == 0:
-                            print "Last saved ball - Turning off ball save"
-                            self.game.ball_save.disable()
-                        print "Left to save: " + str(self.num_balls_to_save)
-                        # and launch another one
-                        self.launch_balls(1, self.ball_save_callback,stealth=True)
-                    else:
-                        print "No more balls to save - turn off the ball saver before this happens?"
+                    self.num_balls_to_save -= 1
+                    print "Left to save: " + str(self.num_balls_to_save)
+                    # and launch another one
+                    self.balls_to_autoplunge += 1
+                    self.launch_balls(1, self.ball_save_callback,stealth=True)
+                    if self.num_balls_to_save == 0:
+                        print "Last saved ball - Turning off ball save"
+                        self.game.ball_save.disable()
+
                 else:
                     print "Ball save is on, but balls in play + balls in trough line up"
                     return 'ignore'
@@ -291,21 +288,25 @@ class Trough(ep.EP_Mode):
                 handler=self.common_launch_code)
         else:
             self.launch_in_progress = False
-            actuallyInTrough = self.num_balls()
-            shouldBeInTrough = self.game.num_balls_total - self.num_balls_in_play
-            if shouldBeInTrough == actuallyInTrough:
-                print "Everything Adds up at the end of the launch."
-            elif shouldBeInTrough > actuallyInTrough:
-                print "There aren't as many balls in the trough as there should be"
-                print "Ball in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
-            else:
-                print "There are more balls in the trough than there should be"
-                print "Balls in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
-                print "Stealth launch to fix that"
-                num = shouldBeInTrough - actuallyInTrough
-                print "Launching: " + str(num)
-                self.balls_to_autoplunge = num
-                self.launch_balls(num,stealth=True)
+            self.delay(delay=.5,handler=self.post_launch_check)
+
+    def post_launch_check(self):
+        print "Running Post Launch Check"
+        actuallyInTrough = self.num_balls()
+        shouldBeInTrough = self.game.num_balls_total - self.num_balls_in_play
+        if shouldBeInTrough == actuallyInTrough:
+            print "Everything Adds up at the end of the launch."
+        elif shouldBeInTrough > actuallyInTrough:
+            print "There aren't as many balls in the trough as there should be"
+            print "Ball in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
+        else:
+            print "There are more balls in the trough than there should be"
+            print "Balls in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
+            print "Stealth launch to fix that"
+            num = actuallyInTrough - shouldBeInTrough
+            print "Launching: " + str(num)
+            self.balls_to_autoplunge = num
+            self.launch_balls(num,stealth=True)
 
     def sw_shooterLane_active_for_200ms(self,sw):
         print "SOLID LAUNCH, GOOD TO GO"
