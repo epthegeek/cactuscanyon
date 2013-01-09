@@ -149,13 +149,9 @@ class CCGame(game.BasicGame):
         early_save_switchnames = ['rightOutlane', 'leftOutlane']
         self.trough = cc_modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
         # set up ball save
-        self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
-        # this is what links the ball save to the trough.  I THINK.
-        self.ball_save.trough_enable_ball_save = self.trough.enable_ball_save
-        self.trough.num_balls_to_save = self.ball_save.get_num_balls_to_save
+#        self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
         # set the ball save callback
         self.trough.ball_save_callback = self.ball_saved
-        self.trough.launch_callback = self.launch_callback
 
         # High Score stuff
         self.highscore_categories = []
@@ -389,7 +385,7 @@ class CCGame(game.BasicGame):
         # Add in the modes that are active at start
         self.modes.add(self.lamp_control)
         self.modes.add(self.trough)
-        self.modes.add(self.ball_save)
+#        self.modes.add(self.ball_save)
         self.modes.add(self.ball_search)
         self.modes.add(self.attract_mode)
         self.modes.add(self.train)
@@ -489,13 +485,11 @@ class CCGame(game.BasicGame):
         # update the lamps
         self.lamp_control.update()
 
-    def launch_callback(self):
-        pass
-
     def ball_saved(self):
         if self.trough.ball_save_active:
             # tell interrupter jones to show the ball save
             print "GAME THINKS THE BALL WAS SAVED"
+            # the ball saved display
             self.interrupter.ball_saved()
             # kill the skillshot if it's running
             if self.skill_shot in self.modes:
@@ -535,7 +529,7 @@ class CCGame(game.BasicGame):
         # stop the music
         print "BALL ENDED IS KILLING THE MUSIC"
         # disable ball save
-        self.ball_save.disable()
+        self.trough.disable_ball_save()
 
         self.sound.stop_music()
         # unload the base add on modes

@@ -163,7 +163,7 @@ class BaseGameMode(ep.EP_Mode):
             self.game.ballStarting = False
             if not self.game.skill_shot.super:
                 ball_save_time = 10
-                self.game.ball_save.start(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
+                self.game.trough.start_ball_save(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
 
     def sw_beerMug_active(self,sw):
         # track it, because why not
@@ -332,7 +332,7 @@ class BaseGameMode(ep.EP_Mode):
             self.game.enable_flippers(enable=False)
 
             # Make sure ball won't be saved when it drains.
-            self.game.ball_save.disable()
+            self.game.trough.disable_ball_save()
 
             # Make sure the ball search won't run while ball is draining.
             self.game.ball_search.disable()
@@ -1000,6 +1000,4 @@ class BaseGameMode(ep.EP_Mode):
         if not self.multiballSaver:
             pass
         else:
-            # if a ball save is not already active
-            if not self.game.trough.ball_save_active:
-                self.game.ball_save.start(num_balls_to_save=8, time=self.multiballSaverTimer, now=True, allow_multiple_saves=True)
+            self.game.trough.start_ball_save(num_balls_to_save=8, time=self.multiballSaverTimer, now=True, allow_multiple_saves=True)

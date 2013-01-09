@@ -203,13 +203,13 @@ class DrunkMultiball(ep.EP_Mode):
         # eject the ball in the saloon
         self.game.saloon.kick()
         # start a ball save
-        self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
+        self.game.trough.start_ball_save(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
         #self.delay(delay=2,handler=self.dmb_ball_save)
         self.update_display()
 
     def dmb_ball_save(self):
     # start a ball save
-        self.game.ball_save.start(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
+        self.game.trough.start_ball_save(num_balls_to_save=3, time=20, now=True, allow_multiple_saves=True)
 
     def update_display(self):
         self.overlay.composite_op = "blacksrc"
@@ -310,7 +310,7 @@ class DrunkMultiball(ep.EP_Mode):
 
     def end_save(self):
         # a ball saver to allow for reacclimation
-        self.game.ball_save.start(num_balls_to_save=1, time=8, now=True, allow_multiple_saves=False)
+        self.game.trough.start_ball_save(num_balls_to_save=1, time=8, now=True, allow_multiple_saves=False)
         self.end_drunk()
 
     def end_drunk(self):

@@ -173,7 +173,7 @@ class Showdown(ep.EP_Mode):
                 pass
         # if 3 balls are already in play - and difficulty is easy - you get a ball save
         elif self.game.trough.num_balls_in_play == 3 and self.difficulty == 'Easy':
-            self.game.ball_save.start(num_balls_to_save=1, time=10, now=True, allow_multiple_saves=False)
+            self.game.trough.start_ball_save(num_balls_to_save=1, time=10, now=True, allow_multiple_saves=False)
             self.game.interrupter.ball_save_activated()
             # this is where to show "ball added" or "ball saver on"
         self.new_rack_finish()

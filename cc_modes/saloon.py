@@ -334,7 +334,7 @@ class Saloon(ep.EP_Mode):
         elif self.bountyPrize == 'ballSave':
             prizeText = "30 SEC"
             prizeText2 = "BALL SAVER"
-            self.game.ball_save.start(num_balls_to_save=1, time=30, now=True, allow_multiple_saves=False)
+            self.game.trough.start_ball_save(num_balls_to_save=1, time=30, now=True, allow_multiple_saves=False)
             self.prizeParam = 10000
             self.prizeHandler = self.game.score
         else:

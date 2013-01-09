@@ -63,22 +63,24 @@ class Trough(ep.EP_Mode):
         self.num_balls_to_stealth_launch = 0
         self.launch_in_progress = False
 
-        self.ball_save_active = False
-
-        #""" Callback called when a ball is saved.  Used optionally only when ball save is enabled (by a call to :meth:`Trough.enable_ball_save`).  Set externally if a callback should be used. """
-        self.ball_save_callback = None
-
-        #""" Method to get the number of balls to save.  Set externally when using ball save logic."""
-        self.num_balls_to_save = None
-
+        # set externally if used
         self.launch_callback = None
-
         self.balls_to_autoplunge = 0
-        self.ignore_next_drain = False
 
-        # set the current total number of balls at start
-        self.last_ball_count = self.game.num_balls_total
+        self.ignore_next_drain = False
         self.num_balls_to_save = 1
+        self.ball_save_callback = None
+        self.ball_save_active = False
+        self.ball_save_lamp = self.game.lamps.shootAgain
+        self.ball_save_begin = 0
+        self.ball_save_multiple_saves = False
+        self.ball_save_timer = 0
+        self.ball_save_hold = 0
+
+    # specific to CC - deliniating the shooter lane as delayed start switch
+    def sw_shooterLane_inactive(self,sw):
+        if self.ball_save_begin > 0:
+            self.delay(delay=1,handler=self.ball_save_delayed_start_handler)
 
     #self.debug()
 
@@ -95,24 +97,18 @@ class Trough(ep.EP_Mode):
         self.game.set_status(str(self.num_balls_in_play) + "," + str(self.num_balls_locked))
         self.delay(name='launch', event_type=None, delay=1.0,handler=self.debug)
 
-    def enable_ball_save(self, enable=True):
-        """Used to enable/disable ball save logic."""
-        print "SETTING ball_save_active to " + str(enable)
-        self.ball_save_active = enable
-        self.num_balls_to_save = self.game.ball_save.num_balls_to_save
-        print "Balls to save: " + str(self.num_balls_to_save)
-
     def early_save_switch_handler(self, sw):
         if self.ball_save_active:
             # Only do an early ball save if a ball is ready to be launched.
             # Otherwise, let the trough switches take care of it.
             if self.game.switches[self.eject_switchname].is_active():
-                self.balls_to_autoplunge += 1
-                self.launch_balls(1, self.ball_save_callback,stealth=True)
+                self.save_ball()
+                # and set a flag to ignore the next ball in the trough
                 self.ignore_next_drain = True
 
     def mode_stopped(self):
         self.cancel_delayed('check_switches')
+        self.disable_ball_save()
 
     # Switches will change states a lot as balls roll down the trough.
     # So don't go through all of the logic every time.  Keep resetting a
@@ -145,15 +141,7 @@ class Trough(ep.EP_Mode):
                 # if the balls in play + the balls in the trough is higher than the total, we should save one
                 if counted_balls_in_trough + self.num_balls_in_play > num_current_machine_balls:
                     print "Check Switches wants to save a ball"
-                    self.num_balls_to_save -= 1
-                    print "Left to save: " + str(self.num_balls_to_save)
-                    # and launch another one
-                    self.balls_to_autoplunge += 1
-                    self.launch_balls(1, self.ball_save_callback,stealth=True)
-                    if self.num_balls_to_save == 0:
-                        print "Last saved ball - Turning off ball save"
-                        self.game.ball_save.disable()
-
+                    self.save_ball()
                 else:
                     print "Ball save is on, but balls in play + balls in trough line up"
                     return 'ignore'
@@ -197,17 +185,6 @@ class Trough(ep.EP_Mode):
             print "There's a ball stacked up in the way of the eject opto"
             ball_count += 1
         print "balls counted: " + str(ball_count)
-        # check if the ball count went up or down
-        if ball_count < self.last_ball_count:
-            self.count_is = "LOWER"
-            print "THE BALL COUNT WENT DOWN"
-        elif ball_count == self.last_ball_count:
-            self.count_is = "SAME"
-            print "THE BALL COUNT STAYED THE SAME"
-        else:
-            self.count_is = "HIGHER"
-            print "THE BALL COUNT WENT UP"
-        self.last_ball_count = ball_count
         return ball_count
 
     def is_full(self):
@@ -248,11 +225,16 @@ class Trough(ep.EP_Mode):
         # shooter lane.
         print "Launch action loop"
         # set the trough eject switch count to zero
+        # This is the switch a ball passes going in/out of the trough
+        # Counting hits on it allows for detecting a ball bouncing back in
         self.eject_sw_count = 0
+
+        # If the shooter lane is clear, huck a ball
         if self.game.switches[self.shooter_lane_switchname].is_inactive():
             self.game.coils[self.eject_coilname].pulse(self.troughStrength)
             # go to a hold pattern to wait for the shooter lane
-            # if after 2 seconds the shooter lane hasn't been hit we should try again
+            # if after 2 seconds the shooter lane hasn't been hit
+            # and the eject switch hasn't triggered, we'll assume the launch worked
             if not self.game.fakePinProc:
                 print "Trough - scheduling the Bounce_Delay"
                 self.delay("Bounce_Delay",delay=2,handler=self.finish_launch)
@@ -284,21 +266,26 @@ class Trough(ep.EP_Mode):
         # If more balls need to be launched, delay 1 second
         if self.num_balls_to_launch > 0:
             print "More balls to launch: " + str(self.num_balls_to_launch) + " - adding delay"
-            self.delay(name='launch', event_type=None, delay=1,
-                handler=self.common_launch_code)
+            self.delay(name='launch', event_type=None, delay=1,handler=self.common_launch_code)
+        # If all the requested balls are launched, go to the cleanup check
         else:
             self.launch_in_progress = False
             self.delay(delay=.5,handler=self.post_launch_check)
 
     def post_launch_check(self):
         print "Running Post Launch Check"
+        # count the balls in the trough, and math out how many should be there
         actuallyInTrough = self.num_balls()
         shouldBeInTrough = self.game.num_balls_total - self.num_balls_in_play
+        # if they line up - awesome
         if shouldBeInTrough == actuallyInTrough:
             print "Everything Adds up at the end of the launch."
+        # If we're short, there's extra balls on the playfield.  Sucks, but such is life.
         elif shouldBeInTrough > actuallyInTrough:
             print "There aren't as many balls in the trough as there should be"
             print "Ball in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
+        # the other option is we have too many balls in the trough
+        # in that case, fix things up by stealth launching the difference
         else:
             print "There are more balls in the trough than there should be"
             print "Balls in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
@@ -317,8 +304,10 @@ class Trough(ep.EP_Mode):
             self.finish_launch()
 
     def sw_troughEject_active(self,sw):
+        # tick up the count with each switch hit
         self.eject_sw_count += 1
         print "Trough Eject switch count: " + str(self.eject_sw_count)
+        # if we go to more than 1, the ball came back
         if self.eject_sw_count > 1:
             print "We're over on eject count - ball fell back in"
             self.cancel_delayed('Bounce_Delay')
@@ -326,3 +315,75 @@ class Trough(ep.EP_Mode):
             self.delay("Retry",delay=1,handler=self.common_launch_code)
         else:
             print "That's one"
+
+    ## BALL SAVE BITS
+
+    def start_ball_save_lamp(self):
+        """Starts blinking the ball save lamp.  Oftentimes called externally to start blinking the lamp before a ball is plunged."""
+        self.ball_save_lamp.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
+
+    def update_lamps(self):
+       if self.ball_save_timer > 5:
+           self.ball_save_lamp.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
+       elif self.timer > 2:
+           self.ball_save_lamp.lamp.schedule(schedule=0x55555555, cycle_seconds=0, now=True)
+       else:
+           self.ball_save_lamp.disable()
+
+    def disable_ball_save(self):
+        """Disables the ball save logic."""
+        # kill the active flag
+        if self.ball_save_active:
+            self.ball_save_active = False
+        # set the timer to 0
+        self.timer = 0
+        # turn off the light
+        self.ball_save_lamp.disable()
+
+    def start_ball_save(self, num_balls_to_save=1, time=12, now=True, allow_multiple_saves=False):
+        """Activates the ball save logic."""
+        print "Starting Ball Save"
+        self.allow_multiple_saves = allow_multiple_saves
+        self.num_balls_to_save = num_balls_to_save
+        if time > self.ball_save_timer: self.ball_save_timer = time
+        self.update_lamps()
+        # if starting right away, do that
+        if now:
+            self.cancel_delayed('ball_save_timer')
+            self.delay(name='ball_save_timer', event_type=None, delay=1, handler=self.ball_save_countdown)
+            self.ball_save_active = True
+        # if not starting right away - stash the timer value and set the flag for delayed start
+        else:
+            self.ball_save_begin = 1
+            self.timer_hold = time
+
+    def ball_save_countdown(self):
+        self.timer -= 1
+        self.update_lamps()
+        if (self.timer >= 1):
+            self.delay(name='ball_save_timer', event_type=None, delay=1, handler=self.ball_save_countdown)
+        else:
+            self.disable_ball_save()
+
+    def ball_save_is_active(self):
+        print "Ball Save active check"
+        return self.timer > 0
+
+    def ball_save_delayed_start_handler(self, sw):
+        if self.ball_save_begin:
+            self.timer = self.timer_hold
+            self.ball_save_begin = 0
+            self.update_lamps()
+            self.cancel_delayed('ball_save_timer')
+            self.delay(name='ball_save_timer', event_type=None, delay=1, handler=self.ball_save_countdown)
+            self.ball_save_active = True
+
+    def save_ball(self):
+        print "Saving Ball"
+        self.num_balls_to_save -= 1
+        print "Left to save: " + str(self.num_balls_to_save)
+        self.balls_to_autoplunge += 1
+        self.launch_balls(1, self.ball_save_callback,stealth=True)
+        if self.num_balls_to_save == 0:
+            print "Last saved ball - Turning off ball save"
+        self.disable_ball_save()
