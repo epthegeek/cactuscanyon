@@ -162,7 +162,7 @@ class CCGame(game.BasicGame):
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'MarshallHighScoreData'
-        cat.titles = ['Masrhall Pinball 1','Marshall Pinball 2','Marshall Pinball 3']
+        cat.titles = ['Marshall Pinball 1','Marshall Pinball 2','Marshall Pinball 3']
         cat.score_for_player = lambda player: self.show_tracking('marshallBest')
         self.highscore_categories.append(cat)
 
