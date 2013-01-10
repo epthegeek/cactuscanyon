@@ -42,10 +42,12 @@ class Showdown(ep.EP_Mode):
         self.ballAdded = False
 
     def ball_drained(self):
-        if self.game.trough.num_balls_in_play in (0,1) and self.game.show_tracking('showdownStatus') == "RUNNING":
-            self.game.base.busy = True
-            self.game.base.queued += 1
-            self.end_showdown()
+        if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
+            if self.game.show_tracking('showdownStatus') == "RUNNING":
+                print "Ending Showdown due to ball drain"
+                self.game.base.busy = True
+                self.game.base.queued += 1
+                self.end_showdown()
 
     def start_showdown(self,side):
         print "S H O W D O W N"
