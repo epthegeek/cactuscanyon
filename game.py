@@ -597,9 +597,13 @@ class CCGame(game.BasicGame):
         # turn the flippers off
         self.enable_flippers(enable=False)
 
-        # divert to the match before high score entry
-        self.modes.add(self.match)
-        self.match.run_match()
+        # divert to the match before high score entry - unless last call is disabled
+        lastCall = 'Enabled' == self.user_settings['Gameplay (Feature)']['Last Call Mode']
+        if lastCall:
+            self.modes.add(self.match)
+            self.match.run_match()
+        else:
+            self.run_highscore()
 
     def run_highscore(self):
         # Remove the base mode here now instead - so that it's still available for last call

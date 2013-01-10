@@ -186,7 +186,7 @@ Gameplay (Feature):
     default: 3
   'Bionic Bart Ball Save':
     options: ['Enabled','Disabled']
-    default: 'Disabled'
+    default: 'Enabled'
   'Bionic Bart Ball Save Timer':
     options: [5,40]
     increments: 5
@@ -197,6 +197,9 @@ Gameplay (Feature):
   'Drunk Multiball Stacking':
     options: ['Enabled','Disabled']
     default: 'Enabled'
+  'Last Call Mode':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
   'Marshall Multiball':
     options: ['Enabled','Disabled']
     default: 'Enabled'
