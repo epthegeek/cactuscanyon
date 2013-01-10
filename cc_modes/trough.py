@@ -325,8 +325,8 @@ class Trough(ep.EP_Mode):
     def update_lamps(self):
        if self.ball_save_timer > 5:
            self.ball_save_lamp.schedule(schedule=0xFF00FF00, cycle_seconds=0, now=True)
-       elif self.timer > 2:
-           self.ball_save_lamp.lamp.schedule(schedule=0x55555555, cycle_seconds=0, now=True)
+       elif self.ball_save_timer > 2:
+           self.ball_save_lamp.schedule(schedule=0x55555555, cycle_seconds=0, now=True)
        else:
            self.ball_save_lamp.disable()
 
@@ -336,7 +336,7 @@ class Trough(ep.EP_Mode):
         if self.ball_save_active:
             self.ball_save_active = False
         # set the timer to 0
-        self.timer = 0
+        self.ball_save_timer = 0
         # turn off the light
         self.ball_save_lamp.disable()
 
@@ -358,20 +358,20 @@ class Trough(ep.EP_Mode):
             self.timer_hold = time
 
     def ball_save_countdown(self):
-        self.timer -= 1
+        self.ball_save_timer -= 1
         self.update_lamps()
-        if (self.timer >= 1):
+        if (self.ball_save_timer >= 1):
             self.delay(name='ball_save_timer', event_type=None, delay=1, handler=self.ball_save_countdown)
         else:
             self.disable_ball_save()
 
     def ball_save_is_active(self):
         print "Ball Save active check"
-        return self.timer > 0
+        return self.ball_save_timer > 0
 
     def ball_save_delayed_start_handler(self, sw):
         if self.ball_save_begin:
-            self.timer = self.timer_hold
+            self.ball_save_timer = self.timer_hold
             self.ball_save_begin = 0
             self.update_lamps()
             self.cancel_delayed('ball_save_timer')
@@ -382,8 +382,9 @@ class Trough(ep.EP_Mode):
         print "Saving Ball"
         self.num_balls_to_save -= 1
         print "Left to save: " + str(self.num_balls_to_save)
+        self.ball_save_callback()
         self.balls_to_autoplunge += 1
-        self.launch_balls(1, self.ball_save_callback,stealth=True)
+        self.launch_balls(1,stealth=True)
         if self.num_balls_to_save == 0:
             print "Last saved ball - Turning off ball save"
-        self.disable_ball_save()
+            self.disable_ball_save()

@@ -43,9 +43,10 @@ class Mountain(ep.EP_Mode):
             self.reset_toy()
 
     def ball_drained(self):
-        # if the ball drains, turn off the mine
-        self.game.coils.mineMotor.disable()
-        self.game.coils.mineFlasher.disable()
+        # if all the balls drain, turn off the mine
+        if self.game.num_balls_in_play == 0:
+            self.stop()
+            self.game.coils.mineFlasher.disable()
 
     def stop(self):
         self.game.coils.mineMotor.disable()
@@ -68,9 +69,8 @@ class Mountain(ep.EP_Mode):
         self.mineTicks = 0
         # if the switch is active and we're supposed to be resetting, then stop here
         if self.mineReset:
-            self.game.coils.mineMotor.disable()
+            self.stop()
             self.mineReset = False
-            self.inMotion = False
 
     def kick(self):
         self.game.coils.minePopper.pulse(self.kickStrength)
@@ -92,16 +92,13 @@ class Mountain(ep.EP_Mode):
             # reset the mine
             self.reset_toy()
 
-    def stop(self):
-        self.game.coils.mineMotor.disable()
-        self.inMotion = False
-
     def run(self):
         self.solidRun = True
         self.game.coils.mineMotor.enable()
         self.inMotion = True
 
     def reset_toy(self):
+        print "Mountain Reset Called"
         if not self.game.switches.mineHome.is_active():
             self.game.coils.mineMotor.enable()
             self.mineReset = True

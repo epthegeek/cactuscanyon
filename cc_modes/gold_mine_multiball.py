@@ -67,8 +67,9 @@ class GoldMine(ep.EP_Mode):
             self.game.base.busy = True
             self.game.base.queued += 1
             self.end_multiball()
-        elif self.game.trough.num_balls_in_play == 1:
-            if self.game.show_tracking('mineStatus') == "RUNNING" and not self.restarted:
+        elif self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('mineStatus') == "RUNNING":
+            print "Down to one ball"
+            if not self.restarted:
                 self.restartFlag = True
                 self.restarted = True
                 self.cancel_delayed("Display")
@@ -78,6 +79,7 @@ class GoldMine(ep.EP_Mode):
                 self.restart_option()
             # otherwise, end just like no ball action
             else:
+                print "Second 1 ball drain routine"
                 self.game.base.busy = True
                 self.game.base.queued += 1
                 self.end_multiball()
