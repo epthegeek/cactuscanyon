@@ -33,6 +33,7 @@ class SavePolly(ep.EP_Mode):
         self.halted = False
         self.won = False
         self.paused = False
+        self.finishing_up = False
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -76,7 +77,9 @@ class SavePolly(ep.EP_Mode):
                 self.game.base.queued += 1
                 self.cancel_delayed("Mode Timer")
                 self.cancel_delayed("Pause Timer")
-                self.polly_died()
+                if not self.finishing_up:
+                    self.polly_died()
+
 
     # bonus lanes pause save polly
     def sw_leftBonusLane_active(self,sw):
@@ -387,6 +390,7 @@ class SavePolly(ep.EP_Mode):
     def polly_died(self,step=1):
         print "OMG POLLY IS DEAD"
         if step == 1:
+            self.finishing_up = True
             # stop the train
             self.game.train.stop()
             #if we're showing the full animation, do that now
@@ -452,6 +456,7 @@ class SavePolly(ep.EP_Mode):
         self.game.peril = False
         # remove the switch blocker
         self.game.switch_blocker('remove',self.myID)
+        self.finishing_up = False
         # unload the mode
         self.unload()
 
@@ -464,3 +469,7 @@ class SavePolly(ep.EP_Mode):
             if self.won or self.modeTimer <= 0:
                 self.running = False
                 self.polly_finished()
+
+    def clear_layer(self):
+        if not self.finishing_up:
+            self.layer = None
