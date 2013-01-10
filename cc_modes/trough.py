@@ -270,7 +270,10 @@ class Trough(ep.EP_Mode):
         # If all the requested balls are launched, go to the cleanup check
         else:
             self.launch_in_progress = False
-            self.delay(delay=.5,handler=self.post_launch_check)
+            if not self.game.fakePinProc:
+                self.delay(delay=.5,handler=self.post_launch_check)
+            else:
+                print "Fakepinproc - post launch check skipped"
 
     def post_launch_check(self):
         print "Running Post Launch Check"
@@ -287,16 +290,13 @@ class Trough(ep.EP_Mode):
         # the other option is we have too many balls in the trough
         # in that case, fix things up by stealth launching the difference
         else:
-            if not self.game.fakePinProc:
-                print "There are more balls in the trough than there should be"
-                print "Balls in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
-                print "Stealth launch to fix that"
-                num = actuallyInTrough - shouldBeInTrough
-                print "Launching: " + str(num)
-                self.balls_to_autoplunge = num
-                self.launch_balls(num,stealth=True)
-            else:
-                print "Fakepinproc - ignore post check fix"
+            print "There are more balls in the trough than there should be"
+            print "Balls in play: " + str(self.num_balls_in_play) + " Counted: " + str(actuallyInTrough)
+            print "Stealth launch to fix that"
+            num = actuallyInTrough - shouldBeInTrough
+            print "Launching: " + str(num)
+            self.balls_to_autoplunge = num
+            self.launch_balls(num,stealth=True)
 
     def sw_shooterLane_active_for_200ms(self,sw):
         print "SOLID LAUNCH, GOOD TO GO"
