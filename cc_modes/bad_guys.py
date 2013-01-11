@@ -45,6 +45,7 @@ class BadGuys(ep.EP_Mode):
                        self.game.lamps.badGuyL3]
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
+        self.pending = [False,False,False,False]
         self.on_time = self.game.user_settings['Machine (Standard)']['Drop Target Boost']
 
     def ball_drained(self):
@@ -63,7 +64,8 @@ class BadGuys(ep.EP_Mode):
 
     def sw_badGuySW0_inactive_for_200ms(self,sw):
         # allowance for running in fakepinproc
-        if not self.game.fakePinProc:
+        if not self.game.fakePinProc and self.pending[0]:
+            self.pending[0] = False
             self.target_activate(0)
 
     def sw_badGuySW1_active(self,sw):
@@ -74,7 +76,8 @@ class BadGuys(ep.EP_Mode):
 
     def sw_badGuySW1_inactive_for_200ms(self,sw):
         # allowance for running in fakepinproc
-        if not self.game.fakePinProc:
+        if not self.game.fakePinProc and self.pending[1]:
+            self.pending[1] = False
             self.target_activate(1)
 
     def sw_badGuySW2_active(self,sw):
@@ -85,7 +88,8 @@ class BadGuys(ep.EP_Mode):
 
     def sw_badGuySW2_inactive_for_200ms(self,sw):
         # allowance for running in fakepinproc
-        if not self.game.fakePinProc:
+        if not self.game.fakePinProc and self.pending[2]:
+            self.pending[2] = False
             self.target_activate(2)
 
     def sw_badGuySW3_active(self,sw):
@@ -96,7 +100,8 @@ class BadGuys(ep.EP_Mode):
 
     def sw_badGuySW3_inactive_for_200ms(self,sw):
         # allowance for running in fakepinproc
-        if not self.game.fakePinProc:
+        if not self.game.fakePinProc and self.pending[3]:
+            self.pending[3] = False
             self.target_activate(3)
 
     def hit_bad_guy(self,target):
@@ -144,8 +149,9 @@ class BadGuys(ep.EP_Mode):
         # new coil raise based on research with on o-scope by jim (jvspin)
         self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
         # hold the raise pulse for a bit longer
-        self.delay(self.coilStrings[target],delay=0.6,handler=self.target_hold,param=target)
         self.lamps[target].schedule(0x00FF00FF)
+        # set a pending flag for this target
+        self.pending[target] = True
         # trying a new way to activate
         #self.delay(delay=0.1,handler=self.target_activate,param=target)
         # If fakepinproc is true, activate the target right away
@@ -158,28 +164,29 @@ class BadGuys(ep.EP_Mode):
     def target_down(self,target):
         # cancel the hold delay, just in case
         self.cancel_delayed(self.coilStrings[target])
-        #print "DEACTIVATING TARGET " + str(target)
+        print "DEACTIVATING TARGET " + str(target)
+        self.coils[target].disable()
         # we'll still deactivate when the coil goes off, just to maintain sync
         status = self.game.show_tracking('highNoonStatus')
         if status != "RUNNING":
             self.game.set_tracking('badGuyUp',False,target)
             self.lamps[target].disable()
         #self.delay(delay=0.02,handler=self.coils[target].disable)
-        self.coils[target].disable()
 
     def target_activate(self,target):
         if self.game.show_tracking('badGuyUp',target) == False:
             print "ACTIVATING TARGET " + str(target)
             # switch to new alternate patter for holding target
             # TRYING THIS IN A NEW METHOD
-            # self.coils[target].patter(on_time=2,off_time=10)
+            self.coils[target].patter(on_time=2,off_time=10)
             self.game.set_tracking('badGuyUp',True,target)
 
     def setup_targets(self):
         # pop up the targets
         delayTime = 0
         for i in range(0,4,1):
-            self.target_up(i)
+            self.delay(delay=delayTime,handler=self.target_up,param=i)
+            delayTime += 0.25
 
     def drop_targets(self):
         # drop all teh targets

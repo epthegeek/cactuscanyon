@@ -583,6 +583,8 @@ class CCGame(game.BasicGame):
         self.interrupter.restarting()
         # lot the end of the game
         self.log("GAME PREMATURELY ENDED")
+        # set the Balls in play to 0
+        self.trough.num_balls_in_play = 0
         # restart the game
         self.start_game()
 

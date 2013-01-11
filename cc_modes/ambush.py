@@ -130,7 +130,7 @@ class Ambush(ep.EP_Mode):
     def start_ambush(self,side):
         # raise the post to hold the ball
         self.activeSide = side
-        self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
+        #self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
 
         print "A M B U S H"
         # kill the music
@@ -188,7 +188,7 @@ class Ambush(ep.EP_Mode):
         self.is_busy()
         self.add_guys(1)
         # drop the post
-        self.posts[self.activeSide].disable()
+        #self.posts[self.activeSide].disable()
 
         # delay adding the second guy for 2 seconds to stagger them a bit
         self.delay("Ambush",delay=2,handler=self.add_guys,param=1)

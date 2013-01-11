@@ -40,10 +40,12 @@ class Showdown(ep.EP_Mode):
         self.showdownValue = 300000
         self.tauntTimer = 0
         self.ballAdded = False
+        self.racking = False
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
-            if self.game.show_tracking('showdownStatus') == "RUNNING":
+            # if we're not setting up a new rack, its ok to end.  Otherwise ignore
+            if self.game.show_tracking('showdownStatus') == "RUNNING" and not self.racking:
                 print "Ending Showdown due to ball drain"
                 self.game.base.busy = True
                 self.game.base.queued += 1
@@ -53,7 +55,7 @@ class Showdown(ep.EP_Mode):
         print "S H O W D O W N"
         # raise the post to hold the ball
         self.activeSide = side
-        self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
+        #self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
 
         # set the layer tracking
         self.game.stack_level(1,True)
@@ -107,7 +109,7 @@ class Showdown(ep.EP_Mode):
         #self.showdown_reset_guys()
         self.new_rack_pan()
         # drop the post
-        self.delay("Operational",delay=1.5,handler=self.posts[self.activeSide].disable)
+        #self.delay("Operational",delay=1.5,handler=self.posts[self.activeSide].disable)
 
 
     def add_ball(self):
@@ -115,6 +117,7 @@ class Showdown(ep.EP_Mode):
         self.game.trough.launch_balls(1)
 
     def new_rack(self):
+        self.racking = True
         # kill the GI again
         self.game.gi_control("OFF")
         # play the interstitial animation
@@ -183,6 +186,7 @@ class Showdown(ep.EP_Mode):
     def new_rack_finish(self):
     # reset the dudes
         self.showdown_reset_guys()
+        self.racking = False
 
     def showdown_reset_guys(self):
         # pop up all the targets

@@ -380,8 +380,9 @@ class BaseGameMode(ep.EP_Mode):
         self.game.score_with_bonus(2530)
         # if there's a running quickdraw or showdown - pass
         if not self.guns_allowed():
-            print "PASSING - Guns disabled"
-            print self.game.show_tracking('stackLevel')
+            pass
+            #print "PASSING - Guns disabled"
+            #print self.game.show_tracking('stackLevel')
         # Everything beyond this point only registers if there's no other mode running - so no stack checking is needed
         # move your train
         elif self.game.show_tracking('mytStatus') == "READY":
