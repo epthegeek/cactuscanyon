@@ -194,6 +194,10 @@ Gameplay (Feature):
   'Move Your Train Mode':
     options: ['Enabled','Disabled']
     default: 'Enabled'
+  'Move Your Train Max Shots':
+    options: [4,20]
+    increments: 1
+    default: 7
   'Drunk Multiball Stacking':
     options: ['Enabled','Disabled']
     default: 'Enabled'

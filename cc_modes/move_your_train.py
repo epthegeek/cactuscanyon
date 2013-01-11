@@ -37,6 +37,8 @@ class MoveYourTrain(ep.EP_Mode):
         self.emptyTrackLayer.composite_op = "blacksrc"
         self.trainOffset = 0
         self.running = False
+        self.shots = 0
+        self.maxShots = self.game.user_settings['Gameplay (Feature)']['Move Your Train Max Shots']
 
     def mode_started(self):
         print "Beginning Move Your Train"
@@ -58,35 +60,43 @@ class MoveYourTrain(ep.EP_Mode):
     def ball_drained(self):
         if self.running:
             if self.game.trough.num_balls_in_play == 0:
-                self.end()
+                self.game.base.busy = True
+                self.game.base.queued += 1
+                self.lose()
 
     ## Switches
     # left shots
 
     def sw_leftLoopTop_active(self,sw):
-        self.move_train("left")
+        if self.shots < self.maxShots:
+            self.move_train("left")
 
     def sw_leftRampEnter_active(self,sw):
-        self.move_train("left")
+        if self.shots < self.maxShots:
+            self.move_train("left")
 
     def sw_minePopper_active_for_390ms(self,sw):
-        self.move_train("left")
+        if self.shots < self.maxShots:
+            self.move_train("left")
 
     # right shots
     def sw_rightLoopTop_active(self,sw):
         # this only counts if bart is not moving.  stupid bart.
-        if not self.game.bart.moving:
+        if not self.game.bart.moving and self.shots < self.maxShots:
             self.move_train("right")
 
     def sw_rightRampMake_active(self,sw):
-        self.move_train("right")
+        if self.shots < self.maxShots:
+            self.move_train("right")
 
     def sw_saloonPopper_active_for_290ms(self,sw):
-        self.move_train("right")
+        if self.shots < self.maxShots:
+            self.move_train("right")
 
     # center shot
     def sw_centerRampMake_active(self,sw):
-        self.move_train("center")
+        if self.shots < self.maxShots:
+            self.move_train("center")
 
     def start(self,postTrap = False,side=0):
         print "Move your train actual start"
@@ -155,6 +165,9 @@ class MoveYourTrain(ep.EP_Mode):
         # four movements in one direction is win
         if self.trainOffset == 80 or self.trainOffset == -80:
             self.delay(delay=self.animWait,handler=self.win)
+        # if we've hit the max number of allowed shots, do the lost display
+        elif self.shots == self.maxShots:
+            self.delay(delay=self.animWait,handler=self.lose)
         else:
             # set a delay to go back to idle for all other cases
             self.delay(name="Operational",delay=self.animWait,handler=self.idle_display)
@@ -167,8 +180,8 @@ class MoveYourTrain(ep.EP_Mode):
         if not self.game.train.inMotion or self.game.fakePinProc:
             # increase the shots taken
             self.shots += 1
-            # if shots divisible by 10, taunt
-            if self.shots % 10 == 0:
+            # if shots is 2 less than the max allowed, taunt
+            if self.shots +2 == self.maxShots:
                 self.game.sound.play(self.game.assets.quote_mytTaunt)
             self.game.train.stopAt = self.game.train.mytIncrement
             print "Stop train at value: " + str(self.game.train.stopAt)
@@ -222,13 +235,41 @@ class MoveYourTrain(ep.EP_Mode):
         textLine = dmd.TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString)
         # calculate the score
         # four shots is a perfect score - so we take off 4 shots
-        self.shots -= 4
+        if self.shots == 4:
         # a perfect score is 1 million - every additional shot costs 50,000, which makes a 100,000 loss for each due to the 2x nature of it - with a floor of 200,000
-        score = 1000000 - (50000 * self.shots)
-        if score <= 0:
-            score = 200000
+            score = 1000000
+        else:
+        # if they finish, but not in perfectly, then it's 750
+            score = 750000
         pointsLine = dmd.TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(score)),blink_frames = 8)
         self.game.score(score)
+        combined = dmd.GroupedLayer(128,32,[textLine,pointsLine])
+        self.layer = combined
+        # end after 2 seconds
+        self.delay(delay=2,handler=self.end)
+
+    def lose(self):
+        # if the train is dead center, nothing
+        if self.trainOffset == 0:
+            textString = "TRAIN NOT MOVED!"
+            points = 0
+        # one shift off center
+        elif self.trainOffset == 20 or self.trainOffset == -20:
+            textString = "TRAIN MOVED A BIT"
+            points = 50000
+        # two shifts off center
+        elif self.trainOffset == 40 or self.trainOffset == -40:
+            textString = "TRAIN MOVED SOME"
+            points = 100000
+        # three shifts off center
+        else:
+            textString = "TRAIN MOSTLY MOVED"
+            poitns = 250000
+        # play the glum riff
+        self.game.sound.play(self.game.assets.sfx_glumRiff)
+        textLine = dmd.TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString)
+        pointsLine = dmd.TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(points)),blink_frames = 8)
+        self.game.score(points)
         combined = dmd.GroupedLayer(128,32,[textLine,pointsLine])
         self.layer = combined
         # end after 2 seconds
@@ -244,5 +285,8 @@ class MoveYourTrain(ep.EP_Mode):
         self.game.train.reset_toy(type=2)
         # turn the status to off
         self.game.set_tracking("mytStatus", "OPEN")
+        # unset the busy flag
+        self.game.base.busy = False
+        self.game.base.queued -= 1
         # unload
         self.unload()
