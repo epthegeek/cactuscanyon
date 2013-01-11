@@ -54,7 +54,7 @@ class Quickdraw(ep.EP_Mode):
     def ball_drained(self):
         # the the ball drains, quickdraw is lost
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('quickdrawStatus',self.side) == "RUNNING":
-            self.lost(self.side)
+            self.lost(self.target)
 
     # switches
 

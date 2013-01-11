@@ -54,6 +54,9 @@ class BionicBart(ep.EP_Mode):
         print "Starting bionic bart battle"
         # set the stack level
         self.game.stack_level(6,True)
+        # if there's a quickdraw running - kill that
+        if self.game.quickdraw.running:
+            self.game.quickdraw.lost(self.game.quickdraw.target)
         # set up the standard display stuff
         script = []
         idleLayer1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bionicCombo.frames[0])

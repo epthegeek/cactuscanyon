@@ -199,7 +199,7 @@ Gameplay (Feature):
     default: 'Enabled'
   'Last Call Mode':
     options: ['Enabled','Disabled']
-    default: 'Disabled'
+    default: 'Enabled'
   'Marshall Multiball':
     options: ['Enabled','Disabled']
     default: 'Enabled'

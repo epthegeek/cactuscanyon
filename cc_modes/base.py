@@ -609,7 +609,7 @@ class BaseGameMode(ep.EP_Mode):
 
 ### shooter lane stuff
 
-    def sw_shooterLane_active_for_300ms(self,sw):
+    def sw_shooterLane_active_for_350ms(self,sw):
         # if we're dealing with a saved ball, plunge like the wind
         if self.game.trough.balls_to_autoplunge > 0:
             self.game.trough.balls_to_autoplunge -= 1
