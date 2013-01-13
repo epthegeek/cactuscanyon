@@ -59,7 +59,7 @@ class ScoreDisplay(ep.EP_Mode):
     def __init__(self, game, priority, left_players_justify="right"):
         super(ScoreDisplay, self).__init__(game, priority)
         self.layer = ScoreLayer(128, 32, self)
-        self.font_common = dmd.font_named("Font07x5.dmd")
+        self.font_common = self.game.assets.font_07x5
         self.set_left_players_justify(left_players_justify)
         anim = self.game.assets.dmd_1pBurnCycle
         self.burnLayer1p = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=3)
