@@ -343,9 +343,9 @@ class BaseGameMode(ep.EP_Mode):
 
             # Kick balls out of places it could be stuck.
             if self.game.switches.minePopper.is_active():
-                self.game.coils.minePopper.pulse(30)
+                self.game.coils.minePopper.pulse(self.game.mountain.kickStrength)
             if self.game.switches.saloonPopper.is_active():
-                self.game.coils.saloonPopper.pulse(30)
+                self.game.coils.saloonPopper.pulse(self.game.saloon.saloonPulse)
         #play sound
         self.stop_music()
         self.game.sound.play(self.game.assets.sfx_spinDown)

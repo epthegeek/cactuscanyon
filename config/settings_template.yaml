@@ -55,6 +55,10 @@ Machine (Standard):
     options: [20,50]
     increments: 5
     default: 30
+  'Saloon Eject Strength':
+    options: [20,50]
+    increments: 5
+    default: 30
   'Inactive Switch Warning':
     options: [3,30]
     increments: 1
