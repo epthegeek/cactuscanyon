@@ -28,7 +28,7 @@ class Saloon(ep.EP_Mode):
         super(Saloon, self).__init__(game, priority)
         self.smacked = False
         self.mytValue = self.game.user_settings['Gameplay (Feature)']['Move Your Train Mode']
-        self.saloonPulse = self.game.user_settings['Machine (Standard)']['Saloon Kicker Strength']
+        self.saloonPulse = self.game.user_settings['Machine (Standard)']['Saloon Eject Strength']
 
 
     def mode_started(self):
