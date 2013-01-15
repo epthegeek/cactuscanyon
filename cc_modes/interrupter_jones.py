@@ -501,6 +501,10 @@ class Interrupter(ep.EP_Mode):
         print "ENTERING SERVICE MODE"
         # clear the interrupter layer - just in case
         self.clear_layer()
+        # if attract mode is running, stop the lampshow
+        if self.game.attract_mode in self.game.modes:
+            # kill the lampshow
+            self.game.lampctrl.stop_show()
         self.game.lamp_control.disable_all_lamps()
         self.stop_music()
         for mode in self.game.mode_list:
