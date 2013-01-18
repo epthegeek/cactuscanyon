@@ -916,6 +916,8 @@ class LampControl(ep.EP_Mode):
             for lamp in range(0,5,1):
                 if self.game.show_tracking('starStatus',lamp) == True:
                     self.starLamps[lamp].enable()
+            if self.game.stampede.running:
+                self.game.starLamps[4].enable()
 
         elif mode == 'Chase':
             # chase the badge points

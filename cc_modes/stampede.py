@@ -238,10 +238,6 @@ class Stampede(ep.EP_Mode):
         # reset the ramp status
         for each in self.shots:
             self.game.set_tracking(each,1)
-        # and update the lamps
-        self.lamp_update()
-        # badge light - stampede is 4
-        self.game.badge.update(4)
         # unset the base busy flag
         self.game.base.busy = False
         self.game.base.queued -= 1
@@ -249,6 +245,8 @@ class Stampede(ep.EP_Mode):
         self.game.stack_level(4,False)
         self.running = False
         self.lamp_update()
+        # badge light - stampede is 4
+        self.game.badge.update(4)
         # turn the main music back on
         self.music_on(self.game.assets.music_mainTheme,mySlice=5)
         # remove the switch blocker
