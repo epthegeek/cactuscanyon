@@ -243,7 +243,7 @@ class Saloon(ep.EP_Mode):
         #   9 - + 1 Million Bonus
         prizes.append('points1Mil')
         # 10 - Move your train - only add if polly isn't running
-        if not self.game.peril and self.game.move_your_train not in self.game.modes and self.mytValue == 'Enabled':
+        if not self.game.peril and self.game.move_your_train not in self.game.modes and self.mytValue == 'Enabled' and not self.game.train.mytFail:
             prizes.append('moveYourTrain')
         # 11 - 30 second ball save
         if not self.game.trough.ball_save_active:

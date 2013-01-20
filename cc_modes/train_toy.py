@@ -30,6 +30,7 @@ class Train(ep.EP_Mode):
         self.mytIncrement = 20
         self.ticksCounted = 0
         self.calibrating = False
+        self.mytFail = True
 
     def mode_started(self):
         # home the train
@@ -141,6 +142,9 @@ class Train(ep.EP_Mode):
                 print "I counted " + str(self.ticksCounted) + " ticks of the encoder"
                 self.mytStop = int(self.ticksCounted * 3.4)
                 print "Setting stop point to " + str(self.mytStop)
+                if self.myStop < 10:
+                    print "Disabling MYT, train didn't register well"
+                    self.mytFail = True
                 self.mytIncrement = int(self.ticksCounted * 0.7)
                 print "Setting increment to " + str(self.mytIncrement)
                 # check this again because save polly requests the reset directly
