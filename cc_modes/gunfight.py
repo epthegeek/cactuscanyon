@@ -246,8 +246,8 @@ class Gunfight(ep.EP_Mode):
     def gunfight_pan(self,badGuys):
         # the intro animation
         anim = self.game.assets.dmd_gunfightPan
-        myWait = len(anim.frames) / 60 + 1.8
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=1)
+        myWait = len(anim.frames) / 30 + 1.2
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
         self.layer = animLayer
         self.delay("Operational",delay=myWait,handler=self.gunfight_intro_eyes,param=badGuys)
 
