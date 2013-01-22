@@ -142,7 +142,7 @@ class Train(ep.EP_Mode):
                 print "I counted " + str(self.ticksCounted) + " ticks of the encoder"
                 self.mytStop = int(self.ticksCounted * 3.4)
                 print "Setting stop point to " + str(self.mytStop)
-                if self.myStop < 10:
+                if self.mytStop < 10:
                     print "Disabling MYT, train didn't register well"
                     self.mytFail = True
                 self.mytIncrement = int(self.ticksCounted * 0.7)
