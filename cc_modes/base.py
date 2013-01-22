@@ -147,12 +147,18 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.base.priority_quote(self.game.assets.quote_playerFour)
                 # if we get to the fourth player, the start button should go out
                 self.game.lamps.startButton.disable()
-        self.game.interrupter.add_player()
+            self.game.interrupter.add_player()
+        elif self.game.match in self.game.modes and self.game.immediateRestart:
+            self.game.match.unload()
+            self.game.game_reset()
+        else:
+            pass
+
         ## -- set the last switch hit --
         ep.last_switch = "startButton"
 
     # to allow restarting the game
-    def sw_startButton_active_for_2s(self,sw):
+    def sw_startButton_active_for_1s(self,sw):
         # if there's a ball in the shooter lane and we're on a ball after ball 1
         if self.game.switches.shooterLane.is_active() and self.game.ball > 1:
             self.game.game_reset()
