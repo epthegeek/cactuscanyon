@@ -136,6 +136,8 @@ class CCGame(game.BasicGame):
         print "Setting initial volume: " + str(volume_to_set)
         self.sound.set_volume(volume_to_set)
 
+        self.immediateRestart = "Enabled" == self.user_settings['Gameplay (Feature)']['Immediate Restart After Game']
+
         # Set the balls per game per the user settings
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']
         # Flipper pulse strength
@@ -648,7 +650,11 @@ class CCGame(game.BasicGame):
         # turn off the sound intro flag
         self.soundIntro = False
         # set a busy flag so that the start button won't restart the game right away
-        self.endBusy = True
+        if not self.immediateRestart:
+            print "Immediate restart is disabled, killing start button"
+            self.endBusy = True
+        else:
+            print "Immediate restart is enabled"
         # re-add the attract mode
         self.modes.add(self.attract_mode)
         # play a quote
