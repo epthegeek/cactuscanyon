@@ -38,6 +38,10 @@ class LastCall(ep.EP_Mode):
     def mode_started(self):
         # reload the basemodes for switch help
         self.game.base.load_modes()
+        # kill any extra balls
+        self.game.set_tracking('extraBallsPending',0)
+        # kill the bozo ball if it was on
+        self.game.set_tracking('bozoBall', False)
         self.shotValue = self.startValue
         self.running = True
         # set up the info layer
