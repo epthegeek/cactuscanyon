@@ -46,7 +46,7 @@ class Mine(ep.EP_Mode):
     def sw_minePopper_active_for_400ms(self,sw):
         # somehow this falls through despite switch stop
         # for MMB just kick out and last call
-        if self.game.marshall_multiball.running or self.game.last_call.running:
+        if self.game.marshall_multiball.running or self.game.last_call.running or self.game.moonlight.running:
             self.game.mountain.eject()
             return
         # for bionic & cva - still collect extra ball

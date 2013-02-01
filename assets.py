@@ -1010,6 +1010,13 @@ class Assets():
         #self.music_tensePiano3 = 'music_tensePiano3'
         #self.game.sound.register_music(self.music_tensePiano3, self.music_path + "095-tense-piano-3.wav")
 
+        self.music_mmOpeningLoop = 'music_mmOpeningLoop'
+        self.game.sound.register_music(self.music_mmOpeningLoop, self.music_path + "opening_loop.wav")
+        self.music_mmMainLoopOne = 'music_mmMainLoopOne'
+        self.game.sound.register_music(self.music_mmMainLoopOne, self.music_path + "main_loop.wav")
+        self.music_mmMainLoopTwo = 'music_mmMainLoopTwo'
+        self.game.sound.register_music(self.music_mmMainLoopTwo, self.music_path + "main_loop_2.wav")
+
         # lampshows
         lampshows = list()
 
@@ -1246,6 +1253,13 @@ class Assets():
         self.dmd_moother = dmd.Animation().load(self.dmd_path+'moother.dmd')
 
         self.dmd_1pBurnCycle = dmd.Animation().load(self.dmd_path+'1p_burn_cycle.dmd')
+
+        self.dmd_mmZap = dmd.Animation().load(self.dmd_path+'mm_zap.dmd')
+        self.dmd_mmPowie = dmd.Animation().load(self.dmd_path+'mm_powie.dmd')
+        self.dmd_mmDOHO = dmd.Animation().load(self.dmd_path+'mm_doho.dmd')
+        self.dmd_mmCrash = dmd.Animation().load(self.dmd_path+'mm_crash.dmd')
+        self.dmd_mmBoom = dmd.Animation().load(self.dmd_path+'mm_boom.dmd')
+        self.dmd_mmBang = dmd.Animation().load(self.dmd_path+'mm_bang.dmd')
 
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"

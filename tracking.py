@@ -175,3 +175,7 @@ class Tracking(game.Player):
 
         # collect points for last call
         self.player_stats['lastCallTotal'] = 0
+
+        # track if player already did moonlight madness within this game
+        self.player_stats['moonlightStatus'] = False
+        self.player_stats['moonlightTotal'] = 0

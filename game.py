@@ -298,6 +298,8 @@ class CCGame(game.BasicGame):
         # Interrupter Jones
         self.interrupter = cc_modes.Interrupter(game=self,priority=200)
         # Switch Hit Tracker
+        # moonlight madness
+        self.moonlight = cc_modes.Moonlight(game=self,priority=200)
         self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=201)
 
         ## try adding the score display font override
@@ -337,7 +339,8 @@ class CCGame(game.BasicGame):
                          self.river_chase,
                          self.cva,
                          self.switch_block,
-                         self.marshall_multiball]
+                         self.marshall_multiball,
+                         self.moonlight]
 
         self.mode_list = [self.ambush,
                           self.attract_mode,
@@ -364,6 +367,7 @@ class CCGame(game.BasicGame):
                           self.marshall_multiball,
                           self.match,
                           self.mine,
+                          self.moonlight,
                           self.mountain,
                           self.move_your_train,
                           self.quickdraw,
@@ -461,12 +465,6 @@ class CCGame(game.BasicGame):
         # reset the train just in case - type 2, should only back the train up if it's out
         self.train.stop_at = 0
         self.train.reset_toy(step=2)
-        # launch a ball, unless there is one in the shooter lane already
-        if not self.switches.shooterLane.is_active():
-            self.trough.launch_balls(1) # eject a ball into the shooter lane
-        else:
-            self.trough.num_balls_in_play += 1
-
         # enable the ball search
         self.ball_search.enable()
         # turn the flippers on
@@ -476,16 +474,28 @@ class CCGame(game.BasicGame):
         # reset the stack levels
         for i in range(0,7,1):
             self.set_tracking('stackLevel',False,i)
-        # and load the skill shot
-        self.modes.add(self.skill_shot)
-        # and all the other modes
-        print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
-        self.base.load_modes()
-        # if we're under 2 minutes and on the last ball, enable BOZO BALL (tm)
-        if self.current_player().game_time < 120 and self.ball == self.balls_per_game:
-            self.base.enable_bozo_ball()
-        # update the lamps
-        self.lamp_control.update()
+
+        # divert here if moonlight madness should run for this player
+        self.moonlightFlag = True
+        if self.moonlightFlag and self.show_tracking('moonlightStatus') == False:
+            self.modes.add(self.moonlight)
+        else:
+            # launch a ball, unless there is one in the shooter lane already
+            if not self.switches.shooterLane.is_active():
+                self.trough.launch_balls(1) # eject a ball into the shooter lane
+            else:
+                self.trough.num_balls_in_play += 1
+
+            # and load the skill shot
+            self.modes.add(self.skill_shot)
+            # and all the other modes
+            print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
+            self.base.load_modes()
+            # if we're under 2 minutes and on the last ball, enable BOZO BALL (tm)
+            if self.current_player().game_time < 120 and self.ball == self.balls_per_game:
+                self.base.enable_bozo_ball()
+            # update the lamps
+            self.lamp_control.update()
 
     def ball_saved(self):
         if self.trough.ball_save_active:
@@ -508,6 +518,9 @@ class CCGame(game.BasicGame):
             # New abort for Last Call
             if self.last_call in self.modes:
                 self.last_call.ball_drained()
+                return
+            if self.moonlight.running:
+                self.moonlight.ball_drained()
                 return
             # Tell every mode a ball has drained by calling the ball_drained function if it exists
             if self.trough.num_balls_in_play == 0:
