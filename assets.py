@@ -1034,6 +1034,7 @@ class Assets():
         self.lamp_highNoonFlash = "high-noon-flash"; lampshows.append(self.lamp_highNoonFlash)
         self.lamp_fanRight = "fan-pan-right"; lampshows.append(self.lamp_fanRight)
         self.lamp_fanLeft = "fan-pan-left"; lampshows.append(self.lamp_fanLeft)
+        self.lamp_slowSparkle = "slow_sparkle"; lampshows.append(self.lamp_slowSparkle)
 
         for lampshow in lampshows:
             self.game.lampctrl.register_show(lampshow,self.lampshows_path + lampshow + ".lampshow")

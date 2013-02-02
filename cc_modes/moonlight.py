@@ -61,8 +61,10 @@ class Moonlight(ep.EP_Mode):
             # switch the music
             self.music_on(self.game.assets.music_mmMainLoopOne)
             # launch 2 more balls
-            self.game.trough.launch_balls(2)
+            self.game.trough.balls_to_autoplunge = 3
+            self.game.trough.launch_balls(3)
             self.update_display()
+            self.game.trough.start_ball_save(num_balls_to_save=5,time=20)
         return game.SwitchStop
 
     def sw_topLeftStandUp_active(self,sw):
@@ -133,6 +135,7 @@ class Moonlight(ep.EP_Mode):
             self.bonanza_hit()
         else:
             self.switch_hit(7)
+        self.game.mountain.eject()
         return game.SwitchStop
 
     def sw_saloonPopper_active_for_290ms(self,sw):
@@ -140,6 +143,7 @@ class Moonlight(ep.EP_Mode):
             self.bonanza_hit()
         else:
             self.switch_hit(8)
+        self.game.saloon.kick()
         return game.SwitchStop
 
     # not lightable - still scorable in bonanza
@@ -243,6 +247,10 @@ class Moonlight(ep.EP_Mode):
             self.game.trough.num_balls_in_play += 1
 
     def ball_drained(self):
+        if self.game.trough.num_balls_in_play == 1:
+            # force the ending
+            self.ending = True
+            self.darken()
         if self.game.trough.num_balls_in_play == 0:
             self.cancel_delayed("Display")
             # wrap up the mode
@@ -273,6 +281,9 @@ class Moonlight(ep.EP_Mode):
         self.delay("Display", delay=0.5, handler=self.update_display)
 
     def final_display(self):
+        # kill all the stuff, just in case we went from 2 balls to 0
+        self.darken()
+        self.ending = False
         # play the closing riff
         self.game.sound.play_music(self.game.assets.music_mmClosing,loops=1)
         titleString = "MOONLIGHT MADNESS TOTAL"
@@ -324,7 +335,7 @@ class Moonlight(ep.EP_Mode):
             self.availableShots.append(theSwitch)
             # kill the lights for that switch
             for lamp in self.lampList[theSwitch]:
-                lamp.disable
+                lamp.disable()
             # score points
             self.moonlightTotal += 1000000
             self.game.increase_tracking('moonlightTotal',1000000)
@@ -351,7 +362,8 @@ class Moonlight(ep.EP_Mode):
     def start_bonanza(self):
         self.bonanza = True
         # start the crazy lightshow
-        self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=True)
+        #self.game.lampctrl.play_show(self.game.assets.lamp_slowSparkle, repeat=True)
+        self.game.schedule_lampshows([self.game.assets.lamp_slowSparkle],True)
         # turn on the GI
         self.game.gi_control("ON")
         # kick in the third stage music
@@ -363,13 +375,18 @@ class Moonlight(ep.EP_Mode):
             for lamp in self.lampList[item]:
                 lamp.schedule(0x00FF00FF)
 
-    def finish_up(self):
-        # stop the music
-        self.stop_music()
+    def darken(self):
         # stop the lampshow
         self.game.lampctrl.stop_show()
         # kill all the lights
         self.game.lamp_control.disable_all_lamps()
+        # disable the flippers
+        self.game.gi_control("OFF")
+        self.game.enable_flippers(False)
+
+    def finish_up(self):
+        # stop the music
+        self.stop_music()
         # set the tracking so this player doesn't moonlight again
         self.game.set_tracking('moonlightStatus', True)
         # turn off the running flag
