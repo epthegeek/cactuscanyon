@@ -1263,6 +1263,7 @@ class Assets():
         self.dmd_mmCrash = dmd.Animation().load(self.dmd_path+'mm_crash.dmd')
         self.dmd_mmBoom = dmd.Animation().load(self.dmd_path+'mm_boom.dmd')
         self.dmd_mmBang = dmd.Animation().load(self.dmd_path+'mm_bang.dmd')
+        self.dmd_moonIntro = dmd.Animation().load(self.dmd_path+'moon-intro.dmd')
 
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"

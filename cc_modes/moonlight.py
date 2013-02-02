@@ -267,14 +267,19 @@ class Moonlight(ep.EP_Mode):
         # pick a random shot to light to start with
         self.enable += self.shotsAtStart
         self.enable_shots()
+        duration = self.game.sound.play(self.game.assets.sfx_churchBell)
         # start the intro music
-        self.music_on(self.game.assets.music_mmOpeningLoop)
+        self.delayed_music_on(duration-1,self.game.assets.music_mmOpeningLoop)
         # throw up an intro display
-        topLine = dmd.TextLayer(64, 5, self.game.assets.font_10px_AZ, "center", opaque=True).set_text("MOONLIGHT")
-        bottomLine = dmd.TextLayer(64, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("MADNESS")
-        combined = dmd.GroupedLayer(128,32,[topLine,bottomLine])
+        anim = self.game.assets.dmd_moonIntro
+        backdrop = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=12)
+        topLine = dmd.TextLayer(74, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("MOONLIGHT")
+        topLine.composite_op = "blacksrc"
+        bottomLine = dmd.TextLayer(74, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("MADNESS")
+        bottomLine.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[backdrop,topLine,bottomLine])
         self.layer = combined
-
+        self.delay("Display",delay=duration+2,handler=self.update_display)
         # launch a ball, unless there is one in the shooter lane already
         if not self.game.switches.shooterLane.is_active():
             self.game.trough.launch_balls(1) # eject a ball into the shooter lane
@@ -300,12 +305,14 @@ class Moonlight(ep.EP_Mode):
         scoreString = ep.format_score(points)
         if self.bonanza:
             scoreLine = dmd.TextLayer(64, 9, self.game.assets.font_13px_thin_score, "center", opaque = False).set_text(scoreString,blink_frames=4)
-        else:
-            scoreLine = dmd.TextLayer(64, 7, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
-        if self.bonanza:
-            infoLine = dmd.TextLayer(64,25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("ALL SWITCHES = 3 MILLION")
+            if self.ending:
+                textString = "FINISHING UP"
+            else:
+                textString = "ALL SWITCHES = 3 MILLION"
+            infoLine = dmd.TextLayer(64,25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString)
             layers = [titleLine, scoreLine, infoLine]
         else:
+            scoreLine = dmd.TextLayer(64, 7, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
             infoLine = dmd.TextLayer(64,18,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT LIT ITEMS")
             amount = 9 - len(self.liveShots)
             textString = str(amount) + " MORE FOR BONANZA"
@@ -431,6 +438,7 @@ class Moonlight(ep.EP_Mode):
         self.running = False
         # turn on the GI just in case
         self.game.gi_control("ON")
+        self.bonanza = False
         # unload the mode
         self.unload()
 
