@@ -53,7 +53,17 @@ class Moonlight(ep.EP_Mode):
         banner5 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mmPowie.frames[0])
         banner6 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mmZap.frames[0])
         self.banners = [ banner1,banner2,banner3,banner4,banner5,banner6 ]
+        self.booms = [self.game.assets.sfx_glassSmash,
+                      self.game.assets.sfx_hitBionicBart,
+                      self.game.assets.sfx_glassSmash,
+                      self.game.assets.sfx_hitBionicBart,
+                      self.game.assets.sfx_cow3,
+                      self.game.assets.sfx_hitBionicBart,
+                      self.game.assets.sfx_glassSmash,
+                      self.game.assets.sfx_hitBionicBart,
+                      self.game.assets.sfx_glassSmash]
         self.shotsAtStart = self.game.user_settings['Gameplay (Feature)']['Moonlight Shots at Start']
+
 
     ## switches
     def sw_rightRampBottom_active(self,sw):
@@ -139,6 +149,13 @@ class Moonlight(ep.EP_Mode):
         self.game.mountain.eject()
         return game.SwitchStop
 
+    def sw_saloonBart_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit()
+        else:
+            self.switch_hit(8)
+        return game.SwitchStop
+
     def sw_saloonPopper_active_for_290ms(self,sw):
         if self.bonanza:
             self.bonanza_hit()
@@ -175,7 +192,7 @@ class Moonlight(ep.EP_Mode):
 
     def sw_jetBumpersExit_active(self,sw):
         if self.bonanza:
-            self.bonanza_hit()
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_rightOutlane_active(self,sw):
@@ -188,39 +205,56 @@ class Moonlight(ep.EP_Mode):
             self.bonanza_hit()
         return game.SwitchStop
 
+
+    # chaff that doesn't do much
     def sw_leftReturnLane_active(self,sw):
         if self.bonanza:
-            self.bonanza_hit()
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_rightReturnLane_active(self,sw):
         if self.bonanza:
-            self.bonanza_hit()
+            self.bonanza_hit(False)
         return game.SwitchStop
 
-    # chaff that doesn't do much
     def sw_leftJetBumper_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_rightJetBumper_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_bottomJetBumper_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_centerRampEnter_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_rightRampEnter_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_leftRampMake_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_leftLoopBottom_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def sw_rightLoopBottom_active(self,sw):
+        if self.bonanza:
+            self.bonanza_hit(False)
         return game.SwitchStop
 
     def mode_started(self):
@@ -291,8 +325,8 @@ class Moonlight(ep.EP_Mode):
         titleLine = dmd.TextLayer(128/2, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString)
         points = self.moonlightTotal
         scoreString = ep.format_score(points)
-        scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_13px_thin_score, "center", opaque = False).set_text(scoreString)
-        infoLine = dmd.TextLayer(64,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NOW BACK TO THE GAME")
+        scoreLine = dmd.TextLayer(64, 9, self.game.assets.font_13px_thin_score, "center", opaque = False).set_text(scoreString)
+        infoLine = dmd.TextLayer(64,24,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NOW BACK TO THE GAME")
         self.layer = dmd.GroupedLayer(128,32,[titleLine,scoreLine,infoLine])
         # delay a bit before starting the real ball
         self.delay(delay=5,handler=self.finish_up)
@@ -334,6 +368,7 @@ class Moonlight(ep.EP_Mode):
             # it's live, that's a hit
             self.liveShots.remove(theSwitch)
             self.availableShots.append(theSwitch)
+            self.game.sound.play(self.game.assets.sfx_ricochetSet)
             # kill the lights for that switch
             for lamp in self.lampList[theSwitch]:
                 lamp.disable()
@@ -348,17 +383,19 @@ class Moonlight(ep.EP_Mode):
             # if it's not active, just pass
             pass
 
-    def bonanza_hit(self):
+    def bonanza_hit(self,display=True):
         # this is a hit during the mayhem
         # score 3 mil
         self.moonlightTotal += 3000000
         self.game.increase_tracking('moonlightTotal',3000000)
         # show a random banner display
-        self.cancel_delayed("Display")
-        banner = random.choice(self.banners)
-        self.layer = banner
-        self.delay("Display",delay=0.6,handler=self.update_display)
-        # play some sound ?
+        if display:
+            boom = random.choice(self.booms)
+            self.game.sound.play(boom)
+            self.cancel_delayed("Display")
+            banner = random.choice(self.banners)
+            self.layer = banner
+            self.delay("Display",delay=0.6,handler=self.update_display)
 
     def start_bonanza(self):
         self.bonanza = True
