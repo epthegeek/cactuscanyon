@@ -269,7 +269,7 @@ class Moonlight(ep.EP_Mode):
         self.enable_shots()
         duration = self.game.sound.play(self.game.assets.sfx_churchBell)
         # start the intro music
-        self.delayed_music_on(duration-1,self.game.assets.music_mmOpeningLoop)
+        self.delay(delay=duration-1,handler=self.launch)
         # throw up an intro display
         anim = self.game.assets.dmd_moonIntro
         backdrop = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=12)
@@ -280,6 +280,9 @@ class Moonlight(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[backdrop,topLine,bottomLine])
         self.layer = combined
         self.delay("Display",delay=duration+2,handler=self.update_display)
+
+    def launch(self):
+        self.music_on(self.game.assets.music_mmOpeningLoop)
         # launch a ball, unless there is one in the shooter lane already
         if not self.game.switches.shooterLane.is_active():
             self.game.trough.launch_balls(1) # eject a ball into the shooter lane
