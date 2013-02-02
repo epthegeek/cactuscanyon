@@ -37,6 +37,8 @@ class Attract(ep.EP_Mode):
         self.NOISY_COUNT = self.game.user_settings['Gameplay (Feature)']['Attract sounds to play']
         self.NOISY_DELAY = self.game.user_settings['Gameplay (Feature)']['Attract sound delay time']
         self.marshallValue = self.game.user_settings['Gameplay (Feature)']['Marshall Multiball']
+        self.flipperOK = True
+        self.slowFlipper = self.game.user_settings['Machine (Standard)']['Slow Attract Pages'] == 'Enabled'
 
     def mode_started(self):
 
@@ -182,13 +184,18 @@ class Attract(ep.EP_Mode):
 
     def sw_flipperLwL_active(self,sw):
         # if going left - bump the index down
-        self.myIndex -= 2
-        self.flipper_action()
+        if self.flipperOK:
+            self.myIndex -= 2
+            self.flipper_action()
 
     def sw_flipperLwR_active(self,sw):
-        self.flipper_action()
+        if self.flipperOK:
+            self.flipper_action()
 
     def flipper_action(self):
+        if self.slowFlipper:
+            self.flipperOK = False
+            self.delay(delay=1,handler=self.flip_again)
         # page the attract animation
         self.run_animation_loop()
         # if noisy, play a noise and count it
@@ -208,6 +215,8 @@ class Attract(ep.EP_Mode):
                 # delay a re-enable
                 self.delay("Noisy",delay=self.NOISY_DELAY,handler=self.noisy_again)
 
+    def flip_again(self):
+        self.flipperOK = True
     def noisy_again(self):
         self.noisy = True
 

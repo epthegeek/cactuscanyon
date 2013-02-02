@@ -465,6 +465,7 @@ PRBallSave:
         mineEntrance: open
         saloonGate: open
         beerMug: open
+        leftJetBumper: open
     stopSwitches:
         shooterLane: closed
         minePopper: active

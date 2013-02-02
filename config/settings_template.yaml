@@ -35,6 +35,9 @@ Machine (Standard):
   'Game Restart':
     options: [True,False]
     default: True
+  'Slow Attract Pages':
+    options: [Enabled,Disabled]
+    default: Disabled
   'Flipper Pulse':
     options: [25,40]
     increments: 1
