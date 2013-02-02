@@ -251,37 +251,39 @@ class Moonlight(ep.EP_Mode):
     def update_display(self):
         self.cancel_delayed("Display")
         titleString = "MOONLIGHT MADNESS"
-        titleLine = dmd.TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString)
+        titleLine = dmd.TextLayer(128/2, 0, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString)
         # score line
         points = self.moonlightTotal
         scoreString = ep.format_score(points)
         if self.bonanza:
-            scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_13px_thin_score, "center", opaque = False).set_text(scoreString,blink_frames=4)
+            scoreLine = dmd.TextLayer(64, 9, self.game.assets.font_13px_thin_score, "center", opaque = False).set_text(scoreString,blink_frames=4)
         else:
-            scoreLine = dmd.TextLayer(64, 5, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
+            scoreLine = dmd.TextLayer(64, 7, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
         if self.bonanza:
-            infoLine = dmd.TextLayer(64,24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("ALL SWITCHES = 3 MILLION")
+            infoLine = dmd.TextLayer(64,25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("ALL SWITCHES = 3 MILLION")
             layers = [titleLine, scoreLine, infoLine]
         else:
-            infoLine = dmd.TextLayer(64,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT LIT ITEMS")
+            infoLine = dmd.TextLayer(64,18,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT LIT ITEMS")
             amount = 9 - len(self.liveShots)
             textString = str(amount) + " MORE FOR BONANZA"
-            infoLine2 = dmd.TextLayer(64,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString)
+            infoLine2 = dmd.TextLayer(64,24,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString)
             layers = [titleLine, scoreLine, infoLine, infoLine2]
         self.layer = dmd.GroupedLayer(128,32,layers)
         # loop back to update the score and whatnot
         self.delay("Display", delay=0.5, handler=self.update_display)
 
     def final_display(self):
+        # play the closing riff
+        self.game.sound.play_music(self.game.assets.music_mmClosing,loops=1)
         titleString = "MOONLIGHT MADNESS TOTAL"
-        titleLine = dmd.TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString)
+        titleLine = dmd.TextLayer(128/2, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString)
         points = self.moonlightTotal
         scoreString = ep.format_score(points)
         scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_13px_thin_score, "center", opaque = False).set_text(scoreString)
         infoLine = dmd.TextLayer(64,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NOW BACK TO THE GAME")
         self.layer = dmd.GroupedLayer(128,32,[titleLine,scoreLine,infoLine])
         # delay a bit before starting the real ball
-        self.delay(delay=2,handler=self.finish_up)
+        self.delay(delay=5,handler=self.finish_up)
 
     def enable_shots(self):
         # if there are shots to add, do that

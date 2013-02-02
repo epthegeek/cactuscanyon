@@ -1016,6 +1016,8 @@ class Assets():
         self.game.sound.register_music(self.music_mmMainLoopOne, self.music_path + "main_loop.wav")
         self.music_mmMainLoopTwo = 'music_mmMainLoopTwo'
         self.game.sound.register_music(self.music_mmMainLoopTwo, self.music_path + "main_loop_2.wav")
+        self.music_mmClosing = 'music_mmClosing'
+        self.game.sound.register_music(self.music_mmClosing, self.music_path + "Closing_Riff.wav")
 
         # lampshows
         lampshows = list()
