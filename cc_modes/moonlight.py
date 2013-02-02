@@ -53,6 +53,7 @@ class Moonlight(ep.EP_Mode):
         banner5 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mmPowie.frames[0])
         banner6 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mmZap.frames[0])
         self.banners = [ banner1,banner2,banner3,banner4,banner5,banner6 ]
+        self.shotsAtStart = self.game.user_settings['Gameplay (Feature)']['Moonlight Shots at Start']
 
     ## switches
     def sw_rightRampBottom_active(self,sw):
@@ -230,7 +231,7 @@ class Moonlight(ep.EP_Mode):
         self.game.gi_control("OFF")
         self.game.lamp_control.disable_all_lamps()
         # pick a random shot to light to start with
-        self.enable += 1
+        self.enable += self.shotsAtStart
         self.enable_shots()
         # start the intro music
         self.music_on(self.game.assets.music_mmOpeningLoop)
@@ -356,7 +357,7 @@ class Moonlight(ep.EP_Mode):
         self.cancel_delayed("Display")
         banner = random.choice(self.banners)
         self.layer = banner
-        self.delay("Display",delay=1,handler=self.update_display)
+        self.delay("Display",delay=0.6,handler=self.update_display)
         # play some sound ?
 
     def start_bonanza(self):

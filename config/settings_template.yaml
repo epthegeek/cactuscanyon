@@ -144,6 +144,10 @@ Gameplay (Feature):
     options: [2,10]
     increments: 1
     default: 3
+  'Moonlight Shots at Start':
+    options: [1,6]
+    increments: 1
+    default: 3
   'Mine Opening Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
