@@ -266,7 +266,11 @@ class Attract(ep.EP_Mode):
                     # clear the interrupter layer
                     self.game.interrupter.clear_layer()
                     # Initialize game
-                    self.game.start_game()
+                    if self.game.switches.flipperLwL.is_active():
+                        force = True
+                    else:
+                        force = False
+                    self.game.start_game(forceMoonlight=force)
                 else:
                     print "BALL SEARCH"
                     self.game.ball_search.perform_search(1)

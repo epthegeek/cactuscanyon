@@ -411,7 +411,7 @@ class CCGame(game.BasicGame):
         self.modes.add(self.switch_tracker)
         self.modes.add(self.score_display)
 
-    def start_game(self):
+    def start_game(self,forceMoonlight=False):
         # Check the time
         now = datetime.datetime.now()
         print "Hour: " + str(now.hour) + " Minutes: " + str(now.minute)
@@ -421,7 +421,11 @@ class CCGame(game.BasicGame):
         # check for moonlight - always works at straight up midnight
         if now.hour == 00 & now.minute == 00:
             self.moonlightFlag = True
+        # If not exactly midnight - check to see if we're within the time window
         elif now.hour == 23 & now.minute >= window:
+            self.moonlightFlag = True
+        # if force was passed - start it no matter what
+        elif forceMoonlight:
             self.moonlightFlag = True
         else:
             self.moonlightFlag = False
