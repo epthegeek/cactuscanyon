@@ -399,7 +399,7 @@ class Moonlight(ep.EP_Mode):
         # flash a gun
         self.guns[0].pulse(30)
         # flip them so the next hit flashes the other one
-        self.gun.reverse()
+        self.guns.reverse()
         # show a random banner display
         if display:
             boom = random.choice(self.booms)
