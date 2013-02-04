@@ -410,7 +410,20 @@ class Attract(ep.EP_Mode):
                     combined = dmd.GroupedLayer(128,32,[backdrop,title,initLine1,scoreLine1])
                     self.layers.append({'layer':combined, 'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 
-    def mode_stopped(self):
+                # Generate a screen for moonlight Champ
+                if category.game_data_key == 'MoonlightHighScoreData':
+                    backdrop = dmd.FrameLayer(opaque = False, frame=self.game.assets.dmd_moonIntro.frames[10])
+                    title = dmd.TextLayer(74,2, self.game.assets.font_5px_bold_AZ, "center", opaque = False).set_text("MOONLIGHT CHAMP")
+                    title.composite_op = "blacksrc"
+                    initLine1 = dmd.TextLayer(74,7, self.game.assets.font_12px_az, "center",opaque=False).set_text(score.inits)
+                    initLine1.composite_op = "blacksrc"
+                    scoreLine1 = dmd.TextLayer(74,22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str)
+                    scoreLine1.composite_op = "blacksrc"
+                    combined = dmd.GroupedLayer(128,32,[backdrop,title,initLine1,scoreLine1])
+                    self.layers.append({'layer':combined, 'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
+
+
+def mode_stopped(self):
         print "DELETING ATTRACT DELAYS"
         self.wipe_delays()
         # rese the noisy flag

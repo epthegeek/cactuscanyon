@@ -93,3 +93,5 @@ MotherlodeChampHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 250000}
 LastCallHighScoreData:
 - {date: 'Sun Oct  3 17:38:46 2010', inits: OIC, score: 50000}
+MoonlightHighScoreData:
+- {date: 'Sun Oct  3 17:38:46 2010', inits: OIC, score: 50000}

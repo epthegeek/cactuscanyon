@@ -31,6 +31,7 @@ import ep
 import pygame
 import highscore
 import time
+import datetime
 import os
 import yaml
 import copy
@@ -64,6 +65,7 @@ class CCGame(game.BasicGame):
         self.soundIntro = False
         self.shutdownFlag = config.value_for_key_path(keypath='shutdown_flag',default=False)
         self.buttonShutdown = config.value_for_key_path(keypath='power_button_combo', default=False)
+        self.moonlightFlag = False
 
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
@@ -142,6 +144,8 @@ class CCGame(game.BasicGame):
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']
         # Flipper pulse strength
         self.flipperPulse = self.user_settings['Machine (Standard)']['Flipper Pulse']
+        # Moonlight window
+        self.moonlightMinutes = self.user_settings['Gameplay (Feature)']['Moonlight Mins to Midnight']
 
         # set up the ball search
         self.setup_ball_search()
@@ -226,6 +230,12 @@ class CCGame(game.BasicGame):
         cat.game_data_key = 'ComboChampHighScoreData'
         cat.score_for_player = lambda player: self.show_tracking('bigChain')
         cat.titles = ['Combo Champ']
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'MoonlightHighScoreData'
+        cat.score_for_player = lambda player: self.show_tracking('moonlightTotal')
+        cat.titles = ['Moonlight Champ']
         self.highscore_categories.append(cat)
 
         for category in self.highscore_categories:
@@ -402,6 +412,20 @@ class CCGame(game.BasicGame):
         self.modes.add(self.score_display)
 
     def start_game(self):
+        # Check the time
+        now = datetime.datetime.now()
+        print "Hour: " + str(now.hour) + " Minutes: " + str(now.minute)
+        # subtract the window minutes from 60
+        window = 60 - self.moonlightMinutes
+        print "Moonlight window time: " + str(window)
+        # check for moonlight - always works at straight up midnight
+        if now.hour == 00 & now.minute == 00:
+            self.moonlightFlag = True
+        elif now.hour == 23 & now.minute >= window:
+            self.moonlightFlag = True
+        else:
+            self.moonlightFlag = False
+
         # remove the attract mode
         self.modes.remove(self.attract_mode)
         # kill the attract mode song fade delay just in case
@@ -476,7 +500,7 @@ class CCGame(game.BasicGame):
             self.set_tracking('stackLevel',False,i)
 
         # divert here if moonlight madness should run for this player
-        self.moonlightFlag = True
+        #self.moonlightFlag = True
         if self.moonlightFlag and self.show_tracking('moonlightStatus') == False:
             self.modes.add(self.moonlight)
         else:
@@ -606,6 +630,8 @@ class CCGame(game.BasicGame):
 
     def game_ended(self):
         self.log("GAME ENDED")
+        # kill the moonlight flag
+        self.moonlightFlag = False
         ## call the game_ended from proc.game.BasicGame
         super(CCGame, self).game_ended()
 
