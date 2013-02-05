@@ -291,11 +291,11 @@ class Moonlight(ep.EP_Mode):
             self.game.trough.num_balls_in_play += 1
 
     def ball_drained(self):
-        if self.game.trough.num_balls_in_play == 1:
+        if self.game.trough.num_balls_in_play == 1 and self.running:
             # force the ending
             self.ending = True
             self.darken()
-        if self.game.trough.num_balls_in_play == 0:
+        if self.game.trough.num_balls_in_play == 0 and self.running:
             self.cancel_delayed("Display")
             # wrap up the mode
             self.final_display()
