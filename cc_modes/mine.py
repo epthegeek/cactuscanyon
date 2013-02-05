@@ -293,6 +293,7 @@ class Mine(ep.EP_Mode):
         animLayer.add_frame_listener(2,self.game.base.play_quote,param=self.game.assets.quote_gasp)
         animLayer.add_frame_listener(15,self.game.sound.play,param=self.game.assets.sfx_lockTwoMinecart)
         animLayer.add_frame_listener(32,self.game.sound.play,param=self.game.assets.sfx_lockTwoExplosion)
+        animLayer.add_frame_listener(32,self.game.base.red_flasher_flourish)
 
         # play the animation
         self.layer = animLayer
