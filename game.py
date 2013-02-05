@@ -560,7 +560,7 @@ class CCGame(game.BasicGame):
                 self.sound.stop_music()
 
             ## and tell all the modes the ball drained no matter what
-            for mode in self.ep_modes:
+            for mode in self.modes:
                 if getattr(mode, "ball_drained", None):
                     mode.ball_drained()
 

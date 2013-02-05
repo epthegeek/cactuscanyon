@@ -36,17 +36,12 @@ class Mountain(ep.EP_Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
             self.stop()
+            self.game.coils.mineFlasher.disable()
 
     def mode_started(self):
         # home the train
         if not self.game.switches.mineHome.is_active():
             self.reset_toy()
-
-    def ball_drained(self):
-        # if all the balls drain, turn off the mine
-        if self.game.num_balls_in_play == 0:
-            self.stop()
-            self.game.coils.mineFlasher.disable()
 
     def stop(self):
         self.game.coils.mineMotor.disable()
