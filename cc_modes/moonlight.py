@@ -35,6 +35,7 @@ class Moonlight(ep.EP_Mode):
         self.liveShots = []
         self.availableShots = [0,1,2,3,4,5,6,7,8]
         # available shots and corresponding lights
+        self.guns = [self.game.coils.leftGunFlasher, self.game.coils.rightGunFlasher]
 
         self.lampList = [ [self.game.lamps.leftQuickdraw],
                           [self.game.lamps.topRightQuickdraw,self.game.lamps.bottomRightQuickdraw],
@@ -398,6 +399,10 @@ class Moonlight(ep.EP_Mode):
         # score 3 mil
         self.moonlightTotal += 3000000
         self.game.increase_tracking('moonlightTotal',3000000)
+        # flash a gun
+        self.guns[0].pulse(30)
+        # flip them so the next hit flashes the other one
+        self.guns.reverse()
         # show a random banner display
         if display:
             boom = random.choice(self.booms)

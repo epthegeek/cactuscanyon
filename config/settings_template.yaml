@@ -151,6 +151,10 @@ Gameplay (Feature):
     options: [1,6]
     increments: 1
     default: 3
+  'Moonlight Mins to Midnight':
+    options: [1,15]
+    increments: 1
+    default: 3
   'Mine Opening Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
