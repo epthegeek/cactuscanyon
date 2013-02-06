@@ -83,6 +83,8 @@ class GoldMine(ep.EP_Mode):
                 self.game.base.busy = True
                 self.game.base.queued += 1
                 self.end_multiball()
+        else:
+            pass
 
     ### switches
     def sw_leftLoopTop_active(self,sw):
@@ -211,6 +213,8 @@ class GoldMine(ep.EP_Mode):
         animLayer.add_frame_listener(43,self.game.sound.play,param=self.game.assets.sfx_smashingWood)
         # turn it on
         self.layer = animLayer
+        # start the lampshow
+        self.game.lampctrl.play_show(self.game.assets.lamp_gmStart, repeat=False,callback=self.lamp_update)
         # when the animation is over go to the next step
         self.delay(delay=myWait,handler=self.intro_banner)
 
