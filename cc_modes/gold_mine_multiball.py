@@ -73,6 +73,9 @@ class GoldMine(ep.EP_Mode):
                 self.restartFlag = True
                 self.restarted = True
                 self.cancel_delayed("Display")
+                # drop the bad guys in case there are bandits up
+                if self.bandits:
+                    self.end_bandits()
                 self.game.sound.play_music(self.game.assets.music_tensePiano1,loops=-1)
                 self.clear_layer()
                 self.lamp_update()
@@ -378,7 +381,7 @@ class GoldMine(ep.EP_Mode):
             self.game.base.priority_quote(self.game.assets.quote_multiball)
             self.get_going()
 
-        elif self.game.show_tracking('motherlodeLit'):
+        elif self.game.show_tracking('motherlodeLit') and not self.bandits:
             # if motherlode is lit, collect it on the first multiball, otherwise divert to the bandits
             if self.game.show_tracking('goldMineStarted') >= 2:
                 self.bandits = True
@@ -478,7 +481,7 @@ class GoldMine(ep.EP_Mode):
     def bandit_timer(self):
         self.banditTimer -= 1
         # if we get to zero, player lost
-        if self.banditTimer == 0:
+        if self.banditTimer <= 0:
             self.end_bandits(False)
         # if we're not at zero yet, loop back around
         else:
@@ -490,7 +493,7 @@ class GoldMine(ep.EP_Mode):
         # play a hit sound
         self.game.sound.play(self.game.assets.sfx_quickdrawHit)
         # if they're all down, end with a win
-        if self.banditsUp == 0:
+        if self.banditsUp <= 0:
             self.end_bandits()
 
     def end_bandits(self,win=True):
