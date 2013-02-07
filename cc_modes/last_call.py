@@ -284,9 +284,15 @@ class LastCall(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[self.backdrop,textLayer,introLayer])
         self.layer = combined
         # kick off the music
-        self.delay("Operational",delay=myWait,handler=self.music_on,param=self.game.assets.music_lastCall)
+        self.delay("Operational", delay=myWait, handler=self.start_music)
         # kick off the player start
         self.delay("Operational",delay=myWait,handler=self.start)
+
+    def start_music(self):
+        # play the intro
+        duration = self.game.sound.play(self.game.assets.music_lastCallIntro)
+        # delay the loop start
+        self.delay("Operational", delay=duration, handler=self.music_on, param=self.game.assets.music_lastCall)
 
     def start(self):
         # set the starting flag for the double flipper start
@@ -353,7 +359,11 @@ class LastCall(ep.EP_Mode):
         # play a cheer
         self.game.sound.play(self.game.assets.sfx_cheers)
         # stop the music
-        self.game.sound.play_music(self.game.assets.music_lastCallEnd,loops=1)
+        #self.game.sound.play_music(self.game.assets.music_lastCallEnd,loops=1)
+        self.game.sound.fadeout_music(4000)
+        # new line to reset the volume after fade
+        self.delay("Fade",delay=4.5,handler=self.game.interrupter.reset_volume)
+
         # show the final score display
         textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("LAST CALL TOTAL:")
         totalscore = self.game.show_tracking('lastCallTotal')

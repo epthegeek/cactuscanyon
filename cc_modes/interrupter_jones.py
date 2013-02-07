@@ -124,9 +124,9 @@ class Interrupter(ep.EP_Mode):
             print "Playing Closing Song"
             self.delay(delay=duration+1,handler=self.music_on,param=self.game.assets.music_goldmineMultiball)
             # and set a delay to fade it out after 2 minutes
-            self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music)
+            self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music,param=2000)
             # new line to reset the volume after fade because it may affect new game
-            self.delay("Attract Fade",delay=60.5,handler=self.reset_volume)
+            self.delay("Attract Fade",delay=62.5,handler=self.reset_volume)
         # set a 2 second delay to allow the start button to work again
         print "Setting delay for start button"
         self.delay(delay=duration+2,handler=self.enable_start)
