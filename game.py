@@ -116,7 +116,6 @@ class CCGame(game.BasicGame):
                         self.lamps.gi02,
                         self.lamps.gi03]
         self.squelched = False
-        self.previousVolume = 0
         # polly mode variable
         self.peril = False
         # status display ok ornot
@@ -137,6 +136,7 @@ class CCGame(game.BasicGame):
         volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
         print "Setting initial volume: " + str(volume_to_set)
         self.sound.set_volume(volume_to_set)
+        self.previousVolume = volume_to_set
 
         self.immediateRestart = "Enabled" == self.user_settings['Gameplay (Feature)']['Immediate Restart After Game']
 

@@ -136,7 +136,7 @@ class Interrupter(ep.EP_Mode):
         self.game.endBusy = False
 
     def reset_volume(self):
-        self.game.sound.set_volume(self.game.user_settings['Sound']['Initial volume'])
+        self.game.sound.set_volume(self.game.user_settings['Sound']['Initial volume'] / 10)
 
     def showdown_hit(self,points):
         pointString = ep.format_score(points)

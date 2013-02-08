@@ -51,6 +51,8 @@ class LastCall(ep.EP_Mode):
         self.infoLayer = dmd.ScriptedLayer(128,32,[{'seconds':2,'layer':infoLine1},{'seconds':2,'layer':infoLine2},{'seconds':2,'layer':infoLine3}])
         self.infoLayer.composite_op = "blacksrc"
         self.double = False
+        # turn on the GI in case of a 3rd ball tilt
+        self.game.gi_control("ON")
 
     def ball_drained(self):
         # if we get down to one ball or less
