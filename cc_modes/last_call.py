@@ -364,7 +364,7 @@ class LastCall(ep.EP_Mode):
         #self.game.sound.play_music(self.game.assets.music_lastCallEnd,loops=1)
         self.game.sound.fadeout_music(4000)
         # new line to reset the volume after fade
-        self.delay("Fade",delay=4.5,handler=self.game.interrupter.reset_volume)
+        self.delay("Fade",delay=6,handler=self.game.interrupter.reset_volume)
 
         # show the final score display
         textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("LAST CALL TOTAL:")

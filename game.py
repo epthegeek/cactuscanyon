@@ -133,10 +133,10 @@ class CCGame(game.BasicGame):
         # set the volume per the settings
         self.sound.music_offset = self.user_settings['Sound']['Music volume offset']
         print "Setting initial offset: " + str(self.sound.music_offset)
-        volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
-        print "Setting initial volume: " + str(volume_to_set)
-        self.sound.set_volume(volume_to_set)
-        self.previousVolume = volume_to_set
+        self.volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
+        print "Setting initial volume: " + str(self.volume_to_set)
+        self.sound.set_volume(self.volume_to_set)
+        self.previousVolume = self.volume_to_set
 
         self.immediateRestart = "Enabled" == self.user_settings['Gameplay (Feature)']['Immediate Restart After Game']
 

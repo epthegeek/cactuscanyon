@@ -107,7 +107,6 @@ class Match(ep.EP_Mode):
 
     def award_match(self):
         self.lastCall = []
-        self.selection = self.playerDigits[0]
         # check the scores to see if anybody won
         for i in range(len(self.game.players)):
             if str(self.playerDigits[i]) == self.selection:
