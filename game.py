@@ -514,9 +514,11 @@ class CCGame(game.BasicGame):
             else:
                 self.trough.num_balls_in_play += 1
 
-            # and load the skill shot
-            if self.skill_shot not in self.modes:
-                self.modes.add(self.skill_shot)
+            # if skillshot is already running for some lame reason, remove it
+            if self.skill_shot in self.modes:
+                self.modes.remove(self.skill_shot)
+            # add teh skill shot.
+            self.modes.add(self.skill_shot)
             # and all the other modes
             print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
             self.base.load_modes()
