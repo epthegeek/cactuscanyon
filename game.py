@@ -515,7 +515,8 @@ class CCGame(game.BasicGame):
                 self.trough.num_balls_in_play += 1
 
             # and load the skill shot
-            self.modes.add(self.skill_shot)
+            if self.skill_shot not in self.modes:
+                self.modes.add(self.skill_shot)
             # and all the other modes
             print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
             self.base.load_modes()
