@@ -366,6 +366,8 @@ class Trough(ep.EP_Mode):
         if (self.ball_save_timer >= 1):
             self.delay(name='ball_save_timer', event_type=None, delay=1, handler=self.ball_save_countdown)
         else:
+            if self.game.current_player().extra_balls > 0:
+                self.game.lamps.shootAgain.enable()
             self.disable_ball_save()
 
     def ball_save_is_active(self):
