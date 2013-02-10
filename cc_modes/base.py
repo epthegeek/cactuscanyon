@@ -1,4 +1,5 @@
 ##   ____           _                ____
+##   ____           _                ____
 ##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
 ## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
 ## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
@@ -149,6 +150,7 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.lamps.startButton.disable()
             self.game.interrupter.add_player()
         elif self.game.match in self.game.modes and self.game.immediateRestart:
+            self.game.sound.stop_music()
             self.game.match.unload()
             self.game.game_reset()
         else:
