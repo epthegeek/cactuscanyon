@@ -129,7 +129,7 @@ class SavePolly(ep.EP_Mode):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
-        if self.running:
+        if self.running and not self.won:
             # score points
             self.game.score(self.shotValue)
             # center ramp pauses the train
@@ -140,7 +140,7 @@ class SavePolly(ep.EP_Mode):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
-        if self.running:
+        if self.running and not self.won:
             # score points
             self.game.score(self.shotValue)
             self.game.sound.play(self.game.assets.sfx_trainWhistle)
@@ -150,7 +150,7 @@ class SavePolly(ep.EP_Mode):
         # kill the mode timer until x
         self.cancel_delayed("Mode Timer")
         self.cancel_delayed("Pause Timer")
-        if self.running:
+        if self.running and not self.won:
             # score points
             self.game.score(self.shotValue)
             self.game.sound.play(self.game.assets.sfx_trainWhistle)
@@ -346,6 +346,8 @@ class SavePolly(ep.EP_Mode):
 
     # success
     def polly_saved(self):
+        # turn off the polly indicator
+        self.game.peril = False
         self.won = True
         self.game.train.stop()
         # kill the lights on the three ramps
@@ -390,6 +392,8 @@ class SavePolly(ep.EP_Mode):
     def polly_died(self,step=1):
         print "OMG POLLY IS DEAD"
         if step == 1:
+            # turn off the polly indicator
+            self.game.peril = False
             self.finishing_up = True
             # stop the train
             self.game.train.stop()
@@ -452,8 +456,6 @@ class SavePolly(ep.EP_Mode):
         self.game.base.queued -= 1
         # turn the music back on
         self.music_on(self.game.assets.music_mainTheme,mySlice=2)
-        # turn off the polly indicator
-        self.game.peril = False
         # remove the switch blocker
         self.game.switch_blocker('remove',self.myID)
         self.finishing_up = False

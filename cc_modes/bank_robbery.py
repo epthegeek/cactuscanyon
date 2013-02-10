@@ -330,6 +330,7 @@ class BankRobbery(ep.EP_Mode):
 
     # success
     def polly_saved(self):
+        self.game.peril = False
         self.game.score(750000)
         self.cancel_delayed("Mode Timer")
         # stop the music
@@ -342,6 +343,7 @@ class BankRobbery(ep.EP_Mode):
 
     # fail
     def polly_died(self):
+        self.game.peril = False
         self.cancel_delayed("Mode Timer")
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
         textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
@@ -461,7 +463,6 @@ class BankRobbery(ep.EP_Mode):
         self.game.base.queued -= 1
         # turn the music back on
         self.music_on(self.game.assets.music_mainTheme,mySlice=3)
-        self.game.peril = False
         # remove the switch blocker
         self.game.switch_blocker('remove',self.myID)
         # unload the mode
