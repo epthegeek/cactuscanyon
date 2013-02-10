@@ -449,6 +449,8 @@ class CCGame(game.BasicGame):
         # Add the first player
         self.add_player()
         self.order_mobs()
+        # reset the music volume
+        self.sound.set_volume(self.volume_to_set)
         # load the base game mode
         self.modes.add(self.base)
         # Start the ball.  This includes ejecting a ball from the trough.
