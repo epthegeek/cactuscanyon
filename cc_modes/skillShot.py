@@ -47,6 +47,7 @@ class SkillShot(ep.EP_Mode):
                                 self.game.lamps.centerRampStopTrain,
                                 self.game.lamps.centerRampSavePolly,
                                 self.game.lamps.centerRampJackpot]
+        # there is no quote for zero or 5
         self.starQuotes = [False,
                            self.game.assets.quote_1light,
                            self.game.assets.quote_2lights,
@@ -72,7 +73,6 @@ class SkillShot(ep.EP_Mode):
     def mode_started(self):
         # reset the super just in case
         self.super = False
-        #print "THOOPER ITH FAHLTH"
         # call the welcome quote - and start the theme song after on the first ball
         duration = self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1 and not self.game.show_tracking('greeted'):
@@ -81,21 +81,30 @@ class SkillShot(ep.EP_Mode):
             # play a random voice call from a pre-set collection
             self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_welcomes)
         else:
-            # count the number of un-lit star points
-            points = self.game.show_tracking('starStatus')
-            left = 0
-            for value in points:
-                if not value:
-                    left += 1
-            print "Unlit badge points: " + str(left)
-            # set the quote based on left
-            theQuote = self.starQuotes[left]
-            # play a quote based on how many points are left
-            if theQuote:
-                self.delay(delay=0.3,handler=self.game.base.play_quote,param=theQuote)
+            # on any ball other than ball one, announce which players turn it is if there is more than one
+            if len(self.game.players) > 1:
+                playerQuotes = [self.game.assets.quote_playerOne, self.game.assets.quote_playerTwo, self.game.assets.quote_playerThree, self.game.assets.quote_playerFour]
+                myDuration = self.game.sound.play(playerQuotes[self.game.current_player_index])
+                self.delay(delay=myDuration+0.2, handler=self.star_callout)
+            else:
+                self.star_callout()
         # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
         self.delay(delay=duration,handler=self.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
+
+    def star_callout(self):
+        # count the number of un-lit star points
+        points = self.game.show_tracking('starStatus')
+        left = 0
+        for value in points:
+            if not value:
+                left += 1
+        print "Unlit badge points: " + str(left)
+        # set the quote based on left
+        theQuote = self.starQuotes[left]
+        # play a quote based on how many points are left
+        if theQuote:
+            self.delay(delay=0.3,handler=self.game.base.play_quote,param=theQuote)
 
     def generate_prizes(self):
         print "SKILLSHOT GENERATE PRIZES"

@@ -862,6 +862,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_pollyHelp, self.quotes_path + "802-polly-help.wav")
         self.quote_pollyThankYou = 'quote_pollyThankYou'
         self.game.sound.register_sound(self.quote_pollyThankYou,self.quotes_path + "835-polly-thank-you.wav")
+        self.quote_playerOne = 'quote_playerOne'
+        self.game.sound.register_sound(self.quote_playerOne, self.quotes_path + "855-polly-player-one.wav")
         self.quote_playerTwo = 'quote_playerTwo'
         self.game.sound.register_sound(self.quote_playerTwo, self.quotes_path + "856-polly-player-two.wav")
         self.quote_playerThree = 'quote_playerThree'

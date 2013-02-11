@@ -463,6 +463,8 @@ class CCGame(game.BasicGame):
         self.trough.balls_to_autoplunge = 0
         # run the start_ball from proc.game.BasicGame
         super(CCGame, self).start_ball()
+        if len(self.players) > 1:
+            self.interrupter.display_player_number()
 
     def create_player(self,name):
         # create an object wiht the Tracking Class - subclassed off game.Player
