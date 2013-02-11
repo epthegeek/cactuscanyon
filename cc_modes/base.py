@@ -150,7 +150,7 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.lamps.startButton.disable()
             self.game.interrupter.add_player()
         elif self.game.match in self.game.modes and self.game.immediateRestart:
-            self.game.sound.stop_music()
+            self.game.sound.stop(self.game.assets.sfx_ragtimePiano)
             self.game.match.unload()
             self.game.game_reset()
         else:
