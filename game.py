@@ -463,7 +463,7 @@ class CCGame(game.BasicGame):
         self.trough.balls_to_autoplunge = 0
         # run the start_ball from proc.game.BasicGame
         super(CCGame, self).start_ball()
-        if len(self.players) > 1:
+        if len(self.players) > 1 and not self.interrupter.hush:
             self.interrupter.display_player_number()
 
     def create_player(self,name):

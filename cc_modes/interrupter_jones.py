@@ -31,6 +31,7 @@ class Interrupter(ep.EP_Mode):
         self.statusDisplay = "Off"
         self.page = 0
         self.playing = False
+        self.hush = False
 
     def display_player_number(self,idle=False):
         # if the skillshot display is busy, we don't trample on it
@@ -323,6 +324,8 @@ class Interrupter(ep.EP_Mode):
             animLayer.opaque = True
             animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lowBoom)
             #animLayer.add_frame_listener(4,self.game.trough.launch_balls,param=1)
+            # this flag tells the player intro quote to not play
+            self.hush = True
             animLayer.add_frame_listener(4,self.game.ball_starting)
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.shoot_again,param=3)

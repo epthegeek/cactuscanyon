@@ -82,13 +82,15 @@ class SkillShot(ep.EP_Mode):
             self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_welcomes)
         else:
             # on any ball other than ball one, announce which players turn it is if there is more than one
-            if len(self.game.players) > 1:
+            if len(self.game.players) > 1 and not self.game.interrupter.hush:
                 playerQuotes = [self.game.assets.quote_playerOne, self.game.assets.quote_playerTwo, self.game.assets.quote_playerThree, self.game.assets.quote_playerFour]
                 myDuration = self.game.sound.play(playerQuotes[self.game.current_player_index])
                 self.delay(delay=myDuration+0.2, handler=self.star_callout)
             else:
                 self.star_callout()
-        # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
+            if self.game.interrupter.hush:
+                self.game.interrupter.hush = False
+            # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
         self.delay(delay=duration,handler=self.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
 
