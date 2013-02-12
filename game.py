@@ -450,6 +450,7 @@ class CCGame(game.BasicGame):
         self.add_player()
         self.order_mobs()
         # reset the music volume
+        self.volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
         self.sound.set_volume(self.volume_to_set)
         # load the base game mode
         self.modes.add(self.base)
