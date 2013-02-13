@@ -100,6 +100,7 @@ class ServiceMode(ServiceModeList):
     def __init__(self, game, priority, font, extra_tests=[]):
         super(ServiceMode, self).__init__(game, priority,font)
         self.name = 'Service Mode'
+        self.instruction_layer.set_text("Revision: " + self.game.revision)
         self.tests = Tests(self.game, self.priority+1, font, extra_tests)
         self.items = [self.tests]
         if len(self.game.settings) > 0:

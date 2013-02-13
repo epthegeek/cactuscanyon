@@ -70,6 +70,7 @@ class CCGame(game.BasicGame):
         super(CCGame, self).__init__(machineType)
         self.load_config('cc_machine.yaml')
 
+
     def setup(self):
         # Instead of resetting everything here as well as when a user
         # initiated reset occurs, do everything in self.reset() and call it
@@ -90,6 +91,9 @@ class CCGame(game.BasicGame):
         self.players = []
         self.current_player_index = 0
         self.modes.modes = []
+
+        # software version number
+        self.revision = "2013.02.13"
 
         # basic game reset stuff, copied in
 
