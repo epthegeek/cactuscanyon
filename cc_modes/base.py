@@ -129,6 +129,7 @@ class BaseGameMode(ep.EP_Mode):
                 self.delay(delay=1,handler=self.check_bonus)
             else:
                 # unload the modes
+                self.wipe_delays()
                 self.remove_modes()
                 self.layer = None
                 self.game.ball_ended()
@@ -802,6 +803,7 @@ class BaseGameMode(ep.EP_Mode):
     def do_bonus(self):
         # unload the modes
         self.remove_modes()
+        self.wipe_delays()
 
         # do the bonus right up front so it's on the score
         bonus_points = self.game.show_tracking('bonus') * self.game.show_tracking('bonusX')
@@ -928,7 +930,16 @@ class BaseGameMode(ep.EP_Mode):
                 if self.game.marshall_multiball not in self.game.modes:
                     self.game.modes.add(self.game.marshall_multiball)
             else:
-                print "Game is busy - Marshall Kickoff Passing"
+                print "Game is busy - Marshall Kickoff Queued"
+                self.wait_for_stackLevel(self.kickoff_marshall)
+
+    def wait_for_stackLevel(self,callback):
+        # if stack level is clear, run that sucker
+        if True not in self.game.show_tracking('stackLevel'):
+            callback()
+        # if not, loop back
+        else:
+            self.delay("wait for", delay=1,handler=self.wait_for_stackLevel,param=callback)
 
     def sw_phantomSwitch_active(self,sw):
         # on a first press, end multiball if we're above 1 ball in play

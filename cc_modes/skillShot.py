@@ -90,7 +90,7 @@ class SkillShot(ep.EP_Mode):
                 self.star_callout()
             if self.game.interrupter.hush:
                 self.game.interrupter.hush = False
-            # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
+        # fire up the shooter lane groove - maybe should tie this to a ball on the shooter lane. meh.
         self.delay(delay=duration,handler=self.music_on,param=self.game.assets.music_shooterLaneGroove)
         self.generate_prizes()
 
