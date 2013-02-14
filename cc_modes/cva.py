@@ -375,7 +375,8 @@ class CvA(ep.EP_Mode):
             duration = self.game.sound.play(self.game.assets.music_cvaIntro)
             # main loop
             self.delay(delay=duration,handler=self.music_on,param=self.game.assets.music_cvaLoop)
-            self.delay(delay=duration,handler=self.gi_bloom,param=4.35)
+            self.delay(delay=duration,handler=self.gi_lampshow)
+            #self.delay(delay=duration,handler=self.gi_bloom,param=4.35)
             self.delay(delay=duration,handler=self.intro,param=3)
             # load a blank frame to fade in from
             self.blankLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
@@ -799,6 +800,9 @@ class CvA(ep.EP_Mode):
         self.cancel_delayed("Aliens")
         # and the display delay
         self.cancel_delayed("Display")
+        # stop the lampshow and end the delay if any for the next one
+        self.game.lampctrl.stop_show()
+        self.cancel_delayed("Lampshow")
         # stop the music
         self.stop_music()
         # kill the drop targets
@@ -909,3 +913,9 @@ class CvA(ep.EP_Mode):
         self.game.lamps.gi01.schedule(0x00000FFF,cycle_seconds=1)
         self.game.lamps.gi02.schedule(0x00000FFF,cycle_seconds=1)
         self.game.lamps.gi03.schedule(0x00000FFF,cycle_seconds=1)
+
+    def gi_lampshow(self):
+        # new lampshow alternate for the GI
+        self.game.lampctrl.play_show(self.game.assets.lamp_cva, repeat=False)
+        # loop back at the end of the song and start over
+        self.delay("Lampshow",delay=61.12,handler=self.gi_lampshow)
