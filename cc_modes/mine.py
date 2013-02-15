@@ -101,7 +101,10 @@ class Mine(ep.EP_Mode):
             self.game.cva.intro(entry = "mine")
             return
         # if high noon is ready, we do that - as long as no mode at all is running
-        if self.game.show_tracking('highNoonStatus') == "READY" and True not in stackLevel:
+        if self.game.show_tracking('highNoonStatus') == "READY" and True not in stackLevel[1:]:
+            # if quickdraw is running, kill that
+            if self.game.quickdraw.running:
+                self.game.quickdraw.lost(self.game.quickdraw.target)
             self.game.modes.add(self.game.high_noon)
             print "STARTING HIGH NOON"
             self.game.high_noon.start_highNoon()
