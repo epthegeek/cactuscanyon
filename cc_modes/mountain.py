@@ -80,7 +80,7 @@ class Mountain(ep.EP_Mode):
             print "MOUNTAIN BUSY, PASSING"
             return
         # flash the light and then kick out if there's a ball in there
-        if self.game.switches.minePopper.is_active():
+        if self.game.switches.minePopper.is_active() and not self.game.fakePinProc:
             print "MINE EJECTING"
             self.game.coils.mineFlasher.schedule(0x0000002B,cycle_seconds=1)
             self.delay(delay=0.06,handler=self.kick)

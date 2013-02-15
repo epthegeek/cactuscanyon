@@ -19,13 +19,15 @@ __all__ = [
     'ep_transition',
     'ep_mode',
     'ep_showcase',
-    'ep_service'
+    'ep_service',
+    'ep_lamps'
 ]
 from ep_layers import *
 from ep_transition import *
 from ep_mode import *
 from ep_showcase import *
 from ep_service import *
+from ep_lamps import *
 
 import locale
 

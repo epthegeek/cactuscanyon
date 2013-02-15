@@ -93,13 +93,14 @@ class CCGame(game.BasicGame):
         self.modes.modes = []
 
         # software version number
-        self.revision = "2013.02.13"
+        self.revision = "2013.02.14"
 
         # basic game reset stuff, copied in
 
         ## init the sound
         self.sound = sound.SoundController(self)
-        self.lampctrl = lamps.LampController(self)
+        self.lampctrl = ep.EP_LampController(self)
+        self.GI_lampctrl = ep.EP_LampControllerGI(self)
         self.assets = Assets(self)
         self.current_music = self.assets.music_mainTheme
 

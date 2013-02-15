@@ -916,6 +916,6 @@ class CvA(ep.EP_Mode):
 
     def gi_lampshow(self):
         # new lampshow alternate for the GI
-        self.game.lampctrl.play_show(self.game.assets.lamp_cva, repeat=False)
+        self.game.GI_lampctrl.play_show(self.game.assets.lamp_cva, repeat=False)
         # loop back at the end of the song and start over
         self.delay("Lampshow",delay=61.12,handler=self.gi_lampshow)

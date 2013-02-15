@@ -1044,6 +1044,9 @@ class Assets():
         for lampshow in lampshows:
             self.game.lampctrl.register_show(lampshow,self.lampshows_path + lampshow + ".lampshow")
 
+        self.lamp_cva = "cva"
+        self.game.GI_lampctrl.register_show("cva",self.lampshows_path + "cva.lampshow")
+
         # experimental DMD pre-loading
         self.dmd_blank = dmd.Animation().load(self.dmd_path +'blank.dmd')
         self.dmd_ballyBanner = dmd.Animation().load(self.dmd_path +'bally-banner.dmd')
