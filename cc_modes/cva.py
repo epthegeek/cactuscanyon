@@ -800,8 +800,8 @@ class CvA(ep.EP_Mode):
         self.cancel_delayed("Aliens")
         # and the display delay
         self.cancel_delayed("Display")
-        # stop the lampshow and end the delay if any for the next one
-        self.game.lampctrl.stop_show()
+        # stop the GI lampshow and end the delay if any for the next one
+        self.game.GI_lampctrl.stop_show()
         self.cancel_delayed("Lampshow")
         # stop the music
         self.stop_music()
