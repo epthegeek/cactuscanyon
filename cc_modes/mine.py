@@ -237,7 +237,7 @@ class Mine(ep.EP_Mode):
         # then we check for zeros
         if self.hitsToLightLock[myBallsLockedTotal] == 0:
             ## if two balls are now locked, light multiball
-            if myBallsLocked == 2:
+            if myBallsLocked >= 2:
                 self.game.set_tracking('mineStatus', "READY")
             else:
                 self.game.set_tracking('mineStatus',"LOCK")
