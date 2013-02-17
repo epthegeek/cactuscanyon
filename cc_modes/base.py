@@ -64,6 +64,9 @@ class BaseGameMode(ep.EP_Mode):
         self.game.interrupter.cancel_delayed("Attract Fade")
         # and update the lamps
         self.lamp_update()
+        # set the jet killed flag
+        self.jetKilled = False
+        self.jetCount = 0
 
     def mode_stopped(self):
         # Ensure flippers are disabled
@@ -508,7 +511,16 @@ class BaseGameMode(ep.EP_Mode):
         self.bumper_hit('right')
 
     def sw_bottomJetBumper_active(self,sw):
-        self.bumper_hit('bottom')
+        # count the hit
+        self.jetCount += 1
+        # if we're over six and not not killed, kill the jet
+        if self.jetCount > 3 and not self.jetKilled:
+            print "Max bumps, shut er down!"
+            self.jetKilled = True
+            self.game.enable_bottom_bumper(False)
+        # otherwise, register the hit
+        else:
+            self.bumper_hit('bottom')
 
     def bumper_hit(self,bumper):
         # if combos are on, award grace

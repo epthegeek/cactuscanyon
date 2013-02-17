@@ -93,7 +93,7 @@ class CCGame(game.BasicGame):
         self.modes.modes = []
 
         # software version number
-        self.revision = "2013.02.14"
+        self.revision = "2013.02.17"
 
         # basic game reset stuff, copied in
 
@@ -931,6 +931,21 @@ class CCGame(game.BasicGame):
                 hold_coil.disable()
 
         self.enable_bumpers(enable)
+
+    def enable_bottom_bumper(self, enable):
+        # For toggling off the bottom jet bumper upon request
+        switch_num = self.switches['bottomJetBumper'].number
+        coil = self.coils['bottomJetBumper']
+
+        drivers = []
+        if enable:
+            print "Enabling bottom bumper"
+            drivers += [pinproc.driver_state_pulse(coil.state(), coil.default_pulse_time)]
+        self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':True}, drivers, False)
+
+        if not enable:
+            print "Disabling bottom bumper"
+            coil.disable()
 
     ## GI LAMPS
 

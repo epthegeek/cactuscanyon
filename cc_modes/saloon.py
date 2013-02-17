@@ -153,6 +153,14 @@ class Saloon(ep.EP_Mode):
             self.game.bart.animate(2)
         # score some points
         self.game.score_with_bonus(2530)
+        # reset the jetcount
+        self.game.base.jetCount = 0
+        # if the bottom jet was killed
+        if self.game.base.jetKilled == True:
+            # turn the bumper back on
+            self.game.enable_bottom_bumper(True)
+            # and reset the flag
+            self.game.base.jetKilled = False
         ## -- set the last switch hit --
         ep.last_switch = "jetBumpersExit"
 
