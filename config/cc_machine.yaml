@@ -438,7 +438,6 @@ PRLamps:
         tags: Playfield
     startButton:
         number: L88
-        tags: Playfield
     gi01:
         number: G01
     gi02:

@@ -98,7 +98,7 @@ class Attract(ep.EP_Mode):
         self.layers.append({'layer':gameOver,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
 
         # Blink the start button to notify player about starting a game.
-        self.game.lamps.startButton.schedule(schedule=0x00ff00ff, cycle_seconds=0, now=False)
+        self.game.lamps.startButton.schedule(schedule=0x00ff00ff)
 
         # Turn on the GIs
         self.game.gi_control("ON")
