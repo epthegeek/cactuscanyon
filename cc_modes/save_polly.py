@@ -412,8 +412,13 @@ class SavePolly(ep.EP_Mode):
             # if not, just move on to polly finished
             else:
                 self.stop_music(slice=3)
-                self.clear_layer()
-                self.polly_finished()
+                backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
+                textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
+                textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
+                combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+                self.layer = combined
+                self.game.sound.play(self.game.assets.sfx_glumRiff)
+                self.delay("Operational",delay=1.5,handler=self.polly_finished)
         if step == 2:
             self.stop_music(slice=3)
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
