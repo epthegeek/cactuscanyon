@@ -195,6 +195,8 @@ class DrunkMultiball(ep.EP_Mode):
         self.starting = False
         # turn off the saloon busy flag - should process check bounty and kick the ball out
         self.game.saloon.busy = False
+        # flash the beer mug
+        self.game.lamps.beerMug.schedule(0xFF00FF00)
         # eject more ball
         if self.game.trough.num_balls_in_play < 3:
             thisMany = 3 - self.game.trough.num_balls_in_play
@@ -318,6 +320,8 @@ class DrunkMultiball(ep.EP_Mode):
         self.running = False
         self.wipe_delays()
         self.clear_layer()
+        # turn off the beer mug
+        self.game.lamps.beerMug.disable()
         # update the tracking
         self.game.set_tracking('drunkMultiballStatus', "OPEN")
         # reset the flippers

@@ -96,3 +96,5 @@ coil:backLeftFlasher     |     .         .         .
 coil:middleRightFlasher  |       .         .         .
 coil:rightGunFlasher     |         .         .         .
 coil:leftGunFlasher      |           .         .         .
+# beer mug optional
+lamp:beerMug             | ..  ..  ..  ..  ..  ..  ..  ..

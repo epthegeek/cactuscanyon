@@ -436,6 +436,9 @@ PRLamps:
     badGuyL1:
         number: L84
         tags: Playfield
+    beerMug:
+        number: L85
+        tags: Playfield
     startButton:
         number: L88
     gi01:
