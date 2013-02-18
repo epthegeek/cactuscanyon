@@ -243,7 +243,7 @@ Gameplay (Feature):
     default: 'Easy'
   'Motherlode Badge Difficulty':
     options: ['Easy','Normal']
-    default: 'Normal'
+    default: 'Easy'
   'Gold Mine Multiball Restart':
     options: ['Yes','No']
     default: 'Yes'
@@ -266,7 +266,7 @@ Gameplay (Feature):
     default: 'Easy'
   'Polly Dies Animation':
     options: ['Show','Hide']
-    default: 'Show'
+    default: 'Hide'
   'Drunk Multiball Intro Skip':
     options: ['Yes','No']
     default: 'No'

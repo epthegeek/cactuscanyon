@@ -187,8 +187,8 @@ class SavePolly(ep.EP_Mode):
             shotsLine2 = dmd.TextLayer(34, 17, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
             # group layer of the award lines
             textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
-            awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
-            page1 = dmd.GroupedLayer(128,32,[awardLine1,self.awardLine2])
+            self.prog_awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+            page1 = dmd.GroupedLayer(128,32,[self.prog_awardLine1,self.awardLine2])
             page1.composite_op = "blacksrc"
             script.append({"seconds":2,"layer":page1})
             # group layer of the shot value info lines
@@ -327,6 +327,8 @@ class SavePolly(ep.EP_Mode):
         self.game.train.stop()
         # add the sucessful shot
         self.shotsSoFar += 1
+        textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
+        self.prog_awardLine1.set_text(textString2)
         if self.shotsSoFar >= self.shotsToWin:
             self.polly_saved()
         else:
