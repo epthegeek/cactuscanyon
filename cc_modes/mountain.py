@@ -92,9 +92,9 @@ class Mountain(ep.EP_Mode):
         self.game.coils.mineMotor.enable()
         self.inMotion = True
 
-    def reset_toy(self):
+    def reset_toy(self,force=False):
         print "Mountain Reset Called"
-        if not self.game.switches.mineHome.is_active():
+        if not self.game.switches.mineHome.is_active() or force:
             self.game.coils.mineMotor.enable()
             self.mineReset = True
             self.inMotion = True

@@ -100,7 +100,7 @@ class BallSearch(ep.EP_Mode):
         self.delay(name='start_special_handler_modes', event_type=None, delay=delay, handler=self.start_special_handler_modes)
 
         # home the mountain
-        self.game.mountain.reset_toy()
+        self.game.mountain.reset_toy(True)
         # drop the gunfight posts
         self.game.coils.leftGunFightPost.disable()
         self.game.coils.rightGunFightPost.disable()
