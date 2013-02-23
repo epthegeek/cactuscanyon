@@ -93,7 +93,7 @@ class CCGame(game.BasicGame):
         self.modes.modes = []
 
         # software version number
-        self.revision = "2013.02.17"
+        self.revision = "2013.02.23"
 
         # basic game reset stuff, copied in
 
