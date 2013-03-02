@@ -93,7 +93,7 @@ class CCGame(game.BasicGame):
         self.modes.modes = []
 
         # software version number
-        self.revision = "2013.02.23"
+        self.revision = "2013.03.02"
 
         # basic game reset stuff, copied in
 
@@ -526,7 +526,7 @@ class CCGame(game.BasicGame):
 
             # if skillshot is already running for some lame reason, remove it
             if self.skill_shot in self.modes:
-                self.modes.remove(self.skill_shot)
+                self.skill_shot.unload()
             # add teh skill shot.
             self.modes.add(self.skill_shot)
             # and all the other modes
@@ -546,7 +546,7 @@ class CCGame(game.BasicGame):
             self.interrupter.ball_saved()
             # kill the skillshot if it's running
             if self.skill_shot in self.modes:
-                self.modes.remove(self.skill_shot)
+                self.skill_shot.unload()
             # if the ball was saved, we need a new one
             #self.trough.launch_balls(1)
 
