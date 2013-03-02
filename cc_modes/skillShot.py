@@ -505,6 +505,7 @@ class SkillShot(ep.EP_Mode):
         # call the lamp update so the prize is shown properly
         self.lamp_update()
 
+        print "SkillShot Awarded: " + awardStringTop + " " + awardStringBottom
         self.award_display(awardStringTop,awardStringBottom)
 
     def award_display(self,awardStringTop,awardStringBottom,start=True):

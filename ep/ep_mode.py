@@ -351,6 +351,7 @@ class EP_Mode(object):
 
     # simple mode shutdown
     def unload(self):
+        print "Unloading: " + self.myID
         self.wipe_delays()
         self.game.modes.remove(self)
 
