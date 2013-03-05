@@ -19,7 +19,7 @@
 import ep
 
 class Mountain(ep.EP_Mode):
-    """Cactus Canyon Interrupter Jones"""
+    """Cactus Canyon Mine Mountain Toy"""
     def __init__(self, game, priority):
         super(Mountain, self).__init__(game, priority)
         self.mineReset = False
@@ -39,18 +39,23 @@ class Mountain(ep.EP_Mode):
             self.game.coils.mineFlasher.disable()
 
     def mode_started(self):
-        # home the train
+        # home the mine
         if not self.game.switches.mineHome.is_active():
             self.reset_toy()
 
     def stop(self):
+        print "Mine Stop Called"
         self.game.coils.mineMotor.disable()
         self.solidRun = False
         self.inMotion = False
 
     def move(self):
-        self.inMotion = True
-        self.game.coils.mineMotor.enable()
+        if not self.inMotion:
+            print "Mine Mountain Move called"
+            self.inMotion = True
+            self.game.coils.mineMotor.enable()
+        else:
+            print "Mountain move called - but already in motion"
 
     def sw_mineEncoder_active(self,sw):
         self.mineTicks += 1
@@ -60,7 +65,7 @@ class Mountain(ep.EP_Mode):
                 self.stop()
 
     def sw_mineHome_active(self,sw):
-        print "Mine Home Active, resetting ticks"
+        print "Mine Home Active, resetting ticks - Reset = " + str(self.mineReset)
         self.mineTicks = 0
         # if the switch is active and we're supposed to be resetting, then stop here
         if self.mineReset:
@@ -81,19 +86,21 @@ class Mountain(ep.EP_Mode):
             return
         # flash the light and then kick out if there's a ball in there
         if self.game.switches.minePopper.is_active() and not self.game.fakePinProc:
-            print "MINE EJECTING"
+            print "Mountain Ejecting wth Reset call"
             self.game.coils.mineFlasher.schedule(0x0000002B,cycle_seconds=1)
             self.delay(delay=0.06,handler=self.kick)
             # reset the mine
             self.reset_toy()
 
     def run(self):
-        self.solidRun = True
-        self.game.coils.mineMotor.enable()
-        self.inMotion = True
+        print "Mountain Solid Run Called"
+        if not self.inMotion:
+            self.inMotion = True
+            self.solidRun = True
+            self.game.coils.mineMotor.enable()
 
     def reset_toy(self,force=False):
-        print "Mountain Reset Called"
+        print "Mountain Reset Called - force = " + str(force)
         if not self.game.switches.mineHome.is_active() or force:
             self.game.coils.mineMotor.enable()
             self.mineReset = True

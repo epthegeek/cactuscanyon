@@ -40,7 +40,6 @@ class Interrupter(ep.EP_Mode):
             myNumber = ("ONE<","TWO*","THREE<","FOUR>")
             # get the current player
             p = self.game.current_player_index
-            print p
             # set up the text
             textString = "PLAYER> " + myNumber[p]
             textLayer = dmd.TextLayer(128/2, 7, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(textString)
