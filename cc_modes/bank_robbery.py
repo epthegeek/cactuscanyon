@@ -386,7 +386,7 @@ class BankRobbery(ep.EP_Mode):
         if step == 4:
             # saved banner goes here
             awardTextString = "POLLY SAVED"
-            awardScoreString = "750,000"
+            awardScoreString = str(ep.format_score(750000))
             # combine them
             completeFrame = self.build_display(awardTextString,awardScoreString)
             stackLevel = self.game.show_tracking('stackLevel')
@@ -413,7 +413,7 @@ class BankRobbery(ep.EP_Mode):
         # build a text line with that
         awardTextString = str(total) + " MORE TO GO"
         # build the display layer
-        banner = self.build_display(awardTextString,"250,000")
+        banner = self.build_display(awardTextString,str(ep.format_score(250000)))
         # activate it
         self.layer = banner
         # delay a return to in progress

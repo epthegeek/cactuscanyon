@@ -320,15 +320,15 @@ class Saloon(ep.EP_Mode):
             self.prizeHandler = self.game.badge.increase_rank
             self.prizeParam = False
         elif self.bountyPrize == 'points250k':
-            prizeText = "250,000"
+            prizeText = str(ep.format_score(250000))
             self.prizeHandler = self.game.score
             self.prizeParam = 250000
         elif self.bountyPrize == 'points500k':
-            prizeText = "500,000"
+            prizeText = str(ep.format_score(500000))
             self.prizeHandler = self.game.score
             self.prizeParam = 500000
         elif self.bountyPrize == 'points1Mil':
-            prizeText = "1,000,000"
+            prizeText = str(ep.format_score(1000000))
             self.prizeHandler = self.game.score
             self.prizeParam = 1000000
         elif self.bountyPrize == 'moveYourTrain':

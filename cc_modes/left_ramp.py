@@ -113,7 +113,7 @@ class LeftRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.show_award_text)
         elif stage == 2:
             self.awardString = "WATER FALL"
-            self.awardPoints = "150,000"
+            self.awardPoints = str(ep.format_score(150000))
             self.game.score_with_bonus(150000)
             self.game.base.play_quote(self.game.assets.quote_leftRamp2)
             # load the animation

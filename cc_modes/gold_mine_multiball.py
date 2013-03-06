@@ -291,9 +291,9 @@ class GoldMine(ep.EP_Mode):
             jackString = "TIME REMAINING: " + str(self.banditTimer)
         else:
             if self.game.drunk_multiball.running:
-                jackString = "JACKPOTS = 1,000,000"
+                jackString = "JACKPOTS = " + str(ep.format_score(1000000))
             else:
-                jackString = "JACKPOTS = 500,000"
+                jackString = "JACKPOTS = " + str(ep.format_score(500000))
         jackpotLine = dmd.TextLayer(128/2,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(jackString)
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,scoreLine,motherLine,jackpotLine])
         self.layer = combined
@@ -349,9 +349,9 @@ class GoldMine(ep.EP_Mode):
             awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
             awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
             awardTextTop.set_text("MULTIBALL JACKPOT")
-            bottomString = "500,000"
+            bottomString = str(ep.format_score(500000))
             if self.game.drunk_multiball.running:
-                bottomString = "1,000,000"
+                bottomString = str(ep.format_score(1000000))
             awardTextBottom.set_text(bottomString,blink_frames=4)
             combined = dmd.GroupedLayer(128,32,[awardTextTop,awardTextBottom])
             self.layer = combined
@@ -423,7 +423,7 @@ class GoldMine(ep.EP_Mode):
 
     def motherlode_hit(self):
         # stop the mountain
-        self.game.mountain.stop()
+        self.game.mountain.reset_toy()
         # turn off the flasher
         self.game.coils.mineFlasher.disable()
         # if the bandits attack, divert there
@@ -539,7 +539,7 @@ class GoldMine(ep.EP_Mode):
         # reset the motherlode multiplier
         self.game.set_tracking('motherlodeMultiplier',1)
 
-        # if we've collected 3 regular motherlodes, or any motherload with a multiplier, then light the badge
+        # if we've collected enough regular motherlodes, or any motherload with a multiplier, then light the badge
         if motherlodes >= self.motherlodesForStar or myMultiplier > 1:
             # set the star flag for motherlode - it's 0
             self.game.badge.update(0)
@@ -668,7 +668,6 @@ class GoldMine(ep.EP_Mode):
         # kill the motherload just in case
         # turn motherlode off
         self.game.set_tracking('motherlodeLit', False)
-        self.game.mountain.stop()
         # reset the mountain to the home position
         self.game.mountain.reset_toy()
         # reset the motherlode multiplier just in case

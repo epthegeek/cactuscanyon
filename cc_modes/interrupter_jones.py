@@ -411,7 +411,7 @@ class Interrupter(ep.EP_Mode):
             self.layer = combined
             self.delay("Display",delay=1.5,handler=self.mad_cow,param=2)
         elif step == 2:
-            textLine1 = dmd.TextLayer(64,9,self.game.assets.font_12px_az_outline, "center",opaque=False).set_text("50,000")
+            textLine1 = dmd.TextLayer(64,9,self.game.assets.font_12px_az_outline, "center",opaque=False).set_text(str(ep.format_score(50000)))
             textLine1.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[backdrop,textLine1])
             self.layer = combined

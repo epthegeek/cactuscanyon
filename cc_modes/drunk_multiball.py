@@ -302,7 +302,7 @@ class DrunkMultiball(ep.EP_Mode):
 
     def jackpot_score(self):
         self.game.sound.play(self.game.assets.sfx_orchestraSpike)
-        scoreString = "5,000,000*"
+        scoreString = str(ep.format_score(5000000)) + "*"
         scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString)
         scoreLine.composite_op = "blacksrc"
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])

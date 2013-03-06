@@ -555,7 +555,8 @@ class BionicBart(ep.EP_Mode):
             self.whineLayer.set_target_position(0,0)
             # then do the text display
             line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("DEFEATED!")
-            line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("5,000,000 POINTS",blink_frames=8)
+            scoreString = str(ep.format_score(5000000)) + " POINTS"
+            line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
             combined = dmd.GroupedLayer(128,32,[line1,line2])
             self.layer = combined
 

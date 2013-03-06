@@ -111,7 +111,7 @@ class LeftLoop(ep.EP_Mode):
             divisor = 10.0
         elif stage == 2:
             self.awardString = "WILD RIDE"
-            self.awardPoints = "150,000"
+            self.awardPoints = str(ep.format_score(150000))
             self.game.score_with_bonus(15000)
             thisOne = 1
             frame_time = 6
@@ -120,7 +120,7 @@ class LeftLoop(ep.EP_Mode):
             self.game.base.play_quote(self.game.assets.quote_leftLoop1)
         elif stage == 3:
             self.awardString = "RIDE EM COWBOY"
-            self.awardPoints = "175,000"
+            self.awardPoints = str(ep.format_score(175000))
             self.game.score_with_bonus(175000)
             self.game.base.play_quote(self.game.assets.quote_leftLoop2)
             thisOne = 0
@@ -129,7 +129,7 @@ class LeftLoop(ep.EP_Mode):
         # anything 4 or more is complete
         else:
             self.awardString = "BRONCO LOOPS COMPLETE"
-            self.awardPoints = "150,000"
+            self.awardPoints = str(ep.format_score(150000))
             thisOne = 0
             frame_time = 4
             divisor = 15

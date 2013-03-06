@@ -113,7 +113,7 @@ class RightRamp(ep.EP_Mode):
         elif stage == 2:
             # set the text lines for the display
             self.awardString = "SHOOT OUT"
-            self.awardPoints = "150,000*"
+            self.awardPoints = str(ep.format_score(150000)) + "*"
             self.game.score_with_bonus(150000)
             # load the animation
             anim = self.game.assets.dmd_bankSheriff

@@ -94,10 +94,16 @@ class Mountain(ep.EP_Mode):
 
     def run(self):
         print "Mountain Solid Run Called"
+        # if the mine is not already moving, move it
         if not self.inMotion:
             self.inMotion = True
             self.solidRun = True
             self.game.coils.mineMotor.enable()
+        # if it is already moving, and in the process of resetting
+        # kill the reset flag and turn on the solid run flag
+        elif self.mineReset:
+            self.mineReset = False
+            self.solidRun = True
 
     def reset_toy(self,force=False):
         print "Mountain Reset Called - force = " + str(force)

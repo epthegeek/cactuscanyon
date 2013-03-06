@@ -54,7 +54,7 @@ class SavePolly(ep.EP_Mode):
         if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             reward = "EXTRA BALL LIT"
         else:
-            reward = "5,000,000"
+            reward = str(ep.format_score(5000000))
         self.awardLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(reward)
         self.awardLine2b= dmd.TextLayer(64, 23, self.game.assets.font_7px_az, "center", opaque=False).set_text(reward)
         # calculate the shot value

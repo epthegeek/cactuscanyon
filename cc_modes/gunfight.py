@@ -197,7 +197,7 @@ class Gunfight(ep.EP_Mode):
     def display_win(self,rankTitle):
         textString3 = "YOUR RANK: " + rankTitle
         newrank = self.game.show_tracking('rank')
-        values = ["500,000","750,000","1,000,000","1,500,000","2,000,000"]
+        values = [str(ep.format_score(500000)),str(ep.format_score(750000)),str(ep.format_score(1000000)),str(ep.format_score(1500000)),str(ep.format_score(2000000))]
         textString4 = "QUICKDRAWS WORTH: " + values[newrank]
         # award some points
         points = 750000

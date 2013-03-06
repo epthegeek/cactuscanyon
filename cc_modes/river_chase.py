@@ -312,7 +312,7 @@ class RiverChase(ep.EP_Mode):
         if step == 4:
             # saved banner goes here
             awardTextString = "POLLY SAVED"
-            awardScoreString = "500,000"
+            awardScoreString = str(ep.format_score(500000))
             # combine them
             completeFrame = self.build_display(awardTextString,awardScoreString)
             stackLevel = self.game.show_tracking('stackLevel')
@@ -346,7 +346,7 @@ class RiverChase(ep.EP_Mode):
         # cancel the mode timer during the display
         self.cancel_delayed("Mode Timer")
         shotsLeftText = str(self.shotsToWin - self.shotsSoFar) + " MORE TO GO"
-        display = self.build_display(shotsLeftText,"100,000")
+        display = self.build_display(shotsLeftText,str(ep.format_score(100000)))
         transition = ep.EP_Transition(self,self.layer,display,ep.EP_Transition.TYPE_CROSSFADE)
         self.delay("Display",delay=1.5,handler=self.in_progress)
 

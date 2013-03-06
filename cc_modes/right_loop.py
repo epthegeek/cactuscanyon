@@ -119,7 +119,7 @@ class RightLoop(ep.EP_Mode):
 
         elif stage == 2:
             self.awardString = "GUNSLINGER"
-            self.awardPoints = "150,000"
+            self.awardPoints = str(ep.format_score(150000))
             self.game.score_with_bonus(150000)
             # play the animation and such
             anim = self.game.assets.dmd_shotCandles

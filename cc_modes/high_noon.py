@@ -281,7 +281,7 @@ class HighNoon(ep.EP_Mode):
             if step == 6:
                 backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_moneybagBorder.frames[0])
                 textLayer1 = dmd.TextLayer(80, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("JACKPOTS WORTH")
-                textLayer2 = dmd.TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text("250,000")
+                textLayer2 = dmd.TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(250000)))
                 self.jackpotLayer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
                 # combine with burst
                 composite = dmd.GroupedLayer(128,32,[self.jackpotLayer,animLayer])
