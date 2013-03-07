@@ -85,33 +85,55 @@ class SavePolly(ep.EP_Mode):
     def sw_leftBonusLane_active(self,sw):
         if not self.halted:
             self.halt_train()
+        # if the train is already halted, cancel any pending resume delay
+        else:
+            self.cancel_delayed("Resume")
 
     def sw_rightBonusLane_active(self,sw):
         if not self.halted:
             self.halt_train()
+        # if the train is already halted, cancel any pending resume delay
+        else:
+            self.cancel_delayed("Resume")
 
     # bumpers pause quickdraw
     def sw_leftJetBumper_active(self,sw):
         if not self.halted:
             self.halt_train()
+        # if the train is already halted, cancel any pending resume delay
+        else:
+            self.cancel_delayed("Resume")
 
     def sw_rightJetBumper_active(self,sw):
         if not self.halted:
             self.halt_train()
+        # if the train is already halted, cancel any pending resume delay
+        else:
+            self.cancel_delayed("Resume")
 
     def sw_bottomJetBumper_active(self,sw):
         if not self.halted:
             self.halt_train()
+        # if the train is already halted, cancel any pending resume delay
+        else:
+            self.cancel_delayed("Resume")
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
     def sw_minePopper_active_for_350ms(self,sw):
         print "TTTT Mine Popper Register"
         if not self.halted:
             self.halt_train()
+        # if the train is already halted, cancel any pending resume delay
+        else:
+            self.cancel_delayed("Resume")
 
     def sw_saloonPopper_active_for_250ms(self,sw):
+        print "TTTT Saloon Popper Register"
         if not self.halted:
             self.halt_train()
+        # if the train is already halted, cancel any pending resume delay
+        else:
+            self.cancel_delayed("Resume")
 
     def sw_saloonPopper_inactive(self,sw):
         if self.running and self.halted:
