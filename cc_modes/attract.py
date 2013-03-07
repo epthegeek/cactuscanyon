@@ -265,6 +265,7 @@ class Attract(ep.EP_Mode):
                     self.stop_music()
                     # clear the interrupter layer
                     self.game.interrupter.clear_layer()
+                    self.game.interrupter.wipe_delays()
                     # Initialize game
                     if self.game.switches.flipperLwL.is_active():
                         force = True
