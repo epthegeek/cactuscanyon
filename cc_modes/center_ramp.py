@@ -88,7 +88,7 @@ class CenterRamp(ep.EP_Mode):
         stage = self.game.show_tracking('centerRampStage')
         if stage == 1:
             self.awardString = "CATCH TRAIN"
-            self.awardPoints = "125,000"
+            self.awardPoints = str(ep.format_score(125000))
             self.game.score_with_bonus(125000)
             self.game.base.play_quote(self.game.assets.quote_centerRamp1)
             self.game.sound.play(self.game.assets.sfx_trainChugShort)

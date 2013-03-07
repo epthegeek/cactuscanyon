@@ -88,7 +88,7 @@ class RightRamp(ep.EP_Mode):
         if stage == 1:
             ## set the text lines for the display later
             self.awardString = "SOUND ALARM"
-            self.awardPoints = "125,000*"
+            self.awardPoints = str(ep.format_score(125000)) + "*"
             self.game.score_with_bonus(125000)
             # load the animation
             anim = self.game.assets.dmd_bankExplodes

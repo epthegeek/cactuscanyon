@@ -92,7 +92,7 @@ class LeftRamp(ep.EP_Mode):
         stage = self.game.show_tracking('leftRampStage')
         if stage == 1:
             self.awardString = "WHITE WATER"
-            self.awardPoints = "125,000"
+            self.awardPoints = str(ep.format_score(125000))
             self.game.score_with_bonus(125000)
             self.game.base.play_quote(self.game.assets.quote_leftRamp1)
             # load the 2 animations

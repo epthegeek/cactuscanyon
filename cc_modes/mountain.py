@@ -59,7 +59,7 @@ class Mountain(ep.EP_Mode):
 
     def sw_mineEncoder_active(self,sw):
         self.mineTicks += 1
-        #print "Mine Encoder :" + str(self.mineTicks)
+        print "Mine Encoder :" + str(self.mineTicks) + " Solid Run: " + str(self.solidRun) + " Reset: " + str(self.mineReset)
         if not self.mineReset and not self.solidRun:
             if self.mineTicks in self.stopPoints:
                 self.stop()

@@ -221,7 +221,8 @@ class DrunkMultiball(ep.EP_Mode):
         textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("DRUNK MULTIBALL")
         if self.active:
             textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOTS")
-            textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("WORTH 5,000,000")
+            textString = "WORTH " + str(ep.format_score(5000000))
+            textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString)
         else:
             textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HIT BEER MUG")
             textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("TO LIGHT JACKPOTS")

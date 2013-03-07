@@ -95,7 +95,7 @@ class RightLoop(ep.EP_Mode):
         stage = self.game.show_tracking('rightLoopStage')
         if stage == 1:
             self.awardString = "GOOD SHOT"
-            self.awardPoints = "125,000"
+            self.awardPoints = str(ep.format_score(125000))
             self.game.score_with_bonus(125000)
             # load the animation
             anim = self.game.assets.dmd_shotBottles
@@ -130,7 +130,7 @@ class RightLoop(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.show_award_text)
         elif stage == 3:
             self.awardString = "MARKSMAN"
-            self.awardPoints = "175,000"
+            self.awardPoints = str(ep.format_score(175000))
             self.game.score_with_bonus(175000)
             #self.show_award_text()
             anim = self.game.assets.dmd_shotCard
