@@ -38,6 +38,7 @@ class Assets():
         # _AZ = All numerals and upper case letters
         # _score = Numerals only
         self.font_5px_AZ = dmd.Font(self.dmd_path + "Font_3_CactusCanyon.dmd")
+        self.font_5px_AZ_inverted = dmd.Font(self.dmd_path + "Font_3_CactusCanyon_inverted.dmd")
         self.font_5px_bold_AZ = dmd.Font(self.dmd_path + "Font_21_CactusCanyon.dmd")
 
         self.font_5px_bold_AZ_outline = dmd.Font(self.dmd_path + "Font_21_mask_CactusCanyon.dmd")

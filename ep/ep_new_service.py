@@ -61,7 +61,7 @@ class NewServiceSkeleton(ep.EP_Mode):
         if self.index < 0:
             self.index = (len(self.section) - 1)
         # then update the display
-        self.update_display()
+        self.selectionLine.set_text(str(self.section[self.index]))
 
     def item_up(self):
         self.index += 1
@@ -69,8 +69,25 @@ class NewServiceSkeleton(ep.EP_Mode):
         if self.index >= len(self.section):
             self.index = 0
         # then update the display
-        self.update_display()
+        self.selectionLine.set_text(str(self.section[self.index]))
 
+    # standard display structure
+    def update_display(self,titleString,selectionString,infoString="",blinkInfo = False):
+        self.titleLine = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text(titleString)
+        self.selectionLine = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text(selectionString)
+        self.infoLine = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center")
+        if blinkInfo:
+            self.infoLine.set_text(infoString,blink_frames=30)
+        else:
+            self.infoLine.set_text(infoString)
+        self.layer = dmd.GroupedLayer(128,32,[self.titleLine,self.selectionLine,self.infoLine])
+
+
+##   __  __       _         __  __
+##  |  \/  | __ _(_)_ __   |  \/  | ___ _ __  _   _
+##  | |\/| |/ _` | | '_ \  | |\/| |/ _ \ '_ \| | | |
+##  | |  | | (_| | | | | | | |  | |  __/ | | | |_| |
+##  |_|  |_|\__,_|_|_| |_| |_|  |_|\___|_| |_|\__,_|
 
 class NewServiceMode(NewServiceSkeleton):
     """Service Mode List base class."""
@@ -113,7 +130,7 @@ class NewServiceMode(NewServiceSkeleton):
             print "Calling Reset"
             self.game.reset()
 
-# switches
+    # switches
 
     def sw_enter_active(self,sw):
         if not self.busy:
@@ -121,30 +138,30 @@ class NewServiceMode(NewServiceSkeleton):
             if self.activeMode == "STARTUP":
                 self.game.sound.play(self.game.assets.sfx_menuEnter)
                 self.activeMode = "MENU"
-                self.update_display()
+                self.update_display("Service Menu",str(self.section[self.index]))
             # if we're on the menu, we're selecting a sub-menu
             elif self.activeMode == "MENU":
                 self.game.sound.play(self.game.assets.sfx_menuEnter)
                 # set active mode to the currently selected mode
-                self.activeMode = self.section[self.index]
+                selection = self.section[self.index]
                 # Then create that mode
-                if self.activeMode == "TESTS":
+                if selection == "TESTS":
                     self.mode_to_add = NewServiceModeTests(game=self.game,priority=201)
                     self.game.modes.add(self.mode_to_add)
-                elif self.activeMode == "SETTINGS":
+                elif selection == "SETTINGS":
                     self.mode_to_add = NewServiceModeSettings(game=self.game,priority=201)
                     self.game.modes.add(self.mode_to_add)
-                elif self.activeMode == "STATS":
+                elif selection == "STATS":
                     self.mode_to_add = NewServiceModeStats(game=self.game,priority=201)
                     self.game.modes.add(self.mode_to_add)
-                elif self.activeMode == "UTILITIES":
+                elif selection == "UTILITIES":
                     self.mode_to_add = NewServiceModeUtilities(game=self.game,priority=201)
                     self.game.modes.add(self.mode_to_add)
-                elif self.activeMode == "UPDATE":
+                elif selection == "UPDATE":
                     self.mode_to_add = NewServiceModeUpdate(game=self.game,priority=201)
                     self.game.modes.add(self.mode_to_add)
-                elif self.activeMode == "SHUTDOWN":
-                    self.update_display()
+                elif selection == "SHUTDOWN":
+                    self.update_display("","SHUTTING DOWN")
                     print "Powering off"
                     # exit with error code 69
                     sys.exit(69)
@@ -152,30 +169,49 @@ class NewServiceMode(NewServiceSkeleton):
                 pass
         return game.SwitchStop
 
-    # display
-    def update_display(self):
-        if self.activeMode == "MENU":
-            title = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text("Service Menu")
-            selection = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text(str(self.section[self.index]))
-            self.layer = dmd.GroupedLayer(128,32,[title,selection])
-        elif self.activeMode == "SHUTDOWN":
-            title = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text("")
-            selection = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text("SHUTTING DOWN")
-            self.layer = dmd.GroupedLayer(128,32,[title,selection])
-
+##   _____         _         ____            _   _
+##  |_   _|__  ___| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
+##    | |/ _ \/ __| __/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
+##    | |  __/\__ \ |_\__ \  ___) |  __/ (__| |_| | (_) | | | |
+##    |_|\___||___/\__|___/ |____/ \___|\___|\__|_|\___/|_| |_|
 
 class NewServiceModeTests(NewServiceSkeleton):
-    """Service Mode List base class."""
+    """Service Mode Tests Section."""
     def __init__(self, game, priority):
         super(NewServiceModeTests, self).__init__(game, priority)
         self.myID = "Service Mode Tests"
+        self.index = 0
 
     def mode_started(self):
         # set some indexes
-        self.index = 0
         self.section = ["SWITCHES","SINGLE LAMPS", "ALL LAMPS","SOLENOIDS","FLASHERS","DROP TARGETS","MINE"]
+        self.update_display("Tests",str(self.section[self.index]))
+
+    def sw_enter_active(self,sw):
+        selection = self.section[self.index]
+        if selection == "SWITCHES":
+            self.mode_to_add = NewServiceModeSwitchEdges(game=self.game,priority=202)
+            self.game.modes.add(self.mode_to_add)
+        else:
+            pass
+        # TODO: The rest of these sections
+
+class NewServiceModeSwitchEdges(NewServiceSkeleton):
+    """Service Mode Tests Section."""
+    def __init__(self, game, priority):
+        super(NewServiceModeSwitchEdges, self).__init__(game, priority)
+        self.myID = "Service Mode Switch Test"
+        self.index = 0
+
+    def mode_started(self):
+        # TODO: check switch states to set row text
+        self.row1text = "aaaAaAaa"
+        self.row2text = "AAaaaaaA"
         self.update_display()
 
+    # TODO: set up all the switch methods for turning the images on and off
+
+    # null the up and down switches
     def sw_up_active(self,sw):
         return game.SwitchStop
 
@@ -183,45 +219,59 @@ class NewServiceModeTests(NewServiceSkeleton):
         return game.SwitchStop
 
     def update_display(self):
-        title = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text("Tests")
-        selection = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text(str(self.section[self.index]))
-        self.layer = dmd.GroupedLayer(128,32,[title,selection])
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_switchMatrix.frames[0])
+        self.switchRow1 = dmd.TextLayer(4,4,self.game.assets.font_matrix,"left").set_text(self.row1text)
+        self.switchRow1.composite_op = "blacksrc"
+        self.switchRow2 = dmd.TextLayer(4,7,self.game.assets.font_matrix,"left").set_text(self.row2text)
+        self.switchRow2.composite_op = "blacksrc"
+        title = dmd.TextLayer(80,1,self.game.assets.font_5px_AZ,"center").set_text("SWITCH EDGES")
+        combined = dmd.GroupedLayer(128,32,[background,title,self.switchRow1,self.switchRow2])
+        # TODO: other row lines, info lines
+        self.layer = combined
 
+##   ____       _   _   _                   ____            _   _
+##  / ___|  ___| |_| |_(_)_ __   __ _ ___  / ___|  ___  ___| |_(_) ___  _ __
+##  \___ \ / _ \ __| __| | '_ \ / _` / __| \___ \ / _ \/ __| __| |/ _ \| '_ \
+##   ___) |  __/ |_| |_| | | | | (_| \__ \  ___) |  __/ (__| |_| | (_) | | | |
+##  |____/ \___|\__|\__|_|_| |_|\__, |___/ |____/ \___|\___|\__|_|\___/|_| |_|
+##                              |___/
 
 class NewServiceModeSettings(NewServiceSkeleton):
-    """Service Mode List base class."""
+    """Service Mode Settings Section."""
     def __init__(self, game, priority):
         super(NewServiceModeSettings, self).__init__(game, priority)
         self.myID = "Service Mode Settings"
+        self.index = 0
 
     def mode_started(self):
-        self.index = 0
-        self.settingSection = ["STANDARD","FEATURE"]
-        self.update_display()
+        self.section = ["STANDARD","FEATURE"]
+        self.update_display("Settings",str(self.section[self.index]))
 
-    def update_display(self):
-        title = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text("Settings")
-        selection = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text(str(self.section[self.index]))
-        self.layer = dmd.GroupedLayer(128,32,[title,selection])
+##   ____  _        _         ____            _   _
+##  / ___|| |_ __ _| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
+##  \___ \| __/ _` | __/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
+##   ___) | || (_| | |_\__ \  ___) |  __/ (__| |_| | (_) | | | |
+##  |____/ \__\__,_|\__|___/ |____/ \___|\___|\__|_|\___/|_| |_|
 
 class NewServiceModeStats(NewServiceSkeleton):
-    """Service Mode List base class."""
+    """Service Stats Section."""
     def __init__(self, game, priority):
         super(NewServiceModeStats, self).__init__(game, priority)
         self.myID = "Service Mode Stats"
+        self.index = 0
 
     def mode_started(self):
-        self.index = 0
         self.section = ["PENDING","PENDING"]
-        self.update_display()
+        self.update_display("Statistics",str(self.section[self.index]))
 
-    def update_display(self):
-        title = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text("Statistics")
-        selection = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text("PENDING",blink_frames=40)
-        self.layer = dmd.GroupedLayer(128,32,[title,selection])
+##   _   _ _   _ _ _ _   _             ____            _   _
+##  | | | | |_(_) (_) |_(_) ___  ___  / ___|  ___  ___| |_(_) ___  _ __
+##  | | | | __| | | | __| |/ _ \/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
+##  | |_| | |_| | | | |_| |  __/\__ \  ___) |  __/ (__| |_| | (_) | | | |
+##   \___/ \__|_|_|_|\__|_|\___||___/ |____/ \___|\___|\__|_|\___/|_| |_|
 
 class NewServiceModeUtilities(NewServiceSkeleton):
-    """Service Mode List base class."""
+    """Service Mode Utilities Section."""
     def __init__(self, game, priority):
         super(NewServiceModeUtilities, self).__init__(game, priority)
         self.myID = "Service Mode Utilities"
@@ -229,15 +279,17 @@ class NewServiceModeUtilities(NewServiceSkeleton):
     def mode_started(self):
         self.index = 0
         self.section = ["CLEAR AUDITS", "RESET HSTD"]
-        self.update_display()
+        self.update_display("Utilities",str(self.section[self.index]))
 
-    def update_display(self):
-        title = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text("Utilities")
-        selection = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text(str(self.section[self.index]))
-        self.layer = dmd.GroupedLayer(128,32,[title,selection])
+##   _   _           _       _         ____            _   _
+##  | | | |_ __   __| | __ _| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
+##  | | | | '_ \ / _` |/ _` | __/ _ \ \___ \ / _ \/ __| __| |/ _ \| '_ \
+##  | |_| | |_) | (_| | (_| | ||  __/  ___) |  __/ (__| |_| | (_) | | | |
+##   \___/| .__/ \__,_|\__,_|\__\___| |____/ \___|\___|\__|_|\___/|_| |_|
+##        |_|
 
 class NewServiceModeUpdate(NewServiceSkeleton):
-    """Service Mode List base class."""
+    """Service Mode Update Section."""
     def __init__(self, game, priority):
         super(NewServiceModeUpdate, self).__init__(game, priority)
         self.myID = "Service Mode Updates"
@@ -251,7 +303,8 @@ class NewServiceModeUpdate(NewServiceSkeleton):
             self.busy = True
             # if enter is pressed, copy the files
             # update the layer to say copying files
-            self.update_display("COPYING FILES","DO NOT POWER OFF")
+            self.selectionLine.set_text("COPYING FILES")
+            self.infoLine.set_text("DO NOT POWER OFF",blink_frames=15)
             self.delay(delay=1,handler=self.copy_files)
         else:
             self.game.sound.play(self.game.assets.sfx_menuReject)
@@ -261,12 +314,6 @@ class NewServiceModeUpdate(NewServiceSkeleton):
 
     def sw_down_active(self,sw):
         return game.SwitchStop
-
-    def update_display(self,textString1 = "",textString2 = ""):
-        title = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text("Software Update")
-        selection = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text(textString1)
-        info = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text(textString2,blink_frames=30)
-        self.layer = dmd.GroupedLayer(128,32,[title,selection,info])
 
     def check_update(self):
         self.myLocation = None
@@ -289,10 +336,11 @@ class NewServiceModeUpdate(NewServiceSkeleton):
             status = "FILES NOT FOUND"
             info = "CHECK USB DRIVE"
         # then update the display
-        self.update_display(textString1=status,textString2=info)
+        self.update_display("Software Update",status,info,blinkInfo=True)
 
     def copy_files(self):
         dir_util.copy_tree(self.myLocation,self.game.game_location)
-        self.update_display(textString1="COPY FINISHED")
+        self.selectionLine.set_text("COPY FINISHED")
+        self.infoLine.set_text("")
         self.busy = False
 
