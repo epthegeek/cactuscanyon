@@ -983,8 +983,7 @@ class BaseGameMode(ep.EP_Mode):
         print ""
 
     def sw_phantomSwitch4_active(self,sw):
-        print "Resetting"
-        sys.exit(42)
+        pass
 
     def guns_flash(self,type=1):
         if type == 1:

@@ -71,6 +71,7 @@ class SkillShot(ep.EP_Mode):
             self.unload()
 
     def mode_started(self):
+        print "Skillshot Started"
         # reset the super just in case
         self.super = False
         # call the welcome quote - and start the theme song after on the first ball
@@ -505,7 +506,7 @@ class SkillShot(ep.EP_Mode):
         # call the lamp update so the prize is shown properly
         self.lamp_update()
 
-        print "SkillShot Awarded: " + awardStringTop + " " + awardStringBottom
+        print "SkillShot Awarded " + str(self.selectedPrizes[5:]) + ": " + str(awardStringTop) + " " + str(awardStringBottom)
         self.award_display(awardStringTop,awardStringBottom)
 
     def award_display(self,awardStringTop,awardStringBottom,start=True):

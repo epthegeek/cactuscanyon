@@ -316,6 +316,8 @@ class CCGame(game.BasicGame):
         # moonlight madness
         self.moonlight = cc_modes.Moonlight(game=self,priority=200)
         self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=201)
+        # new service mode test
+        self.new_service = ep.ep_new_service.NewServiceMode(game=self,priority=200)
 
         ## try adding the score display font override
         #self.score_display.font_18x12 = self.assets.font_score_x12

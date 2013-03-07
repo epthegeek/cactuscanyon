@@ -113,6 +113,8 @@ class Assets():
         self.font_showcase_fill_2 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Fill_2.dmd")
         self.font_showcase_fill_3 = dmd.Font(self.dmd_path + "Font_Custom_Showcase_Fill_3.dmd")
 
+        # switch matrix font
+        self.font_matrix = dmd.Font(self.dmd_path + "switch_matrix_font.dmd")
 
 # CC Sounds
         # Sound Effects
@@ -1272,6 +1274,8 @@ class Assets():
         self.dmd_mmBoom = dmd.Animation().load(self.dmd_path+'mm_boom.dmd')
         self.dmd_mmBang = dmd.Animation().load(self.dmd_path+'mm_bang.dmd')
         self.dmd_moonIntro = dmd.Animation().load(self.dmd_path+'moon-intro.dmd')
+
+        self.dmd_switchMatrix = dmd.Animation().load(self.dmd_path+'matrix_backdrop.dmd')
 
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"

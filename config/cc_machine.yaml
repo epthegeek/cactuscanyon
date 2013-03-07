@@ -63,14 +63,19 @@ PRSwitches:
         number: S12
     startButton:
         number: S13
+        descr: Start Button
     plumbBobTilt:
         number: S14
+        descr: Tilt Plumb Bob
     mineEntrance:
         number: S15
+        descr: Mine Entrance
     leftOutlane:
         number: S16
+        descr: Left Outlane
     rightReturnLane:
         number: S17
+        descr: Right Return Lane
     shooterLane:
         number: S18
     tilt:

@@ -428,8 +428,9 @@ class Attract(ep.EP_Mode):
                     self.layers.append({'layer':combined, 'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
 
 
-def mode_stopped(self):
+    def mode_stopped(self):
         print "DELETING ATTRACT DELAYS"
         self.wipe_delays()
         # rese the noisy flag
         self.noisy = True
+
