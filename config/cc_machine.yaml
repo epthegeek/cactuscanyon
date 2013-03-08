@@ -135,7 +135,7 @@ PRSwitches:
         tags: Standard,2,7
     bottomRightStandUp:
         number: S28
-        label: Bottom Right QD Target
+        label: Bot. Right QD Target
         tags: Standard,2,8
     troughEject:
         number: S31
@@ -314,7 +314,7 @@ PRSwitches:
         tags: Standard,8,6
     bottomLeftStandUp:
         number: S87
-        label: Bottom Left QD Target
+        label: Bot. Left QD Target
         tags: Standard,8,7
     
 PRCoils:

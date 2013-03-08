@@ -269,9 +269,6 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
     def switch_handler(self, sw):
         if (sw.state):
             self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
-            # set the last switch text string
-            lastString = "LAST SWITCH: " + sw.tags[2] + sw.tags[1]
-            self.lastText.set_text(lastString)
             # set the label text
             self.labelText.set_text(str(sw.label).upper())
             # set the row wire color text
@@ -280,18 +277,26 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
             if int(sw.tags[1]) != 0:
                 self.colText.set_text(str(self.colColors[int(sw.tags[1])]))
             else:
-                pass
+                self.colText.set_text("")
             # update the proper string position
             if "Grounded" in sw.tags:
                 # grounded switch slice
                 self.rowStrings[int(sw.tags[2])] = "A" + self.rowStrings[int(sw.tags[2])][1:]
                 self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+                # set the last switch text string
+                lastString = "LAST SWITCH: F" + sw.tags[2]
+                self.lastText.set_text(lastString)
             elif "Dedicated" in sw.tags:
                 # dedicated switch slice
                 self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:11] + "A"
                 self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+                # set the last switch text string
+                lastString = "LAST SWITCH: D" + sw.tags[2]
+                self.lastText.set_text(lastString)
             else:
                 # standard switch slice
+                lastString = "LAST SWITCH: " + sw.tags[2] + sw.tags[1]
+                self.lastText.set_text(lastString)
                 # find the slice positions
                 left = int(sw.tags[1]) + 1
                 right = int(sw.tags[1]) + 2
