@@ -169,6 +169,31 @@ class NewServiceMode(NewServiceSkeleton):
                 pass
         return game.SwitchStop
 
+    def sw_up_active(self,sw):
+        if self.activeMode == "MENU":
+            if not self.busy:
+                print "Item Down"
+            # play the sound for moving down
+            self.game.sound.play(self.game.assets.sfx_menuDown)
+            self.item_down()
+        else:
+            pass
+
+        return game.SwitchStop
+
+    def sw_down_active(self,sw):
+        if self.activeMode == "MENU":
+            if not self.busy:
+                print "Item Down"
+            # play the sound for moving down
+            self.game.sound.play(self.game.assets.sfx_menuDown)
+            self.item_down()
+        else:
+            pass
+
+        return game.SwitchStop
+
+
 ##   _____         _         ____            _   _
 ##  |_   _|__  ___| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
 ##    | |/ _ \/ __| __/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
@@ -198,6 +223,7 @@ class NewServiceModeTests(NewServiceSkeleton):
         else:
             pass
         # TODO: The rest of these sections
+        return game.SwitchStop
 
 class NewServiceModeSwitchEdges(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -207,30 +233,154 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         self.index = 0
 
     def mode_started(self):
+        self.rowColors = ["","WHT-BRN","WHT-RED","WHT-ORG","WHT-YEL","WHT-GRN","WHT-BLU","WHT-VLT","WHT-GRY"]
+        self.colColors = ["","GRN-BRN","GRN-RED","GRN-ORG","GRN-WHT","GRN-BLK","GRN-BLU","GRN-VLT","GRN-GRY"]
+        self.dedColors = ["","ORG-BRN","ORG-RED","ORG-BLK","ORG-YEL","ORG-GRN","ORG-BLU","ORG-VLT","ORG-GRY"]
+        self.grndColors = ["","BLK-GRN","BLU-VLT","BLK-BLU","BLU-GRY","BLK-VLT","BLK-YEL","BLK-GRY","BLK-BLU"]
         # TODO: check switch states to set row text
-        self.row1text = "aaaAaAaa"
-        self.row2text = "AAaaaaaA"
+        self.row1text = "a-aaaaaaaa-a"
+        self.row2text = "a-aaaaaaaa-a"
+        self.row3text = "a-aaaaaaaa-a"
+        self.row4text = "a-aaaaaaaa-a"
+        self.row5text = "a-aaaaaaaa-a"
+        self.row6text = "a-aaaaaaaa-a"
+        self.row7text = "a-aaaaaaaa-a"
+        self.row8text = "a-aaaaaaaa-a"
+        # build the display
         self.update_display()
+        # make a list of the row layers
+        self.rowStrings = [None,self.row1text,self.row2text,self.row3text,self.row4text,self.row5text,self.row6text,self.row7text,self.row8text]
+        # setup the switches
+        for switch in self.game.switches:
+            if self.game.machine_type == 'sternWhitestar':
+                add_handler = 1
+            elif switch != self.game.switches.exit:
+                add_handler = 1
+            else:
+                add_handler = 0
+            if add_handler:
+                self.add_switch_handler(name=switch.name, event_type='inactive', delay=None, handler=self.switch_handler)
+                self.add_switch_handler(name=switch.name, event_type='active', delay=None, handler=self.switch_handler)
+
+    def switch_handler(self, sw):
+        if (sw.state):
+            self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
+            # set the last switch text string
+            lastString = "LAST SWITCH: " + sw.tags[2] + sw.tags[1]
+            self.lastText.set_text(lastString)
+            # set the label text
+            self.labelText.set_text(str(sw.label).upper())
+            # set the row wire color text
+            self.rowText.set_text(str(self.rowColors[int(sw.tags[2])]))
+            # set the column color if applicable
+            if int(sw.tags[1]) != 0:
+                self.colText.set_text(str(self.colColors[int(sw.tags[1])]))
+            else:
+                pass
+            # update the proper string position
+            if "Grounded" in sw.tags:
+                # grounded switch slice
+                self.rowStrings[int(sw.tags[2])] = "A" + self.rowStrings[int(sw.tags[2])][1:]
+                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+            elif "Dedicated" in sw.tags:
+                # dedicated switch slice
+                self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:11] + "A"
+                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+            else:
+                # standard switch slice
+                # find the slice positions
+                left = int(sw.tags[1]) + 1
+                right = int(sw.tags[1]) + 2
+                self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:left] + "A" + self.rowStrings[int(sw.tags[2])][right:]
+                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+        else:
+            # clear the label text
+            self.labelText.set_text("")
+            # update the proper string position
+            if "Grounded" in sw.tags:
+                # grounded switch slice
+                self.rowStrings[int(sw.tags[2])] = "a" + self.rowStrings[int(sw.tags[2])][1:]
+                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+            elif "Dedicated" in sw.tags:
+                # dedicated switch slice
+                self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:11] + "a"
+                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+            else:
+                # standard switch slice
+                # find the slice positions
+                left = int(sw.tags[1]) + 1
+                right = int(sw.tags[1]) + 2
+                self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:left] + "a" + self.rowStrings[int(sw.tags[2])][right:]
+                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+
+        return game.SwitchStop
 
     # TODO: set up all the switch methods for turning the images on and off
 
-    # null the up and down switches
+    def sw_enter_active(self,sw):
+        self.switch_handler(sw)
+        return game.SwitchStop
+
+    # redefine the exit switch so we can get out
+    def sw_exit_active(self,sw):
+        if not self.busy:
+            self.game.sound.play(self.game.assets.sfx_menuExit)
+            self.unload()
+        return game.SwitchStop
+
     def sw_up_active(self,sw):
+        self.switch_handler(sw)
         return game.SwitchStop
 
     def sw_down_active(self,sw):
+        self.switch_handler(sw)
         return game.SwitchStop
 
+
     def update_display(self):
+        layers = []
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_switchMatrix.frames[0])
-        self.switchRow1 = dmd.TextLayer(4,4,self.game.assets.font_matrix,"left").set_text(self.row1text)
+        layers.append(background)
+        self.switchRow1 = dmd.TextLayer(0,4,self.game.assets.font_matrix,"left").set_text(self.row1text)
         self.switchRow1.composite_op = "blacksrc"
-        self.switchRow2 = dmd.TextLayer(4,7,self.game.assets.font_matrix,"left").set_text(self.row2text)
+        layers.append(self.switchRow1)
+        self.switchRow2 = dmd.TextLayer(0,7,self.game.assets.font_matrix,"left").set_text(self.row2text)
         self.switchRow2.composite_op = "blacksrc"
-        title = dmd.TextLayer(80,1,self.game.assets.font_5px_AZ,"center").set_text("SWITCH EDGES")
-        combined = dmd.GroupedLayer(128,32,[background,title,self.switchRow1,self.switchRow2])
+        layers.append(self.switchRow2)
+        self.switchRow3 = dmd.TextLayer(0,10,self.game.assets.font_matrix,"left").set_text(self.row3text)
+        self.switchRow3.composite_op = "blacksrc"
+        layers.append(self.switchRow3)
+        self.switchRow4 = dmd.TextLayer(0,13,self.game.assets.font_matrix,"left").set_text(self.row4text)
+        self.switchRow4.composite_op = "blacksrc"
+        layers.append(self.switchRow4)
+        self.switchRow5 = dmd.TextLayer(0,16,self.game.assets.font_matrix,"left").set_text(self.row5text)
+        self.switchRow5.composite_op = "blacksrc"
+        layers.append(self.switchRow5)
+        self.switchRow6 = dmd.TextLayer(0,19,self.game.assets.font_matrix,"left").set_text(self.row6text)
+        self.switchRow6.composite_op = "blacksrc"
+        layers.append(self.switchRow6)
+        self.switchRow7 = dmd.TextLayer(0,22,self.game.assets.font_matrix,"left").set_text(self.row7text)
+        self.switchRow7.composite_op = "blacksrc"
+        layers.append(self.switchRow7)
+        self.switchRow8 = dmd.TextLayer(0,25,self.game.assets.font_matrix,"left").set_text(self.row8text)
+        self.switchRow8.composite_op = "blacksrc"
+        layers.append(self.switchRow8)
+        title = dmd.TextLayer(81,0,self.game.assets.font_5px_AZ,"center").set_text("SWITCH EDGES")
+        layers.append(title)
+        self.rowText = dmd.TextLayer(35,26,self.game.assets.font_5px_AZ,"left").set_text("")
+        layers.append(self.rowText)
+        self.colText = dmd.TextLayer(125,26,self.game.assets.font_5px_AZ,"right").set_text("")
+        layers.append(self.colText)
+        self.lastText = dmd.TextLayer(81,18,self.game.assets.font_5px_AZ,"center").set_text("")
+        layers.append(self.lastText)
+        self.labelText = dmd.TextLayer(81,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("")
+        self.labelText.composite_op = "blacksrc"
+        layers.append(self.labelText)
+        combined = dmd.GroupedLayer(128,32,layers)
         # TODO: other row lines, info lines
         self.layer = combined
+        self.rowLayers = [None,self.switchRow1,self.switchRow2,self.switchRow3,self.switchRow4,self.switchRow5,self.switchRow6,self.switchRow7,self.switchRow8]
+
 
 class NewServiceModeDropTargets(NewServiceSkeleton):
     """Service Mode Tests Section."""

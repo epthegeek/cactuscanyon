@@ -43,18 +43,46 @@ PRSwitches:
     ## EOS switches?
     flipperLwR:
         number: SF2
+        label: Right Flipper
+        tags: Grounded,0,2
     flipperLwL:
         number: SF4
+        label: Left Flipper
+        tags: Grounded,0,4
 
     #Dedicated Grounded Swtches
+    leftCoin:
+        number: SD1
+        label: Left Coin Chute
+        tags: Dedicated,0,1
+    centerCoin:
+        number: SD2
+        label: Center Coin Chute
+        tags: Dedicated,0,2
+    rightCoin:
+        number: SD3
+        label: Right Coin Chute
+        tags: Dedicated,0,3
+    fourthCoin:
+        number: SD4
+        label: 4th Coin Chute
+        tags: Dedicated,0,4
     exit: 
         number: SD5
+        label: Exit
+        tags: Dedicated,0,5
     down: 
         number: SD6
+        label: Down
+        tags: Dedicated,0,6
     up: 
         number: SD7
+        label: Up
+        tags: Dedicated,0,7
     enter: 
         number: SD8
+        label: Enter
+        tags: Dedicated,0,8
 
     #Regular Switches
     phantomSwitch2:
@@ -63,130 +91,231 @@ PRSwitches:
         number: S12
     startButton:
         number: S13
-        descr: Start Button
+        label: Start Button
+        tags: Standard,1,3
     plumbBobTilt:
         number: S14
-        descr: Tilt Plumb Bob
+        label: Tilt Plumb Bob
+        tags: Standard,1,4
     mineEntrance:
         number: S15
-        descr: Mine Entrance
+        label: Mine Entrance
+        tags: Standard,1,5
     leftOutlane:
         number: S16
-        descr: Left Outlane
+        label: Left Outlane
+        tags: Standard,1,6
     rightReturnLane:
         number: S17
-        descr: Right Return Lane
+        label: Right Return Lane
+        tags: Standard,1,7
     shooterLane:
         number: S18
+        label: Shooter Lane
+        tags: Standard,1,8
     tilt:
         number: S21
+        label: Tilt Plumb
+        tags: Standard,2,1
     coinDoorClosed:
         number: S22
+        label: Coin Door Closed
+        tags: Standard,2,2
     alwaysClosed:
         number: S24
+        label: Always Closed
+        tags: Standard,2,4
     leftReturnLane:
         number: S26
+        label: Left Return Lane
+        tags: Standard,2,6
     rightOutlane:
         number: S27
+        label: Right Outlane
+        tags: Standard,2,7
     bottomRightStandUp:
         number: S28
+        label: Bottom Right QD Target
+        tags: Standard,2,8
     troughEject:
         number: S31
+        label: Trough Eject Sensor
+        tags: Standard,3,1
         type: 'NC'
     troughBallOne:
         number: S32
+        label: Trough Ball 1
+        tags: Standard,3,2
         type: 'NC'
     troughBallTwo:
         number: S33
+        label: Trough Ball 2
+        tags: Standard,3,3
         type: 'NC'
     troughBallThree:
         number: S34
+        label: Trough Ball 3
+        tags: Standard,3,4
         type: 'NC'
     troughBallFour:
         number: S35
+        label: Trough Ball 4
+        tags: Standard,3,5
         type: 'NC'
     leftLoopBottom:
         number: S36
+        label: Left Loop Bottom
+        tags: Standard,3,6
         type: 'NC'
     rightLoopBottom:
         number: S37
+        label: Right Loop Bottom
+        tags: Standard,3,7
         type: 'NC'
     minePopper:
         number: S41
+        label: Mine Popper
+        tags: Standard,4,1
         type: 'NC'
     saloonPopper:
         number: S42
+        label: Saloon Popper
+        tags: Standard,4,2
         type: 'NC'
     phantomSwitch:
         number: S43
     topRightStandUp:
         number: S44
+        label: Top Right QD Target
+        tags: Standard,4,4
     phantomSwitch4:
         number: S45
     beerMug:
         number: S46
+        label: Beer Mug
+        tags: Standard,4,6
     leftBonusLane:
         number: S47
+        label: Left Bonus Lane
+        tags: Standard,4,7
     jetBumpersExit:
         number: S48
+        label: Jet Bumpers Exit
+        tags: Standard,4,8
     leftSlingshot:
         number: S51
+        label: Left Slingshot
+        tags: Standard,5,1
     rightSlingshot:
         number: S52
+        label: Right Slingshot
+        tags: Standard,5,2
     leftJetBumper:
         number: S53
+        label: Left Jet Bumper
+        tags: Standard,5,3
     rightJetBumper:
         number: S54
+        label: Right Jet Bumper
+        tags: Standard,5,4
     bottomJetBumper:
         number: S55
+        label: Bottom Jet Bumper
+        tags: Standard,5,5
     rightLoopTop:
         number: S56
+        label: Right Loop Top
+        tags: Standard,5,6
     rightBonusLane:
         number: S57
+        label: Right Bonus Lane
+        tags: Standard,5,7
     leftLoopTop:
         number: S58
+        label: Left Loop Top
+        tags: Standard,5,8
     badGuySW0:
         number: S61
+        label: Left Drop Target
+        tags: Standard,6,1
     badGuySW1:
         number: S62
+        label: Left CTR Drop Target
+        tags: Standard,6,2
     badGuySW2:
         number: S63
+        label: Right CTR Drop Target
+        tags: Standard,6,3
     badGuySW3:
         number: S64
+        label: Right Drop Target
+        tags: Standard,6,4
     rightRampMake:
         number: S65
+        label: Right Ramp Make
+        tags: Standard,6,5
     rightRampEnter:
         number: S66
+        label: Right Ramp Enter
+        tags: Standard,6,6
     skillBowl:
         number: S67
+        lable: Skill Bowl
+        tags: Standard,6,7
     rightRampBottom:
         number: S68
+        label: Right Ramp Bottom
+        tags: Standard,6,8
     trainEncoder:
         number: S71
+        label: Train Encoder
+        tags: Standard,7,1
     trainHome:
         number: S72
+        label: Train Home
+        tags: Standard,7,2
     saloonGate:
         number: S73
+        label: Saloon Gate
+        tags: Standard,7,3
     saloonBart:
         number: S75
+        label: Bart Brother Toy
+        tags: Standard,7,5
     mineHome:
         number: S77
+        label: Mine Home
+        tags: Standard,7,7
         type: 'NC'
     mineEncoder:
         number: S78
+        label: Mine Encoder
+        tags: Standard,7,8
         type: 'NC'
     centerRampEnter:
         number: S82
+        label: Center Ramp Enter
+        tags: Standard,8,2
     leftRampMake:
         number: S83
+        label: Left Ramp Make
+        tags: Standard,8,3
     centerRampMake:
         number: S84
+        label: Center Ramp Make
+        tags: Standard,8,4
     leftRampEnter:
         number: S85
+        label: Left Ramp Enter
+        tags: Standard,8,5
     topLeftStandUp:
         number: S86
+        label: Top Left QD Target
+        tags: Standard,8,6
     bottomLeftStandUp:
         number: S87
+        label: Bottom Left QD Target
+        tags: Standard,8,7
     
 PRCoils:
     flipperLwRMain:
