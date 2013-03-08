@@ -183,7 +183,7 @@ class BaseGameMode(ep.EP_Mode):
         hits = self.game.increase_tracking('beerMugHits')
         self.game.increase_tracking('beerMugHitsTotal')
         # flash the light if present
-        self.game.lamps.beerMug.schedule(0x0000FFF,cycle_seconds=1)
+        self.game.lamps.beerMug.schedule(0x00000CCC,cycle_seconds=1)
         # score points
         self.game.score(2130)
         # play a sound

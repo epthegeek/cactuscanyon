@@ -172,10 +172,9 @@ class NewServiceMode(NewServiceSkeleton):
     def sw_up_active(self,sw):
         if self.activeMode == "MENU":
             if not self.busy:
-                print "Item Down"
             # play the sound for moving down
-            self.game.sound.play(self.game.assets.sfx_menuDown)
-            self.item_down()
+                self.game.sound.play(self.game.assets.sfx_menuDown)
+                self.item_up()
         else:
             pass
 
@@ -184,10 +183,9 @@ class NewServiceMode(NewServiceSkeleton):
     def sw_down_active(self,sw):
         if self.activeMode == "MENU":
             if not self.busy:
-                print "Item Down"
             # play the sound for moving down
-            self.game.sound.play(self.game.assets.sfx_menuDown)
-            self.item_down()
+                self.game.sound.play(self.game.assets.sfx_menuDown)
+                self.item_down()
         else:
             pass
 
@@ -222,6 +220,9 @@ class NewServiceModeTests(NewServiceSkeleton):
             self.game.modes.add(self.mode_to_add)
         elif selection == "MINE":
             self.mode_to_add = NewServiceModeMine(game=self.game,priority=202)
+            self.game.modes.add(self.mode_to_add)
+        elif selection == "ALL LAMPS":
+            self.mode_to_add = NewServiceModeAllLamps(game=self.game,priority=202)
             self.game.modes.add(self.mode_to_add)
         else:
             pass
@@ -380,9 +381,62 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         self.labelText.composite_op = "blacksrc"
         layers.append(self.labelText)
         combined = dmd.GroupedLayer(128,32,layers)
-        # TODO: other row lines, info lines
         self.layer = combined
         self.rowLayers = [None,self.switchRow1,self.switchRow2,self.switchRow3,self.switchRow4,self.switchRow5,self.switchRow6,self.switchRow7,self.switchRow8]
+
+class NewServiceModeAllLamps(NewServiceSkeleton):
+    """Service Mode Tests Section."""
+    def __init__(self, game, priority):
+        super(NewServiceModeAllLamps, self).__init__(game, priority)
+        self.myID = "Service Mode All Lamps Test"
+        self.index = 0
+        self.mode = 0
+
+    def mode_started(self):
+        self.update_display()
+        self.update_mode()
+
+    def mode_stopped(self):
+        for lamp in self.game.lamps:
+            lamp.disable()
+
+    def sw_enter_active(self,sw):
+        return game.SwitchStop
+
+    def sw_up_active(self,sw):
+        self.update_mode()
+        return game.SwitchStop
+
+    def sw_down_active(self,sw):
+        self.update_mode()
+        return game.SwitchStop
+
+    def update_mode(self):
+        if self.mode == 0:
+            self.mode = 1
+            for lamp in self.game.lamps:
+                lamp.schedule(0x0000FFFF)
+            self.infoLine.set_text("FLASHING",blink_frames=30)
+        else:
+            self.mode = 0
+            for lamp in self.game.lamps:
+                lamp.enable()
+            self.infoLine.set_text("SOLID ON")
+
+    def update_display(self):
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        layers.append(background)
+        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("ALL LAMPS")
+        layers.append(title)
+        targetLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("+/- TO CHANGE MODE")
+        targetLine.composite_op = "blacksrc"
+        layers.append(targetLine)
+        self.infoLine = dmd.TextLayer(64,16,self.game.assets.font_12px_az,"center").set_text("FLASHING",blink_frames=30)
+        layers.append(self.infoLine)
+        combined = dmd.GroupedLayer(128,32,layers)
+        self.layer = combined
+
 
 
 class NewServiceModeDropTargets(NewServiceSkeleton):
