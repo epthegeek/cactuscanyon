@@ -229,6 +229,12 @@ class NewServiceModeTests(NewServiceSkeleton):
         # TODO: The rest of these sections
         return game.SwitchStop
 
+##   ____          _ _       _       _____         _
+##  / ___|_      _(_) |_ ___| |__   |_   _|__  ___| |_
+##  \___ \ \ /\ / / | __/ __| '_ \    | |/ _ \/ __| __|
+##   ___) \ V  V /| | || (__| | | |   | |  __/\__ \ |_
+##  |____/ \_/\_/ |_|\__\___|_| |_|   |_|\___||___/\__|
+
 class NewServiceModeSwitchEdges(NewServiceSkeleton):
     """Service Mode Tests Section."""
     def __init__(self, game, priority):
@@ -277,7 +283,7 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
             if int(sw.tags[1]) != 0:
                 self.colText.set_text(str(self.colColors[int(sw.tags[1])]))
             else:
-                self.colText.set_text("")
+                self.colText.set_text("GROUND")
             # update the proper string position
             if "Grounded" in sw.tags:
                 # grounded switch slice
@@ -389,6 +395,15 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         self.layer = combined
         self.rowLayers = [None,self.switchRow1,self.switchRow2,self.switchRow3,self.switchRow4,self.switchRow5,self.switchRow6,self.switchRow7,self.switchRow8]
 
+
+##
+##      _    _ _   _                                _____         _
+##     / \  | | | | |    __ _ _ __ ___  _ __  ___  |_   _|__  ___| |_
+##    / _ \ | | | | |   / _` | '_ ` _ \| '_ \/ __|   | |/ _ \/ __| __|
+##   / ___ \| | | | |__| (_| | | | | | | |_) \__ \   | |  __/\__ \ |_
+##  /_/   \_\_|_| |_____\__,_|_| |_| |_| .__/|___/   |_|\___||___/\__|
+##                                     |_|
+
 class NewServiceModeAllLamps(NewServiceSkeleton):
     """Service Mode Tests Section."""
     def __init__(self, game, priority):
@@ -442,7 +457,12 @@ class NewServiceModeAllLamps(NewServiceSkeleton):
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 
-
+##   ____                    _____                    _         _____         _
+##  |  _ \ _ __ ___  _ __   |_   _|_ _ _ __ __ _  ___| |_ ___  |_   _|__  ___| |_
+##  | | | | '__/ _ \| '_ \    | |/ _` | '__/ _` |/ _ \ __/ __|   | |/ _ \/ __| __|
+##  | |_| | | | (_) | |_) |   | | (_| | | | (_| |  __/ |_\__ \   | |  __/\__ \ |_
+##  |____/|_|  \___/| .__/    |_|\__,_|_|  \__, |\___|\__|___/   |_|\___||___/\__|
+##                  |_|                    |___/
 
 class NewServiceModeDropTargets(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -640,6 +660,12 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         # drop all teh targets
         for i in range(0,4,1):
             self.target_down(i)
+
+##   __  __ _              _____         _
+##  |  \/  (_)_ __   ___  |_   _|__  ___| |_
+##  | |\/| | | '_ \ / _ \   | |/ _ \/ __| __|
+##  | |  | | | | | |  __/   | |  __/\__ \ |_
+##  |_|  |_|_|_| |_|\___|   |_|\___||___/\__|
 
 class NewServiceModeMine(NewServiceSkeleton):
     """Service Mode Tests Section."""
