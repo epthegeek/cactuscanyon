@@ -220,6 +220,9 @@ class NewServiceModeTests(NewServiceSkeleton):
         elif selection == "DROP TARGETS":
             self.mode_to_add = NewServiceModeDropTargets(game=self.game,priority=202)
             self.game.modes.add(self.mode_to_add)
+        elif selection == "MINE":
+            self.mode_to_add = NewServiceModeMine(game=self.game,priority=202)
+            self.game.modes.add(self.mode_to_add)
         else:
             pass
         # TODO: The rest of these sections
@@ -578,6 +581,141 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         # drop all teh targets
         for i in range(0,4,1):
             self.target_down(i)
+
+class NewServiceModeMine(NewServiceSkeleton):
+    """Service Mode Tests Section."""
+    def __init__(self, game, priority):
+        super(NewServiceModeMine, self).__init__(game, priority)
+        self.myID = "Service Mode Mine Test"
+        self.index = 0
+        self.inMotion = False
+        self.resetFlag = False
+
+    def mode_started(self):
+        self.kickStrength = self.game.user_settings['Machine (Standard)']['Mine Kicker Strength']
+        self.update_display()
+
+
+    def sw_enter_active(self,sw):
+        self.reset()
+        return game.SwitchStop
+
+    def sw_up_active(self,sw):
+        self.jog()
+        return game.SwitchStop
+
+    def sw_down_active(self,sw):
+        self.jog()
+        return game.SwitchStop
+
+    # entrance switch
+    def sw_mineEntrance_active(self,sw):
+        self.box0.set_text("b")
+        self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
+        return game.SwitchStop
+
+    def sw_mineEntrance_inactive(self,sw):
+        self.box0.set_text("a")
+        return game.SwitchStop
+
+    # popper
+    def sw_minePopper_active(self,sw):
+        self.box1.set_text("b")
+        self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
+        return game.SwitchStop
+
+    def sw_minePopper_active_for_1000ms(self,sw):
+        self.game.coils.minePopper.pulse(self.kickStrength)
+        return game.SwitchStop
+
+    def sw_minePopper_inactive(self,sw):
+        self.box1.set_text("a")
+        return game.SwitchStop
+
+    # encoder opto
+    def sw_mineEncoder_active(self,sw):
+        self.box2.set_text("b")
+        return game.SwitchStop
+
+    def sw_mineEncoder_inactive(self,sw):
+        self.box2.set_text("a")
+        return game.SwitchStop
+
+    # home optop
+    def sw_mineHome_active(self,sw):
+        if self.resetFlag:
+            self.stop()
+            self.resetFlag = False
+            self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
+            self.box3.set_text("b")
+        return game.SwitchStop
+
+    def sw_mineHome_inactive(self,sw):
+        self.box3.set_text("a")
+        return game.SwitchStop
+
+
+    def jog(self):
+        if not self.inMotion:
+            self.inMotion = True
+            self.game.coils.mineMotor.enable()
+            self.delay(delay=1,handler=self.stop)
+        else:
+            pass
+
+    def stop(self):
+        self.game.coils.mineMotor.disable()
+        self.inMotion = False
+
+    def reset(self):
+        if not self.inMotion:
+            self.resetFlag = True
+            self.inMotion = True
+            self.game.coils.mineMotor.enable()
+
+    def update_display(self):
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        layers.append(background)
+        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("MINE TEST")
+        layers.append(title)
+        instructionLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("+/- TO JOG   'ENTER' TO HOME")
+        instructionLine.composite_op = "blacksrc"
+        layers.append(instructionLine)
+        name0 = dmd.TextLayer(16,14,self.game.assets.font_5px_AZ,"center").set_text("ENTER")
+        layers.append(name0)
+        name1 = dmd.TextLayer(47,14,self.game.assets.font_5px_AZ,"center").set_text("POPPER")
+        layers.append(name1)
+        name2 = dmd.TextLayer(81,14,self.game.assets.font_5px_AZ,"center").set_text("ENCODE")
+        layers.append(name2)
+        name3 = dmd.TextLayer(112,14,self.game.assets.font_5px_AZ,"center").set_text("HOME")
+        layers.append(name3)
+        label0 = dmd.TextLayer(16,20,self.game.assets.font_5px_AZ,"center").set_text("SW.15")
+        layers.append(label0)
+        label1 = dmd.TextLayer(47,20,self.game.assets.font_5px_AZ,"center").set_text("SW.41")
+        layers.append(label1)
+        label2 = dmd.TextLayer(81,20,self.game.assets.font_5px_AZ,"center").set_text("SW.78")
+        layers.append(label2)
+        label3 = dmd.TextLayer(112,20,self.game.assets.font_5px_AZ,"center").set_text("SW.77")
+        layers.append(label3)
+        self.box0 = dmd.TextLayer(16,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        if self.game.switches.mineEntrance.is_active():
+            self.box0.set_text("b")
+        layers.append(self.box0)
+        self.box1 = dmd.TextLayer(47,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        if self.game.switches.minePopper.is_active():
+            self.box1.set_text("b")
+        layers.append(self.box1)
+        self.box2 = dmd.TextLayer(81,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        if self.game.switches.mineEncoder.is_active():
+            self.box2.set_text("b")
+        layers.append(self.box2)
+        self.box3 = dmd.TextLayer(112,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        if self.game.switches.mineHome.is_active():
+            self.box3.set_text("b")
+        layers.append(self.box3)
+        combined = dmd.GroupedLayer(128,32,layers)
+        self.layer = combined
 
 
 ##   ____       _   _   _                   ____            _   _
