@@ -192,6 +192,9 @@ class NewServiceModeTests(NewServiceSkeleton):
         if selection == "SWITCHES":
             self.mode_to_add = NewServiceModeSwitchEdges(game=self.game,priority=202)
             self.game.modes.add(self.mode_to_add)
+        elif selection == "DROP TARGETS":
+            self.mode_to_add = NewServiceModeDropTargets(game=self.game,priority=202)
+            self.game.modes.add(self.mode_to_add)
         else:
             pass
         # TODO: The rest of these sections
@@ -229,6 +232,204 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         # TODO: other row lines, info lines
         self.layer = combined
 
+class NewServiceModeDropTargets(NewServiceSkeleton):
+    """Service Mode Tests Section."""
+    def __init__(self, game, priority):
+        super(NewServiceModeDropTargets, self).__init__(game, priority)
+        self.myID = "Service Mode Drop Target Test"
+        self.index = 0
+        self.targets = ["LEFT DROP TARGET","LEFT CENTER DROP TARGET","RIGHT CENTER DROP TARGET","RIGHT DROP TARGET"]
+        self.coils = [self.game.coils.badGuyC0,
+                      self.game.coils.badGuyC1,
+                      self.game.coils.badGuyC2,
+                      self.game.coils.badGuyC3]
+
+    def mode_started(self):
+        self.update_display()
+        self.targetUp = [False,False,False,False]
+        self.on_time = self.game.user_settings['Machine (Standard)']['Drop Target Boost']
+
+    def sw_exit_active(self,sw):
+        if not self.busy:
+            self.game.sound.play(self.game.assets.sfx_menuExit)
+            self.drop_targets()
+            self.unload()
+        return game.SwitchStop
+
+    def sw_up_active(self,sw):
+        print "Targets:"
+        print self.targetUp
+        self.index += 1
+        if self.index > 3:
+            self.index = 0
+        print "Index is: " + str(self.index)
+        self.targetLine.set_text(self.targets[self.index])
+        self.update_instruction(self.index)
+        return game.SwitchStop
+
+    def sw_down_active(self,sw):
+        print "Targets:"
+        print self.targetUp
+        self.index -= 1
+        if self.index < 0:
+            self.index = 3
+        print "Index is: " + str(self.index)
+        self.targetLine.set_text(self.targets[self.index])
+        self.update_instruction(self.index)
+        return game.SwitchStop
+
+    def sw_enter_active(self,sw):
+        print "Enter Pressed"
+        print "Index is: " + str(self.index)
+        print "targetUp is: " + str(self.targetUp[self.index])
+        # if the selected target is down
+        if self.targetUp[self.index] == False:
+            # raise the target
+            print "Raise target " + str(self.index)
+            self.target_up(self.index)
+            # update the insruction line
+        else:
+            print "Target is up, killing target"
+            print "Lower Target" +  str(self.index)
+            self.target_down(self.index)
+        return game.SwitchStop
+
+    def sw_badGuySW0_active(self,sw):
+        # far left bad guy target
+        if self.targetUp[0]:
+            self.update_box(0)
+        return game.SwitchStop
+
+    def sw_badGuySW0_inactive_for_180ms(self,sw):
+        # allowance for running in fakepinproc
+        if not self.game.fakePinProc:
+            self.target_activate(0)
+            self.update_box(0)
+        return game.SwitchStop
+
+    def sw_badGuySW1_active(self,sw):
+        # center left badguy target
+        if self.targetUp[1]:
+            self.update_box(1)
+        return game.SwitchStop
+
+    def sw_badGuySW1_inactive_for_180ms(self,sw):
+        # allowance for running in fakepinproc
+        if not self.game.fakePinProc:
+            self.target_activate(1)
+            self.update_box(1)
+        return game.SwitchStop
+
+    def sw_badGuySW2_active(self,sw):
+        # center right bad guy target
+        if self.targetUp[2]:
+            self.update_box(2)
+        return game.SwitchStop
+
+    def sw_badGuySW2_inactive_for_180ms(self,sw):
+        # allowance for running in fakepinproc
+        if not self.game.fakePinProc:
+            self.target_activate(2)
+            self.update_box(2)
+        return game.SwitchStop
+
+    def sw_badGuySW3_active(self,sw):
+        # far right bad guy target
+        if self.targetUp[3]:
+            self.update_box(3)
+        return game.SwitchStop
+
+    def sw_badGuySW3_inactive_for_180ms(self,sw):
+        # allowance for running in fakepinproc
+        if not self.game.fakePinProc:
+            self.target_activate(3)
+            self.update_box(3)
+        return game.SwitchStop
+
+    def update_box(self,target):
+        print "Updating checkbox " + str(target)
+        boxes = [self.box0,self.box1,self.box2,self.box3]
+        # if the bad guy is down, the box is empty
+        if self.targetUp[target] == False:
+            boxes[target].set_text("a")
+        else:
+            boxes[target].set_text("b")
+
+    def update_instruction(self,target):
+        print "Update instruction for target " + str(target) + "Target val: " + str(self.targetUp[target])
+        if self.targetUp[target] == False:
+            self.instructionLine.set_text("PRESS ENTER TO RAISE TARGET")
+        else:
+            self.instructionLine.set_text("PRESS ENTER TO LOWER TARGET")
+
+
+    def update_display(self):
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        layers.append(background)
+        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("DROP TARGETS")
+        layers.append(title)
+        self.targetLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text(str(self.targets[self.index]))
+        self.targetLine.composite_op = "blacksrc"
+        layers.append(self.targetLine)
+        self.instructionLine = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ,"center").set_text("PRESS ENTER TO RAISE TARGET")
+        layers.append(self.instructionLine)
+        label0 = dmd.TextLayer(16,20,self.game.assets.font_5px_AZ,"center").set_text("SW.61")
+        layers.append(label0)
+        label1 = dmd.TextLayer(48,20,self.game.assets.font_5px_AZ,"center").set_text("SW.62")
+        layers.append(label1)
+        label2 = dmd.TextLayer(80,20,self.game.assets.font_5px_AZ,"center").set_text("SW.63")
+        layers.append(label2)
+        label3 = dmd.TextLayer(112,20,self.game.assets.font_5px_AZ,"center").set_text("SW.64")
+        layers.append(label3)
+        self.box0 = dmd.TextLayer(16,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        layers.append(self.box0)
+        self.box1 = dmd.TextLayer(48,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        layers.append(self.box1)
+        self.box2 = dmd.TextLayer(80,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        layers.append(self.box2)
+        self.box3 = dmd.TextLayer(112,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        layers.append(self.box3)
+        combined = dmd.GroupedLayer(128,32,layers)
+        self.layer = combined
+
+    # raise target
+    def target_up(self,target):
+        print "TARGET RAISED " + str(target)
+        # new coil raise based on research with on o-scope by jim (jvspin)
+        self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
+        # If fakepinproc is true, activate the target right away
+        if self.game.fakePinProc:
+            self.target_activate(target)
+
+    # drop target
+    def target_down(self,target):
+        print "DEACTIVATING TARGET " + str(target)
+        self.coils[target].disable()
+        self.targetUp[target] = False
+        self.update_box(target)
+        self.update_instruction(target)
+        print "Targets:"
+        print self.targetUp
+
+    def target_activate(self,target):
+        if self.targetUp[target] == False:
+            print "ACTIVATING TARGET " + str(target)
+            self.coils[target].patter(on_time=2,off_time=10)
+            self.targetUp[target] = True
+            if self.game.fakePinProc:
+                self.update_box(target)
+                self.update_instruction(target)
+        print "Targets:"
+        print self.targetUp
+
+
+    def drop_targets(self):
+        # drop all teh targets
+        for i in range(0,4,1):
+            self.target_down(i)
+
+
 ##   ____       _   _   _                   ____            _   _
 ##  / ___|  ___| |_| |_(_)_ __   __ _ ___  / ___|  ___  ___| |_(_) ___  _ __
 ##  \___ \ / _ \ __| __| | '_ \ / _` / __| \___ \ / _ \/ __| __| |/ _ \| '_ \
@@ -259,10 +460,48 @@ class NewServiceModeStats(NewServiceSkeleton):
         super(NewServiceModeStats, self).__init__(game, priority)
         self.myID = "Service Mode Stats"
         self.index = 0
+        self.values = []
 
     def mode_started(self):
-        self.section = ["PENDING","PENDING"]
-        self.update_display("Statistics",str(self.section[self.index]))
+        # grab the audits section out of the game data
+        itemlist = self.game.game_data["Audits"]
+        # go through the audits and store the names and values
+        for item in sorted(itemlist.iterkeys()):
+            self.section.append(str(item).upper())
+            print "Item: " + str(item)
+            self.values.append(str(itemlist[item]))
+            print "Value: " + str(itemlist[item])
+        self.update_display("Statistics",self.section[self.index],self.values[self.index])
+
+    def item_down(self):
+        self.index -= 1
+        # if we get below zero, loop around
+        if self.index < 0:
+            self.index = (len(self.section) - 1)
+            # then update the display
+        self.selectionLine.set_text(str(self.section[self.index]))
+        self.infoLine.set_text(str(self.values[self.index]))
+
+    def item_up(self):
+        self.index += 1
+        # if we get too high, go to zero
+        if self.index >= len(self.section):
+            self.index = 0
+            # then update the display
+        self.selectionLine.set_text(str(self.section[self.index]))
+        self.infoLine.set_text(str(self.values[self.index]))
+
+
+    # standard display structure
+    def update_display(self,titleString,selectionString,infoString="",blinkInfo = False):
+        self.titleLine = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text(titleString)
+        self.selectionLine = dmd.TextLayer(64,11,self.game.assets.font_9px_az,"center").set_text(selectionString)
+        self.infoLine = dmd.TextLayer(64,22,self.game.assets.font_7px_az,"center")
+        if blinkInfo:
+            self.infoLine.set_text(infoString,blink_frames=30)
+        else:
+            self.infoLine.set_text(infoString)
+        self.layer = dmd.GroupedLayer(128,32,[self.titleLine,self.selectionLine,self.infoLine])
 
 ##   _   _ _   _ _ _ _   _             ____            _   _
 ##  | | | | |_(_) (_) |_(_) ___  ___  / ___|  ___  ___| |_(_) ___  _ __

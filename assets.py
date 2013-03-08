@@ -1277,6 +1277,7 @@ class Assets():
         self.dmd_moonIntro = dmd.Animation().load(self.dmd_path+'moon-intro.dmd')
 
         self.dmd_switchMatrix = dmd.Animation().load(self.dmd_path+'matrix_backdrop.dmd')
+        self.dmd_testBackdrop = dmd.Animation().load(self.dmd_path+'test_backdrop.dmd')
 
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"
