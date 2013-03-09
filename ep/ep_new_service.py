@@ -205,7 +205,7 @@ class NewServiceModeTests(NewServiceSkeleton):
 
     def mode_started(self):
         # set some indexes
-        self.section = ["SWITCHES","SINGLE LAMPS", "ALL LAMPS","SOLENOIDS","FLASHERS","DROP TARGETS","MINE"]
+        self.section = ["SWITCHES","SINGLE LAMPS", "ALL LAMPS","SOLENOIDS","FLASHERS","DROP TARGETS","MINE","TRAIN"]
         self.update_display("Tests",str(self.section[self.index]))
 
     def sw_enter_active(self,sw):
@@ -224,6 +224,9 @@ class NewServiceModeTests(NewServiceSkeleton):
             self.game.modes.add(self.mode_to_add)
         elif selection == "SINGLE LAMPS":
             self.mode_to_add = NewServiceModeSingleLamps(game=self.game,priority=202)
+            self.game.modes.add(self.mode_to_add)
+        elif selection == "FLASHERS":
+            self.mode_to_add = NewServiceModeFlashers(game=self.game,priority=202)
             self.game.modes.add(self.mode_to_add)
         else:
             pass
@@ -331,8 +334,6 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
 
         return game.SwitchStop
 
-    # TODO: set up all the switch methods for turning the images on and off
-
     def sw_enter_active(self,sw):
         self.switch_handler(sw)
         return game.SwitchStop
@@ -396,8 +397,15 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         self.layer = combined
         self.rowLayers = [None,self.switchRow1,self.switchRow2,self.switchRow3,self.switchRow4,self.switchRow5,self.switchRow6,self.switchRow7,self.switchRow8]
 
+##   ____  _             _        _                            _____         _
+##  / ___|(_)_ __   __ _| | ___  | |    __ _ _ __ ___  _ __   |_   _|__  ___| |_
+##  \___ \| | '_ \ / _` | |/ _ \ | |   / _` | '_ ` _ \| '_ \    | |/ _ \/ __| __|
+##   ___) | | | | | (_| | |  __/ | |__| (_| | | | | | | |_) |   | |  __/\__ \ |_
+##  |____/|_|_| |_|\__, |_|\___| |_____\__,_|_| |_| |_| .__/    |_|\___||___/\__|
+##                 |___/                              |_|
+
 class NewServiceModeSingleLamps(NewServiceSkeleton):
-    """Service Mode Tests Section."""
+    """Service Mode Single Lamp Test."""
     def __init__(self, game, priority):
         super(NewServiceModeSingleLamps, self).__init__(game, priority)
         self.myID = "Service Mode Single Lamps Test"
@@ -542,6 +550,82 @@ class NewServiceModeAllLamps(NewServiceSkeleton):
         layers.append(self.infoLine)
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
+
+##   _____ _           _                 _____         _
+##  |  ___| | __ _ ___| |__   ___ _ __  |_   _|__  ___| |_
+##  | |_  | |/ _` / __| '_ \ / _ \ '__|   | |/ _ \/ __| __|
+##  |  _| | | (_| \__ \ | | |  __/ |      | |  __/\__ \ |_
+##  |_|   |_|\__,_|___/_| |_|\___|_|      |_|\___||___/\__|
+
+class NewServiceModeFlashers(NewServiceSkeleton):
+    """Service Mode Tests Section."""
+    def __init__(self, game, priority):
+        super(NewServiceModeFlashers, self).__init__(game, priority)
+        self.myID = "Service Mode Flashers Test"
+        self.index = 0
+        self.section = []
+        # grab the flashers from the coil list
+        for flasher in self.game.coils:
+            print flasher.name + " - " + str(flasher.tags)
+            if "Flasher" in flasher.tags:
+                self.section.append(flasher)
+
+    def mode_started(self):
+        self.update_display()
+        self.change_flasher()
+
+    def mode_stopped(self):
+        for flasher in self.section:
+            flasher.disable()
+
+    def sw_enter_active(self,sw):
+        # null the enter button
+        return game.SwitchStop
+
+    def item_down(self):
+        self.index -= 1
+        # if we get below zero, loop around
+        if self.index < 0:
+            self.index = (len(self.section) - 1)
+            # update the lamp
+        self.change_flasher()
+
+    def item_up(self):
+        self.index += 1
+        # if we get too high, go to zero
+        if self.index >= len(self.section):
+            self.index = 0
+            # update the lamp
+        self.change_flasher()
+
+    def change_flasher(self):
+        flasher = self.section[self.index]
+        flasherString = flasher.label.upper()
+        print flasher.name + " - " + flasherString
+        # kill everything!
+        for flasher in self.section:
+            flasher.disable()
+            # then update the display
+        self.flasherName.set_text(flasherString)
+        # if we're flashing, schedule the new one
+        flasher.schedule(0x00010001)
+
+    def update_display(self):
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        layers.append(background)
+        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("FLASHERS")
+        layers.append(title)
+        self.flasherName = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("")
+        self.flasherName.composite_op = "blacksrc"
+        layers.append(self.flasherName)
+        instructions = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ,"center").set_text("+/- TO SELECT FLASHER")
+        layers.append(instructions)
+        self.infoLine = dmd.TextLayer(64,21,self.game.assets.font_7px_az,"center").set_text("FLASHING",blink_frames=30)
+        layers.append(self.infoLine)
+        combined = dmd.GroupedLayer(128,32,layers)
+        self.layer = combined
+
 
 ##   ____                    _____                    _         _____         _
 ##  |  _ \ _ __ ___  _ __   |_   _|_ _ _ __ __ _  ___| |_ ___  |_   _|__  ___| |_

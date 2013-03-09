@@ -328,66 +328,128 @@ PRCoils:
         number: FLLH
     moveBart:
         number: FURM
+        label: Bart Toy - Move
+        tags: Solenoid
     moveBartHat:
         number: FULH
+        label: Bart Toy - Hat
+        tags: Solenoid
     autoPlunger:
         number: C01
+        label: Auto-Plunger
+        tags: Solenoid
     badGuyC0:
         number: C02
+        label: Left Drop Target
+        tags: Mech
     badGuyC1:
         number: C03
+        label: Left CTR Drop Target
+        tags: Mech
     badGuyC2:
         number: C04
+        label: Right CTR Drop Target
+        tags: Mech
     badGuyC3:
         number: C05
+        label: Right Drop Target
+        tags: Mech
     minePopper:
         number: C06
+        label: Mine Popper
+        tags: Mech
     knocker:
         number: C07
+        label: Backbox Knocker
+        tags: Solenoid
     saloonPopper:
         number: C08
+        label: Saloon Popper
+        tags: Solenoid
     troughEject:
         number: C09
+        label: Trough Eject
+        tags: Solenoid
     leftSlingshot:
         number: C10
+        label: Left Slingshot
+        tags: Solenoid
     rightSlingshot:
         number: C11
+        label: Right Slingshot
+        tags: Solenoid
     leftJetBumper:
         number: C12
+        label: Left Jet Bumper
+        tags: Solenoid
     rightJetBumper:
         number: C13
+        label: Right Jet Bumper
+        tags: Solenoid
     leftGunFightPost:
         number: C14
+        label: Left Gunfight Post
+        tags: Solenoid
     rightGunFightPost:
         number: C15
+        label: Right GUnfight Post
+        tags: Solenoid
     bottomJetBumper:
         number: C16
+        label: Bottom Jet Bumper
+        tags: Solenoid
     mineMotor:
         number: C17
+        label: Mine Motor
+        tags: Mech
     mineFlasher:
         number: C18
+        label: Mine
+        tags: Flasher
     leftGunFlasher:
         number: C19
+        label: Left Pistol
+        tags: Flasher
     rightGunFlasher:
         number: C20
+        label: Right Pistol
+        tags: Flasher
     leftLoopGate:
         number: C21
+        label: Left Loop Gate
+        tags: Solenoid
     rightLoopGate:
         number: C22
+        label: Right Loop Gate
+        tags: Solenoid
     beaconFlasher:
         number: C24
+        label: Awards Beacon
+        tags: Flasher
     middleRightFlasher:
         number: C25
+        label: Right Middle - Red
+        tags: Flasher
     saloonFlasher:
         number: C26
+        label: Saloon
+        tags: Flasher
     backRightFlasher:
         number: C27
+        label: Back Right - Red
+        tags: Flasher
     backLeftFlasher:
         number: C28
+        label: Back Left - Red
+        tags: Flasher
     trainReverse:
         number: C37
+        label: Train Motor - Reverse
+        tags: Mech
     trainForward:
         number: C38
+        label: Train Motor - Forward
+        tags: Mech
 
 PRLamps:
     rankStranger:
