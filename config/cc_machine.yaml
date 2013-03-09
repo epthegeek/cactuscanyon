@@ -260,7 +260,7 @@ PRSwitches:
         tags: Standard,6,6
     skillBowl:
         number: S67
-        lable: Skill Bowl
+        label: Skill Bowl
         tags: Standard,6,7
     rightRampBottom:
         number: S68

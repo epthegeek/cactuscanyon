@@ -319,7 +319,7 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
                 lastString = "LAST SWITCH: D" + sw.tags[2]
                 self.lastText.set_text(lastString)
             else:
-                lastString = "LAST SWITCH: " + sw.tags[2] + sw.tags[1]
+                lastString = "LAST SWITCH: " + sw.tags[1] + sw.tags[2]
                 self.lastText.set_text(lastString)
             self.update_row(sw,"A")
         else:
@@ -452,10 +452,10 @@ class NewServiceModeSingleLamps(NewServiceSkeleton):
     def change_lamp(self):
         lamp = self.section[self.index]
         lampString = lamp.label.upper()
-        print lamp.name + " - " + lampString
+        print "Change Lamp " + lamp.name + " - " + lampString
         # kill everything!
-        for lamp in self.section:
-            lamp.disable()
+        for everyLamp in self.section:
+            everyLamp.disable()
         # then update the display
         self.lampName.set_text(lampString)
         # if we're flashing, schedule the new one
@@ -589,8 +589,8 @@ class NewServiceModeSolenoids(NewServiceSkeleton):
         coil = self.section[self.index]
         coilString = coil.label.upper()
         # kill everything!
-        for coil in self.section:
-            coil.disable()
+        for everyCoil in self.section:
+            everyCoil.disable()
         # then update the display
         self.coilName.set_text(coilString)
         # if we're running, schedule the new one
@@ -656,8 +656,8 @@ class NewServiceModeFlashers(NewServiceSkeleton):
         flasher = self.section[self.index]
         flasherString = flasher.label.upper()
         # kill everything!
-        for flasher in self.section:
-            flasher.disable()
+        for everyflasher in self.section:
+            everyflasher.disable()
             # then update the display
         self.flasherName.set_text(flasherString)
         # if we're flashing, schedule the new one
@@ -1002,7 +1002,7 @@ class NewServiceModeMine(NewServiceSkeleton):
         title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("MINE TEST")
         layers.append(title)
         self.instructionLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("+/- TO JOG   'ENTER' TO HOME")
-        instructionLine.composite_op = "blacksrc"
+        self.instructionLine.composite_op = "blacksrc"
         layers.append(self.instructionLine)
         name0 = dmd.TextLayer(16,14,self.game.assets.font_5px_AZ,"center").set_text("ENTER")
         layers.append(name0)
