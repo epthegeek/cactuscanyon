@@ -1388,7 +1388,7 @@ class NewServiceModeUtilities(NewServiceSkeleton):
 
     def mode_started(self):
         self.index = 0
-        self.section = ["CLEAR AUDITS", "RESET HIGH SCORES","EMPTY TROUGH"]
+        self.section = ["CLEAR AUDITS", "RESET HIGH SCORES","RESTORE DEFAULTS","RESET SWITCH COUNT","EMPTY TROUGH"]
         self.update_display("Utilities",str(self.section[self.index]))
 
     def sw_enter_active(self,sw):
@@ -1441,13 +1441,30 @@ class NewServiceModeUtility(NewServiceSkeleton):
 
     def perform_action(self):
         # play a sound
-        self.game.sounds.play(self.game.assets.sfx_menuSave)
+        self.game.sound.play(self.game.assets.sfx_menuSave)
         # clear audits
         if self.tool == "CLEAR AUDITS":
-            pass
+            self.game.remote_load_game_data(restore="Audits")
+            self.clear_instructions()
+            self.selectionLine.set_text("AUDITS RESET",blink_frames=15)
+            self.delay(delay=2,handler=self.unload)
         # reset hstd
-        elif tool == "RESET HIGH SCORES":
-            pass
+        elif self.tool == "RESET HIGH SCORES":
+            self.game.remote_load_game_data(restore="HighScoreData")
+            self.clear_instructions()
+            self.selectionLine.set_text("SCORES RESET",blink_frames=15)
+            self.delay(delay=2,handler=self.unload)
+        elif self.tool == "RESET SWITCH COUNTS":
+            self.game.remote_load_game_data(restore="SwitchHits")
+            self.clear_instructions()
+            self.selectionLine.set_text("SWITCH COUNTS RESET",blink_frames=15)
+            self.delay(delay=2,handler=self.unload)
+        # restore defaults
+        elif self.tool == "RESTORE DEFAULTS":
+            self.game.remote_load_settings(restore=True)
+            self.clear_instructions()
+            self.selectionLine.set_text("DEFAULTS RESTORED",blink_frames=15)
+            self.delay(delay=2,handler=self.unload)
         # empty trough
         else:
             self.eject_balls()

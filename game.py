@@ -861,10 +861,6 @@ class CCGame(game.BasicGame):
         avg_game_time = int((prev_total * prev_x) + new_value) / (prev_total + 1)
         return int(avg_game_time)
 
-
-    def save_settings(self):
-        super(CCGame,self).save_settings(user_settings_path)
-
     ### Standard flippers
     def enable_flippers(self, enable):
         """Enables or disables the flippers AND bumpers."""
@@ -1067,7 +1063,7 @@ class CCGame(game.BasicGame):
             self.set_tracking('showdownStatus',"OVER")
 
 
-    def load_settings(self, template_filename, user_filename):
+    def load_settings(self, template_filename, user_filename,restore=False):
         """Loads the YAML game settings configuration file.  The game settings
        describe operator configuration options, such as balls per game and
        replay levels.
@@ -1078,7 +1074,7 @@ class CCGame(game.BasicGame):
        """
         self.user_settings = {}
         self.settings = yaml.load(open(template_filename, 'r'))
-        if os.path.exists(user_filename):
+        if os.path.exists(user_filename) and not restore:
             self.user_settings = yaml.load(open(user_filename, 'r'))
             # check that we got something
             if self.user_settings:
@@ -1086,6 +1082,9 @@ class CCGame(game.BasicGame):
             else:
                 print "Settings broken, all bad, defaulting"
                 self.user_settings = {}
+        #
+        if restore:
+            print "Restore Forced - Loading user settings skipped"
 
         for section in self.settings:
             for item in self.settings[section]:
@@ -1101,7 +1100,18 @@ class CCGame(game.BasicGame):
                     else:
                         self.user_settings[section][item] = self.settings[section][item]['options'][0]
 
-    def load_game_data(self, template_filename, user_filename):
+        if restore:
+            print "Restore - Saving settings"
+            self.save_settings()
+
+
+    def save_settings(self):
+        super(CCGame,self).save_settings(user_settings_path)
+
+    def remote_load_settings(self,restore=False):
+        self.load_settings(settings_defaults_path, user_settings_path,restore)
+
+    def load_game_data(self, template_filename, user_filename,restore=None):
         """Loads the YAML game data configuration file.  This file contains
         transient information such as audits, high scores and other statistics.
         The *template_filename* provides default values for the game;
@@ -1122,6 +1132,17 @@ class CCGame(game.BasicGame):
 
         if template:
             for key, value in template.iteritems():
+                # if we're restoring a section - copy those
+                if restore:
+                    if restore in key:
+                        self.game_data[key] = copy.deepcopy(value)
+                # if something is missing, add that
                 if key not in self.game_data:
                        self.game_data[key] = copy.deepcopy(value)
 
+        # if we restored something, save
+        if restore:
+            self.save_game_data()
+
+    def remote_load_game_data(self,restore=None):
+        self.load_game_data(game_data_defaults_path, user_game_data_path,restore)
