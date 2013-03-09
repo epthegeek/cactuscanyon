@@ -30,7 +30,6 @@ class NewServiceSkeleton(ep.EP_Mode):
 
     def sw_up_active(self,sw):
         if not self.busy:
-            print "Item Up"
             # play the sound for moving up
             self.game.sound.play(self.game.assets.sfx_menuUp)
             self.item_up()
@@ -40,7 +39,6 @@ class NewServiceSkeleton(ep.EP_Mode):
 
     def sw_down_active(self, sw):
         if not self.busy:
-            print "Item Down"
             # play the sound for moving down
             self.game.sound.play(self.game.assets.sfx_menuDown)
             self.item_down()
@@ -224,6 +222,9 @@ class NewServiceModeTests(NewServiceSkeleton):
         elif selection == "ALL LAMPS":
             self.mode_to_add = NewServiceModeAllLamps(game=self.game,priority=202)
             self.game.modes.add(self.mode_to_add)
+        elif selection == "SINGLE LAMPS":
+            self.mode_to_add = NewServiceModeSingleLamps(game=self.game,priority=202)
+            self.game.modes.add(self.mode_to_add)
         else:
             pass
         # TODO: The rest of these sections
@@ -394,6 +395,91 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
         self.rowLayers = [None,self.switchRow1,self.switchRow2,self.switchRow3,self.switchRow4,self.switchRow5,self.switchRow6,self.switchRow7,self.switchRow8]
+
+class NewServiceModeSingleLamps(NewServiceSkeleton):
+    """Service Mode Tests Section."""
+    def __init__(self, game, priority):
+        super(NewServiceModeSingleLamps, self).__init__(game, priority)
+        self.myID = "Service Mode Single Lamps Test"
+        self.section = []
+        for lamp in self.game.lamps:
+            if lamp.label:
+                self.section.append(lamp)
+
+    def mode_started(self):
+        self.index = 0
+        self.mode = 0
+        self.update_display()
+        self.change_lamp()
+
+    def mode_stopped(self):
+        # Kill the lights
+        for lamp in self.section:
+            lamp.disable()
+
+    def sw_enter_active(self,sw):
+        if self.mode == 0:
+            self.mode = 1
+            self.infoLine.set_text("SOLID ON")
+        else:
+            self.mode = 0
+            self.infoLine.set_text("FLASHING",blink_frames=30)
+        # refresh the lamp
+        self.change_lamp()
+        return game.SwitchStop
+
+    def item_down(self):
+        self.index -= 1
+        # if we get below zero, loop around
+        if self.index < 0:
+            self.index = (len(self.section) - 1)
+        # update the lamp
+        self.change_lamp()
+
+    def item_up(self):
+        self.index += 1
+        # if we get too high, go to zero
+        if self.index >= len(self.section):
+            self.index = 0
+        # update the lamp
+        self.change_lamp()
+
+    def change_lamp(self):
+        lamp = self.section[self.index]
+        lampString = lamp.label.upper()
+        print lamp.name + " - " + lampString
+        # kill everything!
+        for lamp in self.section:
+            lamp.disable()
+        # then update the display
+        self.lampName.set_text(lampString)
+        # if we're flashing, schedule the new one
+        if self.mode == 0:
+            lamp.schedule(0x0000FFFF)
+        else:
+            lamp.enable()
+
+    def update_display(self):
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        layers.append(background)
+        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("SINGLE LAMPS")
+        layers.append(title)
+        self.lampName = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("")
+        self.lampName.composite_op = "blacksrc"
+        layers.append(self.lampName)
+        instructions = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ,"center").set_text("+/- TO SELECT LAMP")
+        instructions2 = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO CHANGE MODE")
+        script = []
+        script.append({'seconds':2,'layer':instructions})
+        script.append({'seconds':2,'layer':instructions2})
+        instruction_duo = dmd.ScriptedLayer(128,32,script)
+        instruction_duo.composite_op = "blacksrc"
+        layers.append(instruction_duo)
+        self.infoLine = dmd.TextLayer(64,21,self.game.assets.font_7px_az,"center").set_text("FLASHING",blink_frames=30)
+        layers.append(self.infoLine)
+        combined = dmd.GroupedLayer(128,32,layers)
+        self.layer = combined
 
 
 ##
@@ -583,9 +669,9 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         boxes = [self.box0,self.box1,self.box2,self.box3]
         # if the bad guy is down, the box is empty
         if self.targetUp[target] == False:
-            boxes[target].set_text("a")
-        else:
             boxes[target].set_text("b")
+        else:
+            boxes[target].set_text("a")
 
     def update_instruction(self,target):
         print "Update instruction for target " + str(target) + "Target val: " + str(self.targetUp[target])
@@ -614,13 +700,13 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         layers.append(label2)
         label3 = dmd.TextLayer(112,20,self.game.assets.font_5px_AZ,"center").set_text("SW.64")
         layers.append(label3)
-        self.box0 = dmd.TextLayer(16,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        self.box0 = dmd.TextLayer(16,26,self.game.assets.font_5px_AZ,"center").set_text("b")
         layers.append(self.box0)
-        self.box1 = dmd.TextLayer(48,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        self.box1 = dmd.TextLayer(48,26,self.game.assets.font_5px_AZ,"center").set_text("b")
         layers.append(self.box1)
-        self.box2 = dmd.TextLayer(80,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        self.box2 = dmd.TextLayer(80,26,self.game.assets.font_5px_AZ,"center").set_text("b")
         layers.append(self.box2)
-        self.box3 = dmd.TextLayer(112,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        self.box3 = dmd.TextLayer(112,26,self.game.assets.font_5px_AZ,"center").set_text("b")
         layers.append(self.box3)
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined

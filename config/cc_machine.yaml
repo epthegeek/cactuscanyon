@@ -392,189 +392,251 @@ PRCoils:
 PRLamps:
     rankStranger:
         number: L11
+        label: Rank Lamp - Stranger
         tags: Playfield,Main
     rankPartner:
         number: L12
+        label: Rank Lamp - Partner
         tags: Playfield,Main
     rankDeputy:
         number: L13
+        label: Rank Lamp - Deputy
         tags: Playfield,Main
     rankSheriff:
         number: L14
+        label: Rank Lamp - Sheriff
         tags: Playfield,Main
     rankMarshall:
         number: L15
+        label: Rank Lamp - Marshall
         tags: Playfield,Main
     starMotherlode:
         number: L16
+        label: Badge Point - Motherlode
         tags: Playfield,Badge
     leftBonusLane:
         number: L17
+        label: Left Bonus Lane
         tags: Playfield
     rightBonusLane:
         number: L18
+        label: Right Bonus Lane
         tags: Playfield
     bountyBeacon:
         number: L21
+        label: Beacon - Bounty
         tags: Playfield,Main
     jackpotBeacon:
         number: L22
+        label: Beacon - Jackpot
         tags: Playfield,Main
     shootToCollect:
         number: L23
+        label: Beacon - Shoot to Collect
         tags: Playfield,Main
     extraBallLitBeacon:
         number: L24
+        label: Beacon - Extra Ball
         tags: Playfield,Main
     bountySaloon:
         number: L25
+        label: Saloon - Bounty
         tags: Playfield,Main
     saloonArrow:
         number: L26
+        label: Saloon - Yellow Triangle
         tags: Playfield,Main
     extraBall:
         number: L27
+        label: Mine - Extra Ball
         tags: Playfield,Main
     mineLock:
         number: L28
+        label: Mine - Lock
         tags: Playfield,Main
     badGuyL2:
         number: L31
+        label: Right Center Drop Target
         tags: Playfield
     badGuyL0:
         number: L32
+        label: Left Drop Target
         tags: Playfield
     leftQuickdraw:
         number: L33
+        label: Left Quickdraw
         tags: Playfield,Main
     rightRampSoundAlarm:
         number: L34
+        label: Right Ramp - Sound Alarm
         tags: Playfield,Main,rightRamp
     rightRampShootOut:
         number: L35
+        label: Right Ramp - Shoot-out
         tags: Playfield,Main,rightRamp
     rightRampSavePolly:
         number: L36
+        label: Right Ramp - Save Polly
         tags: Playfield,Main,rightRamp
     rightRampJackpot:
         number: L37
+        label: Right Ramp - Jackpot
         tags: Playfield,Main,rightRamp
     rightRampCombo:
         number: L38
+        label: Right Ramp - Combo
         tags: Playfield,rightRamp
     rightLoopCombo:
         number: L41
+        label: Right Loop - Combo
         tags: Playfield,rightLoop
     rightLoopJackpot:
         number: L42
+        label: Right Loop - Jackpot
         tags: Playfield,Main,rightLoop
     rightLoopMarksman:
         number: L43
+        label: Right Loop - Marksman
         tags: Playfield,Main,rightLoop
     rightLoopGunslinger:
         number: L44
+        label: Right Loop - Gunslinger
         tags: Playfield,Main,rightLoop
     rightLoopGoodShot:
         number: L45
+        label: Right Loop - Good Shot
         tags: Playfield,Main,rightLoop
     leftReturnQuickdraw:
         number: L46
+        label: Left Return Lane QD
         tags: Playfield,Main
     leftGunfightPin:
         number: L47
+        label: Left Gunfight
         tags: Playfield,Main
     leftOutGunfight:
         number: L48
+        label: Left Outlane - Special
         tags: Playfield,Main
     badGuyL3:
         number: L51
+        label: Right Drop Target
         tags: Playfield
     bottomRightQuickdraw:
         number: L52
+        label: Bottom Right Quickdraw
         tags: Playfield,Main
     topRightQuickdraw:
         number: L53
+        label: Top Right Quickdraw
         tags: Playfield,Main
     centerRampCatchTrain:
         number: L54
+        label: Center Ramp - Catch Train
         tags: Playfield,Main,centerRamp
     centerRampStopTrain:
         number: L55
+        label: Center Ramp - Stop Train
         tags: Playfield,Main,centerRamp
     centerRampSavePolly:
         number: L56
+        label: Center Ramp - Save Polly
         tags: Playfield,Main,centerRamp
     centerRampJackpot:
         number: L57
+        label: Center Ramp - Jackpot
         tags: Playfield,Main,centerRamp
     centerRampCombo:
         number: L58
+        label: Center Ramp - Combo
         tags: Playfield,centerRamp
     leftRampWhiteWater:
         number: L61
+        label: Left Ramp - Whitewater
         tags: Playfield,Main,leftRamp
     leftRampWaterfall:
         number: L62
+        label: Left Ramp - Waterfall
         tags: Playfield,Main,leftRamp
     leftRampSavePolly:
         number: L63
+        label: Left Ramp - Save Polly
         tags: Playfield,Main,leftRamp
     leftRampJackpot:
         number: L64
+        label: Left Ramp - Jackpot
         tags: Playfield,Main,leftRamp
     leftRampCombo:
         number: L65
+        label: Left Ramp - Combo
         tags: Playfield,leftRamp
     rightReturnQuickdraw:
         number: L66
+        label: Right Return Lane QD
         tags: Playfield,Main
     rightOutSpecial:
         number: L67
+        label: Right Outlane Special
         tags: Playfield,Main
     rightGunfightPin:
         number: L68
+        label: Right Gunfight
         tags: Playfield,Main
     starStampede:
         number: L71
+        label: Badge Point - Stampede
         tags: Playfield,Badge
     starCombo:
         number: L72
+        label: Badge Point - Combo
         tags: Playfield,Badge
     starHighNoon:
         number: L73
+        label: Badge - High Noon
         tags: Playfield,Badge
     leftLoopCombo:
         number: L74
+        label: Left Loop - Combo
         tags: Playfield,leftLoop
     leftLoopJackpot:
         number: L75
+        label: Left Loop - Jackpot
         tags: Playfield,Main,leftLoop
     leftLoopRideEm:
         number: L76
+        label: Left Loop - Ride em
         tags: Playfield,Main,leftLoop
     leftLoopWildRide:
         number: L77
+        label: Left Loop - Wild Ride
         tags: Playfield,Main,leftLoop
     leftLoopBuckNBronco:
         number: L78
+        label: Left Loop - Buck N Bronco
         tags: Playfield,Main,leftLoop
     starBartBrothers:
         number: L81
+        label: Badge Point - Bart Bros
         tags: Playfield,Badge
     shootAgain:
         number: L82
+        label: Shoot Again
         tags: Playfield,Main
     starShowdown:
         number: L83
+        label: Badge Point - Showdown
         tags: Playfield,Badge
     badGuyL1:
         number: L84
+        label: Left Center Drop Target
         tags: Playfield
     beerMug:
         number: L85
+        label: Beer Mug Mod
         tags: Playfield
     startButton:
         number: L88
+        label: Start Button
     gi01:
         number: G01
     gi02:
