@@ -27,6 +27,7 @@ class NewServiceSkeleton(ep.EP_Mode):
         self.busy = False
         self.index = 0
         self.section = []
+        self.callback = None
 
     def sw_up_active(self,sw):
         if not self.busy:
@@ -58,16 +59,22 @@ class NewServiceSkeleton(ep.EP_Mode):
         # if we get below zero, loop around
         if self.index < 0:
             self.index = (len(self.section) - 1)
-        # then update the display
-        self.selectionLine.set_text(str(self.section[self.index]))
+        if self.callback:
+            self.callback()
+        else:
+            # then update the display
+            self.selectionLine.set_text(str(self.section[self.index]))
 
     def item_up(self):
         self.index += 1
         # if we get too high, go to zero
         if self.index >= len(self.section):
             self.index = 0
-        # then update the display
-        self.selectionLine.set_text(str(self.section[self.index]))
+        if self.callback:
+            self.callback()
+        else:
+            # then update the display
+            self.selectionLine.set_text(str(self.section[self.index]))
 
     # standard display structure
     def update_display(self,titleString,selectionString,infoString="",blinkInfo = False):
@@ -228,9 +235,14 @@ class NewServiceModeTests(NewServiceSkeleton):
         elif selection == "FLASHERS":
             self.mode_to_add = NewServiceModeFlashers(game=self.game,priority=202)
             self.game.modes.add(self.mode_to_add)
+        elif selection == "SOLENOIDS":
+            self.mode_to_add = NewServiceModeSolenoids(game=self.game,priority=202)
+            self.game.modes.add(self.mode_to_add)
+        elif selection == "TRAIN":
+            self.mode_to_add = NewServiceModeTrain(game=self.game,priority=202)
+            self.game.modes.add(self.mode_to_add)
         else:
             pass
-        # TODO: The rest of these sections
         return game.SwitchStop
 
 ##   ____          _ _       _       _____         _
@@ -251,7 +263,6 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         self.colColors = ["","GRN-BRN","GRN-RED","GRN-ORG","GRN-WHT","GRN-BLK","GRN-BLU","GRN-VLT","GRN-GRY"]
         self.dedColors = ["","ORG-BRN","ORG-RED","ORG-BLK","ORG-YEL","ORG-GRN","ORG-BLU","ORG-VLT","ORG-GRY"]
         self.grndColors = ["","BLK-GRN","BLU-VLT","BLK-BLU","BLU-GRY","BLK-VLT","BLK-YEL","BLK-GRY","BLK-BLU"]
-        # TODO: check switch states to set row text
         self.row1text = "a-aaaaaaaa-a"
         self.row2text = "a-aaaaaaaa-a"
         self.row3text = "a-aaaaaaaa-a"
@@ -275,64 +286,63 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
             if add_handler:
                 self.add_switch_handler(name=switch.name, event_type='inactive', delay=None, handler=self.switch_handler)
                 self.add_switch_handler(name=switch.name, event_type='active', delay=None, handler=self.switch_handler)
+            # set the switch to active on the grid if active
+                if switch.is_active():
+                    self.update_row(switch,"A")
 
     def switch_handler(self, sw):
+        # set the row & col ints
+        myRow = int(sw.tags[2])
+        myCol = int(sw.tags[1])
+
         if (sw.state):
             self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
             # set the label text
             self.labelText.set_text(str(sw.label).upper())
             # set the row wire color text
-            self.rowText.set_text(str(self.rowColors[int(sw.tags[2])]))
+            self.rowText.set_text(str(self.rowColors[myRow]))
             # set the column color if applicable
-            if int(sw.tags[1]) != 0:
-                self.colText.set_text(str(self.colColors[int(sw.tags[1])]))
+            if myCol != 0:
+                self.colText.set_text(str(self.colColors[myCol]))
             else:
                 self.colText.set_text("GROUND")
             # update the proper string position
             if "Grounded" in sw.tags:
-                # grounded switch slice
-                self.rowStrings[int(sw.tags[2])] = "A" + self.rowStrings[int(sw.tags[2])][1:]
-                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
                 # set the last switch text string
                 lastString = "LAST SWITCH: F" + sw.tags[2]
                 self.lastText.set_text(lastString)
             elif "Dedicated" in sw.tags:
-                # dedicated switch slice
-                self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:11] + "A"
-                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
                 # set the last switch text string
                 lastString = "LAST SWITCH: D" + sw.tags[2]
                 self.lastText.set_text(lastString)
             else:
-                # standard switch slice
                 lastString = "LAST SWITCH: " + sw.tags[2] + sw.tags[1]
                 self.lastText.set_text(lastString)
-                # find the slice positions
-                left = int(sw.tags[1]) + 1
-                right = int(sw.tags[1]) + 2
-                self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:left] + "A" + self.rowStrings[int(sw.tags[2])][right:]
-                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
+            self.update_row(sw,"A")
         else:
             # clear the label text
             self.labelText.set_text("")
-            # update the proper string position
-            if "Grounded" in sw.tags:
-                # grounded switch slice
-                self.rowStrings[int(sw.tags[2])] = "a" + self.rowStrings[int(sw.tags[2])][1:]
-                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
-            elif "Dedicated" in sw.tags:
-                # dedicated switch slice
-                self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:11] + "a"
-                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
-            else:
-                # standard switch slice
-                # find the slice positions
-                left = int(sw.tags[1]) + 1
-                right = int(sw.tags[1]) + 2
-                self.rowStrings[int(sw.tags[2])] = self.rowStrings[int(sw.tags[2])][:left] + "a" + self.rowStrings[int(sw.tags[2])][right:]
-                self.rowLayers[int(sw.tags[2])].set_text(self.rowStrings[int(sw.tags[2])])
-
+            # turn off the row
+            self.update_row(sw,"a")
         return game.SwitchStop
+
+    def update_row(self,sw,char):
+        myRow = int(sw.tags[2])
+        myCol = int(sw.tags[1])
+        left = myCol + 1
+        right = myCol + 2
+        # substitute the row position
+        if "Grounded" in sw.tags:
+            # grounded switch slice
+            self.rowStrings[myRow] = char + self.rowStrings[myRow][1:]
+        elif "Dedicated" in sw.tags:
+            # dedicated switch slice
+            self.rowStrings[myRow] = self.rowStrings[myRow][:11] + char
+        else:
+            # standard switch slice
+            self.rowStrings[myRow] = self.rowStrings[myRow][:left] + char + self.rowStrings[myRow][right:]
+            # then update the row text
+        self.rowLayers[myRow].set_text(self.rowStrings[myRow])
 
     def sw_enter_active(self,sw):
         self.switch_handler(sw)
@@ -352,7 +362,6 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
     def sw_down_active(self,sw):
         self.switch_handler(sw)
         return game.SwitchStop
-
 
     def update_display(self):
         layers = []
@@ -415,6 +424,7 @@ class NewServiceModeSingleLamps(NewServiceSkeleton):
                 self.section.append(lamp)
 
     def mode_started(self):
+        self.callback = self.change_lamp
         self.index = 0
         self.mode = 0
         self.update_display()
@@ -435,22 +445,6 @@ class NewServiceModeSingleLamps(NewServiceSkeleton):
         # refresh the lamp
         self.change_lamp()
         return game.SwitchStop
-
-    def item_down(self):
-        self.index -= 1
-        # if we get below zero, loop around
-        if self.index < 0:
-            self.index = (len(self.section) - 1)
-        # update the lamp
-        self.change_lamp()
-
-    def item_up(self):
-        self.index += 1
-        # if we get too high, go to zero
-        if self.index >= len(self.section):
-            self.index = 0
-        # update the lamp
-        self.change_lamp()
 
     def change_lamp(self):
         lamp = self.section[self.index]
@@ -515,14 +509,13 @@ class NewServiceModeAllLamps(NewServiceSkeleton):
             lamp.disable()
 
     def sw_enter_active(self,sw):
+        self.change_mode()
         return game.SwitchStop
 
     def sw_up_active(self,sw):
-        self.update_mode()
         return game.SwitchStop
 
     def sw_down_active(self,sw):
-        self.update_mode()
         return game.SwitchStop
 
     def update_mode(self):
@@ -543,10 +536,84 @@ class NewServiceModeAllLamps(NewServiceSkeleton):
         layers.append(background)
         title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("ALL LAMPS")
         layers.append(title)
-        targetLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("+/- TO CHANGE MODE")
+        targetLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("'ENTER' TO CHANGE MODE")
         targetLine.composite_op = "blacksrc"
         layers.append(targetLine)
         self.infoLine = dmd.TextLayer(64,16,self.game.assets.font_12px_az,"center").set_text("FLASHING",blink_frames=30)
+        layers.append(self.infoLine)
+        combined = dmd.GroupedLayer(128,32,layers)
+        self.layer = combined
+
+##   ____        _                  _     _   _____         _
+##  / ___|  ___ | | ___ _ __   ___ (_) __| | |_   _|__  ___| |_
+##  \___ \ / _ \| |/ _ \ '_ \ / _ \| |/ _` |   | |/ _ \/ __| __|
+##   ___) | (_) | |  __/ | | | (_) | | (_| |   | |  __/\__ \ |_
+##  |____/ \___/|_|\___|_| |_|\___/|_|\__,_|   |_|\___||___/\__|
+
+class NewServiceModeSolenoids(NewServiceSkeleton):
+    """Service Mode Tests Section."""
+    def __init__(self, game, priority):
+        super(NewServiceModeSolenoids, self).__init__(game, priority)
+        self.myID = "Service Mode Solenoids Test"
+        self.index = 0
+        self.section = []
+        # grab the solenoids from the coil list
+        for solenoid in self.game.coils:
+            if "Solenoid" in solenoid.tags:
+                self.section.append(solenoid)
+
+    def mode_started(self):
+        self.callback = self.change_coil
+        self.mode = 0
+        self.update_display()
+        self.change_coil()
+
+    def mode_stopped(self):
+        for coil in self.section:
+            coil.disable()
+
+    def sw_enter_active(self,sw):
+        if self.mode == 0:
+            self.mode = 1
+            self.infoLine.set_text("RUNNING")
+        else:
+            self.mode = 0
+            self.infoLine.set_text("STOPPED")
+        self.change_coil()
+        return game.SwitchStop
+
+    def change_coil(self):
+        coil = self.section[self.index]
+        coilString = coil.label.upper()
+        # kill everything!
+        for coil in self.section:
+            coil.disable()
+        # then update the display
+        self.coilName.set_text(coilString)
+        # if we're running, schedule the new one
+        if self.mode == 1:
+            coil.schedule(0x00000001)
+        else:
+            coil.disable()
+
+    def update_display(self):
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        layers.append(background)
+        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("SOLENOIDS")
+        layers.append(title)
+        self.coilName = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("")
+        self.coilName.composite_op = "blacksrc"
+        layers.append(self.coilName)
+        instructions = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ,"center").set_text("+/- TO SELECT SOLENOID")
+        instructions2 = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO CHANGE MODE")
+        script = []
+        script.append({'seconds':2,'layer':instructions})
+        script.append({'seconds':2,'layer':instructions2})
+        instruction_duo = dmd.ScriptedLayer(128,32,script)
+        instruction_duo.composite_op = "blacksrc"
+        layers.append(instruction_duo)
+        self.infoLine = dmd.TextLayer(64,21,self.game.assets.font_7px_az,"center").set_text("STOPPED")
         layers.append(self.infoLine)
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
@@ -566,11 +633,11 @@ class NewServiceModeFlashers(NewServiceSkeleton):
         self.section = []
         # grab the flashers from the coil list
         for flasher in self.game.coils:
-            print flasher.name + " - " + str(flasher.tags)
             if "Flasher" in flasher.tags:
                 self.section.append(flasher)
 
     def mode_started(self):
+        self.callback = self.change_flasher
         self.update_display()
         self.change_flasher()
 
@@ -582,26 +649,9 @@ class NewServiceModeFlashers(NewServiceSkeleton):
         # null the enter button
         return game.SwitchStop
 
-    def item_down(self):
-        self.index -= 1
-        # if we get below zero, loop around
-        if self.index < 0:
-            self.index = (len(self.section) - 1)
-            # update the lamp
-        self.change_flasher()
-
-    def item_up(self):
-        self.index += 1
-        # if we get too high, go to zero
-        if self.index >= len(self.section):
-            self.index = 0
-            # update the lamp
-        self.change_flasher()
-
     def change_flasher(self):
         flasher = self.section[self.index]
         flasherString = flasher.label.upper()
-        print flasher.name + " - " + flasherString
         # kill everything!
         for flasher in self.section:
             flasher.disable()
@@ -843,12 +893,12 @@ class NewServiceModeMine(NewServiceSkeleton):
         super(NewServiceModeMine, self).__init__(game, priority)
         self.myID = "Service Mode Mine Test"
         self.index = 0
-        self.inMotion = False
-        self.resetFlag = False
 
     def mode_started(self):
         self.kickStrength = self.game.user_settings['Machine (Standard)']['Mine Kicker Strength']
         self.update_display()
+        self.inMotion = False
+        self.resetFlag = False
 
 
     def sw_enter_active(self,sw):
@@ -969,6 +1019,126 @@ class NewServiceModeMine(NewServiceSkeleton):
         if self.game.switches.mineHome.is_active():
             self.box3.set_text("b")
         layers.append(self.box3)
+        combined = dmd.GroupedLayer(128,32,layers)
+        self.layer = combined
+
+##   _____          _         _____         _
+##  |_   _| __ __ _(_)_ __   |_   _|__  ___| |_
+##    | || '__/ _` | | '_ \    | |/ _ \/ __| __|
+##    | || | | (_| | | | | |   | |  __/\__ \ |_
+##    |_||_|  \__,_|_|_| |_|   |_|\___||___/\__|
+
+class NewServiceModeTrain(NewServiceSkeleton):
+    """Service Mode Train Test."""
+    def __init__(self, game, priority):
+        super(NewServiceModeTrain, self).__init__(game, priority)
+        self.myID = "Service Mode Settings"
+        self.index = 0
+
+    def mode_started(self):
+        self.mode = 0
+        self.update_display()
+        self.inMotion = False
+
+    def mode_stopped(self):
+        # just in case
+        self.stop()
+
+    def sw_enter_active(self,sw):
+        if self.mode == 0:
+            self.mode = 1
+            self.speedLayer.set_text("SPEED: FAST")
+        else:
+            self.mode = 0
+            self.speedLayer.set_text("SPEED: SLOW")
+        return game.SwitchStop
+
+    def sw_up_active(self,sw):
+        if not self.inMotion:
+            self.move("FORWARD")
+        return game.SwitchStop
+
+    def sw_up_inactive(self,sw):
+        self.stop()
+        return game.SwitchStop
+
+    def sw_down_active(self,sw):
+        if not self.inMotion:
+            self.move("BACKWARD")
+        return game.SwitchStop
+
+    def sw_down_inactive(self,sw):
+        self.stop()
+        return game.SwitchStop
+
+    def sw_trainHome_active(self,sw):
+        self.stop()
+        self.box1.set_text('HOME b')
+        return game.SwitchStop
+
+    def sw_trainHome_inactive(self,sw):
+        self.box1.set_text('HOME a')
+        return game.SwitchStop
+
+    def sw_trainEncoder_active(self,sw):
+        self.box0.set_text('ENCODER b')
+        return game.SwitchStop
+
+    def sw_trainEncoder_inactive(self,sw):
+        self.box1.set_text('ENCODER a')
+        return game.SwitchStop
+
+    def stop(self):
+        self.game.coils.trainForward.disable()
+        self.game.coils.trainReverse.disable()
+        self.inMotion = False
+        self.directionLayer.set_text("STOPPED")
+
+    def move(self,direction):
+        self.inMotion = True
+        self.directionLayer.set_text(direction)
+        if direction == "FORWARD":
+            coil = self.game.coils.trainForward
+        else:
+            coil = self.game.coils.trainReverse
+        if self.mode == 0:
+            coil.patter(on_time=6,off_time=6)
+        else:
+            coil.enable()
+
+    def update_display(self):
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        layers.append(background)
+        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("TRAIN TEST")
+        layers.append(title)
+        self.speedLayer = dmd.TextLayer(32,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("SPEED: SLOW")
+        self.speedLayer.composite_op = "blacksrc"
+        layers.append(self.speedLayer)
+        dash = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("-")
+        dash.composite_op = "blacksrc"
+        layers.append(dash)
+        self.directionLayer = dmd.TextLayer(96,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("STOPPED")
+        self.directionLayer.composite_op = "blacksrc"
+        layers.append(self.directionLayer)
+        instructions = dmd.TextLayer(64,16,self.game.assets.font_5px_AZ,"center").set_text("HOLD + TO GO FORWARD")
+        instructions2 = dmd.TextLayer(64,16,self.game.assets.font_5px_AZ,"center").set_text("HOLD - TO GO BACKWARD")
+        instructions3 = dmd.TextLayer(64,16,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO CHANGE SPEED")
+        script = []
+        script.append({'seconds':2,'layer':instructions})
+        script.append({'seconds':2,'layer':instructions2})
+        script.append({'seconds':2,'layer':instructions3})
+        instruction_trio = dmd.ScriptedLayer(128,32,script)
+        instruction_trio.composite_op = "blacksrc"
+        layers.append(instruction_trio)
+        self.box0 = dmd.TextLayer(13,24,self.game.assets.font_5px_AZ,"left").set_text("ENCODER a")
+        if self.game.switches.trainEncoder.is_active():
+            self.box0.set_text("ENCODER b")
+        layers.append(self.box0)
+        self.box1 = dmd.TextLayer(78,24,self.game.assets.font_5px_AZ,"left").set_text("HOME a")
+        if self.game.switches.trainHome.is_active():
+            self.box1.set_text("HOME b")
+        layers.append(self.box1)
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 

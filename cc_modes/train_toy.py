@@ -95,7 +95,6 @@ class Train(ep.EP_Mode):
     def forward(self):
         if not self.trainDisabled:
             self.inMotion = True
-            # TODO need to tweak this out for speed later
             self.game.coils.trainForward.patter(on_time=6,off_time=6)
 
     def fast_reverse(self):
