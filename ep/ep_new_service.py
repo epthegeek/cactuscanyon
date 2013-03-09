@@ -150,26 +150,26 @@ class NewServiceMode(NewServiceSkeleton):
                 # set active mode to the currently selected mode
                 selection = self.section[self.index]
                 # Then create that mode
+                mode_to_add = None
                 if selection == "TESTS":
-                    self.mode_to_add = NewServiceModeTests(game=self.game,priority=201)
-                    self.game.modes.add(self.mode_to_add)
+                    mode_to_add = NewServiceModeTests(game=self.game,priority=201)
                 elif selection == "SETTINGS":
-                    self.mode_to_add = NewServiceModeSettings(game=self.game,priority=201)
-                    self.game.modes.add(self.mode_to_add)
+                    mode_to_add = NewServiceModeSettings(game=self.game,priority=201)
                 elif selection == "STATS":
-                    self.mode_to_add = NewServiceModeStats(game=self.game,priority=201)
-                    self.game.modes.add(self.mode_to_add)
+                    mode_to_add = NewServiceModeStats(game=self.game,priority=201)
                 elif selection == "UTILITIES":
-                    self.mode_to_add = NewServiceModeUtilities(game=self.game,priority=201)
-                    self.game.modes.add(self.mode_to_add)
+                    mode_to_add = NewServiceModeUtilities(game=self.game,priority=201)
                 elif selection == "UPDATE":
-                    self.mode_to_add = NewServiceModeUpdate(game=self.game,priority=201)
-                    self.game.modes.add(self.mode_to_add)
+                    mode_to_add = NewServiceModeUpdate(game=self.game,priority=201)
                 elif selection == "SHUTDOWN":
                     self.update_display("","SHUTTING DOWN")
                     print "Powering off"
                     # exit with error code 69
                     sys.exit(69)
+                else:
+                    pass
+                if mode_to_add:
+                    self.game.modes.add(mode_to_add)
             else:
                 pass
         return game.SwitchStop
@@ -217,32 +217,27 @@ class NewServiceModeTests(NewServiceSkeleton):
 
     def sw_enter_active(self,sw):
         selection = self.section[self.index]
+        mode_to_add = None
         if selection == "SWITCHES":
-            self.mode_to_add = NewServiceModeSwitchEdges(game=self.game,priority=202)
-            self.game.modes.add(self.mode_to_add)
+            mode_to_add = NewServiceModeSwitchEdges(game=self.game,priority=202)
         elif selection == "DROP TARGETS":
-            self.mode_to_add = NewServiceModeDropTargets(game=self.game,priority=202)
-            self.game.modes.add(self.mode_to_add)
+            mode_to_add = NewServiceModeDropTargets(game=self.game,priority=202)
         elif selection == "MINE":
-            self.mode_to_add = NewServiceModeMine(game=self.game,priority=202)
-            self.game.modes.add(self.mode_to_add)
+            mode_to_add = NewServiceModeMine(game=self.game,priority=202)
         elif selection == "ALL LAMPS":
-            self.mode_to_add = NewServiceModeAllLamps(game=self.game,priority=202)
-            self.game.modes.add(self.mode_to_add)
+            mode_to_add = NewServiceModeAllLamps(game=self.game,priority=202)
         elif selection == "SINGLE LAMPS":
-            self.mode_to_add = NewServiceModeSingleLamps(game=self.game,priority=202)
-            self.game.modes.add(self.mode_to_add)
+            mode_to_add = NewServiceModeSingleLamps(game=self.game,priority=202)
         elif selection == "FLASHERS":
-            self.mode_to_add = NewServiceModeFlashers(game=self.game,priority=202)
-            self.game.modes.add(self.mode_to_add)
+            mode_to_add = NewServiceModeFlashers(game=self.game,priority=202)
         elif selection == "SOLENOIDS":
-            self.mode_to_add = NewServiceModeSolenoids(game=self.game,priority=202)
-            self.game.modes.add(self.mode_to_add)
+            mode_to_add = NewServiceModeSolenoids(game=self.game,priority=202)
         elif selection == "TRAIN":
-            self.mode_to_add = NewServiceModeTrain(game=self.game,priority=202)
-            self.game.modes.add(self.mode_to_add)
+            mode_to_add = NewServiceModeTrain(game=self.game,priority=202)
         else:
             pass
+        if mode_to_add:
+           self.game.modes.add(mode_to_add)
         return game.SwitchStop
 
 ##   ____          _ _       _       _____         _
