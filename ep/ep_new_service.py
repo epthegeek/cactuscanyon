@@ -938,7 +938,7 @@ class NewServiceModeMine(NewServiceSkeleton):
         return game.SwitchStop
 
     def clear_mine(self):
-        if self.game.switches.doorClosed.is_active():
+        if self.game.switches.coinDoorClosed.is_active():
             self.game.coils.minePopper.pulse(self.kickStrength)
             self.busy = False
             self.instructionLine.set_text("+/- TO JOG   'ENTER' TO HOME")
@@ -1160,7 +1160,7 @@ class NewServiceModeTrain(NewServiceSkeleton):
         self.box1 = dmd.TextLayer(78,24,self.game.assets.font_5px_AZ,"left").set_text("HOME a")
         if self.game.switches.trainHome.is_active():
             self.box1.set_text("HOME b")
-        flayers.append(self.box1)
+        layers.append(self.box1)
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 
@@ -1229,7 +1229,9 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
 
     def sw_enter_active(self,sw):
         if self.state == 'nav':
+            self.game.sound.play(self.game.assets.sfx_menuEnter)
             self.state = 'edit'
+            self.revert_value = self.item.value
             self.change_item()
             self.change_instructions()
         else:
@@ -1248,12 +1250,15 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             self.unload()
         else:
             self.state = 'nav'
+            self.item.value = self.revert_value
             self.change_item()
             self.infoLine.set_text("REMAINS:")
+            self.currentSetting.set_text(str(self.item.value).upper())
             self.game.sound.play(self.game.assets.sfx_menuCancel)
         return game.SwitchStop
 
     def sw_up_active(self,sw):
+        self.game.sound.play(self.game.assets.sfx_menuUp)
         if self.state == 'nav':
             self.index += 1
             print "Up - Index size: " + str(len(self.items)) + " - Current index: " + str(self.index)
@@ -1271,6 +1276,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         return game.SwitchStop
 
     def sw_down_active(self,sw):
+        self.game.sound.play(self.game.assets.sfx_menuDown)
         if self.state == 'nav':
             self.index -= 1
             print "Down - Index size: " + str(len(self.items)) + " - Current index: " + str(self.index)
@@ -1291,6 +1297,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         self.item = self.items[self.index]
         self.settingName.set_text(self.item.name.upper())
         if self.state == 'nav':
+            self.option_index = self.item.options.index(self.item.value)
             self.infoLine.set_text("CURRENT:")
             self.currentSetting.set_text(str(self.item.value).upper())
         else:
@@ -1477,7 +1484,7 @@ class NewServiceModeUtility(NewServiceSkeleton):
             self.clear_instructions()
             self.selectionLine.set_text("SCORES RESET",blink_frames=15)
             self.delay(delay=2,handler=self.unload)
-        elif self.tool == "RESET SWITCH COUNTS":
+        elif self.tool == "RESET SWITCH COUNT":
             self.game.remote_load_game_data(restore="SwitchHits")
             self.clear_instructions()
             self.selectionLine.set_text("SWITCH COUNTS RESET",blink_frames=15)
@@ -1497,7 +1504,7 @@ class NewServiceModeUtility(NewServiceSkeleton):
         self.instructions2.set_text("")
 
     def eject_balls(self):
-        if self.game.switches.doorClosed.is_active():
+        if self.game.switches.coinDoorClosed.is_active():
             self.selectionLine.set_text("CLOSE COIN DOOR",blink_frames=10)
         else:
             self.selectionLine.set_text("COLLECT BALLS NOW")
@@ -1594,6 +1601,6 @@ class NewServiceModeUpdate(NewServiceSkeleton):
     def copy_files(self):
         dir_util.copy_tree(self.myLocation,self.game.game_location)
         self.selectionLine.set_text("COPY FINISHED")
-        self.infoLine.set_text("")
+        self.infoLine.set_text("PRESS 'EXIT' BUTTON")
         self.busy = False
 

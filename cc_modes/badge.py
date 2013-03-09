@@ -33,7 +33,7 @@ class Badge(ep.EP_Mode):
                           self.game.lamps.rankDeputy,
                           self.game.lamps.rankSheriff,
                           self.game.lamps.rankMarshall]
-        marshallRequirement = self.game.user_settings['Gameplay (Feature)']['Marshall Required for Bionic']
+        marshallRequirement = self.game.user_settings['Gameplay (Feature)']['Marshall Req for Bionic']
         self.marshallValue = self.game.user_settings['Gameplay (Feature)']['Marshall Multiball']
 
         if marshallRequirement == "Yes":

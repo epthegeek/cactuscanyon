@@ -143,7 +143,7 @@ class CCGame(game.BasicGame):
         self.sound.set_volume(self.volume_to_set)
         self.previousVolume = self.volume_to_set
 
-        self.immediateRestart = "Enabled" == self.user_settings['Gameplay (Feature)']['Immediate Restart After Game']
+        self.immediateRestart = "Enabled" == self.user_settings['Gameplay (Feature)']['Fast Restart After Game']
 
         # Set the balls per game per the user settings
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']

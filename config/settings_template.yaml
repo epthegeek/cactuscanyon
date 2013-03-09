@@ -156,7 +156,7 @@ Gameplay (Feature):
   'Bionic Bart Ball Save':
     options: ['Enabled','Disabled']
     default: 'Enabled'
-  'Immediate Restart After Game':
+  'Fast Restart After Game':
     options: ['Enabled','Disabled']
     default: 'Enabled'
   'Bionic Bart Ball Save Timer':
@@ -205,7 +205,7 @@ Gameplay (Feature):
     options: [5,15]
     increments: 1
     default: 8
-  'Marshall Required for Bionic':
+  'Marshall Req for Bionic':
     options: ['Yes','No']
     default: 'No'
   'Multiball Ball Savers':
