@@ -512,7 +512,7 @@ class NewServiceModeAllLamps(NewServiceSkeleton):
             lamp.disable()
 
     def sw_enter_active(self,sw):
-        self.change_mode()
+        self.update_mode()
         return game.SwitchStop
 
     def sw_up_active(self,sw):
@@ -1363,6 +1363,10 @@ class NewServiceModeStats(NewServiceSkeleton):
             print "Value: " + str(itemlist[item])
         self.update_display("Statistics",self.section[self.index],self.values[self.index])
 
+    def sw_enter_active(self,sw):
+        # null the enter switch
+        return game.SwitchStop
+
     def item_down(self):
         self.index -= 1
         # if we get below zero, loop around
@@ -1556,6 +1560,7 @@ class NewServiceModeUpdate(NewServiceSkeleton):
             self.delay(delay=1,handler=self.copy_files)
         else:
             self.game.sound.play(self.game.assets.sfx_menuReject)
+        return game.SwitchStop
 
     def sw_up_active(self,sw):
         return game.SwitchStop
