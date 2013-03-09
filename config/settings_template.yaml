@@ -73,52 +73,6 @@ Sound:
   'Music volume offset':
     options: [-0.4,-0.3,-0.2,-0.1,0,0.1,0.2,0.3,0.4]
     default: 0
-Display:
-  'Left side score justify':
-    # This example has no default.  The first option (right) will be used as the default.
-    options: [right, left]
-Replay:
-  'Replay Type':
-    options: ['none','auto','fixed','incremental']
-    default: 'auto'
-  'Replay Percentage':
-    options: [5,40]
-    increments: 5
-    default: 10
-  'Replay Award':
-    options: ['Audit', 'Extra Ball']
-    default: 'Audit'
-  'Replay Levels':
-    options: [1,2,3,4]
-    default: 1
-  'Replay Level 1':
-    options: [50000,5000000]
-    increments: 50000
-    default: 100000
-  'Replay Level 2':
-    options: [100000,5000000]
-    increments: 50000
-    default: 200000
-  'Replay Level 3':
-    options: [150000,5000000]
-    increments: 50000
-    default: 300000
-  'Replay Level 4':
-    options: [200000,5000000]
-    increments: 50000
-    default: 400000
-  'Replay Boost':
-    options: [50000,5000000]
-    increments: 50000
-    default: 100000
-  'Special':
-    options: ['Audit', 'Extra Ball','Points']
-    default: 'Audit'
-Highscore:
-  'Grand Champion':
-    options: [50000000,500000000]
-    increments: 50000000
-    default: 350000000
 Gameplay (Feature):
   'Attract sounds to play':
     options: [3,10]

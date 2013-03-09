@@ -78,14 +78,22 @@ class NewServiceSkeleton(ep.EP_Mode):
 
     # standard display structure
     def update_display(self,titleString,selectionString,infoString="",blinkInfo = False):
-        self.titleLine = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text(titleString)
-        self.selectionLine = dmd.TextLayer(64,13,self.game.assets.font_9px_az,"center").set_text(selectionString)
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        background.set_target_position(0,-4)
+        layers.append(background)
+        self.titleLine = dmd.TextLayer(1,3,self.game.assets.font_5px_AZ_inverted,"Left").set_text(titleString.upper())
+        self.titleLine.composite_op = "blacksrc"
+        layers.append(self.titleLine)
+        self.selectionLine = dmd.TextLayer(64,14,self.game.assets.font_9px_az,"center").set_text(selectionString)
+        layers.append(self.selectionLine)
         self.infoLine = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center")
         if blinkInfo:
             self.infoLine.set_text(infoString,blink_frames=30)
         else:
             self.infoLine.set_text(infoString)
-        self.layer = dmd.GroupedLayer(128,32,[self.titleLine,self.selectionLine,self.infoLine])
+        layers.append(self.infoLine)
+        self.layer = dmd.GroupedLayer(128,32,layers)
 
 
 ##   __  __       _         __  __
@@ -1133,7 +1141,7 @@ class NewServiceModeTrain(NewServiceSkeleton):
         self.box1 = dmd.TextLayer(78,24,self.game.assets.font_5px_AZ,"left").set_text("HOME a")
         if self.game.switches.trainHome.is_active():
             self.box1.set_text("HOME b")
-        layers.append(self.box1)
+        flayers.append(self.box1)
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 
@@ -1153,8 +1161,163 @@ class NewServiceModeSettings(NewServiceSkeleton):
         self.index = 0
 
     def mode_started(self):
-        self.section = ["STANDARD","FEATURE"]
+        self.section = ["STANDARD","FEATURE","AUDIO"]
         self.update_display("Settings",str(self.section[self.index]))
+
+    def sw_enter_active(self,sw):
+        if self.section[self.index] == "STANDARD":
+            selection = "Machine (Standard)"
+        elif self.section[self.index] == "FEATURE":
+            selection = "Gameplay (Feature)"
+        else:
+            selection = "Sound"
+        mode_to_add = NewServiceModeSettingsEditor(game=self.game,priority=202,itemlist=self.game.settings[selection],name=selection)
+        self.game.modes.add(mode_to_add)
+        return game.SwitchStop
+
+##   ____       _   _   _                   _____    _ _ _
+##  / ___|  ___| |_| |_(_)_ __   __ _ ___  | ____|__| (_) |_ ___  _ __
+##  \___ \ / _ \ __| __| | '_ \ / _` / __| |  _| / _` | | __/ _ \| '__|
+##   ___) |  __/ |_| |_| | | | | (_| \__ \ | |__| (_| | | || (_) | |
+##  |____/ \___|\__|\__|_|_| |_|\__, |___/ |_____\__,_|_|\__\___/|_|
+##                              |___/
+
+class NewServiceModeSettingsEditor(NewServiceSkeleton):
+    """Service Mode Settings Section."""
+    def __init__(self, game, priority,itemlist,name):
+        super(NewServiceModeSettingsEditor, self).__init__(game, priority)
+        self.myID = "Service Mode Settings Editor"
+        self.index = 0
+        self.name = name
+        self.title = name + " Settings"
+        print self.title
+        self.items = []
+        for item in sorted(itemlist.iterkeys()):
+            if 'increments' in itemlist[item]:
+                num_options = (itemlist[item]['options'][1]-itemlist[item]['options'][0]) / itemlist[item]['increments']
+                option_list = []
+                for i in range(0,num_options):
+                    option_list.append(itemlist[item]['options'][0] + (i * itemlist[item]['increments']))
+                self.items.append( EditItem(str(item), option_list, self.game.user_settings[self.name][item]) )
+            else:
+                self.items.append( EditItem(str(item), itemlist[item]['options'], self.game.user_settings[self.name][item]) )
+
+    def mode_started(self):
+        self.state = 'nav'
+        self.item = self.items[0]
+        self.option_index = self.item.options.index(self.item.value)
+        self.update_display()
+
+    def sw_enter_active(self,sw):
+        if self.state == 'nav':
+            self.state = 'edit'
+            self.change_item()
+            self.change_instructions()
+        else:
+            self.state = 'nav'
+            self.change_item()
+            self.infoLine.set_text("NOW SET TO:")
+            self.game.sound.play(self.game.assets.sfx_menuSave)
+            self.game.user_settings[self.name][self.item.name]=self.item.value
+            self.game.save_settings()
+            self.change_instructions()
+        return game.SwitchStop
+
+    def sw_exit_active(self,sw):
+        if self.state == 'nav':
+            self.game.sound.play(self.game.assets.sfx_menuExit)
+            self.unload()
+        else:
+            self.state = 'nav'
+            self.change_item()
+            self.infoLine.set_text("REMAINS:")
+            self.game.sound.play(self.game.assets.sfx_menuCancel)
+        return game.SwitchStop
+
+    def sw_up_active(self,sw):
+        if self.state == 'nav':
+            self.index += 1
+            print "Up - Index size: " + str(len(self.items)) + " - Current index: " + str(self.index)
+            # if we get too high, go to zero
+            if self.index >= len(self.items):
+                self.index = 0
+                print "Passed max - index now 0"
+                self.game.sound.play(self.game.assets.sfx_menuUp)
+            self.change_item()
+        else:
+            if self.option_index < (len(self.item.options) - 1):
+                self.option_index += 1
+                self.item.value = self.item.options[self.option_index]
+                self.change_item()
+        return game.SwitchStop
+
+    def sw_down_active(self,sw):
+        if self.state == 'nav':
+            self.index -= 1
+            print "Down - Index size: " + str(len(self.items)) + " - Current index: " + str(self.index)
+            # if we get below zero, loop around
+            if self.index < 0:
+                self.index = (len(self.items) - 1)
+                print "Passed max - index now " + str(self.index)
+            self.game.sound.play(self.game.assets.sfx_menuDown)
+            self.change_item()
+        else:
+            if self.option_index > 0:
+                self.option_index -= 1
+                self.item.value = self.item.options[self.option_index]
+                self.change_item()
+        return game.SwitchStop
+
+    def change_item(self):
+        self.item = self.items[self.index]
+        self.settingName.set_text(self.item.name.upper())
+        if self.state == 'nav':
+            self.infoLine.set_text("CURRENT:")
+            self.currentSetting.set_text(str(self.item.value).upper())
+        else:
+            self.infoLine.set_text("CHANGE TO:")
+            self.currentSetting.set_text(str(self.item.value).upper(),blink_frames=10)
+
+    def change_instructions(self):
+            if self.state == 'nav':
+                self.instructions = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("+/- TO SELECT")
+                self.instructions2 = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO MODIFY")
+            else:
+                self.instructions = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("+/- TO CHANGE")
+                self.instructions2 = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO SAVE")
+
+    def update_display(self):
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        layers.append(background)
+        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text(self.title.upper())
+        layers.append(title)
+        self.settingName = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text(self.item.name.upper())
+        self.settingName.composite_op = "blacksrc"
+        layers.append(self.settingName)
+        self.infoLine = dmd.TextLayer(72,14,self.game.assets.font_9px_az_mid,"right").set_text(str("CURRENT:"))
+        layers.append(self.infoLine)
+        self.currentSetting = dmd.TextLayer(74,14,self.game.assets.font_9px_az,"left").set_text(str(self.item.value).upper())
+        layers.append(self.currentSetting)
+        self.instructions = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("+/- TO SELECT")
+        self.instructions2 = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO MODIFY")
+        script = []
+        script.append({'seconds':2,'layer':self.instructions})
+        script.append({'seconds':2,'layer':self.instructions2})
+        instruction_duo = dmd.ScriptedLayer(128,32,script)
+        instruction_duo.composite_op = "blacksrc"
+        layers.append(instruction_duo)
+
+        combined = dmd.GroupedLayer(128,32,layers)
+        self.layer = combined
+
+# edit item object thing
+class EditItem:
+    """Service Mode Items."""
+    def __init__(self, name, options, value):
+        self.name = name
+        self.options = options
+        self.value = value
 
 ##   ____  _        _         ____            _   _
 ##  / ___|| |_ __ _| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
@@ -1225,8 +1388,110 @@ class NewServiceModeUtilities(NewServiceSkeleton):
 
     def mode_started(self):
         self.index = 0
-        self.section = ["CLEAR AUDITS", "RESET HSTD"]
+        self.section = ["CLEAR AUDITS", "RESET HIGH SCORES","EMPTY TROUGH"]
         self.update_display("Utilities",str(self.section[self.index]))
+
+    def sw_enter_active(self,sw):
+        selection = self.section[self.index]
+        mode_to_add = NewServiceModeUtility(game=self.game,priority=202,tool=selection)
+        self.game.modes.add(mode_to_add)
+        return game.SwitchStop
+
+##   _   _ _   _ _ _ _              _        _   _
+##  | | | | |_(_) (_) |_ _   _     / \   ___| |_(_) ___  _ __
+##  | | | | __| | | | __| | | |   / _ \ / __| __| |/ _ \| '_ \
+##  | |_| | |_| | | | |_| |_| |  / ___ \ (__| |_| | (_) | | | |
+##   \___/ \__|_|_|_|\__|\__, | /_/   \_\___|\__|_|\___/|_| |_|
+##                       |___/
+
+class NewServiceModeUtility(NewServiceSkeleton):
+    """Service Mode Utilities Section."""
+    def __init__(self, game, priority,tool):
+        super(NewServiceModeUtility, self).__init__(game, priority)
+        self.myID = "Service Mode Utilities"
+        self.tool = tool
+        self.mode = 0
+
+    def mode_started(self):
+        self.game.sound.play(self.game.assets.sfx_menuReject)
+        self.update_display()
+
+    def sw_enter_active(self,sw):
+        # prevent this happening more than once by setting the busy flag
+        if not self.busy:
+            self.busy = True
+            # do the reset
+            self.perform_action()
+        else:
+            pass
+        return game.SwitchStop
+
+    def sw_exit_active(self,sw):
+        # allow to exit from clearing trough
+        if not self.busy and self.tool != "EMTPY TROUGH":
+            self.game.sound.play(self.game.assets.sfx_menuExit)
+            self.unload()
+        return game.SwitchStop
+
+    def sw_up_active(self,sw):
+        return game.SwitchStop
+
+    def sw_down_active(self,sw):
+        return game.SwitchStop
+
+    def perform_action(self):
+        # play a sound
+        self.game.sounds.play(self.game.assets.sfx_menuSave)
+        # clear audits
+        if self.tool == "CLEAR AUDITS":
+            pass
+        # reset hstd
+        elif tool == "RESET HIGH SCORES":
+            pass
+        # empty trough
+        else:
+            self.eject_balls()
+
+    def clear_instructions(self):
+        self.instructions.set_text("")
+        self.instructions2.set_text("")
+
+    def eject_balls(self):
+        if self.game.switches.doorClosed.is_active():
+            self.selectionLine.set_text("CLOSE COIN DOOR",blink_frames=10)
+        else:
+            self.selectionLine.set_text("COLLECT BALLS NOW")
+        # kick out a ball
+        if self.game.switches.troughBallOne.is_active():
+            print "Ejecting Ball"
+            self.game.coils.troughEject.pulse(35)
+        # if they're all gone, we're done here
+        else:
+            self.unload()
+        # the beatings will continue until the trough is empty
+        self.delay(delay=1.5,handler=self.eject_balls)
+
+
+    def update_display(self):
+    # standard display structure
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        background.set_target_position(0,-4)
+        layers.append(background)
+        self.titleLine = dmd.TextLayer(1,3,self.game.assets.font_5px_AZ_inverted,"Left").set_text(str(self.tool).upper())
+        self.titleLine.composite_op = "blacksrc"
+        layers.append(self.titleLine)
+        self.selectionLine = dmd.TextLayer(64,12,self.game.assets.font_9px_az,"center").set_text("ARE YOU SURE?",blink_frames=10)
+        layers.append(self.selectionLine)
+        self.instructions = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("'EXIT' TO CANCEL")
+        self.instructions2 = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO EXECUTE")
+        script = []
+        script.append({'seconds':2,'layer':self.instructions})
+        script.append({'seconds':2,'layer':self.instructions2})
+        instruction_duo = dmd.ScriptedLayer(128,32,script)
+        instruction_duo.composite_op = "blacksrc"
+        layers.append(instruction_duo)
+        self.layer = dmd.GroupedLayer(128,32,layers)
 
 ##   _   _           _       _         ____            _   _
 ##  | | | |_ __   __| | __ _| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
