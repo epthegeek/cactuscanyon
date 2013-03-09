@@ -928,13 +928,27 @@ class NewServiceModeMine(NewServiceSkeleton):
 
     # popper
     def sw_minePopper_active(self,sw):
+        self.busy = True
         self.box1.set_text("b")
         self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
         return game.SwitchStop
 
     def sw_minePopper_active_for_1000ms(self,sw):
-        self.game.coils.minePopper.pulse(self.kickStrength)
+        self.clear_mine()
         return game.SwitchStop
+
+    def clear_mine(self):
+        if self.game.switches.doorClosed.is_active():
+            self.game.coils.minePopper.pulse(self.kickStrength)
+            self.busy = False
+            self.instructionLine.set_text("+/- TO JOG   'ENTER' TO HOME")
+        # If the door isn't closed, we can't kick
+        else:
+            self.instructionLine.set_text("CLOSE DOOR OR HOLD DOOR SWITCH",blink_frames=15)
+            self.game.sound.play(self.game.assets.sfx_menuReject)
+            # loop back in 1 second to try again
+            self.delay(delay=1,handler=self.clear_mine)
+
 
     def sw_minePopper_inactive(self,sw):
         self.box1.set_text("a")
@@ -949,7 +963,7 @@ class NewServiceModeMine(NewServiceSkeleton):
         self.box2.set_text("a")
         return game.SwitchStop
 
-    # home optop
+    # home opto
     def sw_mineHome_active(self,sw):
         if self.resetFlag:
             self.stop()
@@ -987,9 +1001,9 @@ class NewServiceModeMine(NewServiceSkeleton):
         layers.append(background)
         title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("MINE TEST")
         layers.append(title)
-        instructionLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("+/- TO JOG   'ENTER' TO HOME")
+        self.instructionLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("+/- TO JOG   'ENTER' TO HOME")
         instructionLine.composite_op = "blacksrc"
-        layers.append(instructionLine)
+        layers.append(self.instructionLine)
         name0 = dmd.TextLayer(16,14,self.game.assets.font_5px_AZ,"center").set_text("ENTER")
         layers.append(name0)
         name1 = dmd.TextLayer(47,14,self.game.assets.font_5px_AZ,"center").set_text("POPPER")
@@ -1104,10 +1118,15 @@ class NewServiceModeTrain(NewServiceSkeleton):
             coil = self.game.coils.trainForward
         else:
             coil = self.game.coils.trainReverse
-        if self.mode == 0:
-            coil.patter(on_time=6,off_time=6)
+
+        # if we're trying to back up, but already home - don't do that
+        if direction == "BACKWARD" and self.game.switches.trainHome.is_active():
+            self.inMotion = False
         else:
-            coil.enable()
+            if self.mode == 0:
+                coil.patter(on_time=6,off_time=6)
+            else:
+                coil.enable()
 
     def update_display(self):
         layers = []

@@ -513,7 +513,8 @@ class Interrupter(ep.EP_Mode):
             if mode in self.game.modes:
                 self.game.modes.remove(mode)
             # then add the service mode
-        self.game.modes.add(self.game.service_mode)
+        #self.game.modes.add(self.game.service_mode)
+        self.game.modes.add(self.game.new_service)
         return True
 
     def sw_phantomSwitch4_active(self,sw):
