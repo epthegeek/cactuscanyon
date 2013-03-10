@@ -105,7 +105,13 @@ class Interrupter(ep.EP_Mode):
 
     def ball_saved(self):
     # don't show in certain situations
-        if self.game.drunk_multiball.running:
+        if self.game.drunk_multiball.running or \
+           self.game.moonlight.running or \
+           self.game.marshall_multiball.running or \
+           self.game.gm_multiball.running or \
+           self.game.stampede.running or \
+           self.game.cva.running or \
+           self.game.last_call.running:
             return
         # otherwise, party on
         # play a quote
