@@ -87,8 +87,12 @@ PRSwitches:
     #Regular Switches
     phantomSwitch2:
         number: S11
+        label: False Switch 2
+        tags: Standard,1,1
     phantomSwitch3:
         number: S12
+        label: False Switch 3
+        tags: Standard,1,2
     startButton:
         number: S13
         label: Start Button
@@ -184,12 +188,16 @@ PRSwitches:
         type: 'NC'
     phantomSwitch:
         number: S43
+        label: False Switch 1
+        tags: Standard,4,3
     topRightStandUp:
         number: S44
         label: Top Right QD Target
         tags: Standard,4,4
     phantomSwitch4:
         number: S45
+        label: False Switch 4
+        tags: Standard,4,5
     beerMug:
         number: S46
         label: Beer Mug

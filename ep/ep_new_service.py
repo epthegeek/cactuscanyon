@@ -186,7 +186,7 @@ class NewServiceMode(NewServiceSkeleton):
         if self.activeMode == "MENU":
             if not self.busy:
             # play the sound for moving down
-                self.game.sound.play(self.game.assets.sfx_menuDown)
+                self.game.sound.play(self.game.assets.sfx_menuUp)
                 self.item_up()
         else:
             pass
@@ -224,6 +224,7 @@ class NewServiceModeTests(NewServiceSkeleton):
         self.update_display("Tests",str(self.section[self.index]))
 
     def sw_enter_active(self,sw):
+        self.game.sound.play(self.game.assets.sfx_menuEnter)
         selection = self.section[self.index]
         mode_to_add = None
         if selection == "SWITCHES":
@@ -1102,7 +1103,7 @@ class NewServiceModeTrain(NewServiceSkeleton):
         return game.SwitchStop
 
     def sw_trainEncoder_inactive(self,sw):
-        self.box1.set_text('ENCODER a')
+        self.box0.set_text('ENCODER a')
         return game.SwitchStop
 
     def stop(self):
@@ -1184,6 +1185,7 @@ class NewServiceModeSettings(NewServiceSkeleton):
         self.update_display("Settings",str(self.section[self.index]))
 
     def sw_enter_active(self,sw):
+        self.game.sound.play(self.game.assets.sfx_menuEnter)
         if self.section[self.index] == "STANDARD":
             selection = "Machine (Standard)"
         elif self.section[self.index] == "FEATURE":
@@ -1305,12 +1307,15 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             self.currentSetting.set_text(str(self.item.value).upper(),blink_frames=10)
 
     def change_instructions(self):
+            print "Change Instructions"
             if self.state == 'nav':
-                self.instructions = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("+/- TO SELECT")
-                self.instructions2 = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO MODIFY")
+                print "Nav Version"
+                self.instructions.set_text("+/- TO SELECT")
+                self.instructions2.set_text("'ENTER' TO MODIFY")
             else:
-                self.instructions = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("+/- TO CHANGE")
-                self.instructions2 = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO SAVE")
+                print "Edit Version"
+                self.instructions.set_text("+/- TO CHANGE")
+                self.instructions2.set_text("'ENTER' TO SAVE")
 
     def update_display(self):
         layers = []
@@ -1330,9 +1335,9 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         script = []
         script.append({'seconds':2,'layer':self.instructions})
         script.append({'seconds':2,'layer':self.instructions2})
-        instruction_duo = dmd.ScriptedLayer(128,32,script)
-        instruction_duo.composite_op = "blacksrc"
-        layers.append(instruction_duo)
+        self.instruction_duo = dmd.ScriptedLayer(128,32,script)
+        self.instruction_duo.composite_op = "blacksrc"
+        layers.append(self.instruction_duo)
 
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
@@ -1395,14 +1400,18 @@ class NewServiceModeStats(NewServiceSkeleton):
 
     # standard display structure
     def update_display(self,titleString,selectionString,infoString="",blinkInfo = False):
-        self.titleLine = dmd.TextLayer(1,1,self.game.assets.font_7px_az,"Left",opaque=True).set_text(titleString)
+        layers = []
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
+        background.set_target_position(0,-4)
+        layers.append(background)
+        self.titleLine = dmd.TextLayer(1,3,self.game.assets.font_5px_AZ_inverted,"Left").set_text(titleString.upper())
+        self.titleLine.composite_op = "blacksrc"
+        layers.append(self.titleLine)
         self.selectionLine = dmd.TextLayer(64,11,self.game.assets.font_9px_az,"center").set_text(selectionString)
-        self.infoLine = dmd.TextLayer(64,22,self.game.assets.font_7px_az,"center")
-        if blinkInfo:
-            self.infoLine.set_text(infoString,blink_frames=30)
-        else:
-            self.infoLine.set_text(infoString)
-        self.layer = dmd.GroupedLayer(128,32,[self.titleLine,self.selectionLine,self.infoLine])
+        layers.append(self.selectionLine)
+        self.infoLine = dmd.TextLayer(64,22,self.game.assets.font_7px_az,"center").set_text(infoString)
+        layers.append(self.infoLine)
+        self.layer = dmd.GroupedLayer(128,32,layers)
 
 ##   _   _ _   _ _ _ _   _             ____            _   _
 ##  | | | | |_(_) (_) |_(_) ___  ___  / ___|  ___  ___| |_(_) ___  _ __
