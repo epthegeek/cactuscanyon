@@ -506,7 +506,7 @@ class Interrupter(ep.EP_Mode):
 
     # Allow service mode to be entered during a game.
     def sw_enter_active(self, sw):
-        print "ENTERING SERVICE MODE"
+        print "ENTERING NEW SERVICE MODE"
         # clear the interrupter layer - just in case
         self.clear_layer()
         # if attract mode is running, stop the lampshow
@@ -523,18 +523,3 @@ class Interrupter(ep.EP_Mode):
         self.game.modes.add(self.game.new_service)
         return True
 
-    def sw_phantomSwitch4_active(self,sw):
-        print "ENTERING NEW SERVICE MODE"
-        # clear the interrupter layer - just in case
-        self.clear_layer()
-        # if attract mode is running, stop the lampshow
-        if self.game.attract_mode in self.game.modes:
-            # kill the lampshow
-            self.game.lampctrl.stop_show()
-        self.game.lamp_control.disable_all_lamps()
-        self.stop_music()
-        for mode in self.game.mode_list:
-            if mode in self.game.modes:
-                self.game.modes.remove(mode)
-                # then add the service mode
-        self.game.modes.add(self.game.service_mode)

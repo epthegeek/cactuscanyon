@@ -99,9 +99,13 @@ class CCGame(game.BasicGame):
 
         ## init the sound
         self.sound = sound.SoundController(self)
+        ## init the lamp controller
         self.lampctrl = ep.EP_LampController(self)
+        ## and a separate one for GI
         self.GI_lampctrl = ep.EP_LampControllerGI(self)
+        ## load all the assets (sound/dots)
         self.assets = Assets(self)
+        ## Set the current song for use with the music method
         self.current_music = self.assets.music_mainTheme
 
         # reset score display to mine
@@ -120,6 +124,7 @@ class CCGame(game.BasicGame):
         self.giLamps = [self.lamps.gi01,
                         self.lamps.gi02,
                         self.lamps.gi03]
+        # squelch flag used by audio routines to turn down music without stopping it
         self.squelched = False
         # polly mode variable
         self.peril = False
@@ -159,12 +164,17 @@ class CCGame(game.BasicGame):
         trough_switchnames = ['troughBallOne', 'troughBallTwo', 'troughBallThree', 'troughBallFour']
         early_save_switchnames = ['rightOutlane', 'leftOutlane']
         self.trough = cc_modes.Trough(self, trough_switchnames,'troughBallOne','troughEject', early_save_switchnames, 'shooterLane', self.ball_drained)
-        # set up ball save
-#        self.ball_save = modes.BallSave(self, self.lamps.shootAgain, 'shooterLane')
         # set the ball save callback
         self.trough.ball_save_callback = self.ball_saved
 
-        # High Score stuff
+        #  _   _ _       _       ____                       ____       _
+        # | | | (_) __ _| |__   / ___|  ___ ___  _ __ ___  / ___|  ___| |_ _   _ _ __
+        # | |_| | |/ _` | '_ \  \___ \ / __/ _ \| '__/ _ \ \___ \ / _ \ __| | | | '_ \
+        # |  _  | | (_| | | | |  ___) | (_| (_) | | |  __/  ___) |  __/ |_| |_| | |_) |
+        # |_| |_|_|\__, |_| |_| |____/ \___\___/|_|  \___| |____/ \___|\__|\__,_| .__/
+        #          |___/                                                        |_|
+
+
         self.highscore_categories = []
 
         cat = highscore.HighScoreCategory()
@@ -246,6 +256,12 @@ class CCGame(game.BasicGame):
         for category in self.highscore_categories:
             category.load_from_game(self)
 
+        #  __  __           _             ___       _ _
+        # |  \/  | ___   __| | ___  ___  |_ _|_ __ (_) |_
+        # | |\/| |/ _ \ / _` |/ _ \/ __|  | || '_ \| | __|
+        # | |  | | (_) | (_| |  __/\__ \  | || | | | | |_
+        # |_|  |_|\___/ \__,_|\___||___/ |___|_| |_|_|\__|
+
         # Create the objects for the basic modes
         self.lamp_control = cc_modes.LampControl(game=self,priority=4)
         self.base = cc_modes.BaseGameMode(game=self,priority=4)
@@ -318,12 +334,6 @@ class CCGame(game.BasicGame):
         self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=201)
         # new service mode test
         self.new_service = ep.ep_new_service.NewServiceMode(game=self,priority=200)
-
-        ## try adding the score display font override
-        #self.score_display.font_18x12 = self.assets.font_score_x12
-
-        # Setup and instantiate service mode
-        self.service_mode = ep.ep_service.ServiceMode(self,100,self.assets.font_tiny7,[])
 
         # set up an array of the modes
         self.ep_modes = [self.base,
@@ -405,10 +415,9 @@ class CCGame(game.BasicGame):
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
-        # Add in the modes that are active at start
+        # Add in the base modes that are active at start
         self.modes.add(self.lamp_control)
         self.modes.add(self.trough)
-#        self.modes.add(self.ball_save)
         self.modes.add(self.ball_search)
         self.modes.add(self.attract_mode)
         self.modes.add(self.train)
@@ -671,7 +680,6 @@ class CCGame(game.BasicGame):
         # Remove the base mode here now instead - so that it's still available for last call
         self.modes.remove(self.base)
 
-        ## TODO need to add some crap here to see if there's a high score to enter - and play the lead in
         # High Score Stuff
         self.seq_manager = highscore.EntrySequenceManager(game=self, priority=2)
         self.seq_manager.finished_handler = self.highscore_entry_finished
@@ -731,9 +739,6 @@ class CCGame(game.BasicGame):
 
         # play the closing song
         self.interrupter.closing_song(duration)
-
-    def save_game_data(self):
-        super(CCGame, self).save_game_data(user_game_data_path)
 
     def setup_ball_search(self):
         # No special handlers in starter game.
@@ -1146,3 +1151,6 @@ class CCGame(game.BasicGame):
 
     def remote_load_game_data(self,restore=None):
         self.load_game_data(game_data_defaults_path, user_game_data_path,restore)
+
+    def save_game_data(self):
+        super(CCGame, self).save_game_data(user_game_data_path)
