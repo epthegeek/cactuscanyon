@@ -14,6 +14,9 @@
 ## Original Cactus Canyon software by Matt Coriale
 ##
 
+## This assets file is used to pre-load all the sound and dots when the program launches
+## That way, everything is in ram and readily accessible with no overhead when you need to use it
+
 from procgame import *
 import os
 
@@ -1050,7 +1053,7 @@ class Assets():
         self.lamp_cva = "cva"
         self.game.GI_lampctrl.register_show("cva",self.lampshows_path + "cva.lampshow")
 
-        # experimental DMD pre-loading
+        # DMD pre-loading
         self.dmd_blank = dmd.Animation().load(self.dmd_path +'blank.dmd')
         self.dmd_ballyBanner = dmd.Animation().load(self.dmd_path +'bally-banner.dmd')
         self.dmd_geckoBorderLeft = dmd.Animation().load(self.dmd_path +'gecko-border.dmd')

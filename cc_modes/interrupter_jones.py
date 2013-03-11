@@ -515,11 +515,11 @@ class Interrupter(ep.EP_Mode):
             self.game.lampctrl.stop_show()
         self.game.lamp_control.disable_all_lamps()
         self.stop_music()
-        for mode in self.game.mode_list:
-            if mode in self.game.modes:
-                self.game.modes.remove(mode)
+        # remove all the active modes
+        for mode in self.game.modes:
+            self.game.modes.remove(mode)
             # then add the service mode
-        #self.game.modes.add(self.game.service_mode)
         self.game.modes.add(self.game.new_service)
+        self.unload()
         return True
 

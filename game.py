@@ -336,6 +336,7 @@ class CCGame(game.BasicGame):
         self.new_service = ep.ep_new_service.NewServiceMode(game=self,priority=200)
 
         # set up an array of the modes
+        # this subset is used for clearing displays on command
         self.ep_modes = [self.base,
                          self.attract_mode,
                          self.right_ramp,
@@ -365,53 +366,8 @@ class CCGame(game.BasicGame):
                          self.bank_robbery,
                          self.river_chase,
                          self.cva,
-                         self.switch_block,
                          self.marshall_multiball,
                          self.moonlight]
-
-        self.mode_list = [self.ambush,
-                          self.attract_mode,
-                          self.bad_guys,
-                          self.badge,
-                          self.ball_search,
-                          self.bank_robbery,
-                          self.bart,
-                          self.base,
-                          self.bionic,
-                          self.bonus_lanes,
-                          self.center_ramp,
-                          self.combos,
-                          self.cva,
-                          self.drunk_multiball,
-                          self.gm_multiball,
-                          self.gunfight,
-                          self.high_noon,
-                          self.interrupter,
-                          self.lamp_control,
-                          self.last_call,
-                          self.left_loop,
-                          self.left_ramp,
-                          self.marshall_multiball,
-                          self.match,
-                          self.mine,
-                          self.moonlight,
-                          self.mountain,
-                          self.move_your_train,
-                          self.quickdraw,
-                          self.right_loop,
-                          self.right_ramp,
-                          self.river_chase,
-                          self.saloon,
-                          self.save_polly,
-                          self.score_display,
-                          self.showdown,
-                          self.skill_shot,
-                          self.stampede,
-                          self.super_filter,
-                          self.switch_block,
-                          self.switch_tracker,
-                          self.train,
-                          self.trough]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
