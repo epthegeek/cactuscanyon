@@ -558,9 +558,6 @@ class CCGame(game.BasicGame):
         # unload the base add on modes
         self.base.remove_modes()
 
-        #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
-        self.game_data['Audits']['Balls Played'] += 1
-
         print "CHECKING TRACKING ball ended LR: " + str(self.show_tracking('leftRampStage'))
 
         # then call the ball_ended from proc.game.BasicGame
@@ -576,6 +573,9 @@ class CCGame(game.BasicGame):
         # gets overwritten when the next ball starts.
         self.ball_time = self.get_ball_time()
         self.current_player().game_time += self.ball_time
+
+        self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
+        self.game_data['Audits']['Balls Played'] += 1
 
         if self.current_player().extra_balls > 0:
             self.current_player().extra_balls -= 1
@@ -682,13 +682,11 @@ class CCGame(game.BasicGame):
         # play a quote
         duration = self.sound.play(self.assets.quote_goodbye)
         # tally up the some audit data
-        # Handle stats for last ball here
-        #self.game_data['Audits']['Avg Ball Time'] = self.calc_time_average_string(self.game_data['Audits']['Balls Played'], self.game_data['Audits']['Avg Ball Time'], self.ball_time)
-        self.game_data['Audits']['Balls Played'] += 1
         # Also handle game stats.
         for i in range(0,len(self.players)):
             game_time = self.get_game_time(i)
-            #self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
+            self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
+            self.game_data['Audits']['Avg Score'] = self.calc_number_average( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Score'], self.players[i].score)
             self.game_data['Audits']['Games Played'] += 1
         # save the game data
         self.save_game_data()
