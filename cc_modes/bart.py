@@ -210,6 +210,8 @@ class Bart(ep.EP_Mode):
 
     def damage(self,saloonHit=False):
         print "DAMAGE BART"
+        # log the hit in audits
+        self.game.game_data['Feature']['Bart Hits'] += 1
         # play a quote appropriate to the current bart
         self.game.base.priority_quote(self.hitQuote,squelch=True)
 
@@ -258,6 +260,8 @@ class Bart(ep.EP_Mode):
 
     def defeat(self):
         print "DEFEATING BART"
+        # log the hit in audits
+        self.game.game_data['Feature']['Barts Defeated'] += 1
         # count barts to the reset
         total = self.game.increase_tracking('bartsDefeated')
         # tick up the global count as well

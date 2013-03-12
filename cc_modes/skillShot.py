@@ -385,6 +385,8 @@ class SkillShot(ep.EP_Mode):
 
 
         elif self.selectedPrizes[5:] == "J":
+            # audit
+            self.game.game_data['Feature']['EB Lit Skillshot'] += 1
             awardStringTop = "EXTRA BALL"
             awardStringBottom ="IS LIT"
             # turn off the skill shot layer

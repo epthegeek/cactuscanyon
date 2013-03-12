@@ -455,6 +455,8 @@ class MarshallMultiball(ep.EP_Mode):
 
         # startup
     def start(self):
+        # audit
+        self.game.game_data['Feature']['Marshall MB Started'] += 1
         # tag this player as having run the MB so it doesn't repeat - if we're actually at rank 4
         if self.game.show_tracking('rank') == 4:
             self.game.set_tracking('marshallMultiballRun',True)

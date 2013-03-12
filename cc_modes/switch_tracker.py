@@ -24,6 +24,13 @@ class SwitchTracker(ep.EP_Mode):
     def __init__(self, game,priority):
         super(SwitchTracker, self).__init__(game, priority)
 
+    # flipper counts for audits
+    def sw_flipperLwL_active(self,sw):
+        self.game.game_data['Audits']['Left Flipper'] += 1
+    def sw_flipperLwR_active(self,sw):
+        self.game.game_data['Audits']['Right Flipper'] += 1
+
+
 
     # switches that get tracked
     def sw_shooterLane_active(self,sw):
@@ -36,6 +43,7 @@ class SwitchTracker(ep.EP_Mode):
         self.game.game_data['SwitchHits']['66 R RAMP ENTER'] = 0
 
     def sw_rightRampMake_active(self,sw):
+        self.game.game_data['Feature']['Right Ramp Hits'] += 1
         self.game.game_data['SwitchHits']['65 R RAMP MAKE'] = 0
 
     def sw_rightRampBottom_active(self,sw):
@@ -45,9 +53,11 @@ class SwitchTracker(ep.EP_Mode):
         self.game.game_data['SwitchHits']['17 R RETURN LANE'] = 0
 
     def sw_rightOutlane_active(self,sw):
+        self.game.game_data['Audits']['Right Drains'] += 1
         self.game.game_data['SwitchHits']['27 R OUTLANE'] = 0
 
     def sw_leftRampEnter_active(self,sw):
+        self.game.game_data['Feature']['Left Ramp Hits'] += 1
         self.game.game_data['SwitchHits']['85 L RAMP ENTER'] = 0
 
     def sw_leftRampMake_active(self,sw):
@@ -57,21 +67,25 @@ class SwitchTracker(ep.EP_Mode):
         self.game.game_data['SwitchHits']['26 L RETURN LANE'] = 0
 
     def sw_leftOutlane_active(self,sw):
+        self.game.game_data['Audits']['Left Drains'] += 1
         self.game.game_data['SwitchHits']['16 L OUTLANE'] = 0
 
     def sw_centerRampEnter_active(self,sw):
         self.game.game_data['SwitchHits']['82 C RAMP ENTER'] = 0
 
     def sw_centerRampMake_active(self,sw):
+        self.game.game_data['Feature']['Center Ramp Hits'] += 1
         self.game.game_data['SwitchHits']['84 C RAMP MAKE'] = 0
 
     def sw_leftLoopTop_active(self,sw):
+        # left loop audit done in mode due to conditions
         self.game.game_data['SwitchHits']['58 L LOOP TOP'] = 0
 
     def sw_leftLoopBottom_active(self,sw):
         self.game.game_data['SwitchHits']['36 L LOOP BOT'] = 0
 
     def sw_rightLoopTop_active(self,sw):
+        # right loop audit doen in mode due to conditions
         self.game.game_data['SwitchHits']['56 R LOOP TOP'] = 0
 
     def sw_rightLoopBottom_active(self,sw):

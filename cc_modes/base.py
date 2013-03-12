@@ -342,6 +342,8 @@ class BaseGameMode(ep.EP_Mode):
             # disable status
             self.game.statusOK = False
 
+            self.game.game_data['Audits']['Tilts'] += 1
+
             self.game.interrupter.tilt_display()
             # Disable flippers so the ball will drain.
             self.game.enable_flippers(enable=False)
@@ -793,7 +795,9 @@ class BaseGameMode(ep.EP_Mode):
             target = self.game.show_tracking('quickdrawStatus')
             if target[1] == "READY":
                 side = 0
+                self.game.game_data['Feature']['Left Quickdraw Lit'] += 1
             else:
+                self.game.game_data['Feature']['Right Quickdraw Lit'] += 1
                 side = 1
         # add the rest of the points for lighting the quickdraw
         self.game.score(12500)

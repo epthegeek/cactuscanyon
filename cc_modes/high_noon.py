@@ -183,6 +183,8 @@ class HighNoon(ep.EP_Mode):
     # start high noon
     def start_highNoon(self,step=1):
         if step == 1:
+            # audit
+            self.game.game_data['Feature']['High Noon Started'] += 1
             # turn off ball search because this takes a while
             self.game.ball_search.disable()
             # kill the music
@@ -348,6 +350,8 @@ class HighNoon(ep.EP_Mode):
 
     # won ?
     def won(self):
+        # audit
+        self.game.game_data['Feature']['High Noon Won'] += 1
         self.game.score(10000000)
         self.hasWon = True
         # cancel the mode timer

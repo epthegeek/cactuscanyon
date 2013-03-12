@@ -40,6 +40,8 @@ class Stampede(ep.EP_Mode):
         self.banners.append(banner1)
 
     def mode_started(self):
+        # log the hit in audits
+        self.game.game_data['Feature']['Stampede Started'] += 1
         # which jackpot is active
         self.active = 9
         self.jackpots = 0
@@ -144,6 +146,9 @@ class Stampede(ep.EP_Mode):
 
     def jackpot_hit(self,step=1):
         if step == 1:
+        # log the hit in audits
+            self.game.game_data['Feature']['Stampede Jackpots'] += 1
+
             # play an animation
             anim = self.game.assets.dmd_stampedeJackpot
             myWait = len(anim.frames) / 15.0

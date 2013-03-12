@@ -219,6 +219,8 @@ class Saloon(ep.EP_Mode):
 
 
     def collect_bounty(self):
+        # audit
+        self.game.game_data['Feature']['Bounty Awards'] += 1
         # shutup the music
         self.game.squelch_music()
         # turn off the tracking
@@ -284,6 +286,8 @@ class Saloon(ep.EP_Mode):
         prizeText2 = None
         # set a prizeHandler and prizeParam based on bounty for use later
         if self.bountyPrize == 'extraBall':
+            # audit
+            self.game.game_data['Feature']['EB Lit Bounty'] += 1
             prizeText = "EXTRA BALL"
             prizeText2 = "IS LIT"
             self.prizeHandler = self.game.mine.light_extra_ball

@@ -469,6 +469,8 @@ class CvA(ep.EP_Mode):
         self.transition = ep.EP_Transition(self,self.staticLayer,animLayer,ep.EP_Transition.TYPE_CROSSFADE,callback=self.one_beat)
 
     def get_going(self):
+        # audit
+        self.game.game_data['Feature']['CVA Started'] += 1
         # start the saucer in motion
         self.saucerMoving = True
         # first saucer stop is position 4
@@ -718,6 +720,8 @@ class CvA(ep.EP_Mode):
 
     def hit_alien(self,target):
         if target in self.activeAliens:
+            # audit
+            self.game.game_data['Feature']['CVA Aliens Hit'] += 1
             # flasher flourish
             self.game.base.red_flasher_flourish()
             # cancel the display
@@ -771,6 +775,8 @@ class CvA(ep.EP_Mode):
         return points
 
     def saucer_hit_display(self):
+        # audit
+        self.game.game_data['Feature']['CVA Ships Hit'] += 1
         # lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.lamp_update)
         anim = self.game.assets.dmd_cvaLargeShipExplodes

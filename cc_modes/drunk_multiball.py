@@ -82,6 +82,8 @@ class DrunkMultiball(ep.EP_Mode):
 
     # beer mug lights jackpots
     def sw_beerMug_active(self,sw):
+        # audit
+        self.game.game_data['Feature']['Drunk MB Beers'] += 1
         if self.availableJackpots:
             self.light_jackpot()
         else:
@@ -100,6 +102,8 @@ class DrunkMultiball(ep.EP_Mode):
 
     def start_drunk(self):
         print "STARTING DRUNK ASS MULTIBALL"
+        # audit
+        self.game.game_data['Feature']['Drunk MB Started'] += 1
         self.running = True
         # set the stack level
         self.game.stack_level(3,True)
@@ -269,6 +273,8 @@ class DrunkMultiball(ep.EP_Mode):
         self.delay(name="Display",delay=myWait,handler=self.update_display)
 
     def collect_jackpot(self,shot,mode):
+        # audit
+        self.game.game_data['Feature']['Drunk MB Jackpots'] += 1
         # take it out of active and put it in  available
         self.active.remove(shot)
         self.availableJackpots.append(shot)

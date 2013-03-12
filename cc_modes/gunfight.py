@@ -107,6 +107,8 @@ class Gunfight(ep.EP_Mode):
             self.game.coils.rightGunFlasher.pulse(30)
 
     def start_gunfight(self,side):
+        # audit
+        self.game.game_data['Feature']['Gunfights Started'] += 1
         self.starting = True
         print "GUNFIGHT GOES HERE"
         # pop up the post
@@ -171,6 +173,8 @@ class Gunfight(ep.EP_Mode):
         self.delay("Operational",delay = 1.5,handler=self.gunfight_pan,param=badGuys)
 
     def won(self):
+        # audit
+        self.game.game_data['Feature']['Gunfights Won'] += 1
         self.win = True
         self.shooting = False
         # set some tracking

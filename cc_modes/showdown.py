@@ -53,6 +53,8 @@ class Showdown(ep.EP_Mode):
 
     def start_showdown(self,side):
         print "S H O W D O W N"
+        # audits
+        self.game.game_data['Feature']['Showdown Started'] += 1
         # raise the post to hold the ball
         self.activeSide = side
         #self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
@@ -279,6 +281,8 @@ class Showdown(ep.EP_Mode):
         if self.deathTally % 4 == 0:
             print "THEY'RE ALL DEAD JIM"
             self.delay("Operational",delay=myWait,handler=self.new_rack)
+            # audit
+            self.game.game_data['Feature']['Showdown Racks Clear'] += 1
         else:
             self.delay("Operational",delay=myWait,handler=self.game.interrupter.showdown_hit,param=self.showdownValue)
 

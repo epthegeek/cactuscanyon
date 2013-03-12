@@ -268,6 +268,8 @@ class LastCall(ep.EP_Mode):
         print "Last call - player index: " + str(self.game.current_player_index)
 
     def intro(self):
+        # audit
+        self.game.game_data['Feature']['Last Call Started'] += 1
         # set a stack level, mostly to kill the inlanes
         self.game.stack_level(6,value=True,lamps=False)
         # play the startup animation

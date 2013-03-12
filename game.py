@@ -328,10 +328,10 @@ class CCGame(game.BasicGame):
         self.super_filter = cc_modes.SuperFilter(game=self,priority = 200)
         # Interrupter Jones
         self.interrupter = cc_modes.Interrupter(game=self,priority=200)
-        # Switch Hit Tracker
         # moonlight madness
         self.moonlight = cc_modes.Moonlight(game=self,priority=200)
-        self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=201)
+        # Switch Hit Tracker - Rides above everything else
+        self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=250)
         # new service mode test
         self.new_service = ep.ep_new_service.NewServiceMode(game=self,priority=200)
 
@@ -596,6 +596,8 @@ class CCGame(game.BasicGame):
 
     def game_reset(self):
         print("RESETTING GAME")
+        # save existing data for audits thus far
+        self.save_data()
         # unload all the base modes, just in case
         self.base.remove_modes()
         # unload all the base mode
@@ -623,6 +625,20 @@ class CCGame(game.BasicGame):
         # self.modes.remove(self.base)
         # turn the flippers off
         self.enable_flippers(enable=False)
+
+        # tally up the some audit data
+        # Also handle game stats.
+        for i in range(0,len(self.players)):
+            game_time = self.get_game_time(i)
+            self.game_data['Audits']['Games Played'] += 1
+            self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
+            self.game_data['Audits']['Avg Score'] = self.calc_number_average( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Score'], self.players[i].score)
+            # rank ending choices
+            ranks = ['Stranger At End','Partner At End','Deputy At End','Sheriff At End','Marshall At End']
+            # +1 the stat for each players final rank
+            self.game_data['Feature'][ranks[self.players[i].player_stats['rank']]] += 1
+        # save the game data
+        self.save_game_data()
 
         # divert to the match before high score entry - unless last call is disabled
         lastCall = 'Enabled' == self.user_settings['Gameplay (Feature)']['Last Call Mode']
@@ -681,15 +697,6 @@ class CCGame(game.BasicGame):
         self.modes.add(self.attract_mode)
         # play a quote
         duration = self.sound.play(self.assets.quote_goodbye)
-        # tally up the some audit data
-        # Also handle game stats.
-        for i in range(0,len(self.players)):
-            game_time = self.get_game_time(i)
-            self.game_data['Audits']['Avg Game Time'] = self.calc_time_average_string( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Game Time'], game_time)
-            self.game_data['Audits']['Avg Score'] = self.calc_number_average( self.game_data['Audits']['Games Played'], self.game_data['Audits']['Avg Score'], self.players[i].score)
-            self.game_data['Audits']['Games Played'] += 1
-        # save the game data
-        self.save_game_data()
 
         # play the closing song
         self.interrupter.closing_song(duration)

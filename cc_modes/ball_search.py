@@ -91,6 +91,9 @@ class BallSearch(ep.EP_Mode):
 
     def perform_search(self, completion_wait_time, completion_handler = None):
         print "DO A BARREL ROLL! - er, BALL SEARCH!"
+        # log the search in audits
+        self.game.game_data['Feature']['Ball Searches'] += 1
+
         if (completion_wait_time != 0):
             self.game.set_status("Balls Missing") # Replace with permanent message
         delay = .150

@@ -71,6 +71,12 @@ class Badge(ep.EP_Mode):
         self.game.set_tracking('starStatus',True,point)
         print "BADGE STATUS: "
         print self.game.show_tracking('starStatus')
+        # log some audits
+        if point == 1:
+        # log the hit in audits
+            self.game.game_data['Feature']['Combos Complete'] += 1
+        elif point == 2:
+            self.game.game_data['Feature']['Bart Bros Complete'] += 1
         # check if bionic is ready
         self.check_bionic()
         # update the badge lamps no matter what

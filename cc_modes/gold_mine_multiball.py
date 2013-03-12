@@ -235,6 +235,7 @@ class GoldMine(ep.EP_Mode):
         self.delay(delay=1.5,handler=self.get_going)
 
     def get_going(self):
+        self.game.game_data['Feature']['Gold Mine Started'] += 1
         self.running = True
         # kick the ball out of the mine
         self.game.mountain.eject()
@@ -302,6 +303,8 @@ class GoldMine(ep.EP_Mode):
 
     def jackpot_hit(self,step=1):
         if step == 1:
+            # audit
+            self.game.game_data['Feature']['Gold Mine Jackpots'] += 1
             # clear the display
             self.abort_display()
             # award the points
@@ -396,6 +399,9 @@ class GoldMine(ep.EP_Mode):
         if not self.game.show_tracking('motherlodeLit'):
             # if not, turn some junk on because it should be
             self.game.set_tracking('motherlodeLit',True)
+            # log the hit in audits
+            self.game.game_data['Feature']['Motherlodes Lit'] += 1
+
             self.game.mountain.run()
             self.lamp_update()
             self.game.base.play_quote(self.game.assets.quote_motherlodeLit)
@@ -422,6 +428,8 @@ class GoldMine(ep.EP_Mode):
             self.delay(name="Display",delay=1.5,handler=self.main_display)
 
     def motherlode_hit(self):
+        # log the hit in audits
+        self.game.game_data['Feature']['Motherlode Hits'] += 1
         # stop the mountain
         self.game.mountain.reset_toy()
         # turn off the flasher

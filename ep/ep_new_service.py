@@ -1357,23 +1357,51 @@ class EditItem:
 ##  |____/ \__\__,_|\__|___/ |____/ \___|\___|\__|_|\___/|_| |_|
 
 class NewServiceModeStats(NewServiceSkeleton):
-    """Service Stats Section."""
+    """Service Stats Menu Section."""
     def __init__(self, game, priority):
         super(NewServiceModeStats, self).__init__(game, priority)
-        self.myID = "Service Mode Stats"
+        self.myID = "Service Mode Stats Menu"
+        self.index = 0
+
+    def mode_started(self):
+        # set some indexes
+        self.section = ["STANDARD AUDITS","FEATURE AUDITS"]
+        self.update_display("Statistics",str(self.section[self.index]))
+
+    def sw_enter_active(self,sw):
+        self.game.sound.play(self.game.assets.sfx_menuEnter)
+        selection = self.section[self.index]
+        mode_to_add = None
+        if selection == "STANDARD AUDITS":
+            mode_to_add = NewServiceModeStatsDisplay(game=self.game,priority=202,title=selection,category="Audits")
+        elif selection == "FEATURE AUDITS":
+            mode_to_add = NewServiceModeStatsDisplay(game=self.game,priority=202,title=selection,category="Feature")
+        else:
+            pass
+        if mode_to_add:
+            self.game.modes.add(mode_to_add)
+        return game.SwitchStop
+
+class NewServiceModeStatsDisplay(NewServiceSkeleton):
+    """Service Stats Display Section."""
+    def __init__(self, game, priority,title,category):
+        super(NewServiceModeStatsDisplay, self).__init__(game, priority)
+        self.myID = "Service Mode Stats Display"
         self.index = 0
         self.values = []
+        self.category = category
+        self.title = title
 
     def mode_started(self):
         # grab the audits section out of the game data
-        itemlist = self.game.game_data["Audits"]
+        itemlist = self.game.game_data[self.category]
         # go through the audits and store the names and values
         for item in sorted(itemlist.iterkeys()):
             self.section.append(str(item).upper())
             print "Item: " + str(item)
             self.values.append(str(itemlist[item]))
             print "Value: " + str(itemlist[item])
-        self.update_display("Statistics",self.section[self.index],self.values[self.index])
+        self.update_display(self.title,self.section[self.index],self.values[self.index])
 
     def sw_enter_active(self,sw):
         # null the enter switch

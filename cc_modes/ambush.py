@@ -133,6 +133,8 @@ class Ambush(ep.EP_Mode):
         #self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
 
         print "A M B U S H"
+        # audit
+        self.game.game_data['Feature']['Ambush Started'] += 1
         # kill the music
         self.stop_music()
         # set the layer tracking
@@ -361,6 +363,8 @@ class Ambush(ep.EP_Mode):
     def hit(self,target):
         # check to make sure the last guy hasn't already fled - there's a small delay while the last gunshot animation plays
         if self.misses < self.LOSE:
+            # audits
+            self.game.game_data['Feature']['Ambush Kills'] += 1
             self.cancel_delayed("Poller")
             # reset the taunt timer
             self.tauntTimer = 0

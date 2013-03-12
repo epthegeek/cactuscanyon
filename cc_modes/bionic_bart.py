@@ -52,6 +52,8 @@ class BionicBart(ep.EP_Mode):
 
     def mode_started(self):
         print "Starting bionic bart battle"
+        # audit
+        self.game.game_data['Feature']['Bionic Bart Started'] += 1
         # set the stack level
         self.game.stack_level(6,True)
         # if there's a quickdraw running - kill that
@@ -410,6 +412,8 @@ class BionicBart(ep.EP_Mode):
     def hit(self,step=1):
         print "Hitting bionic bart"
         if step == 1:
+            # audit
+            self.game.game_data['Feature']['Bionic Bart Hits'] += 1
             # turn off loaded and the lights
             self.loaded = False
             self.lamp_update()
@@ -496,6 +500,8 @@ class BionicBart(ep.EP_Mode):
     def bionic_defeated(self,step=1):
         # VICTOLY!
         if step == 1:
+            # audit
+            self.game.game_data['Feature']['Bionic Bart Kills'] += 1
             # set bart flag to dead
             self.game.set_tracking('bionicStatus', "DEAD")
 

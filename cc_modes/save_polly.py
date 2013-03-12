@@ -180,6 +180,8 @@ class SavePolly(ep.EP_Mode):
 
     def start_save_polly(self,step=1):
         if step == 1:
+            # audit
+            self.game.game_data['Feature']['Center Polly Started'] += 1
             # set the level 1 stack flag
             self.game.stack_level(2,True)
             # set the running flag
@@ -370,6 +372,8 @@ class SavePolly(ep.EP_Mode):
 
     # success
     def polly_saved(self):
+        # audit
+        self.game.game_data['Feature']['Center Polly Won'] += 1
         # turn off the polly indicator
         self.game.peril = False
         self.won = True

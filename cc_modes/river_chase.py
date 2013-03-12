@@ -172,6 +172,8 @@ class RiverChase(ep.EP_Mode):
 
     def start_river_chase(self,step=1):
         if step == 1:
+            # audit
+            self.game.game_data['Feature']['Left Polly Started'] += 1
             # set the level 1 stack flag
             self.game.stack_level(2,True)
 
@@ -254,6 +256,8 @@ class RiverChase(ep.EP_Mode):
 
     # success
     def polly_saved(self):
+        # audit
+        self.game.game_data['Feature']['Left Polly Won'] += 1
         self.game.peril = False
         self.game.score(500000)
         self.running = False

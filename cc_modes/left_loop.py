@@ -61,6 +61,8 @@ class LeftLoop(ep.EP_Mode):
         self.game.coils.leftLoopGate.disable()
         # if we aren't coming through on a full loop - it's a natural hit and it counts
         if ep.last_switch == 'leftLoopBottom':
+            # Register the hit in audits
+            self.game.game_data['Feature']['Left Loop Hits'] += 1
             # cancel any other displays
             for mode in self.game.ep_modes:
                 if getattr(mode, "abort_display", None):

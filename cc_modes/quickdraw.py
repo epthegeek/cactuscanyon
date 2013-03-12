@@ -99,6 +99,8 @@ class Quickdraw(ep.EP_Mode):
             self.pause()
 
     def start_quickdraw(self,side):
+        # audit
+        self.game.game_data['Feature']['Quickdraws Started'] += 1
         # set the stack flag
         self.game.stack_level(0,True)
 
@@ -200,6 +202,8 @@ class Quickdraw(ep.EP_Mode):
         self.timer(self.target)
 
     def won(self,target):
+        # audit
+        self.game.game_data['Feature']['Quickdraws Won'] += 1
         # kill the timer
         self.cancel_delayed("Grace")
         self.cancel_delayed("Timer Delay")
@@ -248,6 +252,8 @@ class Quickdraw(ep.EP_Mode):
         # if this is the 4th one , and we're not at the EB max, then light extra ball
         if dudesDead == 4 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             # call the extra ball lit with a callback to the check bounty routine after
+            # audit
+            self.game.game_data['Feature']['EB Lit Quickdraws'] += 1
             self.delay("Operational",delay=duration,handler=self.game.mine.light_extra_ball,param=self.game.quickdraw.check_bounty)
         # any other case, just go to check bounty
         else:

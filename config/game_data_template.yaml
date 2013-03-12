@@ -27,6 +27,68 @@ Audits:
   Games Played: 0
   Games Started: 0
   Balls Played: 0
+  Extra Balls Earned: 0
+  Left Drains: 0
+  Right Drains: 0
+  Tilts: 0
+  Left Flipper: 0
+  Right Flipper: 0
+Feature:
+  Ball Searches: 0
+  Ball Saves: 0
+  Left Loop Hits: 0
+  Left Ramp Hits: 0
+  Center Ramp Hits: 0
+  Right Loop Hits: 0
+  Right Ramp Hits: 0
+  Bart Hits: 0
+  Barts Defeated: 0
+  Motherlodes Lit: 0
+  Motherlode Hits: 0
+  Stampede Started: 0
+  Stampede Jackpots: 0
+  Combos Complete: 0
+  Bart Bros Complete: 0
+  Showdown Started: 0
+  Showdown Racks Clear: 0
+  Ambush Started: 0
+  Ambush Kills: 0
+  Bionic Bart Started: 0
+  Bionic Bart Hits: 0
+  Bionic Bart Kills: 0
+  Gunfights Started: 0
+  Gunfights Won: 0
+  Quickdraws Started: 0
+  Quickdraws Won: 0
+  Right Quickdraw Lit: 0
+  Left Quickdraw Lit: 0
+  Left Polly Started: 0
+  Center Polly Started: 0
+  Right Polly Started: 0
+  Left Polly Won: 0
+  Center Polly Won: 0
+  Right Polly Won: 0
+  Gold Mine Started: 0
+  Gold Mine Jackpots: 0
+  Bounty Awards: 0
+  Stranger At End: 0
+  Partner At End: 0
+  Deputy At End: 0
+  Sheriff At End: 0
+  Marshall At End: 0
+  High Noon Started: 0
+  High Noon Won: 0
+  Drunk MB Started: 0
+  Drunk MB Beers: 0
+  Drunk MB Jackpots: 0
+  CVA Started: 0
+  CVA Ships Hit: 0
+  CVA Aliens Hit: 0
+  EB Lit Skillshot: 0
+  EB Lit Bounty: 0
+  EB Lit Quickdraws: 0
+  Last Call Started: 0
+  Marshall MB Started: 0
 SwitchHits:
   18 SHOOTER LANE: 0
   67 SKILL BOWL: 0

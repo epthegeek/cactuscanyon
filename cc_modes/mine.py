@@ -336,6 +336,8 @@ class Mine(ep.EP_Mode):
         # add the ball to the pending extra balls
         derp = self.game.increase_tracking('extraBallsPending')
         print "EXTRA BALLS PENDING: " + str(derp)
+        # audit tick
+        self.game.game_data['Audits']['Extra Balls Earned'] += 1
         # setup  a bunch of text
         textLine1 = dmd.TextLayer(28, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("EXTRA")
         textLine2 = dmd.TextLayer(28, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("BALL")
@@ -367,7 +369,7 @@ class Mine(ep.EP_Mode):
         self.cancel_delayed("Display")
         # stop the music
         self.game.squelch_music()
-        # turn off the mine flasher
+        # turn off the mine flasher ?
         # add one to the total of extra balls
         ebt = self.game.increase_tracking('extraBallsTotal')
         print "Extra balls total: " + str(ebt)
