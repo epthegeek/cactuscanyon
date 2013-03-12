@@ -1398,9 +1398,9 @@ class NewServiceModeStatsDisplay(NewServiceSkeleton):
         # go through the audits and store the names and values
         for item in sorted(itemlist.iterkeys()):
             self.section.append(str(item).upper())
-            print "Item: " + str(item)
+            #print "Item: " + str(item)
             self.values.append(str(itemlist[item]))
-            print "Value: " + str(itemlist[item])
+            #print "Value: " + str(itemlist[item])
         self.update_display(self.title,self.section[self.index],self.values[self.index])
 
     def sw_enter_active(self,sw):
