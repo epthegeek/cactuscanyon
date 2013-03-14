@@ -579,7 +579,7 @@ class NewServiceModeSolenoids(NewServiceSkeleton):
     def sw_enter_active(self,sw):
         if self.mode == 0:
             self.mode = 1
-            self.infoLine.set_text("RUNNING")
+            self.infoLine.set_text("REPEAT")
         else:
             self.mode = 0
             self.infoLine.set_text("STOPPED")
@@ -1271,10 +1271,11 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
                 self.game.sound.play(self.game.assets.sfx_menuUp)
             self.change_item()
         else:
-            if self.option_index < (len(self.item.options) - 1):
-                self.option_index += 1
-                self.item.value = self.item.options[self.option_index]
-                self.change_item()
+            self.option_index += 1
+            if self.option_index >= (len(self.item.options)):
+                self.option_index = 0
+            self.item.value = self.item.options[self.option_index]
+            self.change_item()
         return game.SwitchStop
 
     def sw_down_active(self,sw):
@@ -1289,10 +1290,11 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             self.game.sound.play(self.game.assets.sfx_menuDown)
             self.change_item()
         else:
-            if self.option_index > 0:
-                self.option_index -= 1
-                self.item.value = self.item.options[self.option_index]
-                self.change_item()
+            self.option_index -= 1
+            if self.option_index < 0:
+                self.option_index = (len(self.item.options) -1)
+            self.item.value = self.item.options[self.option_index]
+            self.change_item()
         return game.SwitchStop
 
     def change_item(self):
