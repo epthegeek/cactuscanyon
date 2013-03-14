@@ -1455,7 +1455,7 @@ class NewServiceModeUtilities(NewServiceSkeleton):
 
     def mode_started(self):
         self.index = 0
-        self.section = ["CLEAR AUDITS", "RESET HIGH SCORES","RESTORE DEFAULTS","RESET SWITCH COUNT","EMPTY TROUGH"]
+        self.section = ["CLEAR STD. AUDITS", "CLEAR FEAT. AUDITS", "RESET HIGH SCORES","RESTORE DEFAULTS","RESET SWITCH COUNT","EMPTY TROUGH"]
         self.update_display("Utilities",str(self.section[self.index]))
 
     def sw_enter_active(self,sw):
@@ -1510,8 +1510,13 @@ class NewServiceModeUtility(NewServiceSkeleton):
         # play a sound
         self.game.sound.play(self.game.assets.sfx_menuSave)
         # clear audits
-        if self.tool == "CLEAR AUDITS":
+        if self.tool == "CLEAR STD. AUDITS":
             self.game.remote_load_game_data(restore="Audits")
+            self.clear_instructions()
+            self.selectionLine.set_text("AUDITS RESET",blink_frames=15)
+            self.delay(delay=2,handler=self.unload)
+        elif self.tool == "CLEAR FEAT. AUDITS":
+            self.game.remote_load_game_data(restore="Feature")
             self.clear_instructions()
             self.selectionLine.set_text("AUDITS RESET",blink_frames=15)
             self.delay(delay=2,handler=self.unload)
