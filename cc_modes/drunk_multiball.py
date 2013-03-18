@@ -40,6 +40,7 @@ class DrunkMultiball(ep.EP_Mode):
         anim = self.game.assets.dmd_reverse
         self.underLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
         self.starting = False
+        self.giOff = 'Disabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball GI']
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -115,8 +116,9 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.enable_inverted_flippers(True)
         # stop the music
         self.stop_music()
-        # turn the GI off
-        self.game.gi_control("OFF")
+        # turn the GI off - Based on setting
+        if self.giOff:
+            self.game.gi_control("OFF")
         # update the lamps
         self.lamp_update()
         # play the drunk multiball song
@@ -280,10 +282,14 @@ class DrunkMultiball(ep.EP_Mode):
         self.availableJackpots.append(shot)
         # update the lamps for the hit ramp
         mode('Disable')
+        self.cancel_delayed("GI Reset")
         # flash some lights
         self.game.lamps.gi01.schedule(0xFF00FF00,cycle_seconds=1)
         self.game.lamps.gi02.schedule(0x0FF00FF0,cycle_seconds=1)
         self.game.lamps.gi03.schedule(0x00FF00FF,cycle_seconds=1)
+        # turn the GI back on if not set for off
+        if not self.giOff:
+            self.delay("GI Reset",delay=1,handler=self.game.gi_control,param="ON")
 
         # score some points
         self.game.score(5000000)
