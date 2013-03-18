@@ -704,6 +704,14 @@ PRLamps:
         number: L85
         label: Beer Mug Mod
         tags: Playfield
+    leftJetBumper:
+        number: L87
+        label: Left Jet Bumper
+        tags: Playfield
+    rightJetBumper:
+        number: L88
+        label: Right Jet Bumper
+        tags: Playfield
     startButton:
         number: L88
         label: Start Button
