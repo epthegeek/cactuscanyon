@@ -232,7 +232,7 @@ Gameplay (Feature):
     increments: 1
     default: 3
   'CVA GI Behavior':
-    options: ['Default','All On']
+    options: ['Default','On']
     default: 'Default'
   'Attract Mode Sounds':
     options: ['Yes','No']

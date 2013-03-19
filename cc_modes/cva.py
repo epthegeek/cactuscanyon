@@ -29,6 +29,7 @@ class CvA(ep.EP_Mode):
         self.positions = [-58,-31,-4,23,50,77,104]
         self.direction = ["LEFT","RIGHT"]
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
+        self.giActive = 'Standard' == self.game.user_settings['Gameplay (Feature)']['CVA GI Behavior']
 
         self.targetNames = ['Left','Left Center','Right Center','Right']
         # setup the standing aliens
@@ -375,7 +376,10 @@ class CvA(ep.EP_Mode):
             duration = self.game.sound.play(self.game.assets.music_cvaIntro)
             # main loop
             self.delay(delay=duration,handler=self.music_on,param=self.game.assets.music_cvaLoop)
-            self.delay(delay=duration,handler=self.gi_lampshow)
+            if self.giActive:
+                self.delay(delay=duration,handler=self.gi_lampshow)
+            else:
+                self.delay(delay=duration,handler=self.game.gi_control,param="ON")
             #self.delay(delay=duration,handler=self.gi_bloom,param=4.35)
             self.delay(delay=duration,handler=self.intro,param=3)
             # load a blank frame to fade in from
