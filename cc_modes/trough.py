@@ -386,7 +386,7 @@ class Trough(ep.EP_Mode):
     def save_ball(self):
         print "Saving Ball"
         # log in audits
-        self.game.game_data['Feature']['Balls Saved'] += 1
+        self.game.game_data['Feature']['Ball Saves'] += 1
 
         self.num_balls_to_save -= 1
         print "Left to save: " + str(self.num_balls_to_save)
