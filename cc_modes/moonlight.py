@@ -446,6 +446,8 @@ class Moonlight(ep.EP_Mode):
         self.running = False
         # turn on the GI just in case
         self.game.gi_control("ON")
+        # reset the autoplunge number just in case
+        self.game.trough.balls_to_autoplunge = 0
         self.bonanza = False
         # unload the mode
         self.unload()
