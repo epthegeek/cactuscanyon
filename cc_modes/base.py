@@ -348,6 +348,9 @@ class BaseGameMode(ep.EP_Mode):
             # Disable flippers so the ball will drain.
             self.game.enable_flippers(enable=False)
 
+            # drop the targets
+            self.game.bad_guys.drop_targets()
+
             # Make sure ball won't be saved when it drains.
             self.game.trough.disable_ball_save()
 
