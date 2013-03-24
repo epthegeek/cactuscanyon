@@ -69,13 +69,13 @@ class GoldMine(ep.EP_Mode):
             self.end_multiball()
         elif self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('mineStatus') == "RUNNING":
             print "Down to one ball"
-            if not self.restarted:
+            if not self.restarted and not self.game.show_tracking("starStatus",0):
                 self.restartFlag = True
                 self.restarted = True
                 self.cancel_delayed("Display")
                 # drop the bad guys in case there are bandits up
                 if self.bandits:
-                    self.end_bandits()
+                    self.end_bandits(win=False)
                 self.game.sound.play_music(self.game.assets.music_tensePiano1,loops=-1)
                 self.clear_layer()
                 self.lamp_update()
