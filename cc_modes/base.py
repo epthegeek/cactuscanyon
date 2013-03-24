@@ -667,7 +667,7 @@ class BaseGameMode(ep.EP_Mode):
             self.autoplunge_correct("Last Call")
         elif self.game.showdown.running:
             self.autoplunge_correct("Showdown")
-        elif self.game.moonlight.running:
+        elif self.game.moonlight.running and not self.game.moonlight.starting:
             self.autoplunge_correct("Moonlight Madness")
         else:
             pass
