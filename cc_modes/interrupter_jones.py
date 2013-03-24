@@ -429,7 +429,7 @@ class Interrupter(ep.EP_Mode):
     # Outside of the service mode, up/down control audio volume.
     def sw_down_active(self, sw):
         print "Volume Down"
-        if self.game.service_mode not in self.game.modes:
+        if self.game.new_service not in self.game.modes:
             # set the volume down one
             volume = self.game.volume_down()
             # save the value
@@ -442,7 +442,7 @@ class Interrupter(ep.EP_Mode):
 
     def sw_up_active(self, sw):
         print "Volume Up"
-        if self.game.service_mode not in self.game.modes:
+        if self.game.new_service not in self.game.modes:
             # set the volume up one
             volume = self.game.volume_up()
             print "New volume: " + str(volume)
