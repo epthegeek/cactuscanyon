@@ -29,7 +29,7 @@ class CvA(ep.EP_Mode):
         self.positions = [-58,-31,-4,23,50,77,104]
         self.direction = ["LEFT","RIGHT"]
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
-        self.giActive = 'Standard' == self.game.user_settings['Gameplay (Feature)']['CVA GI Behavior']
+        self.giActive = 'Default' == self.game.user_settings['Gameplay (Feature)']['CVA GI Behavior']
 
         self.targetNames = ['Left','Left Center','Right Center','Right']
         # setup the standing aliens

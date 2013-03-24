@@ -597,7 +597,7 @@ class CCGame(game.BasicGame):
     def game_reset(self):
         print("RESETTING GAME")
         # save existing data for audits thus far
-        self.save_data()
+        self.save_game_data()
         # unload all the base modes, just in case
         self.base.remove_modes()
         # unload all the base mode
