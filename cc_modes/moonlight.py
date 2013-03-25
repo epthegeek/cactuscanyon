@@ -31,9 +31,6 @@ class Moonlight(ep.EP_Mode):
         self.starting = False
         self.ending = False
         self.bonanza = False
-        # index for available shots
-        self.liveShots = []
-        self.availableShots = [0,1,2,3,4,5,6,7,8]
         # available shots and corresponding lights
         self.guns = [self.game.coils.leftGunFlasher, self.game.coils.rightGunFlasher]
 
@@ -259,6 +256,9 @@ class Moonlight(ep.EP_Mode):
         return game.SwitchStop
 
     def mode_started(self):
+        # index for available shots
+        self.liveShots = []
+        self.availableShots = [0,1,2,3,4,5,6,7,8]
         self.moonlightTotal = 0
         self.running = True
         self.starting = True
