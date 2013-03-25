@@ -514,10 +514,20 @@ class Interrupter(ep.EP_Mode):
             # kill the lampshow
             self.game.lampctrl.stop_show()
         self.game.lamp_control.disable_all_lamps()
+        # stop the music
         self.stop_music()
+        # stop the train
+        self.game.train.stop()
+        # stop the mine
+        self.game.mountain.stop()
+        # drop the bad guys
+        self.game.bad_guys.drop_targets()
+        # kill the gunfight pins
+        self.game.coils.rightGunfightPost.disable()
+        self.game.coils.leftGunfightPost.disable()
         # remove all the active modes
         for mode in self.game.modes:
-            self.game.modes.remove(mode)
+            self.game.modes.unload(mode)
             # then add the service mode
         self.game.modes.add(self.game.new_service)
         self.unload()
