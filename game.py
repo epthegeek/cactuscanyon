@@ -93,7 +93,7 @@ class CCGame(game.BasicGame):
         self.modes.modes = []
 
         # software version number
-        self.revision = "2013.03.19"
+        self.revision = "2013.03.27"
 
         # basic game reset stuff, copied in
 
@@ -1093,7 +1093,7 @@ class CCGame(game.BasicGame):
             if self.game_data:
                 print "Found settings. All good"
             else:
-                print "Settings broken, all bad, defaulting"
+                print "Data broken, all bad, defaulting"
                 self.game_data = {}
 
         if template:
