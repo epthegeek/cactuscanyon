@@ -69,8 +69,20 @@ class CCGame(game.BasicGame):
         self.moonlightFlag = False
 
         super(CCGame, self).__init__(machineType)
-        # load the images for the colorized display
-        self.desktop.load_images(dots_path)
+        use_desktop = config.value_for_key_path(keypath='use_desktop', default=True)
+        color_desktop = config.value_for_key_path(keypath='color_desktop', default=False)
+        if use_desktop:
+            # if not color, run the old style pygame
+            if not color_desktop:
+                from procgame.desktop import Desktop
+                self.desktop = Desktop()
+            # otherwise run the color display
+            else:
+                from ep import EP_Desktop
+                self.desktop = EP_Desktop()
+                # load the images for the colorized display
+                self.desktop.load_images(dots_path)
+
         self.load_config('cc_machine.yaml')
 
 

@@ -21,7 +21,8 @@ __all__ = [
     'ep_showcase',
     'ep_service',
     'ep_lamps',
-    'ep_new_service'
+    'ep_new_service',
+    'ep_pygame_desktop'
 ]
 from ep_layers import *
 from ep_transition import *
@@ -30,6 +31,7 @@ from ep_showcase import *
 from ep_service import *
 from ep_lamps import *
 from ep_new_service import *
+from ep_desktop_pygame import *
 
 import locale
 
