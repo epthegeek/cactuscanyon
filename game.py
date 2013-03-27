@@ -42,6 +42,7 @@ user_game_data_path = curr_file_path + "/config/game_data.yaml"
 game_data_defaults_path = curr_file_path + "/config/game_data_template.yaml"
 settings_defaults_path = curr_file_path + "/config/settings_template.yaml"
 user_settings_path = curr_file_path + "/config/user_settings.yaml"
+dots_path = curr_file_path + "/dots/"
 
 ## Subclass BasicGame to create the main game
 class CCGame(game.BasicGame):
@@ -68,6 +69,8 @@ class CCGame(game.BasicGame):
         self.moonlightFlag = False
 
         super(CCGame, self).__init__(machineType)
+        # load the images for the colorized display
+        self.desktop.load_images(dots_path)
         self.load_config('cc_machine.yaml')
 
 

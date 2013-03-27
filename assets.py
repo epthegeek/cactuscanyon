@@ -1300,3 +1300,4 @@ class Assets():
         self.font_07x4 = dmd.Font(self.shared_dmd_path + "Font07x4.dmd")
         self.font_07x5 = dmd.Font(self.shared_dmd_path + "Font07x5.dmd")
 
+        
