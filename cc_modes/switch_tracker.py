@@ -41,6 +41,7 @@ class SwitchTracker(ep.EP_Mode):
 
     def sw_rightRampEnter_active(self,sw):
         self.game.game_data['SwitchHits']['66 R RAMP ENTER'] = 0
+        self.multiball_status_check()
 
     def sw_rightRampMake_active(self,sw):
         self.game.game_data['Feature']['Right Ramp Hits'] += 1
@@ -51,6 +52,7 @@ class SwitchTracker(ep.EP_Mode):
 
     def sw_rightReturnLane_active(self,sw):
         self.game.game_data['SwitchHits']['17 R RETURN LANE'] = 0
+        self.multiball_status_check()
 
     def sw_rightOutlane_active(self,sw):
         self.game.game_data['Audits']['Right Drains'] += 1
@@ -59,12 +61,14 @@ class SwitchTracker(ep.EP_Mode):
     def sw_leftRampEnter_active(self,sw):
         self.game.game_data['Feature']['Left Ramp Hits'] += 1
         self.game.game_data['SwitchHits']['85 L RAMP ENTER'] = 0
+        self.multiball_status_check()
 
     def sw_leftRampMake_active(self,sw):
         self.game.game_data['SwitchHits']['83 L RAMP MAKE'] = 0
 
     def sw_leftReturnLane_active(self,sw):
         self.game.game_data['SwitchHits']['26 L RETURN LANE'] = 0
+        self.multiball_status_check()
 
     def sw_leftOutlane_active(self,sw):
         self.game.game_data['Audits']['Left Drains'] += 1
@@ -72,6 +76,7 @@ class SwitchTracker(ep.EP_Mode):
 
     def sw_centerRampEnter_active(self,sw):
         self.game.game_data['SwitchHits']['82 C RAMP ENTER'] = 0
+        self.multiball_status_check()
 
     def sw_centerRampMake_active(self,sw):
         self.game.game_data['Feature']['Center Ramp Hits'] += 1
@@ -83,6 +88,7 @@ class SwitchTracker(ep.EP_Mode):
 
     def sw_leftLoopBottom_active(self,sw):
         self.game.game_data['SwitchHits']['36 L LOOP BOT'] = 0
+        self.multiball_status_check()
 
     def sw_rightLoopTop_active(self,sw):
         # right loop audit doen in mode due to conditions
@@ -90,12 +96,15 @@ class SwitchTracker(ep.EP_Mode):
 
     def sw_rightLoopBottom_active(self,sw):
         self.game.game_data['SwitchHits']['37 R LOOP BOT'] = 0
+        self.multiball_status_check()
 
     def sw_rightBonusLane_active(self,sw):
         self.game.game_data['SwitchHits']['57 R BONUS LANE'] = 0
+        self.multiball_status_check()
 
     def sw_leftBonusLane_active(self,sw):
         self.game.game_data['SwitchHits']['47 L BONUS LANE'] = 0
+        self.multiball_status_check()
 
     def sw_bottomRightStandUp_active(self,sw):
         self.game.game_data['SwitchHits']['28 BOT R QUICKDRAW'] = 0
@@ -111,12 +120,15 @@ class SwitchTracker(ep.EP_Mode):
 
     def sw_mineEntrance_active(self,sw):
         self.game.game_data['SwitchHits']['15 MINE ENTRANCE'] = 0
+        self.multiball_status_check()
 
     def sw_beerMug_active(self,sw):
         self.game.game_data['SwitchHits']['46 BEER MUG'] = 0
+        self.multiball_status_check()
 
     def sw_jetBumpersExit_active(self,sw):
         self.game.game_data['SwitchHits']['48 JETS EXIT'] = 0
+        self.multiball_status_check()
 
     def sw_leftSlingshot_active(self,sw):
         self.game.game_data['SwitchHits']['51 L SLINGSHOT'] = 0
@@ -135,7 +147,12 @@ class SwitchTracker(ep.EP_Mode):
 
     def sw_saloonGate_active(self,sw):
         self.game.game_data['SwitchHits']['73 SALOON GATE'] = 0
+        self.multiball_status_check()
 
     def sw_saloonBart_active(self,sw):
         self.game.game_data['SwitchHits']['75 BART TOY'] = 0
 
+    # this is for killing the 'current status' display
+    def multiball_status_check(self):
+        if self.game.interrupter.statusDisplay != "OFF":
+            self.game.interrupter.status_off()
