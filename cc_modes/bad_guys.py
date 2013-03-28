@@ -199,3 +199,8 @@ class BadGuys(ep.EP_Mode):
         for coil in self.posts:
             coil.disable()
 
+    def slay(self):
+        # just turn the targets off - for service mode
+        for coil in self.coils:
+            coil.disable()
+
