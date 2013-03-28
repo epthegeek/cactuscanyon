@@ -521,10 +521,10 @@ class Interrupter(ep.EP_Mode):
         # stop the mine
         self.game.mountain.stop()
         # drop the bad guys
-        self.game.bad_guys.drop_targets()
+        self.game.bad_guys.kill_power()
         # kill the gunfight pins
-        self.game.coils.rightGunfightPost.disable()
-        self.game.coils.leftGunfightPost.disable()
+        self.game.coils.rightGunFightPost.disable()
+        self.game.coils.leftGunFightPost.disable()
         # remove all the active modes
         for mode in self.game.modes:
             self.game.modes.unload(mode)

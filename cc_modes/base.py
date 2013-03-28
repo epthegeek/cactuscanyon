@@ -357,8 +357,8 @@ class BaseGameMode(ep.EP_Mode):
             self.game.trough.disable_ball_save()
 
             # kill the gunfight pins
-            self.game.coils.rightGunfightPost.disable()
-            self.game.coils.leftGunfightPost.disable()
+            self.game.coils.rightGunFightPost.disable()
+            self.game.coils.leftGunFightPost.disable()
 
             # Make sure the ball search won't run while ball is draining.
             self.game.ball_search.disable()
