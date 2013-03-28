@@ -143,7 +143,7 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.ball == 1 and len(self.game.players) < 4:
             self.game.add_player()
             # tick up the audits
-            self.game_data['Audits']['Games Started'] += 1
+            self.game.game_data['Audits']['Games Started'] += 1
             self.game.order_mobs()
             self.game.lamps.startButton.enable()
             # and play a soundbyte
