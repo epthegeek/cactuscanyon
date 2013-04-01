@@ -1271,6 +1271,7 @@ class Assets():
 
         self.dmd_1pBurnCycle = dmd.Animation().load(self.dmd_path+'1p_burn_cycle.dmd')
 
+        self.dmd_mmJacob = dmd.Animation().load(self.dmd_path+'mm_jacob.dmd')
         self.dmd_mmZap = dmd.Animation().load(self.dmd_path+'mm_zap.dmd')
         self.dmd_mmPowie = dmd.Animation().load(self.dmd_path+'mm_powie.dmd')
         self.dmd_mmDOHO = dmd.Animation().load(self.dmd_path+'mm_doho.dmd')

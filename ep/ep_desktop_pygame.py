@@ -108,9 +108,23 @@ class EP_Desktop():
         dot_cyan_low = pygame.image.load(dots_path+ 'DotCyanLow.png')
         dot_cyan_mid = pygame.image.load(dots_path+ 'DotCyanMid.png')
         dot_cyan = pygame.image.load(dots_path+ 'DotCyan.png')
-        dot_white_low = pygame.image.load(dots_path+ 'DotWhiteLow.png')
-        dot_white_mid = pygame.image.load(dots_path+ 'DotWhiteMid.png')
-        dot_white = pygame.image.load(dots_path+ 'DotWhite.png')
+        #dot_white_low = pygame.image.load(dots_path+ 'DotWhiteLow.png')
+        #dot_white_mid = pygame.image.load(dots_path+ 'DotWhiteMid.png')
+        #dot_white = pygame.image.load(dots_path+ 'DotWhite.png')
+        dot_white_255 = pygame.image.load(dots_path+ 'DotWhite255.png')
+        dot_white_238 = pygame.image.load(dots_path+ 'DotWhite238.png')
+        dot_white_221 = pygame.image.load(dots_path+ 'DotWhite221.png')
+        dot_white_204 = pygame.image.load(dots_path+ 'DotWhite204.png')
+        dot_white_187 = pygame.image.load(dots_path+ 'DotWhite187.png')
+        dot_white_170 = pygame.image.load(dots_path+ 'DotWhite170.png')
+        dot_white_153 = pygame.image.load(dots_path+ 'DotWhite153.png')
+        dot_white_136 = pygame.image.load(dots_path+ 'DotWhite136.png')
+        dot_white_119 = pygame.image.load(dots_path+ 'DotWhite119.png')
+        dot_white_102 = pygame.image.load(dots_path+ 'DotWhite102.png')
+        dot_white_085 = pygame.image.load(dots_path+ 'DotWhite085.png')
+        dot_white_068 = pygame.image.load(dots_path+ 'DotWhite068.png')
+        dot_white_051 = pygame.image.load(dots_path+ 'DotWhite051.png')
+        dot_white_034 = pygame.image.load(dots_path+ 'DotWhite034.png')
         dot_magenta_low = pygame.image.load(dots_path+ 'DotMagentaLow.png')
         dot_magenta_mid = pygame.image.load(dots_path+ 'DotMagentaMid.png')
         dot_magenta = pygame.image.load(dots_path+ 'DotMagenta.png')
@@ -131,7 +145,8 @@ class EP_Desktop():
                        [None,dot_orange_low,dot_orange_mid,dot_orange], # color 13 orange
                        [None,dot_cyan_low,dot_cyan_mid,dot_cyan], # color 14 - cyan
                        [None,dot_magenta_low,dot_magenta_mid,dot_magenta], # color 15 - magenta
-                       [None,dot_white_low,dot_white_mid,dot_white]] # default color - white
+                       #[None,dot_white_low,dot_white_mid,dot_white]] # default color - white
+                       [None,None,dot_white_034,dot_white_051,dot_white_068,dot_white_085,dot_white_102,dot_white_119,dot_white_136,dot_white_153,dot_white_170,dot_white_187,dot_white_204,dot_white_221,dot_white_238,dot_white_255]]
 
 
     def add_key_map(self, key, switch_number):
@@ -217,21 +232,25 @@ class EP_Desktop():
             if dot_value != 0:
                 # set the brightness and color
                 brightness = (dot_value&0xf)
-                if brightness <= 4:
-                    bright_value = 0
-                elif brightness <= 9:
-                    bright_value = 1
-                elif brightness <= 14:
-                    bright_value = 2
-                else:
-                    bright_value = 3
-                color = (dot_value >> 4)
                 # if we have a brightness but no color - use white
-                if brightness and color == 0:
+                if brightness and (dot_value >>4) == 0:
                     color = 16
+                    bright_value = brightness
+                # otherwise, find the color and set the brightness
+                else:
+                    if brightness <= 4:
+                        bright_value = 0
+                    elif brightness <= 9:
+                        bright_value = 1
+                    elif brightness <= 14:
+                        bright_value = 2
+                    else:
+                        bright_value = 3
+                    color = (dot_value >> 4)
                 #print "Dot Value: " + str(derp) +" - color: " + str(color) + " - Brightness: " +str(brightness)
                 # set the image based on color and brightness
                 image = self.colors[color][bright_value]
+
 
             #color_val = ord(dot)*16
             #index = y*y_offset + x*x_offset

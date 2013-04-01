@@ -50,7 +50,8 @@ class Moonlight(ep.EP_Mode):
         banner4 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mmDOHO.frames[0])
         banner5 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mmPowie.frames[0])
         banner6 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mmZap.frames[0])
-        self.banners = [ banner1,banner2,banner3,banner4,banner5,banner6 ]
+        banner7 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_mmJacob.frames[0])
+        self.banners = [ banner1,banner2,banner3,banner4,banner5,banner6,banner7 ]
         self.booms = [self.game.assets.sfx_glassSmash,
                       self.game.assets.sfx_hitBionicBart,
                       self.game.assets.sfx_glassSmash,
@@ -405,11 +406,11 @@ class Moonlight(ep.EP_Mode):
         self.guns.reverse()
         # show a random banner display
         if display:
-            boom = random.choice(self.booms)
-            self.game.sound.play(boom)
             self.cancel_delayed("Display")
             banner = random.choice(self.banners)
             self.layer = banner
+            boom = random.choice(self.booms)
+            self.game.sound.play(boom)
             self.delay("Display",delay=0.6,handler=self.update_display)
 
     def start_bonanza(self):
