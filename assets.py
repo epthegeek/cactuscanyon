@@ -960,6 +960,8 @@ class Assets():
         self.quote_1light = 'quote_1light'
         self.game.sound.register_sound(self.quote_1light, self.quotes_path + "1034-mayor-only-1-light.wav")
 
+        self.quote_toasty = 'quote_toasty'
+        self.game.sound.register_sound(self.quote_toasty, self.quotes_path + "mm-570-toasty.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

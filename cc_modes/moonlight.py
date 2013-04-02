@@ -409,8 +409,11 @@ class Moonlight(ep.EP_Mode):
             self.cancel_delayed("Display")
             banner = random.choice(self.banners)
             self.layer = banner
-            boom = random.choice(self.booms)
-            self.game.sound.play(boom)
+            if banner == self.banners[6]:
+                self.game.sound.play(self.game.assets.quote_toasty)
+            else:
+                boom = random.choice(self.booms)
+                self.game.sound.play(boom)
             self.delay("Display",delay=0.6,handler=self.update_display)
 
     def start_bonanza(self):
