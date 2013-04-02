@@ -47,6 +47,24 @@ MUSIC_PATH = "sounds/music/"
 QUOTES_PATH = "sounds/quotes/"
 FLASHER_PULSE = int(1000 / 32)
 
+WHITE = 0x0
+GREY = 0x1
+DARK_GREY = 0x2
+DARK_GREEN = 0x3
+FLESH = 0x4
+PURPLE = 0x5
+DARK_RED = 0x6
+BROWN = 0x7
+DARK_BROWN = 0x8
+RED = 0x9
+GREEN = 0xA
+YELLOW = 0xB
+BLUE = 0xC
+ORANGE = 0xD
+CYAN = 0xE
+MAGENTA = 0xF
+
+
 
 # set up a property for last switch tracking
 def get_last_switch(self):
