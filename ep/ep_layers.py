@@ -112,7 +112,7 @@ class EP_TextLayer(dmd.layers.Layer):
                 frame.set_dot(x,y,newdot)
         self.bitmap = frame
 
-    def set_text(self, text, seconds=None, blink_frames=None,font_color=0x0):
+    def set_text(self, text, seconds=None, blink_frames=None,color=0x0):
         """Displays the given message for the given number of seconds."""
         self.started_at = None
         self.seconds = seconds
@@ -133,19 +133,20 @@ class EP_TextLayer(dmd.layers.Layer):
             if self.fill_color != None:
                 self.set_target_position(0, 0)
                 self.frame = dmd.Frame(width=self.width, height=self.height)
-                self.frame.fill_rect(0, 0, self.width, self.height, self.fill_color)
+                self.frame.fill_rect(0, 0, self.width, self.height, self.fill_color,color)
                 self.draw_font(self.frame, text, self.x + x, self.y + y)
             else:
                 self.set_target_position(self.x, self.y)
                 (w, h) = self.font.size(text)
                 self.frame = dmd.Frame(w, h)
-                self.draw_font(self.frame, text, 0, 0)
+                self.draw_font(self.frame, text, 0, 0,color)
                 (self.target_x_offset, self.target_y_offset) = (x,y)
 
         return self
 
-    def draw_font(self, frame, text, x, y):
+    def draw_font(self, frame, text, x, y,color=0):
         """Uses this font's characters to draw the given string at the given position."""
+        print "Draw font color " + str(color)
         for ch in text:
             char_offset = ord(ch) - ord(' ')
             if char_offset < 0 or char_offset >= 96:
@@ -153,7 +154,7 @@ class EP_TextLayer(dmd.layers.Layer):
             char_x = self.font.char_size * (char_offset % 10)
             char_y = self.font.char_size * (char_offset / 10)
             width = self.font.char_widths[char_offset]
-            dmd.Frame.copy_rect(dst=frame, dst_x=x, dst_y=y, src=self.bitmap, src_x=char_x, src_y=char_y, width=width, height=self.font.char_size, op=self.composite_op)
+            dmd.Frame.copy_rect(dst=frame, dst_x=x, dst_y=y, src=self.font.bitmaps[color], src_x=char_x, src_y=char_y, width=width, height=self.font.char_size, op=self.composite_op)
             x += width + self.font.tracking
         return x
 

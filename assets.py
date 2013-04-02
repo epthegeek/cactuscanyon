@@ -19,6 +19,7 @@
 
 from procgame import *
 import os
+import ep
 
 curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
 
@@ -64,7 +65,8 @@ class Assets():
         self.font_9px_az_mid = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_2.dmd")
         self.font_9px_az_dim = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_1.dmd")
 
-        self.font_10px_AZ = dmd.Font(self.dmd_path + "Font_Custom_10px_AZ.dmd")
+        self.font_10px_AZ = ep.ColorFont(self.dmd_path + "Font_Custom_10px_AZ.dmd")
+        self.font_10px_AZ.make_colors([ep.YELLOW,ep.ORANGE])
         self.font_12px_az = dmd.Font(self.dmd_path + "Font_16_CactusCanyon.dmd")
         self.font_12px_az_dim = dmd.Font(self.dmd_path + "Font_16_CactusCanyon_dim.dmd")
 

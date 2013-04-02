@@ -57,14 +57,14 @@ class Attract(ep.EP_Mode):
         ## Set up the layers to use
         ballyBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ballyBanner.frames[0])
 
-        textLayer1 = dmd.TextLayer(76, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("ORIGINALLY")
+        textLayer1 = ep.EP_TextLayer(76, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("ORIGINALLY",color=ep.YELLOW)
         textLayer1.composite_op = "blacksrc"
         textLayer2 = dmd.TextLayer(76, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("BY")
         textLayer2.composite_op = "blacksrc"
         leftGecko = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_geckoBorderLeft.frames[0])
         original = dmd.GroupedLayer(128, 32, [leftGecko, textLayer1,textLayer2])
 
-        textLayer1 = dmd.TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("CONTINUED")
+        textLayer1 = ep.EP_TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("CONTINUED",color=ep.ORANGE)
         textLayer1.composite_op = "blacksrc"
         textLayer2 = dmd.TextLayer(58, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("WITH")
         textLayer2.composite_op = "blacksrc"
