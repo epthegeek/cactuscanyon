@@ -412,7 +412,7 @@ class HighNoon(ep.EP_Mode):
             self.game.saloon.kick()
         # clear the shooter lane if needed
         if self.game.switches.shooterLane.is_active():
-            self.game.coils.shooterLane.pulse(30)
+            self.game.coils.autoPlunger.pulse(35)
         if self.hasWon:
             # if we won, the animation is playing, so it may take a while and the balls may drain first
             # so we have to bounce through a helper

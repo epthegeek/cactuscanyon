@@ -73,8 +73,10 @@ class ColorFont(object):
             for y in range(self.__anim.height):
                 for x in range(self.__anim.width):
                     dot = self.bitmaps[0].get_dot(x,y)
-                    newdot = ((c << 4) | (dot & 0xF))
-                    frame.set_dot(x, y, newdot)
+                    if dot > 1:
+                        newdot = ((c << 4) | (dot & 0xF))
+                        frame.set_dot(x, y, newdot)
+
             self.bitmaps[c] = frame
 
     def save(self, filename):
