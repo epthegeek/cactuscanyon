@@ -41,9 +41,11 @@ class Assets():
         # _az = All numerals, letters, and lower case
         # _AZ = All numerals and upper case letters
         # _score = Numerals only
-        self.font_5px_AZ = dmd.Font(self.dmd_path + "Font_3_CactusCanyon.dmd")
+        self.font_5px_AZ = ep.ColorFont(self.dmd_path + "Font_3_CactusCanyon.dmd")
+        self.font_5px_AZ.make_colors([ep.GREY])
         self.font_5px_AZ_inverted = dmd.Font(self.dmd_path + "Font_3_CactusCanyon_inverted.dmd")
-        self.font_5px_bold_AZ = dmd.Font(self.dmd_path + "Font_21_CactusCanyon.dmd")
+        self.font_5px_bold_AZ = ep.ColorFont(self.dmd_path + "Font_21_CactusCanyon.dmd")
+        self.font_5px_bold_AZ.make_colors([ep.ORANGE])
 
         self.font_5px_bold_AZ_outline = dmd.Font(self.dmd_path + "Font_21_mask_CactusCanyon.dmd")
         self.font_5px_bold_AZ_outline.tracking = -1
@@ -59,15 +61,19 @@ class Assets():
         self.font_7px_extra_thin_score = dmd.Font(self.dmd_path + "Font_10_CactusCanyon.dmd")
         self.font_7px_thin_score = dmd.Font(self.dmd_path + "Font_4_CactusCanyon.dmd")
         self.font_7px_wide_score = dmd.Font(self.dmd_path + "Font_6_CactusCanyon.dmd")
-        self.font_7px_bold_az = dmd.Font(self.dmd_path + "Font_14_CactusCanyon.dmd")
+        self.font_7px_bold_az = ep.ColorFont(self.dmd_path + "Font_14_CactusCanyon.dmd")
+        self.font_7px_bold_az.make_colors([ep.BROWN,ep.RED])
 
-        self.font_9px_az = dmd.Font(self.dmd_path + "Font_15_CactusCanyon.dmd")
+        self.font_9px_az = ep.ColorFont(self.dmd_path + "Font_15_CactusCanyon.dmd")
+        self.font_9px_az.make_colors([ep.YELLOW,ep.ORANGE])
         self.font_9px_az_mid = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_2.dmd")
         self.font_9px_az_dim = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_1.dmd")
 
         self.font_10px_AZ = ep.ColorFont(self.dmd_path + "Font_Custom_10px_AZ.dmd")
         self.font_10px_AZ.make_colors([ep.YELLOW,ep.ORANGE])
-        self.font_12px_az = dmd.Font(self.dmd_path + "Font_16_CactusCanyon.dmd")
+
+        self.font_12px_az = ep.ColorFont(self.dmd_path + "Font_16_CactusCanyon.dmd")
+        self.font_12px_az.make_colors([ep.GREEN,ep.CYAN])
         self.font_12px_az_dim = dmd.Font(self.dmd_path + "Font_16_CactusCanyon_dim.dmd")
 
         self.font_12px_az_outline = dmd.Font(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
