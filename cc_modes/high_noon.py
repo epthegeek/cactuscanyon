@@ -37,7 +37,7 @@ class HighNoon(ep.EP_Mode):
         self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_highNoonBackdrop.frames[0])
 
     def ball_drained(self):
-        if self.game.show_tracking('highNoonStatus') == "RUNNING":
+        if self.running:
         # if a ball drains, we put it back in play as long as the mode is running
             self.empty_trough()
         # if all the balls drain, and we're finishing up, unflag busy
@@ -132,40 +132,41 @@ class HighNoon(ep.EP_Mode):
 
     # bad guy hit
     def hit_bad_guy(self,target):
-        # tally the hit
-        self.killed += 1
-        # bad guys currently worth 2.5 mil
-        self.game.score(2500000)
-        # falsh the flashers
-        self.red_flasher_flourish()
-        # a sound effect
-        self.game.sound.play(self.game.assets.sfx_gunfightShot)
-        # a video
-        anim = self.game.assets.dmd_dudeShotFullBody
-        myWait = len(anim.frames) / 10.0
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
-        # set the position of the dying guy based on target
-        if target == 0:
-            animLayer.set_target_position(-49,0)
-        elif target == 1:
-            animLayer.set_target_position(-16,0)
-        elif target == 2:
-            animLayer.set_target_position(15,0)
-        else:
-            animLayer.set_target_position(47,0)
-        # cancel the current display delay
-        self.cancel_delayed("Display")
-        self.layer = animLayer
-        # then go back to it when the video ends
-        self.delay(name="Display",delay=myWait,handler=self.update_display)
+        if self.running:
+            # tally the hit
+            self.killed += 1
+            # bad guys currently worth 2.5 mil
+            self.game.score(2500000)
+            # falsh the flashers
+            self.red_flasher_flourish()
+            # a sound effect
+            self.game.sound.play(self.game.assets.sfx_gunfightShot)
+            # a video
+            anim = self.game.assets.dmd_dudeShotFullBody
+            myWait = len(anim.frames) / 10.0
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+            # set the position of the dying guy based on target
+            if target == 0:
+                animLayer.set_target_position(-49,0)
+            elif target == 1:
+                animLayer.set_target_position(-16,0)
+            elif target == 2:
+                animLayer.set_target_position(15,0)
+            else:
+                animLayer.set_target_position(47,0)
+            # cancel the current display delay
+            self.cancel_delayed("Display")
+            self.layer = animLayer
+            # then go back to it when the video ends
+            self.delay(name="Display",delay=myWait,handler=self.update_display)
 
-        # if that's enough, we're done
-        if self.killed >= 20:
-            self.won()
-        else:
-            # pop the target back up
-            print "HIGH NOON: reactivate target " + str(target)
-            self.delay(delay=0.6,handler=self.game.bad_guys.target_up,param=target)
+            # if that's enough, we're done
+            if self.killed >= 20:
+                self.won()
+            else:
+                # pop the target back up
+                print "HIGH NOON: reactivate target " + str(target)
+                self.delay(delay=0.6,handler=self.game.bad_guys.target_up,param=target)
 
     # todo other switches to trap: mine, saloon, bad guy toy ?
 
@@ -195,6 +196,7 @@ class HighNoon(ep.EP_Mode):
 
             self.game.stack_level(6,True)
             self.game.set_tracking('highNoonStatus',"RUNNING")
+            self.running = True
             # church bell
             anim = self.game.assets.dmd_bellTower
             myWait = len(anim.frames) / 10.0
@@ -371,6 +373,8 @@ class HighNoon(ep.EP_Mode):
         self.cancel_delayed("Display")
         # reset the autoplunge, just in case
         self.game.trough.balls_to_autoplunge = 0
+        # turn off the local running flag
+        self.running = False
         self.game.set_tracking('highNoonStatus',"FINISH")
         # drop the bad guys
         self.game.bad_guys.drop_targets()
