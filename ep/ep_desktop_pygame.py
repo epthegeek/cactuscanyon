@@ -11,6 +11,7 @@ import copy
 import ctypes
 import itertools
 from procgame.events import EventManager
+import os
 
 try:
     import pygame
@@ -199,8 +200,11 @@ class EP_Desktop():
 
     def setup_window(self):
         pygame.init()
+        xOffset = 43
+        yOffset = 224
         #self.screen = pygame.display.set_mode((128*self.screen_multiplier, 32*self.screen_multiplier))
-        self.screen = pygame.display.set_mode((1024,256))
+        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (xOffset,yOffset)
+        self.screen = pygame.display.set_mode((1280,320),pygame.NOFRAME)
         pygame.display.set_caption('Cactus Canyon Continued')
 
     def draw(self, frame):
@@ -256,7 +260,7 @@ class EP_Desktop():
             #index = y*y_offset + x*x_offset
             #surface_array[index:index+bytes_per_pixel] = (color_val,color_val,color_val,0)
             if image:
-                self.screen.blit(image, ((x*8), (y*8)))
+                self.screen.blit(image, ((x*10), (y*10)))
             x += 1
             if x == 128:
                 x = 0

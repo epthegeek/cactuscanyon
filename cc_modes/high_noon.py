@@ -44,6 +44,10 @@ class HighNoon(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('highNoonStatus') == "FINISH":
             self.busy = False
 
+    # auto launch any ball if we're not done
+    def sw_shooterLane_active_for_1s(self,sw):
+        self.game.coils.autoPlunger.pulse(self.game.base.autoplungeStrength)
+
     # jackpot shots
     def sw_leftLoopTop_active(self,sw):
         self.process_shot(0)
@@ -328,8 +332,7 @@ class HighNoon(ep.EP_Mode):
         # launch more balls
         if self.game.trough.num_balls_in_play != 4:
             thisMany = 4 - self.game.trough.num_balls_in_play
-            # turn on autoplunge and launch balls
-            self.game.trough.balls_to_autoplunge = 4
+            # launch balls - mode handles auto launching
             self.game.trough.launch_balls(thisMany)
 
     def update_display(self):
@@ -410,9 +413,6 @@ class HighNoon(ep.EP_Mode):
             self.game.mountain.kick()
         if self.game.switches.saloonPopper.is_active():
             self.game.saloon.kick()
-        # clear the shooter lane if needed
-        if self.game.switches.shooterLane.is_active():
-            self.game.coils.shooterLane.pulse(30)
         if self.hasWon:
             # if we won, the animation is playing, so it may take a while and the balls may drain first
             # so we have to bounce through a helper
@@ -432,6 +432,8 @@ class HighNoon(ep.EP_Mode):
         self.wait_until_unbusy(self.final_display)
 
     def final_display(self,step=1):
+        # Turn off the ball search
+        self.game.ball_search.disable()
         # the tally display after the mode
         print "HIGH NOON FINAL DISPLAY - STEP " + str(step)
         # jackpots
@@ -573,6 +575,8 @@ class HighNoon(ep.EP_Mode):
         self.game.modes.add(self.game.skill_shot)
         # turn the GI back on
         self.game.gi_control("ON")
+        # turn the ball search back on
+        self.game.ball_search.enable()
         # unload the mode
         # clear the delays if any
         self.wipe_delays()
