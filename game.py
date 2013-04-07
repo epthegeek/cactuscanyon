@@ -933,10 +933,12 @@ class CCGame(game.BasicGame):
             self.giState = "OFF"
             for lamp in self.giLamps:
                 lamp.disable()
+            self.lamps.beerMugGI.disable()
         else:
             self.giState = "ON"
             for lamp in self.giLamps:
                 lamp.enable()
+            self.lamps.beerMugGI.enable()
 
 
     def lightning(self,section):
