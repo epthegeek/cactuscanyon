@@ -979,6 +979,9 @@ class LampControl(ep.EP_Mode):
     # |____/ \__,_|\__,_|  \____|\__,_|\__, |___/
     #                                  |___/
     def bad_guys(self):
+        # if high noon is running ignore the bad guys
+        if self.game.high_noon.running:
+            return
         # first disable, they're not in the common wipe
         self.disable_bad_guys()
 

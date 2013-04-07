@@ -675,6 +675,8 @@ class BaseGameMode(ep.EP_Mode):
             self.autoplunge_correct("Showdown")
         elif self.game.moonlight.running and not self.game.moonlight.starting:
             self.autoplunge_correct("Moonlight Madness")
+        elif self.game.high_noon.running:
+            self.autoplunge_correct("High Noon")
         else:
             pass
 

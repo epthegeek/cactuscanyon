@@ -81,10 +81,15 @@ class HighNoon(ep.EP_Mode):
             self.timer(self.myTimer)
 
     def sw_minePopper_active_for_350ms(self,sw):
-        self.game.mountain.kick()
+        if self.running:
+            self.game.mountain.kick()
+            return game.SwitchStop
+
+    def sw_shooterLane_active_for_1s(self,sw):
+        self.game.coils.autoPlunger.pulse(self.game.base.autoplungeStrength)
         return game.SwitchStop
 
-    # jackpot hit
+        # jackpot hit
     def process_shot(self,shot):
         # award points
         self.game.score(100000)
@@ -172,7 +177,7 @@ class HighNoon(ep.EP_Mode):
             else:
                 # pop the target back up
                 print "HIGH NOON: reactivate target " + str(target)
-                self.delay(delay=0.6,handler=self.game.bad_guys.target_up,param=target)
+                self.delay(delay=1,handler=self.game.bad_guys.target_up,param=target)
 
     # todo other switches to trap: mine, saloon, bad guy toy ?
 
@@ -283,6 +288,9 @@ class HighNoon(ep.EP_Mode):
                 textLayer2.set_text(str(kills) + " KILLS =")
                 # set up the timer while we've got kills hand
                 self.myTimer = 30 + kills
+                # cap it at 60 seconds
+                if self.myTimer > 60:
+                    self.myTimer = 60
                 textLayer3 = dmd.TextLayer(64, 15, self.game.assets.font_12px_az, "center", opaque=False)
                 textLayer3.set_text(str(self.myTimer) + " SECONDS")
                 self.timeLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3])
@@ -322,6 +330,9 @@ class HighNoon(ep.EP_Mode):
         self.game.mountain.kick()
         # put balls in play
         self.empty_trough()
+        # flash the bad guy lamps
+        for lamp in range(0,4,1):
+            self.game.lamp_control.badGuyLamps[lamp].schedule(0x0F0F0F0F)
         # pop up all the bad guys
         self.game.bad_guys.setup_targets()
         # play a quote
@@ -336,8 +347,7 @@ class HighNoon(ep.EP_Mode):
         # launch more balls
         if self.game.trough.num_balls_in_play != 4:
             thisMany = 4 - self.game.trough.num_balls_in_play
-            # turn on autoplunge and launch balls
-            self.game.trough.balls_to_autoplunge = 4
+            # launch balls
             self.game.trough.launch_balls(thisMany)
 
     def update_display(self):
@@ -387,6 +397,9 @@ class HighNoon(ep.EP_Mode):
         # turn the lights off
         self.game.set_tracking('lampStatus',"OFF")
         self.lamp_update()
+        # kill the bad guy lamps?
+        for lamp in range(0,4,1):
+            self.game.lamp_control.badGuyLamps[lamp].disable()
         # kill the GI
         self.game.gi_control("OFF")
         # lampshow down wipe
@@ -404,8 +417,8 @@ class HighNoon(ep.EP_Mode):
             animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_fireworks2)
             animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_fireworks3)
             animLayer.composite_op = "blacksrc"
-            textLayer1 = dmd.TextLayer(80, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("VICTORY")
-            textLayer2 = dmd.TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(20000000)))
+            textLayer1 = dmd.TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("VICTORY")
+            textLayer2 = dmd.TextLayer(64, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(20000000)))
             combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
             self.layer = combined
         else:
@@ -423,7 +436,7 @@ class HighNoon(ep.EP_Mode):
             self.game.saloon.kick()
         # clear the shooter lane if needed
         if self.game.switches.shooterLane.is_active():
-            self.game.coils.shooterLane.pulse(30)
+            self.game.coils.autoPlunger.pulse(self.game.base.autoplungeStrength)
         if self.hasWon:
             # if we won, the animation is playing, so it may take a while and the balls may drain first
             # so we have to bounce through a helper
@@ -443,6 +456,8 @@ class HighNoon(ep.EP_Mode):
         self.wait_until_unbusy(self.final_display)
 
     def final_display(self,step=1):
+        # disable ball search
+        self.game.ball_search.disable()
         # the tally display after the mode
         print "HIGH NOON FINAL DISPLAY - STEP " + str(step)
         # jackpots
@@ -475,7 +490,7 @@ class HighNoon(ep.EP_Mode):
             print "HIGH NOON TOTAL"
             titleLine = dmd.TextLayer(64,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
             if self.hasWon:
-                self.grandTotal += 10000000
+                self.grandTotal += 20000000
             pointsLine = dmd.TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.grandTotal))
             combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
             # play a sound
@@ -584,6 +599,8 @@ class HighNoon(ep.EP_Mode):
         self.game.modes.add(self.game.skill_shot)
         # turn the GI back on
         self.game.gi_control("ON")
+        # turn the ball search back on
+        self.game.ball_search.enable()
         # unload the mode
         # clear the delays if any
         self.wipe_delays()

@@ -142,14 +142,17 @@ class BadGuys(ep.EP_Mode):
             else:
                 self.game.gunfight.won()
 
-    def target_up(self,target):
+    def target_up(self,target,lamp=True):
+        # ignore the light if high noon is running
+        if self.game.high_noon.running:
+            lamp = False
         print "TARGET RAISED " + str(target)
         print self.game.show_tracking('badGuyUp')
        # self.coils[target].patter(on_time=10,off_time=10,original_on_time=18)
         # new coil raise based on research with on o-scope by jim (jvspin)
         self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
-        # hold the raise pulse for a bit longer
-        self.lamps[target].schedule(0x00FF00FF)
+        if lamp:
+            self.lamps[target].schedule(0x00FF00FF)
         # set a pending flag for this target
         self.pending[target] = True
         # trying a new way to activate
@@ -161,15 +164,15 @@ class BadGuys(ep.EP_Mode):
     def target_hold(self,target):
         self.coils[target].patter(on_time=2,off_time=10)
 
-    def target_down(self,target):
+    def target_down(self,target,lamp= True):
+        if self.game.high_noon.running:
+            lamp = False
         # cancel the hold delay, just in case
         self.cancel_delayed(self.coilStrings[target])
         print "DEACTIVATING TARGET " + str(target)
         self.coils[target].disable()
-        # we'll still deactivate when the coil goes off, just to maintain sync
-        status = self.game.show_tracking('highNoonStatus')
-        if status != "RUNNING":
-            self.game.set_tracking('badGuyUp',False,target)
+        self.game.set_tracking('badGuyUp',False,target)
+        if lamp:
             self.lamps[target].disable()
         #self.delay(delay=0.02,handler=self.coils[target].disable)
 
