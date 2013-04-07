@@ -45,8 +45,8 @@ class Saloon(ep.EP_Mode):
     def saloon_shot(self):
         print "saloon shot"
         stackLevel = self.game.show_tracking('stackLevel')
-        # if MMB is running, just kick out
-        if self.game.marshall_multiball.running or self.game.moonlight.running:
+        # if MMB, moonlight or high noon is running, just kick out
+        if self.game.marshall_multiball.running or self.game.moonlight.running or self.game.high_noon.running:
             self.kick()
             return
 

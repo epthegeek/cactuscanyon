@@ -51,7 +51,8 @@ class Mine(ep.EP_Mode):
             return
         # for bionic & cva - still collect extra ball
         if self.game.show_tracking('bionicStatus') == "RUNNING" or \
-           self.game.show_tracking('cvaStatus') == "RUNNING":
+           self.game.show_tracking('cvaStatus') == "RUNNING" or \
+           self.game.high_noon.running:
             print "WAIT, HOW DID I GET HERE"
             # if there's an extra ball pending, award it
             eb = self.game.show_tracking('extraBallsPending')

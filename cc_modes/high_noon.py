@@ -27,14 +27,16 @@ class HighNoon(ep.EP_Mode):
         super(HighNoon, self).__init__(game,priority)
         self.myID = "High Noon"
         self.gmShots = [self.game.left_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_loop,self.game.right_ramp,self.game.mine]
+        # backdrop
+        self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_highNoonBackdrop.frames[0])
+
+    def mode_started(self):
         self.killed = 0
         self.myTimer = 0
         self.jackpots = 0
         self.grandTotal = 0
         self.hasWon = False
         self.starting = False
-        # backdrop
-        self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_highNoonBackdrop.frames[0])
 
     def ball_drained(self):
         if self.running:
@@ -77,6 +79,10 @@ class HighNoon(ep.EP_Mode):
         if self.starting:
             self.starting = False
             self.timer(self.myTimer)
+
+    def sw_minePopper_active_for_350ms(self,sw):
+        self.game.mountain.kick()
+        return game.SwitchStop
 
     # jackpot hit
     def process_shot(self,shot):
@@ -398,8 +404,9 @@ class HighNoon(ep.EP_Mode):
             animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_fireworks2)
             animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_fireworks3)
             animLayer.composite_op = "blacksrc"
-            wordsLayer = self.game.showcase.make_string(1,2,3,text="VICTORY")
-            combined = dmd.GroupedLayer(128,32,[wordsLayer,animLayer])
+            textLayer1 = dmd.TextLayer(80, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("VICTORY")
+            textLayer2 = dmd.TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(20000000)))
+            combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
             self.layer = combined
         else:
             myWait = 3
