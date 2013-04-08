@@ -212,7 +212,7 @@ class Saloon(ep.EP_Mode):
         self.game.base.play_quote(self.game.assets.quote_bountyLit)
         # lights and whatnot
         self.lamp_update()
-        self.delay(delay=1.6,handler=self.clear_layer)
+        self.delay("Display",delay=1.6,handler=self.clear_layer)
         # if we got a callback - do that - its for skillshot ending
         if callback:
             self.delay(delay=1.6,handler=callback)

@@ -178,3 +178,51 @@ class EP_TextLayer(dmd.layers.Layer):
 
     def is_visible(self):
         return self.frame != None
+
+
+class EP_PanningLayer(dmd.layers.Layer):
+    """Pans a frame about on a 128x32 buffer, bouncing when it reaches the boundaries."""
+    # callback should use a sent callback when it hits the edge of the pan
+    def __init__(self, width, height, frame, origin, translate, callback = None):
+        super(EP_PanningLayer, self).__init__()
+        self.buffer = dmd.Frame(width, height)
+        self.frame = frame
+        self.origin = origin
+        self.original_origin = origin
+        self.translate = translate
+        self.tick = 0
+        self.callback = callback
+        print "Translate before FUCKERY" + str(self.translate)
+        # Make sure the translate value doesn't cause us to do any strange movements:
+        if width == frame.width:
+            print "Width eq width" + str(frame.width)
+            self.translate = (0, self.translate[1])
+        if height == frame.height:
+            print "height = height" + str(frame.height)
+            self.translate = (self.translate[0], 0)
+        print "Tranlsate 0 at init: " + str(self.translate[0])
+        print "Translate 1 at init: " + str(self.translate[1])
+
+    def reset(self):
+        self.origin = self.original_origin
+
+    def next_frame(self):
+        self.tick += 1
+        if (self.tick % 6) != 0:
+            return self.buffer
+        dmd.Frame.copy_rect(dst=self.buffer, dst_x=0, dst_y=0, src=self.frame, src_x=self.origin[0], src_y=self.origin[1], width=self.buffer.width, height=self.buffer.height)
+        if self.callback and (abs(self.origin[0] + self.buffer.width + self.translate[0]) > self.frame.width) or (self.origin[0] + self.translate[0] < 0):
+            print ("Hit callback 1")
+            self.callback()
+        if self.callback and (self.origin[1] + self.buffer.height + self.translate[1] > self.frame.height) or (self.origin[1] + self.translate[1] < 0):
+            print ("Hit callback 2")
+            print "Origin 1: " + str(self.origin[1])
+            print "Buffer Height: " + str(self.buffer.height)
+            print "Translate: " + str(self.translate[1])
+            derp = abs(self.origin[1] + self.buffer.height + self.translate[1])
+            print "Mathed total: " + str(derp)
+            print "Frame Height: " + str(self.frame.height)
+            self.callback()
+        self.origin = (self.origin[0] + self.translate[0], self.origin[1] + self.translate[1])
+        return self.buffer
+
