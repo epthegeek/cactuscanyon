@@ -203,8 +203,8 @@ class EP_Desktop():
         xOffset = 43
         yOffset = 224
         #self.screen = pygame.display.set_mode((128*self.screen_multiplier, 32*self.screen_multiplier))
-        os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (xOffset,yOffset)
-        self.screen = pygame.display.set_mode((1280,320),pygame.NOFRAME)
+        #os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (xOffset,yOffset)
+        self.screen = pygame.display.set_mode((1280,320))
         pygame.display.set_caption('Cactus Canyon Continued')
 
     def draw(self, frame):
