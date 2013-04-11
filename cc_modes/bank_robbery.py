@@ -27,8 +27,6 @@ class BankRobbery(ep.EP_Mode):
     def __init__(self,game,priority):
         super(BankRobbery, self).__init__(game,priority)
         self.myID = "Bank Robbery"
-        self.running = False
-        self.halted = False
         self.position = [-49,-4,43]
         self.y_pos = 7
         self.isActive = [True,True,True]
@@ -58,6 +56,8 @@ class BankRobbery(ep.EP_Mode):
         # point value for shots
         self.shotValue = 250000
         self.isActive = [True,True,True]
+        self.running = False
+        self.halted = False
         self.won = False
         self.have_won = False
         self.banner = False

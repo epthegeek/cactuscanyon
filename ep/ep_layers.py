@@ -20,7 +20,7 @@
 from procgame import *
 import time
 
-class EP_UpdateLayer(dmd.dmd.Layer):
+class EP_UpdateLayer(dmd.Layer):
 
     def __init__(self, callbackFunction = None):
         super(EP_UpdateLayer, self).__init__(False)
@@ -77,7 +77,7 @@ class EP_AnimatedLayer(dmd.layers.AnimatedLayer):
         self.target_x = x
         self.target_y = y
 
-class EP_TextLayer(dmd.layers.Layer):
+class EP_TextLayer(dmd.Layer):
     """Layer that displays text."""
 
     fill_color = None
@@ -146,7 +146,7 @@ class EP_TextLayer(dmd.layers.Layer):
 
     def draw_font(self, frame, text, x, y,color=0):
         """Uses this font's characters to draw the given string at the given position."""
-        print "Draw font color " + str(color)
+        #print "Draw font color " + str(color)
         for ch in text:
             char_offset = ord(ch) - ord(' ')
             if char_offset < 0 or char_offset >= 96:
@@ -180,7 +180,7 @@ class EP_TextLayer(dmd.layers.Layer):
         return self.frame != None
 
 
-class EP_PanningLayer(dmd.layers.Layer):
+class EP_PanningLayer(dmd.Layer):
     """Pans a frame about on a 128x32 buffer, bouncing when it reaches the boundaries."""
     # callback should use a sent callback when it hits the edge of the pan
     def __init__(self, width, height, frame, origin, translate, callback = None):

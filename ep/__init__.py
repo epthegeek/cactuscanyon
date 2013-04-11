@@ -23,7 +23,8 @@ __all__ = [
     'ep_lamps',
     'ep_new_service',
     'ep_pygame_desktop',
-    'ep_font'
+    'ep_font',
+    'ep_custom_message'
 ]
 from ep_layers import *
 from ep_transition import *
@@ -34,6 +35,7 @@ from ep_lamps import *
 from ep_new_service import *
 from ep_desktop_pygame import *
 from ep_font import *
+from ep_custom_message import *
 
 import locale
 

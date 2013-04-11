@@ -247,3 +247,221 @@ Gameplay (Feature):
   'Attract Mode Music':
     options: ['Yes','No']
     default: 'Yes'
+Custom Message:
+  'Custom Mesage':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Custom Message Pages':
+    options: [1,2,3,4,5]
+    default: 1
+  'Page 1 Border':
+    options: ['NONE','ROPE','SIMPLE']
+    default: 'NONE'
+  'Page 1 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 1 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 1 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 1 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 1 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 1 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 1 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 1 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 1 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 1 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 1 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 1 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 1 Preview':
+    options: [1]
+    default: 1
+  'Page 2 Border':
+    options: ['NONE','ROPE','SIMPLE']
+    default: 'NONE'
+  'Page 2 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 2 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 2 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 2 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 2 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 2 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 2 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 2 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 2 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 2 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 2 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 2 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 2 Preview':
+    options: [2]
+    default: 2
+  'Page 3 Border':
+    options: ['NONE','ROPE','SIMPLE']
+    default: 'NONE'
+  'Page 3 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 3 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 3 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 3 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 3 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 3 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 3 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 3 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 3 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 3 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 3 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 3 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 3 Preview':
+    options: [3]
+    default: 3
+  'Page 4 Border':
+    options: ['NONE','ROPE','SIMPLE']
+    default: 'NONE'
+  'Page 4 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 4 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 4 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 4 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 4 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 4 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 4 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 4 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 4 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 4 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 4 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 4 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 4 Preview':
+    options: [4]
+    default: 4
+  'Page 5 Border':
+    options: ['NONE','ROPE','SIMPLE']
+    default: 'NONE'
+  'Page 5 Line 1 Text':
+    options: []
+    default: 'NONE'
+  'Page 5 Line 1 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 5 Line 1 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 5 Line 1 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 5 Line 2 Text':
+    options: []
+    default: 'NONE'
+  'Page 5 Line 2 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 5 Line 2 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 5 Line 2 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 5 Line 3 Text':
+    options: []
+    default: 'NONE'
+  'Page 5 Line 3 Color':
+    options: ['WHITE','BLUE','YELLOW','MAGENTA','CYAN','GREEN','ORANGE','RED']
+    default: 'WHITE'
+  'Page 5 Line 3 Size':
+    options: [5,7,9,12]
+    default: 7
+  'Page 5 Line 3 Justify':
+    options: ['LEFT','CENTER','RIGHT']
+    default: 'CENTER'
+  'Page 5 Preview':
+    options: [5]
+    default: 5
+

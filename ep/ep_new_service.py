@@ -19,6 +19,7 @@ from procgame import dmd, game
 import sys
 import os
 from distutils import dir_util
+import highscore
 
 class NewServiceSkeleton(ep.EP_Mode):
     """New Service Mode List base class with defaults."""
@@ -1181,7 +1182,7 @@ class NewServiceModeSettings(NewServiceSkeleton):
         self.index = 0
 
     def mode_started(self):
-        self.section = ["STANDARD","FEATURE","AUDIO"]
+        self.section = ["STANDARD","FEATURE","AUDIO","CUSTOM MESSAGE"]
         self.update_display("Settings",str(self.section[self.index]))
 
     def sw_enter_active(self,sw):
@@ -1190,6 +1191,8 @@ class NewServiceModeSettings(NewServiceSkeleton):
             selection = "Machine (Standard)"
         elif self.section[self.index] == "FEATURE":
             selection = "Gameplay (Feature)"
+        elif self.section[self.index] == "CUSTOM MESSAGE":
+            selection = "Custom Message"
         else:
             selection = "Sound"
         mode_to_add = NewServiceModeSettingsEditor(game=self.game,priority=202,itemlist=self.game.settings[selection],name=selection)
@@ -1234,8 +1237,22 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             self.game.sound.play(self.game.assets.sfx_menuEnter)
             self.state = 'edit'
             self.revert_value = self.item.value
-            self.change_item()
-            self.change_instructions()
+            if self.items[self.index].name.endswith('Text'):
+                print "This is a text entry"
+                self.state = 'text'
+                self.text_entry = highscore.InitialEntryMode(game=self.game, priority=self.priority+1, left_text=self.items[self.index].name, right_text='', entered_handler=self.set_text,max_inits=16)
+                self.game.modes.add(self.text_entry)
+            elif self.items[self.index].name.endswith('Preview'):
+                print "This is a preview"
+                self.state = 'preview'
+                self.preview = ep.EP_MessagePreview(self.game,self.priority+1,self.item.value,self.end_preview)
+                self.game.modes.add(self.preview)
+            else:
+                self.change_item()
+                self.change_instructions()
+        elif self.state == 'text' or self.state == 'preview':
+            pass
+
         else:
             self.state = 'nav'
             self.change_item()
@@ -1246,16 +1263,36 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             self.change_instructions()
         return game.SwitchStop
 
+    def set_text(self,mode,inits):
+        # set the text string - if there is none, set to NONE
+        if len(inits) == 0:
+            inits = "NONE"
+        self.game.user_settings[self.name][self.item.name]=str(inits)
+        self.game.modes.remove(self.text_entry)
+        self.game.save_settings()
+        self.state = 'nav'
+
+    def end_preview(self):
+        self.state = 'nav'
+        self.preview.unload()
+
     def sw_exit_active(self,sw):
         if self.state == 'nav':
             self.game.sound.play(self.game.assets.sfx_menuExit)
             self.unload()
+        elif self.state == 'preview':
+            pass
         else:
-            self.state = 'nav'
+            # if we're in text edit, bail and close that mode
+            if self.state == 'text':
+                self.game.modes.remove(self.text_entry)
             self.item.value = self.revert_value
             self.change_item()
-            self.infoLine.set_text("REMAINS:")
-            self.currentSetting.set_text(str(self.item.value).upper())
+            # don't update these lines if we're coming out of text
+            if self.state != 'text':
+                self.infoLine.set_text("REMAINS:")
+                self.currentSetting.set_text(str(self.item.value).upper())
+            self.state = 'nav'
             self.game.sound.play(self.game.assets.sfx_menuCancel)
         return game.SwitchStop
 
@@ -1270,6 +1307,8 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
                 print "Passed max - index now 0"
                 self.game.sound.play(self.game.assets.sfx_menuUp)
             self.change_item()
+        elif self.state == 'text' or self.state == 'preview':
+            pass
         else:
             self.option_index += 1
             if self.option_index >= (len(self.item.options)):
@@ -1289,6 +1328,8 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
                 print "Passed max - index now " + str(self.index)
             self.game.sound.play(self.game.assets.sfx_menuDown)
             self.change_item()
+        elif self.state == 'text' or self.state == 'preview':
+            pass
         else:
             self.option_index -= 1
             if self.option_index < 0:
@@ -1301,9 +1342,17 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         self.item = self.items[self.index]
         self.settingName.set_text(self.item.name.upper())
         if self.state == 'nav':
-            self.option_index = self.item.options.index(self.item.value)
-            self.infoLine.set_text("CURRENT:")
-            self.currentSetting.set_text(str(self.item.value).upper())
+            if self.item.name.endswith('Text'):
+                print "This is a text item"
+                self.infoLine.set_text("ENTER TO")
+                self.currentSetting.set_text(" EDIT")
+            elif self.item.name.endswith('Preview'):
+                self.infoLine.set_text("ENTER TO")
+                self.currentSetting.set_text(" VIEW")
+            else:
+                self.option_index = self.item.options.index(self.item.value)
+                self.infoLine.set_text("CURRENT:")
+                self.currentSetting.set_text(str(self.item.value).upper())
         else:
             self.infoLine.set_text("CHANGE TO:")
             self.currentSetting.set_text(str(self.item.value).upper(),blink_frames=10)

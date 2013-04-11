@@ -51,6 +51,11 @@ class RiverChase(ep.EP_Mode):
         self.game.switch_blocker('add',self.myID)
         self.game.peril = True
         self.shotsSoFar = 0
+        self.running = False
+        self.halted = False
+        self.won = False
+        self.distance_value = int(30.0 / self.shotsToWin)
+
         # position for the horse
         self.x_pos = 6
         # point value for shots

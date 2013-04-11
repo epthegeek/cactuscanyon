@@ -1,8 +1,7 @@
 import math
-from procgame.game import Mode
-from procgame import dmd
+from procgame import game,dmd
 
-class InitialEntryMode(Mode):
+class InitialEntryMode(game.Mode):
     """Mode that prompts the player for their initials.
 
     *left_text* and *right_text* are strings or arrays to be displayed at the
@@ -23,7 +22,7 @@ class InitialEntryMode(Mode):
     font = None
     letters_font = None
 
-    def __init__(self, game, priority, left_text, right_text, entered_handler):
+    def __init__(self, game, priority, left_text, right_text, entered_handler,max_inits,starting_string=''):
         super(InitialEntryMode, self).__init__(game, priority)
 
         self.entered_handler = entered_handler
@@ -36,6 +35,7 @@ class InitialEntryMode(Mode):
         self.layer.opaque = True
         self.layer.layers = []
         self.knocks = 0
+        self.max_inits = max_inits
 
         if type(right_text) != list:
             right_text = [right_text]
@@ -149,7 +149,8 @@ class InitialEntryMode(Mode):
         if letter == self.char_back:
             if len(self.inits) > 0:
                 self.inits = self.inits[:-1]
-        elif letter == self.char_done or len(self.inits) > 3:
+        elif letter == self.char_done or len(self.inits) > self.max_inits:
+            print "Ending entry"
             self.inits = self.inits[:-1] # Strip off the done character
             if self.entered_handler != None:
                 self.entered_handler(mode=self, inits=self.inits)
@@ -161,21 +162,25 @@ class InitialEntryMode(Mode):
         else:
             self.inits += letter
             # if we're on the third letter, jump to the accept
-            if len(self.inits) == 4:
+            if len(self.inits) == (self.max_inits + 1):
                 self.current_letter_index = 29
         self.letter_increment(0)
 
     def sw_flipperLwL_active(self, sw):
         self.periodic_left()
-        return False
+        return game.SwitchStop
+
     def sw_flipperLwL_inactive(self, sw):
         self.cancel_delayed('periodic_movement')
+        return game.SwitchStop
 
     def sw_flipperLwR_active(self, sw):
         self.periodic_right()
-        return False
+        return game.SwitchStop
+
     def sw_flipperLwR_inactive(self, sw):
         self.cancel_delayed('periodic_movement')
+        return game.SwitchStop
 
     def periodic_left(self):
         self.letter_increment(-1)
@@ -186,4 +191,4 @@ class InitialEntryMode(Mode):
 
     def sw_startButton_active(self, sw):
         self.letter_accept()
-        return True
+        return game.SwitchStop
