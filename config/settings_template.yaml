@@ -248,7 +248,7 @@ Gameplay (Feature):
     options: ['Yes','No']
     default: 'Yes'
 Custom Message:
-  'Custom Mesage':
+  'Custom Message':
     options: ['Enabled','Disabled']
     default: 'Disabled'
   'Custom Message Pages':

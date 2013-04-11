@@ -39,6 +39,12 @@ class Attract(ep.EP_Mode):
         self.marshallValue = self.game.user_settings['Gameplay (Feature)']['Marshall Multiball']
         self.flipperOK = True
         self.slowFlipper = self.game.user_settings['Machine (Standard)']['Slow Attract Pages'] == 'Enabled'
+        self.customMessage = self.game.user_settings['Custom Message']['Custom Message'] == 'Enabled'
+        if self.customMessage:
+            print "Custom Message Enabled"
+            self.customPages = self.game.user_settings['Custom Message']['Custom Message Pages']
+        else:
+            print "Custom Message Not Enabled"
 
     def mode_started(self):
 
@@ -90,6 +96,19 @@ class Attract(ep.EP_Mode):
                         {'layer':ballyBanner,'type':ep.EP_Transition.TYPE_CROSSFADE, 'direction':False},
                         {'layer':expanded,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
                         {'layer':proc_banner,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False}]
+
+        # new custom message stuff
+        if self.customMessage:
+            print "Building Custom Message pages " + str(self.customPages)
+            for n in range (1,self.customPages +1,1):
+                print "Page " + str(n)
+                line = 'Page ' + str(n) + ' Line 1 Text'
+                if self.game.user_settings['Custom Message'][line] != 'NONE':
+                    print "Line one has text rendering"
+                    layer = ep.EP_CustomMessageFrame().make_frame(self.game,n)
+                    self.layers.append({'layer':layer,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST})
+                else:
+                    print "Line 1 has no text, skipping page"
 
         self.generate_score_frames()
 
