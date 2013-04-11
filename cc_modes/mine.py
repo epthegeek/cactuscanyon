@@ -421,7 +421,7 @@ class Mine(ep.EP_Mode):
         # reset the collecting flagg for later
         self.collectingEB = False
         # hit the knocker
-        self.game.base.knock(1,realOnly = True)
+        self.game.interrupter.knock(1,realOnly = True)
         # play a quote
         if isLong:
             # play this quote

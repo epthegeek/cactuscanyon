@@ -155,6 +155,10 @@ class CCGame(game.BasicGame):
         print "Loading game settings"
         self.load_settings(settings_defaults_path, user_settings_path)
 
+        # check for the knocker setting
+        if self.user_settings['Machine (Standard)']['Real Knocker Installed'] == "Yes":
+            self.useKnocker = True
+
         # set the volume per the settings
         self.sound.music_offset = self.user_settings['Sound']['Music volume offset']
         print "Setting initial offset: " + str(self.sound.music_offset)
@@ -162,6 +166,7 @@ class CCGame(game.BasicGame):
         print "Setting initial volume: " + str(self.volume_to_set)
         self.sound.set_volume(self.volume_to_set)
         self.previousVolume = self.volume_to_set
+
 
         self.immediateRestart = "Enabled" == self.user_settings['Gameplay (Feature)']['Fast Restart After Game']
 
@@ -199,72 +204,72 @@ class CCGame(game.BasicGame):
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'MarshallHighScoreData'
         cat.titles = ['Marshall Pinball 1','Marshall Pinball 2','Marshall Pinball 3']
-        cat.score_for_player = lambda player: self.show_tracking('marshallBest')
+        cat.score_for_player = lambda player: player.player_stats['marshallBest']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'LastCallHighScoreData'
         cat.titles = ['Last Call Champ']
-        cat.score_for_player = lambda player: self.show_tracking('lastCallTotal')
+        cat.score_for_player = lambda player: player.player_stats['lastCallTotal']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'QuickdrawChampHighScoreData'
         cat.titles = ['Quickdraw Champ']
-        cat.score_for_player = lambda player: self.show_tracking('quickdrawsWon')
+        cat.score_for_player = lambda player: player.player_stats['quickdrawsWon']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'ShowdownChampHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('showdownTotal')
+        cat.score_for_player = lambda player: player.player_stats['showdownTotal']
         cat.titles = ['Showdown Champ']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'AmbushChampHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('ambushTotal')
+        cat.score_for_player = lambda player: player.player_stats['ambushTotal']
         cat.titles = ['Ambush Champ']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'TownDrunkHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('beerMugHitsTotal')
+        cat.score_for_player = lambda player: player.player_stats['beerMugHitsTotal']
         cat.titles = ['Town Drunk']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'TumbleweedChampHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('tumbleweedHitsTotal')
+        cat.score_for_player = lambda player: player.player_stats['tumbleweedHitsTotal']
         cat.titles = ['Tumbleweed Champ']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'UndertakerHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('kills')
+        cat.score_for_player = lambda player: player.player_stats['kills']
         cat.titles = ['Undertaker']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'BountyHunterHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('bartsDefeatedTotal')
+        cat.score_for_player = lambda player: player.player_stats['bartsDefeatedTotal']
         cat.titles = ['Bounty Hunter']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'MotherlodeChampHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('motherlodeValue')
+        cat.score_for_player = lambda player: player.player_stats['motherlodeValue']
         cat.titles = ['Motherlode Champ']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'ComboChampHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('bigChain')
+        cat.score_for_player = lambda player: player.player_stats['bigChain']
         cat.titles = ['Combo Champ']
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
         cat.game_data_key = 'MoonlightHighScoreData'
-        cat.score_for_player = lambda player: self.show_tracking('moonlightTotal')
+        cat.score_for_player = lambda player: player.player_stats['moonlightTotal']
         cat.titles = ['Moonlight Champ']
         self.highscore_categories.append(cat)
 

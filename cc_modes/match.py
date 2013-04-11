@@ -126,7 +126,7 @@ class Match(ep.EP_Mode):
             bottlesLayer.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,bottlesLayer])
             self.layer = combined
-            self.game.base.knock(self.winners)
+            self.game.interrupter.knock(self.winners)
             self.game.sound.play(self.game.assets.sfx_matchRiff)
 
         # Then delay for 2 seconds and shut 'er down

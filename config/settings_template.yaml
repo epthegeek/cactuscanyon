@@ -36,8 +36,8 @@ Machine (Standard):
     options: [True,False]
     default: True
   'Slow Attract Pages':
-    options: [Enabled,Disabled]
-    default: Disabled
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
   'Flipper Pulse':
     options: [25,40]
     increments: 1
@@ -66,6 +66,13 @@ Machine (Standard):
     options: [3,30]
     increments: 1
     default: 5
+  'Real Knocker Installed':
+    options: ['Yes','No']
+    default: 'No'
+  'Real Knocker Strength':
+    options: [20,50]
+    increments: 5
+    default: 20
 Sound:
   'Initial volume':
     options: [1,2,3,4,5,6,7,8,9,10]

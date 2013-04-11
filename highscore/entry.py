@@ -35,6 +35,7 @@ class InitialEntryMode(Mode):
         self.layer = dmd.GroupedLayer(128, 32)
         self.layer.opaque = True
         self.layer.layers = []
+        self.knocks = 0
 
         if type(right_text) != list:
             right_text = [right_text]
@@ -57,6 +58,14 @@ class InitialEntryMode(Mode):
             frame = dmd.Frame(width=128, height=8)
             self.font.draw(frame, text, 128-(self.font.size(text)[0]), 0)
             script.append({'seconds':seconds_per_text, 'layer':dmd.FrameLayer(frame=frame)})
+            if text == "Grand Champion":
+                self.knocks += 2
+            elif text == 'High Score #1' or \
+                 text == 'High Score #2' or \
+                 text == 'High Score #3' or \
+                 text == 'High Score #4':
+                self.knocks += 1
+
         topthird_right_layer = dmd.ScriptedLayer(width=128, height=8, script=script)
         topthird_right_layer.composite_op = 'blacksrc'
         self.layer.layers += [topthird_right_layer]
@@ -144,6 +153,9 @@ class InitialEntryMode(Mode):
             self.inits = self.inits[:-1] # Strip off the done character
             if self.entered_handler != None:
                 self.entered_handler(mode=self, inits=self.inits)
+                # fire the knocker if we have some to fire
+                if self.knocks:
+                    self.game.interrupter.knock(self.knocks)
             else:
                 self.game.logger.warning('InitialEntryMode finished but no entered_handler to notify!')
         else:

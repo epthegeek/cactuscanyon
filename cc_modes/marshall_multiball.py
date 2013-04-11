@@ -470,10 +470,8 @@ class MarshallMultiball(ep.EP_Mode):
     # display
     def main_display(self):
         scoreLayer = dmd.TextLayer(100, 17, self.game.assets.font_marshallScore, "right", opaque=False).set_text(str(self.pointTotal))
-
         combined = dmd.GroupedLayer(128,32,[self.backdrop,scoreLayer])
         self.layer = combined
-        self.delay("Score Display",delay=0.5,handler=self.main_display)
 
     def main_shot_routine(self,shot):
         if shot == 1:
@@ -546,6 +544,8 @@ class MarshallMultiball(ep.EP_Mode):
         elif value == 5000:
             self.game.sound.play(self.game.assets.sfx_chime5000)
             self.score(5000)
+        # update the score
+        self.main_display()
 
     # score points
     def score(self,points):
@@ -606,7 +606,10 @@ class MarshallMultiball(ep.EP_Mode):
         # clear the layer
         self.clear_layer()
         # store up the final score - if better than any previous run
+        print "Marshall Multiball points: " + str(self.pointTotal)
+        print "Current best: " + str(self.game.show_tracking('marshallBest'))
         if self.pointTotal > self.game.show_tracking('marshallBest'):
+            print "Setting marshallBest to " + str(self.pointTotal)
             self.game.set_tracking('marshallBest',self.pointTotal)
         # add the final total to the player's score
         self.game.score(self.pointTotal)

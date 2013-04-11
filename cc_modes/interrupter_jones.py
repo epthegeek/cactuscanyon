@@ -32,6 +32,8 @@ class Interrupter(ep.EP_Mode):
         self.page = 0
         self.playing = False
         self.hush = False
+        self.knockerStrength = self.game.user_settings['Machine (Standard)']['Real Knocker Strength']
+
 
     def display_player_number(self,idle=False):
         # if the skillshot display is busy, we don't trample on it
@@ -532,4 +534,19 @@ class Interrupter(ep.EP_Mode):
         self.game.modes.add(self.game.new_service)
         self.unload()
         return True
+
+    # knocker
+    def knock(self,value,realOnly = False):
+        if self.game.useKnocker:
+            self.game.coils.knocker.pulse(self.knockerStrength)
+            print "Fired knocker!"
+        else:
+            if realOnly:
+                pass
+            else:
+                self.game.sound.play(self.game.assets.sfx_knocker)
+        value -= 1
+        # if there's more than one, come back
+        if value > 0:
+            self.delay(delay=0.5,handler=self.knock,param=value)
 

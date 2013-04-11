@@ -1025,20 +1025,6 @@ class BaseGameMode(ep.EP_Mode):
             if self.game.switches.saloonPopper.is_active():
                 self.game.saloon.kick()
 
-    # knocker
-    def knock(self,value,realOnly = False):
-        if self.game.useKnocker:
-            self.game.coils.knocker.pulse(20)
-        else:
-            if realOnly:
-                pass
-            else:
-                self.game.sound.play(self.game.assets.sfx_knocker)
-        value -= 1
-        # if there's more than one, come back
-        if value > 0:
-            self.delay(delay=0.5,handler=self.knock,param=value)
-
     def abort_display(self):
         # fix the audio volume if it's down
         if self.game.squelched:

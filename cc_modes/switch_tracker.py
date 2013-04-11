@@ -154,5 +154,5 @@ class SwitchTracker(ep.EP_Mode):
 
     # this is for killing the 'current status' display
     def multiball_status_check(self):
-        if self.game.interrupter.statusDisplay != "OFF":
+        if self.game.interrupter.statusDisplay != "Off":
             self.game.interrupter.status_off()
