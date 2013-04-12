@@ -51,7 +51,7 @@ class Mountain(ep.EP_Mode):
         self.inMotion = False
         self.open = False
 
-    def open(self):
+    def full_open(self):
         print "Opening Mine"
         self.open = True
         self.move()
