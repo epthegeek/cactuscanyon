@@ -15,14 +15,14 @@ class InitialEntryMode(game.Mode):
     entered_handler = None
     """Method taking two parameters: `mode` and `inits`."""
 
-    char_back = '<'
-    char_done = '='
+    char_back = '{'
+    char_done = '}'
 
     init_font = None
     font = None
     letters_font = None
 
-    def __init__(self, game, priority, left_text, right_text, entered_handler,max_inits,starting_string=''):
+    def __init__(self, game, priority, left_text, right_text, entered_handler,max_inits,extended=False):
         super(InitialEntryMode, self).__init__(game, priority)
 
         self.entered_handler = entered_handler
@@ -36,6 +36,7 @@ class InitialEntryMode(game.Mode):
         self.layer.layers = []
         self.knocks = 0
         self.max_inits = max_inits
+        self.extended = extended
 
         if type(right_text) != list:
             right_text = [right_text]
@@ -82,7 +83,10 @@ class InitialEntryMode(game.Mode):
         self.letters = []
         for idx in range(26):
             self.letters += [chr(ord('A')+idx)]
-        self.letters += [' ', '.', self.char_back, self.char_done]
+        self.letters += [' ', '.']
+        if self.extended:
+            self.letters += ['(',')','@','*','&','<','>','=','^','/','-','+','!','$','"',"'"]
+        self.letters += [self.char_back, self.char_done]
         self.current_letter_index = 0
         self.inits = self.letters[self.current_letter_index]
         self.animate_to_index(0)
@@ -163,7 +167,10 @@ class InitialEntryMode(game.Mode):
             self.inits += letter
             # if we're on the third letter, jump to the accept
             if len(self.inits) == (self.max_inits + 1):
-                self.current_letter_index = 29
+                if self.extended:
+                    self.current_letter_index = 45
+                else:
+                    self.current_letter_index = 29
         self.letter_increment(0)
 
     def sw_flipperLwL_active(self, sw):

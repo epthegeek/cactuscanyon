@@ -1240,7 +1240,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             if self.items[self.index].name.endswith('Text'):
                 print "This is a text entry"
                 self.state = 'text'
-                self.text_entry = highscore.InitialEntryMode(game=self.game, priority=self.priority+1, left_text=self.items[self.index].name, right_text='', entered_handler=self.set_text,max_inits=16)
+                self.text_entry = highscore.InitialEntryMode(game=self.game, priority=self.priority+1, left_text=self.items[self.index].name, right_text='', entered_handler=self.set_text,max_inits=16,extended=True)
                 self.game.modes.add(self.text_entry)
             elif self.items[self.index].name.endswith('Preview'):
                 print "This is a preview"
