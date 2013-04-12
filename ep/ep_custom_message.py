@@ -40,6 +40,25 @@ class EP_CustomMessageFrame(object):
         self.x_offsets = [0,0,0,0]
         self.y_offsets = [0,0,0,0]
 
+        # get the border
+        border = self.game.user_settings['Custom Message']['Page ' + str(self.page) + ' Border']
+        if border == "ROPE":
+            myBorder = self.game.assets.dmd_ropeBorder
+        elif border == "SIMPLE":
+            myBorder = self.game.assets.dmd_simpleBorder
+        elif border == "GUNS":
+            myBorder = self.game.assets.dmd_gunsBorder
+        elif border == "SKULLS":
+            myBorder = self.game.assets.dmd_skullsBorder
+        elif border == "STARS":
+            myBorder = self.game.assets.dmd_starsBorder
+        elif border == "TRACKS":
+            myBorder = self.game.assets.dmd_tracksBorder
+        # otherwise blank
+        else:
+            myBorder = self.game.assets.dmd_blank
+        self.backdrop = dmd.FrameLayer(opaque=False, frame=myBorder.frames[0])
+
         # get all the bits
         # step through the lines getting the data
         for n in range (1,4,1):
@@ -68,10 +87,20 @@ class EP_CustomMessageFrame(object):
                 if self.justify[n] == 'CENTER':
                     self.x_offsets[n] = 64
                 elif self.justify[n] == 'LEFT':
-                    self.x_offsets[n] = 6
+                    if border == "GUNS" or border == "SKULLS":
+                        self.x_offsets[n] = 24
+                    elif border == "STARS" or border == "TRACKS":
+                        self.x_offsets[n] = 18
+                    else:
+                        self.x_offsets[n] = 6
                 # other option is right
                 else:
-                    self.x_offsets[n] = 122
+                    if border == "GUNS" or border == "SKULLS":
+                        self.x_offsets[n] = 104
+                    elif border == "STARS" or border == "TRACKS":
+                        self.x_offsets[n] = 110
+                    else:
+                        self.x_offsets[n] = 122
 
                 size = self.game.user_settings['Custom Message'][str(line) + 'Size']
                 self.size[n] = size
@@ -79,19 +108,6 @@ class EP_CustomMessageFrame(object):
                 self.totalLines += 1
             else:
                 print "No Line " + str(n)
-
-        # get the border
-        border = self.game.user_settings['Custom Message']['Page ' + str(self.page) + ' Border']
-        if border == "ROPE":
-            print "Setting border to rope"
-            myBorder = self.game.assets.dmd_ropeBorder
-        elif border == "SIMPLE":
-            print "Setting border to simple"
-            myBorder = self.game.assets.dmd_simpleBorder
-        # otherwise blank
-        else:
-            myBorder = self.game.assets.dmd_blank
-        self.backdrop = dmd.FrameLayer(opaque=False, frame=myBorder.frames[0])
 
         # generate the vertical offsets
         # if we didn't find any lines - return just the backdrop

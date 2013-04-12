@@ -255,7 +255,7 @@ Custom Message:
     options: [1,2,3,4,5]
     default: 1
   'Page 1 Border':
-    options: ['NONE','ROPE','SIMPLE']
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS']
     default: 'NONE'
   'Page 1 Line 1 Text':
     options: []
@@ -297,7 +297,7 @@ Custom Message:
     options: [1]
     default: 1
   'Page 2 Border':
-    options: ['NONE','ROPE','SIMPLE']
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS']
     default: 'NONE'
   'Page 2 Line 1 Text':
     options: []
@@ -339,7 +339,7 @@ Custom Message:
     options: [2]
     default: 2
   'Page 3 Border':
-    options: ['NONE','ROPE','SIMPLE']
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS']
     default: 'NONE'
   'Page 3 Line 1 Text':
     options: []
@@ -381,7 +381,7 @@ Custom Message:
     options: [3]
     default: 3
   'Page 4 Border':
-    options: ['NONE','ROPE','SIMPLE']
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS']
     default: 'NONE'
   'Page 4 Line 1 Text':
     options: []
@@ -423,7 +423,7 @@ Custom Message:
     options: [4]
     default: 4
   'Page 5 Border':
-    options: ['NONE','ROPE','SIMPLE']
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS']
     default: 'NONE'
   'Page 5 Line 1 Text':
     options: []
