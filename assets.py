@@ -88,7 +88,8 @@ class Assets():
         self.font_13px_thin_score = dmd.Font(self.dmd_path + "Font_7_CactusCanyon.dmd")
         self.font_13px_wide_score = dmd.Font(self.dmd_path + "Font_9_CactusCanyon.dmd")
 
-        self.font_15px_az = dmd.Font(self.dmd_path + "Font_17_CactusCanyon.dmd")
+        self.font_15px_az = ep.ColorFont(self.dmd_path + "Font_17_CactusCanyon.dmd")
+        self.font_15px_az.make_colors([ep.ORANGE])
 
         self.font_15px_bionic = dmd.Font(self.dmd_path + "Font_Custom_15px.dmd")
 
