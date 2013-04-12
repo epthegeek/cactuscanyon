@@ -1051,7 +1051,7 @@ class CCGame(game.BasicGame):
             self.set_tracking('showdownStatus',"OVER")
 
 
-    def load_settings(self, template_filename, user_filename,restore=False):
+    def load_settings(self, template_filename, user_filename,restore=False,type='settings'):
         """Loads the YAML game settings configuration file.  The game settings
        describe operator configuration options, such as balls per game and
        replay levels.
@@ -1062,7 +1062,7 @@ class CCGame(game.BasicGame):
        """
         self.user_settings = {}
         self.settings = yaml.load(open(template_filename, 'r'))
-        if os.path.exists(user_filename) and not restore:
+        if os.path.exists(user_filename):
             self.user_settings = yaml.load(open(user_filename, 'r'))
             # check that we got something
             if self.user_settings:
@@ -1070,10 +1070,8 @@ class CCGame(game.BasicGame):
             else:
                 print "Settings broken, all bad, defaulting"
                 self.user_settings = {}
+                self.save_settings()
         #
-        if restore:
-            print "Restore Forced - Loading user settings skipped"
-
         for section in self.settings:
             for item in self.settings[section]:
                 if not section in self.user_settings:
@@ -1087,6 +1085,30 @@ class CCGame(game.BasicGame):
                         self.user_settings[section][item] = self.settings[section][item]['default']
                     else:
                         self.user_settings[section][item] = self.settings[section][item]['options'][0]
+            # this section handles restoring
+
+        for section in self.settings:
+            if restore:
+                if type == 'settings':
+                    if section != 'Custom Message':
+                        self.user_settings[section] = {}
+                        for item in self.settings[section]:
+                            if 'default' in self.settings[section][item]:
+                                self.user_settings[section][item] = self.settings[section][item]['default']
+                            else:
+                                self.user_settings[section][item] = self.settings[section][item]['options'][0]
+                    # for message reset
+                else:
+                    if section == 'Custom Message':
+                        self.user_settings[section] = {}
+                        for item in self.settings[section]:
+                            if 'default' in self.settings[section][item]:
+                                self.user_settings[section][item] = self.settings[section][item]['default']
+                            else:
+                                self.user_settings[section][item] = self.settings[section][item]['options'][0]
+
+
+
 
         if restore:
             print "Restore - Saving settings"
@@ -1096,8 +1118,8 @@ class CCGame(game.BasicGame):
     def save_settings(self):
         super(CCGame,self).save_settings(user_settings_path)
 
-    def remote_load_settings(self,restore=False):
-        self.load_settings(settings_defaults_path, user_settings_path,restore)
+    def remote_load_settings(self,restore=False,type="settings"):
+        self.load_settings(settings_defaults_path, user_settings_path,restore,type=type)
 
     def load_game_data(self, template_filename, user_filename,restore=None):
         """Loads the YAML game data configuration file.  This file contains

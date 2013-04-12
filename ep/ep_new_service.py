@@ -1506,7 +1506,7 @@ class NewServiceModeUtilities(NewServiceSkeleton):
 
     def mode_started(self):
         self.index = 0
-        self.section = ["CLEAR STD. AUDITS", "CLEAR FEAT. AUDITS", "RESET HIGH SCORES","RESTORE DEFAULTS","RESET SWITCH COUNT","EMPTY TROUGH"]
+        self.section = ["CLEAR STD. AUDITS", "CLEAR FEAT. AUDITS", "RESET HIGH SCORES","RESTORE SETTINGS","RESET CUSTOM MSG","RESET SWITCH COUNT","EMPTY TROUGH"]
         self.update_display("Utilities",str(self.section[self.index]))
 
     def sw_enter_active(self,sw):
@@ -1583,10 +1583,16 @@ class NewServiceModeUtility(NewServiceSkeleton):
             self.selectionLine.set_text("SWITCH COUNTS RESET",blink_frames=15)
             self.delay(delay=2,handler=self.unload)
         # restore defaults
-        elif self.tool == "RESTORE DEFAULTS":
+        elif self.tool == "RESTORE SETTINGS":
             self.game.remote_load_settings(restore=True)
             self.clear_instructions()
             self.selectionLine.set_text("DEFAULTS RESTORED",blink_frames=15)
+            self.delay(delay=2,handler=self.unload)
+        # reset custom message
+        elif self.tool == "RESET CUSTOM MSG":
+            self.game.remote_load_settings(restore=True,type='message')
+            self.clear_instructions()
+            self.selectionLine.set_text("MESSAGES RESET",blink_frames=15)
             self.delay(delay=2,handler=self.unload)
         # empty trough
         else:
