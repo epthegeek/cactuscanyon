@@ -24,6 +24,7 @@ class Mountain(ep.EP_Mode):
         super(Mountain, self).__init__(game, priority)
         self.mineReset = False
         self.inMotion = False
+        self.open = False
         self.kickStrength = self.game.user_settings['Machine (Standard)']['Mine Kicker Strength']
         self.mineTicks = 0
         self.solidRun = False
@@ -48,6 +49,12 @@ class Mountain(ep.EP_Mode):
         self.game.coils.mineMotor.disable()
         self.solidRun = False
         self.inMotion = False
+        self.open = False
+
+    def open(self):
+        print "Opening Mine"
+        self.open = True
+        self.move()
 
     def move(self):
         if not self.inMotion:
@@ -62,7 +69,13 @@ class Mountain(ep.EP_Mode):
         #print "Mine Encoder :" + str(self.mineTicks) + " Solid Run: " + str(self.solidRun) + " Reset: " + str(self.mineReset)
         if not self.mineReset and not self.solidRun:
             if self.mineTicks in self.stopPoints:
-                self.stop()
+                if self.open:
+                    if self.mineTicks == 8:
+                        self.stop()
+                    else:
+                        pass
+                else:
+                    self.stop()
 
     def sw_mineHome_active(self,sw):
         print "Mine Home Active, resetting ticks - Reset = " + str(self.mineReset)

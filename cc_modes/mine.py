@@ -339,6 +339,9 @@ class Mine(ep.EP_Mode):
         print "EXTRA BALLS PENDING: " + str(derp)
         # audit tick
         self.game.game_data['Audits']['Extra Balls Earned'] += 1
+        # open the mine
+        if self.game.mountain.ticks != 8:
+            self.game.mountain.open()
         # setup  a bunch of text
         textLine1 = dmd.TextLayer(28, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("EXTRA")
         textLine2 = dmd.TextLayer(28, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("BALL")
