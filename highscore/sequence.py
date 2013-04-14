@@ -175,10 +175,10 @@ class EntrySequenceManager(game.Mode):
         self.fanfareSounds.reverse()
         if self.fanfareIndex == self.fanfareCount:
             self.delay(delay = 2,handler=self.clear_layer)
-            self.delay(delay = 2,handler=self.next)
+            self.delay(delay = 3,handler=self.game.restore_music)
+            self.delay(delay = 3,handler=self.next)
         else:
             self.delay(delay = 2,handler=self.fanfare,param=inits)
 
     def clear_layer(self):
         self.layer = None
-        self.game.restore_music()
