@@ -1097,6 +1097,7 @@ class Assets():
         self.dmd_skyline = dmd.Animation().load(self.dmd_path+'skyline.dmd')
         self.dmd_bartender = dmd.Animation().load(self.dmd_path + 'bartender.dmd')
         self.dmd_escaped = dmd.Animation().load(self.dmd_path +'escaped.dmd')
+        self.dmd_stringBorder = dmd.Animation().load(self.dmd_path+'frame1.dmd')
 
         self.dmd_tombstone = dmd.Animation().load(self.dmd_path+'tombstone.dmd')
         self.dmd_wantedPoster = dmd.Animation().load(self.dmd_path +'wanted-poster-3.dmd')
