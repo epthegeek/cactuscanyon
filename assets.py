@@ -1100,7 +1100,6 @@ class Assets():
         self.dmd_stringBorder = dmd.Animation().load(self.dmd_path+'frame1.dmd')
 
         self.dmd_tombstone = dmd.Animation().load(self.dmd_path+'tombstone.dmd')
-        self.dmd_wantedPoster = dmd.Animation().load(self.dmd_path +'wanted-poster-3.dmd')
         self.dmd_beerMug = dmd.Animation().load(self.dmd_path +'beer-mug-1.dmd')
 
         self.dmd_cashWipe = dmd.Animation().load(self.dmd_path +'cash-wipe.dmd')

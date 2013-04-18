@@ -400,7 +400,7 @@ class Attract(ep.EP_Mode):
 
                 # Generate a screen for the Bounty Hunter
                 if category.game_data_key == 'BountyHunterHighScoreData':
-                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_wantedPoster.frames[0])
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bigPosterA.frames[0])
                     title = ep.EP_TextLayer(64, 2, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("BOUNTY HUNTER",color=ep.ORANGE)
                     initLine1 = dmd.TextLayer(44, 7, self.game.assets.font_12px_az, "center", opaque=False).set_text(score.inits)
                     scoreLine1 = ep.EP_TextLayer(44, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str + " BARTS",color=ep.RED)
