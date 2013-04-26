@@ -68,7 +68,6 @@ class CCGame(game.BasicGame):
         self.buttonShutdown = config.value_for_key_path(keypath='power_button_combo', default=False)
         self.moonlightFlag = False
 
-        super(CCGame, self).__init__(machineType)
         use_desktop = config.value_for_key_path(keypath='use_desktop', default=True)
         color_desktop = config.value_for_key_path(keypath='color_desktop', default=False)
         if use_desktop:
@@ -79,12 +78,13 @@ class CCGame(game.BasicGame):
             # otherwise run the color display
             else:
                 from ep import EP_Desktop
-                self.desktop = EP_Desktop()
+                self.desktop = EP_Desktop(config.value_for_key_path(keypath='pixel_size',default=8))
                 # load the images for the colorized display
                 self.desktop.load_images(dots_path)
 
-        self.load_config('cc_machine.yaml')
+        super(CCGame, self).__init__(machineType)
 
+        self.load_config('cc_machine.yaml')
 
     def setup(self):
         # Instead of resetting everything here as well as when a user
@@ -391,7 +391,7 @@ class CCGame(game.BasicGame):
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
-        # Add in the base modes that are active at start
+    # Add in the base modes that are active at start
         self.modes.add(self.lamp_control)
         self.modes.add(self.trough)
         self.modes.add(self.ball_search)

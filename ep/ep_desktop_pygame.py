@@ -53,9 +53,10 @@ class EP_Desktop():
 
     key_map = {}
 
-    def __init__(self):
+    def __init__(self,pixel_size):
         self.ctrl = 0
         self.i = 0
+        self.pixel_size = pixel_size
 
         if 'pygame' in globals():
             self.setup_window()
@@ -63,7 +64,6 @@ class EP_Desktop():
             print 'Desktop init skipping setup_window(); pygame does not appear to be loaded.'
         self.add_key_map(pygame.locals.K_LSHIFT, 3)
         self.add_key_map(pygame.locals.K_RSHIFT, 1)
-        self.pixel_size = 8
 
     def load_images(self,dots_path):
         ## dot images
@@ -261,7 +261,7 @@ class EP_Desktop():
         yOffset = 224
         #self.screen = pygame.display.set_mode((128*self.screen_multiplier, 32*self.screen_multiplier))
         #os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (xOffset,yOffset)
-        self.screen = pygame.display.set_mode((1280,320))
+        self.screen = pygame.display.set_mode(((self.pixel_size*127),(self.pixel_size*32)))
         pygame.display.set_caption('Cactus Canyon Continued')
 
     def draw(self, frame):
