@@ -998,7 +998,7 @@ class BaseGameMode(ep.EP_Mode):
         print ""
 
     def sw_phantomSwitch4_active(self,sw):
-        pass
+        self.game.interrupter.ball_saved()
 
     def guns_flash(self,type=1):
         if type == 1:

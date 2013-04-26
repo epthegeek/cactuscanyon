@@ -119,12 +119,18 @@ class Interrupter(ep.EP_Mode):
         # play a quote
         self.game.base.priority_quote(self.game.assets.quote_dontMove)
         # show some display
-        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_skyline.frames[0])
-        myLayer = dmd.TextLayer(128/2,14, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("BALL SAVED")
-        myLayer.composite_op = "blacksrc"
-        combined = dmd.GroupedLayer(128,32,[backdrop,myLayer])
-        self.layer = combined
-        self.delay(delay=1,handler=self.clear_layer)
+        anim = self.game.assets.dmd_ballSaved
+        myWait = len(anim.frames) / 12.0
+        # set the animation
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold = True
+        animLayer.frame_time = 5
+        animLayer.opaque = True
+        # add listener frames
+        animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_ballSaved)
+
+        self.layer = animLayer
+        self.delay(delay=myWait + 0.5,handler=self.clear_layer)
 
     def closing_song(self,duration):
         attractMusic = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Music']

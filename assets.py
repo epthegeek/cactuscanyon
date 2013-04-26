@@ -445,6 +445,8 @@ class Assets():
         self.sfx_matchRiff = 'sfx_matchRiff'
         self.game.sound.register_sound(self.sfx_matchRiff, self.sfx_path + "038-sfx-match-riff.wav")
 
+        self.sfx_ballSaved = 'sfx_ballSaved'
+        self.game.sound.register_sound(self.sfx_ballSaved, self.sfx_path + "00-ball_saved.wav")
     # Quotes
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
@@ -1291,6 +1293,8 @@ class Assets():
         self.dmd_mmBoom = dmd.Animation().load(self.dmd_path+'mm_boom.dmd')
         self.dmd_mmBang = dmd.Animation().load(self.dmd_path+'mm_bang.dmd')
         self.dmd_moonIntro = dmd.Animation().load(self.dmd_path+'moon-intro.dmd')
+
+        self.dmd_ballSaved = dmd.Animation().load(self.dmd_path+'ball_saved.dmd')
 
         self.dmd_switchMatrix = dmd.Animation().load(self.dmd_path+'matrix_backdrop.dmd')
         self.dmd_testBackdrop = dmd.Animation().load(self.dmd_path+'test_backdrop.dmd')
