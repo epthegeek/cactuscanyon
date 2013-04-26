@@ -24,11 +24,11 @@ Machine (Standard):
     options: [14,10,8]
     default: 10
   'Color Desktop X Offset':
-    options: [-50,50]
+    options: [-250,250]
     increments: 1
     default: 0
   'Color Desktop Y Offset':
-    options: [-50,50]
+    options: [-250,250]
     increments: 1
     default: 0
   'Balls Per Game':
