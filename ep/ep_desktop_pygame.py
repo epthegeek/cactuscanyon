@@ -62,8 +62,18 @@ class EP_Desktop():
         self.add_key_map(pygame.locals.K_RSHIFT, 1)
 
 
-    def draw_window(self,pixel):
+    def draw_window(self,pixel,xoffset=0,yoffset=0):
         self.pixel_size = pixel
+        if self.pixel_size == 14:
+            self.xOffset = 64 + xoffset
+            self.yOffset = 376 + yoffset
+        elif self.pixel_size == 10:
+            self.xOffset = 43 + xoffset
+            self.yOffset = 233 + yoffset
+        else:
+            self.xOffset = xoffset
+            self.yOffset = yoffset
+
         if 'pygame' in globals():
             self.setup_window()
         else:
@@ -261,11 +271,10 @@ class EP_Desktop():
 
     def setup_window(self):
         pygame.init()
-        xOffset = 43
-        yOffset = 224
         #self.screen = pygame.display.set_mode((128*self.screen_multiplier, 32*self.screen_multiplier))
         #os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (xOffset,yOffset)
-        self.screen = pygame.display.set_mode(((self.pixel_size*127),(self.pixel_size*32)))
+        self.screen = pygame.display.set_mode(((self.pixel_size*128),(self.pixel_size*32)),pygame.FULLSCREEN,16)
+        pygame.mouse.set_visible(False)
         pygame.display.set_caption('Cactus Canyon Continued')
 
     def draw(self, frame):
@@ -285,8 +294,8 @@ class EP_Desktop():
 
         frame_string = frame.get_data()
 
-        x = 0
-        y = 0
+        x = 0 + self.xOffset
+        y = 0 + self.yOffset
         # fill the screen black
         self.screen.fill((0,0,0))
 

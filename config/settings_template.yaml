@@ -23,6 +23,14 @@ Machine (Standard):
   'Color Desktop Pixel Size':
     options: [14,10,8]
     default: 10
+  'Color Desktop X Offset':
+    options: [-50,50]
+    increments: 1
+    default: 0
+  'Color Desktop Y Offset':
+    options: [-50,50]
+    increments: 1
+    default: 0
   'Balls Per Game':
     options: [1,10]
     increments: 1
