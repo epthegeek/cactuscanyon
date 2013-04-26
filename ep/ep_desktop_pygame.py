@@ -68,12 +68,12 @@ class EP_Desktop():
             self.xOffset = 64 + xoffset
             self.yOffset = 376 + yoffset
             self.xDefault = 64
-            self.yDefault = 300
+            self.yDefault = 316
         elif self.pixel_size == 10:
             self.xOffset = 43 + xoffset
             self.yOffset = 233 + yoffset
             self.xDefault = 43
-            self.yDefault = 190
+            self.yDefault = 220
         else:
             self.xOffset = xoffset
             self.yOffset = yoffset
@@ -279,6 +279,7 @@ class EP_Desktop():
         pygame.init()
         #self.screen = pygame.display.set_mode((128*self.screen_multiplier, 32*self.screen_multiplier))
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (self.xOffset,self.yOffset)
+        print "Making window - " + str(self.pixel_size*128) + " by " + str(self.pixel_size*32)
         self.screen = pygame.display.set_mode(((self.pixel_size*128),(self.pixel_size*32)),pygame.NOFRAME)
         pygame.mouse.set_visible(False)
         pygame.display.set_caption('Cactus Canyon Continued')

@@ -394,7 +394,7 @@ class CCGame(game.BasicGame):
 
         # set up the color desktop if we're using that
         if self.color_desktop:
-            self.desktop.draw_window(self.user_settings['Machine (Standard)']['Color Desktop Pixel Size'],self.user_settings['Machine (Standard)']['Color Desktop X Offset'],self.user_settings['Machine (Standard)']['Color Desktop Y Offset'])
+            self.desktop.draw_window(self.user_settings['Machine (Standard)']['Color Display Pixel Size'],self.user_settings['Machine (Standard)']['Color Display X Offset'],self.user_settings['Machine (Standard)']['Color Display Y Offset'])
             # load the images for the colorized display
             self.desktop.load_images(dots_path)
 
