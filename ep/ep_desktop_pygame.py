@@ -53,17 +53,21 @@ class EP_Desktop():
 
     key_map = {}
 
-    def __init__(self,pixel_size):
+    def __init__(self):
+        print "Init Color Desktop"
         self.ctrl = 0
         self.i = 0
-        self.pixel_size = pixel_size
 
+        self.add_key_map(pygame.locals.K_LSHIFT, 3)
+        self.add_key_map(pygame.locals.K_RSHIFT, 1)
+
+
+    def draw_window(self,pixel):
+        self.pixel_size = pixel
         if 'pygame' in globals():
             self.setup_window()
         else:
             print 'Desktop init skipping setup_window(); pygame does not appear to be loaded.'
-        self.add_key_map(pygame.locals.K_LSHIFT, 3)
-        self.add_key_map(pygame.locals.K_RSHIFT, 1)
 
     def load_images(self,dots_path):
         ## dot images

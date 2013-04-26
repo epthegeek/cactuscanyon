@@ -69,18 +69,18 @@ class CCGame(game.BasicGame):
         self.moonlightFlag = False
 
         use_desktop = config.value_for_key_path(keypath='use_desktop', default=True)
-        color_desktop = config.value_for_key_path(keypath='color_desktop', default=False)
+        self.color_desktop = config.value_for_key_path(keypath='color_desktop', default=False)
         if use_desktop:
             # if not color, run the old style pygame
-            if not color_desktop:
+            if not self.color_desktop:
+                print "Standard Desktop"
                 from procgame.desktop import Desktop
                 self.desktop = Desktop()
             # otherwise run the color display
             else:
+                print "Color Desktop"
                 from ep import EP_Desktop
-                self.desktop = EP_Desktop(config.value_for_key_path(keypath='pixel_size',default=8))
-                # load the images for the colorized display
-                self.desktop.load_images(dots_path)
+                self.desktop = EP_Desktop()
 
         super(CCGame, self).__init__(machineType)
 
@@ -391,7 +391,15 @@ class CCGame(game.BasicGame):
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
-    # Add in the base modes that are active at start
+
+        # set up the color desktop if we're using that
+        if self.color_desktop:
+            self.desktop.draw_window(self.user_settings['Machine (Standard)']['Color Desktop Pixel Size'])
+            # load the images for the colorized display
+            self.desktop.load_images(dots_path)
+
+
+        # Add in the base modes that are active at start
         self.modes.add(self.lamp_control)
         self.modes.add(self.trough)
         self.modes.add(self.ball_search)

@@ -20,6 +20,9 @@
 # will be updated with ALL of the entries here without overwriting existing settings.
 
 Machine (Standard):
+  'Color Desktop Pixel Size':
+    options: [14,10,8]
+    default: 10
   'Balls Per Game':
     options: [1,10]
     increments: 1
