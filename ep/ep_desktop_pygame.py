@@ -72,8 +72,8 @@ class EP_Desktop():
         elif self.pixel_size == 10:
             self.xOffset = 43 + xoffset
             self.yOffset = 233 + yoffset
-            self.xDefault = 43
-            self.yDefault = 220
+            self.xDefault = 30
+            self.yDefault = 175
         else:
             self.xOffset = xoffset
             self.yOffset = yoffset
