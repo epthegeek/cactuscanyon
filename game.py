@@ -721,6 +721,8 @@ class CCGame(game.BasicGame):
             self.endBusy = True
         else:
             print "Immediate restart is enabled"
+        # save data
+        self.save_game_data()
         # re-add the attract mode
         self.modes.add(self.attract_mode)
         # play a quote
