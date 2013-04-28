@@ -145,15 +145,15 @@ class CenterRamp(ep.EP_Mode):
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):
         # create the two text lines
-        awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+        awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         # if blink frames we have to set them
         if blink:
-            awardTextTop.set_text(self.awardString,blink_frames=12)
-            awardTextBottom.set_text(self.awardPoints,blink_frames=12)
+            awardTextTop.set_text(self.awardString,blink_frames=12,color=ep.DARK_BROWN)
+            awardTextBottom.set_text(self.awardPoints,blink_frames=12,color=ep.BROWN)
         else:
-            awardTextTop.set_text(self.awardString)
-            awardTextBottom.set_text(self.awardPoints)
+            awardTextTop.set_text(self.awardString,color=ep.DARK_BROWN)
+            awardTextBottom.set_text(self.awardPoints,color=ep.BROWN)
             # combine them
         completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
         # play the sound effect

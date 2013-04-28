@@ -191,7 +191,7 @@ class BaseGameMode(ep.EP_Mode):
         # play a sound
         self.game.sound.play(self.game.assets.sfx_ricochetSet)
         # a little display action
-        textLine1 = dmd.TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG")
+        textLine1 = ep.EP_TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG",color=ep.ORANGE)
         left = self.mug_shots - hits
         ## if we're at zero, it's lit and the display shows it
         if left == 0:
@@ -200,8 +200,8 @@ class BaseGameMode(ep.EP_Mode):
         elif left < 0:
             textString = "SHOOT THE SALOON"
             textString2 = "FOR MULTIBALL"
-            textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString,blink_frames=8)
-            textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+            textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString,blink_frames=8)
+            textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
             self.mug_display(textLine1,textLine2,textLine3)
 
         ## if we're still not there yet, show how much is left
@@ -211,8 +211,8 @@ class BaseGameMode(ep.EP_Mode):
             else:
                 textString = str(left) + " MORE HITS FOR"
             textString2 = "DRUNKEN MULTIBALL"
-            textLine2 = dmd.TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
-            textLine3 = dmd.TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
+            textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
+            textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
             self.mug_display(textLine1,textLine2,textLine3)
 
         if left != 0:
@@ -245,9 +245,9 @@ class BaseGameMode(ep.EP_Mode):
         # enable the multiball
         self.game.set_tracking('drunkMultiballStatus', "READY")
         self.lamp_update()
-        textLine1 = ep.pulse_text(self,51,1,"DRUNK")
-        textLine2 = ep.pulse_text(self,51,12,"MULTIBALL")
-        textLine3 = dmd.TextLayer(51, 23, self.game.assets.font_6px_az, "center", opaque=False).set_text("IS LIT")
+        textLine1 = ep.pulse_text(self,51,1,"DRUNK",color=ep.ORANGE)
+        textLine2 = ep.pulse_text(self,51,12,"MULTIBALL",color=ep.ORANGE)
+        textLine3 = ep.EP_TextLayer(51, 23, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("IS LIT",color=ep.GREEN)
         self.repeat_ding(4)
         duration = self.game.base.play_quote(self.game.assets.quote_drunkMultiballLit)
         self.delay(delay=duration,handler=self.game.base.play_quote,param=self.game.assets.quote_shootSaloon)

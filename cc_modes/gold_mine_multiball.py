@@ -270,11 +270,11 @@ class GoldMine(ep.EP_Mode):
         titleString = "GOLD MINE MULTIBALL"
         if self.game.drunk_multiball.running:
             titleString = "DRUNK MINE MULTIBALL"
-        titleLine = dmd.TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString)
+        titleLine = ep.EP_TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString,color=ep.YELLOW)
         # score line
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(64, 5, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
+        scoreLine = ep.EP_TextLayer(64, 5, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4,color=ep.DARK_BROWN)
         scoreLine.composite_op = "blacksrc"
         # motherlode line
         # if no motherlode is lit
@@ -286,7 +286,7 @@ class GoldMine(ep.EP_Mode):
         else:
             textString = "JACKPOTS LIGHT MOTHERLODE"
 
-        motherLine = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString)
+        motherLine = ep.EP_TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString,color=ep.YELLOW)
         # jackpot value line
         if self.bandits:
             jackString = "TIME REMAINING: " + str(self.banditTimer)
@@ -295,7 +295,7 @@ class GoldMine(ep.EP_Mode):
                 jackString = "JACKPOTS = " + str(ep.format_score(1000000))
             else:
                 jackString = "JACKPOTS = " + str(ep.format_score(500000))
-        jackpotLine = dmd.TextLayer(128/2,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(jackString)
+        jackpotLine = ep.EP_TextLayer(128/2,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(jackString,color=ep.DARK_BROWN)
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,scoreLine,motherLine,jackpotLine])
         self.layer = combined
         # loop back in .2 to update

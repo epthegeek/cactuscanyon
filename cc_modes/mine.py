@@ -188,7 +188,7 @@ class Mine(ep.EP_Mode):
         # clear the hits to light lock
         self.game.set_tracking('mineHits', 0)
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
-        textLine = dmd.TextLayer(56, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("LOCK IS LIT")
+        textLine = ep.EP_TextLayer(56, 9, self.game.assets.font_12px_az, "center", opaque=False).set_text("LOCK IS LIT",color=ep.GREEN)
         composite = dmd.GroupedLayer(128,32,[backdrop,textLine])
         self.layer = composite
         self.delay(name="Display",delay=1.5,handler=self.clear_layer)
@@ -316,7 +316,7 @@ class Mine(ep.EP_Mode):
             self.game.sound.play(self.game.assets.sfx_orchestraRiff)
         if lock == 2:
             self.game.sound.play(self.game.assets.sfx_lockTwoFlourish)
-        textLine = dmd.TextLayer(128/2, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL " + str(self.game.show_tracking('ballsLocked')) + " LOCKED")
+        textLine = ep.EP_TextLayer(128/2, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL " + str(self.game.show_tracking('ballsLocked')) + " LOCKED",color=ep.GREEN)
         textLine.composite_op = "blacksrc"
         if self.layer == None:
             self.layer = self.no_layer()

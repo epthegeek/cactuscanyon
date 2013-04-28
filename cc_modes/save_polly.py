@@ -49,14 +49,15 @@ class SavePolly(ep.EP_Mode):
         self.trainLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=True,frame_time=6)
         anim = self.game.assets.dmd_cowOnTracks
         self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
-        self.pollyTitle = dmd.TextLayer(34, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
+        self.pollyTitle = ep.EP_TextLayer(34, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL",color=ep.MAGENTA)
         # if we haven't maxed extra balls, the prize is an extra ball light - otherwise, 5 mil
         if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             reward = "EXTRA BALL LIT"
         else:
             reward = str(ep.format_score(5000000))
-        self.awardLine2 = dmd.TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(reward)
-        self.awardLine2b= dmd.TextLayer(64, 23, self.game.assets.font_7px_az, "center", opaque=False).set_text(reward)
+        self.awardLine2 = ep.EP_TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(reward,color=ep.MAGENTA)
+        self.awardLine2b= ep.EP_TextLayer(64, 23, self.game.assets.font_7px_az, "center", opaque=False).set_text(reward,color=ep.MAGENTA)
+        self.scoreLine = ep.EP_TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("",blink_frames=8)
         # calculate the shot value
         self.shotValue = 250000
         # extra 250k for each ramp done
@@ -208,7 +209,7 @@ class SavePolly(ep.EP_Mode):
             # alternate lines for the bottom
             script = []
             shotsLine1 = dmd.TextLayer(34, 11, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOTS WORTH:")
-            shotsLine2 = dmd.TextLayer(34, 17, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
+            shotsLine2 = ep.EP_TextLayer(34, 17, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)),color=ep.MAGENTA)
             # group layer of the award lines
             textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
             self.prog_awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
@@ -247,12 +248,12 @@ class SavePolly(ep.EP_Mode):
             # and all the text
             p = self.game.current_player()
             scoreString = ep.format_score(p.score)
-            scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
+            self.scoreLine.set_text(scoreString,blink_frames=999,color=ep.BROWN)
             timeString = "TIME: " + str(int(self.modeTimer))
-            timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString)
+            timeLine = ep.EP_TextLayer(34, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(timeString,color=ep.DARK_RED)
 
             # stick together the animation and static text with the dynamic text
-            composite = dmd.GroupedLayer(128,32,[self.trainLayer,self.pollyTitle,scoreLine,self.infoLayer,timeLine])
+            composite = dmd.GroupedLayer(128,32,[self.trainLayer,self.pollyTitle,self.scoreLine,self.infoLayer,timeLine])
             self.layer = composite
             ## tick down the timer
             self.modeTimer -= 0.1
@@ -439,8 +440,8 @@ class SavePolly(ep.EP_Mode):
             else:
                 self.stop_music(slice=3)
                 backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-                textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
-                textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
+                textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.DARK_RED)
+                textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.DARK_RED)
                 combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
                 self.layer = combined
                 self.game.sound.play(self.game.assets.sfx_glumRiff)

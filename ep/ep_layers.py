@@ -116,8 +116,9 @@ class EP_TextLayer(dmd.Layer):
         """Displays the given message for the given number of seconds."""
         self.started_at = None
         self.seconds = seconds
-        self.blink_frames = blink_frames
-        self.blink_frames_counter = self.blink_frames
+        if blink_frames != 999:
+            self.blink_frames = blink_frames
+            self.blink_frames_counter = self.blink_frames
         if text == None:
             self.frame = None
         else:
