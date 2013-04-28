@@ -96,7 +96,7 @@ def format_score(score):
         return locale.format("%d", score, True)
 
 
-def pulse_text(self,x,y,text,sequence=False,align="center",myOpaque=False,size="9px",timing=0.2):
+def pulse_text(self,x,y,text,sequence=False,align="center",myOpaque=False,size="9px",timing=0.2,color=None):
     """This method returns a scripted layer of flashing dim/bright text"""
     if not sequence:
         # default sequence
@@ -111,7 +111,11 @@ def pulse_text(self,x,y,text,sequence=False,align="center",myOpaque=False,size="
     script = []
     # iterate through the sequence creating text layers and appending them to anim.frames
     for i in sequence:
-        frame = dmd.TextLayer(x, y, levels[i], align,opaque=myOpaque).set_text(text)
+        frame = EP_TextLayer(x, y, levels[i], align,opaque=myOpaque)
+        if color:
+            frame.set_text(text,color=color)
+        else:
+            frame.set_text(text)
         frame.composite_op = "blacksrc"
         script.append({'seconds':timing,'layer':frame})
     # create an animated layer with the frames

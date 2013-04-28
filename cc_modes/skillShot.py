@@ -515,8 +515,8 @@ class SkillShot(ep.EP_Mode):
         # the award icon
         prizeList = dmd.TextLayer(126, 1, self.game.assets.font_skillshot, "right", opaque=False).set_text(self.selectedPrizes[5:])
         # the award text
-        awardTextTop = dmd.TextLayer(6,10,self.game.assets.font_5px_bold_AZ,justify="left",opaque=False).set_text(awardStringTop,blink_frames=10)
-        awardTextBottom = dmd.TextLayer(6,18,self.game.assets.font_5px_bold_AZ,justify="left",opaque=True).set_text(awardStringBottom,blink_frames=10)
+        awardTextTop = ep.EP_TextLayer(6,10,self.game.assets.font_5px_bold_AZ,justify="left",opaque=False).set_text(awardStringTop,blink_frames=10,color=ep.ORANGE)
+        awardTextBottom = ep.EP_TextLayer(6,18,self.game.assets.font_5px_bold_AZ,justify="left",opaque=True).set_text(awardStringBottom,blink_frames=10,color=ep.ORANGE)
         self.layer = dmd.GroupedLayer(128, 32, [awardTextBottom, awardTextTop, prizeList,self.mask, self.lasso])
 
         # remove after 2 seconds

@@ -97,18 +97,18 @@ class ScoreDisplay(ep.EP_Mode):
         """Returns the font to be used for displaying the given numeric score value in a 2, 3, or 4-player game."""
         if is_active_player:
             if score < 1e7:
-                return self.game.assets.font_14x10
+                return self.game.assets.font_14x10,ep.YELLOW
             if score < 1e8:
-                return self.game.assets.font_14x9
+                return self.game.assets.font_14x9,ep.YELLOW
             else:
-                return self.game.assets.font_14x8
+                return self.game.assets.font_14x8,ep.YELLOW
         else:
             if score < 1e7:
-                return self.game.assets.font_09x7
+                return self.game.assets.font_09x7,ep.DARK_BROWN
             if score < 1e8:
-                return self.game.assets.font_09x6
+                return self.game.assets.font_09x6,ep.DARK_BROWN
             else:
-                return self.game.assets.font_09x5
+                return self.game.assets.font_09x5,ep.DARK_BROWN
 
     def pos_for_player(self, player_index, is_active_player):
         return self.score_posns[is_active_player][player_index]
@@ -152,11 +152,11 @@ class ScoreDisplay(ep.EP_Mode):
         for i in range(len(self.game.players[:4])): # Limit to first 4 players for now.
             score = self.game.players[i].score
             is_active_player = (self.game.ball > 0) and (i == self.game.current_player_index)
-            font = self.font_for_score(score=score, is_active_player=is_active_player)
+            font,myColor = self.font_for_score(score=score, is_active_player=is_active_player)
             pos = self.pos_for_player(player_index=i, is_active_player=is_active_player)
             justify = self.justify_for_player(player_index=i)
-            layer = dmd.TextLayer(pos[0], pos[1], font, justify)
-            layer.set_text(self.format_score(score))
+            layer = ep.EP_TextLayer(pos[0], pos[1], font, justify)
+            layer.set_text(self.format_score(score),color=myColor)
             self.layer.layers += [layer]
         pass
 

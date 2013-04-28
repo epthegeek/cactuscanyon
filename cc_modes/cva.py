@@ -494,7 +494,7 @@ class CvA(ep.EP_Mode):
         # score line
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLayer = dmd.TextLayer(64, 17, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=6)
+        scoreLayer = ep.EP_TextLayer(64, 17, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=6,color=ep.DARK_GREEN)
 
         # if we're in ship mode, draw a combined layer of the ship and desert
         if self.mode == "SHIP":
@@ -748,8 +748,8 @@ class CvA(ep.EP_Mode):
             self.game.score(myString)
             # add the points to the running total
             self.alienPoints += myString
-            titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("ALIEN KILLED")
-            scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
+            titleLayer = ep.EP_TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("ALIEN KILLED",color=ep.GREEN)
+            scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1,color=ep.RED)
             combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
             self.layer = combined
             self.delay(delay=0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvaGroan)
@@ -792,8 +792,8 @@ class CvA(ep.EP_Mode):
         myString = self.point_value("SAUCER")
         # add the points to the running total
         self.saucerPoints += myString
-        titleLayer = dmd.TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("SAUCER DESTROYED")
-        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1)
+        titleLayer = ep.EP_TextLayer(64, 4, self.game.assets.font_7px_az, "center", opaque=False).set_text("SAUCER DESTROYED",color=ep.GREEN)
+        scoreLayer = ep.pulse_text(self,64,14,ep.format_score(myString),align="center",myOpaque=True,size="12px",timing=0.1,color=ep.RED)
         combined = dmd.GroupedLayer(128,32,[scoreLayer,titleLayer,animLayer])
         self.layer = combined
         # play the boom
@@ -827,30 +827,34 @@ class CvA(ep.EP_Mode):
         if self.saucerHits > 0:
             # set the saucer title line
             if self.saucerHits == 1:
-                textStringOne = "1 SAUCER DESTROYED"
+                textStringOne = "1 SAUCER"
             else:
-                textStringOne = str(self.saucerHits) + " SAUCERS DESTROYED"
-            titleLayerOne = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
-            titleLayerOne.set_text(textStringOne)
+                textStringOne = str(self.saucerHits) + " SAUCERS"
+            titleLayerOne = ep.EP_TextLayer(64, 3, self.game.assets.font_7px_az, "center", opaque=False)
+            titleLayerOne.set_text(textStringOne,color=ep.GREEN)
+            titleTwoLayerOne = ep.EP_TextLayer(64,11, self.game.assets.font_5px_AZ,"center",opaque=False)
+            titleTwoLayerOne.set_text("DESTROYED",color=ep.GREEN)
             # set the saucer score line
-            scoreLayerOne = ep.pulse_text(self,64,14,ep.format_score(self.saucerPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+            scoreLayerOne = ep.pulse_text(self,64,18,ep.format_score(self.saucerPoints),align="center",myOpaque=True,size="9px",timing=0.1,color=ep.RED)
             # build the layer
-            pageOne = dmd.GroupedLayer(128,32,[shipBorder,titleLayerOne,scoreLayerOne])
+            pageOne = dmd.GroupedLayer(128,32,[shipBorder,titleLayerOne,titleTwoLayerOne,scoreLayerOne])
             # add it to the script
             script.append({'layer':pageOne,'seconds':1.5})
         # do the aliens bit if any aliens were destroyed
         if self.aliensKilled > 0:
             # set the aliens title line
             if self.aliensKilled == 1:
-                textStringTwo = "1 ALIEN KILLED"
+                textStringTwo = "1 ALIEN"
             else:
-                textStringTwo = str(self.aliensKilled) + " ALIENS KILLED"
-            titleLayerTwo = dmd.TextLayer(64, 5, self.game.assets.font_7px_az, "center", opaque=False)
-            titleLayerTwo.set_text(textStringTwo)
+                textStringTwo = str(self.aliensKilled) + " ALIENS"
+            titleLayerTwo = ep.EP_TextLayer(64, 3, self.game.assets.font_7px_az, "center", opaque=False)
+            titleLayerTwo.set_text(textStringTwo,color=ep.GREEN)
+            titleTwoLayerTwo = ep.EP_TextLayer(64,11,self.game.assets.font_5px_AZ, "center",opaque=False)
+            titleTwoLayerTwo.set_text("KILLED",color=ep.GREEN)
             # set the aliens score line
-            scoreLayerTwo = ep.pulse_text(self,64,14,ep.format_score(self.alienPoints),align="center",myOpaque=True,size="12px",timing=0.1)
+            scoreLayerTwo = ep.pulse_text(self,64,18,ep.format_score(self.alienPoints),align="center",myOpaque=True,size="9px",timing=0.1,color=ep.RED)
             # build the layer
-            pageTwo = dmd.GroupedLayer(128,32,[alienBorder,titleLayerTwo,scoreLayerTwo])
+            pageTwo = dmd.GroupedLayer(128,32,[alienBorder,titleLayerTwo,titleTwoLayerTwo,scoreLayerTwo])
             # add it to the script
             script.append({'layer':pageTwo,'seconds':1.5})
         # if either exist, start the script
