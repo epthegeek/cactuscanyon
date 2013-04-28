@@ -419,10 +419,10 @@ class CCGame(game.BasicGame):
         window = 60 - self.moonlightMinutes
         print "Moonlight window time: " + str(window)
         # check for moonlight - always works at straight up midnight
-        if now.hour == 0 & now.minute == 0:
+        if now.hour == 0 and now.minute == 0:
             self.moonlightFlag = True
         # If not exactly midnight - check to see if we're within the time window
-        elif now.hour == 23 & now.minute >= window:
+        elif now.hour == 23 and now.minute >= window:
             self.moonlightFlag = True
         # if force was passed - start it no matter what
         elif forceMoonlight:
