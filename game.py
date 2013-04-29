@@ -108,7 +108,7 @@ class CCGame(game.BasicGame):
         self.modes.modes = []
 
         # software version number
-        self.revision = "2013.04.07"
+        self.revision = "2013.04.28"
 
         # basic game reset stuff, copied in
 
@@ -513,6 +513,8 @@ class CCGame(game.BasicGame):
         if self.moonlightFlag and self.show_tracking('moonlightStatus') == False:
             self.modes.add(self.moonlight)
         else:
+            self.base.busy = False
+            self.base.queued = 0
             # launch a ball, unless there is one in the shooter lane already
             if not self.switches.shooterLane.is_active():
                 self.trough.launch_balls(1) # eject a ball into the shooter lane
@@ -568,7 +570,8 @@ class CCGame(game.BasicGame):
                 self.sound.stop_music()
 
             ## and tell all the modes the ball drained no matter what
-            for mode in self.modes:
+            modequeue_copy = list(self.modes)
+            for mode in modequeue_copy:
                 if getattr(mode, "ball_drained", None):
                     mode.ball_drained()
 
@@ -629,9 +632,9 @@ class CCGame(game.BasicGame):
         # unload all the base modes, just in case
         self.base.remove_modes()
         # unload all the base mode
-        self.modes.remove(self.base)
+        self.base.unload()
         # and the skillshot
-        self.modes.remove(self.skill_shot)
+        self.skill_shot.unload()
         # throw up a message about restarting
         self.interrupter.restarting()
         # lot the end of the game

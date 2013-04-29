@@ -421,25 +421,8 @@ class Ambush(ep.EP_Mode):
         self.game.bad_guys.drop_targets()
         # kill the music - if nothing else is running
         self.stop_music(slice=2)
-        # tally some score?
-
-        # play a quote about bodycount
-        bodycount = self.game.show_tracking('ambushTotal')
-        # see if the death tally beats previous/existing and store in tracking if does - for ambush champ
-        # if the total for this round of ambush was higher than the stored, store it
-        if self.deathTally > bodycount:
-            self.game.set_tracking('ambushTotal',self.deathTally)
-        # set the ambush status to over and setup showdown
-        self.game.set_tracking('showdownStatus',"OPEN")
-        self.game.set_tracking('ambushStatus',"OVER")
-        # turn off lights
-        for i in range(0,4,1):
-            print "END AMBUSH BAD GUYS " + str(i)
-            self.game.set_tracking('badGuysDead',False,i)
-            print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
-            # reset the badguy UP tracking just in case
-        for i in range (0,4,1):
-            self.game.set_tracking('badGuyUp',False,i)
+        # update all the tracking
+        self.update_tracking()
         # update the lamps
         self.lamp_update()
         # start up the main theme again if a higher level mode isn't running
@@ -463,19 +446,48 @@ class Ambush(ep.EP_Mode):
         else:
             self.game.base.play_quote(self.game.assets.quote_mobEnd)
         self.delay("Display",delay=2,handler=self.clear_layer)
-        # reset the showdown points for next time
-        self.game.set_tracking('ambushPoints',0)
 
-        # should we update the badge with ambush?
-        badge = "Yes" == self.game.user_settings['Gameplay (Feature)']['Ambush Awards Badge']
-        if badge:
-            # award the badge light - showdown/ambush is 3
-            self.game.badge.update(3)
+        self.update_badge()
         # unset the base busy flag
         self.game.base.busy = False
         self.game.base.queued -= 1
         # unload the mode
         self.delay("Ambush",delay=2.1,handler=self.unload)
+
+    def tilted(self):
+        if self.running:
+            self.wip_delays()
+            self.update_tracking()
+            self.update_badge()
+            self.unload()
+        self.running = False
+
+    def update_tracking(self):
+        bodycount = self.game.show_tracking('ambushTotal')
+        # see if the death tally beats previous/existing and store in tracking if does - for ambush champ
+        # if the total for this round of ambush was higher than the stored, store it
+        if self.deathTally > bodycount:
+            self.game.set_tracking('ambushTotal',self.deathTally)
+            # set the ambush status to over and setup showdown
+        self.game.set_tracking('showdownStatus',"OPEN")
+        self.game.set_tracking('ambushStatus',"OVER")
+        for i in range(0,4,1):
+            print "END AMBUSH BAD GUYS " + str(i)
+            self.game.set_tracking('badGuysDead',False,i)
+            print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
+            # reset the badguy UP tracking just in case
+        for i in range (0,4,1):
+            self.game.set_tracking('badGuyUp',False,i)
+        # reset the ambush points for next time
+        self.game.set_tracking('ambushPoints',0)
+
+
+    def update_badge(self):
+        # should we update the badge with ambush?
+        badge = "Yes" == self.game.user_settings['Gameplay (Feature)']['Ambush Awards Badge']
+        if badge:
+            # award the badge light - showdown/ambush is 3
+            self.game.badge.update(3)
 
     def mode_stopped(self):
         self.running = False

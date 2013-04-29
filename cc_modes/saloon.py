@@ -26,10 +26,15 @@ class Saloon(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(Saloon, self).__init__(game, priority)
+        self.myID = "Saloon"
         self.smacked = False
         self.mytValue = self.game.user_settings['Gameplay (Feature)']['Move Your Train Mode']
         self.saloonPulse = self.game.user_settings['Machine (Standard)']['Saloon Eject Strength']
 
+    def tilted(self):
+        if self.game.switches.saloonPopper.is_active():
+            self.game.coils.saloonPopper.pulse(self.game.saloon.saloonPulse)
+        self.unload()
 
     def mode_started(self):
         self.unbusy()

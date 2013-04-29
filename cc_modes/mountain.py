@@ -22,6 +22,7 @@ class Mountain(ep.EP_Mode):
     """Cactus Canyon Mine Mountain Toy"""
     def __init__(self, game, priority):
         super(Mountain, self).__init__(game, priority)
+        self.myID = "Mountain"
         self.mineReset = False
         self.inMotion = False
         self.open = False
@@ -33,6 +34,11 @@ class Mountain(ep.EP_Mode):
             self.stopPoints = [4,6,7,8]
         else:
             self.stopPoints = [1,2,3,4,5,6,7,8]
+
+    def tilted(self):
+        if self.game.switches.minePopper.is_active():
+            self.game.coils.minePopper.pulse(self.game.mountain.kickStrength)
+
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:

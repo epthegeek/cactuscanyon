@@ -231,11 +231,9 @@ class Gunfight(ep.EP_Mode):
 
     def end_gunfight(self,waitTime=0):
         self.layer = None
-        # tidy up - set the gunfight status and bart brothers status to open
-        self.game.set_tracking('gunfightStatus',"OPEN")
-        # only change the bart status if he was dead - gunfights from bounty/skill shot shouldn't reset bart
-        if self.game.show_tracking('bartStatus') == "DEAD":
-            self.game.set_tracking('bartStatus',"OPEN")
+
+        self.update_tracking()
+
         # turn off the level one flag
         self.game.stack_level(0,False)
         # turn the main game music back on if a second level mode isn't running
@@ -246,6 +244,20 @@ class Gunfight(ep.EP_Mode):
         self.cancel_delayed("Operational")
         # unload
         self.unload()
+
+    def tilted(self):
+        if self.running:
+            self.update_tracking()
+        self.running = False
+        self.unload()
+
+    def update_tracking(self):
+        # tidy up - set the gunfight status and bart brothers status to open
+        self.game.set_tracking('gunfightStatus',"OPEN")
+        # only change the bart status if he was dead - gunfights from bounty/skill shot shouldn't reset bart
+        if self.game.show_tracking('bartStatus') == "DEAD":
+            self.game.set_tracking('bartStatus',"OPEN")
+
 
     def gunfight_pan(self,badGuys):
         # the intro animation

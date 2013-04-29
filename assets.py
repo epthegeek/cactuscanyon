@@ -28,6 +28,8 @@ class Assets():
     def __init__(self, game):
 
         self.game = game
+        color_desktop = self.game.color_desktop
+        print "Color Desktop Assets: " + str(color_desktop)
 
         # Paths
         self.lampshows_path = curr_file_path + "/lampshows/"
@@ -84,7 +86,8 @@ class Assets():
         self.font_12px_az_outline.tracking = -1
         self.font_12px_az_outline.composite_op = "blacksrc"
 
-        self.font_dangerFont = dmd.Font(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
+        self.font_dangerFont = ep.ColorFont(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
+        self.font_dangerFont.make_colors([ep.RED])
         self.font_dangerFont.composite_op = "blacksrc"
 
         self.font_13px_score = dmd.Font(self.dmd_path + "Font_8_CactusCanyon.dmd")
@@ -108,7 +111,8 @@ class Assets():
         self.font_score_x11 = dmd.Font(self.dmd_path + "Font_12c_CactusCanyon.dmd")
         self.font_score_x10 = dmd.Font(self.dmd_path + "Font_12d_CactusCanyon.dmd")
 
-        self.font_20px_az = dmd.Font(self.dmd_path + "Font_18_CactusCanyon.dmd")
+        self.font_20px_az = ep.ColorFont(self.dmd_path + "Font_18_CactusCanyon.dmd")
+        self.font_20px_az.make_colors([ep.RED])
 
         self.font_skillshot = dmd.Font(self.dmd_path + "Font_20_CactusCanyon.dmd")
 
@@ -1076,8 +1080,12 @@ class Assets():
         self.dmd_geckoBorderLeft = dmd.Animation().load(self.dmd_path +'gecko-border.dmd')
         self.dmd_geckoBorderRight = dmd.Animation().load(self.dmd_path +'right-gecko-border.dmd')
         self.dmd_procBanner = dmd.Animation().load(self.dmd_path +'splash.dmd')
-        self.dmd_ccBanner = dmd.Animation().load(self.dmd_path+'cactus-canyon-banner.dmd')
-        self.dmd_cccBanner = dmd.Animation().load(self.dmd_path +'ccc-banner.dmd')
+        if color_desktop:
+            self.dmd_cccBanner = dmd.Animation().load(self.dmd_path +'ccc-banner-color.dmd')
+            self.dmd_ccBanner = dmd.Animation().load(self.dmd_path+'cactus-canyon-banner-color.dmd')
+        else:
+            self.dmd_cccBanner = dmd.Animation().load(self.dmd_path +'ccc-banner.dmd')
+            self.dmd_ccBanner = dmd.Animation().load(self.dmd_path+'cactus-canyon-banner.dmd')
 
         self.dmd_quickdrawStill = dmd.Animation().load(self.dmd_path+'quick-draw-still.dmd')
 

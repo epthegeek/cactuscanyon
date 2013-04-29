@@ -909,6 +909,20 @@ class CvA(ep.EP_Mode):
         self.finishing = False
         self.unload()
 
+    def tilted(self):
+        if self.running:
+            self.wipe_delays()
+            # turn off the running flag
+            self.game.set_tracking("cvaStatus","OPEN")
+            # reset the saucer x just in case
+            self.saucerX = 104
+            # boost the number of shots required
+            self.game.base.tumbleweedShots += 3
+            # and reset the tracking to 0
+            self.game.set_tracking('tumbleweedHits',0)
+        self.running = False
+        self.unload()
+
     def taunt_timer(self,counter = 0):
         counter += 1
         if counter == 9:

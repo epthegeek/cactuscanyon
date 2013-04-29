@@ -454,6 +454,16 @@ class BankRobbery(ep.EP_Mode):
         self.lamp_update()
         self.end_save_polly()
 
+    def tilted(self):
+        if self.running:
+            if self.game.save_polly.winsRequired and not self.won:
+                self.game.set_tracking('rightRampStage',1)
+            # if wins are not required then the ramp goes to 'done' even if lost
+            else:
+                self.game.set_tracking('rightRampStage',5)
+        self.running = False
+        self.unload()
+
     # clean up and exit
     def end_save_polly(self):
         print "ENDING SAVE POLLY"

@@ -25,6 +25,7 @@ class LampControl(ep.EP_Mode):
     """Playfield Lamp Controller"""
     def __init__(self, game,priority):
         super(LampControl, self).__init__(game, priority)
+        self.myID = "Lamp Control"
 
         # lamp groups
         self.starLamps = [self.game.lamps.starMotherlode,
@@ -52,6 +53,8 @@ class LampControl(ep.EP_Mode):
 
         self.bigFive = [self.left_loop,self.left_ramp,self.center_ramp,self.right_loop,self.right_ramp]
 
+    def tilted(self):
+        pass
 
     def disable_lamps(self):
         # disable all playfield lamps
@@ -1030,3 +1033,4 @@ class LampControl(ep.EP_Mode):
     def disable_bonus_lanes(self):
         self.game.lamps.leftBonusLane.disable()
         self.game.lamps.rightBonusLane.disable()
+

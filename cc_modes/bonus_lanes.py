@@ -28,6 +28,7 @@ class BonusLanes(ep.EP_Mode):
     """Cactus Canyon Bonus Lanes"""
     def __init__(self, game, priority):
         super(BonusLanes, self).__init__(game, priority)
+        self.myID = "Bonus Lanes"
 
     def mode_started(self):
         # reset the bonus multiplier

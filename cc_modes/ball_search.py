@@ -19,6 +19,7 @@ class BallSearch(ep.EP_Mode):
     """Ball Search mode."""
     def __init__(self, game, priority, countdown_time, coils=[], reset_switches=[], stop_switches=[], enable_switch_names=[], special_handler_modes=[]):
         super(BallSearch, self).__init__(game,priority)
+        self.myID = "Ball Search"
         self.stop_switches = stop_switches
         self.countdown_time = countdown_time
         self.coils = coils
@@ -44,6 +45,9 @@ class BallSearch(ep.EP_Mode):
     #		for special_handler_mode in self.special_handler_modes:
     #			special_handler_mode.mode_stopped()
     #		self.stop(0)
+
+    def tilted(self):
+        pass
 
     def enable(self):
         self.enabled = 1

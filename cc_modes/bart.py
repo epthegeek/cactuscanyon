@@ -34,6 +34,7 @@ class Bart(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Bart, self).__init__(game,priority)
+        self.myID = "Bart"
         # set up the number of barts required
         self.bartsForStar = self.game.user_settings['Gameplay (Feature)']['Bart Brothers for Star']
         # setup the difficulty
@@ -59,6 +60,7 @@ class Bart(ep.EP_Mode):
         self.targetNames = ['Left','Left Center','Right Center','Right']
         self.busy = False
         self.activeBossPosse = []
+
 
     def mode_started(self):
         # activate the first bart if we're on the first ball

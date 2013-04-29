@@ -75,11 +75,13 @@ class Interrupter(ep.EP_Mode):
         if status == 2:
             print "DANGER DANGER"
             # double warning
-            line1 = dmd.TextLayer(128/2, 1, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R")
+            line1 = ep.EP_TextLayer(128/2, 1, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R",color=ep.RED)
             line1.composite_op = "blacksrc"
-            line2 = dmd.TextLayer(128/2, 16, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R")
+            line2 = ep.EP_TextLayer(128/2, 16, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R",color=ep.RED)
             line2.composite_op = "blacksrc"
-            self.layer = dmd.GroupedLayer(128,32,[line1,line2])
+            combined = dmd.GroupedLayer(128,32,[line1,line2])
+            combined.composite_op = "blacksrc"
+            self.layer = combined
             # play a sound
             myWait = self.play_tilt_sound()
             self.delay(delay=0.5,handler=self.play_tilt_sound)
@@ -89,7 +91,7 @@ class Interrupter(ep.EP_Mode):
         else:
             print "DANGER"
             #add a display layer and add a delayed removal of it.
-            line1 = dmd.TextLayer(128/2, 10, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R")
+            line1 = ep.EP_TextLayer(128/2, 10, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R",color=ep.RED)
             line1.composite_op = "blacksrc"
             self.layer = line1
             #play sound
@@ -98,9 +100,13 @@ class Interrupter(ep.EP_Mode):
 
     def tilt_display(self):
         # build a tilt graphic
-        tiltLayer = dmd.TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT")
+        tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT",color=ep.RED)
         # Display the tilt graphic
         self.layer = tiltLayer
+
+    def tilted(self):
+        print "Interrupter Passing Tilt"
+        pass
 
     def play_tilt_sound(self):
         self.game.sound.play(self.game.assets.sfx_tiltDanger)
@@ -521,6 +527,7 @@ class Interrupter(ep.EP_Mode):
         if self.game.attract_mode in self.game.modes:
             # kill the lampshow
             self.game.lampctrl.stop_show()
+            self.game.attract_mode.unload()
         self.game.lamp_control.disable_all_lamps()
         # stop the music
         self.stop_music()
@@ -534,7 +541,8 @@ class Interrupter(ep.EP_Mode):
         self.game.coils.rightGunFightPost.disable()
         self.game.coils.leftGunFightPost.disable()
         # remove all the active modes
-        for mode in self.game.modes:
+        modequeue_copy = list(self.game.modes)
+        for mode in modequeue_copy:
             mode.unload()
             # then add the service mode
         self.game.modes.add(self.game.new_service)

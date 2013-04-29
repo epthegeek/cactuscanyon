@@ -673,15 +673,11 @@ class GoldMine(ep.EP_Mode):
         self.running = False
         # clear the layer
         self.layer = None
-        # kill the motherload just in case
-        # turn motherlode off
-        self.game.set_tracking('motherlodeLit', False)
+
+        self.update_tracking()
+
         # reset the mountain to the home position
         self.game.mountain.reset_toy()
-        # reset the motherlode multiplier just in case
-        self.game.set_tracking('motherlodeMultiplier',1)
-        # set the status to open
-        self.game.set_tracking('mineStatus','OPEN')
         print "MULTIBALL ENDED"
         # start the music back up
         # if save polly is running, turn that on instead
@@ -705,6 +701,20 @@ class GoldMine(ep.EP_Mode):
         self.game.switch_blocker('remove',self.myID)
         # unload the mode
         self.unload()
+
+    def tilted(self):
+        if self.running:
+            self.update_tracking()
+        self.running = False
+        self.unload()
+
+    def update_tracking(self):
+        # turn motherlode off
+        self.game.set_tracking('motherlodeLit', False)
+        # reset the motherlode multiplier just in case
+        self.game.set_tracking('motherlodeMultiplier',1)
+        # set the status to open
+        self.game.set_tracking('mineStatus','OPEN')
 
     def abort_display(self):
         self.cancel_delayed("Display")

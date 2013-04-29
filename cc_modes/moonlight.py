@@ -30,6 +30,7 @@ class Moonlight(ep.EP_Mode):
         self.myID = "Moonlight Madness"
         self.starting = False
         self.ending = False
+        self.tilted = False
         self.bonanza = False
         # available shots and corresponding lights
         self.guns = [self.game.coils.leftGunFlasher, self.game.coils.rightGunFlasher]
@@ -454,6 +455,14 @@ class Moonlight(ep.EP_Mode):
         self.game.trough.balls_to_autoplunge = 0
         self.bonanza = False
         # unload the mode
+        self.unload()
+
+    def tilted(self):
+        if self.running:
+            self.game.set_tracking('moonlightStatus', True)
+            self.tilted = True
+            self.game.gi_control("ON")
+        self.running = False
         self.unload()
 
     # when the mode unloads, re-run ball starting

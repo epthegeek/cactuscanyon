@@ -28,6 +28,7 @@ class Combos(ep.EP_Mode):
     """Cactus Canyon Combos"""
     def __init__(self, game, priority):
         super(Combos, self).__init__(game, priority)
+        self.myID = "Combos"
 
         self.comboLights = [self.game.lamps.rightRampCombo,
                             self.game.lamps.leftRampCombo,

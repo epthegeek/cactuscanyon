@@ -285,18 +285,11 @@ class Quickdraw(ep.EP_Mode):
     def end_quickdraw(self):
         # status passes won/lost?
         print "ENDING QUICKDRAW"
-        # set the status to OPEN
-        self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
         # turn off the layer
         self.layer = None
-        # play a parting quote?
-        # If all the bad guys are now dead, make showdown ready, or ambush
-        if False not in self.game.show_tracking('badGuysDead'):
-            if self.game.show_tracking('showdownStatus') != "OVER":
-                self.game.set_tracking('showdownStatus',"READY")
-                print "SHOWDOWN STATUS IS READY"
-            else:
-                self.game.set_tracking('ambushStatus',"READY")
+
+        self.update_tracking()
+
         self.lamp_update()
         # turn the main music back on - if a second level mode isn't running
         print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
@@ -308,6 +301,24 @@ class Quickdraw(ep.EP_Mode):
         self.lamp_update()
         # remove the mode
         self.unload()
+
+    def tilted(self):
+        if self.running:
+            self.update_tracking()
+        self.running = False
+        self.unload()
+
+    def update_tracking(self):
+        # set the status to OPEN
+        self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
+        # If all the bad guys are now dead, make showdown ready, or ambush
+        if False not in self.game.show_tracking('badGuysDead'):
+            if self.game.show_tracking('showdownStatus') != "OVER":
+                self.game.set_tracking('showdownStatus',"READY")
+                print "SHOWDOWN STATUS IS READY"
+            else:
+                self.game.set_tracking('ambushStatus',"READY")
+
 
     def mode_stopped(self):
         self.running = False

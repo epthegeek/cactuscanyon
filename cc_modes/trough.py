@@ -44,6 +44,7 @@ class Trough(ep.EP_Mode):
     def __init__(self, game, position_switchnames, eject_switchname, eject_coilname,
                  early_save_switchnames, shooter_lane_switchname, drain_callback=None):
         super(Trough, self).__init__(game, 90)
+        self.myID = "Trough"
         self.position_switchnames = position_switchnames
         self.eject_switchname = eject_switchname
         self.eject_coilname = eject_coilname
@@ -76,6 +77,10 @@ class Trough(ep.EP_Mode):
         self.ball_save_multiple_saves = False
         self.ball_save_timer = 0
         self.ball_save_hold = 0
+
+
+    def tilted(self):
+        pass
 
     # specific to CC - deliniating the shooter lane as delayed start switch
     def sw_shooterLane_inactive(self,sw):

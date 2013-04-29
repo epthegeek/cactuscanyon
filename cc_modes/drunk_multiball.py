@@ -368,4 +368,13 @@ class DrunkMultiball(ep.EP_Mode):
         # unload the mode
         self.unload()
 
-
+    def tilted(self):
+        if self.running:
+            # update the tracking
+            self.game.set_tracking('drunkMultiballStatus', "OPEN")
+            # reset the mug hits for next time
+            self.game.set_tracking('beerMugHits',0)
+            # tick up the shots needed for next time
+            self.game.base.mug_shots += 3
+        self.running = False
+        self.unload()

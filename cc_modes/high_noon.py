@@ -574,20 +574,15 @@ class HighNoon(ep.EP_Mode):
     # end high noon
     def end_high_noon(self):
         print "END HIGH NOON BEGINS"
-        # reset a ton of tracking
-        self.game.set_tracking('highNoonStatus',"OPEN")
-        # reset the bage
+        # reset the badge
         self.game.badge.reset()
-        # reset all the ramps progress
-        self.game.set_tracking('leftRampStatus',1)
-        self.game.set_tracking('centerRampStatus',1)
-        self.game.set_tracking('rightRampStatus',1)
-        self.game.set_tracking('leftLoopStatus',1)
-        self.game.set_tracking('rightLoopStatus',1)
         # clear the stack level
         self.game.stack_level(6,False)
         # turn the flippers back on
         self.game.enable_flippers(True)
+
+        self.update_tracking()
+
         # turn the lights back on
         self.game.set_tracking('lampStatus',"ON")
         self.lamp_update()
@@ -604,6 +599,25 @@ class HighNoon(ep.EP_Mode):
         # unload the mode
         # clear the delays if any
         self.wipe_delays()
+        self.unload()
+
+    def update_tracking(self):
+        # reset a ton of tracking
+        self.game.set_tracking('highNoonStatus',"OPEN")
+        # reset all the ramps progress
+        self.game.set_tracking('leftRampStatus',1)
+        self.game.set_tracking('centerRampStatus',1)
+        self.game.set_tracking('rightRampStatus',1)
+        self.game.set_tracking('leftLoopStatus',1)
+        self.game.set_tracking('rightLoopStatus',1)
+        # turn the lights back on
+        self.game.set_tracking('lampStatus',"ON")
+
+    def tilted(self):
+        if self.running:
+            self.update_tracking()
+            self.game.badge.reset()
+        self.running = False
         self.unload()
 
     def church_bell(self,rings=12):

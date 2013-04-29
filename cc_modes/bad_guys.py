@@ -34,6 +34,7 @@ class BadGuys(ep.EP_Mode):
     """BadGuys for great justice - covers Quickdraw, Showdown, and ... ? """
     def __init__(self,game,priority):
         super(BadGuys, self).__init__(game,priority)
+        self.myID = "Bad Guys"
         self.coils = [self.game.coils.badGuyC0,
                       self.game.coils.badGuyC1,
                       self.game.coils.badGuyC2,
@@ -47,6 +48,9 @@ class BadGuys(ep.EP_Mode):
                       self.game.coils.rightGunFightPost]
         self.pending = [False,False,False,False]
         self.on_time = self.game.user_settings['Machine (Standard)']['Drop Target Boost']
+
+    def tilted(self):
+        pass
 
     def ball_drained(self):
     # just in case, drop all the coils when ball ends

@@ -24,6 +24,7 @@ class RightLoop(ep.EP_Mode):
     """Cactus Canyon Left Loop"""
     def __init__(self, game, priority):
         super(RightLoop, self).__init__(game, priority)
+        self.myID = "Right Loop"
         # set up a frame layer with the guns border on it
         self.border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_gunsBorder.frames[0])
         self.layer = None

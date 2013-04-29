@@ -25,6 +25,7 @@ class LeftRamp(ep.EP_Mode):
     """Cactus Canyon Left Ramp Mode"""
     def __init__(self, game, priority):
         super(LeftRamp, self).__init__(game, priority)
+        self.myID = "Left Ramp"
         # Set up the sounds
         # set up the animations
         self.border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_woodcutBorder.frames[0])

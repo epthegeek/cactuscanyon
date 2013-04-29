@@ -296,23 +296,8 @@ class Showdown(ep.EP_Mode):
         # award the badge light - showdown/ambush is 3
         self.game.badge.update(3)
 
-        # play a quote about bodycount
-        bodycount = self.game.show_tracking('showdownTotal')
-        # if the total for this round of showdown was higher stored, store it
-        if self.deathTally > bodycount:
-            self.game.set_tracking('showdownTotal',self.deathTally)
-        # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
-        # set the showdown status to over and setup ambush
-        self.game.set_tracking('showdownStatus',"OVER")
-        self.game.set_tracking('ambushStatus',"OPEN")
-        # turn off lights
-        for i in range(0,4,1):
-            print "END SHOWDOWN BAD GUYS " + str(i)
-            self.game.set_tracking('badGuysDead',False,i)
-            print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
-            # reset the badguy UP tracking just in case
-        for i in range (0,4,1):
-            self.game.set_tracking('badGuyUp',False,i)
+        self.update_tracking()
+
         self.lamp_update()
         # start up the main theme again if a higher level mode isn't running
         self.music_on(self.game.assets.music_mainTheme,mySlice=2)
@@ -331,14 +316,40 @@ class Showdown(ep.EP_Mode):
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_mobEnd)
         self.delay("Display",delay=2,handler=self.clear_layer)
-        # reset the showdown points for next time
-        self.game.set_tracking('showdownPoints',0)
         # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
         # unset the base busy flag
         self.game.base.busy = False
         self.game.base.queued -= 1
         # unload the mode
         self.delay(delay=2.1,handler=self.unload)
+
+    def tilted(self):
+        if self.running:
+            self.game.badge.update(3)
+            self.update_tracking()
+            self.unload()
+        self.running = False
+
+    def update_tracking(self):
+        bodycount = self.game.show_tracking('showdownTotal')
+        # if the total for this round of showdown was higher stored, store it
+        if self.deathTally > bodycount:
+            self.game.set_tracking('showdownTotal',self.deathTally)
+            # see if the death tally beats previous/existing and store in tracking if does - for showdown champ
+        # set the showdown status to over and setup ambush
+        self.game.set_tracking('showdownStatus',"OVER")
+        self.game.set_tracking('ambushStatus',"OPEN")
+        # turn off lights
+        for i in range(0,4,1):
+            print "END SHOWDOWN BAD GUYS " + str(i)
+            self.game.set_tracking('badGuysDead',False,i)
+            print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
+            # reset the badguy UP tracking just in case
+        for i in range (0,4,1):
+            self.game.set_tracking('badGuyUp',False,i)
+        # reset the showdown points for next time
+        self.game.set_tracking('showdownPoints',0)
+
 
     def mode_stopped(self):
         self.running = False

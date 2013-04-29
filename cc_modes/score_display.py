@@ -25,6 +25,7 @@ locale.setlocale(locale.LC_ALL, "")
 class ScoreLayer(dmd.GroupedLayer):
     def __init__(self, width, height, mode):
         super(ScoreLayer, self).__init__(width, height, mode)
+        self.myID = "Score Display"
         self.mode = mode
     def next_frame(self):
         """docstring for next_frame"""
@@ -64,6 +65,9 @@ class ScoreDisplay(ep.EP_Mode):
         anim = self.game.assets.dmd_1pBurnCycle
         self.burnLayer1p = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=3)
         self.burnLayer1p.composite_op = "blacksrc"
+
+    def tilted(self):
+        pass
 
     def set_left_players_justify(self, left_players_justify):
         """Call to set the justification of the left-hand players' scores in a multiplayer game.

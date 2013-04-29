@@ -25,6 +25,7 @@ class Mine(ep.EP_Mode):
     """Game mode for controlling the mine and such"""
     def __init__(self, game,priority):
         super(Mine, self).__init__(game, priority)
+        self.myID = "Mine"
         # set the hits to light the lock based on the config option
         # Settings are in triplets of "light lock 1, light lock 2, light multiball"
         # the last digit is for every step after The 'balls locked total' tracking item

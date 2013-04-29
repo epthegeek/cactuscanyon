@@ -22,6 +22,7 @@ class Train(ep.EP_Mode):
     """Cactus Canyon Interrupter Jones"""
     def __init__(self, game, priority):
         super(Train, self).__init__(game, priority)
+        self.myID = "Train"
         self.trainProgress = 0
         self.inMotion = False
         self.trainReset = False
@@ -31,6 +32,9 @@ class Train(ep.EP_Mode):
         self.ticksCounted = 0
         self.calibrating = False
         self.mytFail = True
+
+    def tilted(self):
+        pass
 
     def mode_started(self):
         # home the train

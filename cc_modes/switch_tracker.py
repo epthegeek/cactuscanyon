@@ -23,6 +23,10 @@ class SwitchTracker(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(SwitchTracker, self).__init__(game, priority)
+        self.myID = "Switch Tracker"
+
+    def tilted(self):
+        pass
 
     # flipper counts for audits
     def sw_flipperLwL_active(self,sw):

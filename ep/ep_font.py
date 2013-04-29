@@ -76,6 +76,11 @@ class ColorFont(object):
                     if dot > 1:
                         newdot = ((c << 4) | (dot & 0xF))
                         frame.set_dot(x, y, newdot)
+                    elif dot == 1:
+                        newdot = dot
+                        frame.set_dot(x,y, newdot)
+                    else:
+                        pass
 
             self.bitmaps[c] = frame
 

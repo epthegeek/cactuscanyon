@@ -23,6 +23,7 @@ class SuperFilter(ep.EP_Mode):
     """Game mode for controlling the skill shot"""
     def __init__(self, game,priority):
         super(SuperFilter, self).__init__(game, priority)
+        self.myID = "Super Filter"
 
     # valid jackpot shots
 

@@ -25,6 +25,7 @@ class RightRamp(ep.EP_Mode):
     """Cactus Canyon Right Ramp Mode"""
     def __init__(self, game, priority):
         super(RightRamp, self).__init__(game, priority)
+        self.myID = "Right Ramp"
         # Set up the sounds
 
     def mode_started(self):

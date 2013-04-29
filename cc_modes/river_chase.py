@@ -278,7 +278,6 @@ class RiverChase(ep.EP_Mode):
     # fail
     def polly_died(self):
         self.game.peril = False
-        self.running = False
         self.wipe_delays()
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
         textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
@@ -372,6 +371,18 @@ class RiverChase(ep.EP_Mode):
         self.shotsSoFar = 0
         self.lamp_update()
         self.end_save_polly()
+
+    def tilted(self):
+        if self.running:
+        # set the tracking on the ramps
+            if self.game.save_polly.winsRequired and not self.won:
+                self.game.set_tracking('leftRampStage',1)
+            # if wins are not required then the ramp goes to 'done' even if lost
+            else:
+                self.game.set_tracking('leftRampStage',5)
+        self.running = False
+        # then unload
+        self.unload()
 
     # clean up and exit
     def end_save_polly(self):

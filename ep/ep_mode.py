@@ -355,6 +355,12 @@ class EP_Mode(object):
         self.wipe_delays()
         self.game.modes.remove(self)
 
+    def tilted(self):
+    # default tilt action is just to unload - this is here so it can be redefined
+    # in each mode if something extra is needed
+        print "Tilted: " + self.myID
+        self.unload()
+
     # music stopper with output
     def stop_music(self,slice =0,execute=True):
         # if given a slice number to check - do that

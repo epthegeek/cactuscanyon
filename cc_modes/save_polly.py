@@ -40,7 +40,6 @@ class SavePolly(ep.EP_Mode):
         self.game.switch_blocker('add',self.myID)
         # set the polly indicator
         self.game.peril = True
-        self.paused = False
         self.shotsSoFar = 0
         self.cows = [self.game.assets.sfx_cow1, self.game.assets.sfx_cow2]
         self.modeTimer = 0
@@ -69,7 +68,11 @@ class SavePolly(ep.EP_Mode):
             self.shotValue += 50000
         if self.game.bank_robbery.won:
             self.shotValue += 200000
+        self.running = False
+        self.halted = False
         self.won = False
+        self.paused = False
+        self.finishing_up = False
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:

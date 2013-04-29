@@ -38,6 +38,9 @@ class Match(ep.EP_Mode):
 
     # TODO maybe set this up so it shows full scores, then they scroll off to the left for more pizazz
 
+    def tilted(self):
+        pass
+
     def mode_started(self):
         self.winners = 0
         self.zeroLayer.set_text("0",blink_frames=0)

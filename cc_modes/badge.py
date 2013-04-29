@@ -22,6 +22,7 @@ class Badge(ep.EP_Mode):
     """Gunfight code """
     def __init__(self,game,priority):
         super(Badge, self).__init__(game,priority)
+        self.myID = "Badge"
         self.starLamps = [self.game.lamps.starMotherlode,
                           self.game.lamps.starCombo,
                           self.game.lamps.starBartBrothers,
@@ -50,6 +51,9 @@ class Badge(ep.EP_Mode):
                           self.game.assets.quote_gunfightWinDeputy,
                           self.game.assets.quote_gunfightWinSheriff,
                           self.game.assets.quote_gunfightWinMarshall]
+
+    def tilted(self):
+        pass
 
     def reset(self):
         # reset the badge progress

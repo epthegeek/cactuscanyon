@@ -290,3 +290,9 @@ class MoveYourTrain(ep.EP_Mode):
         self.game.base.queued -= 1
         # unload
         self.unload()
+
+    def tilted(self):
+        if self.running:
+            self.game.set_tracking("mytStatus", "OPEN")
+        self.running = False
+        self.unload()

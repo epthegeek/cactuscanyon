@@ -603,6 +603,13 @@ class BionicBart(ep.EP_Mode):
 
         self.delay(delay=duration,handler=self.leader_final_quote,param="fail")
 
+    def tilted(self):
+        # reset all the star status
+        self.game.badge.reset()
+        # set bionic
+        self.game.set_tracking('bionicStatus',"OPEN")
+        self.unload()
+
     def leader_final_quote(self,condition):
         if condition == "win":
             duration = self.game.sound.play(self.game.assets.sfx_cheers)

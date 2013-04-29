@@ -29,6 +29,7 @@ class LastCall(ep.EP_Mode):
     """Last Call multiball mode ... """
     def __init__(self,game,priority):
         super(LastCall, self).__init__(game,priority)
+        self.myID = "Last Call"
         self.starting = False
         self.ending = False
         self.backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_simpleBorder.frames[0])
@@ -381,18 +382,35 @@ class LastCall(ep.EP_Mode):
         # wait until all the balls are back in the trough
         self.delay("Operational",delay=3,handler=self.ball_collection)
 
-    def ball_collection(self):
+    def ball_collection(self,tilted=False):
         # holding pattern until the balls are all back
         if self.game.trough.is_full() or self.game.fakePinProc:
-            self.end()
+            self.end(tilted)
         else:
             self.delay("Operational",delay=2,handler=self.ball_collection)
 
-    def end(self):
+    def tilted(self):
+        if self.running:
+            self.ball_collection(True)
+
+    def end(self,tilted=False):
+        if tilted:
+            # clear the interrupter layer in case of a tilt
+            self.game.interrupter.clear_layer()
+            # turn on the GI
+            self.game.gi_control("ON")
+
         # turn off the ending flag
         self.ending = False
         # if there are more than one player, que up the next one
         if len(self.playerList) > 1:
+            # if we tilted some things have to get fixed
+            if tilted:
+                # update the lamps
+                self.lamp_update()
+                # turn the music back on
+                self.music_on(self.game.assets.music_lastCall)
+
             # re-run set players with any players left after the first one
             self.set_players(self.playerList[1:])
             # then call start for the next player

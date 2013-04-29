@@ -259,6 +259,16 @@ class Stampede(ep.EP_Mode):
         # unload the mode
         self.delay(delay=2,handler=self.unload)
 
+    def tilted(self):
+        if self.running:
+            # reset the ramp status
+            for each in self.shots:
+                self.game.set_tracking(each,1)
+            # badge light - stampede is 4
+            self.game.badge.update(4)
+        self.running = False
+        self.unload()
+
     def abort_display(self):
         self.cancel_delayed('Display')
         self.clear_layer()

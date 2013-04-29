@@ -205,6 +205,7 @@ class EP_LampShow(object):
 
     def __init__(self, game):
         super(EP_LampShow, self).__init__()
+        self.myID = "Lamp Show"
         self.game = game
         self.reset()
 
@@ -269,6 +270,7 @@ class LampShowMode(ep.EP_Mode):
     """
     def __init__(self, game):
         super(LampShowMode, self).__init__(game, 3)
+        self.myID = "Lamp Show Mode"
         self.lampshow = EP_LampShow(self.game)
         self.show_over = True
         self.logger = logging.getLogger('game.lamps')
@@ -375,6 +377,7 @@ class GILampShowMode(ep.EP_Mode):
     """
     def __init__(self, game):
         super(GILampShowMode, self).__init__(game, 3)
+        self.myID = "GI Lamp Show Mode"
         self.lampshow = EP_LampShow(self.game)
         self.show_over = True
         self.logger = logging.getLogger('game.lamps')

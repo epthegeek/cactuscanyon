@@ -91,17 +91,17 @@ class BaseGameMode(ep.EP_Mode):
         self.game.modes.add(self.game.bad_guys)
 
     def remove_modes(self):
-        self.game.modes.remove(self.game.bonus_lanes)
-        self.game.modes.remove(self.game.combos)
-        self.game.modes.remove(self.game.right_ramp)
-        self.game.modes.remove(self.game.left_ramp)
-        self.game.modes.remove(self.game.center_ramp)
-        self.game.modes.remove(self.game.left_loop)
-        self.game.modes.remove(self.game.right_loop)
-        self.game.modes.remove(self.game.mine)
-        self.game.modes.remove(self.game.bart)
-        self.game.modes.remove(self.game.saloon)
-        self.game.modes.remove(self.game.bad_guys)
+        self.game.bonus_lanes.unload()
+        self.game.combos.unload()
+        self.game.right_ramp.unload()
+        self.game.left_ramp.unload()
+        self.game.center_ramp.unload()
+        self.game.left_loop.unload()
+        self.game.right_loop.unload()
+        self.game.mine.unload()
+        self.game.bart.unload()
+        self.game.saloon.unload()
+        self.game.bad_guys.unload()
 
     def ball_drained(self):
         print "CHECKING TRACKING ball drained LR: " + str(self.game.show_tracking('leftRampStage'))
@@ -120,22 +120,27 @@ class BaseGameMode(ep.EP_Mode):
             self.game.coils.mineFlasher.disable()
             # stop the music
             self.stop_music()
-            # play the ball end riff
-            self.game.sound.play(self.game.assets.sfx_ballEnd)
             # turn off ball save
             self.game.ball_search.disable()
             # turn off the flippers
             self.game.enable_flippers(False)
             if self.game.show_tracking('tiltStatus') < 3:
+                # play the ball end riff
+                self.game.sound.play(self.game.assets.sfx_ballEnd)
                 # go check the bonus - after that we'll finish the ball
                 # delay 1 second to give other modes time too set the busy if needed
                 self.delay(delay=1,handler=self.check_bonus)
+            # this is the last ball drain on a tilt
             else:
-                # unload the modes
                 self.wipe_delays()
-                self.remove_modes()
                 self.layer = None
-                self.game.ball_ended()
+                self.game.interrupter.clear_layer()
+                # if we tilted out of a moonlight - we go to start ball, not ball ended
+                if self.game.moonlight.tilted:
+                    self.game.moonlight.tilted = False
+                    self.game.ball_starting()
+                else:
+                    self.game.ball_ended()
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
@@ -332,6 +337,9 @@ class BaseGameMode(ep.EP_Mode):
         # if that puts us at three, time to tilt
         if status == 3:
             self.tilt()
+        # if it keeps banging, ignore it
+        elif status > 3:
+            pass
         # for 2 or 1 hand off to interrupter jones
         else:
             self.game.interrupter.tilt_danger(status)
@@ -340,13 +348,15 @@ class BaseGameMode(ep.EP_Mode):
         # Process tilt.
         # First check to make sure tilt hasn't already been processed once.
         # No need to do this stuff again if for some reason tilt already occurred.
-        if self.game.show_tracking('tiltStatus') == 3:
+        if self.game.show_tracking('tiltStatus') >= 3:
             # disable status
             self.game.statusOK = False
 
             self.game.game_data['Audits']['Tilts'] += 1
 
             self.game.interrupter.tilt_display()
+
+
             # Disable flippers so the ball will drain.
             self.game.enable_flippers(enable=False)
 
@@ -360,22 +370,24 @@ class BaseGameMode(ep.EP_Mode):
             self.game.coils.rightGunFightPost.disable()
             self.game.coils.leftGunFightPost.disable()
 
-            # Make sure the ball search won't run while ball is draining.
-            self.game.ball_search.disable()
-
             # Ensure all lamps are off.
             for lamp in self.game.lamps:
                 lamp.disable()
 
-            # Kick balls out of places it could be stuck.
-            if self.game.switches.minePopper.is_active():
-                self.game.coils.minePopper.pulse(self.game.mountain.kickStrength)
-            if self.game.switches.saloonPopper.is_active():
-                self.game.coils.saloonPopper.pulse(self.game.saloon.saloonPulse)
-        #play sound
-        self.stop_music()
-        self.game.sound.play(self.game.assets.sfx_spinDown)
-        #play video ?
+            #play sound
+            self.stop_music()
+            self.game.sound.play(self.game.assets.sfx_spinDown)
+
+            # tilt out all the modes
+            modequeue_copy = list(self.game.modes)
+            for mode in modequeue_copy:
+                print "Tilt Roll Call: " + mode.myID
+                if getattr(mode, "tilted", None):
+                    mode.tilted()
+
+
+    def tilted(self):
+        pass
 
     ###
     ###  ___       _

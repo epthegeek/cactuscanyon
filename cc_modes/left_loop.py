@@ -25,6 +25,7 @@ class LeftLoop(ep.EP_Mode):
     """Cactus Canyon Left Loop"""
     def __init__(self, game, priority):
         super(LeftLoop, self).__init__(game, priority)
+        self.myID = "Left Loop"
         # set up the animations they are to alternate
         self.anims = []
         anim0 = self.game.assets.dmd_horseRunLeft
