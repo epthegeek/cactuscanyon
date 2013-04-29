@@ -184,10 +184,10 @@ class RightLoop(ep.EP_Mode):
     def show_marksman_award(self):
         anim = self.game.assets.dmd_smokingCard
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=7)
-        awardTextTop = dmd.TextLayer(128/3,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        awardTextBottom = dmd.TextLayer(128/3,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-        awardTextTop.set_text(self.awardString)
-        awardTextBottom.set_text(self.awardPoints)
+        awardTextTop = ep.EP_TextLayer(128/3,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextBottom = ep.EP_TextLayer(128/3,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+        awardTextTop.set_text(self.awardString,color=ep.BROWN)
+        awardTextBottom.set_text(self.awardPoints,color=ep.RED)
         completeFrame = dmd.GroupedLayer(128, 32, [animLayer,awardTextTop,awardTextBottom])
         self.layer = completeFrame
         self.delay(name="Display",delay=2,handler=self.clear_layer)
@@ -195,15 +195,15 @@ class RightLoop(ep.EP_Mode):
 
     def show_award_text(self,blink=None):
     # create the two text lines
-        awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+        awardTextTop = ep.EP_TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         # if blink frames we have to set them
         if blink:
-            awardTextTop.set_text(self.awardString,blink_frames=blink,seconds=1)
-            awardTextBottom.set_text(self.awardPoints,blink_frames=blink,seconds=1)
+            awardTextTop.set_text(self.awardString,blink_frames=blink,seconds=1,color=ep.BROWN)
+            awardTextBottom.set_text(self.awardPoints,blink_frames=blink,seconds=1,color=ep.RED)
         else:
-            awardTextTop.set_text(self.awardString)
-            awardTextBottom.set_text(self.awardPoints)
+            awardTextTop.set_text(self.awardString,color=ep.BROWN)
+            awardTextBottom.set_text(self.awardPoints,color=ep.RED)
             # combine them
         completeFrame = dmd.GroupedLayer(128, 32, [self.border,awardTextTop,awardTextBottom])
         # swap in the new layer

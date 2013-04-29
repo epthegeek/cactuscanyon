@@ -47,14 +47,15 @@ class Assets():
         self.font_5px_AZ.make_colors([ep.GREY,ep.GREEN,ep.ORANGE,ep.YELLOW,ep.BROWN,ep.DARK_BROWN,ep.MAGENTA,ep.DARK_RED])
         self.font_5px_AZ_inverted = dmd.Font(self.dmd_path + "Font_3_CactusCanyon_inverted.dmd")
         self.font_5px_bold_AZ = ep.ColorFont(self.dmd_path + "Font_21_CactusCanyon.dmd")
-        self.font_5px_bold_AZ.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.ORANGE,ep.RED,ep.BROWN,ep.DARK_BROWN])
+        self.font_5px_bold_AZ.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.RED,ep.BROWN,ep.DARK_BROWN])
 
         self.font_5px_bold_AZ_outline = ep.ColorFont(self.dmd_path + "Font_21_mask_CactusCanyon.dmd")
         self.font_5px_bold_AZ_outline.make_colors([ep.DARK_GREEN])
         self.font_5px_bold_AZ_outline.tracking = -1
         self.font_5px_bold_AZ_outline.composite_op = "blacksrc"
 
-        self.font_6px_az = dmd.Font(self.dmd_path + "Font_19_CactusCanyon.dmd")
+        self.font_6px_az = ep.ColorFont(self.dmd_path + "Font_19_CactusCanyon.dmd")
+        self.font_6px_az.make_colors([ep.GREEN,ep.YELLOW,ep.RED])
         self.font_6px_az_inverse = dmd.Font(self.dmd_path + "Font_Custom_6px.dmd")
         self.font_6px_az_inverse.composite_op = "blacksrc"
 
@@ -69,7 +70,7 @@ class Assets():
         self.font_7px_bold_az.make_colors([ep.BROWN,ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.ORANGE,ep.RED])
 
         self.font_9px_az = ep.ColorFont(self.dmd_path + "Font_15_CactusCanyon.dmd")
-        self.font_9px_az.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.ORANGE,ep.RED,ep.DARK_GREEN,ep.DARK_BROWN])
+        self.font_9px_az.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.ORANGE,ep.RED,ep.DARK_GREEN,ep.BROWN,ep.DARK_BROWN])
         self.font_9px_az_mid = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_2.dmd")
         self.font_9px_az_dim = ep.ColorFont(self.dmd_path + "Font_15_CactusCanyon_1.dmd")
         self.font_9px_az_dim.make_colors([ep.RED,ep.ORANGE])
@@ -97,7 +98,7 @@ class Assets():
     #    self.font_13px_wide_score = dmd.Font(self.dmd_path + "Font_9_CactusCanyon.dmd")
 
         self.font_15px_az = ep.ColorFont(self.dmd_path + "Font_17_CactusCanyon.dmd")
-        self.font_15px_az.make_colors([ep.ORANGE,ep.BROWN,ep.CYAN])
+        self.font_15px_az.make_colors([ep.ORANGE,ep.BROWN,ep.CYAN,ep.GREEN,ep.RED])
 
         self.font_15px_bionic = dmd.Font(self.dmd_path + "Font_Custom_15px.dmd")
 

@@ -121,10 +121,10 @@ class Combos(ep.EP_Mode):
         else:
             textString = "COMBO AWARDED"
             textString2 = str(combos) + " COMBOS"
-        textLine1 = dmd.TextLayer(64,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False).set_text(textString)
-        textLine2 = dmd.TextLayer(64,11,self.game.assets.font_9px_az,justify="center",opaque=False)
-        textLine3 = dmd.TextLayer(64,25,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        textLine2.set_text(textString2,blink_frames=10)
+        textLine1 = ep.EP_TextLayer(64,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False).set_text(textString,color=ep.BROWN)
+        textLine2 = ep.EP_TextLayer(64,11,self.game.assets.font_9px_az,justify="center",opaque=False)
+        textLine3 = ep.EP_TextLayer(64,25,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        textLine2.set_text(textString2,blink_frames=10,color=ep.GREEN)
         combosForStar = self.game.user_settings['Gameplay (Feature)']['Combos for Star']
         diff = combosForStar - combos
         if combos > combosForStar:
@@ -133,7 +133,7 @@ class Combos(ep.EP_Mode):
             comboString = "BADGE AWARDED"
         else:
             comboString = str(diff) + " MORE FOR BADGE!"
-        textLine3.set_text(comboString)
+        textLine3.set_text(comboString,color=ep.BROWN)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
         self.layer = combined
         print "I MADE IT THROUGH COMBO DISPLAY"

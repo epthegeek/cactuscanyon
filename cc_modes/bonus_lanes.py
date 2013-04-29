@@ -109,11 +109,11 @@ class BonusLanes(ep.EP_Mode):
 
     def show_bonus_award(self):
         ## the top text line is just bonus
-        awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        awardTextTop.set_text("BONUS:")
+        awardTextTop = ep.EP_TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextTop.set_text("BONUS:",color=ep.GREEN)
         ## The second line is the tracking value + X
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-        awardTextBottom.set_text(str(self.game.show_tracking('bonusX')) + "X")
+        awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+        awardTextBottom.set_text(str(self.game.show_tracking('bonusX')) + "X",color=ep.BROWN)
         # combine the text onto the held cactus animation
         if self.layer == None:
             self.layer = self.no_layer()

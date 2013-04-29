@@ -131,12 +131,12 @@ class Bart(ep.EP_Mode):
         self.setup()
         # show the 'challenges you' display
         # clear the banner layer
-        textLayer1 = dmd.TextLayer(42,2,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
-        textLayer1.set_text(self.nameLine)
-        textLayer2 = dmd.TextLayer(42,16,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
-        textLayer2.set_text("CHALLENGES")
-        textLayer3 = dmd.TextLayer(42,24,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
-        textLayer3.set_text("YOU")
+        textLayer1 = ep.EP_TextLayer(42,2,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer1.set_text(self.nameLine,color=ep.BROWN)
+        textLayer2 = ep.EP_TextLayer(42,16,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer2.set_text("CHALLENGES",color=ep.RED)
+        textLayer3 = ep.EP_TextLayer(42,24,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer3.set_text("YOU",color=ep.RED)
 
         textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
 
@@ -246,10 +246,10 @@ class Bart(ep.EP_Mode):
             offset = 40
         else:
             offset = 42
-        textLayer1 = dmd.TextLayer(offset,1,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(self.nameLine)
-        textLayer2 = dmd.TextLayer(offset,9,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(str(self.hitString))
-        textLayer3 = dmd.TextLayer(offset,17,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText)
-        textLayer4 = dmd.TextLayer(offset,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text("TO COLLECT")
+        textLayer1 = ep.EP_TextLayer(offset,1,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(self.nameLine,color=ep.BROWN)
+        textLayer2 = ep.EP_TextLayer(offset,9,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(str(self.hitString))
+        textLayer3 = ep.EP_TextLayer(offset,17,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText,color=ep.YELLOW)
+        textLayer4 = ep.EP_TextLayer(offset,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text("TO COLLECT",color=ep.YELLOW)
         self.textLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3,textLayer4])
         self.textLayer.composite_op = "blacksrc"
         # play a fancy lamp show
@@ -308,8 +308,8 @@ class Bart(ep.EP_Mode):
             self.drop_posse()
         # setup the display
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_weaveBorder.frames[0])
-        textLayer1 = dmd.TextLayer(64,2,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED")
-        textLayer2 = dmd.TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString))
+        textLayer1 = ep.EP_TextLayer(64,1,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED",color=ep.BROWN)
+        textLayer2 = ep.EP_TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString),color=ep.GREEN)
         if total < self.bartsForStar:
             theText = str(self.bartsForStar - total) + " MORE FOR BADGE"
         elif total == self.bartsForStar:
@@ -318,7 +318,7 @@ class Bart(ep.EP_Mode):
             self.game.badge.update(2)
         else:
             theText = str(globalTotal) + " DEFEATED!"
-        textLayer3 = dmd.TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText)
+        textLayer3 = ep.EP_TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText, color=ep.RED)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
          # light gunfight?
         self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)

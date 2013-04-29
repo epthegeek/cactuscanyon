@@ -193,15 +193,15 @@ class LeftLoop(ep.EP_Mode):
 
     def show_award_text(self,blink=None):
         # create the two text lines
-        awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+        awardTextTop = ep.EP_TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
+        awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         # if blink frames we have to set them
         if blink:
-            awardTextTop.set_text(self.awardString,blink_frames=blink,seconds=1)
-            awardTextBottom.set_text(self.awardPoints,blink_frames=blink,seconds=1)
+            awardTextTop.set_text(self.awardString,blink_frames=blink,seconds=1,color=ep.DARK_BROWN)
+            awardTextBottom.set_text(self.awardPoints,blink_frames=blink,seconds=1,color=ep.BROWN)
         else:
-            awardTextTop.set_text(self.awardString)
-            awardTextBottom.set_text(self.awardPoints)
+            awardTextTop.set_text(self.awardString,color=ep.DARK_BROWN)
+            awardTextBottom.set_text(self.awardPoints,color=ep.BROWN)
         # combine them
         if self.layer == None:
             self.layer = self.no_layer()

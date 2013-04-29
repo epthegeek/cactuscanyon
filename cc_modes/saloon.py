@@ -370,19 +370,19 @@ class Saloon(ep.EP_Mode):
         # set the backdrop for the revealed award
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_moneybagBorder.frames[0])
         # set the text for the award
-        awardTextTop = dmd.TextLayer(76,4,self.game.assets.font_9px_az,justify="center",opaque=False)
+        awardTextTop = dmd.TextLayer(76,3,self.game.assets.font_9px_az,justify="center",opaque=False)
         awardTextTop.set_text("YOUR BOUNTY:")
         awardTextTop.composite_op = "blacksrc"
         if prizeText2 != None:
-            awardTextMiddle = dmd.TextLayer(76,15,self.game.assets.font_6px_az,justify="center",opaque=False)
-            awardTextBottom = dmd.TextLayer(76,24,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-            awardTextMiddle.set_text(prizeText)
+            awardTextMiddle = ep.EP_TextLayer(76,15,self.game.assets.font_6px_az,justify="center",opaque=False)
+            awardTextBottom = ep.EP_TextLayer(76,24,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+            awardTextMiddle.set_text(prizeText,color=ep.GREEN)
             awardTextMiddle.composite_op = "blacksrc"
-            awardTextBottom.set_text(prizeText2)
+            awardTextBottom.set_text(prizeText2,color=ep.GREEN)
             self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextBottom,awardTextMiddle,awardTextTop,animLayer])
         else:
-            awardTextMiddle = dmd.TextLayer(76,17,self.game.assets.font_9px_az,justify="center",opaque=False)
-            awardTextMiddle.set_text(prizeText)
+            awardTextMiddle = ep.EP_TextLayer(76,17,self.game.assets.font_9px_az,justify="center",opaque=False)
+            awardTextMiddle.set_text(prizeText,color=ep.GREEN)
             self.layer= dmd.GroupedLayer(128,32,[backdrop,awardTextMiddle,awardTextTop,animLayer])
         # play a lampshow
         self.game.lampctrl.play_show(self.game.assets.lamp_topToBottom, repeat=False,callback=self.lamp_update)
