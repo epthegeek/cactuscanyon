@@ -57,7 +57,7 @@ class Interrupter(ep.EP_Mode):
             foo = self.rotator.pop(0)
             self.rotator.append(foo)
             ## then shift 0 to the end
-            self.delay(name="clearInterrupter",delay=1.5,handler=self.clear_layer)
+            self.delay(name="Display",delay=1.5,handler=self.clear_layer)
         # with an idle call, set a repeat
         if idle:
             self.delay(name="idle",delay=10,handler=self.display_player_number,param=True)
@@ -66,12 +66,12 @@ class Interrupter(ep.EP_Mode):
         self.cancel_delayed("idle")
 
     def abort_player_number(self):
-        self.cancel_delayed("clearInterrupter")
+        self.cancel_delayed("Display")
         self.cancel_delayed("idle")
         self.layer = None
 
     def tilt_danger(self,status):
-        self.cancel_delayed("Tilting")
+        self.cancel_delayed("Display")
         # if it puts us at 2, time for second warning
         if status == 2:
             print "DANGER DANGER"
@@ -86,21 +86,21 @@ class Interrupter(ep.EP_Mode):
             # play a sound
             myWait = self.play_tilt_sound()
             self.delay(delay=0.5,handler=self.play_tilt_sound)
-            self.delay("Tilting",delay=1,handler=self.clear_layer)
+            self.delay("Display",delay=1,handler=self.clear_layer)
 
         # otherwise this must be the first warning
         else:
-            print "DANGER"
+            print "Display"
             #add a display layer and add a delayed removal of it.
             line1 = ep.EP_TextLayer(128/2, 10, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R",color=ep.RED)
             line1.composite_op = "blacksrc"
             self.layer = line1
             #play sound
             self.play_tilt_sound()
-            self.delay("Tilting",delay=1,handler=self.clear_layer)
+            self.delay("Display",delay=1,handler=self.clear_layer)
 
     def tilt_display(self):
-        self.cancel_delayed("Tilting")
+        self.cancel_delayed("Display")
         # build a tilt graphic
         tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT",color=ep.RED)
         # Display the tilt graphic
