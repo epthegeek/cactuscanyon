@@ -71,6 +71,7 @@ class Interrupter(ep.EP_Mode):
         self.layer = None
 
     def tilt_danger(self,status):
+        self.cancel_delayed("Tilting")
         # if it puts us at 2, time for second warning
         if status == 2:
             print "DANGER DANGER"
@@ -85,7 +86,7 @@ class Interrupter(ep.EP_Mode):
             # play a sound
             myWait = self.play_tilt_sound()
             self.delay(delay=0.5,handler=self.play_tilt_sound)
-            self.delay(delay=1,handler=self.clear_layer)
+            self.delay("Tilting",delay=1,handler=self.clear_layer)
 
         # otherwise this must be the first warning
         else:
@@ -96,9 +97,10 @@ class Interrupter(ep.EP_Mode):
             self.layer = line1
             #play sound
             self.play_tilt_sound()
-            self.delay(delay=1,handler=self.clear_layer)
+            self.delay("Tilting",delay=1,handler=self.clear_layer)
 
     def tilt_display(self):
+        self.cancel_delayed("Tilting")
         # build a tilt graphic
         tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT",color=ep.RED)
         # Display the tilt graphic
