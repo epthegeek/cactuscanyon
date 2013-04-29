@@ -179,8 +179,8 @@ class Attract(ep.EP_Mode):
             tumbleweedWipe = dmd.GroupedLayer(128,32,[weedBack,weedFront])
             weedWait = len(anim.frames) / 15.0
             self.layer = tumbleweedWipe
-            attractMusic = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Music']
-            if attractMusic:
+            sounds = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Sounds']
+            if sounds:
                 self.game.sound.play(self.game.assets.sfx_tumbleWind)
         # two versions of the transition creation to cover if a direction is needed or not
         elif frameB['direction'] != False:
