@@ -121,11 +121,11 @@ class Stampede(ep.EP_Mode):
     def main_display(self):
         # this is the main score display for stampede - it's got score on it, so we'll have to loop
         # title line
-        titleLine = dmd.TextLayer(128/2, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("STAMPEDE MULTIBALL")
+        titleLine = ep.EP_TextLayer(128/2, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("STAMPEDE MULTIBALL",color=ep.PURPLE)
         # score line
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(64, 7, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString)
+        scoreLine = ep.EP_TextLayer(64, 7, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,color=ep.YELLOW)
         scoreLine.composite_op = "blacksrc"
         # group with cow layer
         combined = dmd.GroupedLayer(128,32,[self.cowLayer,titleLine,scoreLine])
@@ -185,6 +185,7 @@ class Stampede(ep.EP_Mode):
 
     def jackpot_wiff(self,step=1):
         if step == 1:
+            layerCopy = self.layer
             # load the animation based on which was last played
             anim = self.anims[0]
             banner = self.banners[0]
@@ -196,8 +197,8 @@ class Stampede(ep.EP_Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=5)
             animLayer.composite_op = "blacksrc"
             bannerLayer = dmd.AnimatedLayer(frames=banner.frames,hold=True, opaque=False,repeat=False,frame_time=5)
-            bannerLayer.composite_op = "blacksrc"
-            combined = dmd.GroupedLayer(128,32,[bannerLayer,animLayer])
+            #bannerLayer.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[layerCopy,bannerLayer,animLayer])
             combined.composite_op = "blacksrc"
             self.layer = combined
             # and some sounds

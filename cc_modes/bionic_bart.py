@@ -474,6 +474,7 @@ class BionicBart(ep.EP_Mode):
             # activate the current shots
             self.activate_shots(self.shotsToLoad - self.shots)
             # kick the ball
+            print "Bionic Hit Saloon Kick"
             self.game.saloon.kick()
             # start a ball save if configured
             if self.ballSave:
@@ -502,9 +503,6 @@ class BionicBart(ep.EP_Mode):
         if step == 1:
             # audit
             self.game.game_data['Feature']['Bionic Bart Kills'] += 1
-            # set bart flag to dead
-            self.game.set_tracking('bionicStatus', "DEAD")
-
             # stop the music
             self.stop_music()
             # load up the defeated animation
@@ -649,7 +647,10 @@ class BionicBart(ep.EP_Mode):
         # turn the main music back on
         if self.game.trough.num_balls_in_play != 0:
             self.music_on(self.game.assets.music_mainTheme)
+        # set bart flag to dead
+        self.game.set_tracking('bionicStatus', "DEAD")
         # kick the ball if it's held
+        print "Bionic Finish Up Saloon Kick"
         self.game.saloon.kick()
         # unset the base busy flag
         self.game.base.busy = False
