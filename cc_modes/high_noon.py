@@ -576,6 +576,7 @@ class HighNoon(ep.EP_Mode):
         print "END HIGH NOON BEGINS"
         # reset the badge
         self.game.badge.reset()
+        self.game.lamp_control.badge()
         # clear the stack level
         self.game.stack_level(6,False)
         # turn the flippers back on
