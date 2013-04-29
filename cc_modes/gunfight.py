@@ -208,10 +208,10 @@ class Gunfight(ep.EP_Mode):
         self.game.score(points)
         self.game.add_bonus(100000)
         # show the win screen
-        textLine1 = dmd.TextLayer(64, 0, self.game.assets.font_7px_bold_az, "center", opaque=True).set_text("BAD GUY SHOT!")
-        textLine2 = ep.pulse_text(self,64,9,ep.format_score(points))
-        textLine3 = dmd.TextLayer(64, 20, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString3)
-        textLine4 = dmd.TextLayer(64, 26, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString4)
+        textLine1 = ep.EP_TextLayer(64, 0, self.game.assets.font_7px_bold_az, "center", opaque=True).set_text("BAD GUY SHOT!",color=ep.YELLOW)
+        textLine2 = ep.pulse_text(self,64,9,ep.format_score(points),color=ep.GREEN)
+        textLine3 = ep.EP_TextLayer(64, 20, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString3,color=ep.BROWN)
+        textLine4 = ep.EP_TextLayer(64, 26, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString4,color=ep.BROWN)
         self.layer = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,textLine4])
         self.delay("Operational",delay=2,handler=self.end_gunfight)
 
@@ -337,7 +337,7 @@ class Gunfight(ep.EP_Mode):
     def gunfight_release(self):
         # play the draw quote
         self.game.base.play_quote(self.game.assets.quote_gunfightDraw)
-        text = dmd.TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2)
+        text = ep.EP_TextLayer(28,8,self.game.assets.font_12px_az,"center",opaque=False).set_text("DRAW!",blink_frames=2,color=ep.RED)
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_gunfightBoots.frames[8])
         self.layer = dmd.GroupedLayer(128,32,[backdrop,text])
         # turn the GI back on

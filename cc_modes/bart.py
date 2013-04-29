@@ -318,7 +318,7 @@ class Bart(ep.EP_Mode):
             self.game.badge.update(2)
         else:
             theText = str(globalTotal) + " DEFEATED!"
-        textLayer3 = ep.EP_TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText, color=ep.RED)
+        textLayer3 = ep.EP_TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText, color=ep.DARK_RED)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
          # light gunfight?
         self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
