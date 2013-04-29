@@ -40,6 +40,7 @@ class BionicBart(ep.EP_Mode):
                         self.game.assets.dmd_zoinkBanner]
         self.ballSave = "Enabled" == self.game.user_settings['Gameplay (Feature)']['Bionic Bart Ball Save']
         self.saveDuration = self.game.user_settings['Gameplay (Feature)']['Bionic Bart Ball Save Timer']
+        self.won = False
 
     def ball_drained(self):
         # if we lose all the balls the battle is lost
@@ -103,6 +104,7 @@ class BionicBart(ep.EP_Mode):
         self.hits = 0
         self.hitValue = 500000
         self.activeShots = []
+        self.won = False
 
     # switches
     def sw_leftLoopTop_active(self,sw):
@@ -503,6 +505,7 @@ class BionicBart(ep.EP_Mode):
         if step == 1:
             # audit
             self.game.game_data['Feature']['Bionic Bart Kills'] += 1
+            self.won = True
             # stop the music
             self.stop_music()
             # load up the defeated animation
@@ -596,8 +599,6 @@ class BionicBart(ep.EP_Mode):
         duration = self.game.base.play_quote(self.game.assets.quote_failBionicBart)
         # reset all the star status
         self.game.badge.reset()
-        # set bionic
-        self.game.set_tracking('bionicStatus',"OPEN")
 
         self.delay(delay=duration,handler=self.leader_final_quote,param="fail")
 
@@ -647,8 +648,13 @@ class BionicBart(ep.EP_Mode):
         # turn the main music back on
         if self.game.trough.num_balls_in_play != 0:
             self.music_on(self.game.assets.music_mainTheme)
-        # set bart flag to dead
-        self.game.set_tracking('bionicStatus', "DEAD")
+        if self.won:
+            # set bart flag to dead
+            self.game.set_tracking('bionicStatus', "DEAD")
+        else:
+            # set bionic
+            self.game.set_tracking('bionicStatus',"OPEN")
+
         # kick the ball if it's held
         print "Bionic Finish Up Saloon Kick"
         self.game.saloon.kick()
