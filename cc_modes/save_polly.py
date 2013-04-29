@@ -499,6 +499,17 @@ class SavePolly(ep.EP_Mode):
         # unload the mode
         self.unload()
 
+    def tilted(self):
+        if self.running:
+            if self.winsRequired and not self.won:
+                self.game.set_tracking('centerRampStage',1)
+            # if wins are not required then the ramp goes to 'done' even if lost
+            else:
+                self.game.set_tracking('centerRampStage',5)
+            self.game.train.reset_toy(type=2)
+        self.running = False
+        self.unload()
+
     def mode_stopped(self):
         print "SAVE POLLY IS DISPATCHING DELAYS"
         self.wipe_delays()
