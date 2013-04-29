@@ -147,11 +147,12 @@ class Quickdraw(ep.EP_Mode):
         # based on rank
         rank = self.game.show_tracking('rank')
         self.points = value[rank]
-        scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))
+        scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points),color=ep.YELLOW)
         # combine the score and animation and turn it on
         self.layer = dmd.GroupedLayer(128,32,[self.animLayer,scoreLayer])
         # read the run time from the settings
         self.runtime = self.game.user_settings['Gameplay (Feature)']['Quickdraw Timer']
+        self.third = self.runtime / 3.0
         # set the amount to subtract per 5th of a second
         # I hope this is right - divide the points by 10, divide by 5 times the amount of seconds, times 10 again to get an even number
         # then take off 370 to get a more interesting countdown
@@ -177,7 +178,13 @@ class Quickdraw(ep.EP_Mode):
             # take points off the score
             self.points -= self.portion
             # update the score text layer
-            scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))
+            if self.runtime < self.third:
+                color = ep.RED
+            elif self.runtime < (self.third * 2):
+                color = ep.ORANGE
+            else:
+                color = ep.YELLOW
+            scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points),color=color)
             if self.layer == None:
                 self.layer = self.no_layer()
 
@@ -219,9 +226,9 @@ class Quickdraw(ep.EP_Mode):
         anim = self.game.assets.dmd_quickdrawHit
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         #  setup the text
-        scoreLayer = dmd.TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points))
+        scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points),color=ep.GREEN)
         # combine and activate
-        textLayer = dmd.TextLayer(84,20, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("QUICK DRAW!")
+        textLayer = ep.EP_TextLayer(84,20, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("QUICK DRAW!",color=ep.GREEN)
         self.game.sound.play(self.game.assets.sfx_quickdrawHit)
         self.game.sound.play(self.game.assets.sfx_quickdrawFinale)
         self.game.sound.play(self.game.assets.sfx_cheers)
