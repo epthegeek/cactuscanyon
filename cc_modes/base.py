@@ -215,7 +215,7 @@ class BaseGameMode(ep.EP_Mode):
                 textString = "1 MORE HIT FOR"
             else:
                 textString = str(left) + " MORE HITS FOR"
-            textString2 = "DRUNKEN MULTIBALL"
+            textString2 = "DRUNK MULTIBALL"
             textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
             textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
             self.mug_display(textLine1,textLine2,textLine3)

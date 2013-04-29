@@ -228,15 +228,15 @@ class DrunkMultiball(ep.EP_Mode):
         self.overlay.composite_op = "blacksrc"
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(80, 8, self.game.assets.font_7px_score, "center", opaque=False).set_text(scoreString,blink_frames=8)
-        textLine1 = dmd.TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("DRUNK MULTIBALL")
+        scoreLine = ep.EP_TextLayer(80, 8, self.game.assets.font_7px_az, "center", opaque=False).set_text(scoreString,blink_frames=8,color=ep.YELLOW)
+        textLine1 = ep.EP_TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("DRUNK MULTIBALL",color=ep.ORANGE)
         if self.active:
-            textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOTS")
+            textLine2 = ep.EP_TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOTS",color=ep.BROWN)
             textString = "WORTH " + str(ep.format_score(5000000))
-            textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString)
+            textLine3 = ep.EP_TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString,color=ep.BROWN)
         else:
-            textLine2 = dmd.TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HIT BEER MUG")
-            textLine3 = dmd.TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("TO LIGHT JACKPOTS")
+            textLine2 = ep.EP_TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HIT BEER MUG",color=ep.BROWN)
+            textLine3 = ep.EP_TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("TO LIGHT JACKPOTS",color=ep.BROWN)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,scoreLine,self.overlay])
         self.layer = combined
         self.delay(name="Display",delay=0.2,handler=self.update_display)
@@ -262,7 +262,7 @@ class DrunkMultiball(ep.EP_Mode):
         animLayer.opaque=False
 
         words = self.game.assets.dmd_dmbJackpotAdded
-        myWait = len(words.frames) / 10.0
+        myWait = (len(words.frames) / 10.0) + 1
         wordsLayer = ep.EP_AnimatedLayer(words)
         wordsLayer.add_frame_listener(6,self.game.sound.play,param=self.game.assets.sfx_orchestraSet)
         wordsLayer.hold=True
@@ -321,7 +321,7 @@ class DrunkMultiball(ep.EP_Mode):
     def jackpot_score(self):
         self.game.sound.play(self.game.assets.sfx_orchestraSpike)
         scoreString = str(ep.format_score(5000000)) + "*"
-        scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString)
+        scoreLine = ep.EP_TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString,color=ep.YELLOW)
         scoreLine.composite_op = "blacksrc"
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])
         combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine])
