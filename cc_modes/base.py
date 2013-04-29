@@ -138,9 +138,9 @@ class BaseGameMode(ep.EP_Mode):
                 # if we tilted out of a moonlight - we go to start ball, not ball ended
                 if self.game.moonlight.tilted:
                     self.game.moonlight.tilted = False
-                    self.game.ball_starting()
+                    self.delay(delay=2,handler=self.game.ball_starting)
                 else:
-                    self.game.ball_ended()
+                    self.delay(delay=2,handler=self.game.ball_ended)
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
