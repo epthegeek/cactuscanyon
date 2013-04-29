@@ -187,8 +187,8 @@ class RightRamp(ep.EP_Mode):
             self.layer = victoryLayer
         else:
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-            textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("YOU")
-            textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LOST!")
+            textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("YOU",color=ep.RED)
+            textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LOST!",color=ep.RED)
             combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
             self.layer = combined
             self.game.sound.play(self.game.assets.sfx_glumRiffShort)
@@ -212,18 +212,18 @@ class RightRamp(ep.EP_Mode):
 
     def build_award_text(self,blink=None):
         # create the two text lines
-        awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False)
+        awardTextTop = ep.EP_TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)
+        awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False)
         awardTextBottom.composite_op = "blacksrc"
         awardTextTop.composite_op = "blacksrc"
 
         # if blink frames we have to set them
         if blink:
-            awardTextTop.set_text(self.awardString,blink_frames=12)
-            awardTextBottom.set_text(self.awardPoints,blink_frames=12)
+            awardTextTop.set_text(self.awardString,blink_frames=12,color=ep.DARK_GREEN)
+            awardTextBottom.set_text(self.awardPoints,blink_frames=12,color=ep.GREEN)
         else:
-            awardTextTop.set_text(self.awardString)
-            awardTextBottom.set_text(self.awardPoints)
+            awardTextTop.set_text(self.awardString,color=ep.DARK_GREEN)
+            awardTextBottom.set_text(self.awardPoints,color=ep.GREEN)
             #awardTextmask.set_text(self.awardPoints)
         # combine them
         if self.layer == None:

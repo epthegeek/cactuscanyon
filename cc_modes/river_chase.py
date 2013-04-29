@@ -280,8 +280,8 @@ class RiverChase(ep.EP_Mode):
         self.game.peril = False
         self.wipe_delays()
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-        textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO")
-        textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!")
+        textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.RED)
+        textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.RED)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_glumRiff)
@@ -338,11 +338,11 @@ class RiverChase(ep.EP_Mode):
     def build_display(self,awardTextString,awardScoreString):
     # create the two text lines
         print "BUILDING DISPLAY"
-        awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+        awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         # if blink frames we have to set them
-        awardTextTop.set_text(awardTextString)
-        awardTextBottom.set_text(awardScoreString)
+        awardTextTop.set_text(awardTextString,color=ep.BLUE)
+        awardTextBottom.set_text(awardScoreString,color=ep.CYAN)
         # combine them
         completeFrame = dmd.GroupedLayer(128, 32, [self.game.left_ramp.border,awardTextTop,awardTextBottom])
         return completeFrame
