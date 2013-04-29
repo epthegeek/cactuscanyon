@@ -636,7 +636,7 @@ class SkillShot(ep.EP_Mode):
 
     def super_hit(self,made=None,switch=0):
         # unload the switch trap
-        self.game.modes.unload(self.game.super_filter)
+        self.game.super_filter.unload()
         # kill the drum roll
         self.stop_music()
         # turn the lights back on
