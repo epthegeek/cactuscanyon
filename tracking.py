@@ -143,7 +143,7 @@ class Tracking(game.Player):
         # Starts at the top of the star with 0, goes clockwise. 0 = motherlode, 1=combo, 2=barts, 3=showdown, 4=stampede
         self.player_stats['starStatus'] = [False, False, False, False, False]
         # Bionic Bart - OPEN / READY / RUNNING / DEAD
-        self.player_stats['bionicStatus'] = "READY"
+        self.player_stats['bionicStatus'] = "OPEN"
 
         # Move your train - OPEN / READY / RUNNING
         self.player_stats['mytStatus'] = "OPEN"
