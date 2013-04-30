@@ -22,15 +22,15 @@
 Machine (Standard):
   'Color Display Pixel Size':
     options: [14,10,8]
-    default: 10
+    default: 8
   'Color Display X Offset':
     options: [-250,250]
     increments: 1
-    default: 0
+    default: 200
   'Color Display Y Offset':
     options: [-250,250]
     increments: 1
-    default: 0
+    default: 200
   'Balls Per Game':
     options: [1,10]
     increments: 1

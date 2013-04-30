@@ -692,14 +692,24 @@ class CCGame(game.BasicGame):
 
     def highscore_entry_ready_to_prompt(self, mode, prompt):
         banner_mode = game.Mode(game=self, priority=8)
+        anim = self.assets.dmd_fireworks
+        myWait = (len(anim.frames) / 10.0) + 2
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold = True
+        animLayer.frame_time = 6
+        # firework sounds keyframed
+        animLayer.add_frame_listener(7,self.sound.play,param=self.assets.sfx_fireworks1)
+        animLayer.add_frame_listener(14,self.sound.play,param=self.assets.sfx_fireworks2)
+        animLayer.add_frame_listener(20,self.sound.play,param=self.assets.sfx_fireworks3)
+        animLayer.composite_op = "blacksrc"
         textLine1 = "GREAT JOB"
         textLine2 = (prompt.left.upper())
-        textLayer1 = dmd.TextLayer(58, 5, self.assets.font_10px_AZ, "center", opaque=False).set_text(textLine1)
+        textLayer1 = ep.EP_TextLayer(58, 5, self.assets.font_10px_AZ, "center", opaque=False).set_text(textLine1,color=ep.BLUE)
         textLayer1.composite_op = "blacksrc"
         textLayer2 = dmd.TextLayer(58, 18, self.assets.font_10px_AZ, "center", opaque=False).set_text(textLine2)
         textLayer2.composite_op = "blacksrc"
-        combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
-        banner_mode.layer = dmd.ScriptedLayer(width=128, height=32, script=[{'seconds':2.0, 'layer':combined}])
+        combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
+        banner_mode.layer = dmd.ScriptedLayer(width=128, height=32, script=[{'seconds':myWait, 'layer':combined}])
         banner_mode.layer.on_complete = lambda: self.highscore_banner_complete(banner_mode=banner_mode, highscore_entry_mode=mode)
         self.modes.add(banner_mode)
         # play the music - if it hasn't started yet

@@ -412,7 +412,7 @@ class HighNoon(ep.EP_Mode):
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
             animLayer.frame_time = 6
-            # ding the bell on frame 5
+            # firework sounds keyframed
             animLayer.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_fireworks1)
             animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_fireworks2)
             animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_fireworks3)

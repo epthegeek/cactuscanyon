@@ -877,10 +877,10 @@ class BaseGameMode(ep.EP_Mode):
     def display_bonus(self,times):
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cactusBorder.frames[0])
         titleString = "BONUS " + str(times) + "X"
-        titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(titleString)
+        titleLine = ep.EP_TextLayer(128/2, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(titleString,color=ep.YELLOW)
         # add the bonus amount to the running total
         self.runningTotal += self.bonus
-        pointsLine = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(ep.format_score(self.runningTotal))
+        pointsLine = dmd.TextLayer(128/2, 17, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(ep.format_score(self.runningTotal))
         # turn the layer on
         self.layer = dmd.GroupedLayer(128,32,[background,titleLine,pointsLine])
         # play a sound
@@ -914,8 +914,8 @@ class BaseGameMode(ep.EP_Mode):
         animLayer.composite_op = "blacksrc"
 
         titleString = "TOTAL SCORE:"
-        titleLine = dmd.TextLayer(128/2, 2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(titleString)
-        pointsLine = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(ep.format_score(self.game.current_player().score))
+        titleLine = ep.EP_TextLayer(128/2, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(titleString,color=ep.ORANGE)
+        pointsLine = dmd.TextLayer(128/2, 17, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(ep.format_score(self.game.current_player().score))
         self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
         # play a final sound
         self.game.sound.play(self.game.assets.sfx_flourish6)
