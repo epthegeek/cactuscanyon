@@ -115,7 +115,7 @@ class Assets():
         self.font_score_x10 = dmd.Font(self.dmd_path + "Font_12d_CactusCanyon.dmd")
 
         self.font_20px_az = ep.ColorFont(self.dmd_path + "Font_18_CactusCanyon.dmd")
-        self.font_20px_az.make_colors([ep.RED])
+        self.font_20px_az.make_colors([ep.RED,ep.ORANGE])
 
         self.font_skillshot = dmd.Font(self.dmd_path + "Font_20_CactusCanyon.dmd")
 
@@ -1179,7 +1179,7 @@ class Assets():
         self.dmd_quickdrawStart = dmd.Animation().load(self.dmd_path +'quickdraw-start.dmd')
         self.dmd_quickdrawHit = dmd.Animation().load(self.dmd_path +'quickdraw-hit.dmd')
 
-        self.dmd_gunfightTop = dmd.Animation().load(self.dmd_path+'gunfight-top.dmd')
+        #self.dmd_gunfightTop = dmd.Animation().load(self.dmd_path+'gunfight-top.dmd')
         self.dmd_gunfightMask = dmd.Animation().load(self.dmd_path +'gunfight-mask.dmd')
         self.dmd_gunfightPan = dmd.Animation().load(self.dmd_path+'gunfight-pan.dmd')
         self.dmd_gunfightEyes = dmd.Animation().load(self.dmd_path+'gunfight-eyes.dmd')

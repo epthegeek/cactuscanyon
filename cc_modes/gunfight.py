@@ -163,9 +163,9 @@ class Gunfight(ep.EP_Mode):
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_gunfightStart)
         # display the clouds with gunfight text
-        title = dmd.TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight")
+        title = ep.EP_TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight",color=ep.ORANGE)
         title.composite_op = "blacksrc"
-        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_gunfightTop.frames[0])
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_gunfightPan.frames[0])
         mask = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_gunfightMask.frames[0])
         mask.composite_op = "blacksrc"
         self.layer = dmd.GroupedLayer(128,32,[backdrop,mask,title])
