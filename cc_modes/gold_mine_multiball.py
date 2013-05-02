@@ -323,7 +323,6 @@ class GoldMine(ep.EP_Mode):
             self.multiplier = self.check_multiplier()
             # play the animation
             anim = self.game.assets.dmd_mineCarCrash
-            # TODO add the sounds to this and determine if it needs listenrs
             # calcuate the wait time to start the next part of the display
             myWait = len(anim.frames) / 10.0
             # set the animation
