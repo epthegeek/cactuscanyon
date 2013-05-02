@@ -643,8 +643,6 @@ class BionicBart(ep.EP_Mode):
         self.layer = None
         # clear the stack level
         self.game.stack_level(6,False)
-        # Turn the lights back on
-        self.lamp_update()
         # turn the main music back on
         if self.game.trough.num_balls_in_play != 0:
             self.music_on(self.game.assets.music_mainTheme)
@@ -655,6 +653,8 @@ class BionicBart(ep.EP_Mode):
             # set bionic
             self.game.set_tracking('bionicStatus',"OPEN")
 
+        # Turn the lights back on
+        self.lamp_update()
         # kick the ball if it's held
         print "Bionic Finish Up Saloon Kick"
         self.game.saloon.kick()
