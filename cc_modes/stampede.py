@@ -62,20 +62,25 @@ class Stampede(ep.EP_Mode):
     ### switches
 
     def sw_leftLoopTop_active(self,sw):
-        self.process_shot(0,self.active)
+        active = self.active
+        self.process_shot(0,active)
 
     def sw_leftRampEnter_active(self, sw):
-        self.process_shot(1,self.active)
+        active = self.active
+        self.process_shot(1,active)
 
     def sw_centerRampMake_active(self, sw):
-        self.process_shot(2,self.active)
+        active = self.active
+        self.process_shot(2,active)
 
     def sw_rightLoopTop_active(self, sw):
         if not self.game.bart.moving:
-            self.process_shot(3,self.active)
+            active = self.active
+            self.process_shot(3,active)
 
     def sw_rightRampMake_active(self, sw):
-        self.process_shot(4,self.active)
+        active = self.active
+        self.process_shot(4,active)
 
     def start_stampede(self):
         # reset the jackpot count, just in case
@@ -198,7 +203,10 @@ class Stampede(ep.EP_Mode):
             animLayer.composite_op = "blacksrc"
             bannerLayer = dmd.AnimatedLayer(frames=banner.frames,hold=True, opaque=False,repeat=False,frame_time=5)
             #bannerLayer.composite_op = "blacksrc"
-            combined = dmd.GroupedLayer(128,32,[layerCopy,bannerLayer,animLayer])
+            if layerCopy:
+                combined = dmd.GroupedLayer(128,32,[layerCopy,bannerLayer,animLayer])
+            else:
+                combined = dmd.GroupedLayer(128,32,[bannerLayer,animLayer])
             combined.composite_op = "blacksrc"
             self.layer = combined
             # and some sounds
