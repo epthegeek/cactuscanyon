@@ -344,10 +344,10 @@ class Mine(ep.EP_Mode):
         if self.game.mountain.mineTicks != 8:
             self.game.mountain.full_open()
         # setup  a bunch of text
-        textLine1 = dmd.TextLayer(28, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("EXTRA")
-        textLine2 = dmd.TextLayer(28, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("BALL")
-        textLine3 = ep.pulse_text(self,96,4,"IS")
-        textLine4 = ep.pulse_text(self,96,16,"LIT",sequence=[1,3])
+        textLine1 = ep.EP_TextLayer(28, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("EXTRA",color=ep.ORANGE)
+        textLine2 = ep.EP_TextLayer(28, 16, self.game.assets.font_9px_az, "center", opaque=False).set_text("BALL",color=ep.ORANGE)
+        textLine3 = ep.pulse_text(self,96,4,"IS",color=ep.GREEN)
+        textLine4 = ep.pulse_text(self,96,16,"LIT",sequence=[1,3],color=ep.GREEN)
         # and a backdrop
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_ball.frames[0])
         # and the wipe animation
