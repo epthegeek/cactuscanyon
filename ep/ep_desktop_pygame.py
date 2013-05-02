@@ -322,11 +322,11 @@ class EP_Desktop():
                     bright_value = brightness
                 # otherwise, find the color and set the brightness
                 else:
-                    if brightness <= 4:
+                    if brightness <= 3:
                         bright_value = 0
-                    elif brightness <= 9:
+                    elif brightness <= 8:
                         bright_value = 1
-                    elif brightness <= 14:
+                    elif brightness <= 13:
                         bright_value = 2
                     else:
                         bright_value = 3
