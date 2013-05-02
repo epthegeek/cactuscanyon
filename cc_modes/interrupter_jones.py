@@ -137,8 +137,9 @@ class Interrupter(ep.EP_Mode):
         # add listener frames
         animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_ballSaved)
 
+        self.cancel_delayed("Display")
         self.layer = animLayer
-        self.delay(delay=myWait + 0.5,handler=self.clear_layer)
+        self.delay("Display",delay=myWait + 0.5,handler=self.clear_layer)
 
     def closing_song(self,duration):
         attractMusic = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Music']
