@@ -66,7 +66,7 @@ class Ambush(ep.EP_Mode):
         script = []
         # set up the text layer
         textString = "< AMBUSH PAUSED >"
-        textLayer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
+        textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString,color=ep.BLUE)
         script.append({'seconds':0.3,'layer':textLayer})
         # set up the alternating blank layer
         blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])

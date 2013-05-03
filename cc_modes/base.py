@@ -589,8 +589,8 @@ class BaseGameMode(ep.EP_Mode):
         else:
             textString1 = "<" + str(250 - hits) + " MORE HITS >"
             textString2 = "< FOR  MEGA  JETS >"
-        textLayer1 = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString1)
-        textLayer2 = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString2)
+        textLayer1 = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString1,color=ep.BROWN)
+        textLayer2 = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString2,color=ep.BROWN)
         textLayer1.composite_op = "blacksrc"
         textLayer2.compoaite_op = "blacksrc"
         self.cancel_delayed("Display")

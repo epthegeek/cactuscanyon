@@ -56,7 +56,8 @@ class Assets():
 
         self.font_6px_az = ep.ColorFont(self.dmd_path + "Font_19_CactusCanyon.dmd")
         self.font_6px_az.make_colors([ep.GREEN,ep.YELLOW,ep.RED,ep.DARK_RED])
-        self.font_6px_az_inverse = dmd.Font(self.dmd_path + "Font_Custom_6px.dmd")
+        self.font_6px_az_inverse = ep.ColorFont(self.dmd_path + "Font_Custom_6px.dmd")
+        self.font_6px_az_inverse.make_colors([ep.GREEN,ep.BROWN,ep.MAGENTA,ep.BLUE,ep.YELLOW])
         self.font_6px_az_inverse.composite_op = "blacksrc"
 
         self.font_7px_alt_az = dmd.Font(self.dmd_path + "Font_1_CactusCanyon.dmd")
