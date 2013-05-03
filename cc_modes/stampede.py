@@ -145,8 +145,10 @@ class Stampede(ep.EP_Mode):
         self.cancel_delayed("Display")
         if active == number:
             self.jackpots += 1
+            self.game.score(500000)
             self.jackpot_hit()
         else:
+            self.game.score(250000)
             self.jackpot_wiff()
 
     def jackpot_hit(self,step=1):
@@ -161,8 +163,6 @@ class Stampede(ep.EP_Mode):
             self.layer = animLayer
             # and some sounds
             self.game.sound.play(self.game.assets.sfx_revRicochet)
-            # and award points
-            self.game.score(500000)
             # loop back to do the next part
             self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
         # second pass layers the score over the text
@@ -211,8 +211,6 @@ class Stampede(ep.EP_Mode):
             self.layer = combined
             # and some sounds
             self.game.base.play_quote(self.game.assets.quote_stampedeWiff)
-            # and award points
-            self.game.score(250000)
             self.delay(name="Display", delay=myWait, handler=self.main_display)
 
     def jackpot_shift(self):
