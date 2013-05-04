@@ -16,11 +16,11 @@
 #                                   1         2         3           1         2         3           1         2         3            1         2         3
 #           METER        # 1234567890123456789012345678901-1234567890123456789012345678901-1234567890123456789012345678901-1234567890123456789012345678901-
 ## flashers
-coil:backLeftFlasher     | .              .              .       .       . .              . .           .
-coil:mineFlasher         |   .              .                .       .       . .      . .           .      .
-coil:saloonFlasher       |     .              .            .       .
-coil:backRightFlasher    |       .              .              .       .  . .            . .           .
-coil:middleRightFlasher  |         .              .       .       .           . .    . .           .        .
-coil:beaconFlasher       |           .              .           .       .
-coil:rightGunFlasher     |             .              .     .       .            . .           .               .
-coil:leftGunFlasher      |               .              .     .       .           . .           .               .
+coil:backLeftFlasher     | .                              .                               .                               .                               .   .                                     .   .             .
+coil:mineFlasher         |     .                              .                                           .                               .                         .   .                 .   .                  .        .
+coil:saloonFlasher       |         .                              .                               .                               .
+coil:backRightFlasher    |             .                              .                                           .                               .         .   .                                 .   .              .
+coil:middleRightFlasher  |                 .                              .                   .                               .                                       .   .             .   .                   .          .
+coil:beaconFlasher       |                     .                              .                                       .                               .
+coil:rightGunFlasher     |                         .                              .                   .                               .                                       .   .                        .                   .
+coil:leftGunFlasher      |                             .                              .                       .                               .                                 .   .                       .                   .

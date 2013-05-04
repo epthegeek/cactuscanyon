@@ -235,7 +235,7 @@ class Quickdraw(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         winLayer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
         # flash the guns
-        self.game.base.guns_flash(1)
+        #self.game.base.guns_flash(1)
         # if something higher is running, throw the win display in a cut in
         if True in stackLevel[1:]:
             self.game.interrupter.cut_in(winLayer,1)

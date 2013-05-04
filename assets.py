@@ -1068,6 +1068,7 @@ class Assets():
         self.lamp_fanRight = "fan-pan-right"; lampshows.append(self.lamp_fanRight)
         self.lamp_fanLeft = "fan-pan-left"; lampshows.append(self.lamp_fanLeft)
         self.lamp_slowSparkle = "slow_sparkle"; lampshows.append(self.lamp_slowSparkle)
+        self.lamp_slowSparkle2 = "slow_sparkle_attract"; lampshows.append(self.lamp_slowSparkle2)
         self.lamp_gmStart = "gm_start"; lampshows.append(self.lamp_gmStart)
         self.lamp_flashers = "flasher-show"; lampshows.append(self.lamp_flashers)
         self.lamp_target0 = "target0"; lampshows.append(self.lamp_target0)
