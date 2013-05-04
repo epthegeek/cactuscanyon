@@ -1070,6 +1070,7 @@ class Assets():
         self.lamp_slowSparkle = "slow_sparkle"; lampshows.append(self.lamp_slowSparkle)
         self.lamp_gmStart = "gm_start"; lampshows.append(self.lamp_gmStart)
         self.lamp_flashers = "flasher-show"; lampshows.append(self.lamp_flashers)
+        self.lamp_target0 = "target0"; lampshows.append(self.lamp_target0)
 
         for lampshow in lampshows:
             self.game.lampctrl.register_show(lampshow,self.lampshows_path + lampshow + ".lampshow")
