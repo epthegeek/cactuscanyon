@@ -150,6 +150,8 @@ class Interrupter(ep.EP_Mode):
             self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music,param=2000)
             # new line to reset the volume after fade because it may affect new game
             self.delay("Attract Fade",delay=62.5,handler=self.reset_volume)
+        # play a flasher lampshow
+        self.game.GI_lampctrl.play_show(self.game.assets.lamp_flashers, repeat=False)
         # set a 2 second delay to allow the start button to work again
         print "Setting delay for start button"
         self.delay(delay=duration+2,handler=self.enable_start)

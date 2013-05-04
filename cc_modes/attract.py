@@ -287,6 +287,8 @@ class Attract(ep.EP_Mode):
                     # clear the interrupter layer
                     self.game.interrupter.clear_layer()
                     self.game.interrupter.wipe_delays()
+                    # stop the GI lampshow just in case the flasher show is playing
+                    self.game.GI_lampctrl.stop_show()
                     # Initialize game
                     if self.game.switches.flipperLwL.is_active():
                         force = True
