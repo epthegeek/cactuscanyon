@@ -112,7 +112,8 @@ class BadGuys(ep.EP_Mode):
     def hit_bad_guy(self,target):
         # stop the timer
         # play the target lampshow
-        self.game.lampctrl.play_show(self.shows[target], repeat=False,callback=self.lamp_update)
+        if not self.game.marshall_multiball.running and not self.game.high_noon.running:
+            self.game.lampctrl.play_show(self.shows[target], repeat=False,callback=self.lamp_update)
         # kill the coil to the drop target based on position
         self.target_down(target)
         # call back to base to turn on the light for this bad guy?
