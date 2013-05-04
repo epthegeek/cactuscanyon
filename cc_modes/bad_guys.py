@@ -46,6 +46,7 @@ class BadGuys(ep.EP_Mode):
                        self.game.lamps.badGuyL3]
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
+        self.shows = [self.game.assets.lamp_target0,self.game.assets.lamp_target0,self.game.assets.lamp_target0,self.game.assets.lamp_target0]
         self.pending = [False,False,False,False]
         self.on_time = self.game.user_settings['Machine (Standard)']['Drop Target Boost']
 
@@ -110,6 +111,8 @@ class BadGuys(ep.EP_Mode):
 
     def hit_bad_guy(self,target):
         # stop the timer
+        # play the target lampshow
+        self.game.lampctrl.play_show(self.shows[target], repeat=False,callback=self.lamp_update)
         # kill the coil to the drop target based on position
         self.target_down(target)
         # call back to base to turn on the light for this bad guy?
