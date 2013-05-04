@@ -46,7 +46,7 @@ class BadGuys(ep.EP_Mode):
                        self.game.lamps.badGuyL3]
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
-        self.shows = [self.game.assets.lamp_target0,self.game.assets.lamp_target0,self.game.assets.lamp_target0,self.game.assets.lamp_target0]
+        self.shows = [self.game.assets.lamp_target0,self.game.assets.lamp_target1,self.game.assets.lamp_target2,self.game.assets.lamp_target3]
         self.pending = [False,False,False,False]
         self.on_time = self.game.user_settings['Machine (Standard)']['Drop Target Boost']
 

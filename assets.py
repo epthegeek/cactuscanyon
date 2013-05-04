@@ -1072,6 +1072,9 @@ class Assets():
         self.lamp_gmStart = "gm_start"; lampshows.append(self.lamp_gmStart)
         self.lamp_flashers = "flasher-show"; lampshows.append(self.lamp_flashers)
         self.lamp_target0 = "target0"; lampshows.append(self.lamp_target0)
+        self.lamp_target1 = "target1"; lampshows.append(self.lamp_target1)
+        self.lamp_target2 = "target2"; lampshows.append(self.lamp_target2)
+        self.lamp_target3 = "target3"; lampshows.append(self.lamp_target3)
 
         for lampshow in lampshows:
             self.game.lampctrl.register_show(lampshow,self.lampshows_path + lampshow + ".lampshow")
