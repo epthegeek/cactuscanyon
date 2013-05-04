@@ -148,6 +148,10 @@ class Attract(ep.EP_Mode):
             self.game.assets.lamp_starShots,
             self.game.assets.lamp_starShots,
             self.game.assets.lamp_starShots,
+            self.game.assets.lamp_slowSparkle,
+            self.game.assets.lamp_slowSparkle,
+            self.game.assets.lamp_slowSparkle,
+            self.game.assets.lamp_slowSparkle
         ]
         self.game.schedule_lampshows(lampshows,True)
 
