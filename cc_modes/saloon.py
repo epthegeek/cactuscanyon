@@ -210,7 +210,7 @@ class Saloon(ep.EP_Mode):
         # show something on the screen
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_starsBorder.frames[0])
         topText = ep.pulse_text(self,64,4,"COLLECT BOUNTY")
-        bottomText = ep.pulse_text(self,64,16,"IS LIT")
+        bottomText = ep.pulse_text(self,64,16,"IS LIT",color=ep.GREEN)
         self.repeat_ding(4)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,topText,bottomText])
         # play a voice clip about the bounty being ready
@@ -425,7 +425,7 @@ class Saloon(ep.EP_Mode):
         textString1 = "GUNFIGHT"
         textLayer1 = ep.pulse_text(self,77,2,textString1,size="12px")
         textString2 = "IS LIT"
-        textLayer2 = ep.pulse_text(self,77,15,textString2,size="12px")
+        textLayer2 = ep.pulse_text(self,77,15,textString2,size="12px",color=ep.GREEN)
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
         # play a quote
         self.game.sound.play(self.game.assets.sfx_flourish6)

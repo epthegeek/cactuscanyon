@@ -55,7 +55,7 @@ class SavePolly(ep.EP_Mode):
         else:
             reward = str(ep.format_score(5000000))
         self.awardLine2 = ep.EP_TextLayer(34, 19, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(reward,color=ep.MAGENTA)
-        self.awardLine2b= ep.EP_TextLayer(64, 23, self.game.assets.font_7px_az, "center", opaque=False).set_text(reward,color=ep.MAGENTA)
+        self.awardLine2b= ep.EP_TextLayer(64, 23, self.game.assets.font_7px_az, "center", opaque=False).set_text(reward,color=ep.GREEN)
         self.scoreLine = ep.EP_TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("",blink_frames=8)
         # calculate the shot value
         self.shotValue = 250000
@@ -295,10 +295,10 @@ class SavePolly(ep.EP_Mode):
                 self.cows.reverse()
                 # setup the display
                 border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_tracksBorder.frames[0])
-                awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-                awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-                awardTextTop.set_text("TRAIN")
-                awardTextBottom.set_text("PAUSED",blink_frames=12)
+                awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+                awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+                awardTextTop.set_text("TRAIN",color=ep.BROWN)
+                awardTextBottom.set_text("PAUSED",blink_frames=12,color=ep.GREEN)
                 completeFrame = dmd.GroupedLayer(128, 32, [border,awardTextTop,awardTextBottom])
                 transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
 
@@ -339,9 +339,9 @@ class SavePolly(ep.EP_Mode):
         # set up the display
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
+        scoreLine = ep.EP_TextLayer(34, 6, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8,color=ep.BROWN)
         timeString = "TIME: PAUSED"
-        timeLine = dmd.TextLayer(34, 25, self.game.assets.font_6px_az, "center", opaque=False).set_text(timeString,blink_frames=10)
+        timeLine = ep.EP_TextLayer(34, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(timeString,blink_frames=10,color=ep.DARK_RED)
         textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
         awardLine1 = dmd.TextLayer(34, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
 
@@ -364,10 +364,10 @@ class SavePolly(ep.EP_Mode):
             self.game.score(self.shotValue)
             # setup the display
             border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_tracksBorder.frames[0])
-            pollyTitle = dmd.TextLayer(64, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL")
+            pollyTitle = ep.EP_TextLayer(64, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL",color=ep.MAGENTA)
             scoreLine = dmd.TextLayer(64, 6, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(str(ep.format_score(self.shotValue)))
             textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
-            awardLine1 = dmd.TextLayer(64, 15, self.game.assets.font_6px_az, "center", opaque=False).set_text(textString2)
+            awardLine1 = ep.EP_TextLayer(64, 15, self.game.assets.font_6px_az, "center", opaque=False).set_text(textString2,color=ep.MAGENTA)
             completeFrame = dmd.GroupedLayer(128,32,[border,pollyTitle,scoreLine,awardLine1,self.awardLine2b])
             transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
             # pause the train briefly
