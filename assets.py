@@ -82,7 +82,7 @@ class Assets():
         self.font_12px_az = ep.ColorFont(self.dmd_path + "Font_16_CactusCanyon.dmd")
         self.font_12px_az.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.ORANGE,ep.RED,ep.DARK_RED])
         self.font_12px_az_dim = ep.ColorFont(self.dmd_path + "Font_16_CactusCanyon_dim.dmd")
-        self.font_12px_az_dim.make_colors([ep.RED])
+        self.font_12px_az_dim.make_colors([ep.RED,ep.GREEN])
 
         self.font_12px_az_outline = ep.ColorFont(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
         self.font_12px_az_outline.make_colors([ep.GREEN])
