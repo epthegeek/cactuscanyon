@@ -116,7 +116,7 @@ class MoveYourTrain(ep.EP_Mode):
             self.layer = moveLayer
             self.delay(delay=1,handler=self.intro_display,param=2)
         if step == 2:
-            yourLayer = self.game.showcase.make_string(1,3,0,text="YOUR")
+            yourLayer = self.game.showcase.make_string(1,3,0,text="THAT")
             self.layer = yourLayer
             self.delay(delay=1,handler=self.intro_display,param=3)
         if step == 3:

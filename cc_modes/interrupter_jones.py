@@ -33,6 +33,7 @@ class Interrupter(ep.EP_Mode):
         self.playing = False
         self.hush = False
         self.knockerStrength = self.game.user_settings['Machine (Standard)']['Real Knocker Strength']
+        self.idle = False
 
 
     def display_player_number(self,idle=False):
@@ -60,15 +61,20 @@ class Interrupter(ep.EP_Mode):
             self.delay(name="Display",delay=1.5,handler=self.clear_layer)
         # with an idle call, set a repeat
         if idle:
+            self.idle = True
             self.delay(name="idle",delay=10,handler=self.display_player_number,param=True)
 
     def cancel_idle(self):
+        self.idle = False
         self.cancel_delayed("idle")
 
     def abort_player_number(self):
-        self.cancel_delayed("Display")
-        self.cancel_delayed("idle")
-        self.layer = None
+        if self.idle:
+            self.cancel_delayed("Display")
+            self.cancel_delayed("idle")
+            self.idle = False
+            self.layer = None
+
 
     def tilt_danger(self,status):
         self.cancel_delayed("Display")
@@ -139,7 +145,7 @@ class Interrupter(ep.EP_Mode):
 
         self.cancel_delayed("Display")
         self.layer = animLayer
-        self.delay("Display",delay=myWait + 0.5,handler=self.clear_layer)
+        self.delay(delay=myWait + 0.5,handler=self.clear_layer)
 
     def closing_song(self,duration):
         attractMusic = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Music']
