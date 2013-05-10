@@ -422,6 +422,10 @@ class BaseGameMode(ep.EP_Mode):
             #print "PASSING - Guns disabled"
             #print self.game.show_tracking('stackLevel')
         # Everything beyond this point only registers if there's no other mode running - so no stack checking is needed
+        elif self.game.tribute_launcher in self.game.modes:
+            # if we hit a return lane when the launcher is running, pop the post
+            print "Tribute raising post on left"
+            self.game.coils.leftGunFightPost.patter(on_time=2,off_time=6,original_on_time=60)
         # move your train
         elif self.game.show_tracking('mytStatus') == "READY":
             # if MYT is ready, start it and raise the post to catch the ball
@@ -650,6 +654,9 @@ class BaseGameMode(ep.EP_Mode):
         elif self.game.last_call.starting:
             self.game.last_call.starting = False
             self.game.last_call.get_going()
+        # select tribute
+        elif self.game.tribute_launcher.selecting:
+            self.game.tribute_launcher.make_selection()
         else:
             pass
 

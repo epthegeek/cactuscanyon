@@ -326,6 +326,8 @@ class CCGame(game.BasicGame):
         self.stampede = cc_modes.Stampede(game=self,priority=69)
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
+        # tribute launcher
+        self.tribute_launcher = cc_modes.TributeLauncher(game=self,priority=71)
         # gold mine multiball
         self.gm_multiball = cc_modes.GoldMine(game=self,priority=75)
         # the mob gun modes so they ride in front of most things

@@ -521,6 +521,8 @@ class SkillShot(ep.EP_Mode):
         elif self.selectedPrizes[5:] == "V":
             awardStringTop = "THIS IS JUST"
             awardStringBottom = "A TRIBUTE"
+            self.game.modes.add(self.game.tribute_launcher)
+            self.game.tribute_launcher.shot = self.active
             self.super = False
 
         # call the lamp update so the prize is shown properly

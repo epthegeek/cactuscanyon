@@ -176,7 +176,7 @@ Gameplay (Feature):
     default: 'Enabled'
   'Tribute Mode':
     options: ['Enabled','Disabled']
-    default: 'Enabled'
+    default: 'Disabled'
   'Fast Restart After Game':
     options: ['Enabled','Disabled']
     default: 'Enabled'
