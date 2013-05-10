@@ -52,7 +52,6 @@ class SuperFilter(ep.EP_Mode):
     def sw_minePopper_active_for_400ms(self,sw):
         if self.game.skill_shot.active == 3:
             self.game.skill_shot.super_hit(made=True,switch=3)
-            self.game.mountain.eject()
             return game.SwitchStop
         else:
             self.game.skill_shot.super_hit()

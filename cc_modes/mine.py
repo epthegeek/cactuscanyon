@@ -46,6 +46,9 @@ class Mine(ep.EP_Mode):
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
         # somehow this falls through despite switch stop
+        # do nothing if there's an active super on the mine
+        if self.game.skill_shot.active == 3:
+            return
         # for MMB just kick out and last call
         if self.game.marshall_multiball.running or self.game.last_call.running or self.game.moonlight.running:
             self.game.mountain.eject()
