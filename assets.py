@@ -1321,6 +1321,29 @@ class Assets():
         self.dmd_switchMatrix = dmd.Animation().load(self.dmd_path+'matrix_backdrop.dmd')
         self.dmd_testBackdrop = dmd.Animation().load(self.dmd_path+'test_backdrop.dmd')
 
+        # Tribute bits
+        self.dmd_mbLogo = dmd.Animation().load(self.dmd_path+'mb-logo.dmd')
+        self.dmd_mbDracIntro = dmd.Animation().load(self.dmd_path+'mb-drac-intro.dmd')
+        self.dmd_mbDracIdle = dmd.Animation().load(self.dmd_path+'mb-drac-idle.dmd')
+        self.dmd_mbDracSmack = dmd.Animation().load(self.dmd_path+'mb-drac-smack.dmd')
+
+        self.dmd_mmLogo = dmd.Animation().load(self.dmd_path+'mm-logo.dmd')
+        self.dmd_mmTrollsIntro = dmd.Animation().load(self.dmd_path+'mm_trolls_intro_anim.dmd')
+        self.dmd_mmTrollDeadLeft = dmd.Animation().load(self.dmd_path+'mm_left_troll_dead.dmd')
+        self.dmd_mmTrollHitLeft = dmd.Animation().load(self.dmd_path+'mm_left_troll_hit.dmd')
+        self.dmd_mmTrollIdleLeft = dmd.Animation().load(self.dmd_path+'mm_left_troll_idle.dmd')
+        self.dmd_mmTrollDeadRight = dmd.Animation().load(self.dmd_path+'mm_right_troll_dead.dmd')
+        self.dmd_mmTrollHitRight = dmd.Animation().load(self.dmd_path+'mm_right_troll_hit.dmd')
+        self.dmd_mmTrollIdleRight = dmd.Animation().load(self.dmd_path+'mm_right_troll_idle.dmd')
+        self.dmd_mmTrollFinalFrame = dmd.Animation().load(self.dmd_path+'mm_trolls_final_border.dmd')
+
+        self.dmd_tafLogo = dmd.Animation().load(self.dmd_path+'taf-logo.dmd')
+        self.dmd_tafItIntro = dmd.Animation().load(self.dmd_path+'taf-it-intro.dmd')
+        self.dmd_tafItIdle = dmd.Animation().load(self.dmd_path+'taf-it-idle.dmd')
+        self.dmd_tafItMiss1 = dmd.Animation().load(self.dmd_path+'taf-it-miss-1.dmd')
+        self.dmd_tafItMiss2 = dmd.Animation().load(self.dmd_path+'taf-it-miss-2.dmd')
+        self.dmd_tafItHit = dmd.Animation().load(self.dmd_path+'taf-it-hit.dmd')
+
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"
 
