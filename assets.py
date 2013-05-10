@@ -954,6 +954,9 @@ class Assets():
         self.quote_centerRampSS = 'quote_centerRampSS'
         self.game.sound.register_sound(self.quote_centerRampSS, self.quotes_path + "1167-mayor-head-up-the-center-ramp-sir.wav")
         self.game.sound.register_sound(self.quote_centerRampSS, self.quotes_path + "1268-prospector-shoot-the-center-ramp.wav")
+        self.quote_mineSS = 'quote_mineSS'
+        self.game.sound.register_sound(self.quote_mineSS, self.quotes_path + "1036-mayor-shoot-the-mine.wav")
+        self.game.sound.register_sound(self.quote_mineSS, self.quotes_path + "1249-prospector-shoot-the-mine2.wav")
         self.quote_leaderLaugh = 'quote_leaderLaugh'
         self.game.sound.register_sound(self.quote_leaderLaugh, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.game.sound.register_sound(self.quote_leaderLaugh, self.quotes_path + "1579-leader-bart-laugh-2.wav")

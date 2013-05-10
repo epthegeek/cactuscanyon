@@ -47,6 +47,8 @@ class SkillShot(ep.EP_Mode):
                                 self.game.lamps.centerRampStopTrain,
                                 self.game.lamps.centerRampSavePolly,
                                 self.game.lamps.centerRampJackpot]
+        self.mineLamps = [self.game.lamps.extraBall,
+                          self.game.lamps.mineLock]
         # there is no quote for zero or 5
         self.starQuotes = [False,
                            self.game.assets.quote_1light,
@@ -54,7 +56,7 @@ class SkillShot(ep.EP_Mode):
                            self.game.assets.quote_3lights,
                            self.game.assets.quote_4lights,
                            False]
-        self.shots = ['leftLoopTop','leftRampEnter','centerRampMake']
+        self.shots = ['leftLoopTop','leftRampEnter','minePopper','centerRampMake']
         self.active = 0
         # check the generosity setting
         if self.game.user_settings['Gameplay (Feature)']['Skillshot Boosts'] == 'Easy':
@@ -188,6 +190,9 @@ class SkillShot(ep.EP_Mode):
                 prizes.append("S")
             # cva
             prizes.append("T")
+            # tribute mode
+            if self.game.user_settings['Gameplay (Feature)']['Tribute Mode'] == "Enabled":
+                prizes.append("V")
 
         # initialize some junk
         count = 0
@@ -236,7 +241,7 @@ class SkillShot(ep.EP_Mode):
         if self.super:
             self.active += 1
             # wrap back around after 3
-            if self.active == 4:
+            if self.active == 5:
                 self.active = 1
             self.super_update_lamps()
             print "ACTIVE SHOT IS: " + str(self.active)
@@ -260,6 +265,9 @@ class SkillShot(ep.EP_Mode):
         if not self.super:
             self.skillshot_award()
         else:
+            # if we're doing tribute - bump the shot over if it was on the loop
+            if self.selectedPrizes[5:] == "V" and self.active == 1:
+                self.active = 2
             # update the lamps to start the blinking
             self.super_update_lamps(blink=True)
             if self.active == 1:
@@ -268,6 +276,10 @@ class SkillShot(ep.EP_Mode):
             elif self.active == 2:
                 awardStringTop = "SHOOT LEFT RAMP"
                 quote = self.game.assets.quote_leftRampSS
+            elif self.active == 3:
+                self.game.mountain.full_open()
+                awardStringTop = "SHOOT THE MINE"
+                quote = self.game.assets.quote_mineSS
             else:
                 awardStringTop = "SHOOT CENTER RAMP"
                 quote = self.game.assets.quote_centerRampSS
@@ -505,6 +517,12 @@ class SkillShot(ep.EP_Mode):
             self.game.base.kickoff_marshall(True)
             self.super = False
 
+        # Tribute mode
+        elif self.selectedPrizes[5:] == "V":
+            awardStringTop = "THIS IS JUST"
+            awardStringBottom = "A TRIBUTE"
+            self.super = False
+
         # call the lamp update so the prize is shown properly
         self.lamp_update()
 
@@ -569,6 +587,8 @@ class SkillShot(ep.EP_Mode):
         pass
 
     def start_gameplay(self,myDelay=2,music=True):
+        # home the mine - in case it got used, reset does nothing if it didn't
+        self.game.mountain.reset_toy()
         # clear the local layer just in case
         self.layer = None
         # turn off super mode
@@ -593,7 +613,7 @@ class SkillShot(ep.EP_Mode):
         self.game.set_tracking('lampStatus',"OFF")
         self.lamp_update()
         # pick a jackpot
-        choices = [1,2,3]
+        choices = [1,2,3,4]
         self.active = random.choice(choices)
         # then update the local lamps
         self.super_update_lamps()
@@ -674,6 +694,14 @@ class SkillShot(ep.EP_Mode):
                 else:
                     lamp.enable()
         elif self.active == 3:
+            for lamp in self.mineLamps:
+                if blink:
+                    lamp.schedule(0x0F0F0F0F)
+                    # also flash the mine flasher
+                    self.game.coils.mineFlasher.schedule(0x01010101)
+                else:
+                    lamp.enable()
+        elif self.active == 3:
             for lamp in self.centerRampLamps:
                 if blink:
                     lamp.schedule(0x0F0F0F0F)
@@ -689,4 +717,7 @@ class SkillShot(ep.EP_Mode):
             lamp.disable()
         for lamp in self.centerRampLamps:
             lamp.disable()
+        for lamp in self.mineLamps:
+            lamp.disable()
+        self.game.coils.mineFlasher.disable()
 

@@ -30,9 +30,9 @@ class SuperFilter(ep.EP_Mode):
     def sw_leftLoopTop_active(self,sw):
         if self.game.skill_shot.active == 1:
             self.game.skill_shot.super_hit(made=True,switch=1)
+            return game.SwitchStop
         else:
             self.game.skill_shot.super_hit()
-        return game.SwitchStop
 
     def sw_leftLoopBottom_active(self,sw):
         # if we hit the bottom of the left loop, and it's not active
@@ -43,16 +43,28 @@ class SuperFilter(ep.EP_Mode):
     def sw_leftRampEnter_active(self,sw):
         if self.game.skill_shot.active == 2:
             self.game.skill_shot.super_hit(made=True,switch=2)
+            return game.SwitchStop
         else:
             self.game.skill_shot.super_hit()
-        return game.SwitchStop
 
-    def sw_centerRampMake_active(self,sw):
+
+        # mine poppper
+    def sw_minePopper_active_for_400ms(self,sw):
         if self.game.skill_shot.active == 3:
             self.game.skill_shot.super_hit(made=True,switch=3)
+            self.game.mountain.eject()
+            return game.SwitchStop
         else:
             self.game.skill_shot.super_hit()
-        return game.SwitchStop
+
+    def sw_centerRampMake_active(self,sw):
+        if self.game.skill_shot.active == 4:
+            self.game.skill_shot.super_hit(made=True,switch=4)
+            return game.SwitchStop
+        else:
+            self.game.skill_shot.super_hit()
+
+
 
     # everything else
     # quickdraw targets
@@ -78,9 +90,6 @@ class SuperFilter(ep.EP_Mode):
         self.game.skill_shot.super_hit()
     # mine entrance
     def sw_mineEntrance_active(self,sw):
-        self.game.skill_shot.super_hit()
-    # mine poppper
-    def sw_minePopper_active_for_100ms(self,sw):
         self.game.skill_shot.super_hit()
     # saloon popper
     def sw_saloonPopper_active_for_100ms(self,sw):
