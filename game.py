@@ -334,6 +334,10 @@ class CCGame(game.BasicGame):
         self.showdown = cc_modes.Showdown(game=self,priority=80)
         self.ambush = cc_modes.Ambush(game=self,priority=80)
 
+        # tribute modes
+        self.mm_tribute = cc_modes.MM_Tribute(game=self,priority=82)
+        self.mb_tribute = cc_modes.MB_Tribute(game=self,priority=82)
+        self.taf_tribute = cc_modes.TAF_Tribute(game=self,priority=82)
         # cva
         self.cva = cc_modes.CvA(game=self,priority=85)
         # marhsall multiball

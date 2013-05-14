@@ -69,15 +69,18 @@ class TributeLauncher(ep.EP_Mode):
         else:
             position = "Lane"
         print "Ball is in the " + position
-        # and then do some junk
+        # and then do some junk -- all selections launch TAF for now
         if self.index == 0:
             print "Selected Monster Bash"
+            self.game.modes.add(self.game.taf_tribute)
         elif self.index == 1:
             print "Selected Addams Family"
+            self.game.modes.add(self.game.taf_tribute)
         elif self.index == 2:
             print "Selected Medieval Madness"
+            self.game.modes.add(self.game.taf_tribute)
         else:
             print "WAT"
-        # and then unload
-        self.delay(delay=4,handler=self.unload)
+        # and then unload -- tribute modes will unload this mode
+        #self.delay(delay=4,handler=self.unload)
 

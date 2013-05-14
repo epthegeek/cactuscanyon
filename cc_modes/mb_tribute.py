@@ -14,15 +14,15 @@
 ## Original Cactus Canyon software by Matt Coriale
 ##
 ##
-## The The Addams Family Tribute
+## The Monster Bash Tribute
 ##
 
 from procgame import dmd,game
 import ep
 import random
 
-class TAF_Tribute(ep.EP_Mode):
+class MB_Tribute(ep.EP_Mode):
     """This is Just a Tribute """
     def __init__(self,game,priority):
-        super(TAF_Tribute, self).__init__(game,priority)
-        self.myID = "TAF Tribute"
+        super(MB_Tribute, self).__init__(game,priority)
+        self.myID = "MB Tribute"

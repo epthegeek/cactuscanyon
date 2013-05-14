@@ -1120,11 +1120,12 @@ class Assets():
         self.dmd_singleCowboySidewaysBorder = dmd.Animation().load(self.dmd_path+'single-cowboy-sideways-border.dmd')
         self.dmd_mineEntranceBorder = dmd.Animation().load(self.dmd_path +'mine-entrance-border.dmd')
         self.dmd_simpleBorder = dmd.Animation().load(self.dmd_path + 'simple_border.dmd')
+        self.dmd_singlePixelBorder = dmd.Animation().load(self.dmd_path + 'single_pixel_border.dmd')
         self.dmd_ropeBorder = dmd.Animation().load(self.dmd_path + 'rope-border.dmd')
         self.dmd_skyline = dmd.Animation().load(self.dmd_path+'skyline.dmd')
         self.dmd_bartender = dmd.Animation().load(self.dmd_path + 'bartender.dmd')
         self.dmd_escaped = dmd.Animation().load(self.dmd_path +'escaped.dmd')
-        self.dmd_stringBorder = dmd.Animation().load(self.dmd_path+'frame1.dmd')
+        self.dmd_stringBorder = dmd.Animation().load(self.dmd_path+'string-border.dmd')
 
         self.dmd_tombstone = dmd.Animation().load(self.dmd_path+'tombstone.dmd')
         self.dmd_beerMug = dmd.Animation().load(self.dmd_path +'beer-mug-1.dmd')

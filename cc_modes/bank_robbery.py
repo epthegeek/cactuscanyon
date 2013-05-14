@@ -206,7 +206,7 @@ class BankRobbery(ep.EP_Mode):
             self.music_on(self.game.assets.music_altPeril)
             # run the animation
             anim = self.game.assets.dmd_pollyIntro
-            myWait = len(anim.frames) / 30
+            myWait = len(anim.frames) / 30.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
             self.layer = animLayer
 

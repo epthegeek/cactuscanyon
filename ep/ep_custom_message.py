@@ -56,6 +56,8 @@ class EP_CustomMessageFrame(object):
             myBorder = self.game.assets.dmd_tracksBorder
         elif border == "THIN":
             myBorder = self.game.assets.dmd_stringBorder
+        elif border == "PIXEL":
+            myBorder = self.game.assets.dmd_singlePixelBorder
         # otherwise blank
         else:
             myBorder = self.game.assets.dmd_blank

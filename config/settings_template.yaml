@@ -353,7 +353,7 @@ Custom Message:
     options: [2]
     default: 2
   'Page 3 Border':
-    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN']
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN','PIXEL']
     default: 'NONE'
   'Page 3 Line 1 Text':
     options: []
@@ -395,7 +395,7 @@ Custom Message:
     options: [3]
     default: 3
   'Page 4 Border':
-    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN']
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN','PIXEL']
     default: 'NONE'
   'Page 4 Line 1 Text':
     options: []
@@ -437,7 +437,7 @@ Custom Message:
     options: [4]
     default: 4
   'Page 5 Border':
-    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN']
+    options: ['NONE','ROPE','SIMPLE','GUNS','SKULLS','STARS','TRACKS','THIN','PIXEL']
     default: 'NONE'
   'Page 5 Line 1 Text':
     options: []

@@ -212,10 +212,13 @@ class LampControl(ep.EP_Mode):
                     self.game.lamps.rightReturnQuickdraw.schedule(0x0F0F0F0F)
                     self.game.lamps.leftReturnQuickdraw.schedule(0xF0F0F0F0)
         # even if guns aren't allowed the quickdraw playfield lights should be on if needed
-        if left == 'OPEN':
-            self.game.lamps.leftQuickdraw.enable()
-        if left == 'TOP' or left == 'BOT':
-            self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
+        if self.game.taf_tribute.runing:
+            self.game.lamps.leftQuickdraw.schedule(0x0F0F0F0F)
+        else:
+            if left == 'OPEN':
+                self.game.lamps.leftQuickdraw.enable()
+            if left == 'TOP' or left == 'BOT':
+                self.game.lamps.leftQuickdraw.schedule(0x00FF00FF)
         if right == 'OPEN':
             self.game.lamps.topRightQuickdraw.enable()
             self.game.lamps.bottomRightQuickdraw.enable()
