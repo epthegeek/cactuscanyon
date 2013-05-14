@@ -159,7 +159,7 @@ class Tracking(game.Player):
         # Level 2 is Save Polly modes - only one of these can run at a time, and they are allowed to run with level 0
         # Level 3 is drunk multiball
         # Level 4 is goldmine multiball, stampede
-        # Level 5 is cva,marshall,boss bart
+        # Level 5 is cva,marshall,boss bart,tribute
         # level 6 is bionic bart,high noon
         self.player_stats['stackLevel'] = [False,False,False,False,False,False,False]
 

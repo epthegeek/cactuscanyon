@@ -58,7 +58,10 @@ __all__ = [
     'switch_tracker',
     'score_display',
     'moonlight',
-    'tribute_launcher'
+    'tribute_launcher',
+    'mm_tribute',
+    'mb_tribute',
+    'taf_tribute'
 ]
 from base import *
 from attract import *
@@ -104,3 +107,6 @@ from switch_tracker import *
 from score_display import *
 from moonlight import *
 from tribute_launcher import *
+from mm_tribute import *
+from mb_tribute import *
+from taf_tribute import *

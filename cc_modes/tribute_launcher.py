@@ -34,6 +34,8 @@ class TributeLauncher(ep.EP_Mode):
 
     def mode_started(self):
         self.selecting = False
+        # set the stack level
+        self.game.stack_level(5,True)
         choices = [0,1,2]
         self.index = random.choice(choices)
         # throw up a text thing telling player to hit flippers to select
@@ -41,7 +43,7 @@ class TributeLauncher(ep.EP_Mode):
         lineOne = ep.EP_TextLayer(58,12, self.game.assets.font_5px_AZ, "center", opaque = False).set_text("HIT BOTH FLIPPERS",color=ep.YELLOW)
         lineTwo = ep.EP_TextLayer(58,19, self.game.assets.font_5px_AZ, "center", opaque = False).set_text("TO SELECT MODE", color=ep.YELLOW)
         icon = dmd.TextLayer(124,1, self.game.assets.font_skillshot, "right", opaque=True).set_text("V")
-        combined = dmd.GroupedLayer(128,32,[title,lineOne,lineTwo,icon])
+        combined = dmd.GroupedLayer(128,32,[icon,title,lineOne,lineTwo])
         self.layer = combined
         self.delay(delay=2,handler=self.start_selection)
 
