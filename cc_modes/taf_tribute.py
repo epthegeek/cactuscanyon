@@ -142,14 +142,14 @@ class TAF_Tribute(ep.EP_Mode):
     def sw_saloonPopper_inactive(self,sw):
         if self.running and self.halted:
             self.halted = False
-            self.delay("Resume",delay=1,handler=self.display_it,param="idle")
+            self.delay("Resume",delay=1,handler=self.resume_it)
 
     # resume when exit
     def sw_jetBumpersExit_active(self,sw):
         if self.running and self.halted:
             # kill the halt flag
             self.halted = False
-            self.delay("Resume",delay=1,handler=self.display_it,param="idle")
+            self.delay("Resume",delay=1,handler=self.resume_it)
 
     def intro(self,step=1):
         if step == 1:
@@ -245,6 +245,12 @@ class TAF_Tribute(ep.EP_Mode):
         self.layer = self.pauseView
         # set the flag
         self.halted = True
+
+    def resume_it(self):
+        # turn the timer back on
+        self.time_it()
+        # turn the display back on
+        self.display_it("idle")
 
     def finish_it(self):
         textLayer1 = ep.EP_TextLayer(128,2,self.game.assets.font_9px_az,"center",opaque=True).set_text("COUSIN IT TOTAL")
