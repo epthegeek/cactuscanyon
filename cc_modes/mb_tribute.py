@@ -26,3 +26,13 @@ class MB_Tribute(ep.EP_Mode):
     def __init__(self,game,priority):
         super(MB_Tribute, self).__init__(game,priority)
         self.myID = "MB Tribute"
+
+
+# after intro - push up with "Hit dracula 5 times" / " to finish" 7px
+
+# running screen: timers in both corners 7px, info line at the bottom "x - hits to finish - x" 5px
+# title line " drac attack" 5px bold - score in the middle 12 px
+#
+# after a hit, push up - "Dracula damaged" 7px - score - large - crossfade back to drac display
+# last one says dracula defeated
+# drac-attack total screen - stake boarder 'drac-attack / total:' w/ score in 9px
