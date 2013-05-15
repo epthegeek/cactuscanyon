@@ -28,10 +28,11 @@ class TAF_Tribute(ep.EP_Mode):
         self.myID = "TAF Tribute"
         # switch value to raise if it gets hit
         self.bump = 25000
-        self.running = False
         # for timer halting in saloon/jets
         self.halted = False
+        self.running = False
 
+        script = []
         # set up the pause text layer
         textString = "< COUSIN IT PAUSED >"
         textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString,color=ep.GREEN)
@@ -44,9 +45,12 @@ class TAF_Tribute(ep.EP_Mode):
         self.pauseView = dmd.ScriptedLayer(128,32,script)
         self.pauseView.composite_op = "blacksrc"
         self.misses = [self.game.assets.dmd_tafItMiss1,self.game.assets.dmd_tafItMiss2]
-
+        self.mumbles = [self.game.assets.sfx_tafIt1,self.game.assets.sfx_tafIt2,self.game.assets.sfx_tafIt3,self.game.assets.sfx_tafIt4]
 
     def mode_started(self):
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add',self.myID)
+        self.index = 0
         # switch value to start
         self.value = 100000
         self.total = 500000
@@ -54,34 +58,49 @@ class TAF_Tribute(ep.EP_Mode):
         self.modeTimer = 20
         self.running = True
         # set up the default text layers
-        self.timerLayer = ep.EP_TextLayer(0,0,self.game.assets.font_9px_az,"left",False)
+        self.timerLayer = ep.EP_TextLayer(0,0,self.game.assets.font_9px_az,"left",True)
         self.valueTitleLayer = ep.EP_TextLayer(80,0,self.game.assets.font_5px_AZ,"center",False).set_text("TARGET VALUE")
         self.valueLayer = ep.EP_TextLayer(80,6,self.game.assets.font_7px_az,"center",False).set_text(ep.format_score(self.value))
         self.totalTitleLayer = ep.EP_TextLayer(80,14,self.game.assets.font_7px_az,"center",False).set_text("IT TOTAL")
         self.totalLayer = ep.EP_TextLayer(80,22,self.game.assets.font_9px_az,"center",False).set_text(ep.format_score(self.total))
         self.intro()
 
+    def ball_drained(self):
+        # if we get to zero balls while running, finish
+        if self.game.trough.num_balls_in_play == 0 and self.running:
+            self.finish_it()
+
     # switches
     # left quickdraws are cousin it
-    def sw_leftQuickdrawTop(self,sw):
+    def sw_bottomLeftStandUp_active(self,sw):
         self.hit_it()
-    def sw_leftQuickdrawBottom(self,sw):
+        return game.SwitchStop
+    def sw_topLeftStandUp_active(self,sw):
         self.hit_it()
+        return game.SwitchStop
 
     # switches that register values
-    def sw_leftLoopBottom(self,sw):
+    def sw_bottomRightStandUp_active(self,sw):
         self.miss_it()
-    def sw_leftRampEnter(self,sw):
+        return game.SwitchStop
+    def sw_topRightStandUp_active(self,sw):
+        self.miss_it()
+        return game.SwitchStop
+    def sw_leftLoopBottom_active(self,sw):
+        self.miss_it()
+        return game.SwitchStop
+    def sw_leftRampEnter_active(self,sw):
         self.miss_it()
     def sw_minePopper_active_for_300ms(self,sw):
         self.miss_it()
-    def sw_centerRampEnter(self,sw):
+    def sw_centerRampEnter_active(self,sw):
         self.miss_it()
-    def sw_saloonGate(self,sw):
+    def sw_saloonGate_active(self,sw):
         self.miss_it()
-    def sw_rightLoopBottom(self,sw):
+    def sw_rightLoopBottom_active(self,sw):
         self.miss_it()
-    def sw_rightRampEnter(self,sw):
+        return game.SwitchStop
+    def sw_rightRampEnter_active(self,sw):
         self.miss_it()
 
     # halt switches
@@ -153,30 +172,35 @@ class TAF_Tribute(ep.EP_Mode):
 
     def intro(self,step=1):
         if step == 1:
-            anim = self.game.dmd.assets.dmd_tafItIntro
+            self.stop_music()
+            anim = self.game.assets.dmd_tafItIntro
             myWait = len(anim.frames) / 10.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+            self.game.sound.play(self.game.assets.sfx_tafDitty)
             self.layer = animLayer
-            self.delay(delay = myWait,handler=self.intro,param=2)
+            self.delay(delay = myWait+1,handler=self.intro,param=2)
         if step == 2:
-            textLayer1 = ep.EP_TextLayer(128,1,self.game.assets.font_9px_az,False).set_text("HIT COUSIN IT")
-            textLayer2 = ep.EP_TextLayer(128,10,self.game.assets.font_9px_az,False).set_text("ALL TARGETS=" + str(ep.format_score(self.value)))
-            textLayer3 = ep.EP_TextLayer(128,20,self.game.assets.font_9xp_az,False).set_text("'IT' INCREASES VALUE")
+            textLayer1 = ep.EP_TextLayer(64,1,self.game.assets.font_9px_az,"center",False).set_text("HIT COUSIN IT")
+            textLayer2 = ep.EP_TextLayer(64,11,self.game.assets.font_7px_az,"center",False).set_text("ALL TARGETS=" + str(ep.format_score(self.value)))
+            textLayer3 = ep.EP_TextLayer(64,20,self.game.assets.font_9px_az,"center",False).set_text("'IT' INCREASES VALUE")
             border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_singlePixelBorder.frames[0])
             combined = dmd.GroupedLayer(128,32,[border,textLayer1,textLayer2,textLayer3])
-            transition = ep.EP_Transition(self,self.layer,combined,ep.EP_Transition.TYPE_CROSSFADE)
-            self.delay(delay = 2, handler=self.get_going)
+            current = self.layer
+            transition = ep.EP_Transition(self,current,combined,ep.EP_Transition.TYPE_CROSSFADE)
+            self.game.sound.play(self.game.assets.quote_itsCousinIt)
+            self.delay(delay = 3, handler=self.get_going)
 
     def get_going(self):
+        self.mumble_it()
         # release the ball
         if self.game.tribute_launcher.shot == 3:
             self.game.mountain.eject()
         else:
-            self.game.coils.leftGunfightPost.disable()
+            self.game.coils.leftGunFightPost.disable()
         # unload the launcher
         self.game.tribute_launcher.unload()
         # start the music
-
+        self.music_on(self.game.assets.music_cousinIt)
         # start the display
         self.display_it("idle",startup = True)
         # start the timer
@@ -186,7 +210,7 @@ class TAF_Tribute(ep.EP_Mode):
     def display_it(self,type=None,startup = False):
         self.cancel_delayed("Display")
         if type == "idle":
-            anim = self.game.dmd.assets.dmd_tafItIdle
+            anim = self.game.assets.dmd_tafItIdle
             myWait = len(anim.frames) / 10.0
             self.cousinLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
         elif type == "miss":
@@ -195,44 +219,58 @@ class TAF_Tribute(ep.EP_Mode):
             myWait = len(anim.frames) / 10.0
             self.cousinLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         elif type == "hit":
-            anim = self.game.dmd.assets.dmd_tafItHit
+            anim = self.game.assets.dmd_tafItHit
             myWait = len(anim.frames) / 10.0
             self.cousinLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         else:
             # if we didn't get a cue to change cousin it, we don't mess with him
             myWait = 0
         # build the layer
-        combined = dmd.GroupedLayer(128,32,[self.cousinLayer,self.timerLayer,self.valueTitleLayer,self.valueLayer,self.totalTitleLayer,self.totalLayer])
+        self.cousinLayer.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[self.timerLayer,self.valueTitleLayer,self.valueLayer,self.totalTitleLayer,self.totalLayer,self.cousinLayer])
         # turn on the layer - crossfade at startup
         if startup:
-            transition = ep.EP_Transition(self,self.layer,combined,ep.EP_Transition.TYPE_CROSSFADE)
+            current = self.layer
+            transition = ep.EP_Transition(self,current,combined,ep.EP_Transition.TYPE_CROSSFADE)
         else:
             self.layer = combined
         # set the delay for fixing it after a hit or a miss
         if myWait > 0:
-            self.delay("Display",delay=myWait,handler=display_it,param="idle")
+            self.delay("Display",delay=myWait,handler=self.display_it,param="idle")
 
     def time_it(self):
         self.modeTimer -= 1
-        if self.modeTimer <= 0:
+        print "TAF MODE TIME: " + str(self.modeTimer)
+        if self.modeTimer < 0:
             self.finish_it()
         else:
             self.timerLayer.set_text(str(self.modeTimer))
-            self.delay("Mode Timer",handler=self.time_it)
+            self.delay("Mode Timer",delay=1,handler=self.time_it)
 
     def hit_it(self):
+        print "Hit IT"
         # on a hit, increase the value, and add the new value to the total and display the hit
         self.value += self.bump
         self.total += self.value
         self.totalLayer.set_text(ep.format_score(self.total))
         self.valueLayer.set_text(ep.format_score(self.value))
+        self.game.sound.play(self.game.assets.sfx_tafHitIt)
         self.display_it("hit")
 
     def miss_it(self):
+        print "Miss IT"
         # on a miss award the current value and display the miss
         self.total += self.value
         self.totalLayer.set_text(ep.format_score(self.total))
+        self.game.sound.play(self.game.assets.sfx_tafMissIt)
+        self.delay(delay=0.5,handler=self.mumble_it)
         self.display_it("miss")
+
+    def mumble_it(self):
+        self.game.sound.play(self.mumbles[self.index])
+        self.index += 1
+        if self.index >= 4:
+            self.index = 0
 
     def halt_it(self):
         if self.modeTimer <= 0:
@@ -253,11 +291,21 @@ class TAF_Tribute(ep.EP_Mode):
         self.display_it("idle")
 
     def finish_it(self):
-        textLayer1 = ep.EP_TextLayer(128,2,self.game.assets.font_9px_az,"center",opaque=True).set_text("COUSIN IT TOTAL")
-        textLayer2 = ep.EP_TextLayer(128,14,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(self.total)))
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Display")
+        textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az,"center",opaque=True).set_text("COUSIN IT TOTAL")
+        textLayer2 = ep.EP_TextLayer(64,14,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(self.total)))
+        combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
+        self.layer = combined
         # score the points
         self.game.score(self.total)
+        self.running = False
+        # turn the level 1 stack flag back off
+        self.game.stack_level(5,False)
         # set the music back to the main loop
+        self.music_on(self.game.assets.music_mainTheme,mySlice=5)
+        # remove the switch blocker
+        self.game.switch_blocker('remove',self.myID)
 
         # then unload
-        self.unload()
+        self.delay(delay=2,handler=self.unload)

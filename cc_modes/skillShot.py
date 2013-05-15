@@ -169,27 +169,27 @@ class SkillShot(ep.EP_Mode):
         # here's the super skill shot prizes
         else:
             # 3 million points
-            prizes.append("O")
+        #    prizes.append("O")
             # bonus 5x
-            if self.game.show_tracking('bonusX') < 9:
-                prizes.append("P")
+        #    if self.game.show_tracking('bonusX') < 9:
+        #        prizes.append("P")
             # light gunfight
-            if self.game.show_tracking('gunfightStatus') != "READY":
-                prizes.append("Q")
+        #    if self.game.show_tracking('gunfightStatus') != "READY":
+        #        prizes.append("Q")
             # drunk multiball
-            if self.game.show_tracking('drunkMultiballStatus') != "READY":
-                prizes.append("R")
+        #    if self.game.show_tracking('drunkMultiballStatus') != "READY":
+        #        prizes.append("R")
             # marshall multiball - if it hasn't already run and it is enabled
-            if self.game.show_tracking('marshallMultiballRun') != "True" and self.game.badge.marshallValue == 'Enabled':
-                prizes.append("U")
+        #    if self.game.show_tracking('marshallMultiballRun') != "True" and self.game.badge.marshallValue == 'Enabled':
+        #        prizes.append("U")
             # extra ball
-            if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-                prizes.append("J")
+        #    if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+        #        prizes.append("J")
             # move your train
-            if self.mytValue == 'Enabled' and self.game.move_your_train not in self.game.modes and not self.game.train.mytFail:
-                prizes.append("S")
+        #    if self.mytValue == 'Enabled' and self.game.move_your_train not in self.game.modes and not self.game.train.mytFail:
+        #        prizes.append("S")
             # cva
-            prizes.append("T")
+        #    prizes.append("T")
             # tribute mode
             if self.game.user_settings['Gameplay (Feature)']['Tribute Mode'] == "Enabled":
                 prizes.append("V")

@@ -475,7 +475,7 @@ class Assets():
         self.sfx_tafDitty = 'sfx_tafDitty'
         self.game.sound.register_sound(self.sfx_tafDitty, self.sfx_path + "taf-mansion-ditty.wav")
         self.quote_itsCousinIt = 'quote_itsCousinIt'
-        self.game.sound.register_sound(self.quote_itsCousinIt, self.quote_itsCousinIt + "taf-its-cousin-it.wav")
+        self.game.sound.register_sound(self.quote_itsCousinIt, self.sfx_path + "taf-its-cousin-it.wav")
 
         # Quotes
 
