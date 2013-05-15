@@ -291,16 +291,16 @@ class TAF_Tribute(ep.EP_Mode):
         self.display_it("idle")
 
     def finish_it(self):
-        self.cancel_delayed("Mode Timer")
-        self.cancel_delayed("Display")
-        textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az,"center",opaque=True).set_text("COUSIN IT TOTAL")
-        textLayer2 = ep.EP_TextLayer(64,14,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(self.total)))
-        combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
+        self.wipe_delays()
+        border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_singlePixelBorder.frames[0])
+        textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az,"center",opaque=True).set_text("COUSIN IT TOTAL",color=ep.BROWN)
+        textLayer2 = ep.EP_TextLayer(64,14,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(self.total)),color=ep.GREEN)
+        combined = dmd.GroupedLayer(128,32,[border,textLayer1,textLayer2])
         self.layer = combined
         # score the points
         self.game.score(self.total)
         self.running = False
-        # turn the level 1 stack flag back off
+        # turn the level 5 stack flag back off
         self.game.stack_level(5,False)
         # set the music back to the main loop
         self.music_on(self.game.assets.music_mainTheme,mySlice=5)
