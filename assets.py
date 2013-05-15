@@ -459,7 +459,25 @@ class Assets():
 
         self.sfx_ballSaved = 'sfx_ballSaved'
         self.game.sound.register_sound(self.sfx_ballSaved, self.sfx_path + "00-ball_saved.wav")
-    # Quotes
+
+        self.sfx_tafMissIt = 'sfx_tafMissIt'
+        self.game.sound.register_sound(self.sfx_tafMissIt, self.sfx_path + "taf-ball-whiff.wav")
+        self.sfx_tafHitIt = 'sfx_tafHitIt'
+        self.game.sound.register_sound(self.sfx_tafHitIt, self.sfx_path + "taf-it-hit.wav")
+        self.sfx_tafIt1 = 'sfx_tafIt1'
+        self.game.sound.register_sound(self.sfx_tafIt1, self.sfx_path + "taf-it1.wav")
+        self.sfx_tafIt2 = 'sfx_tafIt2'
+        self.game.sound.register_sound(self.sfx_tafIt2, self.sfx_path + "taf-it2.wav")
+        self.sfx_tafIt3 = 'sfx_tafIt3'
+        self.game.sound.register_sound(self.sfx_tafIt3, self.sfx_path + "taf-it3.wav")
+        self.sfx_tafIt4 = 'sfx_tafIt4'
+        self.game.sound.register_sound(self.sfx_tafIt4, self.sfx_path + "taf-it4.wav")
+        self.sfx_tafDitty = 'sfx_tafDitty'
+        self.game.sound.register_sound(self.sfx_tafDitty, self.sfx_path + "taf-mansion-ditty.wav")
+        self.quote_itsCousinIt = 'quote_itsCousinIt'
+        self.game.sound.register_sound(self.quote_itsCousinIt, self.quote_itsCousinIt + "taf-its-cousin-it.wav")
+
+        # Quotes
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
         self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "592-alien-you-dont-stand-a-chance.wav")
@@ -1054,6 +1072,9 @@ class Assets():
         self.game.sound.register_music(self.music_mmMainLoopTwo, self.music_path + "main_loop_2.wav")
         self.music_mmClosing = 'music_mmClosing'
         self.game.sound.register_music(self.music_mmClosing, self.music_path + "Closing_Riff.wav")
+
+        self.music_cousinIt = 'music_cousinIt'
+        self.game.sound.register_music(self.music_cousinIt, self.music_path + "taf-cousin-it-music.wav")
 
         # lampshows
         lampshows = list()
