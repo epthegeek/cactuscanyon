@@ -118,8 +118,11 @@ class BadGuys(ep.EP_Mode):
         self.target_down(target)
         # call back to base to turn on the light for this bad guy?
         print "QD STATUS CHECK: " + str(self.game.show_tracking('quickdrawStatus'))
+        # If there's a mb tribute running
+        if self.game.mb_tribute.running:
+            self.game.mb_tribute.hit_drac()
         # If there's a quickdraw running
-        if "RUNNING" in self.game.show_tracking('quickdrawStatus'):
+        elif "RUNNING" in self.game.show_tracking('quickdrawStatus'):
             # It's been won
             self.game.quickdraw.won(target)
         # we might be fighting with boss bart

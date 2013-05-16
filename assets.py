@@ -1351,6 +1351,7 @@ class Assets():
         self.dmd_mbDracIntro = dmd.Animation().load(self.dmd_path+'mb-drac-intro.dmd')
         self.dmd_mbDracIdle = dmd.Animation().load(self.dmd_path+'mb-drac-idle.dmd')
         self.dmd_mbDracSmack = dmd.Animation().load(self.dmd_path+'mb-drac-smack.dmd')
+        self.dmd_mbStakeBorder = dmd.Animation().load(self.dmd_path+'mb-stake-border.dmd')
 
         self.dmd_mmLogo = dmd.Animation().load(self.dmd_path+'mm-logo.dmd')
         self.dmd_mmTrollsIntro = dmd.Animation().load(self.dmd_path+'mm_trolls_intro_anim.dmd')

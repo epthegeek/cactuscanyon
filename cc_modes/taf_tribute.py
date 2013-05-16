@@ -293,7 +293,7 @@ class TAF_Tribute(ep.EP_Mode):
     def finish_it(self):
         self.wipe_delays()
         border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_singlePixelBorder.frames[0])
-        textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az,"center",opaque=True).set_text("COUSIN IT TOTAL",color=ep.BROWN)
+        textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az,"center",opaque=False).set_text("COUSIN IT TOTAL",color=ep.BROWN)
         textLayer2 = ep.EP_TextLayer(64,14,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(self.total)),color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[border,textLayer1,textLayer2])
         self.layer = combined
