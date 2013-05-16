@@ -44,7 +44,7 @@ class Assets():
         # _AZ = All numerals and upper case letters
         # _score = Numerals only
         self.font_5px_AZ = ep.ColorFont(self.dmd_path + "Font_3_CactusCanyon.dmd")
-        self.font_5px_AZ.make_colors([ep.GREY,ep.GREEN,ep.ORANGE,ep.YELLOW,ep.BROWN,ep.DARK_BROWN,ep.MAGENTA,ep.DARK_RED,ep.PURPLE])
+        self.font_5px_AZ.make_colors([ep.GREY,ep.GREEN,ep.ORANGE,ep.YELLOW,ep.BROWN,ep.DARK_BROWN,ep.MAGENTA,ep.DARK_RED,ep.PURPLE,ep.RED])
         self.font_5px_AZ_inverted = dmd.Font(self.dmd_path + "Font_3_CactusCanyon_inverted.dmd")
         self.font_5px_bold_AZ = ep.ColorFont(self.dmd_path + "Font_21_CactusCanyon.dmd")
         self.font_5px_bold_AZ.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.RED,ep.BROWN,ep.DARK_BROWN])
@@ -57,12 +57,12 @@ class Assets():
         self.font_6px_az = ep.ColorFont(self.dmd_path + "Font_19_CactusCanyon.dmd")
         self.font_6px_az.make_colors([ep.GREEN,ep.YELLOW,ep.RED,ep.DARK_RED,ep.MAGENTA])
         self.font_6px_az_inverse = ep.ColorFont(self.dmd_path + "Font_Custom_6px.dmd")
-        self.font_6px_az_inverse.make_colors([ep.GREEN,ep.BROWN,ep.MAGENTA,ep.BLUE,ep.YELLOW])
+        self.font_6px_az_inverse.make_colors([ep.GREEN,ep.BROWN,ep.MAGENTA,ep.BLUE,ep.YELLOW,ep.RED])
         self.font_6px_az_inverse.composite_op = "blacksrc"
 
         self.font_7px_alt_az = dmd.Font(self.dmd_path + "Font_1_CactusCanyon.dmd")
         self.font_7px_az = ep.ColorFont(self.dmd_path + "Font_2_CactusCanyon.dmd")
-        self.font_7px_az.make_colors([ep.GREEN,ep.MAGENTA,ep.YELLOW,ep.ORANGE])
+        self.font_7px_az.make_colors([ep.GREEN,ep.MAGENTA,ep.YELLOW,ep.ORANGE,ep.RED])
     #    self.font_7px_score = dmd.Font(self.dmd_path + "Font_5_CactusCanyon.dmd")
     #    self.font_7px_extra_thin_score = dmd.Font(self.dmd_path + "Font_10_CactusCanyon.dmd")
     #    self.font_7px_thin_score = dmd.Font(self.dmd_path + "Font_4_CactusCanyon.dmd")

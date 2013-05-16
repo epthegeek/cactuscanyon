@@ -72,7 +72,7 @@ class TributeLauncher(ep.EP_Mode):
         # and then do some junk -- all selections launch TAF for now
         if self.index == 0:
             print "Selected Monster Bash"
-            self.game.modes.add(self.game.taf_tribute)
+            self.game.modes.add(self.game.mb_tribute)
         elif self.index == 1:
             print "Selected Addams Family"
             self.game.modes.add(self.game.taf_tribute)

@@ -48,9 +48,10 @@ class MB_Tribute(ep.EP_Mode):
         self.leftTimerLine = ep.EP_TextLayer(0,1,self.game.assets.font_7px_az, "left",True)
         self.rightTimerLine = ep.EP_TextLayer(128,1,self.game.assets.font_7px_az,"right",False)
         self.scoreLine = ep.EP_TextLayer(64,6,self.game.assets.font_12px_az,"center",opaque=False)
-        self.infoLine = ep.EP_TextLayer(64,20,self.game.assets.font_5px_AZ,"center", opaque=False)
+        self.infoLine = ep.EP_TextLayer(64,22,self.game.assets.font_5px_AZ,"center", opaque=False)
+        self.infoLine.set_text(str(self.hitsToWin) + " - HITS TO FINISH - " + str(self.hitsToWin))
         # offset position for the drac layers based on index position
-        self.offsets = [0,20,50,80]
+        self.offsets = [-51,-23,5,33]
 
     def mode_started(self):
         # first hit is 250, but it adds the bump first in the routine
@@ -86,10 +87,10 @@ class MB_Tribute(ep.EP_Mode):
             # sounds ?
 
             self.layer = animLayer
-            self.delay(delay = myWait+1,handler=self.intro,param=2)
+            self.delay(delay = myWait,handler=self.intro,param=2)
         if step == 2:
-            textLayer1 = ep.EP_TextLayer(64,1,self.game.assets.font_7px_az,"center",True).set_text("HIT DRACULA " + str(self.hitsToWin) + " TIMES",color=ep.RED)
-            textLayer2 = ep.EP_TextLayer(64,11,self.game.assets.font_7px_az,"center",False).set_text("TO FINISH",color=ep.RED)
+            textLayer1 = ep.EP_TextLayer(64,5,self.game.assets.font_9px_az,"center",True).set_text("HIT DRACULA " + str(self.hitsToWin) + " TIMES",color=ep.RED)
+            textLayer2 = ep.EP_TextLayer(64,16,self.game.assets.font_9px_az,"center",False).set_text("TO FINISH",color=ep.RED)
             combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
             current = self.layer
             transition = ep.EP_Transition(self,current,combined,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
@@ -119,13 +120,13 @@ class MB_Tribute(ep.EP_Mode):
         self.moveTimer += 1
         self.move_drac()
 
-    def display_drac(self,type=None,fade = False):
+    def display_drac(self,mode=None,fade = False):
         self.cancel_delayed("Display")
-        if type == "idle":
+        if mode == "idle":
             anim = self.game.assets.dmd_mbDracIdle
             myWait = len(anim.frames) / 10.0
             self.dracLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
-        elif type == "hit":
+        elif mode == "hit":
             anim = self.game.assets.dmd_mbDracSmack
             myWait = len(anim.frames) / 10.0
             self.dracLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
@@ -144,22 +145,20 @@ class MB_Tribute(ep.EP_Mode):
         else:
             self.layer = combined
         # set the delay for fixing it after a hit or a miss
-        if type == "hit":
+        if mode == "hit":
             self.delay("Display",delay=myWait,handler=self.hit_banner)
 
     def hit_banner(self):
-        title = ep.EP_TextLayer(64,1,self.game.assets.font_7px_az,"center",False)
+        title = ep.EP_TextLayer(64,3,self.game.assets.font_7px_az,"center",False)
         # if we have enough hits to win
         if self.hitsSoFar >= self.hitsToWin:
             title.set_text("DRACULA DEFEATED",color=ep.RED)
-            myCallback = self.post_hit_banner
         else:
             title.set_text("DRACULA DAMAGED", color=ep.RED)
-            myCallback = self.display_drac
-        points = ep.EP_TextLayer(64,10,self.game.assets.font_12px_az,"center",False).set_text(ep.format_score(self.value))
+        points = ep.EP_TextLayer(64,13,self.game.assets.font_12px_az,"center",False).set_text(ep.format_score(self.value))
         combined = dmd.GroupedLayer(128,32,[title,points])
-        transition = ep.EP_Transition(self,self.layer,combined,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH,callback=myCallback)
-        if self.hitsSoFar >= self.hitToWin:
+        transition = ep.EP_Transition(self,self.layer,combined,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
+        if self.hitsSoFar >= self.hitsToWin:
             self.delay(delay=2,handler=self.finish_drac)
         else:
             self.delay("Display",delay=2,handler=self.post_hit_banner)
@@ -168,7 +167,7 @@ class MB_Tribute(ep.EP_Mode):
         # restart the timer and reset
         self.modeTimer = 21
         self.time_drac()
-        self.display_drac(type="idle",fade=True)
+        self.display_drac(mode="idle",fade=True)
         # put drac back up
         self.game.bad_guys.target_up(self.index)
         # restart the move timer
@@ -185,6 +184,10 @@ class MB_Tribute(ep.EP_Mode):
         # score the points
         self.game.score(self.value)
         self.totalPoints += self.value
+        # register the hit
+        self.hitsSoFar += 1
+        remain = str(self.hitsToWin - self.hitsSoFar)
+        self.infoLine.set_text(remain + " - HITS TO FINISH - " + remain)
         # sound ?
 
         self.modeTimer = 21
@@ -211,6 +214,8 @@ class MB_Tribute(ep.EP_Mode):
     def move_drac(self):
         self.moveTimer -= 1
         if self.moveTimer <= 0:
+            self.moveTimer = 8
+            print "Moving Dracula"
             # drop the target
             self.game.bad_guys.target_down(self.index)
             # move to the next target
@@ -230,8 +235,8 @@ class MB_Tribute(ep.EP_Mode):
             self.game.bad_guys.target_up(self.index)
             # update the display
             self.display_drac()
-        else:
-            self.delay("Move Timer",delay=1,handler=self.move_drac)
+
+        self.delay("Move Timer",delay=1,handler=self.move_drac)
 
     def score_update(self):
         # update the score line total every half second
@@ -264,8 +269,8 @@ class MB_Tribute(ep.EP_Mode):
         self.wipe_delays()
         border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mbStakeBorder.frames[0])
         textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_5px_AZ,"center",opaque=False).set_text("DRAC ATTACK",color=ep.RED)
-        textLayer3 = ep.EP_TextLayer(64,7,self.game.assets.font_5px_AZ,"center",opaque=False).set_text("TOTAL",color=ep.RED)
-        textLayer2 = ep.EP_TextLayer(64,14,self.game.assets.font_9px_az,"center",opaque=False).set_text(str(ep.format_score(self.totalPoints)),color=ep.GREEN)
+        textLayer3 = ep.EP_TextLayer(64,9,self.game.assets.font_5px_AZ,"center",opaque=False).set_text("TOTAL",color=ep.RED)
+        textLayer2 = ep.EP_TextLayer(64,16,self.game.assets.font_9px_az,"center",opaque=False).set_text(str(ep.format_score(self.totalPoints)),color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[border,textLayer1,textLayer2,textLayer3])
         self.layer = combined
         self.running = False
