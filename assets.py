@@ -477,7 +477,46 @@ class Assets():
         self.quote_itsCousinIt = 'quote_itsCousinIt'
         self.game.sound.register_sound(self.quote_itsCousinIt, self.sfx_path + "taf-its-cousin-it.wav")
 
+        self.sfx_mbDracIntro = 'sfx_mbDracIntro'
+        self.game.sound.register_sound(self.sfx_mbDracIntro, self.sfx_path + "mb_drac_intro.wav")
+        self.sfx_mbCoffinCreak = 'sfx_mbCoffinCreak'
+        self.game.sound.register_sound(self.sfx_mbCoffinCreak, self.sfx_path + "mb_coffin_creak.wav")
+        self.sfx_mbBangCrash = 'sfx_mbBangCrash'
+        self.game.sound.register_sound(self.sfx_mbBangCrash, self.sfx_path + "mb_bang-crash.wav")
+        self.sfx_mbBats = 'sfx_mbBats'
+        self.game.sound.register_sound(self.sfx_mbBats, self.sfx_path + "mb_screeching-bats.wav")
+        self.sfx_mbSmack = 'sfx_mbSmack'
+        self.game.sound.register_sound(self.sfx_mbSmack, self.sfx_path + "mb_drac_smack.wav")
+
         # Quotes
+
+        self.quote_mbDracBleh = 'quote_mbDracBleh'
+        self.game.sound.register_sound(self.quote_mbDracBleh, self.quotes_path + "mb_drac-blah.wav")
+        self.quote_mbDracStart = 'quote_mbDracStart'
+        self.game.sound.register_sound(self.quote_mbDracStart, self.quotes_path + "mb_drac-can-you-hit-dis-bat.wav")
+        self.game.sound.register_sound(self.quote_mbDracStart, self.quotes_path + "mb_drac-who-dare-disturb-my-slumber.wav")
+        self.game.sound.register_sound(self.quote_mbDracStart, self.quotes_path + "mb_drac-i-am-count-dracula-and-youre-not.wav")
+        self.quote_mbDracMove = 'quote_mbDracMove'
+        self.game.sound.register_sound(self.quote_mbDracMove, self.quotes_path + "mb_drac-look-out-now.wav")
+        self.game.sound.register_sound(self.quote_mbDracMove, self.quotes_path + "mb_drac-over-here-garlic-breath.wav")
+        self.game.sound.register_sound(self.quote_mbDracMove, self.quotes_path + "mb_drac-over-here-sphere-boy.wav")
+        self.game.sound.register_sound(self.quote_mbDracMove, self.quotes_path + "mb_drac-watch-me-now.wav")
+        self.quote_mbDracSmack = 'quote_mbDracSmack'
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-hey.wav")
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-ow.wav")
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-thats-my-feet.wav")
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-ooch.wav")
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-how-dare-you-strike-the-great-impaler.wav")
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-ouch.wav")
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-those-are-my-bruno-males.wav")
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-watch-the-family-jewels.wav")
+        self.game.sound.register_sound(self.quote_mbDracSmack, self.quotes_path + "mb_drac-not-below-the-belt.wav")
+        self.quote_mbDracWin = 'quote_mbDracWin'
+        self.game.sound.register_sound(self.quote_mbDracWin, self.quotes_path + "mb_drac-can-i-get-some-fries-with-that-stake.wav")
+        self.quote_mbDracLose = 'quote_mbDracLose'
+        self.game.sound.register_sound(self.quote_mbDracLose, self.quotes_path + "mb_drac-blah-blah-blah.wav")
+        self.quote_mbDracBad = 'quote_mbDracBad'
+        self.game.sound.register_sound(self.quote_mbDracBad, self.quotes_path + "mb_drac-thats-lower-than-franks-iq.wav")
 
         self.quote_cvaTaunt = 'quote_cvaTaunt'
         self.game.sound.register_sound(self.quote_cvaTaunt, self.quotes_path + "592-alien-you-dont-stand-a-chance.wav")
@@ -1076,6 +1115,9 @@ class Assets():
         self.music_cousinIt = 'music_cousinIt'
         self.game.sound.register_music(self.music_cousinIt, self.music_path + "taf-cousin-it-music.wav")
 
+        self.music_dracAttack = 'music_dracAttack'
+        self.game.sound.register_music(self.music_dracAttack, self.music_path + "mb_drac_song.wav"
+        )
         # lampshows
         lampshows = list()
 

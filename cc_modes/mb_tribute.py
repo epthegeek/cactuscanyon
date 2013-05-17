@@ -81,14 +81,24 @@ class MB_Tribute(ep.EP_Mode):
     def intro(self,step=1):
         if step == 1:
             self.stop_music()
+            self.game.sound.play(self.game.assets.sfx_mbBats)
             anim = self.game.assets.dmd_mbDracIntro
             myWait = len(anim.frames) / 10.0
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold = True
+            animLayer.frame_time = 6
+            animLayer.repeat = False
+            animLayer.opaque = True
             # sounds ?
+            animLayer.add_frame_listener(19,self.game.sound.play,param=self.game.assets.sfx_mbDracIntro)
+            animLayer.add_frame_listener(42,self.game.sound.play,param=self.game.assets.sfx_mbCoffinCreak)
+            animLayer.add_frame_listener(47,self.game.sound.play,param=self.game.assets.sfx_mbBangCrash)
+            animLayer.add_frame_listener(55,self.game.base.play_quote,param=self.game.assets.quote_mbDracBleh)
 
             self.layer = animLayer
             self.delay(delay = myWait,handler=self.intro,param=2)
         if step == 2:
+            self.game.base.music_on(self.game.assets.music_dracAttack)
             textLayer1 = ep.EP_TextLayer(64,5,self.game.assets.font_9px_az,"center",True).set_text("HIT DRACULA " + str(self.hitsToWin) + " TIMES",color=ep.RED)
             textLayer2 = ep.EP_TextLayer(64,16,self.game.assets.font_9px_az,"center",False).set_text("TO FINISH",color=ep.RED)
             combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
@@ -193,6 +203,9 @@ class MB_Tribute(ep.EP_Mode):
         self.modeTimer = 21
         # display the hit
         self.display_drac("hit")
+        # play the hit sound
+        myWait = self.game.sound.play(self.game.assets.sfx_mbSmack)
+        self.delay(delay=myWait,handler=self.game.base.priority_quote,param=self.game.assets.quote_mbDracSmack)
 
     def time_drac(self):
         self.modeTimer -= 1
@@ -233,6 +246,7 @@ class MB_Tribute(ep.EP_Mode):
                     self.index -= 1
             # raise the target
             self.game.bad_guys.target_up(self.index)
+            self.game.base.play_quote(self.game.assets.quote_mbDracMove)
             # update the display
             self.display_drac()
 
@@ -273,13 +287,24 @@ class MB_Tribute(ep.EP_Mode):
         textLayer2 = ep.EP_TextLayer(64,16,self.game.assets.font_9px_az,"center",opaque=False).set_text(str(ep.format_score(self.totalPoints)),color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[border,textLayer1,textLayer2,textLayer3])
         self.layer = combined
+        # play a final quote
+        if self.hitsToWin == self.hitsSoFar:
+            sound = self.game.assets.quote_mbDracWin
+        elif self.hitsSoFar <= 1:
+            sound = self.game.assets.quote_mbDracBad
+        else:
+            sound = self.game.assets.quote_mbDracLose
+        myWait = self.game.base.play_quote(sound)
+        self.delay(delay=myWait,handler=self.done)
+
+    def done(self):
         self.running = False
         # turn the level 5 stack flag back off
         self.game.stack_level(5,False)
         # set the music back to the main loop
         self.music_on(self.game.assets.music_mainTheme,mySlice=5)
         # then unload
-        self.delay(delay=2,handler=self.unload)
+        self.unload()
 
 # last one says dracula defeated
 # drac-attack total screen - stake boarder 'drac-attack / total:' w/ score in 9px
