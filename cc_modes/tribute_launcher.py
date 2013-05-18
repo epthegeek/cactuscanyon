@@ -31,6 +31,7 @@ class TributeLauncher(ep.EP_Mode):
         mm_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mmLogo.frames[0])
         self.slides = [mb_logo,taf_logo,mm_logo]
         self.shot = 0
+        self.selecting = False
 
     def mode_started(self):
         self.selecting = False
