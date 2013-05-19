@@ -85,3 +85,9 @@ class TributeLauncher(ep.EP_Mode):
         # and then unload -- tribute modes will unload this mode
         #self.delay(delay=4,handler=self.unload)
 
+
+    def remove_launcher(self):
+        self.selecting = False
+        # turn the level 5 stack flag back off
+        self.game.stack_level(5,False)
+        self.unload()

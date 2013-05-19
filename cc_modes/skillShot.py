@@ -675,6 +675,9 @@ class SkillShot(ep.EP_Mode):
             # award the prize
             self.skillshot_award(switch)
         else:
+            # if tribute was on, remove that
+            if self.game.tribute_launcher in self.game.modes:
+                self.game.tribute_launcher.remove_launcher()
             # start the ball saver
             self.game.trough.start_ball_save(num_balls_to_save=1, time=10, now=True, allow_multiple_saves=False)
             # clear the prizes
