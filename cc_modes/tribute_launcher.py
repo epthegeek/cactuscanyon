@@ -79,7 +79,7 @@ class TributeLauncher(ep.EP_Mode):
             self.game.modes.add(self.game.taf_tribute)
         elif self.index == 2:
             print "Selected Medieval Madness"
-            self.game.modes.add(self.game.taf_tribute)
+            self.game.modes.add(self.game.mm_tribute)
         else:
             print "WAT"
         # and then unload -- tribute modes will unload this mode

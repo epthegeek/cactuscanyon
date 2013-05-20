@@ -121,6 +121,8 @@ class BadGuys(ep.EP_Mode):
         # If there's a mb tribute running
         if self.game.mb_tribute.running:
             self.game.mb_tribute.hit_drac()
+        elif self.game.mm_tribute.running:
+            self.game.mm_tribute.hit_troll(target)
         # If there's a quickdraw running
         elif "RUNNING" in self.game.show_tracking('quickdrawStatus'):
             # It's been won

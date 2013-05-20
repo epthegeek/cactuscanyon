@@ -488,7 +488,27 @@ class Assets():
         self.sfx_mbSmack = 'sfx_mbSmack'
         self.game.sound.register_sound(self.sfx_mbSmack, self.sfx_path + "mb_drac_smack.wav")
 
+        self.sfx_mmTrollSmack = 'sfx_mmTrollSmack'
+        self.game.sound.register_sound(self.sfx_mmTrollSmack, self.sfx_path + "mm_troll-smack.wav")
+
         # Quotes
+
+        self.quote_mmTrolls = 'quote_mmTrolls'
+        self.game.sound.register_sound(self.quote_mmTrolls, self.quotes_path + "mm_trolls_crowd.wav")
+        self.quote_mmLeftPain = 'quote_mmLeftPain'
+        self.game.sound.register_sound(self.quote_mmLeftPain, self.quotes_path + "mm_left-troll-pain-1.wav")
+        self.game.sound.register_sound(self.quote_mmLeftPain, self.quotes_path + "mm_left-troll-pain-2.wav")
+        self.game.sound.register_sound(self.quote_mmLeftPain, self.quotes_path + "mm_left-troll-pain-3.wav")
+        self.quote_mmRightPain = 'quote_mmRightPain'
+        self.game.sound.register_sound(self.quote_mmRightPain, self.quotes_path + "mm_right-troll-pain-1.wav")
+        self.game.sound.register_sound(self.quote_mmRightPain, self.quotes_path + "mm_right-troll-pain-2.wav")
+        self.game.sound.register_sound(self.quote_mmRightPain, self.quotes_path + "mm_right-troll-pain-3.wav")
+        self.quote_mmLeftDeath = 'quote_mmLeftDeath'
+        self.game.sound.register_sound(self.quote_mmLeftDeath, self.quotes_path + "mm_left-troll-death-1.wav")
+        self.game.sound.register_sound(self.quote_mmLeftDeath, self.quotes_path + "mm_left-troll-death-2.wav")
+        self.quote_mmRightDeath = 'quote_mmRightDeath'
+        self.game.sound.register_sound(self.quote_mmRightDeath, self.quotes_path + "mm_right-troll-death-1.wav")
+        self.game.sound.register_sound(self.quote_mmRightDeath, self.quotes_path + "mm_right-troll-death-2.wav")
 
         self.quote_mbDracBleh = 'quote_mbDracBleh'
         self.game.sound.register_sound(self.quote_mbDracBleh, self.quotes_path + "mb_drac-blah.wav")
@@ -1116,8 +1136,10 @@ class Assets():
         self.game.sound.register_music(self.music_cousinIt, self.music_path + "taf-cousin-it-music.wav")
 
         self.music_dracAttack = 'music_dracAttack'
-        self.game.sound.register_music(self.music_dracAttack, self.music_path + "mb_drac_song.wav"
-        )
+        self.game.sound.register_music(self.music_dracAttack, self.music_path + "mb_drac_song.wav")
+
+        self.music_trolls = 'music_trolls'
+        self.game.sound.register_music(self.music_trolls, self.music_path + "mm_trolls_music.wav")
         # lampshows
         lampshows = list()
 
