@@ -54,6 +54,8 @@ class MB_Tribute(ep.EP_Mode):
         self.offsets = [-51,-23,5,33]
 
     def mode_started(self):
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add',self.myID)
         # unload the launcher
         self.game.tribute_launcher.unload()
         # first hit is 250, but it adds the bump first in the routine
@@ -370,8 +372,7 @@ class MB_Tribute(ep.EP_Mode):
         self.game.stack_level(5,False)
         # set the music back to the main loop
         self.music_on(self.game.assets.music_mainTheme,mySlice=5)
+        # remove the switch blocker
+        self.game.switch_blocker('remove',self.myID)
         # then unload
         self.unload()
-
-# last one says dracula defeated
-# drac-attack total screen - stake boarder 'drac-attack / total:' w/ score in 9px

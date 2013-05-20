@@ -75,6 +75,8 @@ class MM_Tribute(ep.EP_Mode):
         # overall mode timer
         self.modeTimer = 30
         self.timeLayer = ep.EP_TextLayer(64,22,self.game.assets.font_9px_az,"center",opaque=True).set_text(str(self.modeTimer),color=ep.GREEN)
+        # fire up the switch block if it's not already loaded
+        self.game.switch_blocker('add',self.myID)
         # unload the launcher
         self.game.tribute_launcher.unload()
         # first hit is 250, but it adds the bump first in the routine
@@ -400,7 +402,7 @@ class MM_Tribute(ep.EP_Mode):
         # if they're both alive - double taunt
         if self.leftHitsSoFar < self.hitsToWin and self.rightHitsSoFar < self.hitsToWin:
             # play the left taunt
-            myWait = self.game.base.play_quote(self.leftTaunts[index])
+            myWait = self.game.base.priority_quote(self.leftTaunts[index])
             # then delay the second
             self.delay("Taunt Call",delay=myWait+0.5,handler=self.game.base.play_quote,param=self.rightTaunts[index])
         # if one of them is already dead - play a single taunt
@@ -418,8 +420,8 @@ class MM_Tribute(ep.EP_Mode):
 
     def taunt_timer(self):
         # loop for calling the troll taunting
-        self.taunt_timer -= 1
-        if self.taunt_timer <= 0:
+        self.tauntTimer -= 1
+        if self.tauntTimer <= 0:
             self.taunt()
         else:
             self.delay("Taunt Timer", delay = 1, handler=self.taunt_timer)
@@ -441,9 +443,9 @@ class MM_Tribute(ep.EP_Mode):
         self.layer = combined
         # play a final quote ?
         if self.won:
-            self.game.base.priority_quote(self.game.assets.mmFatality)
+            self.delay(delay=1,handler=self.game.base.priority_quote,param=self.game.assets.quote_mmFatality)
         elif self.leftHitsSoFar == 0 and self.rightHitsSoFar == 0:
-            self.game.base.pirority_quote(self.game.assets.quote_mmYouSuck)
+            self.game.base.priority_quote(self.game.assets.quote_mmYouSuck)
         else:
             self.game.sound.play(self.game.assets.sfx_cheers)
         myWait = 2
@@ -455,6 +457,8 @@ class MM_Tribute(ep.EP_Mode):
         self.game.stack_level(5,False)
         # set the music back to the main loop
         self.music_on(self.game.assets.music_mainTheme,mySlice=5)
+        # remove the switch blocker
+        self.game.switch_blocker('remove',self.myID)
         # then unload
         self.unload()
 
