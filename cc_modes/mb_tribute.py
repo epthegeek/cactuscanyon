@@ -54,6 +54,8 @@ class MB_Tribute(ep.EP_Mode):
         self.offsets = [-51,-23,5,33]
 
     def mode_started(self):
+        # unload the launcher
+        self.game.tribute_launcher.unload()
         # first hit is 250, but it adds the bump first in the routine
         self.value = 175000
         self.bump = 75000
@@ -113,8 +115,6 @@ class MB_Tribute(ep.EP_Mode):
             self.game.mountain.eject()
         else:
             self.game.coils.leftGunFightPost.disable()
-        # unload the launcher
-        self.game.tribute_launcher.unload()
         # start the music
         #self.music_on(self.game.assets.music_dracAttack)
         # start the timer

@@ -51,6 +51,8 @@ class TAF_Tribute(ep.EP_Mode):
         # fire up the switch block if it's not already loaded
         self.game.switch_blocker('add',self.myID)
         self.index = 0
+        # unload the launcher
+        self.game.tribute_launcher.unload()
         # switch value to start
         self.value = 100000
         self.total = 500000
@@ -197,8 +199,6 @@ class TAF_Tribute(ep.EP_Mode):
             self.game.mountain.eject()
         else:
             self.game.coils.leftGunFightPost.disable()
-        # unload the launcher
-        self.game.tribute_launcher.unload()
         # start the music
         self.music_on(self.game.assets.music_cousinIt)
         # start the display

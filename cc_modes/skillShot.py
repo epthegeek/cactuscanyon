@@ -708,7 +708,7 @@ class SkillShot(ep.EP_Mode):
                     self.game.coils.mineFlasher.schedule(0x01010101)
                 else:
                     lamp.enable()
-        elif self.active == 3:
+        elif self.active == 4:
             for lamp in self.centerRampLamps:
                 if blink:
                     lamp.schedule(0x0F0F0F0F)
