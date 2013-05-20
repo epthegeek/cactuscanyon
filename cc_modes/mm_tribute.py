@@ -28,8 +28,9 @@ class MM_Tribute(ep.EP_Mode):
         self.myID = "MM Tribute"
         self.halted = False
         self.running = False
-        self.hitsToWin = 5
+        self.hitsToWin = 3
         self.won = False
+        self.tauntTimer = 8
 
         script = []
         # set up the pause text layer
@@ -43,8 +44,34 @@ class MM_Tribute(ep.EP_Mode):
         # make a script layer with the two
         self.pauseView = dmd.ScriptedLayer(128,32,script)
         self.pauseView.composite_op = "blacksrc"
+        self.leftTaunts = [self.game.assets.quote_mmLT1,
+                           self.game.assets.quote_mmLT2,
+                           self.game.assets.quote_mmLT3,
+                           self.game.assets.quote_mmLT4,
+                           self.game.assets.quote_mmLT5,
+                           self.game.assets.quote_mmLT6]
+        self.rightTaunts = [self.game.assets.quote_mmRT1,
+                            self.game.assets.quote_mmRT2,
+                            self.game.assets.quote_mmRT3,
+                            self.game.assets.quote_mmRT4,
+                            self.game.assets.quote_mmRT5,
+                            self.game.assets.quote_mmRT6]
+        self.leftSoloTaunts = [self.game.assets.quote_mmLTS1,
+                               self.game.assets.quote_mmLTS2,
+                               self.game.assets.quote_mmLTS3,
+                               self.game.assets.quote_mmLTS4,
+                               self.game.assets.quote_mmLTS5,
+                               self.game.assets.quote_mmLTS6]
+        self.rightSoloTaunts = [self.game.assets.quote_mmRTS1,
+                                self.game.assets.quote_mmRTS2,
+                                self.game.assets.quote_mmRTS3,
+                                self.game.assets.quote_mmRTS4,
+                                self.game.assets.quote_mmRTS5,
+                                self.game.assets.quote_mmRTS6]
 
     def mode_started(self):
+        self.tauntChoices = [0,1,2,3,4,5]
+        self.tauntTimer = 8
         # overall mode timer
         self.modeTimer = 30
         self.timeLayer = ep.EP_TextLayer(64,22,self.game.assets.font_9px_az,"center",opaque=True).set_text(str(self.modeTimer),color=ep.GREEN)
@@ -62,9 +89,9 @@ class MM_Tribute(ep.EP_Mode):
         # score for the mode
         self.totalPoints = 0
         # set up the text layers
-        self.titleLine = ep.EP_TextLayer(64,2,self.game.assets.font_5px_az,"center",opaque=False)
-        self.titleLine.set_text(str(self.hitsToWin) + " - TROLLS! - " + str(self.hitsToWin),color=ep.BROWN)
-        self.scoreLayer = ep.EP_TextLayer(64,10,self.game.assets.font_5px_az,"center",opaque=False)
+        self.titleLine = ep.EP_TextLayer(64,2,self.game.assets.font_5px_AZ,"center",opaque=False)
+        self.update_titleLine()
+        self.scoreLayer = ep.EP_TextLayer(64,10,self.game.assets.font_5px_AZ,"center",opaque=False)
         self.intro()
 
     def ball_drained(self):
@@ -142,8 +169,11 @@ class MM_Tribute(ep.EP_Mode):
     def intro(self,step=1):
         if step == 1:
             self.stop_music()
-            self.game.base.play_quote(self.game.assets.quote_mmTrolls)
-            border = dmd.FrameLayer(opaque = True, frame=self.game.assets.dmd_singlePixelBorder.frame[0])
+            self.delay(delay=0.5,handler=self.game.base.play_quote,param=self.game.assets.quote_mmTrolls)
+
+            introWait = self.game.sound.play(self.game.assets.sfx_mmIntro)
+            self.delay(delay=introWait,handler=self.game.music_on,param=self.game.assets.music_trolls)
+            border = dmd.FrameLayer(opaque = True, frame=self.game.assets.dmd_singlePixelBorder.frames[0])
             titleLine = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az,"center",False).set_text("TROLLS!",color=ep.GREEN)
             infoLine1 = ep.EP_TextLayer(64,14,self.game.assets.font_5px_AZ,"center",False).set_text("SHOOT EACH TROLL " + str(self.hitsToWin) + " TIMES")
             infoLine2 = ep.EP_TextLayer(64,20,self.game.assets.font_5px_AZ,"center",False).set_text("TO FINISH")
@@ -151,7 +181,7 @@ class MM_Tribute(ep.EP_Mode):
             self.layer = combined
             self.delay(delay=2,handler=self.intro,param=2)
         if step == 2:
-            startFrame = dmd.FrameLayer(opaque = True, frame=self.game.assets.dmd_mmTrollsIntro.frame[0])
+            startFrame = dmd.FrameLayer(opaque = True, frame=self.game.assets.dmd_mmTrollsIntro.frames[0])
             transition = ep.EP_Transition(self,self.layer,startFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
             self.delay(delay=1.5,handler=self.intro,param=3)
         if step == 3:
@@ -163,14 +193,15 @@ class MM_Tribute(ep.EP_Mode):
             animLayer.repeat = False
             animLayer.opaque = True
             # sounds ?
-        #    animLayer.add_frame_listener(19,self.game.sound.play,param=self.game.assets.sfx_mbDracIntro)
-        #    animLayer.add_frame_listener(42,self.game.sound.play,param=self.game.assets.sfx_mbCoffinCreak)
-        #    animLayer.add_frame_listener(47,self.game.sound.play,param=self.game.assets.sfx_mbBangCrash)
-        #    animLayer.add_frame_listener(55,self.game.base.play_quote,param=self.game.assets.quote_mbDracBleh)
-
+            animLayer.add_frame_listener(1,self.game.sound.play,param=self.game.assets.sfx_lightning1)
+            animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_lightning1)
+            # trolls raising
+            animLayer.add_frame_listener(10,self.game.bad_guys.target_up,param=1)
+            animLayer.add_frame_listener(21,self.game.bad_guys.target_up,param=2)
+            # first taunt
+            animLayer.add_frame_listener(25,self.taunt)
             self.layer = animLayer
             self.delay(delay = myWait,handler=self.get_going)
-            self.delay(delay = 3, handler=self.get_going)
 
     def get_going(self):
         # release the ball
@@ -178,20 +209,16 @@ class MM_Tribute(ep.EP_Mode):
             self.game.mountain.eject()
         else:
             self.game.coils.leftGunFightPost.disable()
-        # start the music
-        self.music_on(self.game.assets.music_trolls)
         # start the timer
         self.modeTimer += 1
         self.time_trolls()
         # start the score updater
         self.score_update()
         # start the display
-        self.display_trolls("idle","both")
-        # raise the two troll targets
-        self.game.bad_guys.target_up(1)
+        self.display_trolls(mode="idle",troll="both")
         self.game.bad_guys.target_up(2)
 
-    def display_trolls(self,mode="idle",troll="both"):
+    def display_trolls(self,troll="both",mode="idle"):
         self.cancel_delayed("Display")
         if troll == "left":
             self.cancel_delayed("Left Display")
@@ -235,6 +262,7 @@ class MM_Tribute(ep.EP_Mode):
         self.layer = combined
         # set the delay for fixing it after a hit or a miss
         if mode == "hit":
+            print "It's a hit - setting loop back to idle"
             # if a troll got hit loop back to that one to set it to idle after the animation finishes
             if troll == "left":
                 self.delay("Left Display",delay=myWait,handler=self.display_trolls,param="left")
@@ -252,6 +280,9 @@ class MM_Tribute(ep.EP_Mode):
         self.totalPoints += self.value
         # play the smack sound
         self.game.sound.play(self.game.assets.sfx_mmTrollSmack)
+        # delay the taunt timer
+        if self.tauntTimer <= 2:
+            self.tauntTimer += 3
         if target == 1:
             # register the hit
             self.leftHitsSoFar += 1
@@ -259,11 +290,14 @@ class MM_Tribute(ep.EP_Mode):
                 # troll is dead
                 if self.rightHitsSoFar >= self.hitsToWin:
                     # both dead? Winner!
-                    self.won = True
+                    self.win()
                 # then display the troll dying
                 self.display_trolls(mode="dead",troll="left")
                 # play the death sound
                 self.game.sound.play(self.game.assets.quote_mmLeftDeath)
+                # if the other troll isn't dead yet, he comments
+                if not self.won:
+                    self.delay(delay=0.5,handler=self.game.base.play_quote,param=self.game.assets.quote_mmRightAlone)
             # if troll is not dead, just hit it
             else:
                 self.display_trolls(mode="hit",troll="left")
@@ -278,11 +312,14 @@ class MM_Tribute(ep.EP_Mode):
                 # troll is dead
                 if self.leftHitsSoFar >= self.hitsToWin:
                     # both dead? Winner!
-                    self.won = True
+                    self.win()
                 # then display the troll dying
                 self.display_trolls(mode="dead",troll="right")
                 # play the death sound
                 self.game.sound.play(self.game.assets.quote_mmRightDeath)
+                # if the other troll isn't dead yet, he comments
+                if not self.won:
+                    self.delay(delay=0.5,handler=self.game.base.play_quote,param=self.game.assets.quote_mmLeftAlone)
             else:
                 self.display_trolls(mode="hit",troll="right")
                 # and put the target back up
@@ -290,12 +327,25 @@ class MM_Tribute(ep.EP_Mode):
                 # and play the pain sound
                 self.game.sound.play(self.game.assets.quote_mmRightPain)
 
+        # update the title line
+        self.update_titleLine()
+
+    def win(self):
+        self.won = True
+        self.cancel_delayed("Mode Timer")
+        self.cancel_delayed("Taunt Timer")
+
     def score_update(self):
         # update the score line total every half second
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
         self.scoreLayer.set_text(scoreString,color=ep.GREEN)
         self.delay("Score Update",delay=0.5,handler=self.score_update)
+
+    def update_titleLine(self):
+        left = self.hitsToWin - self.leftHitsSoFar
+        right = self.hitsToWin - self.rightHitsSoFar
+        self.titleLine.set_text(str(left) + " - TROLLS! - " + str(right),color=ep.BROWN)
 
     def time_trolls(self):
         self.modeTimer -= 1
@@ -336,11 +386,49 @@ class MM_Tribute(ep.EP_Mode):
         else:
             self.display_trolls(mode="idle",troll="both")
 
+    def taunt(self):
+        # cancel any existing timer and taunt calls
+        self.cancel_delayed("Taunt Timer")
+        self.cancel_delayed("Taunt Call")
+        # pick a taunt
+        index = random.choice(self.tauntChoices)
+        # remove that from the list
+        self.tauntChoices.remove(index)
+        # make sure it's not now empty
+        if len(self.tauntChoices) == 0:
+            self.tauntChoices = [0,1,2,3,4,5]
+        # if they're both alive - double taunt
+        if self.leftHitsSoFar < self.hitsToWin and self.rightHitsSoFar < self.hitsToWin:
+            # play the left taunt
+            myWait = self.game.base.play_quote(self.leftTaunts[index])
+            # then delay the second
+            self.delay("Taunt Call",delay=myWait+0.5,handler=self.game.base.play_quote,param=self.rightTaunts[index])
+        # if one of them is already dead - play a single taunt
+        else:
+            if self.leftHitsSoFar < self.hitsToWin:
+                # play a left taunt
+                self.game.base.play_quote(self.leftSoloTaunts[index])
+            else:
+                self.game.base.play_quote(self.rightSoloTaunts[index])
+        # set the timer for the next one
+        self.tauntTimer = 8
+        # then start the timer
+        self.taunt_timer()
+
+
+    def taunt_timer(self):
+        # loop for calling the troll taunting
+        self.taunt_timer -= 1
+        if self.taunt_timer <= 0:
+            self.taunt()
+        else:
+            self.delay("Taunt Timer", delay = 1, handler=self.taunt_timer)
+
     def finish_trolls(self):
         # kill the delays
         self.wipe_delays()
         border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mmTrollFinalFrame.frames[0])
-        textLayer1 = ep.EP_TextLayer(64,6,self.game.assets.font_5px_AZ,"center",opaque=False)
+        textLayer1 = ep.EP_TextLayer(64,8,self.game.assets.font_5px_AZ,"center",opaque=False)
         if self.won:
             textLayer1.set_text("TROLLS DESTROYED",color=ep.DARK_GREEN)
             # add some extra points if won - to make it a cool 1.5 million
@@ -348,10 +436,16 @@ class MM_Tribute(ep.EP_Mode):
             self.totalPoints += 450000
         else:
             textLayer1.set_text("TROLLS ESCAPED",color=ep.DARK_GREEN)
-        textLayer2 = ep.EP_TextLayer(64,13,self.game.assets.font_9px_az,"center",opaque=False).set_text(str(ep.format_score(self.totalPoints)),color=ep.GREEN)
+        textLayer2 = ep.EP_TextLayer(64,14,self.game.assets.font_9px_az,"center",opaque=False).set_text(str(ep.format_score(self.totalPoints)),color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[border,textLayer1,textLayer2])
         self.layer = combined
         # play a final quote ?
+        if self.won:
+            self.game.base.priority_quote(self.game.assets.mmFatality)
+        elif self.leftHitsSoFar == 0 and self.rightHitsSoFar == 0:
+            self.game.base.pirority_quote(self.game.assets.quote_mmYouSuck)
+        else:
+            self.game.sound.play(self.game.assets.sfx_cheers)
         myWait = 2
         self.delay(delay=myWait,handler=self.done)
 

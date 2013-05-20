@@ -44,7 +44,7 @@ class Assets():
         # _AZ = All numerals and upper case letters
         # _score = Numerals only
         self.font_5px_AZ = ep.ColorFont(self.dmd_path + "Font_3_CactusCanyon.dmd")
-        self.font_5px_AZ.make_colors([ep.GREY,ep.GREEN,ep.ORANGE,ep.YELLOW,ep.BROWN,ep.DARK_BROWN,ep.MAGENTA,ep.DARK_RED,ep.PURPLE,ep.RED])
+        self.font_5px_AZ.make_colors([ep.GREY,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.YELLOW,ep.BROWN,ep.DARK_BROWN,ep.MAGENTA,ep.DARK_RED,ep.PURPLE,ep.RED])
         self.font_5px_AZ_inverted = dmd.Font(self.dmd_path + "Font_3_CactusCanyon_inverted.dmd")
         self.font_5px_bold_AZ = ep.ColorFont(self.dmd_path + "Font_21_CactusCanyon.dmd")
         self.font_5px_bold_AZ.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.RED,ep.BROWN,ep.DARK_BROWN])
@@ -490,6 +490,8 @@ class Assets():
 
         self.sfx_mmTrollSmack = 'sfx_mmTrollSmack'
         self.game.sound.register_sound(self.sfx_mmTrollSmack, self.sfx_path + "mm_troll-smack.wav")
+        self.sfx_mmIntro = 'sfx_mmIntro'
+        self.game.sound.register_sound(self.sfx_mmIntro, self.music_path + "mm_trolls_intro.wav")
 
         # Quotes
 
@@ -509,6 +511,66 @@ class Assets():
         self.quote_mmRightDeath = 'quote_mmRightDeath'
         self.game.sound.register_sound(self.quote_mmRightDeath, self.quotes_path + "mm_right-troll-death-1.wav")
         self.game.sound.register_sound(self.quote_mmRightDeath, self.quotes_path + "mm_right-troll-death-2.wav")
+        self.quote_mmRightAlone = 'quote_mmRightAlone'
+        self.game.sound.register_sound(self.quote_mmRightAlone, self.quotes_path + "mm_right-troll-alone-1.wav")
+        self.game.sound.register_sound(self.quote_mmRightAlone, self.quotes_path + "mm_right-troll-alone-2.wav")
+        self.game.sound.register_sound(self.quote_mmRightAlone, self.quotes_path + "mm_right-troll-alone-3.wav")
+        self.quote_mmLeftAlone = 'quote_mmLeftAlone'
+        self.game.sound.register_sound(self.quote_mmLeftAlone, self.quotes_path + "mm_left-troll-alone-1.wav")
+        self.game.sound.register_sound(self.quote_mmLeftAlone, self.quotes_path + "mm_left-troll-alone-2.wav")
+        self.game.sound.register_sound(self.quote_mmLeftAlone, self.quotes_path + "mm_left-troll-alone-3.wav")
+        self.quote_mmLT1 = 'quote_mmLT1'
+        self.game.sound.register_sound(self.quote_mmLT1, self.quotes_path + "mm_left-team-taunt-1.wav")
+        self.quote_mmLT2 = 'quote_mmLT2'
+        self.game.sound.register_sound(self.quote_mmLT2, self.quotes_path + "mm_left-team-taunt-2.wav")
+        self.quote_mmLT3 = 'quote_mmLT3'
+        self.game.sound.register_sound(self.quote_mmLT3, self.quotes_path + "mm_left-team-taunt-3.wav")
+        self.quote_mmLT4 = 'quote_mmLT4'
+        self.game.sound.register_sound(self.quote_mmLT4, self.quotes_path + "mm_left-team-taunt-4.wav")
+        self.quote_mmLT5 = 'quote_mmLT5'
+        self.game.sound.register_sound(self.quote_mmLT5, self.quotes_path + "mm_left-team-taunt-5.wav")
+        self.quote_mmLT6 = 'quote_mmLT6'
+        self.game.sound.register_sound(self.quote_mmLT6, self.quotes_path + "mm_left-team-taunt-6.wav")
+        self.quote_mmRT1 = 'quote_mmRT1'
+        self.game.sound.register_sound(self.quote_mmRT1, self.quotes_path + "mm_right-team-taunt-1.wav")
+        self.quote_mmRT2 = 'quote_mmRT2'
+        self.game.sound.register_sound(self.quote_mmRT2, self.quotes_path + "mm_right-team-taunt-2.wav")
+        self.quote_mmRT3 = 'quote_mmRT3'
+        self.game.sound.register_sound(self.quote_mmRT3, self.quotes_path + "mm_right-team-taunt-3.wav")
+        self.quote_mmRT4 = 'quote_mmRT4'
+        self.game.sound.register_sound(self.quote_mmRT4, self.quotes_path + "mm_right-team-taunt-4.wav")
+        self.quote_mmRT5 = 'quote_mmRT5'
+        self.game.sound.register_sound(self.quote_mmRT5, self.quotes_path + "mm_right-team-taunt-5.wav")
+        self.quote_mmRT6 = 'quote_mmRT6'
+        self.game.sound.register_sound(self.quote_mmRT6, self.quotes_path + "mm_right-team-taunt-6.wav")
+        self.quote_mmLTS1 = 'quote_mmLTS1'
+        self.game.sound.register_sound(self.quote_mmLTS1, self.quotes_path + "mm_left-taunt-1.wav")
+        self.quote_mmLTS2 = 'quote_mmLTS2'
+        self.game.sound.register_sound(self.quote_mmLTS2, self.quotes_path + "mm_left-taunt-2.wav")
+        self.quote_mmLTS3 = 'quote_mmLTS3'
+        self.game.sound.register_sound(self.quote_mmLTS3, self.quotes_path + "mm_left-taunt-3.wav")
+        self.quote_mmLTS4 = 'quote_mmLTS4'
+        self.game.sound.register_sound(self.quote_mmLTS4, self.quotes_path + "mm_left-taunt-4.wav")
+        self.quote_mmLTS5 = 'quote_mmLTS5'
+        self.game.sound.register_sound(self.quote_mmLTS5, self.quotes_path + "mm_left-taunt-5.wav")
+        self.quote_mmLTS6 = 'quote_mmLTS6'
+        self.game.sound.register_sound(self.quote_mmLTS6, self.quotes_path + "mm_left-taunt-6.wav")
+        self.quote_mmRTS1 = 'quote_mmRTS1'
+        self.game.sound.register_sound(self.quote_mmRTS1, self.quotes_path + "mm_right-taunt-1.wav")
+        self.quote_mmRTS2 = 'quote_mmRTS2'
+        self.game.sound.register_sound(self.quote_mmRTS2, self.quotes_path + "mm_right-taunt-2.wav")
+        self.quote_mmRTS3 = 'quote_mmRTS3'
+        self.game.sound.register_sound(self.quote_mmRTS3, self.quotes_path + "mm_right-taunt-3.wav")
+        self.quote_mmRTS4 = 'quote_mmRTS4'
+        self.game.sound.register_sound(self.quote_mmRTS4, self.quotes_path + "mm_right-taunt-4.wav")
+        self.quote_mmRTS5 = 'quote_mmRTS5'
+        self.game.sound.register_sound(self.quote_mmRTS5, self.quotes_path + "mm_right-taunt-5.wav")
+        self.quote_mmRTS6 = 'quote_mmRTS6'
+        self.game.sound.register_sound(self.quote_mmRTS6, self.quotes_path + "mm_right-taunt-6.wav")
+        self.quote_mmFatality = 'quote_mmFatality'
+        self.game.sound.register_sound(self.quote_mmFatality, self.quotes_path + "mm_fatality.wav")
+        self.quote_mmYouSuck = 'quote_mmYouSuck'
+        self.game.sound.register_sound(self.quote_mmYouSuck, self.quotes_path + "mm_you-suck.wav")
 
         self.quote_mbDracBleh = 'quote_mbDracBleh'
         self.game.sound.register_sound(self.quote_mbDracBleh, self.quotes_path + "mb_drac-blah.wav")
