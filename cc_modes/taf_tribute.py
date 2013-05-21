@@ -211,8 +211,8 @@ class TAF_Tribute(ep.EP_Mode):
         self.cancel_delayed("Display")
         if type == "idle":
             anim = self.game.assets.dmd_tafItIdle
-            myWait = len(anim.frames) / 10.0
-            self.cousinLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=6)
+            myWait = len(anim.frames) / 2.0
+            self.cousinLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=False,repeat=True,frame_time=30)
         elif type == "miss":
             anim = self.misses[0]
             self.misses.reverse()
