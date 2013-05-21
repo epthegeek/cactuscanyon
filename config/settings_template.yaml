@@ -177,6 +177,9 @@ Gameplay (Feature):
   'Tribute Mode':
     options: ['Enabled','Disabled']
     default: 'Disabled'
+  'Tribute Selecting':
+    options: ['Manual','Random']
+    default: 'Random'
   'Fast Restart After Game':
     options: ['Enabled','Disabled']
     default: 'Enabled'

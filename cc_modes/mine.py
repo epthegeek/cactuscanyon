@@ -99,6 +99,9 @@ class Mine(ep.EP_Mode):
         stackLevel = self.game.show_tracking('stackLevel')
         print stackLevel
 
+        # if tribute is starting - pass entirely
+        if self.game.skill_shot.super or self.game.tribute_launcher in self.game.modes:
+            pass
         # if cva is ready, we do that - as long as no mode above guns is running
         if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:] and not self.game.bart.bossFight:
             self.game.mountain.busy = True

@@ -293,7 +293,10 @@ class SkillShot(ep.EP_Mode):
         # stop the music
         self.stop_music()
         # play the sound
-        self.game.sound.play(self.game.assets.sfx_flourish7)
+        if self.selectedPrizes[5:] == "V":
+            self.music_on(self.game.assets.music_tribute)
+        else:
+            self.game.sound.play(self.game.assets.sfx_flourish7)
 
         awardStringTop = None
         awardStringBottom = None

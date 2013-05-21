@@ -1202,6 +1202,16 @@ class Assets():
 
         self.music_trolls = 'music_trolls'
         self.game.sound.register_music(self.music_trolls, self.music_path + "mm_trolls_music.wav")
+
+        self.music_tribute = 'music_tribute'
+        self.game.sound.register_music(self.music_tribute, self.music_path + "tribute-intro.wav")
+        self.music_mb = 'music_mb'
+        self.game.sound.register_music(self.music_mb, self.music_path + "mb_theme.wav")
+        self.music_mm = 'music_mm'
+        self.game.sound.register_music(self.music_mm, self.music_path + "mm_theme.wav")
+        self.music_taf = 'music_taf'
+        self.game.sound.register_music(self.music_taf, self.music_path + "taf_theme.wav")
+
         # lampshows
         lampshows = list()
 

@@ -30,10 +30,16 @@ class TributeLauncher(ep.EP_Mode):
         taf_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tafLogo.frames[0])
         mm_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mmLogo.frames[0])
         self.slides = [mb_logo,taf_logo,mm_logo]
+        self.songs = [self.game.assets.music_mb,self.game.assets.music_taf,self.game.assets.music_mm]
         self.shot = 0
         self.selecting = False
+        self.method = self.game.user_settings['Gameplay (Feature)']['Tribute Selecting']
+        self.Timer = 30
 
     def mode_started(self):
+        # mode auto selects after 30 seconds to avoid holding the ball forever
+        self.Timer = 30
+        self.counter = 0
         self.selecting = False
         # set the stack level
         self.game.stack_level(5,True)
@@ -41,29 +47,85 @@ class TributeLauncher(ep.EP_Mode):
         self.index = random.choice(choices)
         # throw up a text thing telling player to hit flippers to select
         title = ep.EP_TextLayer(58, 1, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("TRIBUTE",color=ep.ORANGE)
-        lineOne = ep.EP_TextLayer(58,12, self.game.assets.font_5px_AZ, "center", opaque = False).set_text("HIT BOTH FLIPPERS",color=ep.YELLOW)
-        lineTwo = ep.EP_TextLayer(58,19, self.game.assets.font_5px_AZ, "center", opaque = False).set_text("TO SELECT MODE", color=ep.YELLOW)
+        lineOne = ep.EP_TextLayer(58,12, self.game.assets.font_5px_AZ, "center", opaque = False)
+        lineTwo = ep.EP_TextLayer(58,19, self.game.assets.font_5px_AZ, "center", opaque = False)
+        lineThree = ep.EP_TextLayer(58,26, self.game.assets.font_5px_AZ, "center", opaque = False)
+        # instructions on how to start are different
+        if self.method == "Random":
+            lineOne.set_text("THIS IS JUST",color=ep.YELLOW)
+            lineTwo.set_text("A TRIBUTE", color=ep.YELLOW)
+            lineThree.set_text("RANDOM MODE", color=ep.RED)
+        else:
+            lineOne.set_text("FLIPPERS = CHANGE",color=ep.YELLOW)
+            lineTwo.set_text("START = SELECT", color=ep.YELLOW)
+            lineThree.set_text("MAX 30 SECONDS", color=ep.RED)
         icon = dmd.TextLayer(124,1, self.game.assets.font_skillshot, "right", opaque=True).set_text("V")
-        combined = dmd.GroupedLayer(128,32,[icon,title,lineOne,lineTwo])
+        combined = dmd.GroupedLayer(128,32,[icon,title,lineOne,lineTwo,lineThree])
         self.layer = combined
-        self.delay(delay=2,handler=self.start_selection)
+        self.delay(delay=3,handler=self.start_selection)
+
+    def sw_startButton_active(self,sw):
+        if self.selecting and self.method == "Manual":
+            self.make_selection()
+        else:
+            pass
+        return game.SwitchStop
+
+    def sw_flipperLwL_active(self,sw):
+        # left flipper changes pages down one
+        self.change_page(-1)
+        return game.SwitchStop
+
+    def sw_flipperLwR_active(self,sw):
+        # right flipper changes pages up one
+        self.change_page(1)
+        return game.SwitchStop
 
     def start_selection(self):
         self.selecting = True
-        self.update_layer()
+        # random shows each available method one time, then starts
+        if self.method == "Random":
+            self.update_layer()
+        # manual plays the music that matches the showing logo
+        else:
+            # start the timer
+            self.timer_loop()
+            # and the music
+            self.layer = self.slides[self.index]
+            self.music_on(self.songs[self.index])
 
+    # this is the random handler
     def update_layer(self):
         # bump up the index
         self.index += 1
+        self.counter += 1
         # wrap if needed
-        if self.index > 2:
+        if self.index > (len(self.slides) -1):
             self.index= 0
         # set the layer
         self.layer = self.slides[self.index]
-        # loop back to do it again
-        self.delay("Display",delay=0.5,handler=self.update_layer)
+        if self.counter == len(self.slides):
+            self.make_selection()
+        else:
+            # loop back to do it again
+            self.delay("Display",delay=0.5,handler=self.update_layer)
+
+    # this is the manual mode handler
+    def change_page(self,value):
+        self.index += value
+        # if we're below zero, wrap
+        if self.index < 0:
+            self.index = (len(self.slides) - 1)
+        # if we're over the total, go to zero
+        elif self.index >= len(self.slides):
+            self.index = 0
+        # set the layer
+        self.layer = self.slides[self.index]
+        # manual plays the music that matches the showing logo
+        self.music_on(self.songs[self.index])
 
     def make_selection(self):
+        self.cancel_delayed("Timer")
         self.cancel_delayed("Display")
         if self.shot == 3:
             position = "Mine"
@@ -85,6 +147,12 @@ class TributeLauncher(ep.EP_Mode):
         # and then unload -- tribute modes will unload this mode
         #self.delay(delay=4,handler=self.unload)
 
+    def timer_loop(self):
+        self.Timer -= 1
+        if self.Timer < 0:
+            self.make_selection()
+        else:
+            self.delay("Timer",delay=1, handler=self.timer_loop)
 
     def remove_launcher(self):
         self.selecting = False

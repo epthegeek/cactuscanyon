@@ -655,9 +655,6 @@ class BaseGameMode(ep.EP_Mode):
         elif self.game.last_call.starting:
             self.game.last_call.starting = False
             self.game.last_call.get_going()
-        # select tribute
-        elif self.game.tribute_launcher.selecting:
-            self.game.tribute_launcher.make_selection()
         else:
             pass
 
