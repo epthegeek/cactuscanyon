@@ -47,22 +47,19 @@ class TributeLauncher(ep.EP_Mode):
         self.index = random.choice(choices)
         # throw up a text thing telling player to hit flippers to select
         title = ep.EP_TextLayer(58, 1, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("TRIBUTE",color=ep.ORANGE)
-        lineOne = ep.EP_TextLayer(58,12, self.game.assets.font_5px_AZ, "center", opaque = False)
-        lineTwo = ep.EP_TextLayer(58,19, self.game.assets.font_5px_AZ, "center", opaque = False)
-        lineThree = ep.EP_TextLayer(58,26, self.game.assets.font_5px_AZ, "center", opaque = False)
+        lineOne = ep.EP_TextLayer(58,15, self.game.assets.font_5px_AZ, "center", opaque = False)
+        lineTwo = ep.EP_TextLayer(58,21, self.game.assets.font_5px_AZ, "center", opaque = False)
         # instructions on how to start are different
         if self.method == "Random":
             lineOne.set_text("THIS IS JUST",color=ep.YELLOW)
             lineTwo.set_text("A TRIBUTE", color=ep.YELLOW)
-            lineThree.set_text("RANDOM MODE", color=ep.RED)
         else:
             lineOne.set_text("FLIPPERS = CHANGE",color=ep.YELLOW)
             lineTwo.set_text("START = SELECT", color=ep.YELLOW)
-            lineThree.set_text("MAX 30 SECONDS", color=ep.RED)
         icon = dmd.TextLayer(124,1, self.game.assets.font_skillshot, "right", opaque=True).set_text("V")
-        combined = dmd.GroupedLayer(128,32,[icon,title,lineOne,lineTwo,lineThree])
+        combined = dmd.GroupedLayer(128,32,[icon,title,lineOne,lineTwo])
         self.layer = combined
-        self.delay(delay=3,handler=self.start_selection)
+        self.delay(delay=4,handler=self.start_selection)
 
     def sw_startButton_active(self,sw):
         if self.selecting and self.method == "Manual":
@@ -72,13 +69,15 @@ class TributeLauncher(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_flipperLwL_active(self,sw):
-        # left flipper changes pages down one
-        self.change_page(-1)
+        if self.method == "Manual":
+            # left flipper changes pages down one
+            self.change_page(-1)
         return game.SwitchStop
 
     def sw_flipperLwR_active(self,sw):
-        # right flipper changes pages up one
-        self.change_page(1)
+        if self.method == "Manual":
+            # right flipper changes pages up one
+            self.change_page(1)
         return game.SwitchStop
 
     def start_selection(self):
@@ -108,10 +107,13 @@ class TributeLauncher(ep.EP_Mode):
             self.make_selection()
         else:
             # loop back to do it again
-            self.delay("Display",delay=0.5,handler=self.update_layer)
+            self.delay("Display",delay=0.7,handler=self.update_layer)
 
     # this is the manual mode handler
     def change_page(self,value):
+        # pad the timer
+        if self.Timer < 25:
+            self.Timer = 25
         self.index += value
         # if we're below zero, wrap
         if self.index < 0:

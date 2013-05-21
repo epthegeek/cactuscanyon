@@ -153,7 +153,21 @@ class MB_Tribute(ep.EP_Mode):
         if step == 1:
             self.stop_music()
             self.game.sound.play(self.game.assets.sfx_mbBats)
-            anim = self.game.assets.dmd_mbDracIntro
+            anim = self.game.assets.dmd_mbDracIntro1
+            myWait = len(anim.frames) / 10.0
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold = True
+            animLayer.frame_time = 6
+            animLayer.repeat = False
+            animLayer.opaque = True
+
+            backdrop = dmd.FrameLayer(opaque=True,frame=self.game.assets.dmd_mbLogo)
+
+            self.layer = dmd.GroupedLayer(128,32,[backdrop,animLayer])
+            self.delay(delay = myWait,handler=self.intro,param=2)
+
+        if step == 2:
+            anim = self.game.assets.dmd_mbDracIntro2
             myWait = len(anim.frames) / 10.0
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
@@ -161,14 +175,15 @@ class MB_Tribute(ep.EP_Mode):
             animLayer.repeat = False
             animLayer.opaque = True
             # sounds ?
-            animLayer.add_frame_listener(19,self.game.sound.play,param=self.game.assets.sfx_mbDracIntro)
-            animLayer.add_frame_listener(42,self.game.sound.play,param=self.game.assets.sfx_mbCoffinCreak)
-            animLayer.add_frame_listener(47,self.game.sound.play,param=self.game.assets.sfx_mbBangCrash)
-            animLayer.add_frame_listener(55,self.game.base.play_quote,param=self.game.assets.quote_mbDracBleh)
+            animLayer.add_frame_listener(23,self.game.sound.play,param=self.game.assets.sfx_mbCoffinCreak)
+            animLayer.add_frame_listener(28,self.game.sound.play,param=self.game.assets.sfx_mbBangCrash)
+            animLayer.add_frame_listener(36,self.game.base.play_quote,param=self.game.assets.quote_mbDracBleh)
 
+            self.game.sound.play(self.game.assets.sfx_mbDracIntro)
             self.layer = animLayer
-            self.delay(delay = myWait,handler=self.intro,param=2)
-        if step == 2:
+            self.delay(delay = myWait,handler=self.intro,param=3)
+
+        if step == 3:
             self.game.base.music_on(self.game.assets.music_dracAttack)
             textLayer1 = ep.EP_TextLayer(64,5,self.game.assets.font_9px_az,"center",True).set_text("HIT DRACULA " + str(self.hitsToWin) + " TIMES",color=ep.RED)
             textLayer2 = ep.EP_TextLayer(64,16,self.game.assets.font_9px_az,"center",False).set_text("TO FINISH",color=ep.RED)

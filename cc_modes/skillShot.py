@@ -17,7 +17,7 @@
 ## The Skill Shot mode for working the lasso ramp awards
 ##
 
-from procgame import dmd
+from procgame import dmd,game
 import random
 import ep
 
@@ -35,6 +35,9 @@ class SkillShot(ep.EP_Mode):
         # offset for the icon layer
         self.x = 126
         self.super = False
+        self.selecting = False
+        self.lcount = 0
+        self.rcount = 0
         self.leftLoopLamps = [self.game.lamps.leftLoopBuckNBronco,
                               self.game.lamps.leftLoopWildRide,
                               self.game.lamps.leftLoopRideEm,
@@ -72,10 +75,47 @@ class SkillShot(ep.EP_Mode):
             self.wipe_delays()
             self.unload()
 
+    def sw_flipperLwL_active(self,sw):
+        if self.selecting and self.game.switches.shooterLane.is_active():
+            self.change_prizes(-1)
+            return game.SwitchStop
+        elif self.super and self.game.switches.shooterLane.is_active():
+            print "Left flipper hit - super is active"
+            if self.rcount == 5:
+                self.lcount += 1
+                if self.lcount == 2:
+                    self.enable_selecting()
+            else:
+                self.rcount = 0
+                self.lcount = 0
+            return game.SwitchStop
+        else:
+            print "Left Flipper hit"
+
+    def sw_flipperLwR_active(self,sw):
+        if self.selecting and self.game.switches.shooterLane.is_active():
+            self.change_prizes(1)
+            return game.SwitchStop
+        elif self.super and self.game.switches.shooterLane.is_active():
+            print "right flipper hit - super is active"
+            self.rcount += 1
+            return game.SwitchStop
+        else:
+            print "right flipper hit"
+
+    def sw_shooterLane_inactive(self,sw):
+        # turn off selecting when the ball leaves the shooter lane
+        if self.selecting:
+            self.selecting = False
+
     def mode_started(self):
         print "Skillshot Started"
         # reset the super just in case
         self.super = False
+        self.selecting = False
+        self.lcount = 0
+        self.rcount = 0
+        self.prizeIndex = 0
         # call the welcome quote - and start the theme song after on the first ball
         duration = self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1 and not self.game.show_tracking('greeted'):
@@ -169,27 +209,27 @@ class SkillShot(ep.EP_Mode):
         # here's the super skill shot prizes
         else:
             # 3 million points
-        #    prizes.append("O")
+            prizes.append("O")
             # bonus 5x
-        #    if self.game.show_tracking('bonusX') < 9:
-        #        prizes.append("P")
+            if self.game.show_tracking('bonusX') < 9:
+                prizes.append("P")
             # light gunfight
-        #    if self.game.show_tracking('gunfightStatus') != "READY":
-        #        prizes.append("Q")
+            if self.game.show_tracking('gunfightStatus') != "READY":
+                prizes.append("Q")
             # drunk multiball
-        #    if self.game.show_tracking('drunkMultiballStatus') != "READY":
-        #        prizes.append("R")
+            if self.game.show_tracking('drunkMultiballStatus') != "READY":
+                prizes.append("R")
             # marshall multiball - if it hasn't already run and it is enabled
-        #    if self.game.show_tracking('marshallMultiballRun') != "True" and self.game.badge.marshallValue == 'Enabled':
-        #        prizes.append("U")
+            if self.game.show_tracking('marshallMultiballRun') != "True" and self.game.badge.marshallValue == 'Enabled':
+                prizes.append("U")
             # extra ball
-        #    if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-        #        prizes.append("J")
+            if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+                prizes.append("J")
             # move your train
-        #    if self.mytValue == 'Enabled' and self.game.move_your_train not in self.game.modes and not self.game.train.mytFail:
-        #        prizes.append("S")
+            if self.mytValue == 'Enabled' and self.game.move_your_train not in self.game.modes and not self.game.train.mytFail:
+                prizes.append("S")
             # cva
-        #    prizes.append("T")
+            prizes.append("T")
             # tribute mode
             if self.game.user_settings['Gameplay (Feature)']['Tribute Mode'] == "Enabled":
                 prizes.append("V")
@@ -201,6 +241,9 @@ class SkillShot(ep.EP_Mode):
         while count < 5:
             item = random.randrange(len(prizes))
             self.selectedPrizes += prizes[item]
+            if item == "J":
+                # only allow extra ball to show up one time
+                prizes.remove(item)
             # add the far right symbol to the left side so that it can be slid right
             self.selectedPrizes = self.selectedPrizes[4:5] + self.selectedPrizes
             count += 1
@@ -212,6 +255,43 @@ class SkillShot(ep.EP_Mode):
             #self.update_layer()
             self.intro_display()
 
+    def enable_selecting(self):
+        self.selecting = True
+        self.lcount = 0
+        self.rcount = 0
+        self.game.sound.play(self.game.assets.quote_yippie)
+        self.choices = []
+        # dmb
+        if self.game.show_tracking('drunkMultiballStatus') != "READY":
+            self.choices.append("R")
+        # marshal
+        if self.game.badge.marshallValue == 'Enabled':
+            self.choices.append("U")
+        # extra ball
+        if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            self.choices.append("J")
+        # cva
+        self.choices.append("T")
+        # tribute
+        if self.game.user_settings['Gameplay (Feature)']['Tribute Mode'] == "Enabled":
+            self.choices.append("V")
+        self.change_prizes()
+
+    def change_prizes(self,value=0):
+        if value != 0:
+            self.game.sound.play(self.game.assets.sfx_chime10)
+            self.prizeIndex += value
+        # if we're over wrap to zero
+        if self.prizeIndex >= len(self.choices):
+            self.prizeIndex = 0
+        # if we're under zero put back to the high end
+        if self.prizeIndex < 0:
+            self.prizeIndex = (len(self.choices) - 1)
+        # build the new string
+        letter = str(self.choices[self.prizeIndex])
+        self.selectedPrizes = letter+letter+letter+letter+letter+letter
+        # update the layer
+        self.update_layer()
 
     def intro_display(self):
         print "Copying the score layer"
@@ -663,6 +743,7 @@ class SkillShot(ep.EP_Mode):
         # unload the switch trap
         self.game.super_filter.unload()
         # kill the active shot to free the mine just in case
+        self.wasActive = self.active
         self.active = 0
         # kill the drum roll
         self.stop_music()

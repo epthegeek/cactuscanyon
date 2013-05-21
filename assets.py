@@ -1483,13 +1483,20 @@ class Assets():
         self.dmd_testBackdrop = dmd.Animation().load(self.dmd_path+'test_backdrop.dmd')
 
         # Tribute bits
-        self.dmd_mbLogo = dmd.Animation().load(self.dmd_path+'mb-logo.dmd')
-        self.dmd_mbDracIntro = dmd.Animation().load(self.dmd_path+'mb-drac-intro.dmd')
+        if color_desktop:
+            self.dmd_mbLogo = dmd.Animation().load(self.dmd_path+'mb-logo-color.dmd')
+        else:
+            self.dmd_mbLogo = dmd.Animation().load(self.dmd_path+'mb-logo.dmd')
+        self.dmd_mbDracIntro1 = dmd.Animation().load(self.dmd_path+'mb-drac-intro-part1.dmd')
+        self.dmd_mbDracIntro2 = dmd.Animation().load(self.dmd_path+'mb-drac-intro-part2.dmd')
         self.dmd_mbDracIdle = dmd.Animation().load(self.dmd_path+'mb-drac-idle.dmd')
         self.dmd_mbDracSmack = dmd.Animation().load(self.dmd_path+'mb-drac-smack.dmd')
         self.dmd_mbStakeBorder = dmd.Animation().load(self.dmd_path+'mb-stake-border.dmd')
 
-        self.dmd_mmLogo = dmd.Animation().load(self.dmd_path+'mm-logo.dmd')
+        if color_desktop:
+            self.dmd_mmLogo = dmd.Animation().load(self.dmd_path+'mm-logo-color.dmd')
+        else:
+            self.dmd_mmLogo = dmd.Animation().load(self.dmd_path+'mm-logo.dmd')
         self.dmd_mmTrollsIntro = dmd.Animation().load(self.dmd_path+'mm_trolls_intro_anim.dmd')
         self.dmd_mmTrollDeadLeft = dmd.Animation().load(self.dmd_path+'mm_left_troll_dead.dmd')
         self.dmd_mmTrollHitLeft = dmd.Animation().load(self.dmd_path+'mm_left_troll_hit.dmd')
