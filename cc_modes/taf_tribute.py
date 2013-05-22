@@ -183,7 +183,7 @@ class TAF_Tribute(ep.EP_Mode):
             self.delay(delay = myWait+1,handler=self.intro,param=2)
         if step == 2:
             textLayer1 = ep.EP_TextLayer(64,1,self.game.assets.font_9px_az,"center",False).set_text("HIT COUSIN IT")
-            textLayer2 = ep.EP_TextLayer(64,11,self.game.assets.font_7px_az,"center",False).set_text("ALL TARGETS=" + str(ep.format_score(self.value)))
+            textLayer2 = ep.EP_TextLayer(64,11,self.game.assets.font_7px_az,"center",False).set_text("ALL SHOTS = " + str(ep.format_score(self.value)))
             textLayer3 = ep.EP_TextLayer(64,20,self.game.assets.font_9px_az,"center",False).set_text("'IT' INCREASES VALUE")
             border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_singlePixelBorder.frames[0])
             combined = dmd.GroupedLayer(128,32,[border,textLayer1,textLayer2,textLayer3])
@@ -240,7 +240,7 @@ class TAF_Tribute(ep.EP_Mode):
 
     def time_it(self):
         self.modeTimer -= 1
-        print "TAF MODE TIME: " + str(self.modeTimer)
+        #print "TAF MODE TIME: " + str(self.modeTimer)
         if self.modeTimer < 0:
             self.finish_it()
         else:

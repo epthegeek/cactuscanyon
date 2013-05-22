@@ -80,7 +80,7 @@ class SkillShot(ep.EP_Mode):
             self.change_prizes(-1)
             return game.SwitchStop
         elif self.super and self.game.switches.shooterLane.is_active():
-            print "Left flipper hit - super is active"
+            #print "Left flipper hit - super is active"
             if self.rcount == 5:
                 self.lcount += 1
                 if self.lcount == 2:
@@ -90,18 +90,20 @@ class SkillShot(ep.EP_Mode):
                 self.lcount = 0
             return game.SwitchStop
         else:
-            print "Left Flipper hit"
+            #print "Left Flipper hit"
+            pass
 
     def sw_flipperLwR_active(self,sw):
         if self.selecting and self.game.switches.shooterLane.is_active():
             self.change_prizes(1)
             return game.SwitchStop
         elif self.super and self.game.switches.shooterLane.is_active():
-            print "right flipper hit - super is active"
+            #print "right flipper hit - super is active"
             self.rcount += 1
             return game.SwitchStop
         else:
-            print "right flipper hit"
+            #print "right flipper hit"
+            pass
 
     def sw_shooterLane_inactive(self,sw):
         # turn off selecting when the ball leaves the shooter lane

@@ -46,7 +46,7 @@ class TributeLauncher(ep.EP_Mode):
         choices = [0,1,2]
         self.index = random.choice(choices)
         # throw up a text thing telling player to hit flippers to select
-        title = ep.EP_TextLayer(58, 1, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("TRIBUTE",color=ep.ORANGE)
+        title = ep.EP_TextLayer(58, 3, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("TRIBUTE",color=ep.ORANGE)
         lineOne = ep.EP_TextLayer(58,15, self.game.assets.font_5px_AZ, "center", opaque = False)
         lineTwo = ep.EP_TextLayer(58,21, self.game.assets.font_5px_AZ, "center", opaque = False)
         # instructions on how to start are different
