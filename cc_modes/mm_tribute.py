@@ -218,7 +218,6 @@ class MM_Tribute(ep.EP_Mode):
         self.score_update()
         # start the display
         self.display_trolls(mode="idle",troll="both")
-        self.game.bad_guys.target_up(2)
 
     def display_trolls(self,troll="both",mode="idle"):
         self.cancel_delayed("Display")
@@ -267,13 +266,23 @@ class MM_Tribute(ep.EP_Mode):
             print "It's a hit - setting loop back to idle"
             # if a troll got hit loop back to that one to set it to idle after the animation finishes
             if troll == "left":
-                self.delay("Left Display",delay=myWait,handler=self.display_trolls,param="left")
+                self.delay("Left Display",delay=myWait,handler=self.reset_troll,param="left")
             if troll == "right":
-                self.delay("Right Display",delay=myWait,handler=self.display_trolls,param="right")
+                self.delay("Right Display",delay=myWait,handler=self.reset_troll,param="right")
         if mode == "dead":
             if self.won:
                 # if both trolls are dead, go to the finish
                 self.delay(delay=myWait,handler=self.finish_trolls)
+
+    def reset_troll(self,side):
+        # set the display back
+        self.display_trolls(side)
+        # put the target back up
+        if side == "left":
+            target = 1
+        else:
+            target = 2
+        self.game.bad_guys.target_up(target)
 
     def hit_troll(self,target):
         # score the points
@@ -303,8 +312,6 @@ class MM_Tribute(ep.EP_Mode):
             # if troll is not dead, just hit it
             else:
                 self.display_trolls(mode="hit",troll="left")
-                # and put the target back up
-                self.game.bad_guys.target_up(1)
                 # and play the pain sound
                 self.game.sound.play(self.game.assets.quote_mmLeftPain)
         # other target is 2
@@ -324,8 +331,6 @@ class MM_Tribute(ep.EP_Mode):
                     self.delay(delay=0.5,handler=self.game.base.play_quote,param=self.game.assets.quote_mmLeftAlone)
             else:
                 self.display_trolls(mode="hit",troll="right")
-                # and put the target back up
-                self.game.bad_guys.target_up(2)
                 # and play the pain sound
                 self.game.sound.play(self.game.assets.quote_mmRightPain)
 

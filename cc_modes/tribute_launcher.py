@@ -59,7 +59,7 @@ class TributeLauncher(ep.EP_Mode):
         icon = dmd.TextLayer(124,1, self.game.assets.font_skillshot, "right", opaque=True).set_text("V")
         combined = dmd.GroupedLayer(128,32,[icon,title,lineOne,lineTwo])
         self.layer = combined
-        self.delay(delay=4,handler=self.start_selection)
+        self.delay(delay=3,handler=self.start_selection)
 
     def sw_startButton_active(self,sw):
         if self.selecting and self.method == "Manual":
@@ -134,7 +134,7 @@ class TributeLauncher(ep.EP_Mode):
         else:
             position = "Lane"
         print "Ball is in the " + position
-        # and then do some junk -- all selections launch TAF for now
+        # and then do some junk
         if self.index == 0:
             print "Selected Monster Bash"
             self.game.modes.add(self.game.mb_tribute)

@@ -607,7 +607,8 @@ class SkillShot(ep.EP_Mode):
             awardStringTop = "THIS IS JUST"
             awardStringBottom = "A TRIBUTE"
             self.game.modes.add(self.game.tribute_launcher)
-            self.game.tribute_launcher.shot = self.active
+            self.game.tribute_launcher.shot = self.wasActive
+            print "Tribute Shot Set to: " + str(self.game.tribute_launcher.shot)
             self.super = False
 
         # call the lamp update so the prize is shown properly

@@ -160,10 +160,11 @@ class MB_Tribute(ep.EP_Mode):
             animLayer.frame_time = 6
             animLayer.repeat = False
             animLayer.opaque = True
+            animLayer.composite_op = "blacksrc"
 
-            backdrop = dmd.FrameLayer(opaque=True,frame=self.game.assets.dmd_mbLogo)
-
-            self.layer = dmd.GroupedLayer(128,32,[backdrop,animLayer])
+            backdrop = dmd.FrameLayer(opaque=True,frame=self.game.assets.dmd_mbLogo.frames[0])
+            combined = dmd.GroupedLayer(128,32,[backdrop,animLayer])
+            self.layer = combined
             self.delay(delay = myWait,handler=self.intro,param=2)
 
         if step == 2:
@@ -194,10 +195,13 @@ class MB_Tribute(ep.EP_Mode):
             self.delay(delay = 3, handler=self.get_going)
 
     def get_going(self):
+        print "RELEASE THE BALL FOR TRIBUTE"
         # release the ball
         if self.game.tribute_launcher.shot == 3:
+            print "TRIBUTE MINE EJECT"
             self.game.mountain.eject()
         else:
+            print "TRIBUTE POST DROP"
             self.game.coils.leftGunFightPost.disable()
         # start the music
         #self.music_on(self.game.assets.music_dracAttack)
