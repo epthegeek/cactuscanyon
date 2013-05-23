@@ -434,6 +434,8 @@ class MM_Tribute(ep.EP_Mode):
     def finish_trolls(self):
         # kill the delays
         self.wipe_delays()
+        # drop the targets
+        self.game.bad_guys.drop_targets()
         border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mmTrollFinalFrame.frames[0])
         textLayer1 = ep.EP_TextLayer(64,8,self.game.assets.font_5px_AZ,"center",opaque=False)
         if self.won:

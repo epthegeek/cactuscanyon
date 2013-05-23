@@ -369,6 +369,8 @@ class MB_Tribute(ep.EP_Mode):
     def finish_drac(self):
         # kill the delays
         self.wipe_delays()
+        # drop the targets
+        self.game.bad_guys.drop_targets()
         border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mbStakeBorder.frames[0])
         textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_5px_AZ,"center",opaque=False).set_text("DRAC ATTACK",color=ep.RED)
         textLayer3 = ep.EP_TextLayer(64,9,self.game.assets.font_5px_AZ,"center",opaque=False).set_text("TOTAL",color=ep.RED)
