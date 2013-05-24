@@ -762,6 +762,8 @@ class SkillShot(ep.EP_Mode):
             # award the prize
             self.skillshot_award(switch)
         else:
+            # this is to help the mine not get stupid after a miss
+            self.wasActive = 0
             # if tribute was on, remove that
             if self.game.tribute_launcher in self.game.modes:
                 self.game.tribute_launcher.remove_launcher()
