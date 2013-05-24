@@ -211,12 +211,15 @@ class SkillShot(ep.EP_Mode):
         # here's the super skill shot prizes
         else:
             # 3 million points
-            prizes.append("O")
+            if self.game.user_settings['Gameplay (Feature)']['Super Skill 3 Million'] == "Enabled":
+                prizes.append("O")
             # bonus 5x
-            if self.game.show_tracking('bonusX') < 9:
+            if self.game.show_tracking('bonusX') < 9 and\
+               self.game.user_settings['Gameplay (Feature)']['Super Skill Bonus X'] == "Enabled":
                 prizes.append("P")
             # light gunfight
-            if self.game.show_tracking('gunfightStatus') != "READY":
+            if self.game.show_tracking('gunfightStatus') != "READY" and \
+               self.game.user_settings['Gameplay (Feature)']['Super Skill Gunfight'] == "Enabled":
                 prizes.append("Q")
             # drunk multiball
             if self.game.show_tracking('drunkMultiballStatus') != "READY":

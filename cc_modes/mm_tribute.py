@@ -282,6 +282,7 @@ class MM_Tribute(ep.EP_Mode):
             target = 1
         else:
             target = 2
+        print "Resetting Troll on target " + str(target)
         self.game.bad_guys.target_up(target)
 
     def hit_troll(self,target):

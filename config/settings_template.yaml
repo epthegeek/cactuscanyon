@@ -222,6 +222,15 @@ Gameplay (Feature):
   'Showdown Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Super Skill Bonus X':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Super Skill Gunfight':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Super Skill 3 Million':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
   'Motherlode Badge Difficulty':
     options: ['Easy','Normal']
     default: 'Easy'

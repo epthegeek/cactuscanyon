@@ -39,7 +39,7 @@ class BadGuys(ep.EP_Mode):
                       self.game.coils.badGuyC1,
                       self.game.coils.badGuyC2,
                       self.game.coils.badGuyC3]
-        self.coilStrings = ["Hold 0","Hold 1","Hold 2","Hold 3"]
+        #self.coilStrings = ["Hold 0","Hold 1","Hold 2","Hold 3"]
         self.lamps = [self.game.lamps.badGuyL0,
                        self.game.lamps.badGuyL1,
                        self.game.lamps.badGuyL2,
@@ -159,10 +159,11 @@ class BadGuys(ep.EP_Mode):
         # ignore the light if high noon is running
         if self.game.high_noon.running:
             lamp = False
-        print "TARGET RAISED " + str(target)
+        print "TARGET RAISE ATTEMPT " + str(target)
         print self.game.show_tracking('badGuyUp')
        # self.coils[target].patter(on_time=10,off_time=10,original_on_time=18)
         # new coil raise based on research with on o-scope by jim (jvspin)
+        print "Target Start " + str(target) + " on time " + str(self.on_time)
         self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
         if lamp:
             self.lamps[target].schedule(0x00FF00FF)
@@ -181,7 +182,7 @@ class BadGuys(ep.EP_Mode):
         if self.game.high_noon.running:
             lamp = False
         # cancel the hold delay, just in case
-        self.cancel_delayed(self.coilStrings[target])
+        #self.cancel_delayed(self.coilStrings[target])
         print "DEACTIVATING TARGET " + str(target)
         self.coils[target].disable()
         self.game.set_tracking('badGuyUp',False,target)
@@ -196,6 +197,9 @@ class BadGuys(ep.EP_Mode):
             # TRYING THIS IN A NEW METHOD
             self.coils[target].patter(on_time=2,off_time=10)
             self.game.set_tracking('badGuyUp',True,target)
+            print self.game.show_tracking('badGuyUp')
+        else:
+            print "SYSTEM THINKS TARGET " + str(target) + " IS ALREADY UP"
 
     def setup_targets(self):
         # pop up the targets
