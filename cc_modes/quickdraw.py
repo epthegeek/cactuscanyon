@@ -323,9 +323,12 @@ class Quickdraw(ep.EP_Mode):
             if self.game.show_tracking('showdownStatus') != "OVER":
                 self.game.set_tracking('showdownStatus',"READY")
                 print "SHOWDOWN STATUS IS READY"
-            else:
+                self.game.modes.add(self.game.showdown)
+                self.game.showdown.start_showdown(0)
+        else:
                 self.game.set_tracking('ambushStatus',"READY")
-
+                self.game.modes.add(self.game.ambush)
+                self.game.ambush.start_ambush(0)
 
     def mode_stopped(self):
         self.running = False

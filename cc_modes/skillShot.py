@@ -114,6 +114,7 @@ class SkillShot(ep.EP_Mode):
         print "Skillshot Started"
         # reset the super just in case
         self.super = False
+        self.kick = False
         self.selecting = False
         self.lcount = 0
         self.rcount = 0
@@ -553,6 +554,7 @@ class SkillShot(ep.EP_Mode):
             self.layer = dmd.GroupedLayer(128,32,[topText,million,wipeLayer])
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
             self.game.sound.play(self.game.assets.sfx_yeeHoo)
+            self.kick = True
             self.delay("Gameplay Start",delay=1.6,handler=self.start_gameplay)
             return
         # bonus x
@@ -561,6 +563,7 @@ class SkillShot(ep.EP_Mode):
             awardStringTop = "BONUS X"
             awardStringBottom = "INCREASED +5"
             self.game.increase_tracking('bonusX',5)
+            self.kick = True
         # gunfight
         elif self.selectedPrizes[5:] == "Q":
             # This one is the gunfight
@@ -568,6 +571,7 @@ class SkillShot(ep.EP_Mode):
             self.game.score(50000)
             self.game.add_bonus(1200)
             self.super = False
+            self.kick = True
             self.game.saloon.light_gunfight(self.game.skill_shot.start_gameplay)
             return
 
@@ -577,6 +581,7 @@ class SkillShot(ep.EP_Mode):
             self.game.score(50000)
             self.game.add_bonus(1200)
             # light the dmb
+            self.kick = True
             self.game.base.light_drunk_multiball(self.game.skill_shot.start_gameplay)
             return
 
@@ -587,6 +592,7 @@ class SkillShot(ep.EP_Mode):
             # load the mode so the train starts moving
             self.game.modes.add(self.game.move_your_train)
             # if we hit the left loop, call start for MYT after a delay
+            self.kick = True
             if switch == 1:
                 self.delay("Operational",delay=1.5,handler=self.game.move_your_train.start)
             self.super = False
@@ -603,6 +609,7 @@ class SkillShot(ep.EP_Mode):
             awardStringTop = "MARSHALL"
             awardStringBottom = "MULTIBALL"
             self.game.base.kickoff_marshall(True)
+            self.kick = True
             self.super = False
 
         # Tribute mode
@@ -634,6 +641,7 @@ class SkillShot(ep.EP_Mode):
         #if self.super and start:
         #    self.delay(delay = 2,handler=self.start_gameplay)
         # if we're not in a super, start gameplay now
+        # clear the mine if a super was hit that wasn't tribute
         if start:
             self.delay("Gameplay Start",delay = 2,handler=self.start_gameplay)
 
@@ -687,6 +695,11 @@ class SkillShot(ep.EP_Mode):
         # start the main game music
         if True not in self.game.show_tracking('stackLevel'):
             self.music_on(self.game.assets.music_mainTheme)
+        # clear the mine if needed
+        if self.kick:
+            self.kick = False
+            if self.game.switches.minePopper.is_active():
+                self.game.mountain.eject()
         # check if the award finished stampede
         self.game.base.check_stampede()
         # unload in 2 seconds - to give
