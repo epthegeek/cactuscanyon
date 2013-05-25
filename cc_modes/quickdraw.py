@@ -325,7 +325,7 @@ class Quickdraw(ep.EP_Mode):
                 print "SHOWDOWN STATUS IS READY"
                 self.game.modes.add(self.game.showdown)
                 self.game.showdown.start_showdown(0)
-        else:
+            else:
                 self.game.set_tracking('ambushStatus',"READY")
                 self.game.modes.add(self.game.ambush)
                 self.game.ambush.start_ambush(0)

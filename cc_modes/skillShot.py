@@ -494,8 +494,9 @@ class SkillShot(ep.EP_Mode):
             # turn off the skill shot layer
             self.layer = None
           #  callback = None
-          #  if self.super:
+            if self.super:
           #      callback = self.start_gameplay
+                 self.kick = True
             self.game.mine.light_extra_ball(self.start_gameplay)
             return
 
@@ -604,6 +605,9 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom = "VS ALIENS"
             self.game.set_tracking("cvaStatus", "READY")
             self.super = False
+            self.game.mountain.busy = True
+            self.game.modes.add(self.game.cva)
+            self.game.cva.intro(entry = "mine")
 
         # marshall multiball
         elif self.selectedPrizes[5:] == "U":
