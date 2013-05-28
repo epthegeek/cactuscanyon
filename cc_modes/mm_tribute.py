@@ -206,6 +206,7 @@ class MM_Tribute(ep.EP_Mode):
             self.delay(delay = myWait,handler=self.get_going)
 
     def get_going(self):
+        self.game.ball_search.enable()
         # release the ball
         if self.game.tribute_launcher.shot == 3:
             self.game.mountain.eject()

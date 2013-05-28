@@ -81,6 +81,7 @@ class TributeLauncher(ep.EP_Mode):
         return game.SwitchStop
 
     def start_selection(self):
+        self.game.ball_search.disable()
         self.selecting = True
         # random shows each available method one time, then starts
         if self.method == "Random":

@@ -195,6 +195,7 @@ class MB_Tribute(ep.EP_Mode):
             self.delay(delay = 3, handler=self.get_going)
 
     def get_going(self):
+        self.game.ball_search.enable()
         print "RELEASE THE BALL FOR TRIBUTE"
         # release the ball
         if self.game.tribute_launcher.shot == 3:
