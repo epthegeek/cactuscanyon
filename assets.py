@@ -189,6 +189,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_horse,self.sfx_path + "179b-horse-running.wav")
         self.sfx_orchestraRiff = 'sfx_orchestraRiff'
         self.game.sound.register_sound(self.sfx_orchestraRiff, self.sfx_path + "041-orchestra-riff.wav")
+        self.sfx_orchestraFlourish = 'sfx_orchestraFlourish'
+        self.game.sound.register_sound(self.sfx_orchestraFlourish, self.sfx_path + "066-orchestra-flourish.wav")
         self.sfx_quickdrawOff = 'sfx_quickdrawOff'
         self.game.sound.register_sound(self.sfx_quickdrawOff, self.sfx_path + "287-quickdraw-hit-light.wav")
         self.sfx_quickdrawOn = 'sfx_quickdrawOn'

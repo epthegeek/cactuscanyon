@@ -213,6 +213,7 @@ class GoldMine(ep.EP_Mode):
         animLayer.opaque = True
         animLayer.add_frame_listener(12,self.game.base.priority_quote,param=self.game.assets.quote_gold)
         animLayer.add_frame_listener(24,self.game.base.priority_quote,param=self.game.assets.quote_mine)
+        animLayer.add_frame_listener(34,self.ta_da)
         animLayer.add_frame_listener(43,self.game.sound.play,param=self.game.assets.sfx_smashingWood)
         # turn it on
         self.layer = animLayer
@@ -220,6 +221,10 @@ class GoldMine(ep.EP_Mode):
         self.game.lampctrl.play_show(self.game.assets.lamp_gmStart, repeat=False,callback=self.lamp_update)
         # when the animation is over go to the next step
         self.delay(delay=myWait,handler=self.intro_banner)
+
+    def ta_da(self):
+        self.stop_music()
+        self.game.sound.play(self.game.assets.sfx_orchestraFlourish)
 
     def intro_banner(self):
         # play the sound
