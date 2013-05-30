@@ -489,6 +489,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_mbBats, self.sfx_path + "mb_screeching-bats.wav")
         self.sfx_mbSmack = 'sfx_mbSmack'
         self.game.sound.register_sound(self.sfx_mbSmack, self.sfx_path + "mb_drac_smack.wav")
+        self.sfx_mbHowl = 'sfx_mbHowl'
+        self.game.sound.register_sound(self.sfx_mbHowl, self.sfx_path + "mb-howl.wav")
 
         self.sfx_mmTrollSmack = 'sfx_mmTrollSmack'
         self.game.sound.register_sound(self.sfx_mmTrollSmack, self.sfx_path + "mm_troll-smack.wav")

@@ -271,6 +271,7 @@ class Moonlight(ep.EP_Mode):
         self.enable += self.shotsAtStart
         self.enable_shots()
         duration = self.game.sound.play(self.game.assets.sfx_churchBell)
+        self.delay(delay=1,handler=self.game.sound.play,param=self.game.assets.sfx_mbHowl)
         # start the intro music
         self.delay(delay=duration-1,handler=self.launch)
         # throw up an intro display
