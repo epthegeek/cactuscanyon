@@ -723,3 +723,7 @@ class GoldMine(ep.EP_Mode):
     def abort_display(self):
         self.cancel_delayed("Display")
         self.clear_layer()
+
+    def mode_stopped(self):
+        if self.game.switches.minePopper.is_active():
+            self.game.mountain.eject()
