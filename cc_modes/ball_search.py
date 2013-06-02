@@ -59,7 +59,7 @@ class BallSearch(ep.EP_Mode):
         print "-->> BALL SEARCH DISABLED <<--"
         self.enabled = 0
 
-    def reset(self):
+    def reset(self,sw):
         self.cancel_delayed("stoppedReset")
         if self.enabled:
             # Stop delayed coil activations in case a ball search has

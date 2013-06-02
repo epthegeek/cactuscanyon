@@ -111,7 +111,7 @@ class BadGuys(ep.EP_Mode):
 
     def hit_bad_guy(self,target):
         # ding the ball search timer
-        self.game.ball_search.reset()
+        self.game.ball_search.reset('None')
         # stop the timer
         # play the target lampshow
         if not self.game.marshall_multiball.running and not self.game.high_noon.running:
