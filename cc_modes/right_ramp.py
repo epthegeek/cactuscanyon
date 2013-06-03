@@ -149,15 +149,16 @@ class RightRamp(ep.EP_Mode):
 
     ## for now, anything above 3 is 'complete'
         else:
-            start_value = self.game.increase_tracking('adventureCompleteValue',5000)
             # vary the prize based on win/lose
             if self.game.bank_robbery.won:
                 self.awardString = "ROBBERY FOILED"
                 self.game.base.play_quote(self.game.assets.quote_victory)
-                value = start_value
+                value = self.game.increase_tracking('rightRampValue',5000)
+                frame = 0
             else:
                 self.awardString = "BANK ROBBED"
-                value = start_value / 10
+                value = self.game.increase_tracking('rightRampValue',500)
+                frame = 13
             self.awardPoints = str(ep.format_score(value)) + "*"
             self.game.score_with_bonus(value)
             # play sounds
@@ -167,7 +168,7 @@ class RightRamp(ep.EP_Mode):
                 self.layer = None
                 self.game.combos.display()
             else:
-                self.anim_bank_victory()
+                self.anim_bank_visit(frame)
 
         # then tick the stage up for next time unless it's completed
         if self.game.show_tracking('rightRampStage') < 3:
@@ -194,6 +195,11 @@ class RightRamp(ep.EP_Mode):
             self.game.sound.play(self.game.assets.sfx_glumRiffShort)
 
         self.delay(name="Display",delay=1,handler=self.blink_award_text)
+
+    def anim_bank_visit(self,frame):
+        backdrop = dmd.FrameLayer(frame=self.game.assets.dmd_bankExplodes.frames[frame])
+        self.layer = backdrop
+        self.delay(delay=2,handler=self.blink_award_text)
 
     def blink_award_text(self):
         # stage one of showing the award text - this one blinks

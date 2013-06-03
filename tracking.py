@@ -163,6 +163,10 @@ class Tracking(game.Player):
         # level 6 is bionic bart,high noon
         self.player_stats['stackLevel'] = [False,False,False,False,False,False,False]
 
+        # ramp values for after they're finished
+        self.player_stats['leftRampValue'] = 2000
+        self.player_stats['rightRampValue'] = 2000
+        self.player_stats['centerRampValue'] = 2000
         # Tumbleweed increases 5000 per shot - so the first one is actually 25000 when scored
         self.player_stats['tumbleweedValue'] = 20000
         self.player_stats['tumbleweedHits'] = 0

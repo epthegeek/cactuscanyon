@@ -139,14 +139,13 @@ class LeftRamp(ep.EP_Mode):
                 self.game.river_chase.start_river_chase()
 
         else:
-            start_value = self.game.increase_tracking('adventureCompleteValue',5000)
             if self.game.river_chase.won:
-                self.awardString = "POLLY SAVED"
+                value = self.game.increase_tracking('leftRampValue',5000)
+                self.awardString = "VICTORY RIDE"
                 self.game.base.play_quote(self.game.assets.quote_victory)
-                value = start_value
             else:
-                self.awardString = "POLLY KIDNAPPED"
-                value = start_value / 10
+                value = self.game.increase_tracking('leftRampValue',500)
+                self.awardString = "SHAMEFUL RIDE"
             self.awardPoints = str(ep.format_score(value))
             self.game.score_with_bonus(value)
             # play animation if we're not in a combo after level 4
@@ -154,7 +153,7 @@ class LeftRamp(ep.EP_Mode):
                 self.layer = None
                 self.game.combos.display()
             else:
-                self.anim_river_victory()
+                self.anim_river_ride()
 
         # then tick the stage up for next time unless it's completed
         if stage < 3:
@@ -205,6 +204,17 @@ class LeftRamp(ep.EP_Mode):
 
             self.layer = combined
         self.delay(name="Display",delay=1,handler=self.show_award_text)
+
+    def anim_river_ride(self):
+        self.game.sound.play(self.game.assets.sfx_horse)
+        anim = self.game.assets.dmd_blankRiverLoop
+        backdrop = dmd.AnimatedLayer(frames=anim.frames, repeat=True, opaque=True,frame_time=6)
+        anim = self.game.assets.dmd_horseLoop
+        horse = dmd.AnimatedLayer(frames=anim.frames,repeat=True, frame_time = 6)
+        horse.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[backdrop,horse])
+        self.layer = combined
+        self.delay(name="Display",delay=2,handler=self.show_award_text)
 
     def push_out(self):
         print "TRANSITION MF"

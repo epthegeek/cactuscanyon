@@ -265,6 +265,8 @@ class RiverChase(ep.EP_Mode):
         self.game.game_data['Feature']['Left Polly Won'] += 1
         self.game.peril = False
         self.game.score(500000)
+        # set the left ramp value up
+        self.game.set_tracking('leftRampValue',20000)
         self.running = False
         self.wipe_delays()
         #self.stop_music(slice=3)

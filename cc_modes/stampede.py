@@ -250,6 +250,10 @@ class Stampede(ep.EP_Mode):
         # reset the ramp status
         for each in self.shots:
             self.game.set_tracking(each,1)
+        # set the values for the ramp shots back down
+        self.game.set_tracking('leftRampValue',2000)
+        self.game.set_tracking('rightRampValue',2000)
+        self.game.set_tracking('centerRampValue',2000)
         # unset the base busy flag
         self.game.base.busy = False
         self.game.base.queued -= 1
