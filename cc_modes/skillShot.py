@@ -36,6 +36,7 @@ class SkillShot(ep.EP_Mode):
         self.x = 126
         self.super = False
         self.selecting = False
+        self.live = False
         self.lcount = 0
         self.rcount = 0
         self.leftLoopLamps = [self.game.lamps.leftLoopBuckNBronco,
@@ -117,6 +118,7 @@ class SkillShot(ep.EP_Mode):
         self.super = False
         self.kick = False
         self.selecting = False
+        self.live = True
         self.lcount = 0
         self.rcount = 0
         self.prizeIndex = 0
@@ -349,6 +351,12 @@ class SkillShot(ep.EP_Mode):
 
     # if the ramp bottom switch gets hit - award the prize and unload the mode
     def sw_rightRampBottom_active(self, sw):
+        if self.live:
+            self.skillshot_set()
+
+    def skillshot_set(self):
+        # don't allow the skillshot to get re-set
+        self.live = False
         if not self.super:
             self.skillshot_award()
         else:
@@ -375,6 +383,7 @@ class SkillShot(ep.EP_Mode):
             self.game.base.play_quote(quote)
 
             self.award_display(awardStringTop,awardStringBottom,start=False)
+
 
     def skillshot_award(self,switch=0):
         # stop the music

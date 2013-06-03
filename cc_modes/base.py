@@ -416,8 +416,11 @@ class BaseGameMode(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
         # score the points
         self.game.score_with_bonus(2530)
+        # if the skillshot is still live at this point, end that
+        if self.game.skill_shot.live:
+            self.game.skill_shot.skillshot_set()
         # if tribute is starting, stop the ball
-        if self.game.tribute_launcher in self.game.modes:
+        elif self.game.tribute_launcher in self.game.modes:
             # if we hit a return lane when the launcher is running, pop the post
             print "Tribute raising post on left"
             self.game.coils.leftGunFightPost.patter(on_time=2,off_time=6,original_on_time=60)
