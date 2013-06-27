@@ -614,9 +614,11 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom = "VS ALIENS"
             self.game.set_tracking("cvaStatus", "READY")
             self.super = False
-            self.game.mountain.busy = True
-            self.game.modes.add(self.game.cva)
-            self.game.cva.intro(entry = "mine")
+            if switch == 3:
+                self.game.mountain.busy = True
+                self.game.modes.add(self.game.cva)
+                self.game.cva.intro(entry = "mine")
+                return
 
         # marshall multiball
         elif self.selectedPrizes[5:] == "U":
