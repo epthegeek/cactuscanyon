@@ -49,7 +49,7 @@ class SuperFilter(ep.EP_Mode):
 
 
         # mine poppper
-    def sw_minePopper_active_for_300ms(self,sw):
+    def sw_minePopper_active_for_400ms(self,sw):
         if self.game.skill_shot.active == 3:
             self.game.skill_shot.super_hit(made=True,switch=3)
             return game.SwitchStop
