@@ -342,6 +342,10 @@ PRCoils:
         number: FULH
         label: Bart Toy - Hat
         tags: Solenoid
+    shakerMotor:
+        number: FURH
+        lable: Shaker Motor
+        tags: Mech
     autoPlunger:
         number: C01
         label: Auto-Plunger
