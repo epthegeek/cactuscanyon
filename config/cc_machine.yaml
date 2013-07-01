@@ -365,7 +365,7 @@ PRCoils:
     minePopper:
         number: C06
         label: Mine Popper
-        tags: Mech
+        tags: Solenoid
     knocker:
         number: C07
         label: Backbox Knocker
