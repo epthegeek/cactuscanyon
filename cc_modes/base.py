@@ -723,6 +723,9 @@ class BaseGameMode(ep.EP_Mode):
             if True in stackLevel[5:]:
                 print "CVA, BB, or High Noon Running - no stampede"
                 pass
+            elif self.game.trough.balls_in_play == 0:
+                print "Balls drained before action, pass"
+                pass
             elif self.game.gunfight.running:
                 print "Stampede check: Gunfight in the way, delaying to try again"
                 self.delay(delay=2,handler=self.check_stampede)
