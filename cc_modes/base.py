@@ -723,7 +723,7 @@ class BaseGameMode(ep.EP_Mode):
             if True in stackLevel[5:]:
                 print "CVA, BB, or High Noon Running - no stampede"
                 pass
-            elif self.game.trough.balls_in_play == 0:
+            elif self.game.trough.num_balls_in_play == 0:
                 print "Balls drained before action, pass"
                 pass
             elif self.game.gunfight.running:
@@ -980,7 +980,7 @@ class BaseGameMode(ep.EP_Mode):
     def kickoff_marshall(self,super=False):
         print "Marshall Multiball Kickoff Attempt"
         # if all the balls drained before this happens - bail
-        if self.game.trough.balls_in_play == 0:
+        if self.game.trough.num_balls_in_play == 0:
             print "Well you blew that. Marshall aborted"
             return
         # if we haven't already run marshall multiball - or if it's coming from the super skill shot
