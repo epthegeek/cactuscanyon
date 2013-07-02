@@ -976,6 +976,10 @@ class BaseGameMode(ep.EP_Mode):
     # for starting marshall multiball, so other modes can reference it and then quit if necessary
     def kickoff_marshall(self,super=False):
         print "Marshall Multiball Kickoff Attempt"
+        # if all the balls drained before this happens - bail
+        if self.game.trough.balls_in_play == 0:
+            print "Well you blew that. Marshall aborted"
+            return
         # if we haven't already run marshall multiball - or if it's coming from the super skill shot
         if not self.game.show_tracking('marshallMultiballRun') or super:
             # and nothing else is running
