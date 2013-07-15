@@ -1,5 +1,7 @@
 import math
 from procgame import game,dmd
+import ep
+
 
 class InitialEntryMode(game.Mode):
     """Mode that prompts the player for their initials.
@@ -27,9 +29,9 @@ class InitialEntryMode(game.Mode):
 
         self.entered_handler = entered_handler
 
-        self.init_font = dmd.font_named('Font09Bx7.dmd')
-        self.font = dmd.font_named('Font07x5.dmd')
-        self.letters_font = dmd.font_named('Font07x5.dmd')
+        self.init_font = self.game.assets.font_09Bx7
+        self.font = self.game.assets.font_07x5
+        self.letters_font = self.game.assets.font_07x5
 
         self.layer = dmd.GroupedLayer(128, 32)
         self.layer.opaque = True
@@ -48,7 +50,7 @@ class InitialEntryMode(game.Mode):
         script = []
         for text in left_text:
             frame = dmd.Frame(width=128, height=8)
-            self.font.draw(frame, text, 0, 0)
+            self.font.draw(frame, text, 0, 0,color=ep.YELLOW)
             script.append({'seconds':seconds_per_text, 'layer':dmd.FrameLayer(frame=frame)})
         topthird_left_layer = dmd.ScriptedLayer(width=128, height=8, script=script)
         topthird_left_layer.composite_op = 'blacksrc'
@@ -57,7 +59,7 @@ class InitialEntryMode(game.Mode):
         script = []
         for text in right_text:
             frame = dmd.Frame(width=128, height=8)
-            self.font.draw(frame, text, 128-(self.font.size(text)[0]), 0)
+            self.font.draw(frame, text, 128-(self.font.size(text)[0]), 0,color=ep.ORANGE)
             script.append({'seconds':seconds_per_text, 'layer':dmd.FrameLayer(frame=frame)})
             if text == "Grand Champion":
                 self.knocks += 2
@@ -118,7 +120,7 @@ class InitialEntryMode(game.Mode):
                     index = index - len(self.letters)
                 (w, h) = self.font.size(self.letters[index])
                 #print "Drawing %d w=%d" % (index, w)
-                self.letters_font.draw(frame, self.letters[index], 128/2 - offset * letter_spread - letter_width/2 + x, 0)
+                self.letters_font.draw(frame, self.letters[index], 128/2 - offset * letter_spread - letter_width/2 + x, 0,color=ep.CYAN)
             frame.fill_rect(64-5, 0, 1, 10, 10)
             frame.fill_rect(64+5, 0, 1, 10, 10)
             self.lowerhalf_layer.frames += [frame]
@@ -135,7 +137,7 @@ class InitialEntryMode(game.Mode):
         init_spread = 8
         x_offset = self.inits_frame.width/2 - len(self.inits) * init_spread / 2
         for x in range(len(self.inits)):
-            self.init_font.draw(self.inits_frame, self.inits[x], x * init_spread + x_offset, 0)
+            self.init_font.draw(self.inits_frame, self.inits[x], x * init_spread + x_offset, 0,color=ep.GREEN)
         self.inits_frame.fill_rect((len(self.inits)-1) * init_spread + x_offset, 9, 8, 1, 1)
 
     def letter_increment(self, inc):

@@ -27,12 +27,12 @@ class Match(ep.EP_Mode):
     def __init__(self, game, priority):
         super(Match, self).__init__(game, priority)
         self.myID = "Match"
-        self.digitLayer = dmd.TextLayer(76,13, self.game.assets.font_13px_thin_score, "center")
-        self.zeroLayer = dmd.TextLayer(88,13, self.game.assets.font_13px_thin_score, "center").set_text("0")
-        self.p1Layer = dmd.TextLayer(13, 0, self.game.assets.font_7px_az, "right", opaque=False)
-        self.p2Layer = dmd.TextLayer(13, 8, self.game.assets.font_7px_az, "right", opaque=False)
-        self.p3Layer = dmd.TextLayer(13, 16, self.game.assets.font_7px_az, "right", opaque=False)
-        self.p4Layer = dmd.TextLayer(13, 24, self.game.assets.font_7px_az, "right", opaque=False)
+        self.digitLayer = ep.EP_TextLayer(76,13, self.game.assets.font_13px_thin_score, "center")
+        self.zeroLayer = ep.EP_TextLayer(88,13, self.game.assets.font_13px_thin_score, "center").set_text("0")
+        self.p1Layer = ep.EP_TextLayer(13, 0, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p2Layer = ep.EP_TextLayer(13, 8, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p3Layer = ep.EP_TextLayer(13, 16, self.game.assets.font_7px_az, "right", opaque=False)
+        self.p4Layer = ep.EP_TextLayer(13, 24, self.game.assets.font_7px_az, "right", opaque=False)
         self.playerDigits = [0,0,0,0]
         self.playerLayers=[self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer]
 
@@ -43,18 +43,18 @@ class Match(ep.EP_Mode):
 
     def mode_started(self):
         self.winners = 0
-        self.zeroLayer.set_text("0",blink_frames=0)
-        self.p1Layer.set_text("",blink_frames=0)
-        self.p2Layer.set_text("",blink_frames=0)
-        self.p3Layer.set_text("",blink_frames=0)
-        self.p4Layer.set_text("",blink_frames=0)
+        self.zeroLayer.set_text("0",blink_frames=0,color=ep.RED)
+        self.p1Layer.set_text("",blink_frames=0,color=ep.RED)
+        self.p2Layer.set_text("",blink_frames=0,color=ep.RED)
+        self.p3Layer.set_text("",blink_frames=0,color=ep.RED)
+        self.p4Layer.set_text("",blink_frames=0,color=ep.RED)
 
     def run_match(self):
         self.game.sound.play(self.game.assets.sfx_ragtimePiano)
         possible = ["0","1","2","3","4","5","6","7","8","9"]
         # pick a random number
         self.selection = random.choice(possible)
-        self.digitLayer.set_text(self.selection)
+        self.digitLayer.set_text(self.selection,color=ep.RED)
         # grab the last two digits of the scores  ... somehow?
         self.generate_digits()
         ## TODO REMOVE THIS -- TEMPORARY ## Make player one win
@@ -66,9 +66,9 @@ class Match(ep.EP_Mode):
         bottlesLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_match.frames[0])
         # put up the match number
         # text
-        textLayer1 = dmd.TextLayer(30, 1, self.game.assets.font_7px_az, "center", opaque=False).set_text("MATCH",blink_frames=12)
-        textLayer2 = dmd.TextLayer(30, 9, self.game.assets.font_7px_az, "center", opaque=False).set_text("TO",blink_frames=12)
-        textLayer3 = dmd.TextLayer(30, 17, self.game.assets.font_7px_az, "center", opaque=False).set_text("WIN",blink_frames=12)
+        textLayer1 = ep.EP_TextLayer(30, 1, self.game.assets.font_7px_az, "center", opaque=False).set_text("MATCH",blink_frames=12,color=ep.YELLOW)
+        textLayer2 = ep.EP_TextLayer(30, 9, self.game.assets.font_7px_az, "center", opaque=False).set_text("TO",blink_frames=12,color=ep.YELLOW)
+        textLayer3 = ep.EP_TextLayer(30, 17, self.game.assets.font_7px_az, "center", opaque=False).set_text("WIN",blink_frames=12,color=ep.GREEN)
 
         combined = dmd.GroupedLayer(128,32,[bottlesLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,textLayer1,textLayer2,textLayer3])
 
@@ -114,7 +114,7 @@ class Match(ep.EP_Mode):
         for i in range(len(self.game.players)):
             if str(self.playerDigits[i]) == self.selection:
                 # set the text on that layer to blink
-                self.playerLayers[i].set_text(str(self.playerDigits[i]) + "0",blink_frames=8)
+                self.playerLayers[i].set_text(str(self.playerDigits[i]) + "0",blink_frames=8,color=ep.GREEN)
                 # and tick the winner count to true
                 self.winners += 1
                 # store a list of winning players
@@ -123,8 +123,8 @@ class Match(ep.EP_Mode):
 
         # if we had any winners there's stuff to do
         if self.winners > 0:
-            self.digitLayer.set_text(self.selection,blink_frames=8)
-            self.zeroLayer.set_text("0",blink_frames=8)
+            self.digitLayer.set_text(self.selection,blink_frames=8,color=ep.GREEN)
+            self.zeroLayer.set_text("0",blink_frames=8,color=ep.GREEN)
             bottlesLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_match.frames[20])
             bottlesLayer.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[self.digitLayer,self.zeroLayer,self.p1Layer,self.p2Layer,self.p3Layer,self.p4Layer,bottlesLayer])
@@ -151,7 +151,7 @@ class Match(ep.EP_Mode):
             digit = str(score)[-2:-1]
             print "MATCH DIGITS - " + str(digit)
             digitString = str(digit) + "0"
-            self.playerLayers[i].set_text(digitString)
+            self.playerLayers[i].set_text(digitString,color=ep.RED)
             #set var for comparison
             self.playerDigits[i]=digit
 

@@ -95,7 +95,8 @@ class Assets():
 
         self.font_13px_score = dmd.Font(self.dmd_path + "Font_8_CactusCanyon.dmd")
     #    self.font_13px_extra_thin_score = dmd.Font(self.dmd_path + "Font_11_CactusCanyon.dmd")
-        self.font_13px_thin_score = dmd.Font(self.dmd_path + "Font_7_CactusCanyon.dmd")
+        self.font_13px_thin_score = ep.ColorFont(self.dmd_path + "Font_7_CactusCanyon.dmd")
+        self.font_13px_thin_score.make_colors([ep.RED,ep.GREEN])
     #    self.font_13px_wide_score = dmd.Font(self.dmd_path + "Font_9_CactusCanyon.dmd")
 
         self.font_15px_az = ep.ColorFont(self.dmd_path + "Font_17_CactusCanyon.dmd")
@@ -1531,7 +1532,8 @@ class Assets():
         self.font_14x9.make_colors([ep.YELLOW])
         self.font_14x8 = ep.ColorFont(self.shared_dmd_path + "Font14x8.dmd")
         self.font_14x8.make_colors([ep.YELLOW])
-        self.font_09Bx7 = dmd.Font(self.shared_dmd_path + "Font09Bx7.dmd")
+        self.font_09Bx7 = ep.ColorFont(self.shared_dmd_path + "Font09Bx7.dmd")
+        self.font_09Bx7.make_colors([ep.GREEN])
         self.font_09x7 = ep.ColorFont(self.shared_dmd_path + "Font09x7.dmd")
         self.font_09x7.make_colors([ep.DARK_BROWN])
         self.font_09x6 = ep.ColorFont(self.shared_dmd_path + "Font09x6.dmd")
@@ -1539,6 +1541,7 @@ class Assets():
         self.font_09x5 = ep.ColorFont(self.shared_dmd_path + "Font09x5.dmd")
         self.font_09x5.make_colors([ep.DARK_BROWN])
         self.font_07x4 = dmd.Font(self.shared_dmd_path + "Font07x4.dmd")
-        self.font_07x5 = dmd.Font(self.shared_dmd_path + "Font07x5.dmd")
+        self.font_07x5 = ep.ColorFont(self.shared_dmd_path + "Font07x5.dmd")
+        self.font_07x5.make_colors([ep.CYAN,ep.YELLOW,ep.ORANGE])
 
         
