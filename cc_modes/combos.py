@@ -46,6 +46,8 @@ class Combos(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 0:
             self.game.lamp_control.disable_combos()
             self.wipe_delays()
+            self.myTimer = 0
+            self.chain = 1
 
     def timer(self):
         # just to be sure
