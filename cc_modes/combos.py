@@ -45,6 +45,7 @@ class Combos(ep.EP_Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
             self.game.lamp_control.disable_combos()
+            self.wipe_delays()
 
     def timer(self):
         # just to be sure
