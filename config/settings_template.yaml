@@ -26,11 +26,11 @@ Machine (Standard):
   'Color Display X Offset':
     options: [-250,250]
     increments: 1
-    default: 200
+    default: 0
   'Color Display Y Offset':
     options: [-250,250]
     increments: 1
-    default: 200
+    default: -70
   'Balls Per Game':
     options: [1,10]
     increments: 1
