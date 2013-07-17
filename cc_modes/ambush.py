@@ -431,11 +431,11 @@ class Ambush(ep.EP_Mode):
         self.game.stack_level(1,False)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
-        textLine1 = dmd.TextLayer(76, 2, self.game.assets.font_7px_bold_az, "center", opaque=False)
+        textLine1 = ep.EP_TextLayer(76, 2, self.game.assets.font_7px_bold_az, "center", opaque=False,color=ep.RED)
         textString = "AMBUSH: " + str(self.deathTally) + " KILLS"
         textLine1.set_text(textString)
         textLine1.composite_op = "blacksrc"
-        textLine2 = dmd.TextLayer(76,11, self.game.assets.font_12px_az, "center", opaque=False)
+        textLine2 = ep.EP_TextLayer(76,11, self.game.assets.font_12px_az, "center", opaque=False,color=ep.GREEN)
         print "TOTAL AMBUSH: " + str(self.game.show_tracking('ambushPoints'))
         textLine2.set_text(ep.format_score(self.game.show_tracking('ambushPoints')))
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
