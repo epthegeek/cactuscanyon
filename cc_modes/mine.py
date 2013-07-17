@@ -441,7 +441,7 @@ class Mine(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_ebFlourish)
         # setup the backdrop
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_extraBall.frames[58])
-        textLine = dmd.TextLayer(128/2, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("EXTRA>  BALL@")
+        textLine = ep.EP_TextLayer(128/2, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("EXTRA(  BALL@",color=ep.GREEN)
         textLine.composite_op = "blacksrc"
         myLayer = dmd.GroupedLayer(128,32,[backdrop,textLine])
         self.layer = myLayer

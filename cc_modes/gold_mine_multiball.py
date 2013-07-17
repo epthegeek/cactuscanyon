@@ -353,13 +353,13 @@ class GoldMine(ep.EP_Mode):
             self.delay(name="Display",delay=.8,handler=self.jackpot_hit,param=3)
         if step == 3:
             # then show 'multiball jackpot' with points
-            awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
-            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-            awardTextTop.set_text("MULTIBALL JACKPOT")
+            awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
+            awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+            awardTextTop.set_text("MULTIBALL JACKPOT",color=ep.ORANGE)
             bottomString = str(ep.format_score(500000))
             if self.game.drunk_multiball.running:
                 bottomString = str(ep.format_score(1000000))
-            awardTextBottom.set_text(bottomString,blink_frames=4)
+            awardTextBottom.set_text(bottomString,blink_frames=4,color=ep.YELLOW)
             combined = dmd.GroupedLayer(128,32,[awardTextTop,awardTextBottom])
             self.layer = combined
             # turn on the motherlode if needed

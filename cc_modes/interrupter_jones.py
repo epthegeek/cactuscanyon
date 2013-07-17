@@ -171,8 +171,8 @@ class Interrupter(ep.EP_Mode):
 
     def showdown_hit(self,points):
         pointString = ep.format_score(points)
-        textLine1 = dmd.TextLayer(128/2, 0, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BAD GUY SHOT!")
-        textLine2 = dmd.TextLayer(128/2, 15, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(pointString,blink_frames=8)
+        textLine1 = ep.EP_TextLayer(128/2, 0, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BAD GUY SHOT!",color=ep.ORANGE)
+        textLine2 = ep.EP_TextLayer(128/2, 15, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(pointString,blink_frames=8,color=ep.RED)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
         combined.composite_op = "blacksrc"
         self.layer = combined
