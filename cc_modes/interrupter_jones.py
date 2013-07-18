@@ -170,27 +170,27 @@ class Interrupter(ep.EP_Mode):
         self.game.sound.set_volume(self.game.volume_to_set)
 
     def showdown_hit(self,points):
-        pointString = ep.format_score(points)
-        textLine1 = ep.EP_TextLayer(128/2, 0, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BAD GUY SHOT!",color=ep.ORANGE)
-        textLine2 = ep.EP_TextLayer(128/2, 15, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(pointString,blink_frames=8,color=ep.RED)
+        pointString = str(ep.format_score(points)) + "#"
+        textLine1 = ep.EP_TextLayer(128/2, 2, self.game.assets.font_9px_AZ_outline, "center", opaque=False).set_text("<BAD> <GUY> <SHOT!>",color=ep.ORANGE)
+        textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(pointString,blink_frames=8,color=ep.RED)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
         combined.composite_op = "blacksrc"
         self.layer = combined
-        self.delay(name="Display",delay=1,handler=self.clear_layer)
+        self.delay(name="Display",delay=1.5,handler=self.clear_layer)
 
     def ball_added(self):
-        textLine = dmd.TextLayer(128/2, 9, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("BALL ADDED",blink_frames=8)
+        textLine = dmd.TextLayer(64, 12, self.game.assets.font_9px_AZ_outline, "center", opaque=False).set_text("<BALL> <ADDED>",blink_frames=8)
         textLine.composite_op = "blacksrc"
         self.layer = textLine
-        self.delay(name="Display",delay=1,handler=self.clear_layer)
+        self.delay(name="Display",delay=1.5,handler=self.clear_layer)
 
     def ball_save_activated(self):
-        textLine1 = dmd.TextLayer(128/2, 0, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL SAVER")
-        textLine2 = dmd.TextLayer(128/2, 15, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("ACTIVATED",blink_frames=8)
+        textLine1 = dmd.TextLayer(128/2, 2, self.game.assets.font_9px_AZ_outline, "center", opaque=False).set_text("<BALL> <SAVER>")
+        textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("ACTIVATED#",blink_frames=8,color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
         combined.composite_op = "blacksrc"
         self.layer = combined
-        self.delay(name="Display",delay=1,handler=self.clear_layer)
+        self.delay(name="Display",delay=1.5,handler=self.clear_layer)
 
     def dude_escaped(self,amount):
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_escaped.frames[0])

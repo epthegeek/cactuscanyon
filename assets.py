@@ -75,6 +75,9 @@ class Assets():
         self.font_9px_az_mid = dmd.Font(self.dmd_path + "Font_15_CactusCanyon_2.dmd")
         self.font_9px_az_dim = ep.ColorFont(self.dmd_path + "Font_15_CactusCanyon_1.dmd")
         self.font_9px_az_dim.make_colors([ep.RED,ep.ORANGE,ep.GREEN])
+        self.font_9px_AZ_outline = ep.ColorFont(self.dmd_path + "Font_15_CactusCanyon_Outline.dmd")
+        self.font_9px_AZ_outline.make_colors([ep.RED,ep.ORANGE])
+        self.font_9px_AZ_outline.composite_op = "blacksrc"
 
         self.font_10px_AZ = ep.ColorFont(self.dmd_path + "Font_Custom_10px_AZ.dmd")
         self.font_10px_AZ.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.ORANGE,ep.RED])
@@ -85,7 +88,7 @@ class Assets():
         self.font_12px_az_dim.make_colors([ep.RED,ep.GREEN])
 
         self.font_12px_az_outline = ep.ColorFont(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
-        self.font_12px_az_outline.make_colors([ep.GREEN,ep.ORANGE])
+        self.font_12px_az_outline.make_colors([ep.GREEN,ep.ORANGE,ep.RED])
         self.font_12px_az_outline.tracking = -1
         self.font_12px_az_outline.composite_op = "blacksrc"
 

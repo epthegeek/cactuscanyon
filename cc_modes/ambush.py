@@ -421,6 +421,8 @@ class Ambush(ep.EP_Mode):
         self.game.bad_guys.drop_targets()
         # kill the music - if nothing else is running
         self.stop_music(slice=2)
+        # grab the points before tracking
+        totalPoints = self.game.show_tracking('ambushPoints')
         # update all the tracking
         self.update_tracking()
         # update the lamps
@@ -431,12 +433,12 @@ class Ambush(ep.EP_Mode):
         self.game.stack_level(1,False)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
-        textLine1 = ep.EP_TextLayer(76, 2, self.game.assets.font_7px_bold_az, "center", opaque=False)
+        textLine1 = ep.EP_TextLayer(74, 2, self.game.assets.font_7px_bold_az, "center", opaque=False)
         textString = "AMBUSH: " + str(self.deathTally) + " KILLS"
         textLine1.set_text(textString,color=ep.RED)
         textLine1.composite_op = "blacksrc"
-        textLine2 = ep.EP_TextLayer(76,11, self.game.assets.font_12px_az, "center", opaque=False)
-        print "TOTAL AMBUSH: " + str(self.game.show_tracking('ambushPoints'))
+        textLine2 = ep.EP_TextLayer(74,11, self.game.assets.font_12px_az, "center", opaque=False)
+        print "TOTAL AMBUSH: " + str(ep.format_score(totalPoints))
         textLine2.set_text(ep.format_score(self.game.show_tracking('ambushPoints')),color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined

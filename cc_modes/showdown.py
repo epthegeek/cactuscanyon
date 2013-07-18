@@ -295,7 +295,8 @@ class Showdown(ep.EP_Mode):
         # tally some score?
         # award the badge light - showdown/ambush is 3
         self.game.badge.update(3)
-
+        # grab the showdown points before resetting
+        totalPoints = self.game.show_tracking('showdownPoints')
         self.update_tracking()
 
         self.lamp_update()
@@ -305,12 +306,12 @@ class Showdown(ep.EP_Mode):
         self.game.stack_level(1,False)
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
-        textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
+        textLine1 = ep.EP_TextLayer(74, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
         textString = "SHOWDOWN: " + str(self.deathTally) + " KILLS"
-        textLine1.set_text(textString)
+        textLine1.set_text(textString,color=ep.RED)
         textLine1.composite_op = "blacksrc"
-        textLine2 = dmd.TextLayer(128/2,11, self.game.assets.font_12px_az, "center", opaque=False)
-        textLine2.set_text(ep.format_score(self.game.show_tracking('showdownPoints')))
+        textLine2 = ep.EP_TextLayer(74,11, self.game.assets.font_12px_az, "center", opaque=False)
+        textLine2.set_text(ep.format_score(totalPoints),color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
         # play a quote
