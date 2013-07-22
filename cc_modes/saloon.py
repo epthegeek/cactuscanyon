@@ -263,6 +263,9 @@ class Saloon(ep.EP_Mode):
         # 11 - 30 second ball save
         if not self.game.trough.ball_save_active:
             prizes.append('ballSave')
+        # 12 - franks n beans
+        if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == True:
+            prizes.append('franksNBeans')
         # so as of this point we have a prizes list to use
         # and pick one of those at random
         self.bountyPrize = random.choice(prizes)
@@ -355,6 +358,11 @@ class Saloon(ep.EP_Mode):
             self.game.trough.start_ball_save(num_balls_to_save=1, time=30, now=True, allow_multiple_saves=False)
             self.prizeParam = 10000
             self.prizeHandler = self.game.score
+        elif self.bountyPrize == 'franksNBeans':
+            prizeText = "FRANKS N"
+            prizeText2 = "BEANS"
+            self.prizeParam = self.game.franks_display
+            self.prizeHandler = self.game.modes.add
         else:
             prizeText = "WTF"
             print "WTF BOUNTY: " + self.bountyPrize

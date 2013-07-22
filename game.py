@@ -282,6 +282,8 @@ class CCGame(game.BasicGame):
         # | |  | | (_) | (_| |  __/\__ \  | || | | | | |_
         # |_|  |_|\___/ \__,_|\___||___/ |___|_| |_|_|\__|
 
+        # franks and beans display mode rides above the score display, but below everything else
+        self.franks_display = cc_modes.FranksDisplay(game=self,priority=1)
         # Create the objects for the basic modes
         self.lamp_control = cc_modes.LampControl(game=self,priority=4)
         self.base = cc_modes.BaseGameMode(game=self,priority=4)
@@ -352,6 +354,8 @@ class CCGame(game.BasicGame):
         self.last_call = cc_modes.LastCall(game=self,priority=90)
         # skillshot switch filter
         self.super_filter = cc_modes.SuperFilter(game=self,priority = 200)
+        # franks and beans
+        self.franks_switches = cc_modes.FranksSwitches(game=self,priority = 200)
         # Interrupter Jones
         self.interrupter = cc_modes.Interrupter(game=self,priority=200)
         # moonlight madness

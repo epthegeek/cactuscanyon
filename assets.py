@@ -62,7 +62,7 @@ class Assets():
 
         self.font_7px_alt_az = dmd.Font(self.dmd_path + "Font_1_CactusCanyon.dmd")
         self.font_7px_az = ep.ColorFont(self.dmd_path + "Font_2_CactusCanyon.dmd")
-        self.font_7px_az.make_colors([ep.GREEN,ep.MAGENTA,ep.YELLOW,ep.ORANGE,ep.RED])
+        self.font_7px_az.make_colors([ep.GREEN,ep.MAGENTA,ep.YELLOW,ep.ORANGE,ep.RED,ep.BROWN])
     #    self.font_7px_score = dmd.Font(self.dmd_path + "Font_5_CactusCanyon.dmd")
     #    self.font_7px_extra_thin_score = dmd.Font(self.dmd_path + "Font_10_CactusCanyon.dmd")
     #    self.font_7px_thin_score = dmd.Font(self.dmd_path + "Font_4_CactusCanyon.dmd")
@@ -500,6 +500,20 @@ class Assets():
         self.game.sound.register_sound(self.sfx_mmTrollSmack, self.sfx_path + "mm_troll-smack.wav")
         self.sfx_mmIntro = 'sfx_mmIntro'
         self.game.sound.register_sound(self.sfx_mmIntro, self.music_path + "mm_trolls_intro.wav")
+
+        self.sfx_franks = 'sfx_franks'
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks01.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks02.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks03.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks04.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks05.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks06.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks07.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks08.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks09.wav")
+        self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks10.wav")
+        self.sfx_dinnerBell = 'sfx_dinnerBell'
+        self.game.sound.register_sound(self.sfx_dinnerBell, self.sfx_path + "dinner_bell.wav")
 
         # Quotes
 
@@ -1520,6 +1534,8 @@ class Assets():
         self.dmd_tafItMiss1 = dmd.Animation().load(self.dmd_path+'taf-it-miss-1.dmd')
         self.dmd_tafItMiss2 = dmd.Animation().load(self.dmd_path+'taf-it-miss-2.dmd')
         self.dmd_tafItHit = dmd.Animation().load(self.dmd_path+'taf-it-hit.dmd')
+
+        self.dmd_franksBackdrop = dmd.Animation().load(self.dmd_path+'beans_n_franks.dmd')
 
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"

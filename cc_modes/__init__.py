@@ -61,7 +61,9 @@ __all__ = [
     'tribute_launcher',
     'mm_tribute',
     'mb_tribute',
-    'taf_tribute'
+    'taf_tribute',
+    'franks_switches',
+    'franks_display'
 ]
 from base import *
 from attract import *
@@ -110,3 +112,5 @@ from tribute_launcher import *
 from mm_tribute import *
 from mb_tribute import *
 from taf_tribute import *
+from franks_switches import *
+from franks_display import *
