@@ -361,8 +361,9 @@ class Saloon(ep.EP_Mode):
         elif self.bountyPrize == 'franksNBeans':
             prizeText = "FRANKS N"
             prizeText2 = "BEANS"
-            self.prizeParam = self.game.franks_display
-            self.prizeHandler = self.game.modes.add
+            self.delay(delay=3,handler=self.game.base.start_franks)
+            self.prizeParam = 10000
+            self.prizeHandler = self.game.score
         else:
             prizeText = "WTF"
             print "WTF BOUNTY: " + self.bountyPrize

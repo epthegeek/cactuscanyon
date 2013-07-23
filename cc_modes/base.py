@@ -1066,3 +1066,9 @@ class BaseGameMode(ep.EP_Mode):
             pass
         else:
             self.game.trough.start_ball_save(num_balls_to_save=8, time=self.multiballSaverTimer, now=True, allow_multiple_saves=True)
+
+    def start_franks(self):
+        if self.game.franks_display.running:
+            self.game.franks_display.time = 31
+        else:
+            self.game.modes.add(self.game.franks_display)
