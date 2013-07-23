@@ -212,6 +212,8 @@ class SkillShot(ep.EP_Mode):
 
             # 1 million points (1M) is always available
             prizes.append("N")
+            if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == "Enabled":
+                prizes.append("W")
         # here's the super skill shot prizes
         else:
             # 3 million points
@@ -636,6 +638,12 @@ class SkillShot(ep.EP_Mode):
             self.game.tribute_launcher.shot = self.wasActive
             print "Tribute Shot Set to: " + str(self.game.tribute_launcher.shot)
             self.super = False
+
+        # franks n beans
+        elif self.selectedPrizes[5:] == "W":
+            awardStringTop = "FRANKS N"
+            awardStringBottom = "BEANS"
+            self.game.base.start_franks()
 
         # call the lamp update so the prize is shown properly
         self.lamp_update()
