@@ -96,5 +96,9 @@ coil:backLeftFlasher     |     .         .         .
 coil:middleRightFlasher  |       .         .         .
 coil:rightGunFlasher     |         .         .         .
 coil:leftGunFlasher      |           .         .         .
+# gi
+lamp:gi01                | ..    ..    ..    ..    ..
+lamp:gi02                |   ..    ..    ..    ..    ..
+lamp:gi03                |     ..    ..    ..    ..    ..
 # beer mug optional
 lamp:beerMug             | ..  ..  ..  ..  ..  ..  ..  ..
