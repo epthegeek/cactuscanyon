@@ -276,16 +276,12 @@ class EP_Desktop():
     screen_multiplier = 4
 
     def setup_window(self):
-        pygame.init()
-        #self.screen = pygame.display.set_mode((128*self.screen_multiplier, 32*self.screen_multiplier))
         os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (self.xOffset,self.yOffset)
-        print "Making window - " + str(self.pixel_size*128) + " by " + str(self.pixel_size*32)
+        pygame.init()
+        print "Making window - " + str(self.pixel_size*128) + " by " + str(self.pixel_size*32) + " offsets " + str(self.xOffset) + "," + str(self.yOffset)
         self.screen = pygame.display.set_mode(((self.pixel_size*128),(self.pixel_size*32)),pygame.NOFRAME)
         pygame.mouse.set_visible(False)
         pygame.display.set_caption('Cactus Canyon Continued')
-
-    def move_display(self,x,y):
-        os.environ['DSL_VIDEO_WINDOW_POS'] = "%d,%d" % ((self.xDefault + x), (self.yDefault + y))
 
     def draw(self, frame):
         """Draw the given :class:`~procgame.dmd.Frame` in the window."""
@@ -295,12 +291,6 @@ class EP_Desktop():
             adjustment = -1
         else:
             adjustment = 0
-
-        #bytes_per_pixel = 4
-        #y_offset = 128*bytes_per_pixel*self.screen_multiplier*self.screen_multiplier
-        #x_offset = bytes_per_pixel*self.screen_multiplier
-
-        #surface_array = array(self.screen)
 
         frame_string = frame.get_data()
 
@@ -336,16 +326,12 @@ class EP_Desktop():
                 image = self.colors[color][bright_value]
 
 
-            #color_val = ord(dot)*16
-            #index = y*y_offset + x*x_offset
-            #surface_array[index:index+bytes_per_pixel] = (color_val,color_val,color_val,0)
             if image:
                 self.screen.blit(image, ((x*self.pixel_size), (y*self.pixel_size)))
             x += 1
             if x == 128:
                 x = 0
                 y += 1
-        #del surface_array
 
         pygame.display.update()
 
