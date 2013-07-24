@@ -406,7 +406,6 @@ class CCGame(game.BasicGame):
         if self.color_desktop:
             self.desktop.draw_window(self.user_settings['Machine (Standard)']['Color Display Pixel Size'],self.user_settings['Machine (Standard)']['Color Display X Offset'],self.user_settings['Machine (Standard)']['Color Display Y Offset'])
             # load the images for the colorized display
-            self.dot_location = dots_path
             self.desktop.load_images(dots_path)
 
 

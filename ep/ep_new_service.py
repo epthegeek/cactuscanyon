@@ -1341,10 +1341,6 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
     def change_item(self):
         self.item = self.items[self.index]
         self.settingName.set_text(self.item.name.upper())
-        # adjust pixel size on the fly - if we're using color
-        if self.game.color_desktop and self.item.name.endswith("Pixel Size"):
-                self.game.desktop.draw_window(self.item.value, self.game.user_settings['Machine (Standard)']['Color Display X Offset'],self.game.user_settings['Machine (Standard)']['Color Display Y Offset'])
-                self.game.desktop.load_images(self.game.dot_location)
 
         if self.state == 'nav':
             if self.item.name.endswith('Text'):
