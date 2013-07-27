@@ -420,7 +420,7 @@ class Ambush(ep.EP_Mode):
         # drop all the targets
         self.game.bad_guys.drop_targets()
         # kill the music - if nothing else is running
-        self.stop_music(slice=2)
+        #self.stop_music(slice=2)
         # grab the points before tracking
         totalPoints = self.game.show_tracking('ambushPoints')
         # update all the tracking

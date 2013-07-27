@@ -185,7 +185,7 @@ class RiverChase(ep.EP_Mode):
             # set the running flag
             self.running = True
             # clear any running music
-            self.stop_music()
+            #self.stop_music()
             self.lamp_update()
 
             # start the music
@@ -362,7 +362,7 @@ class RiverChase(ep.EP_Mode):
 
     def end_river_chase(self):
         # only kill the music if there's not a higher level running
-        self.stop_music(slice=3)
+        #self.stop_music(slice=3)
         self.layer = None
         # set the tracking on the ramps
         if self.game.save_polly.winsRequired and not self.won:

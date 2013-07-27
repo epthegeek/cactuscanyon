@@ -227,7 +227,7 @@ class Stampede(ep.EP_Mode):
     def end_stampede(self):
         print "ENDING S T A M P E D E"
         # stop the music
-        self.stop_music(slice=5)
+        #self.stop_music(slice=5)
         # do a final display
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_skullsBorder.frames[0])

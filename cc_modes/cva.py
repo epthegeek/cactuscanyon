@@ -814,7 +814,7 @@ class CvA(ep.EP_Mode):
         self.game.GI_lampctrl.stop_show()
         self.cancel_delayed("Lampshow")
         # stop the music
-        self.stop_music()
+        #self.stop_music()
         # kill the drop targets
         self.game.bad_guys.kill_power()
         # do the final display

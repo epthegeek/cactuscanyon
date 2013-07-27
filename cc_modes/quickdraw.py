@@ -130,7 +130,7 @@ class Quickdraw(ep.EP_Mode):
         self.target = random.choice(choices)
         print "BAD GUY ACTIVE IS: " + str(self.target)
         # kill the game music
-        self.stop_music()
+        #self.stop_music()
         # start the mode music
         self.game.sound.play(self.game.assets.music_quickdrawBumper)
         self.delay("Operational",delay=1.3,handler=self.music_on,param=self.game.assets.music_quickdraw)
@@ -282,7 +282,7 @@ class Quickdraw(ep.EP_Mode):
     def lost(self,target):
         # kill the mode music
         # start up the main theme again if a higher level mode isn't running
-        self.stop_music(slice=1)
+        #self.stop_music(slice=1)
         # stuff specific to losing
         # drop the coil and kill the lamp
         self.game.bad_guys.target_down(target)
@@ -302,9 +302,8 @@ class Quickdraw(ep.EP_Mode):
         print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
             # turn the level 1 flag off
         self.game.stack_level(0,False)
-        if True not in self.game.show_tracking('stackLevel') and self.game.trough.num_balls_in_play != 0:
-            self.music_on(self.game.assets.music_mainTheme)
-            # full lamp update
+        self.music_on(self.game.assets.music_mainTheme,mySlice=1)
+        # full lamp update
         self.lamp_update()
         # remove the mode
         self.unload()

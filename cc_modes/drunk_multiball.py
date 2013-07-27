@@ -115,7 +115,7 @@ class DrunkMultiball(ep.EP_Mode):
         # enable the inverted flippers
         self.game.enable_inverted_flippers(True)
         # stop the music
-        self.stop_music()
+        #self.stop_music()
         # turn the GI off - Based on setting
         if self.giOff:
             self.game.gi_control("OFF")
@@ -356,7 +356,7 @@ class DrunkMultiball(ep.EP_Mode):
         # set the stack flag back off
         self.game.stack_level(3,False)
         # kill the music
-        self.stop_music(slice=4)
+        #self.stop_music(slice=4)
         # restat the main music
         self.music_on(self.game.assets.music_mainTheme,mySlice=4)
         # tick up the shots needed for next time

@@ -198,8 +198,6 @@ class BankRobbery(ep.EP_Mode):
 
             # set the running flag
             self.running = True
-            # clear any running music
-            self.stop_music()
             self.lamp_update()
 
             # start the music
@@ -337,8 +335,6 @@ class BankRobbery(ep.EP_Mode):
         self.game.peril = False
         self.game.score(750000)
         self.cancel_delayed("Mode Timer")
-        # stop the music
-        #self.stop_music(slice=3)
         # kill the lights on the three ramps
         self.game.lamp_control.left_ramp('Base')
         self.game.lamp_control.center_ramp('Base')
@@ -442,7 +438,7 @@ class BankRobbery(ep.EP_Mode):
         self.running = False
         # only kill the music if there's not a higher level running
         # stop the polly music
-        self.stop_music(slice=3)
+        #self.stop_music(slice=3)
         self.layer = None
         # set the tracking on the ramps
         # if wins are required, and player did not win, reset ramp to stage 1

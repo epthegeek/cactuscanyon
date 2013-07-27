@@ -291,7 +291,7 @@ class Showdown(ep.EP_Mode):
         self.game.bad_guys.drop_targets()
         # kill the music - if nothing else is running
         # start up the main theme again if a higher level mode isn't running
-        self.stop_music(slice=2)
+        #self.stop_music(slice=2)
         # tally some score?
         # award the badge light - showdown/ambush is 3
         self.game.badge.update(3)

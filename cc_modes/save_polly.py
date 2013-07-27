@@ -191,7 +191,7 @@ class SavePolly(ep.EP_Mode):
             # set the running flag
             self.running = True
             # clear any running music
-            self.stop_music()
+            #self.stop_music()
             # set the center to crazy stage
             self.game.set_tracking('centerRampStage',99)
             self.lamp_update()
@@ -466,7 +466,7 @@ class SavePolly(ep.EP_Mode):
         self.running = False
         # only kill the music if there's not a higher level running
         # stop the polly music
-        self.stop_music(slice=3)
+        #self.stop_music(slice=3)
         self.game.train.reset_toy(type=2)
         # turn off the polly display
         self.layer = None
@@ -492,7 +492,7 @@ class SavePolly(ep.EP_Mode):
         self.game.base.busy = False
         self.game.base.queued -= 1
         # turn the music back on
-        self.music_on(self.game.assets.music_mainTheme,mySlice=2)
+        self.music_on(self.game.assets.music_mainTheme,mySlice=3)
         # remove the switch blocker
         self.game.switch_blocker('remove',self.myID)
         self.finishing_up = False

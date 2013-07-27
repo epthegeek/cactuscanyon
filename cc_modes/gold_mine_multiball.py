@@ -261,7 +261,7 @@ class GoldMine(ep.EP_Mode):
         # update the lamps
         self.lamp_update()
         # kill the intro music and start the multiball music
-        self.stop_music()
+        #self.stop_music()
         self.music_on(self.game.assets.music_goldmineMultiball)
         # kick into the MB display
         self.main_display()
