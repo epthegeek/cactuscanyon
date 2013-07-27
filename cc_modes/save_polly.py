@@ -443,8 +443,8 @@ class SavePolly(ep.EP_Mode):
             else:
                 self.stop_music(slice=3)
                 backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-                textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.DARK_RED)
-                textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.DARK_RED)
+                textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.RED)
+                textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.RED)
                 combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
                 self.layer = combined
                 self.game.sound.play(self.game.assets.sfx_glumRiff)
