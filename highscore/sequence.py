@@ -167,7 +167,7 @@ class EntrySequenceManager(game.Mode):
         self.game.sound.play(self.fanfareSounds[0])
         self.game.sound.play(self.game.assets.sfx_cheers)
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_starsBorder.frames[0])
-        textLayer1 = ep.EP_TextLayer(64, 3, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(self.active_prompt.right[self.fanfareIndex].upper(),blink_frames=10,color=ep.YELLOW)
+        textLayer1 = ep.EP_TextLayer(64, 3, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text(self.active_prompt.right[self.fanfareIndex].upper(),blink_frames=10)
         textLayer2 = ep.EP_TextLayer(64, 10, self.game.assets.font_12px_az,"center",opaque=False).set_text(inits,color=ep.BLUE)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
         self.layer = combined

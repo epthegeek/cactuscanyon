@@ -708,9 +708,9 @@ class CCGame(game.BasicGame):
         animLayer.hold = True
         animLayer.frame_time = 6
         # firework sounds keyframed
-        animLayer.add_frame_listener(7,self.sound.play,param=self.assets.sfx_fireworks1)
-        animLayer.add_frame_listener(14,self.sound.play,param=self.assets.sfx_fireworks2)
-        animLayer.add_frame_listener(20,self.sound.play,param=self.assets.sfx_fireworks3)
+        animLayer.add_frame_listener(14,self.sound.play,param=self.assets.sfx_fireworks1)
+        animLayer.add_frame_listener(17,self.sound.play,param=self.assets.sfx_fireworks2)
+        animLayer.add_frame_listener(21,self.sound.play,param=self.assets.sfx_fireworks3)
         animLayer.composite_op = "blacksrc"
         textLine1 = "GREAT JOB"
         textLine2 = (prompt.left.upper())
