@@ -48,6 +48,7 @@ class Combos(ep.EP_Mode):
             self.wipe_delays()
             self.myTimer = 0
             self.chain = 1
+            self.layer = None
 
     def timer(self):
         # just to be sure
