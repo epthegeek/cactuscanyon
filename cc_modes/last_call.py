@@ -46,9 +46,9 @@ class LastCall(ep.EP_Mode):
         self.shotValue = self.startValue
         self.running = True
         # set up the info layer
-        infoLine1 = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("BEER MUG RAISES JACKPOTS")
-        infoLine2 = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SALOON RESETS JACKPOTS")
-        infoLine3 = dmd.TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("CENTER RAMP 2X WHEN LIT")
+        infoLine1 = ep.EP_TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("BEER MUG RAISES JACKPOTS",color=ep.YELLOW)
+        infoLine2 = ep.EP_TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SALOON RESETS JACKPOTS",color=ep.ORANGE)
+        infoLine3 = ep.EP_TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("CENTER RAMP 2X WHEN LIT",color=ep.MAGENTA)
         self.infoLayer = dmd.ScriptedLayer(128,32,[{'seconds':2,'layer':infoLine1},{'seconds':2,'layer':infoLine2},{'seconds':2,'layer':infoLine3}])
         self.infoLayer.composite_op = "blacksrc"
         self.double = False
@@ -83,6 +83,8 @@ class LastCall(ep.EP_Mode):
             weDo = random.choice([False,True,False])
             if weDo:
                 self.game.base.play_quote(self.game.assets.quote_beerMug)
+            jackString = "JACKPOTS = " + str(ep.format_score(self.shotValue))
+            self.jackpotLine.set_text(jackString)
         return game.SwitchStop
 
     def sw_topLeftStandUp_active(self, sw):
@@ -121,9 +123,9 @@ class LastCall(ep.EP_Mode):
             beerLayer.repeat = False
             beerLayer.frame_time = 8
             beerLayer.opaque = True
-            textLayer1 = dmd.TextLayer(51, 2, self.game.assets.font_9px_az, "center", opaque=False).set_text("ANOTHER")
-            textLayer2 = dmd.TextLayer(51, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("ROUND")
-            textLayer3 = dmd.TextLayer(51, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOTS RESET",blink_frames=8)
+            textLayer1 = ep.EP_TextLayer(51, 2, self.game.assets.font_9px_az, "center", opaque=False).set_text("ANOTHER",color=ep.RED)
+            textLayer2 = ep.EP_TextLayer(51, 12, self.game.assets.font_9px_az, "center", opaque=False).set_text("ROUND",color=ep.RED)
+            textLayer3 = ep.EP_TextLayer(51, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOTS RESET",blink_frames=8,color=ep.RED)
             combined = dmd.GroupedLayer(128,32,[beerLayer,textLayer1,textLayer2,textLayer3])
             self.layer = combined
 
@@ -224,13 +226,13 @@ class LastCall(ep.EP_Mode):
         print "Score string: " + scoreString
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])
         if double:
-            scoreLine1 = dmd.TextLayer(64,2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("DOUBLE<")
+            scoreLine1 = ep.EP_TextLayer(64,2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("DOUBLE<",color=ep.GREEN)
             scoreLine1.composite_op = "blacksrc"
-            scoreLine2 = dmd.TextLayer(64,15, self.game.assets.font_12px_az_outline, "center",opaque=False).set_text(scoreString)
+            scoreLine2 = ep.EP_TextLayer(64,15, self.game.assets.font_12px_az_outline, "center",opaque=False).set_text(scoreString,color=ep.GREEN)
             scoreLine2.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine1,scoreLine2])
         else:
-            scoreLine = dmd.TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString)
+            scoreLine = ep.EP_TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString,color=ep.GREEN)
             scoreLine.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine])
 
@@ -284,7 +286,7 @@ class LastCall(ep.EP_Mode):
         introLayer.add_frame_listener(6, self.game.sound.play,param=self.game.assets.quote_whatThe)
         introLayer.add_frame_listener(14, self.game.sound.play,param=self.game.assets.sfx_glassSmash)
         introLayer.add_frame_listener(19, self.game.sound.play,param=self.game.assets.sfx_pianoRiff)
-        textLayer = dmd.TextLayer(64, 8, self.game.assets.font_12px_az, "center", opaque=False).set_text("LAST CALL")
+        textLayer = ep.EP_TextLayer(64, 8, self.game.assets.font_12px_az, "center", opaque=False).set_text("LAST CALL",color=ep.CYAN)
         myWait = (len(anim.frames) / 7.5) + 2
         combined = dmd.GroupedLayer(128,32,[self.backdrop,textLayer,introLayer])
         self.layer = combined
@@ -304,12 +306,12 @@ class LastCall(ep.EP_Mode):
         self.starting = True
         # start the actual player
         playerNum = self.playerList[0] + 1
-        textLayer1 = dmd.TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False)
-        textLayer1.set_text("PLAYER " + str(playerNum),blink_frames=10)
-        textLayer2 = dmd.TextLayer(64, 15, self.game.assets.font_5px_bold_AZ, "center", opaque=False)
-        textLayer2.set_text("PRESS BOTH FLIPPERS")
-        textLayer3 = dmd.TextLayer(64, 22, self.game.assets.font_5px_bold_AZ, "center", opaque=False)
-        textLayer3.set_text("TO START")
+        textLayer1 = ep.EP_TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False)
+        textLayer1.set_text("PLAYER " + str(playerNum),blink_frames=10,color=ep.CYAN)
+        textLayer2 = ep.EP_TextLayer(64, 15, self.game.assets.font_5px_bold_AZ, "center", opaque=False)
+        textLayer2.set_text("PRESS BOTH FLIPPERS",color=ep.GREEN)
+        textLayer3 = ep.EP_TextLayer(64, 22, self.game.assets.font_5px_bold_AZ, "center", opaque=False)
+        textLayer3.set_text("TO START",color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[self.backdrop,textLayer1,textLayer2,textLayer3])
         self.layer = combined
         # set a timer to end if nobody hits the flippers
@@ -337,7 +339,7 @@ class LastCall(ep.EP_Mode):
         # score line
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
+        scoreLine = ep.EP_TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4,color=ep.CYAN)
         scoreLine.composite_op = "blacksrc"
 
         if self.ending:
@@ -350,9 +352,9 @@ class LastCall(ep.EP_Mode):
         jackString = "JACKPOTS = " + str(ep.format_score(self.shotValue))
         if self.ending:
             jackString = "COLLECTING BALLS"
-        jackpotLine = dmd.TextLayer(128/2,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(jackString)
+        self.jackpotLine = dmd.TextLayer(128/2,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(jackString)
 
-        combined = dmd.GroupedLayer(128,32,[self.backdrop,scoreLine,infoLine,jackpotLine])
+        combined = dmd.GroupedLayer(128,32,[self.backdrop,scoreLine,infoLine,self.jackpotLine])
         self.layer = combined
         # loop back in .2 to update
         if not loop:
@@ -370,9 +372,9 @@ class LastCall(ep.EP_Mode):
         self.delay("Fade",delay=6,handler=self.game.interrupter.reset_volume)
 
         # show the final score display
-        textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("LAST CALL TOTAL:")
+        textLine1 = ep.EP_TextLayer(64, 4, self.game.assets.font_9px_az, "center", opaque=False).set_text("LAST CALL TOTAL:",color=ep.CYAN)
         totalscore = self.game.show_tracking('lastCallTotal')
-        textLine2 = dmd.TextLayer(64, 15, self.game.assets.font_9px_az, "center", opaque=False).set_text(str(ep.format_score(totalscore)),blink_frames=8)
+        textLine2 = ep.EP_TextLayer(64, 15, self.game.assets.font_9px_az, "center", opaque=False).set_text(str(ep.format_score(totalscore)),blink_frames=8,color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,textLine2])
         self.layer = combined
         # turn off the playfield lights
@@ -422,25 +424,25 @@ class LastCall(ep.EP_Mode):
     def finish_up(self):
         self.running = False
         self.game.stack_level(6,value=False,lamps=False)
-        textLine1 = dmd.TextLayer(64, 4, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("FINAL TOTALS:")
+        textLine1 = ep.EP_TextLayer(64, 4, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("FINAL TOTALS:",color=ep.RED)
         playerCount = len(self.game.players)
         if playerCount == 1:
-            playerLine1 = dmd.TextLayer(64, 15, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.game.players[0].score)))
+            playerLine1 = ep.EP_TextLayer(64, 15, self.game.assets.font_7px_az, "center", opaque=False).set_text(str(ep.format_score(self.game.players[0].score)),color=ep.YELLOW)
             combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1])
         elif playerCount == 2:
-            playerLine1 = dmd.TextLayer(64, 12, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)))
-            playerLine2 = dmd.TextLayer(64, 20, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)))
+            playerLine1 = ep.EP_TextLayer(64, 12, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)),color=ep.YELLOW)
+            playerLine2 = ep.EP_TextLayer(64, 20, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)),color=ep.YELLOW)
             combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1,playerLine2])
         elif playerCount == 3:
-            playerLine1 = dmd.TextLayer(4, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)))
-            playerLine2 = dmd.TextLayer(4, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)))
-            playerLine3 = dmd.TextLayer(68, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("3) " + str(ep.format_score(self.game.players[2].score)))
+            playerLine1 = ep.EP_TextLayer(4, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)),color=ep.YELLOW)
+            playerLine2 = ep.EP_TextLayer(4, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)),color=ep.YELLOW)
+            playerLine3 = ep.EP_TextLayer(68, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("3) " + str(ep.format_score(self.game.players[2].score)),color=ep.YELLOW)
             combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1,playerLine2,playerLine3])
         else:
-            playerLine1 = dmd.TextLayer(4, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)))
-            playerLine2 = dmd.TextLayer(4, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)))
-            playerLine3 = dmd.TextLayer(68, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("3) " + str(ep.format_score(self.game.players[2].score)))
-            playerLine4 = dmd.TextLayer(68, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("4) " + str(ep.format_score(self.game.players[3].score)))
+            playerLine1 = ep.EP_TextLayer(4, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("1) " + str(ep.format_score(self.game.players[0].score)),color=ep.YELLOW)
+            playerLine2 = ep.EP_TextLayer(4, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("2) " + str(ep.format_score(self.game.players[1].score)),color=ep.YELLOW)
+            playerLine3 = ep.EP_TextLayer(68, 12, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("3) " + str(ep.format_score(self.game.players[2].score)),color=ep.YELLOW)
+            playerLine4 = ep.EP_TextLayer(68, 20, self.game.assets.font_5px_AZ, "left", opaque=False).set_text("4) " + str(ep.format_score(self.game.players[3].score)),color=ep.YELLOW)
             combined = dmd.GroupedLayer(128,32,[self.backdrop,textLine1,playerLine1,playerLine2,playerLine3,playerLine4])
 
 
