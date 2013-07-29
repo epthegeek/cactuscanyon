@@ -423,10 +423,10 @@ class GoldMine(ep.EP_Mode):
             multiplier = self.game.show_tracking('motherlodeMultiplier')
             # and do a display thing
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
-            awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-            awardTextTop.set_text("MOTHERLODE")
-            awardTextBottom.set_text(str(multiplier) + "X")
+            awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+            awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
+            awardTextTop.set_text("MOTHERLODE",color=ep.YELLOW)
+            awardTextBottom.set_text(str(multiplier) + "X",color=ep.GREEN)
             combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom])
             self.layer = combined
             self.delay(name="Display",delay=1.5,handler=self.main_display)
@@ -575,10 +575,46 @@ class GoldMine(ep.EP_Mode):
         self.wipe_transition(myMultiplier)
 
     def wipe_transition(self,multiplier):
-        anim = self.game.assets.dmd_burstWipe
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+        # set up the display during multiball
+        backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_multiballFrame.frames[0])
+        # title line
+        titleString = "GOLD MINE MULTIBALL"
+        if self.game.drunk_multiball.running:
+            titleString = "DRUNK MINE MULTIBALL"
+        titleLine = ep.EP_TextLayer(128/2, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(titleString,color=ep.YELLOW)
+        # score line
+        p = self.game.current_player()
+        scoreString = ep.format_score(p.score)
+        scoreLine = ep.EP_TextLayer(64, 5, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4,color=ep.DARK_BROWN)
+        scoreLine.composite_op = "blacksrc"
+        # motherlode line
+        # if no motherlode is lit
+        if self.game.show_tracking('motherlodeLit') and not self.bandits:
+            textString = "MOTHERLODE " + ep.format_score(self.motherlodeValue) + " X " + str(self.game.show_tracking('motherlodeMultiplier'))
+        # if the bandits showed up
+        elif self.bandits:
+            textString = "SHOOT THE BANDITS!"
+        else:
+            textString = "JACKPOTS LIGHT MOTHERLODE"
+
+        motherLine = ep.EP_TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString,color=ep.YELLOW)
+        # jackpot value line
+        if self.bandits:
+            jackString = "TIME REMAINING: " + str(self.banditTimer)
+        else:
+            if self.game.drunk_multiball.running:
+                jackString = "JACKPOTS = " + str(ep.format_score(1000000))
+            else:
+                jackString = "JACKPOTS = " + str(ep.format_score(500000))
+        jackpotLine = ep.EP_TextLayer(128/2,22,self.game.assets.font_5px_AZ, "center", opaque=False).set_text(jackString,color=ep.DARK_BROWN)
+
+        anim = self.game.assets.dmd_explosionWipe1
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+        animLayer.composite_op = "blacksrc"
         myWait = len(anim.frames) / 10.0
-        self.layer = animLayer
+        combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,scoreLine,motherLine,jackpotLine,animLayer])
+        self.layer = combined
+        self.game.sound.play(self.game.assets.sfx_lockTwoExplosion)
         if self.moo:
             self.moo = False
             self.delay(delay=myWait,handler=self.award_mootherlode,param=multiplier)
@@ -597,30 +633,40 @@ class GoldMine(ep.EP_Mode):
         mooText = dmd.TextLayer(70,12,self.game.assets.font_12px_az_outline,"center",opaque=False)
         mooText.composite_op = "blacksrc"
         mooText.set_text(str(ep.format_score(scoreText)),blink_frames=12)
-        combined = dmd.GroupedLayer(128,32,[mooLayer,mooText])
+        anim = self.game.assets.dmd_explosionWipe2
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True, opaque = False,repeat = False, frame_time=6)
+        animLayer.composite_op = "blacksrc"
+
+        combined = dmd.GroupedLayer(128,32,[mooLayer,mooText,animLayer])
         self.game.sound.play(self.game.assets.sfx_cow3)
         self.layer = combined
         self.delay("Display",delay=3,handler=self.main_display)
         self.game.mountain.kick()
         self.bandits = False
 
-    def award_motherlode(self,times):
+    def award_motherlode(self,times,overlay=None):
         # tick the counter up
         self.counter += 1
         # tick the times down
         times -= 1
         # setup the display
-        awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-        awardTextTop.set_text("MOTHERLODE " + str(self.counter) + "X")
-        awardTextBottom.set_text(ep.format_score(self.displayMotherlodeValue * self.counter))
-        combined = dmd.GroupedLayer(128,32,[awardTextTop, awardTextBottom])
-        # if we're on the first counter, crossfade to the score
+        awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=True)
+        awardTextTop.set_text(str(self.counter) + "X" + " = " + ep.format_score(self.displayMotherlodeValue * self.counter),color=ep.GREEN)
+        motherLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_motherlode.frames[0])
+        motherLayer.composite_op = "blacksrc"
+
+        # if we're on the first counter, finish the wipe
         if self.counter == 1:
-            ep.EP_Transition(self,self.layer,combined,ep.EP_Transition.TYPE_CROSSFADE)
+            # set up the second part of the wipe
+            anim = self.game.assets.dmd_explosionWipe2
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True, opaque = False,repeat = False, frame_time=6)
+            animLayer.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32,[awardTextTop,motherLayer,animLayer])
         # otherwise just update the view
         else:
-            self.layer = combined
+            combined = dmd.GroupedLayer(128,32,[awardTextTop, motherLayer])
+
+        self.layer = combined
         # loop through the multiplier again if times is not zero
         if times == 0:
             # then go back to the main display

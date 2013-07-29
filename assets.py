@@ -1487,6 +1487,9 @@ class Assets():
 
         self.dmd_cows = dmd.Animation().load(self.dmd_path+'crazy_cows.dmd')
         self.dmd_moother = dmd.Animation().load(self.dmd_path+'moother.dmd')
+        self.dmd_explosionWipe1 = dmd.Animation().load(self.dmd_path+'boom-wipe-1.dmd')
+        self.dmd_explosionWipe2 = dmd.Animation().load(self.dmd_path+'boom-wipe-2.dmd')
+        self.dmd_motherlode = dmd.Animation().load(self.dmd_path+'motherlode.dmd')
 
         self.dmd_1pBurnCycle = dmd.Animation().load(self.dmd_path+'1p_burn_cycle.dmd')
 
