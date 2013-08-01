@@ -353,6 +353,7 @@ class EP_Mode(object):
     def unload(self):
         print "Unloading: " + self.myID
         self.wipe_delays()
+        self.layer = None
         self.game.modes.remove(self)
 
     def tilted(self):
