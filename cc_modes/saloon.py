@@ -264,7 +264,7 @@ class Saloon(ep.EP_Mode):
         if not self.game.trough.ball_save_active:
             prizes.append('ballSave')
         # 12 - franks n beans
-        if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == True:
+        if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == True and not self.game.show_tracking('farted'):
             prizes.append('franksNBeans')
         # so as of this point we have a prizes list to use
         # and pick one of those at random

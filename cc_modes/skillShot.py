@@ -212,7 +212,7 @@ class SkillShot(ep.EP_Mode):
 
             # 1 million points (1M) is always available
             prizes.append("N")
-            if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == "Enabled":
+            if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == "Enabled" and not self.game.show_tracking('farted'):
                 prizes.append("W")
         # here's the super skill shot prizes
         else:

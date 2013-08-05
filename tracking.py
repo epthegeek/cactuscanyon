@@ -183,3 +183,7 @@ class Tracking(game.Player):
         # track if player already did moonlight madness within this game
         self.player_stats['moonlightStatus'] = False
         self.player_stats['moonlightTotal'] = 0
+
+        # track if player already did franks and beans within this game
+        self.player_stats['farted'] = False
+        self.player_stats['fartTotal'] = 0
