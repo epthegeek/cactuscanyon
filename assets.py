@@ -1233,6 +1233,14 @@ class Assets():
         self.game.sound.register_music(self.music_mm, self.music_path + "mm_theme.wav")
         self.music_taf = 'music_taf'
         self.game.sound.register_music(self.music_taf, self.music_path + "taf_theme.wav")
+        self.music_cv = 'music_cv'
+        self.game.sound.register_music(self.music_cv, self.music_path + "cv_main_music.wav")
+        self.music_ringmaster = 'music_ringmaster'
+        self.game.sound.register_music(self.music_ringmaster, self.music_path + "cv_ringmaster_music.wav")
+        self.music_ss = 'music_ss'
+        self.game.sound.register_music(self.music_ss, self.music_path + "ss_title_song.wav")
+        self.music_leapers = 'music_leapers'
+        self.game.sound.register_music(self.music_leapers, self.music_path + "ss_leaper_song.wav")
 
         # lampshows
         lampshows = list()
@@ -1538,7 +1546,18 @@ class Assets():
         self.dmd_tafItMiss2 = dmd.Animation().load(self.dmd_path+'taf-it-miss-2.dmd')
         self.dmd_tafItHit = dmd.Animation().load(self.dmd_path+'taf-it-hit.dmd')
 
+        if color_desktop:
+            self.dmd_cvLogo = dmd.Animation().load(self.dmd_path+'cv-logo-color.dmd')
+            self.dmd_cvFinale = dmd.Animation().load(self.dmd_path+'cv-finale-color.dmd')
+        else:
+            self.dmd_cvLogo = dmd.Animation().load(self.dmd_path+'cv-logo.dmd')
+            self.dmd_cvFinale = dmd.animation().load(self.dmd_path+'cv-finale.dmd')
+
+        self.dmd_ssLogo = dmd.Animation().load(self.dmd_path+'ss-logo.dmd')
+
+
         self.dmd_franksBackdrop = dmd.Animation().load(self.dmd_path+'beans_n_franks.dmd')
+
 
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"
