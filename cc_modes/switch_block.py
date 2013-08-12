@@ -42,18 +42,24 @@ class SwitchBlock(ep.EP_Mode):
 
     # The ramps
     def sw_leftRampEnter_active(self,sw):
+        if self.game.cv_tribute.running:
+            self.game.cv_tribute.atmos("leftRamp")
         return game.SwitchStop
 
     def sw_leftRampMake_active(self,sw):
         return game.SwitchStop
 
     def sw_centerRampMake_active(self,sw):
+        if self.game.cv_tribute.running:
+            self.game.cv_tribute.atmos("centerRamp")
         return game.SwitchStop
 
     def sw_centerRampEnter_active(self,sw):
         return game.SwitchStop
 
     def sw_rightRampEnter_active(self,sw):
+        if self.game.cv_tribute.running:
+            self.game.cv_tribute.atmos("rightRamp")
         return game.SwitchStop
 
     def sw_rightRampMake_active(self,sw):

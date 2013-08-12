@@ -149,7 +149,7 @@ class TributeLauncher(ep.EP_Mode):
             self.game.modes.add(self.game.mm_tribute)
         elif self.index == 3:
             print "Selected Cirqus Voltaire"
-            self.game.modes.add(self.game.mm_tribute)
+            self.game.modes.add(self.game.cv_tribute)
         elif self.index == 4:
             print "Selected Scared Stiff"
             self.game.modes.add(self.game.mm_tribute)

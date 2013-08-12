@@ -50,7 +50,7 @@ class Assets():
         self.font_5px_bold_AZ.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.RED,ep.BROWN,ep.DARK_BROWN])
 
         self.font_5px_bold_AZ_outline = ep.ColorFont(self.dmd_path + "Font_21_mask_CactusCanyon.dmd")
-        self.font_5px_bold_AZ_outline.make_colors([ep.DARK_GREEN])
+        self.font_5px_bold_AZ_outline.make_colors([ep.DARK_GREEN,ep.GREEN,ep.YELLOW,ep.RED,ep.CYAN,ep.MAGENTA])
         self.font_5px_bold_AZ_outline.tracking = -1
         self.font_5px_bold_AZ_outline.composite_op = "blacksrc"
 
@@ -76,7 +76,7 @@ class Assets():
         self.font_9px_az_dim = ep.ColorFont(self.dmd_path + "Font_15_CactusCanyon_1.dmd")
         self.font_9px_az_dim.make_colors([ep.RED,ep.ORANGE,ep.GREEN])
         self.font_9px_AZ_outline = ep.ColorFont(self.dmd_path + "Font_15_CactusCanyon_Outline.dmd")
-        self.font_9px_AZ_outline.make_colors([ep.RED,ep.ORANGE])
+        self.font_9px_AZ_outline.make_colors([ep.RED,ep.ORANGE,ep.CYAN])
         self.font_9px_AZ_outline.composite_op = "blacksrc"
 
         self.font_10px_AZ = ep.ColorFont(self.dmd_path + "Font_Custom_10px_AZ.dmd")
@@ -512,6 +512,16 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvGears, self.sfx_path + "cv_120-gear-noises.wav")
         self.sfx_cvGulp = 'sfx_cvGulp'
         self.game.sound.register_sound(self.sfx_cvGulp, self.sfx_path + "cv_1269-r-gulp.wav")
+        self.sfx_cvMusicLead = 'sfx_cvMusicLead'
+        self.game.sound.register_sound(self.sfx_cvMusicLead, self.sfx_path + "cv_14-049-music-lead.wav")
+        self.sfx_cvArc = 'sfx_cvArc'
+        self.game.sound.register_sound(self.sfx_cvArc, self.sfx_path + "cv_14-104-arc.wav")
+        self.sfx_cvAcrobats = 'sfx_cvAcrobats'
+        self.game.sound.register_sound(self.sfx_cvAcrobats, self.sfx_path + "cv_14-179-acrobats.wav")
+        self.sfx_cvRatchet = 'sfx_cvRatchet'
+        self.game.sound.register_sound(self.sfx_cvRatchet, self.sfx_path + "cv_14-112-ratchet.wav")
+        self.sfx_cvWhip = 'sfx_cvWhip'
+        self.game.sound.register_sound(self.sfx_cvWhip, self.sfx_path + "cv_14-113-whip.wav")
 
         self.sfx_franks = 'sfx_franks'
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks01.wav")
@@ -548,7 +558,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1215-r-taunt-do-your-worst.wav")
         self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1216-r-taunt-shoes.wav")
         self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1217-r-taunt-mangy.wav")
-        self.game.sound.reigster_sound(self.quote_cvTaunt, self.quotes_path + "cv_1219-r-taunt-weep.wav")
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1219-r-taunt-weep.wav")
         self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1229-r-taunt-laugh-then-cough.wav")
         self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1281-r-taunt-fish.wav")
         self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1282-r-taunt-granny.wav")
@@ -1600,7 +1610,7 @@ class Assets():
         self.dmd_cvBurst2 = dmd.Animation().load(self.dmd_path+'cv-burst2.dmd')
         self.dmd_cvBurst3 = dmd.Animation().load(self.dmd_path+'cv-burst3.dmd')
         self.dmd_cvExplosion = dmd.Animation().load(self.dmd_path+'cv-explosion.dmd')
-        self.dmd_cvFireworks = dmd.Animation().load(self.dmd_path+'cv-fireworks.dmd.')
+        self.dmd_cvFireworks = dmd.Animation().load(self.dmd_path+'cv-fireworks.dmd')
 
         self.dmd_ssLogo = dmd.Animation().load(self.dmd_path+'ss-logo.dmd')
 
