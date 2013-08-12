@@ -108,7 +108,7 @@ class CCGame(game.BasicGame):
         self.modes.modes = []
 
         # software version number
-        self.revision = "2013.08.01"
+        self.revision = "2013.08.12"
 
         # basic game reset stuff, copied in
 
@@ -340,6 +340,8 @@ class CCGame(game.BasicGame):
         self.mm_tribute = cc_modes.MM_Tribute(game=self,priority=82)
         self.mb_tribute = cc_modes.MB_Tribute(game=self,priority=82)
         self.taf_tribute = cc_modes.TAF_Tribute(game=self,priority=82)
+        self.cv_tribute = cc_modes.CV_Tribute(game=self,priority=82)
+        self.ss_tribute = cc_modes.SS_Tribute(game=self,priority=82)
         # cva
         self.cva = cc_modes.CvA(game=self,priority=85)
         # marhsall multiball
