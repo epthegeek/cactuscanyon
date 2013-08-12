@@ -1552,6 +1552,14 @@ class Assets():
         else:
             self.dmd_cvLogo = dmd.Animation().load(self.dmd_path+'cv-logo.dmd')
             self.dmd_cvFinale = dmd.animation().load(self.dmd_path+'cv-finale.dmd')
+        self.dmd_cvIntro1 = dmd.Animation().load(self.dmd_path+'cv-intro-part1.dmd')
+        self.dmd_cvIntro2 = dmd.Animation().load(self.dmd_path+'cv-intro-part2.dmd')
+        self.dmd_cvHypno = dmd.Animation().load(self.dmd_path+'cv-hypno.dmd')
+        self.dmd_cvBurst1 = dmd.Animation().load(self.dmd_path+'cv-burst1.dmd')
+        self.dmd_cvBurst2 = dmd.Animation().load(self.dmd_path+'cv-burst2.dmd')
+        self.dmd_cvBurst3 = dmd.Animation().load(self.dmd_path+'cv-burst3.dmd')
+        self.dmd_cvExplosion = dmd.Animation().load(self.dmd_path+'cv-explosion.dmd')
+        self.dmd_cvFireworks = dmd.Animation().load(self.dmd_path+'cv-fireworks.dmd.')
 
         self.dmd_ssLogo = dmd.Animation().load(self.dmd_path+'ss-logo.dmd')
 
