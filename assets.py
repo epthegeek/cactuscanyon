@@ -501,6 +501,18 @@ class Assets():
         self.sfx_mmIntro = 'sfx_mmIntro'
         self.game.sound.register_sound(self.sfx_mmIntro, self.music_path + "mm_trolls_intro.wav")
 
+        self.sfx_cvStartRiff = 'sfx_cvStartRiff'
+        self.game.sound.register_sound(self.sfx_cvStartRiff, self.sfx_path + "cv_051-ringmaster-start-riff.wav")
+        self.sfx_cvEject = 'sfx_cvEject'
+        self.game.sound.register_sound(self.sfx_cvEject, self.sfx_path + "cv_099-drum-roll-ball-eject.wav")
+        self.sfx_cvHit = 'sfx_cvHit'
+        self.game.sound.register_sound(self.sfx_cvHit, self.sfx_path + "cv_105-ringmaster-hit-1.wav")
+        self.game.sound.register_sound(self.sfx_cvHit, self.sfx_path + "cv_106-ringmaster-hit-2.wav")
+        self.sfx_cvGears = 'sfx_cvGears'
+        self.game.sound.register_sound(self.sfx_cvGears, self.sfx_path + "cv_120-gear-noises.wav")
+        self.sfx_cvGulp = 'sfx_cvGulp'
+        self.game.sound.register_sound(self.sfx_cvGulp, self.sfx_path + "cv_1269-r-gulp.wav")
+
         self.sfx_franks = 'sfx_franks'
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks01.wav")
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks02.wav")
@@ -515,7 +527,36 @@ class Assets():
         self.sfx_dinnerBell = 'sfx_dinnerBell'
         self.game.sound.register_sound(self.sfx_dinnerBell, self.sfx_path + "dinner_bell.wav")
 
+
         # Quotes
+
+        self.quote_cvIntroLead = 'quote_cvIntroLead'
+        self.game.sound.register_sound(self.quote_cvIntroLead, self.quotes_path + "cv_1201-r-intro.wav")
+        self.quote_cvIntro = 'quote_cvIntro'
+        self.game.sound.register_sound(self.quote_cvIntro, self.quotes_path + "cv_1212-r-intro-cranky.wav")
+        self.game.sound.register_sound(self.quote_cvIntro, self.quotes_path + "cv_1220-r-intro-you-must-challenge-me.wav")
+        self.quote_cvHit = 'quote_cvHit'
+        self.game.sound.register_sound(self.quote_cvHit, self.quotes_path + "cv_1209-r-hit-how-dare-you.wav")
+        self.game.sound.register_sound(self.quote_cvHit, self.quotes_path + "cv_1244-r-hit-the-best-youve-got.wav")
+        self.game.sound.register_sound(self.quote_cvHit, self.quotes_path + "cv_1247-r-hit-ow-ooh.wav")
+        self.game.sound.register_sound(self.quote_cvHit, self.quotes_path + "cv_1251-r-hit-watch-it.wav")
+        self.game.sound.register_sound(self.quote_cvHit, self.quotes_path + "cv_1253-r-hit-my-contact.wav")
+        self.game.sound.register_sound(self.quote_cvHit, self.quotes_path + "cv_1271-r-hit-ooh-that-hurts.wav")
+        self.game.sound.register_sound(self.quote_cvHit, self.quotes_path + "cv_1266-r-hit-stop-that.wav")
+        self.quote_cvTaunt = 'quote_cvTaunt'
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1210-r-taunt-mother.wav")
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1215-r-taunt-do-your-worst.wav")
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1216-r-taunt-shoes.wav")
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1217-r-taunt-mangy.wav")
+        self.game.sound.reigster_sound(self.quote_cvTaunt, self.quotes_path + "cv_1219-r-taunt-weep.wav")
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1229-r-taunt-laugh-then-cough.wav")
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1281-r-taunt-fish.wav")
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1282-r-taunt-granny.wav")
+        self.game.sound.register_sound(self.quote_cvTaunt, self.quotes_path + "cv_1283-r-taunt-dump-truck.wav")
+        self.quote_cvEnd = 'quote_cvEnd'
+        self.game.sound.register_sound(self.quote_cvEnd, self.quotes_path + "cv_1263-r-end-oooh-nooo.wav")
+        self.game.sound.register_sound(self.quote_cvEnd, self.quotes_path + "cv_1214-r-end-goodbye.wav")
+
 
         self.quote_mmTrolls = 'quote_mmTrolls'
         self.game.sound.register_sound(self.quote_mmTrolls, self.quotes_path + "mm_trolls_crowd.wav")
