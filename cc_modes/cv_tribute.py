@@ -356,8 +356,11 @@ class CV_Tribute(ep.EP_Mode):
             animLayer.repeat = False
             animLayer.opaque = True
             # add sound keyframes for fireworks
+            animLayer.add_frame_listener(8,self.game.sound.play,param=self.game.assets.sfx_cvDoubleBoom)
             animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_cvElephant)
             animLayer.add_frame_listener(29,self.game.sound.play,param=self.game.assets.sfx_cvAcrobats)
+            animLayer.add_frame_listener(52,self.game.sound.play,param=self.game.assets.sfx_cvSqueakyWheel)
+            animLayer.add_frame_listener(59,self.game.sound.play,param=self.game.assets.sfx_cvClowns)
 
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.finish_ringmaster,param=2)
@@ -379,6 +382,18 @@ class CV_Tribute(ep.EP_Mode):
             animLayer2.repeat = False
             animLayer2.opaque = False
             animLayer2.composite_op = "blacksrc"
+
+            animLayer2.add_frame_listener(7,self.game.sound.play,param=self.game.assets.sfx_cvFireworkLaunch)
+            animLayer2.add_frame_listener(10,self.game.sound.play,param=self.game.assets.sfx_cvFireworkLaunch)
+            animLayer2.add_frame_listener(11,self.game.sound.play,param=self.game.assets.sfx_cvFireworkBang)
+            animLayer2.add_frame_listener(12,self.game.sound.play,param=self.game.assets.sfx_cvFireworkBang)
+            animLayer2.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_cvFireworkLaunch)
+            animLayer2.add_frame_listener(15,self.game.sound.play,param=self.game.assets.sfx_cvFireworkBang)
+            animLayer2.add_frame_listener(16,self.game.sound.play,param=self.game.assets.sfx_cvFireworkBang)
+            animLayer2.add_frame_listener(19,self.game.sound.play,param=self.game.assets.sfx_cvFireworkBang)
+            animLayer2.add_frame_listener(21,self.game.sound.play,param=self.game.assets.sfx_cvFireworkLaunch)
+            animLayer2.add_frame_listener(24,self.game.sound.play,param=self.game.assets.sfx_cvFireworkBang)
+            animLayer2.add_frame_listener(26,self.game.sound.play,param=self.game.assets.sfx_cvFireworkBang)
 
 
             pointsLayer = ep.EP_TextLayer(64,17,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(1000000)),color=ep.MAGENTA)

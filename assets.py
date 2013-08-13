@@ -524,6 +524,16 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvWhip, self.sfx_path + "cv_14-113-whip.wav")
         self.sfx_cvElephant = 'sfx_cvElephant'
         self.game.sound.register_sound(self.sfx_cvElephant, self.sfx_path + "cv_14-170-elephant.wav")
+        self.sfx_cvDoubleBoom = 'sfx_cvDoubleBoom'
+        self.game.sound.register_sound(self.sfx_cvDoubleBoom, self.sfx_path + "cv_14-162-double-boom.wav")
+        self.sfx_cvClowns = 'sfx_cvClowns'
+        self.game.sound.register_sound(self.sfx_cvClowns, self.sfx_path + "cv_14-1185-uneasy-clowns.wav")
+        self.sfx_cvSqueakyWheel = 'sfx_cvSqueakyWheel'
+        self.game.sound.register_sound(self.sfx_cvSqueakyWheel, self.sfx_path + "cv_14-523-squeaky-wheel.wav")
+        self.sfx_cvFireworkLaunch = 'sfx_cvFireworkLaunch'
+        self.game.sound.register_sound(self.sfx_cvFireworkLaunch, self.sfx_path + "cv_14-575-firework-launch.wav")
+        self.sfx_cvFireworkBang = 'sfx_cvFireworkBang'
+        self.game.sound.register_sound(self.sfx_cvFireworkBang, self.sfx_path + "cv_14-641-firework-bang.wav")
 
         self.sfx_franks = 'sfx_franks'
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks01.wav")
