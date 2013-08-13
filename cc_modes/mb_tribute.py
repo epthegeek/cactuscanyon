@@ -82,60 +82,40 @@ class MB_Tribute(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 0 and self.running:
             self.finish_drac()
 
+    def halt_test(self):
+        if not self.halted:
+            self.halt_drac()
+        # if the mode is already halted, cancel any pending resume delay
+        else:
+            self.cancel_delayed("Resume")
+
+
     # halt switches
     # bonus lanes pause save polly
     def sw_leftBonusLane_active(self,sw):
-        if not self.halted:
-            self.halt_drac()
-        # if the mode is already halted, cancel any pending resume delay
-        else:
-            self.cancel_delayed("Resume")
+        self.halt_test()
 
     def sw_rightBonusLane_active(self,sw):
-        if not self.halted:
-            self.halt_drac()
-        # if the mode is already halted, cancel any pending resume delay
-        else:
-            self.cancel_delayed("Resume")
+        self.halt_test()
 
     # bumpers pause quickdraw
     def sw_leftJetBumper_active(self,sw):
-        if not self.halted:
-            self.halt_drac()
-        # if the mode is already halted, cancel any pending resume delay
-        else:
-            self.cancel_delayed("Resume")
+        self.halt_test()
 
     def sw_rightJetBumper_active(self,sw):
-        if not self.halted:
-            self.halt_drac()
-        # if the mode is already halted, cancel any pending resume delay
-        else:
-            self.cancel_delayed("Resume")
+        self.halt_test()
 
     def sw_bottomJetBumper_active(self,sw):
-        if not self.halted:
-            self.halt_drac()
-        # if the mode is already halted, cancel any pending resume delay
-        else:
-            self.cancel_delayed("Resume")
+        self.halt_test()
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
     def sw_minePopper_active_for_350ms(self,sw):
         print "Drac Mine Popper Register"
-        if not self.halted:
-            self.halt_drac()
-        # if the mode is already halted, cancel any pending resume delay
-        else:
-            self.cancel_delayed("Resume")
+        self.halt_test()
 
     def sw_saloonPopper_active_for_250ms(self,sw):
         print "Drac Saloon Popper Register"
-        if not self.halted:
-            self.halt_drac()
-        # if the mode is already halted, cancel any pending resume delay
-        else:
-            self.cancel_delayed("Resume")
+        self.halt_test()
 
     def sw_saloonPopper_inactive(self,sw):
         if self.running and self.halted:
