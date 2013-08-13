@@ -158,7 +158,19 @@ class CV_Tribute(ep.EP_Mode):
         if self.running and self.halted:
             # kill the halt flag
             self.halted = False
+            self.taunt_player()
             self.delay("Resume",delay=1,handler=self.resume_ringmaster)
+
+    def taunt_player(self):
+            self.game.bart.animate(2)
+            self.game.base.play_quote(self.game.assets.quote_cvTaunt)
+            self.tauntTimer = 10
+
+    def taunt_timer(self):
+            self.tauntTimer -= 1
+            if self.tauntTimer <= 0:
+                self.taunt_player()
+            self.delay("Taunt Timer", delay=1, handler=self.taunt_timer)
 
     def intro(self,step=1):
         if step == 1:
@@ -176,10 +188,12 @@ class CV_Tribute(ep.EP_Mode):
             self.delay(delay = 0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvGears)
             self.delay(delay = 1.83, handler=self.game.sound.play,param=self.game.assets.sfx_cvGears)
             self.delay(delay = 0.5,handler=self.game.sound.play,param=self.game.assets.quote_cvIntroLead)
+            self.delay(delay = 0.5,handler=self.game.bart.animate,param=2)
             self.delay(delay = 2.75, handler = self.intro,param=2)
 
         if step == 2:
             myDelay = self.game.sound.play(self.game.assets.quote_cvIntro)
+            self.game.bart.animate(2)
             self.delay(delay = myDelay, handler=self.intro,param=3)
 
         if step == 3:
@@ -217,6 +231,8 @@ class CV_Tribute(ep.EP_Mode):
         # start the timer
         self.modeTimer += 1
         self.time_ringmaster()
+        self.tauntTimer = 10
+        self.taunt_timer()
         # start the display
 #        self.display_main()
 
@@ -250,16 +266,18 @@ class CV_Tribute(ep.EP_Mode):
         self.totalPoints += self.value
         # register the hit
         self.hitsSoFar += 1
-        remain = str(self.hitsToWin - self.hitsSoFar)
+        remain = self.hitsToWin - self.hitsSoFar
         if remain <= 0:
             # end this sucker
-            self.win()
+            self.finish_ringmaster()
         elif remain == 1:
             self.infoLine.set_text("}}}{",color=ep.MAGENTA)
         elif remain == 2:
             self.infoLine.set_text("}}{{",color=ep.MAGENTA)
         elif remain == 3:
             self.infoLine.set_text("}{{{",color=ep.MAGENTA)
+        else:
+            pass
         self.titleLine.set_text(ep.format_score(self.value),color=ep.CYAN)
 
         self.modeTimer = 21
@@ -276,7 +294,8 @@ class CV_Tribute(ep.EP_Mode):
         self.layer = dmd.GroupedLayer(128,32,[mainLayer,animLayer])
         # play the hit sound
         myWait = self.game.sound.play(self.game.assets.sfx_cvHit)
-        self.delay(delay=myWait,handler=self.game.base.priority_quote,param=self.game.assets.quote_cvHit)
+        self.delay(delay=0.5,handler=self.game.base.priority_quote,param=self.game.assets.quote_cvHit)
+        self.delay(delay=0.5,handler=self.game.bart.animate,param=2)
         self.delay(delay=1,handler=self.post_hit)
 
     def time_ringmaster(self):
@@ -327,6 +346,7 @@ class CV_Tribute(ep.EP_Mode):
             # kill the delays
             self.wipe_delays()
             self.game.score(1000000)
+            self.stop_music()
 
             anim = self.game.assets.dmd_cvFinale
             myWait = len(anim.frames) / 10.0
@@ -336,13 +356,14 @@ class CV_Tribute(ep.EP_Mode):
             animLayer.repeat = False
             animLayer.opaque = True
             # add sound keyframes for fireworks
+            animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_cvElephant)
+            animLayer.add_frame_listener(29,self.game.sound.play,param=self.game.assets.sfx_cvAcrobats)
 
             self.layer = animLayer
             self.delay(delay=myWait,handler=self.finish_ringmaster,param=2)
 
         if step == 2:
-            anim = self.game.assets.dmd_cvIntro1
-            myWait = len(anim.frames) / 10.0
+            anim = self.game.assets.dmd_cvExplosion
             animLayer = ep.EP_AnimatedLayer(anim)
             animLayer.hold = True
             animLayer.frame_time = 6
@@ -350,13 +371,24 @@ class CV_Tribute(ep.EP_Mode):
             animLayer.opaque = False
             animLayer.composite_op = "blacksrc"
 
-            pointsLayer = ep.EP_TextLayer(64,16,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(1000000)),color=ep.MAGENTA)
-            combined = dmd.GroupedLayer(128,32,[pointsLayer,animLayer])
+            anim = self.game.assets.dmd_cvFireworks
+            myWait = len(anim.frames) / 10.0
+            animLayer2 = ep.EP_AnimatedLayer(anim)
+            animLayer2.hold = True
+            animLayer2.frame_time = 6
+            animLayer2.repeat = False
+            animLayer2.opaque = False
+            animLayer2.composite_op = "blacksrc"
+
+
+            pointsLayer = ep.EP_TextLayer(64,17,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(1000000)),color=ep.MAGENTA)
+            combined = dmd.GroupedLayer(128,32,[pointsLayer,animLayer2,animLayer])
             self.layer = combined
             self.game.sound.play(self.game.assets.quote_cvEnd)
             self.delay(delay = myWait, handler=self.done)
 
     def done(self):
+        self.wipe_delays()
         self.running = False
         # turn the level 5 stack flag back off
         self.game.stack_level(5,False)

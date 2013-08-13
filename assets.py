@@ -522,6 +522,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvRatchet, self.sfx_path + "cv_14-112-ratchet.wav")
         self.sfx_cvWhip = 'sfx_cvWhip'
         self.game.sound.register_sound(self.sfx_cvWhip, self.sfx_path + "cv_14-113-whip.wav")
+        self.sfx_cvElephant = 'sfx_cvElephant'
+        self.game.sound.register_sound(self.sfx_cvElephant, self.sfx_path + "cv_14-170-elephant.wav")
 
         self.sfx_franks = 'sfx_franks'
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks01.wav")
