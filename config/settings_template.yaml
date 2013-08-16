@@ -91,14 +91,14 @@ Machine (Standard):
     options: ['Extra Ball','Last Call']
     default: 'Extra Ball'
   'Replay Score':
-    options: [5000000,30000000]
+    options: [3000000,9000000000]
     increments: 500000
     default: 10000000
   'Replay Auto Adjust':
     options: ['Yes','No']
     default: 'Yes'
   'Replay Score Pad':
-    options: [500000,10000000]
+    options: [0,10000000]
     increments: 500000
     default: 0
 Sound:

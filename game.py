@@ -479,7 +479,15 @@ class CCGame(game.BasicGame):
         # run the start_ball from proc.game.BasicGame
         super(CCGame, self).start_ball()
         if len(self.players) > 1 and not self.interrupter.hush:
-            self.interrupter.display_player_number()
+            if self.replays and self.ball == 3:
+                # if they already earned a replay - still show their number
+                if self.show_tracking('replay_earned'):
+                    self.interrupter.display_player_number()
+                # but if they didn't we want to see the score display instead
+                else:
+                    pass
+            else:
+                self.interrupter.display_player_number()
 
     def create_player(self,name):
         # create an object wiht the Tracking Class - subclassed off game.Player
@@ -688,6 +696,9 @@ class CCGame(game.BasicGame):
                 target = int(round(self.game_data['Audits']['Avg Score']+500000)//500000*500000)
                 # add any user defined pad
                 target += self.user_settings['Machine (Standard)']['Replay Score Pad']
+                # 3 million is the minimum
+                if target < 3000000:
+                    target = 3000000
                 print "Setting Replay score to ==== " + str(target)
                 # set the value and save
                 self.user_settings['Machine (Standard)']['Replay Score'] = target
@@ -698,9 +709,27 @@ class CCGame(game.BasicGame):
 
         # divert to the match before high score entry - unless last call is disabled
         lastCall = 'Enabled' == self.user_settings['Gameplay (Feature)']['Last Call Mode']
-        if lastCall:
+        # if replays are enabled, and last call is not, then there may be last call to do if someone won
+        if self.replays and not lastCall and self.user_settings['Machine (Standard)']['Replay Award'] == 'Last Call':
+            winners = 0
+            lastCallers = []
+            # check to see if anybody won
+            for i in range(len(self.players)):
+                if self.players[i].player_stats['replay_earned']:
+                    winners += 1
+                    lastCallers.append(i)
+                    print ("Player " + str(i) + " gets last call")
+            # if anybody won, it's go time
+            if winners > 0:
+                self.modes.add(self.last_call)
+                self.last_call.set_players(lastCallers)
+                self.last_call.intro()
+
+        # otherwise if last call is enabled, run that
+        elif lastCall:
             self.modes.add(self.match)
             self.match.run_match()
+        # in any other case, run the high scores
         else:
             self.run_highscore()
 

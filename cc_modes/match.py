@@ -48,6 +48,7 @@ class Match(ep.EP_Mode):
         self.p2Layer.set_text("",blink_frames=0,color=ep.RED)
         self.p3Layer.set_text("",blink_frames=0,color=ep.RED)
         self.p4Layer.set_text("",blink_frames=0,color=ep.RED)
+        self.lastCall = []
 
     def run_match(self):
         self.game.sound.play(self.game.assets.sfx_ragtimePiano)
@@ -109,7 +110,6 @@ class Match(ep.EP_Mode):
         self.delay(delay = myWait,handler=self.award_match)
 
     def award_match(self):
-        self.lastCall = []
         # check the scores to see if anybody won
         for i in range(len(self.game.players)):
             if str(self.playerDigits[i]) == self.selection:
@@ -119,7 +119,9 @@ class Match(ep.EP_Mode):
                 self.winners += 1
                 # store a list of winning players
                 print ("Player " + str(i) + " gets last call")
-                self.lastCall.append(i)
+                # check to make sure they're not in last call already
+                if i not in self.lastCall:
+                    self.lastCall.append(i)
 
         # if we had any winners there's stuff to do
         if self.winners > 0:
@@ -147,11 +149,18 @@ class Match(ep.EP_Mode):
 
         for i in range(len(self.game.players)):
             score = self.game.players[i].score
-            print "PLAYER SCORE - " + str(score)
             digit = str(score)[-2:-1]
-            print "MATCH DIGITS - " + str(digit)
-            digitString = str(digit) + "0"
-            self.playerLayers[i].set_text(digitString,color=ep.RED)
+            # if replays are on, they may already be a winner
+            if self.game.replays and self.game.players[i].player_stats['replay_earned']:
+                print "Player " + str(i) + "earned last call in replay"
+                self.playerLayers[i].set_text("**",color=ep.GREEN)
+                self.lastCall.append(i)
+                self.winners += 1
+            else:
+                print "PLAYER SCORE - " + str(score)
+                print "MATCH DIGITS - " + str(digit)
+                digitString = str(digit) + "0"
+                self.playerLayers[i].set_text(digitString,color=ep.RED)
             #set var for comparison
             self.playerDigits[i]=digit
 

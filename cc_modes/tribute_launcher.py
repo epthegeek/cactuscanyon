@@ -45,7 +45,7 @@ class TributeLauncher(ep.EP_Mode):
         self.selecting = False
         # set the stack level
         self.game.stack_level(5,True)
-        choices = [0,1,2,3,4]
+        choices = [0,1,2,3] # add 4 back in to enable ss when it's ready
         self.index = random.choice(choices)
         # throw up a text thing telling player to hit flippers to select
         title = ep.EP_TextLayer(58, 3, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("TRIBUTE",color=ep.ORANGE)
