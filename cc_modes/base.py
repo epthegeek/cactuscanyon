@@ -415,7 +415,7 @@ class BaseGameMode(ep.EP_Mode):
         # play the sound
         self.game.sound.play(self.game.assets.sfx_rattlesnake)
         # score the points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         # if the skillshot is still live at this point, end that
         if self.game.skill_shot.live:
             self.game.skill_shot.skillshot_set()
@@ -492,7 +492,7 @@ class BaseGameMode(ep.EP_Mode):
 
 
     def outlane_hit(self, side):
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         if self.game.show_tracking('bozoBall'):
             # if bozo ball flag is on, award that
             self.collect_bozo_ball()

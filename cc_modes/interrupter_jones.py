@@ -258,10 +258,15 @@ class Interrupter(ep.EP_Mode):
     def status(self):
         # cancel the delay, in case we got pushed early
         self.cancel_delayed("Display")
+        # hide the replay page if replays are disabled
+        max_page = 6
+        # by bumping up the max page by one if replays are enabled
+        if self.game.replays:
+            max_page += 1
         # first, tick up the page
         self.page += 1
         # roll back around if we get over the number of pages
-        if self.page > 6:
+        if self.page > max_page:
             self.page = 1
         # then show some junk based on what page we're on
         if self.page == 1:
@@ -325,6 +330,9 @@ class Interrupter(ep.EP_Mode):
             textString2 = "QUICKDRAWS: " + str(quickdrawKills)
             textString3 = "GUNFIGHTS: " + str(gunfightKills)
             self.tld("GUN BATTLE WINS:",textString2,textString3)
+        # replay score
+        if self.page == 7:
+            self.layer = self.replay_score_page()
 
         self.delay(name="Display",delay=3,handler=self.status)
 
@@ -575,3 +583,41 @@ class Interrupter(ep.EP_Mode):
         if value > 0:
             self.delay(delay=0.5,handler=self.knock,param=value)
 
+
+    # replay score display
+    def replay_score_display(self):
+        self.layer = self.replay_score_page()
+        self.delay(delay=1.5,handler=self.clear_layer)
+
+    def replay_score_page(self):
+        replay_text = ep.format_score(self.game.user_settings['Machine (Standard)']['Replay Score'])
+        score_text = ep.format_score(self.game.current_player().score)
+        textLine1 = ep.EP_TextLayer(64, 1, self.game.assets.font_5px_bold_AZ, "center", opaque=True).set_text("REPLAY SCORE:",color=ep.ORANGE)
+        textLine2 = ep.EP_TextLayer(64, 7, self.game.assets.font_7px_az, "center", opaque=False).set_text(replay_text,color=ep.GREEN)
+        textLine3 = ep.EP_TextLayer(64, 17, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("YOUR SCORE:",color=ep.ORANGE)
+        textLine4 = ep.EP_TextLayer(64, 23, self.game.assets.font_7px_az, "center", opaque=False).set_text(score_text,blink_frames=8,color=ep.RED)
+        layer = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,textLine4])
+        return layer
+
+    def replay_award_display(self):
+        anim = self.game.assets.dmd_fireworks
+        myWait = (len(anim.frames) / 10.0) + 1
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold = True
+        animLayer.frame_time = 6
+        # firework sounds keyframed
+        animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_fireworks1)
+        animLayer.add_frame_listener(17,self.game.sound.play,param=self.game.assets.sfx_fireworks2)
+        animLayer.add_frame_listener(21,self.game.sound.play,param=self.game.assets.sfx_fireworks3)
+        animLayer.add_frame_listener(24,self.game.sound.play,param=self.game.assets.quote_replay)
+        animLayer.composite_op = "blacksrc"
+        textLine1 = "REPLAY AWARD"
+        textLayer1 = ep.EP_TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=True).set_text(textLine1,color=ep.BLUE)
+        textLayer1.composite_op = "blacksrc"
+        textLine2 = self.game.user_settings['Machine (Standard)']['Replay Award']
+        textLayer2 = dmd.TextLayer(58, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(textLine2.upper())
+        textLayer2.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
+        self.layer = combined
+        self.delay(delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
+        self.delay("Display", delay=myWait,handler=self.clear_layer)

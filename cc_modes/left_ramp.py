@@ -72,7 +72,7 @@ class LeftRamp(ep.EP_Mode):
     def sw_leftRampMake_active(self,sw):
         # in general gameplay this switch has no purpose
         # but I'm sure it adds points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "leftRampMake"
 
@@ -94,7 +94,7 @@ class LeftRamp(ep.EP_Mode):
         if stage == 1:
             self.awardString = "WHITE WATER"
             self.awardPoints = str(ep.format_score(125000))
-            self.game.score_with_bonus(125000)
+            self.game.score(125000,bonus=True)
             self.game.base.play_quote(self.game.assets.quote_leftRamp1)
             # load the 2 animations
             anim1 = self.game.assets.dmd_blankRiver
@@ -115,7 +115,7 @@ class LeftRamp(ep.EP_Mode):
         elif stage == 2:
             self.awardString = "WATER FALL"
             self.awardPoints = str(ep.format_score(150000))
-            self.game.score_with_bonus(150000)
+            self.game.score(150000,bonus=True)
             self.game.base.play_quote(self.game.assets.quote_leftRamp2)
             # load the animation
             anim = self.game.assets.dmd_riverChase
@@ -131,7 +131,7 @@ class LeftRamp(ep.EP_Mode):
         elif stage == 3:
             # if drunk stacking isn't allowed - don't start save polly
             if self.game.drunk_multiball.running and not self.game.base.drunkStacking:
-                self.score_with_bonus(50000)
+                self.game.score(50000,bonus=True)
             else:
                 # stage 3 now starts river chase
                 self.game.increase_tracking('leftRampStage')
@@ -147,7 +147,7 @@ class LeftRamp(ep.EP_Mode):
                 value = self.game.increase_tracking('leftRampValue',500)
                 self.awardString = "SHAMEFUL RIDE"
             self.awardPoints = str(ep.format_score(value))
-            self.game.score_with_bonus(value)
+            self.game.score(value,bonus=True)
             # play animation if we're not in a combo after level 4
             if combo:
                 self.layer = None

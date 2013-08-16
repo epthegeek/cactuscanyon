@@ -38,7 +38,7 @@ class RightRamp(ep.EP_Mode):
         # play the switch sound
         self.game.sound.play(self.game.assets.sfx_rightRampEnter)
         # score the arbitrary and wacky points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "rightRampEnter"
 
@@ -75,7 +75,7 @@ class RightRamp(ep.EP_Mode):
 
 
     def sw_rightRampBottom_active(self,sw):
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "rightRampBottom"
 
@@ -90,7 +90,7 @@ class RightRamp(ep.EP_Mode):
             ## set the text lines for the display later
             self.awardString = "SOUND ALARM"
             self.awardPoints = str(ep.format_score(125000)) + "*"
-            self.game.score_with_bonus(125000)
+            self.game.score(125000,bonus=True)
             # load the animation
             anim = self.game.assets.dmd_bankExplodes
             # calcuate the wait time to start the next part of the display
@@ -115,7 +115,7 @@ class RightRamp(ep.EP_Mode):
             # set the text lines for the display
             self.awardString = "SHOOT OUT"
             self.awardPoints = str(ep.format_score(150000)) + "*"
-            self.game.score_with_bonus(150000)
+            self.game.score(150000,bonus=True)
             # load the animation
             anim = self.game.assets.dmd_bankSheriff
             # calculate the wait time
@@ -140,7 +140,7 @@ class RightRamp(ep.EP_Mode):
         elif stage == 3:
             # if drunk stacking isn't allowed - don't start save polly
             if self.game.drunk_multiball.running and not self.game.base.drunkStacking:
-                self.score_with_bonus(50000)
+                self.game.score(50000,bonus=True)
             else:
                 self.game.increase_tracking('rightRampStage')
                 self.game.modes.add(self.game.bank_robbery)
@@ -160,7 +160,7 @@ class RightRamp(ep.EP_Mode):
                 value = self.game.increase_tracking('rightRampValue',500)
                 frame = 13
             self.awardPoints = str(ep.format_score(value)) + "*"
-            self.game.score_with_bonus(value)
+            self.game.score(value,bonus=True)
             # play sounds
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
             # play animation

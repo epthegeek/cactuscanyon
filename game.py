@@ -158,6 +158,8 @@ class CCGame(game.BasicGame):
         # check for the knocker setting
         if self.user_settings['Machine (Standard)']['Real Knocker Installed'] == "Yes":
             self.useKnocker = True
+        # check the replay settings
+        self.replays = self.user_settings['Machine (Standard)']['Replays'] == "Enabled"
 
         # set the volume per the settings
         self.sound.music_offset = self.user_settings['Sound']['Music volume offset']
@@ -680,6 +682,17 @@ class CCGame(game.BasicGame):
             ranks = ['Stranger At End','Partner At End','Deputy At End','Sheriff At End','Marshall At End']
             # +1 the stat for each players final rank
             self.game_data['Feature'][ranks[self.players[i].player_stats['rank']]] += 1
+            # replay adjust - if replays are enabled
+            if self.user_settings['Machine (Standard)']['Replay Auto Adjust'] == 'Yes' and self.replays:
+                # round the average score
+                target = int(round(self.game_data['Audits']['Avg Score']+500000)//500000*500000)
+                # add any user defined pad
+                target += self.user_settings['Machine (Standard)']['Replay Score Pad']
+                print "Setting Replay score to ==== " + str(target)
+                # set the value and save
+                self.user_settings['Machine (Standard)']['Replay Score'] = target
+                self.save_settings()
+
         # save the game data
         self.save_game_data()
 
@@ -847,16 +860,34 @@ class CCGame(game.BasicGame):
         else:
             print "Stack set not updating thh lamps"
 
-    # score with bonus
-    def score_with_bonus(self, points,percent=7):
+    def score(self, points,bonus=False,percent=7):
         """Convenience method to add *points* to the current player."""
         p = self.current_player()
         p.score += points
+        if bonus:
         # divide the score by 100 to get what 1 % is (rounded), then multiply by the applied percent, then round to an even 10.
         # why? because that's what modern pinball does. Score always ends in 0
-        bonus = points / 100 * percent / 10 * 10
-        #print "ADDING BONUS - " + str(bonus)
-        p.player_stats['bonus'] += bonus
+            bonus_points = points / 100 * percent / 10 * 10
+            p.player_stats['bonus'] += bonus_points
+        # check replay if they're enabled and the player hasn't earned it yet
+        if self.replays and not self.show_tracking('replay_earned'):
+            if p.score >= self.user_settings['Machine (Standard)']['Replay Score']:
+                self.award_replay()
+
+    def award_replay(self):
+        print "Player earned REPLAY! PARTYTIME!"
+        # fire the knocker
+        self.interrupter.knock(1)
+        self.interrupter.replay_award_display()
+        if self.user_settings['Machine (Standard)']['Replay Award'] == 'Extra Ball':
+            # track the extra ball
+            self.increase_tracking('extraBallsTotal')
+            # give the extra ball
+            self.current_player().extra_balls += 1
+        else:
+            # do something about last call here
+            pass
+        self.set_tracking('replay_earned',True)
 
     ## bonus stuff
 

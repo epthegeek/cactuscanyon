@@ -187,3 +187,6 @@ class Tracking(game.Player):
         # track if player already did franks and beans within this game
         self.player_stats['farted'] = False
         self.player_stats['fartTotal'] = 0
+
+        # player earned replay
+        self.player_stats['replay_earned'] = False

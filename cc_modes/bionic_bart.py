@@ -451,7 +451,7 @@ class BionicBart(ep.EP_Mode):
             self.delay(delay=0.8,handler=self.hit,param=3)
         if step == 3:
             self.set_bart_layer(self.stunnedLayer)
-            self.game.score_with_bonus(self.hitValue)
+            self.game.score(self.hitValue,bonus=True)
             self.set_action_line(str(ep.format_score(self.hitValue)))
             self.set_status_line(style="HIT")
             # increase the hit value for next time

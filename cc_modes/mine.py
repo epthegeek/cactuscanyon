@@ -91,7 +91,7 @@ class Mine(ep.EP_Mode):
         # play the default sound
         self.game.sound.play(self.game.assets.sfx_mineEntrance)
         # award some points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ep.last_switch = "mineEntrance"
         ## kill the combo shot chain
         ep.last_shot = None

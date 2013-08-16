@@ -51,7 +51,7 @@ class LeftLoop(ep.EP_Mode):
             if stage != 4:
                 self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # score come points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "leftLoopBottom"
         ## kill the combo shot chain
@@ -89,7 +89,7 @@ class LeftLoop(ep.EP_Mode):
             self.award_loop_score(combo)
         # if it's a roll through so just add some points
         elif ep.last_switch == 'rightLoopTop':
-            self.game.score_with_bonus(2530)
+            self.game.score(2530,bonus=True)
             self.game.increase_tracking('fullLoops')
         ## -- set the last switch --
         ep.last_switch = "leftLoopTop"
@@ -106,7 +106,7 @@ class LeftLoop(ep.EP_Mode):
         if stage == 1:
             self.awardString = "BUCK N BRONCO"
             self.awardPoints = str(ep.format_score(125000))
-            self.game.score_with_bonus(125000)
+            self.game.score(125000,bonus=True)
             self.game.base.play_quote(self.game.assets.quote_leftLoop1)
             # set the item to use, frame time to use, and amount to divide my wait by
             thisOne = 1
@@ -115,7 +115,7 @@ class LeftLoop(ep.EP_Mode):
         elif stage == 2:
             self.awardString = "WILD RIDE"
             self.awardPoints = str(ep.format_score(150000))
-            self.game.score_with_bonus(15000)
+            self.game.score(150000,bonus=True)
             thisOne = 1
             frame_time = 6
             divisor = 10.0
@@ -124,7 +124,7 @@ class LeftLoop(ep.EP_Mode):
         elif stage == 3:
             self.awardString = "RIDE EM COWBOY"
             self.awardPoints = str(ep.format_score(175000))
-            self.game.score_with_bonus(175000)
+            self.game.score(175000,bonus=True)
             self.game.base.play_quote(self.game.assets.quote_leftLoop2)
             thisOne = 0
             frame_time = 4
@@ -170,7 +170,7 @@ class LeftLoop(ep.EP_Mode):
                 self.game.set_tracking('cvaStatus',"READY")
                 self.game.base.play_quote(self.game.assets.quote_niceLoopin)
 
-            self.game.score_with_bonus(points)
+            self.game.score(points,bonus=True)
             self.tumbleweed_display(points,combo)
             return
 

@@ -143,7 +143,7 @@ class Saloon(ep.EP_Mode):
     def sw_saloonGate_active(self,sw):
         # play the sound.
         # add some points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         # exciting!
         ## -- set the last switch hit --
         ep.last_switch = "saloonGate"
@@ -157,7 +157,7 @@ class Saloon(ep.EP_Mode):
             # and move the bart
             self.game.bart.animate(2)
         # score some points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         # reset the jetcount
         self.game.base.jetCount = 0
         # if the bottom jet was killed

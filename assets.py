@@ -757,6 +757,8 @@ class Assets():
         self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "2042-waitress-hit-that-bad-guy.wav")
         self.game.sound.register_sound(self.quote_bionicUrge, self.quotes_path + "1416-drunk-shoot-that-bad-guy.wav")
 
+        self.quote_replay = 'quote_replay'
+        self.game.sound.register_sound(self.quote_replay, self.quotes_path + "1027-mayor-replay.wav")
         self.quote_lockLit = 'quote_lockLit'
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "1186-mayor-lock-is-lit.wav")
         self.game.sound.register_sound(self.quote_lockLit, self.quotes_path + "859-polly-lock-is-lit.wav")
@@ -1614,7 +1616,7 @@ class Assets():
             self.dmd_cvFinale = dmd.Animation().load(self.dmd_path+'cv-finale-color.dmd')
         else:
             self.dmd_cvLogo = dmd.Animation().load(self.dmd_path+'cv-logo.dmd')
-            self.dmd_cvFinale = dmd.animation().load(self.dmd_path+'cv-finale.dmd')
+            self.dmd_cvFinale = dmd.Animation().load(self.dmd_path+'cv-finale.dmd')
         self.dmd_cvIntro1 = dmd.Animation().load(self.dmd_path+'cv-intro-part1.dmd')
         self.dmd_cvIntro2 = dmd.Animation().load(self.dmd_path+'cv-intro-part2.dmd')
         self.dmd_cvHypno = dmd.Animation().load(self.dmd_path+'cv-hypno.dmd')

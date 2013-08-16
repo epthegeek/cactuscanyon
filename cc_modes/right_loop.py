@@ -45,7 +45,7 @@ class RightLoop(ep.EP_Mode):
                 # while working on completing, the sound plays
                 self.game.sound.play(self.game.assets.sfx_rightLoopEnter)
         # score come points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "rightLoopBottom"
         ## kill the combo shot chain
@@ -85,7 +85,7 @@ class RightLoop(ep.EP_Mode):
                 self.award_loop_score(combo)
             # if it's a roll through so just add some points
             elif  ep.last_switch == "leftLoopTop":
-                self.game.score_with_bonus(2530)
+                self.game.score(2530,bonus=True)
                 self.game.increase_tracking('fullLoops')
             ## -- set the last switch hit --
             ep.last_switch = "rightLoopTop"
@@ -99,7 +99,7 @@ class RightLoop(ep.EP_Mode):
         if stage == 1:
             self.awardString = "GOOD SHOT"
             self.awardPoints = str(ep.format_score(125000))
-            self.game.score_with_bonus(125000)
+            self.game.bonus(125000,bonus=True)
             # load the animation
             anim = self.game.assets.dmd_shotBottles
             # calculate a wait
@@ -123,7 +123,7 @@ class RightLoop(ep.EP_Mode):
         elif stage == 2:
             self.awardString = "GUNSLINGER"
             self.awardPoints = str(ep.format_score(150000))
-            self.game.score_with_bonus(150000)
+            self.game.score(150000,bonus=True)
             # play the animation and such
             anim = self.game.assets.dmd_shotCandles
             myWait = len(anim.frames) / 10.0
@@ -134,7 +134,7 @@ class RightLoop(ep.EP_Mode):
         elif stage == 3:
             self.awardString = "MARKSMAN"
             self.awardPoints = str(ep.format_score(175000))
-            self.game.score_with_bonus(175000)
+            self.game.score(175000,bonus=True)
             #self.show_award_text()
             anim = self.game.assets.dmd_shotCard
             myWait = len(anim.frames) / 10.0
@@ -163,7 +163,7 @@ class RightLoop(ep.EP_Mode):
                 self.game.set_tracking('cvaStatus',"READY")
                 # play the quote
                 self.game.base.play_quote(self.game.assets.quote_niceLoopin)
-            self.game.score_with_bonus(points)
+            self.game.score(points,bonus=True)
             self.tumbleweed_display(points,combo)
 
         # then tick the stage up for next time unless it's completed

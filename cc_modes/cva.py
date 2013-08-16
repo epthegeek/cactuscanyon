@@ -196,7 +196,7 @@ class CvA(ep.EP_Mode):
         if ep.last_switch != 'leftLoopTop' and ep.last_switch != 'leftLoopBottom':
             self.game.sound.play(self.game.assets.sfx_cvaWoosh)
             # score come points
-            self.game.score_with_bonus(2530)
+            self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "leftLoopBottom"
         return game.SwitchStop
@@ -205,7 +205,7 @@ class CvA(ep.EP_Mode):
         # play the switch sound
         self.game.sound.play(self.game.assets.sfx_cvaWoosh)
         # score the arbitrary and wacky points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "centerRampEnter"
         return game.SwitchStop
@@ -216,7 +216,7 @@ class CvA(ep.EP_Mode):
         if ep.last_switch != 'rightLoopTop' and ep.last_switch != 'rightLoopBottom':
             self.game.sound.play(self.game.assets.sfx_cvaWoosh)
             # score come points
-            self.game.score_with_bonus(2530)
+            self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "rightLoopBottom"
         return game.SwitchStop
@@ -225,7 +225,7 @@ class CvA(ep.EP_Mode):
         # play the switch sound
         self.game.sound.play(self.game.assets.sfx_cvaWoosh)
         # score the arbitrary and wacky points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "rightRampEnter"
         return game.SwitchStop
@@ -265,11 +265,11 @@ class CvA(ep.EP_Mode):
 
     def quickdraw_hit(self,position,side):
         # score the arbitrary and wacky points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
 
     # beer mug
     def sw_beerMug_active(self,sw):
-        self.game.score_with_bonus(2130)
+        self.game.score(2130,bonus=True)
         # play a sound
         #self.game.sound.play(self.game.assets.sfx_ricochetSet)
         ## -- set the last switch -- ##
@@ -280,31 +280,31 @@ class CvA(ep.EP_Mode):
     # the mine
     def sw_minePopper_active_for_390ms(self,sw):
         if not self.game.mountain.busy:
-            self.game.score_with_bonus(2530)
+            self.game.score(2530,bonus=True)
             # kick the ball
             self.game.mountain.eject()
             return game.SwitchStop
 
     # the saloon
     def sw_saloonPopper_active_for_290ms(self,sw):
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         self.game.saloon.kick()
         return game.SwitchStop
 
     def sw_saloonBart_active(self,sw):
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "saloonBart"
         return game.SwitchStop
 
     def sw_saloonGate_active(self,sw):
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "saloonGate"
         return game.SwitchStop
 
     def sw_jetBumpersExit_active(self,sw):
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "jetBumpersExit"
         return game.SwitchStop
@@ -328,7 +328,7 @@ class CvA(ep.EP_Mode):
         # play the sound
         self.game.sound.play(self.game.assets.sfx_cvaInlane)
         # score the points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
 
     # outlanes
     def sw_leftOutlane_active(self,sw):
@@ -347,7 +347,7 @@ class CvA(ep.EP_Mode):
         # play the sound
         self.game.sound.play(self.game.assets.sfx_cvaDrain)
         # score the points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
 
 
     def intro(self,step=1,entry="inlane",onSide = 0):

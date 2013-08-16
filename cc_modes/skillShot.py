@@ -130,7 +130,11 @@ class SkillShot(ep.EP_Mode):
             # play a random voice call from a pre-set collection
             self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_welcomes)
         else:
-            # on any ball other than ball one, announce which players turn it is if there is more than one
+            # if we're on ball three and the player hasn't reached the replay score - show that
+            if self.game.replays:
+                if self.game.ball == 3 and not self.game.show_tracking('replay_earned'):
+                # on any ball other than ball one, announce which players turn it is if there is more than one
+                    self.game.interrupter.replay_score_display()
             if len(self.game.players) > 1 and not self.game.interrupter.hush:
                 playerQuotes = [self.game.assets.quote_playerOne, self.game.assets.quote_playerTwo, self.game.assets.quote_playerThree, self.game.assets.quote_playerFour]
                 myDuration = self.game.sound.play(playerQuotes[self.game.current_player_index])
@@ -337,7 +341,7 @@ class SkillShot(ep.EP_Mode):
             self.super_update_lamps()
             print "ACTIVE SHOT IS: " + str(self.active)
         ##
-        self.game.score_with_bonus(7250)
+        self.game.score(7250,bonus=True)
         # slide the prize list over
         self.game.sound.play(self.game.assets.sfx_skillShotWoosh)
         # blink the flasher
@@ -519,7 +523,7 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom = "TO " + newRank
 
         elif self.selectedPrizes[5:] == "L":
-            self.game.score_with_bonus(1000)
+            self.game.score(1000,bonus=True)
             awardStringTop = "BONUS X"
             awardStringBottom = "INCREASED +3"
             self.game.increase_tracking('bonusX',3)
@@ -572,7 +576,7 @@ class SkillShot(ep.EP_Mode):
             return
         # bonus x
         elif self.selectedPrizes[5:] == "P":
-            self.game.score_with_bonus(1000)
+            self.game.score(1000,bonus=True)
             awardStringTop = "BONUS X"
             awardStringBottom = "INCREASED +5"
             self.game.increase_tracking('bonusX',5)

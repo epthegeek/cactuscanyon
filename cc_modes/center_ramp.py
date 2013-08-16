@@ -38,7 +38,7 @@ class CenterRamp(ep.EP_Mode):
         # play the switch sound
         self.game.sound.play(self.game.assets.sfx_centerRampEnter)
         # score the arbitrary and wacky points
-        self.game.score_with_bonus(2530)
+        self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "centerRampEnter"
 
@@ -89,7 +89,7 @@ class CenterRamp(ep.EP_Mode):
         if stage == 1:
             self.awardString = "CATCH TRAIN"
             self.awardPoints = str(ep.format_score(125000))
-            self.game.score_with_bonus(125000)
+            self.game.score(125000,bonus=True)
             self.game.base.play_quote(self.game.assets.quote_centerRamp1)
             self.game.sound.play(self.game.assets.sfx_trainChugShort)
             self.game.sound.play(self.game.assets.sfx_leftLoopEnter) # same sound used on left loop so the name is funny
@@ -113,7 +113,7 @@ class CenterRamp(ep.EP_Mode):
                 return
             # if drunk multiball is running - dont' start polly if stacking is off
             elif self.game.drunk_multiball.running and not self.game.base.drunkStacking:
-                self.score_with_bonus(50000)
+                self.score(50000,bonus=True)
             else:
                 self.game.increase_tracking('centerRampStage')
                 self.game.modes.add(self.game.save_polly)
@@ -218,7 +218,7 @@ class CenterRamp(ep.EP_Mode):
 
         self.delay(name="Display",delay=myWait,handler=self.show_award_text)
         self.awardPoints = str(ep.format_score(value))
-        self.game.score_with_bonus(value)
+        self.game.score(value,bonus=True)
 
     def abort_display(self):
         self.clear_layer()
