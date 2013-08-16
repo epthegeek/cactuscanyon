@@ -82,10 +82,11 @@ class Attract(ep.EP_Mode):
         self.splash = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ccBanner.frames[0])
         continuedBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cccBanner.frames[0])
 
-        border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_simpleBorder.frames[0])
-        replayTextLayer1 = ep.EP_TextLayer(64, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("REPLAY SCORE:",color=ep.ORANGE)
-        replayTextLayer2 = ep.EP_TextLayer(64, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(ep.format_score(self.game.user_settings['Machine (Standard)']['Replay Score']),color=ep.YELLOW)
-        replayPage = dmd.GroupedLayer(128,32,[border,replayTextLayer1,replayTextLayer2])
+        if self.game.replays:
+            border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_simpleBorder.frames[0])
+            replayTextLayer1 = ep.EP_TextLayer(64, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("REPLAY SCORE:",color=ep.ORANGE)
+            replayTextLayer2 = ep.EP_TextLayer(64, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(ep.format_score(self.game.user_settings['Machine (Standard)']['Replay Score']),color=ep.YELLOW)
+            replayPage = dmd.GroupedLayer(128,32,[border,replayTextLayer1,replayTextLayer2])
 
         self.myIndex = 0
 
@@ -118,8 +119,9 @@ class Attract(ep.EP_Mode):
 
         self.generate_score_frames()
 
-        # add the replay value page
-        self.layers.append({'layer':replayPage,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
+        if self.game.replays:
+            # add the replay value page
+            self.layers.append({'layer':replayPage,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
 
         # add a game over at the end
         gameOver = self.game.showcase.make_thin_string(3,text="GAME OVER")
