@@ -551,9 +551,11 @@ class CCGame(game.BasicGame):
             # and all the other modes
             print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
             self.base.load_modes()
-            # if we're under 2 minutes and on the last ball, enable BOZO BALL (tm)
-            if self.current_player().game_time < 120 and self.ball == self.balls_per_game:
-                self.base.enable_bozo_ball()
+            # if we're under x minutes and on the last ball, enable BOZO BALL (tm), if configured to do so
+            if self.user_settings['Gameplay (Feature)']['Bozo Ball'] == 'Enabled':
+                time = self.user_settings['Gameplay (Feature)']['Bozo Ball Minutes'] * 60
+                if self.current_player().game_time < time and self.ball == self.balls_per_game:
+                    self.base.enable_bozo_ball()
             # update the lamps
             self.lamp_control.update()
 

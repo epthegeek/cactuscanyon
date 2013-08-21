@@ -136,6 +136,13 @@ Gameplay (Feature):
     options: [2,10]
     increments: 1
     default: 3
+  'Bozo Ball':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Bozo Ball Minutes':
+    options: [1,5]
+    increments: 1
+    default: 2
   'Moonlight Shots at Start':
     options: [1,6]
     increments: 1
