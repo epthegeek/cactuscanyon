@@ -232,43 +232,68 @@ class Saloon(ep.EP_Mode):
         self.game.set_tracking('isBountyLit', False)
         # select an award
         prizes = []
-        # - Choices:
-        #   1 - Light Extra Ball - include as long as we're not at maximum
-        if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-            prizes.append('extraBall')
-        #   2 - Light Gun Fight - include if not currently lit via dead bart
-        if self.game.show_tracking('bartStatus') != "DEAD":
-            prizes.append('lightGunFight')
-        #   3 - Light Quick Draw
-        if "OPEN" in self.game.show_tracking('quickdrawStatus'):
-            prizes.append('lightQuickdraw')
-        #   4 - Light Lock / Lock ball - included if lock is ready or lit
-        if self.game.show_tracking('mineStatus') == "OPEN" or self.game.show_tracking('mineStatus') == "LOCK":
-            prizes.append('awardLock')
-        #   5 - Bonus multiplier + 5
-        if self.game.show_tracking('bonusX') < 6:
-            prizes.append('bonusX')
-        #   6 - Increase your rank
-        if self.game.show_tracking('rank') < 4:
-            prizes.append('rank')
-        #   7 - Points 250,000
-        prizes.append('points250k')
-        #   8 - Points 500,000
-        prizes.append('points500k')
-        #   9 - + 1 Million Bonus
-        prizes.append('points1Mil')
-        # 10 - Move your train - only add if polly isn't running
-        if not self.game.peril and self.game.move_your_train not in self.game.modes and self.mytValue == 'Enabled' and not self.game.train.mytFail:
-            prizes.append('moveYourTrain')
-        # 11 - 30 second ball save
-        if not self.game.trough.ball_save_active:
-            prizes.append('ballSave')
-        # 12 - franks n beans
-        if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == True and not self.game.show_tracking('farted'):
-            prizes.append('franksNBeans')
-        # so as of this point we have a prizes list to use
-        # and pick one of those at random
-        self.bountyPrize = random.choice(prizes)
+        # if we're not running in tournament mode, choices are as normal
+        if not self.game.tournament:
+            # - Choices:
+            #   1 - Light Extra Ball - include as long as we're not at maximum
+            if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+                prizes.append('extraBall')
+            #   2 - Light Gun Fight - include if not currently lit via dead bart
+            if self.game.show_tracking('bartStatus') != "DEAD":
+                prizes.append('lightGunFight')
+            #   3 - Light Quick Draw
+            if "OPEN" in self.game.show_tracking('quickdrawStatus'):
+                prizes.append('lightQuickdraw')
+            #   4 - Light Lock / Lock ball - included if lock is ready or lit
+            if self.game.show_tracking('mineStatus') == "OPEN" or self.game.show_tracking('mineStatus') == "LOCK":
+                prizes.append('awardLock')
+            #   5 - Bonus multiplier + 5
+            if self.game.show_tracking('bonusX') < 6:
+                prizes.append('bonusX')
+            #   6 - Increase your rank
+            if self.game.show_tracking('rank') < 4:
+                prizes.append('rank')
+            #   7 - Points 250,000
+            prizes.append('points250k')
+            #   8 - Points 500,000
+            prizes.append('points500k')
+            #   9 - + 1 Million Bonus
+            prizes.append('points1Mil')
+            # 10 - Move your train - only add if polly isn't running
+            if not self.game.peril and self.game.move_your_train not in self.game.modes and self.mytValue == 'Enabled' and not self.game.train.mytFail:
+                prizes.append('moveYourTrain')
+            # 11 - 30 second ball save
+            if not self.game.trough.ball_save_active:
+                prizes.append('ballSave')
+            # 12 - franks n beans
+            if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == True and not self.game.show_tracking('farted'):
+                prizes.append('franksNBeans')
+            # so as of this point we have a prizes list to use
+            # and pick one of those at random
+            self.bountyPrize = random.choice(prizes)
+        # this section is for when tournament mode IS active
+        else:
+            # only do franks and beans once
+            if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == True and not self.game.show_tracking('farted'):
+                franksOption = 'franksNBeans'
+            else:
+                franksOption = 'points250k'
+            if self.game.show_tracking('rank') < 4:
+                rankOption = 'rank'
+            else:
+                rankOption = 'points250k'
+            prizes = ['points500k','bonusX','points1Mil',rankOption,'ballSave',franksOption]
+            # get the current player bounty index position
+            index = self.game.show_tracking('bountyIndex')
+            # set the bounty based on index
+            self.bountyPrize = prizes[index]
+            # increase the index
+            index += 1
+            # cap at 5
+            if index > 5:
+                index = 0
+            # set the new index
+            self.game.set_tracking('bountyIndex',index)
         print "SELECTED BOUNTY: " + self.bountyPrize
         # play some sounds/music
         self.game.sound.play(self.game.assets.sfx_bountyCollected)

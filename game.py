@@ -673,8 +673,6 @@ class CCGame(game.BasicGame):
 
     def game_ended(self):
         self.log("GAME ENDED")
-        # turn off the tournament flag
-        self.tournament = False
         # kill the moonlight flag
         self.moonlightFlag = False
         ## call the game_ended from proc.game.BasicGame
@@ -732,7 +730,7 @@ class CCGame(game.BasicGame):
                 self.last_call.intro()
 
         # otherwise if last call is enabled, run that
-        elif lastCall:
+        elif lastCall and not self.tournament:
             self.modes.add(self.match)
             self.match.run_match()
         # in any other case, run the high scores
@@ -740,6 +738,8 @@ class CCGame(game.BasicGame):
             self.run_highscore()
 
     def run_highscore(self):
+        # kill the tournament play here - after running past the match and such
+        self.tournament = False
         # Remove the base mode here now instead - so that it's still available for last call
         self.modes.remove(self.base)
 
