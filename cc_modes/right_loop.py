@@ -99,7 +99,7 @@ class RightLoop(ep.EP_Mode):
         if stage == 1:
             self.awardString = "GOOD SHOT"
             self.awardPoints = str(ep.format_score(125000))
-            self.game.bonus(125000,bonus=True)
+            self.game.score(125000,bonus=True)
             # load the animation
             anim = self.game.assets.dmd_shotBottles
             # calculate a wait
