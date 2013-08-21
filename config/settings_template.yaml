@@ -143,6 +143,9 @@ Gameplay (Feature):
     options: [1,5]
     increments: 1
     default: 2
+  'Tournament Mode':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
   'Moonlight Shots at Start':
     options: [1,6]
     increments: 1

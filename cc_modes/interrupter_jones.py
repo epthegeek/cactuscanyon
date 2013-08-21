@@ -621,3 +621,12 @@ class Interrupter(ep.EP_Mode):
         self.layer = combined
         self.delay(delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
         self.delay("Display", delay=myWait,handler=self.clear_layer)
+
+    def tournament_start_display(self):
+        textLine1 = ep.EP_TextLayer(64, 1, self.game.assets.font_7px_az, "center", opaque=True).set_text("TOURNAMENT MODE",color=ep.RED)
+        textLine2 = ep.EP_TextLayer(64, 11, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("PRESS START",blink_frames=8,color=ep.YELLOW)
+        textLine3 = ep.EP_TextLayer(64, 17, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("NOW FOR",color=ep.YELLOW)
+        textLine4 = ep.EP_TextLayer(64, 23, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("TOURNAMENT PLAY",color=ep.YELLOW)
+        self.tournamentTimerLayer = ep.EP_TextLayer(122,8,self.game.assets.font_17px_score, "right",opaque=False).set_text("9",color=ep.GREEN)
+        self.tournamentTimerLayer2 = ep.EP_TextLayer(6,8,self.game.assets.font_17px_score, "left",opaque=False).set_text("9",color=ep.GREEN)
+        self.layer = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,textLine4,self.tournamentTimerLayer,self.tournamentTimerLayer2])

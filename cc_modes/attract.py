@@ -48,6 +48,9 @@ class Attract(ep.EP_Mode):
 
     def mode_started(self):
 
+        # new timer thing for tournament start
+        self.tournamentTimer = 0
+
         # show the switch warning on the interrupter level if any switch hits the warning limit
         warn = self.game.user_settings['Machine (Standard)']['Inactive Switch Warning']
         bad_switches = []
@@ -228,6 +231,42 @@ class Attract(ep.EP_Mode):
         if self.flipperOK:
             self.flipper_action()
 
+    # holding flippers enables tournament mode
+    def sw_flipperLwL_active_for_2s(self,sw):
+        if self.game.switches.flipperLwR.is_active():
+            if self.tournamentTimer == 0 and self.game.user_settings['Gameplay (Feature)']['Tournament Mode'] == "Enabled":
+                print "LEFT FLIPPER ACTIVATING TOURNAMENT"
+                self.activate_tournament()
+
+    def sw_flipperLwR_active_for_2s(self,sw):
+        if self.game.switches.flipperLwL.is_active():
+            if self.tournamentTimer == 0 and self.game.user_settings['Gameplay (Feature)']['Tournament Mode'] == "Enabled":
+                print "RIGHT FLIPPER ACTIVATING TOURNAMENT"
+                self.activate_tournament()
+
+    def activate_tournament(self):
+        self.game.sound.play(self.game.assets.sfx_churchBell)
+        self.game.interrupter.tournament_start_display()
+        self.tournamentTimer = 9
+        self.delay("Tournament Timer", delay =1, handler=self.tournament_timer_tick)
+
+    def tournament_timer_tick(self):
+        self.tournamentTimer -= 1
+        if self.tournamentTimer <= 0:
+            print "Tournament Countdown Finished"
+            self.tournamentTimer = 0
+            self.game.interrupter.clear_layer()
+        else:
+            print "Tournament Countdown Continues - " + str(self.tournamentTimer)
+            if self.tournamentTimer <= 3:
+                myColor = ep.RED
+            else:
+                myColor = ep.GREEN
+            self.game.interrupter.tournamentTimerLayer.set_text(str(self.tournamentTimer),color=myColor)
+            self.game.interrupter.tournamentTimerLayer2.set_text(str(self.tournamentTimer),color=myColor)
+            self.delay("Tournament Timer", delay =1, handler=self.tournament_timer_tick)
+
+
     def flipper_action(self):
         if self.slowFlipper:
             self.flipperOK = False
@@ -309,6 +348,9 @@ class Attract(ep.EP_Mode):
                         force = True
                     else:
                         force = False
+                    # kickoff tournament
+                    if self.tournamentTimer > 0:
+                        self.game.tournament = True
                     self.game.start_game(forceMoonlight=force)
                 else:
                     print "BALL SEARCH"

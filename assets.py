@@ -112,7 +112,8 @@ class Assets():
         self.font_15px_az_outline.tracking = -1
         self.font_15px_az_outline.composite_op = "blacksrc"
 
-        self.font_17px_score = dmd.Font(self.dmd_path + "Font_12_CactusCanyon.dmd")
+        self.font_17px_score = ep.ColorFont(self.dmd_path + "Font_12_CactusCanyon.dmd")
+        self.font_17px_score.make_colors([ep.GREEN,ep.RED])
 
         #self.font_score_x12 = dmd.Font(self.dmd_path + "Font_Score_12_CactusCanyon.dmd")
         self.font_score_x12 = dmd.Font(self.dmd_path + "Font_12b_CactusCanyon.dmd")

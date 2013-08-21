@@ -130,7 +130,11 @@ class ScoreDisplay(ep.EP_Mode):
         # Common: Add the "BALL X ... FREE PLAY" footer.
         common = dmd.TextLayer(128/2, 32-6, self.font_common, "center")
 
-        credit_str = 'FREE PLAY'
+        if self.game.tournament:
+            credit_str = 'TOURNAMENT'
+        else:
+            credit_str = 'FREE PLAY'
+
         if self.credit_string_callback:
             credit_str = self.credit_string_callback()
         if self.game.ball == 0:

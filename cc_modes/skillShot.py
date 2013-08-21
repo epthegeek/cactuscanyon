@@ -259,9 +259,39 @@ class SkillShot(ep.EP_Mode):
             if item == "J":
                 # only allow extra ball to show up one time
                 prizes.remove(item)
-            # add the far right symbol to the left side so that it can be slid right
-            self.selectedPrizes = self.selectedPrizes[4:5] + self.selectedPrizes
             count += 1
+        # Tournament bit! uses the same 5 prizes - and 100,000 place holders if item is lit/unavailable
+        if self.game.tournament:
+            self.selectedPrizes = ""
+            # light bounty? (money bag) don't add if bounty is already lit
+            if not self.game.show_tracking('isBountyLit'):
+                self.selectedPrizes += "E"
+            else:
+                self.selectedPrizes += "X"
+            # bonus X don't include if bonus already 6x or more
+            if self.game.show_tracking('bonusX') < 6:
+                self.selectedPrizes += "L"
+            else:
+                self.selectedPrizes += "X"
+            # increae rank (star) don't include if already at max rank
+            if self.game.show_tracking('rank') < 4:
+                self.selectedPrizes += "K"
+            else:
+                self.selectedPrizes += "X"
+            # if multiball is ready, then don't include light lock
+            if self.game.show_tracking('mineStatus') != "READY":
+                self.selectedPrizes += "D"
+            else:
+                self.selectedPrizes += "X"
+            # light quick draw (gun w/ quick draw)
+            if self.game.show_tracking('quickdrawStatus',key=1) != "READY":
+                self.selectedPrizes += "H"
+            else:
+                self.selectedPrizes += "X"
+
+
+        # add the far right symbol to the left side so that it can be slid right
+        self.selectedPrizes = self.selectedPrizes[4:5] + self.selectedPrizes
 
         print "Selected Prizes: " + self.selectedPrizes
         # if we're not in the super skillshot, update the display right away
@@ -540,6 +570,13 @@ class SkillShot(ep.EP_Mode):
                 self.game.score(100000)
                 self.game.add_bonus(50000)
 
+        # new 100 grand award
+        elif self.selectedPrizes[5:] == "X":
+            awardStringTop = ep.format_score(100000)
+            awardStringBottom = "POINTS"
+            self.game.score(100000)
+
+        # the 1 million prize
         elif self.selectedPrizes[5:] == "N":
             self.game.score(1000000)
             self.game.add_bonus(2370)
@@ -693,15 +730,16 @@ class SkillShot(ep.EP_Mode):
         # put the scripted shift in place!
         self.layer = dmd.ScriptedLayer(128, 32, script)
 
+    # holding flipper starts super skill shot - unless in tournament mode
     def sw_flipperLwL_active_for_2s(self,sw):
         if self.game.switches.shooterLane.is_active():
-            if not self.super:
+            if not self.super and not self.game.tournament:
                 print "LEFT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
                 self.activate_super()
 
     def sw_flipperLwR_active_for_2s(self,sw):
         if self.game.switches.shooterLane.is_active():
-            if not self.super:
+            if not self.super and not self.game.tournament:
                 print "RIGHT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
                 self.activate_super()
 

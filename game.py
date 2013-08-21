@@ -106,6 +106,8 @@ class CCGame(game.BasicGame):
         self.players = []
         self.current_player_index = 0
         self.modes.modes = []
+        # reset sets tournament to false
+        self.tournament = False
 
         # software version number
         self.revision = "2013.08.16"
@@ -671,6 +673,8 @@ class CCGame(game.BasicGame):
 
     def game_ended(self):
         self.log("GAME ENDED")
+        # turn off the tournament flag
+        self.tournament = False
         # kill the moonlight flag
         self.moonlightFlag = False
         ## call the game_ended from proc.game.BasicGame
