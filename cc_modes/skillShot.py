@@ -256,8 +256,9 @@ class SkillShot(ep.EP_Mode):
         while count < 5:
             item = random.randrange(len(prizes))
             self.selectedPrizes += prizes[item]
-            if item == "J":
-                # only allow extra ball to show up one time
+            if item == "J" or item == "N":
+                # only allow extra ball to show up one time, by removing it from the array if it gets picked
+                # same for franks and beans
                 prizes.remove(item)
             count += 1
         # Tournament bit! uses the same 5 prizes - and 100,000 place holders if item is lit/unavailable
