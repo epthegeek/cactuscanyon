@@ -151,7 +151,7 @@ class Match(ep.EP_Mode):
             score = self.game.players[i].score
             digit = str(score)[-2:-1]
             # if replays are on, they may already be a winner
-            if self.game.replays and self.game.players[i].player_stats['replay_earned']:
+            if self.game.replays and self.game.players[i].player_stats['replay_earned'] and self.game.user_settings['Gameplay (Feature)']['Replay Award'] == 'Last Call':
                 print "Player " + str(i) + "earned last call in replay"
                 self.playerLayers[i].set_text("**",color=ep.GREEN)
                 self.lastCall.append(i)

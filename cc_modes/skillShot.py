@@ -256,7 +256,7 @@ class SkillShot(ep.EP_Mode):
         while count < 5:
             item = random.randrange(len(prizes))
             self.selectedPrizes += prizes[item]
-            if item == "J" or item == "N":
+            if item == "J" or item == "W":
                 # only allow extra ball to show up one time, by removing it from the array if it gets picked
                 # same for franks and beans
                 prizes.remove(item)
