@@ -272,34 +272,34 @@ class HighNoon(ep.EP_Mode):
             if step == 2:
                 # set up the badguy layer to expose
                 backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
-                textLayer1 = dmd.TextLayer(80, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("SHOOT")
+                textLayer1 = ep.EP_TextLayer(80, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("SHOOT",color=ep.RED)
                 textLayer1.composite_op = "blacksrc"
-                textLayer2 = dmd.TextLayer(80, 11, self.game.assets.font_9px_az, "center", opaque=False).set_text("20 BAD GUYS")
-                textLayer3 = dmd.TextLayer(80, 21, self.game.assets.font_9px_az, "center", opaque=False).set_text("TO WIN")
+                textLayer2 = ep.EP_TextLayer(80, 11, self.game.assets.font_9px_az, "center", opaque=False).set_text("20 BAD GUYS",color=ep.RED)
+                textLayer3 = ep.EP_TextLayer(80, 21, self.game.assets.font_9px_az, "center", opaque=False).set_text("TO WIN",color=ep.GREEN)
                 textLayer3.composite_op = "blacksrc"
                 self.badGuysLayer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
                 # then combine it with the wipe
                 composite = dmd.GroupedLayer(128,32,[self.badGuysLayer,animLayer])
             if step == 4:
                 # this is the next page to show - time given
-                textLayer1 = dmd.TextLayer(64, 1, self.game.assets.font_6px_az, "center", opaque=False).set_text("30 SECONDS +")
-                textLayer2 = dmd.TextLayer(64, 8, self.game.assets.font_6px_az, "center", opaque=False)
+                textLayer1 = ep.EP_TextLayer(64, 1, self.game.assets.font_6px_az, "center", opaque=False).set_text("30 SECONDS +",color=ep.YELLOW)
+                textLayer2 = ep.EP_TextLayer(64, 8, self.game.assets.font_6px_az, "center", opaque=False)
                 kills = self.game.show_tracking('kills')
-                textLayer2.set_text(str(kills) + " KILLS =")
+                textLayer2.set_text(str(kills) + " KILLS =",color=ep.ORANGE)
                 # set up the timer while we've got kills hand
                 self.myTimer = 30 + kills
                 # cap it at 60 seconds
                 if self.myTimer > 60:
                     self.myTimer = 60
-                textLayer3 = dmd.TextLayer(64, 15, self.game.assets.font_12px_az, "center", opaque=False)
-                textLayer3.set_text(str(self.myTimer) + " SECONDS")
+                textLayer3 = ep.EP_TextLayer(64, 15, self.game.assets.font_12px_az, "center", opaque=False)
+                textLayer3.set_text(str(self.myTimer) + " SECONDS",color=ep.GREEN)
                 self.timeLayer = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,textLayer3])
                 # then combine it with the wipe
                 composite = dmd.GroupedLayer(128,32,[self.timeLayer,animLayer])
             if step == 6:
                 backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_moneybagBorder.frames[0])
-                textLayer1 = dmd.TextLayer(80, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("JACKPOTS WORTH")
-                textLayer2 = dmd.TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(250000)))
+                textLayer1 = ep.EP_TextLayer(80, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("JACKPOTS WORTH",color=ep.ORANGE)
+                textLayer2 = ep.EP_TextLayer(80, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(250000)),color=ep.GREEN)
                 self.jackpotLayer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
                 # combine with burst
                 composite = dmd.GroupedLayer(128,32,[self.jackpotLayer,animLayer])
@@ -359,10 +359,22 @@ class HighNoon(ep.EP_Mode):
     def display(self):
         ## this is the main mode display, returns a built layer
         textString1 = str(self.myTimer)
-        textLayer1 = dmd.TextLayer(105, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString1)
+        if self.myTimer > 10:
+            timeColor = ep.GREEN
+        elif self.myTimer > 5:
+            timeColor = ep.YELLOW
+        else:
+            timeColor = ep.RED
+        textLayer1 = ep.EP_TextLayer(105, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString1,color=timeColor)
         remain = 20 - self.killed
+        if remain > 10:
+            remainColor = ep.RED
+        elif remain > 5:
+            remainColor = ep.YELLOW
+        else:
+            remainColor = ep.GREEN
         textString2 = str(remain)
-        textLayer2 = dmd.TextLayer(24, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString2)
+        textLayer2 = ep.EP_TextLayer(24, 4, self.game.assets.font_17px_score, "center", opaque=False).set_text(textString2,color=remainColor)
         display = dmd.GroupedLayer(128,32,[self.backdrop,textLayer1,textLayer2])
         return display
 
@@ -417,14 +429,14 @@ class HighNoon(ep.EP_Mode):
             animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_fireworks2)
             animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_fireworks3)
             animLayer.composite_op = "blacksrc"
-            textLayer1 = dmd.TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("VICTORY")
-            textLayer2 = dmd.TextLayer(64, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(20000000)))
+            textLayer1 = ep.EP_TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("VICTORY",color=ep.GREEN)
+            textLayer2 = ep.EP_TextLayer(64, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(20000000)),color=ep.ORANGE)
             combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
             self.layer = combined
         else:
             myWait = 3
-            textLayer1 = dmd.TextLayer(64,4,self.game.assets.font_10px_AZ, "center", opaque=True).set_text("THEY")
-            textLayer2 = dmd.TextLayer(64,18,self.game.assets.font_10px_AZ, "center", opaque=False).set_text("ESCAPED")
+            textLayer1 = ep.EP_TextLayer(64,4,self.game.assets.font_10px_AZ, "center", opaque=True).set_text("THEY",color=ep.RED)
+            textLayer2 = ep.EP_TextLayer(64,18,self.game.assets.font_10px_AZ, "center", opaque=False).set_text("ESCAPED",color=ep.RED)
             combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2])
             self.layer = combined
         #  turn the flippers off
@@ -488,10 +500,10 @@ class HighNoon(ep.EP_Mode):
         # total
         if step == 3:
             print "HIGH NOON TOTAL"
-            titleLine = dmd.TextLayer(64,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
+            titleLine = ep.EP_TextLayer(64,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("COMBINED TOTAL:",color=ep.BROWN)
             if self.hasWon:
                 self.grandTotal += 20000000
-            pointsLine = dmd.TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.grandTotal))
+            pointsLine = ep.EP_TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.grandTotal),color=ep.YELLOW)
             combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
             # play a sound
             duration = self.game.sound.play(self.game.assets.sfx_orchestraSpike)
@@ -512,15 +524,15 @@ class HighNoon(ep.EP_Mode):
             backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
             x_offset = 64
         # first just the title
-        titleLine = dmd.TextLayer(x_offset, 10, self.game.assets.font_12px_az, "center", opaque=False).set_text(title + "S")
+        titleLine = ep.EP_TextLayer(x_offset, 10, self.game.assets.font_12px_az, "center", opaque=False).set_text(title + "S",color=ep.ORANGE)
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine])
         script.append({"layer":combined,"seconds":0.5})
         myWait = 0.5
         # have to define pointsLine and TitleLine just in case it's zero
         titleString = "0 " + title + "S"
-        titleLine = dmd.TextLayer(x_offset,3,self.game.assets.font_7px_az, "center", opaque=False).set_text(titleString)
+        titleLine = ep.EP_TextLayer(x_offset,3,self.game.assets.font_7px_az, "center", opaque=False).set_text(titleString,color=ep.BROWN)
         points = 0
-        pointsLine = dmd.TextLayer(x_offset, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(points))
+        pointsLine = ep.EP_TextLayer(x_offset, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(points),color=ep.ORANGE)
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,pointsLine])
         script.append({"layer":combined,"seconds":frame_delay})
         # then generate frames for each level of title
@@ -530,8 +542,8 @@ class HighNoon(ep.EP_Mode):
                 titleString = "1 " + title
             else:
                 titleString = str(i) + " " + title + "S"
-            titleLine = dmd.TextLayer(x_offset,3,self.game.assets.font_7px_az, "center", opaque=False).set_text(titleString)
-            pointsLine = dmd.TextLayer(x_offset, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(points))
+            titleLine = ep.EP_TextLayer(x_offset,3,self.game.assets.font_7px_az, "center", opaque=False).set_text(titleString,color=ep.BROWN)
+            pointsLine = ep.EP_TextLayer(x_offset, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(points),color=ep.ORANGE)
             combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,pointsLine])
             script.append({"layer":combined,"seconds":frame_delay})
             myWait += frame_delay
@@ -557,7 +569,13 @@ class HighNoon(ep.EP_Mode):
         # set another sound to play after the anim
         myWait += animWait
         #self.delay(name="Display",delay=myWait,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
-        titleLine = dmd.TextLayer(x_offset,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("TOTAL:")
+        if step == 2:
+            preString = "JACKPOTS "
+        elif step == 3:
+            preString = "BAD GUYS "
+        else:
+            preString = ""
+        titleLine = ep.EP_TextLayer(x_offset,3,self.game.assets.font_7px_az, "center", opaque=False).set_text(preString + "TOTAL:",color=ep.BROWN)
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,pointsLine,animLayer])
         script.append({"layer":combined,"seconds":(animWait + 2)})
         # tack on that extra second
@@ -568,7 +586,7 @@ class HighNoon(ep.EP_Mode):
         self.grandTotal += points
         # and delay the comeback for step 2
         print "TALLY LOOP STEP " + str(step)
-        self.delay(name="Display",delay=myWait,handler=callback,param=step)
+        self.delay(name="Display",delay=myWait+1.5,handler=callback,param=step)
 
 
     # end high noon
