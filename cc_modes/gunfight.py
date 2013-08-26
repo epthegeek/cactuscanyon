@@ -54,6 +54,11 @@ class Gunfight(ep.EP_Mode):
         self.running = True
         self.win = False
         self.wipe_delays()
+        # check the balls save timer
+        if self.game.trough.ball_save_timer > 0:
+            self.save_timer = self.game.trough.ball_save_timer
+        else:
+            self.save_timer = 0
 
     # kill switches - they check win first, in case the ball glanced off a bad guy and then hit a target
     def sw_leftRampEnter_active(self,sw):
@@ -348,6 +353,9 @@ class Gunfight(ep.EP_Mode):
         self.starting = False
         print "DROP THE POST"
         self.posts[self.activeSide].disable()
+        # if there was ball save time left, put that back
+        if self.save_timer > 0:
+            self.game.trough.start_ball_save(self.save_timer,1)
         # set the shooting flag
         self.shooting = True
         # set a named timer for gunfight lost

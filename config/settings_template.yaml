@@ -172,6 +172,9 @@ Gameplay (Feature):
   'Ambush Awards Badge':
     options: ['Yes','No']
     default: 'No'
+  'Ambush Ball Saver':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
   'Ambush or Showdown First':
     options: ['Ambush','Showdown']
     default: 'Showdown'

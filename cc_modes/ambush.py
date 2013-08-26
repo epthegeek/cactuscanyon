@@ -61,6 +61,7 @@ class Ambush(ep.EP_Mode):
         self.LOSE = self.game.user_settings['Gameplay (Feature)']['Ambush Escapes to Lose']
         # how long the bad guys wait before disappearing
         self.SECONDS = self.game.user_settings['Gameplay (Feature)']['Ambush Target Timer']
+        self.ball_saver = self.game.user_settings['Gameplay (Feature)']['Ambush Ball Saver']
 
         # build the pause view
         script = []
@@ -363,6 +364,9 @@ class Ambush(ep.EP_Mode):
     def hit(self,target):
         # check to make sure the last guy hasn't already fled - there's a small delay while the last gunshot animation plays
         if self.misses < self.LOSE:
+            # fire the ball saver if enabled
+            if self.ball_saver:
+                self.game.trough.start_ball_save(1,3)
             # audits
             self.game.game_data['Feature']['Ambush Kills'] += 1
             self.cancel_delayed("Poller")
