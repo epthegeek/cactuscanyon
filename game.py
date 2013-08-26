@@ -110,7 +110,7 @@ class CCGame(game.BasicGame):
         self.tournament = False
 
         # software version number
-        self.revision = "2013.08.16"
+        self.revision = "2013.08.26"
 
         # basic game reset stuff, copied in
 
