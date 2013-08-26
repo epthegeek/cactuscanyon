@@ -728,6 +728,8 @@ class CCGame(game.BasicGame):
                 self.modes.add(self.last_call)
                 self.last_call.set_players(lastCallers)
                 self.last_call.intro()
+            else:
+                self.run_highscore()
 
         # otherwise if last call is enabled, run that
         elif lastCall and not self.tournament:
