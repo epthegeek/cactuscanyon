@@ -116,8 +116,8 @@ class Stampede(ep.EP_Mode):
         # start the music for stampede - delay this music start in case a quickdraw started at the same time
         self.delay(delay=1.5,handler=self.music_on,param=self.game.assets.music_stampede)
         # launch some more balls
-        if self.game.trough.num_balls_in_play < 3:
-            total = 3 - self.game.trough.num_balls_in_play
+        if self.game.trough.num_balls_in_play < 4:
+            total = 4 - self.game.trough.num_balls_in_play
             # turn on autoplunge
             self.game.trough.balls_to_autoplunge = total
             # launch whatever it takes to get to 3 balls
