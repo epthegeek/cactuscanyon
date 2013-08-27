@@ -142,6 +142,8 @@ class Bart(ep.EP_Mode):
 
         # play the intro
         duration = self.game.base.play_quote(self.introQuote,squelch=True)
+        # wiggle the figure
+        self.animate(2)
 
         # show the transition
         transition = ep.EP_Transition(self,self.game.score_display.layer,textLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)

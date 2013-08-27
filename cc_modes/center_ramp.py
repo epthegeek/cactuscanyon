@@ -208,8 +208,8 @@ class CenterRamp(ep.EP_Mode):
             value = start_value / 10
 
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-            textLine1 = dmd.TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("YOU")
-            textLine2 = dmd.TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LOST!")
+            textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.RED)
+            textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.RED)
             combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
             self.layer = combined
             self.game.sound.play(self.game.assets.sfx_glumRiffShort)
