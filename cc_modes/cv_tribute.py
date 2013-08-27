@@ -338,7 +338,7 @@ class CV_Tribute(ep.EP_Mode):
         # turn the timer back on
         self.time_ringmaster()
         # turn the display back on
-        self.display_main("idle")
+        self.display_main()
 
 
     def finish_ringmaster(self,step=1):

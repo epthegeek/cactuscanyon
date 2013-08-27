@@ -214,7 +214,7 @@ class Attract(ep.EP_Mode):
         # can be hurried to the next step by flipper buttons
         self.timer -= 1
         #print "ATTRACT TIMER: " + str(self.timer)
-        if (self.timer == 0):
+        if self.timer == 0:
             self.run_animation_loop()
         # come back to the timer - after cancelling any existing delay, just to be sure
         self.cancel_delayed('slideshow_timer')

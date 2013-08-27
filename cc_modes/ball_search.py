@@ -103,7 +103,7 @@ class BallSearch(ep.EP_Mode):
         delay = .150
         for coil in self.coils:
             self.delay(name='search_coils', event_type=None, delay=delay, handler=self.pop_coil, param=str(coil))
-            delay = delay + .150
+            delay += .150
         self.delay(name='start_special_handler_modes', event_type=None, delay=delay, handler=self.start_special_handler_modes)
 
         # home the mountain
@@ -115,7 +115,7 @@ class BallSearch(ep.EP_Mode):
         for coil in self.badGuyCoils:
             coil.disable()
 
-        if (completion_wait_time != 0):
+        if completion_wait_time != 0:
             pass
         else:
             self.cancel_delayed(name='ball_search_countdown')

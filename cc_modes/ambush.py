@@ -462,7 +462,7 @@ class Ambush(ep.EP_Mode):
 
     def tilted(self):
         if self.running:
-            self.wip_delays()
+            self.wipe_delays()
             self.update_tracking()
             self.update_badge()
             self.unload()
