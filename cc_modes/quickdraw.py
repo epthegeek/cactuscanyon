@@ -46,6 +46,7 @@ class Quickdraw(ep.EP_Mode):
         # make a script layer with the two
         self.pauseView = dmd.ScriptedLayer(128,32,script)
         self.pauseView.composite_op = "blacksrc"
+        self.eb_wins = self.game.user_settings['Gameplay (Feature)']['Quickdraw Wins for EB']
 
     def mode_started(self):
         self.paused = False
@@ -257,7 +258,7 @@ class Quickdraw(ep.EP_Mode):
         # play a quote
         duration = self.game.base.priority_quote(self.game.assets.quote_quickdrawWin)
         # if this is the 4th one , and we're not at the EB max, then light extra ball
-        if dudesDead == 4 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+        if dudesDead == self.eb_wins and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             # call the extra ball lit with a callback to the check bounty routine after
             # audit
             self.game.game_data['Feature']['EB Lit Quickdraws'] += 1

@@ -249,6 +249,10 @@ Gameplay (Feature):
   'Quickdraws Lit Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Quickdraw Wins for EB':
+    options: [2,8]
+    increments: 1
+    default: 4
   'Multiball Locks Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
