@@ -161,7 +161,7 @@ class RiverChase(ep.EP_Mode):
 
         # count the shot
         self.shotsSoFar += 1
-        if self.shotsSoFar == self.shotsToWin:
+        if self.shotsSoFar >= self.shotsToWin:
             # winner winner, chicken dinner
             self.polly_saved()
             # this has to be reset or the display abort screws with stuff later
