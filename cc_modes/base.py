@@ -1,5 +1,4 @@
 ##   ____           _                ____
-##   ____           _                ____
 ##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
 ## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
 ## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
@@ -439,14 +438,14 @@ class BaseGameMode(ep.EP_Mode):
             self.game.modes.add(self.game.cva)
             self.game.cva.intro(entry="inlane",onSide = side)
         # if guns are allowed, and showdown is ready do that
-       # CHANGING SHOWDOWN AND AMBUSH TO START IMMEDIATELY AFTER 4TH QD
+       # CHANGING SHOWDOWN TO START IMMEDIATELY AFTER 4TH QD
        # elif self.game.show_tracking('showdownStatus') == "READY":
        #     self.game.modes.add(self.game.showdown)
        #     self.game.showdown.start_showdown(side)
         # if guns are allowed and ambush is ready, do that
-       # elif self.game.show_tracking('ambushStatus') == "READY":
-       #     self.game.modes.add(self.game.ambush)
-       #     self.game.ambush.start_ambush(side)
+        elif self.game.show_tracking('ambushStatus') == "READY":
+            self.game.modes.add(self.game.ambush)
+            self.game.ambush.start_ambush(side)
         # if there's no showdown ready, gunfight is possible
         elif self.game.show_tracking('gunfightStatus') == "READY":
             self.game.modes.add(self.game.gunfight)
