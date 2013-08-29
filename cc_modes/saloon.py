@@ -251,7 +251,7 @@ class Saloon(ep.EP_Mode):
             if self.game.show_tracking('bonusX') < 6:
                 prizes.append('bonusX')
             #   6 - Increase your rank
-            if self.game.show_tracking('rank') < 3:
+            if self.game.show_tracking('rank') < 4 and not self.game.bart.bossFight:
                 prizes.append('rank')
             #   7 - Points 250,000
             prizes.append('points250k')
