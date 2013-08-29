@@ -77,7 +77,7 @@ class Trough(ep.EP_Mode):
         self.ball_save_multiple_saves = False
         self.ball_save_timer = 0
         self.ball_save_hold = 0
-
+        self.default_time = self.game.user_settings['Gameplay (Feature)']['Default Ball Save Time']
 
     def tilted(self):
         pass
@@ -348,9 +348,11 @@ class Trough(ep.EP_Mode):
         # turn off the light
         self.ball_save_lamp.disable()
 
-    def start_ball_save(self, num_balls_to_save=1, time=12, now=True, allow_multiple_saves=False):
+    def start_ball_save(self, num_balls_to_save=1, time=0, now=True, allow_multiple_saves=False):
+        if time == 0:
+            time = self.default_time
         """Activates the ball save logic."""
-        print "Starting Ball Save"
+        print "Starting Ball Save for " + str(time) + " seconds"
         self.allow_multiple_saves = allow_multiple_saves
         self.num_balls_to_save = num_balls_to_save
         if time > self.ball_save_timer: self.ball_save_timer = time

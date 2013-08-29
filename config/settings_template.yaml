@@ -284,6 +284,10 @@ Gameplay (Feature):
     options: [5,30]
     increments: 5
     default: 10
+  'Default Ball Save Time':
+    options: [5,30]
+    increments: 5
+    default: 10
   'Skillshot Boosts':
     options: ['Easy','Hard']
     default: 'Easy'
