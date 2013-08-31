@@ -44,13 +44,13 @@ class Assets():
         # _AZ = All numerals and upper case letters
         # _score = Numerals only
         self.font_5px_AZ = ep.ColorFont(self.dmd_path + "Font_3_CactusCanyon.dmd")
-        self.font_5px_AZ.make_colors([ep.GREY,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.YELLOW,ep.BROWN,ep.DARK_BROWN,ep.MAGENTA,ep.DARK_RED,ep.PURPLE,ep.RED])
+        self.font_5px_AZ.make_colors([ep.GREY,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.YELLOW,ep.BROWN,ep.DARK_BROWN,ep.MAGENTA,ep.DARK_RED,ep.PURPLE,ep.RED,ep.CYAN,ep.BLUE])
         self.font_5px_AZ_inverted = dmd.Font(self.dmd_path + "Font_3_CactusCanyon_inverted.dmd")
         self.font_5px_bold_AZ = ep.ColorFont(self.dmd_path + "Font_21_CactusCanyon.dmd")
         self.font_5px_bold_AZ.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.RED,ep.BROWN,ep.DARK_BROWN])
 
         self.font_5px_bold_AZ_outline = ep.ColorFont(self.dmd_path + "Font_21_mask_CactusCanyon.dmd")
-        self.font_5px_bold_AZ_outline.make_colors([ep.DARK_GREEN,ep.GREEN,ep.YELLOW,ep.RED,ep.CYAN,ep.MAGENTA])
+        self.font_5px_bold_AZ_outline.make_colors([ep.DARK_GREEN,ep.GREEN,ep.YELLOW,ep.RED,ep.CYAN,ep.MAGENTA,ep.BLUE])
         self.font_5px_bold_AZ_outline.tracking = -1
         self.font_5px_bold_AZ_outline.composite_op = "blacksrc"
 
