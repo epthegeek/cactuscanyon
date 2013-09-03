@@ -370,8 +370,8 @@ class Interrupter(ep.EP_Mode):
         if step == 3:
             imageLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_shootAgain.frames[7])
             self.game.base.play_quote(self.game.assets.quote_shootAgain)
-            textLine1 = dmd.TextLayer(80,5, self.game.assets.font_9px_az, "center", opaque= False).set_text("SHOOT")
-            textLine2 = dmd.TextLayer(80,15, self.game.assets.font_9px_az, "center", opaque= False).set_text("AGAIN")
+            textLine1 = ep.EP_TextLayer(80,5, self.game.assets.font_9px_az, "center", opaque= False).set_text("SHOOT",color=ep.GREEN)
+            textLine2 = ep.EP_TextLayer(80,15, self.game.assets.font_9px_az, "center", opaque= False).set_text("AGAIN",color=ep.GREEN)
             combined = dmd.GroupedLayer(128,32,[imageLayer,textLine1,textLine2])
             self.layer = combined
             self.delay(delay = 1.5,handler=self.clear_layer)
