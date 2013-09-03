@@ -142,15 +142,17 @@ class LampControl(ep.EP_Mode):
             if self.game.drunk_multiball.running:
                 self.update_bigFive('Drunk')
             # if the goldmine is running - update with those
-            if mineStatus == "RUNNING":
+            elif mineStatus == "RUNNING":
                 self.update_bigFive('Mine')
                 self.combos('Mine')
             # if stampede is running - do that next
-            if self.game.stampede.running:
+            elif self.game.stampede.running:
                 self.update_bigFive('Stampede')
             # if polly is running - could be ALSO running - update with that to overwrite jackpot updates
-            if self.game.peril:
+            elif self.game.peril:
                 self.update_bigFive('Polly')
+            else:
+                pass
         # otherwise do the basic update of the big five
         else:
             self.update_bigFive()
@@ -248,6 +250,8 @@ class LampControl(ep.EP_Mode):
         elif self.game.show_tracking('motherlodeLit') or self.game.gm_multiball.restartFlag:
             self.game.coils.mineFlasher.schedule(0x00010001)
             self.game.lamps.mineLock.schedule(0x0F0F0F0F)
+        else:
+            pass
 
         #
         #  ____        _
@@ -267,6 +271,8 @@ class LampControl(ep.EP_Mode):
         elif bartStatus == 'RUNNING' or bartStatus == 'LAST':
             if bionicStatus != "READY":
                 self.game.lamps.saloonArrow.enable()
+        else:
+            pass
 
         #  ____                                ____ _           _
         # | __ )  ___  __ _  ___ ___  _ __    / ___| |_   _ ___| |_ ___ _ __
