@@ -612,7 +612,7 @@ class MarshallMultiball(ep.EP_Mode):
             print "Setting marshallBest to " + str(self.pointTotal)
             self.game.set_tracking('marshallBest',self.pointTotal)
         # add the final total to the player's score
-        self.game.score(self.pointTotal)
+        self.game.score(self.pointTotal * 1000)
         # kill the running flag
         self.running = False
         self.game.stack_level(5,False)
