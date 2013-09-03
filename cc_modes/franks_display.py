@@ -33,6 +33,7 @@ class FranksDisplay(ep.EP_Mode):
     def mode_started(self):
         self.game.sound.play(self.game.assets.sfx_dinnerBell)
         self.game.modes.add(self.game.franks_switches)
+        self.game.set_tracking('farted',True)
         self.running = True
         self.time = 31
         # build the display
