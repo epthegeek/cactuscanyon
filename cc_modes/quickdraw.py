@@ -299,11 +299,12 @@ class Quickdraw(ep.EP_Mode):
         self.update_tracking()
 
         self.lamp_update()
-        # turn the main music back on - if a second level mode isn't running
         print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
-            # turn the level 1 flag off
+        # turn the level 1 flag off
         self.game.stack_level(0,False)
-        self.music_on(self.game.assets.music_mainTheme,mySlice=1)
+        # turn the main music back on - if a second level mode isn't running
+        if self.game.trough.num_balls_in_play > 0:
+            self.music_on(self.game.assets.music_mainTheme,mySlice=1)
         # full lamp update
         self.lamp_update()
         # remove the mode

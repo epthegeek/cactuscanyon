@@ -243,7 +243,8 @@ class Gunfight(ep.EP_Mode):
         self.game.stack_level(0,False)
         # turn the main game music back on if a second level mode isn't running
         # start up the main theme again if a higher level mode isn't running
-        self.music_on(self.game.assets.music_mainTheme,mySlice=1)
+        if self.game.trough.num_balls_in_play > 0:
+            self.music_on(self.game.assets.music_mainTheme,mySlice=1)
 
         self.lamp_update()
         self.cancel_delayed("Operational")

@@ -301,7 +301,8 @@ class Showdown(ep.EP_Mode):
 
         self.lamp_update()
         # start up the main theme again if a higher level mode isn't running
-        self.music_on(self.game.assets.music_mainTheme,mySlice=2)
+        if self.game.trough.num_balls_in_play > 0:
+            self.music_on(self.game.assets.music_mainTheme,mySlice=2)
         # turn off the level 1 flag
         self.game.stack_level(1,False)
         # setup a display frame

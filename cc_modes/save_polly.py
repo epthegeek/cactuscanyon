@@ -486,16 +486,16 @@ class SavePolly(ep.EP_Mode):
         # turn the level 1 stack flag back off
         self.game.stack_level(2,False)
         # check to see if stampede is ready - if we're not ending due to ball fail
-        if self.game.trough.num_balls_in_play != 0:
+        if self.game.trough.num_balls_in_play >= 0:
             self.game.base.check_stampede()
-        # unset the busy flag
-        self.game.base.busy = False
-        self.game.base.queued -= 1
-        # turn the music back on
-        self.music_on(self.game.assets.music_mainTheme,mySlice=3)
+            # turn the music back on - if we're not done
+            self.music_on(self.game.assets.music_mainTheme,mySlice=3)
         # remove the switch blocker
         self.game.switch_blocker('remove',self.myID)
         self.finishing_up = False
+        # unset the busy flag
+        self.game.base.busy = False
+        self.game.base.queued -= 1
         # unload the mode
         self.unload()
 
