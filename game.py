@@ -522,6 +522,8 @@ class CCGame(game.BasicGame):
         # reset the train just in case - type 2, should only back the train up if it's out
         self.train.stop_at = 0
         self.train.reset_toy(step=2)
+        # zero out the auto-launch just in case
+        self.trough.balls_to_autoplunge = 0
         # enable the ball search
         self.ball_search.enable()
         # turn the flippers on
