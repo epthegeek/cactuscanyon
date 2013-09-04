@@ -257,16 +257,22 @@ class Stampede(ep.EP_Mode):
         # unset the base busy flag
         self.game.base.busy = False
         self.game.base.queued -= 1
-        # clear the stack layer
-        self.game.stack_level(4,False)
+        # clear the stack layer - if goldmine isn't running. This covers balls draining while the gold mine starts. Rare, but possible.
+        if self.game.show_tracking('mineStatus') == "RUNNING":
+            print "Goldmine is running"
+            pass
+        else:
+            print "Gold mine is not running"
+            self.game.stack_level(4,False)
+            # turn the main music back on
+            self.music_on(self.game.assets.music_mainTheme,mySlice=5)
+            # remove the switch blocker
+            self.game.switch_blocker('remove',self.myID)
+            self.lamp_update()
+
         self.running = False
-        self.lamp_update()
         # badge light - stampede is 4
         self.game.badge.update(4)
-        # turn the main music back on
-        self.music_on(self.game.assets.music_mainTheme,mySlice=5)
-        # remove the switch blocker
-        self.game.switch_blocker('remove',self.myID)
         # unload the mode
         self.delay(delay=2,handler=self.unload)
 

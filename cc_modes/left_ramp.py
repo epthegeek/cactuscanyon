@@ -91,6 +91,7 @@ class LeftRamp(ep.EP_Mode):
         ## completed is CURRENTLY 4 - to reset the awards
         ## reset the leftRampStage
         stage = self.game.show_tracking('leftRampStage')
+        print "Ramp Stage " + str(stage)
         if stage == 1:
             self.awardString = "WHITE WATER"
             self.awardPoints = str(ep.format_score(125000))
