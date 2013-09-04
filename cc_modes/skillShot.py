@@ -253,14 +253,21 @@ class SkillShot(ep.EP_Mode):
         count = 0
         self.selectedPrizes = ""
         # run a loop to pick five prizes from the prizes list that was built
+        if len(prizes) >= 5:
+            remove = True
+        else:
+            remove = False
         while count < 5:
             item = random.randrange(len(prizes))
             self.selectedPrizes += prizes[item]
-            if prizes[item] == "J" or prizes[item] == "W":
-                # only allow extra ball to show up one time, by removing it from the array if it gets picked
-                # same for franks and beans
-                print "Found " + prizes[item] + " taking out of rotation"
+            if remove:
                 prizes.remove(prizes[item])
+            else:
+                if prizes[item] == "J" or prizes[item] == "W":
+                    # only allow extra ball to show up one time, by removing it from the array if it gets picked
+                    # same for franks and beans
+                    print "Found " + prizes[item] + " taking out of rotation"
+                    prizes.remove(prizes[item])
             count += 1
         # Tournament bit! uses the same 5 prizes - and 100,000 place holders if item is lit/unavailable
         if self.game.tournament:
