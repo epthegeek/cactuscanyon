@@ -67,7 +67,7 @@ class GoldMine(ep.EP_Mode):
             self.game.base.busy = True
             self.game.base.queued += 1
             self.end_multiball()
-        elif self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('mineStatus') == "RUNNING":
+        elif self.game.trough.num_balls_in_play == 1 and self.running:
             print "Down to one ball"
             if not self.restarted and not self.game.show_tracking("starStatus",0):
                 self.restartFlag = True
