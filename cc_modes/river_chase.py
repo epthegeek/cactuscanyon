@@ -161,11 +161,13 @@ class RiverChase(ep.EP_Mode):
 
         # count the shot
         self.shotsSoFar += 1
-        if self.shotsSoFar >= self.shotsToWin:
+        if self.shotsSoFar >= self.shotsToWin and not self.won:
             # winner winner, chicken dinner
             self.polly_saved()
             # this has to be reset or the display abort screws with stuff later
             self.shotsSoFar = 0
+        elif self.won:
+            pass
         else:
             # set the banner flag
             self.banner = True
@@ -294,7 +296,7 @@ class RiverChase(ep.EP_Mode):
             self.game.base.priority_quote(self.game.assets.quote_victory)
             # frame layer of the dead guy
             self.layer = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_ourHero.frames[0])
-            self.delay("Display",delay=0.5,handler=self.win_display,param=2)
+            self.delay("Win Display",delay=0.5,handler=self.win_display,param=2)
         if step == 2:
             # the pan up
             anim = self.game.assets.dmd_ourHero
@@ -305,7 +307,7 @@ class RiverChase(ep.EP_Mode):
             # turn it on
             self.layer = animLayer
             # loop back for the finish animation
-            self.delay("Display",delay=myWait,handler=self.win_display,param=3)
+            self.delay("Win Display",delay=myWait,handler=self.win_display,param=3)
         if step == 3:
             anim = self.game.assets.dmd_pollyVictory
             myWait = len(anim.frames) / 8.57
@@ -318,7 +320,7 @@ class RiverChase(ep.EP_Mode):
             animLayer.add_frame_listener(14,self.game.sound.play,param=self.game.assets.sfx_grinDing)
             # play animation
             self.layer = animLayer
-            self.delay("Display",delay=myWait,handler=self.win_display,param=4)
+            self.delay("Win Display",delay=myWait,handler=self.win_display,param=4)
         if step == 4:
             # saved banner goes here
             awardTextString = "POLLY SAVED"
