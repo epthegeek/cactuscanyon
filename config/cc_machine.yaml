@@ -202,6 +202,7 @@ PRSwitches:
         number: S46
         label: Beer Mug
         tags: Standard,4,6
+        debounce: False
     leftBonusLane:
         number: S47
         label: Left Bonus Lane
