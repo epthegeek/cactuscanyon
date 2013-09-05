@@ -108,6 +108,8 @@ class CCGame(game.BasicGame):
         self.modes.modes = []
         # reset sets tournament to false
         self.tournament = False
+        # new flag for controlling layover during showdown startup display - and maybe others
+        self.display_hold = False
 
         # software version number
         self.revision = "2013.09.05"
@@ -580,7 +582,7 @@ class CCGame(game.BasicGame):
     def ball_drained(self):
         print "BALL DRAINED ROUTINE RUNNING"
         # if we're not ejecting a new ball, then it really drained
-        if not self.trough.launch_in_progress:
+        if not self.trough.launch_in_progress and not self.display_hold:
             # New abort for Last Call
             if self.last_call in self.modes:
                 self.last_call.ball_drained()

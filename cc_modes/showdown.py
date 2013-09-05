@@ -43,7 +43,7 @@ class Showdown(ep.EP_Mode):
         self.racking = False
 
     def ball_drained(self):
-        if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
+        if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1 and not self.game.display_hold:
             # if we're not setting up a new rack, its ok to end.  Otherwise ignore
             if self.game.show_tracking('showdownStatus') == "RUNNING" and not self.racking:
                 print "Ending Showdown due to ball drain"
@@ -53,6 +53,8 @@ class Showdown(ep.EP_Mode):
 
     def start_showdown(self,side):
         print "S H O W D O W N"
+        # turn on the display hold to catch ball drain during intro
+        self.game.display_hold = True
         # audits
         self.game.game_data['Feature']['Showdown Started'] += 1
         # raise the post to hold the ball
@@ -102,6 +104,9 @@ class Showdown(ep.EP_Mode):
         self.delay("Taunt Timer",delay=1,handler=self.taunt_timer)
 
     def get_going(self):
+        # check if the ball drained during the intro and put one back if needed
+        if self.game.trough.num_balls_in_play == 0:
+            self.add_ball()
         myWait = self.game.base.play_quote(self.game.assets.quote_showdown)
         self.delay("Operational",delay=myWait,handler=self.game.base.play_quote,param=self.game.assets.quote_mobStart)
         # turn the GI back on
@@ -189,6 +194,7 @@ class Showdown(ep.EP_Mode):
     # reset the dudes
         self.showdown_reset_guys()
         self.racking = False
+        self.game.display_hold = False
 
     def showdown_reset_guys(self):
         # pop up all the targets
