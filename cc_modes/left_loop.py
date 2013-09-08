@@ -218,7 +218,7 @@ class LeftLoop(ep.EP_Mode):
 
     def tumbleweed_display(self,value,combo):
         banner = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_tumbleweedBanner.frames[0])
-        scoreLayer = dmd.TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6)
+        scoreLayer = ep.EP_TextLayer(64,22,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(ep.format_score(value)),blink_frames=6,color=ep.YELLOW)
         # load up the animation
         anim = self.game.assets.dmd_tumbleweedRight
         # start the full on animation

@@ -221,28 +221,37 @@ class Attract(ep.EP_Mode):
         self.delay('slideshow_timer', event_type=None, delay=1, handler=self.timer_countdown)
 
 
+
     def sw_flipperLwL_active(self,sw):
+        if self.game.switches.flipperLwR.is_active():
+            self.show_scores()
         # if going left - bump the index down
-        if self.flipperOK:
+        elif self.flipperOK:
             self.myIndex -= 2
             self.flipper_action()
+        else:
+            pass
 
     def sw_flipperLwR_active(self,sw):
-        if self.flipperOK:
-            self.flipper_action()
-
-    # holding flippers enables tournament mode
-    def sw_flipperLwL_active_for_2s(self,sw):
-        if self.game.switches.flipperLwR.is_active():
-            if self.tournamentTimer == 0 and self.game.user_settings['Gameplay (Feature)']['Tournament Mode'] == "Enabled":
-                print "LEFT FLIPPER ACTIVATING TOURNAMENT"
-                self.activate_tournament()
-
-    def sw_flipperLwR_active_for_2s(self,sw):
         if self.game.switches.flipperLwL.is_active():
-            if self.tournamentTimer == 0 and self.game.user_settings['Gameplay (Feature)']['Tournament Mode'] == "Enabled":
-                print "RIGHT FLIPPER ACTIVATING TOURNAMENT"
-                self.activate_tournament()
+            self.show_scores()
+        elif self.flipperOK:
+            self.flipper_action()
+        else:
+            pass
+
+    def show_scores(self):
+        self.cancel_delayed('slideshow_timer')
+        self.cancel_delayed('show scores')
+        self.layer = None
+        self.delay("show scores", delay=5,handler=self.run_animation_loop)
+        self.delay("show scores", delay=5,handler=self.timer_countdown)
+
+# holding flippers enables tournament mode
+    def sw_flipperLwL_active_for_2s(self,sw):
+        if self.tournamentTimer == 0 and self.game.user_settings['Gameplay (Feature)']['Tournament Mode'] == "Enabled":
+            print "LEFT FLIPPER ACTIVATING TOURNAMENT"
+            self.activate_tournament()
 
     def activate_tournament(self):
         self.game.sound.play(self.game.assets.sfx_churchBell)
@@ -344,7 +353,7 @@ class Attract(ep.EP_Mode):
                     # stop the GI lampshow just in case the flasher show is playing
                     self.game.GI_lampctrl.stop_show()
                     # Initialize game
-                    if self.game.switches.flipperLwL.is_active():
+                    if self.game.switches.flipperLwL.is_active() and self.tournamentTimer <= 0:
                         force = True
                     else:
                         force = False
