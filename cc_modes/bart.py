@@ -356,9 +356,9 @@ class Bart(ep.EP_Mode):
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         animLayer.composite_op = "blacksrc"
         textString = str(ep.format_score(25000))
-        pointsLayer = dmd.TextLayer(64, 1, self.game.assets.font_15px_az, "center", opaque=True).set_text(textString,blink_frames=4)
-        textLine = dmd.TextLayer(64,18,self.game.assets.font_5px_AZ, "center",opaque = False).set_text("BOSS SHOTS")
-        textLine2 = dmd.TextLayer(64,24,self.game.assets.font_5px_AZ,"center",opaque = False).set_text("VALUE INCREASED")
+        pointsLayer = ep.EP_TextLayer(64, 1, self.game.assets.font_15px_az, "center", opaque=True).set_text(textString,blink_frames=4,color=ep.RED)
+        textLine = ep.EP_TextLayer(64,18,self.game.assets.font_5px_AZ, "center",opaque = False).set_text("BOSS SHOTS",color=ep.GREEN)
+        textLine2 = ep.EP_TextLayer(64,24,self.game.assets.font_5px_AZ,"center",opaque = False).set_text("VALUE INCREASED",color=ep.GREEN)
         self.layer = dmd.GroupedLayer(128,32,[pointsLayer,textLine,textLine2,animLayer])
         myWait = len(anim.frames) / 10.0 + 1
         # play a shot sound
