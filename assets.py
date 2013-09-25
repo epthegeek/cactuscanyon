@@ -9,7 +9,7 @@
 ##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
 ##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
 ##
-## A P-ROC Project by Eric Priepke, Copyright 2012
+## A P-ROC Project by Eric Priepke, Copyright 2012-2013-2013
 ## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
 ## Original Cactus Canyon software by Matt Coriale
 ##
