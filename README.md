@@ -12,6 +12,13 @@ upon the PyProcGame framework by Adam Preble and Gerry Stellenberg,  it includes
 of borrowed ideas from the likes of Koen Heltzel, Jim Askey and others.  Without those
 guys, there'd be no this thing.  They're awesome. I'm a nub.
 
+I should be clear here, due to the misrepresentation of others as to what this means:
+By "heavily cribbed from the work of others" I mean that I studied other available projects
+to see how they did things, learned from them, and wrote my own.  I didn't just take
+someone's project and bolt my crap onto it.  Without them to learn from, I would be
+nowhere, and I appreciate that their works were available to study -- but I did my own
+work.
+
 It's not all here
 =================
 
