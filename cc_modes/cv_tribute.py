@@ -16,6 +16,7 @@
 ##
 ## The Cirqus Voltaire Tribute
 ##
+## CV TRIBUTE MODE IS NOT FINISHED AT THIS TIME
 
 from procgame import dmd,game
 import ep

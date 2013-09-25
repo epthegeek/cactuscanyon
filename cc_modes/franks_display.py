@@ -16,6 +16,11 @@
 #
 # This mode is just a display layer for the beans and franks
 #
+# Franks and Beans is a "Scoring Mode" like 2x playfield or others in the past.
+# It has no goal. It should have no goal.  There is no "Frank" -- franks is
+# another word for hot dogs.  This little goofy thing is a tribute to the movie
+# Blazing Saddles.
+#
 from procgame import game, dmd
 import ep
 
