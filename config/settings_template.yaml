@@ -207,6 +207,10 @@ Gameplay (Feature):
   'Franks N Beans':
     options: ['Enabled','Disabled']
     default: 'Enabled'
+  'Franks N Beans Time':
+    options: [15,60]
+    increments: 1
+    default: 30
   'Tribute Mode':
     options: ['Enabled','Disabled']
     default: 'Enabled'

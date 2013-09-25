@@ -35,7 +35,7 @@ class FranksDisplay(ep.EP_Mode):
         self.game.modes.add(self.game.franks_switches)
         self.game.set_tracking('farted',True)
         self.running = True
-        self.time = 31
+        self.time = self.game.user_settings['Gameplay (Feature)']['Franks n Beans Time'] + 1
         # build the display
         background = dmd.FrameLayer(opaque=True,frame=self.game.assets.dmd_franksBackdrop.frames[0])
         self.scoreLine = ep.EP_TextLayer(48,1,self.game.assets.font_7px_az, "center", opaque= False)
