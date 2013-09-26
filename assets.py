@@ -509,8 +509,8 @@ class Assets():
         self.sfx_cvHit = 'sfx_cvHit'
         self.game.sound.register_sound(self.sfx_cvHit, self.sfx_path + "cv_105-ringmaster-hit-1.wav")
         self.game.sound.register_sound(self.sfx_cvHit, self.sfx_path + "cv_106-ringmaster-hit-2.wav")
-        self.sfx_cvGears = 'sfx_cvGears'
-        self.game.sound.register_sound(self.sfx_cvGears, self.sfx_path + "cv_120-gear-noises.wav")
+        #self.sfx_cvGears = 'sfx_cvGears'
+        #self.game.sound.register_sound(self.sfx_cvGears, self.sfx_path + "cv_120-gear-noises.wav")
         self.sfx_cvGulp = 'sfx_cvGulp'
         self.game.sound.register_sound(self.sfx_cvGulp, self.sfx_path + "cv_1269-r-gulp.wav")
         self.sfx_cvMusicLead = 'sfx_cvMusicLead'
@@ -535,6 +535,12 @@ class Assets():
         self.game.sound.register_sound(self.sfx_cvFireworkLaunch, self.sfx_path + "cv_14-575-firework-launch.wav")
         self.sfx_cvFireworkBang = 'sfx_cvFireworkBang'
         self.game.sound.register_sound(self.sfx_cvFireworkBang, self.sfx_path + "cv_14-641-firework-bang.wav")
+        self.sfx_cvExplosion = 'sfx_cvExplosion'
+        self.game.sound.register_sound(self.sfx_cvExplosion, self.sfx_path + "cv_large_explosion.wav")
+        self.sfx_cvMonkey = 'sfx_cvMonkey'
+        self.game.sound.register_sound(self.sfx_cvMonkey, self.sfx_path + "cv_monkey.wav")
+        self.sfx_cvCrash = 'sfx_cvCrash'
+        self.game.sound.register_sound(self.sfx_cvCrash, self.sfx_path + "cv_14-218_clown_crash.wav")
 
         self.sfx_franks = 'sfx_franks'
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks01.wav")
@@ -1301,6 +1307,8 @@ class Assets():
         self.game.sound.register_music(self.music_taf, self.music_path + "taf_theme.wav")
         self.music_cv = 'music_cv'
         self.game.sound.register_music(self.music_cv, self.music_path + "cv_main_music.wav")
+        self.music_cvGear = 'music_cvGear'
+        self.game.sound.register_music(self.music_cvGear, self.music_path + "cv_120-gear-noises.wav")
         self.music_ringmaster = 'music_ringmaster'
         self.game.sound.register_music(self.music_ringmaster, self.music_path + "cv_ringmaster_music.wav")
         self.music_ss = 'music_ss'

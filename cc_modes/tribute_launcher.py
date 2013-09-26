@@ -31,7 +31,8 @@ class TributeLauncher(ep.EP_Mode):
         mm_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mmLogo.frames[0])
         cv_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cvLogo.frames[0])
         ss_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_ssLogo.frames[0])
-        self.slides = [mb_logo,taf_logo,mm_logo,cv_logo,ss_logo]
+#        self.slides = [mb_logo,taf_logo,mm_logo,cv_logo,ss_logo]
+        self.slides = [mb_logo,taf_logo,mm_logo,cv_logo]
         self.songs = [self.game.assets.music_mb,self.game.assets.music_taf,self.game.assets.music_mm,self.game.assets.music_cv,self.game.assets.music_ss]
         self.shot = 0
         self.selecting = False

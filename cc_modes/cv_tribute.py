@@ -184,10 +184,11 @@ class CV_Tribute(ep.EP_Mode):
             animLayer.opaque = True
             animLayer.composite_op = "blacksrc"
 
+            animLayer.add_frame_listener(31,self.stop_music)
+
             self.layer = animLayer
             self.game.sound.play(self.game.assets.sfx_cvStartRiff)
-            self.delay(delay = 0.5,handler=self.game.sound.play,param=self.game.assets.sfx_cvGears)
-            self.delay(delay = 1.83, handler=self.game.sound.play,param=self.game.assets.sfx_cvGears)
+            self.delay(delay = 0.5, handler=self.music_on,param=self.game.assets.music_cvGear)
             self.delay(delay = 0.5,handler=self.game.sound.play,param=self.game.assets.quote_cvIntroLead)
             self.delay(delay = 0.5,handler=self.game.bart.animate,param=2)
             self.delay(delay = 2.75, handler = self.intro,param=2)
@@ -270,6 +271,7 @@ class CV_Tribute(ep.EP_Mode):
         remain = self.hitsToWin - self.hitsSoFar
         if remain <= 0:
             # end this sucker
+            self.infoLine.set_text("}}}}",color=ep.MAGENTA)
             self.finish_ringmaster()
         elif remain == 1:
             self.infoLine.set_text("}}}{",color=ep.MAGENTA)
@@ -303,6 +305,7 @@ class CV_Tribute(ep.EP_Mode):
         self.modeTimer -= 1
         # if we get to zero, end the mode
         if self.modeTimer < 0:
+            self.game.sound.play(self.game.assets.sfx_cvMonkey)
             self.done()
         # otherwise update the timer layers and loop back
         else:
@@ -346,8 +349,8 @@ class CV_Tribute(ep.EP_Mode):
         if step == 1:
             # kill the delays
             self.wipe_delays()
-            self.game.score(1000000)
             self.stop_music()
+            self.game.score(1000000)
 
             anim = self.game.assets.dmd_cvFinale
             myWait = len(anim.frames) / 10.0
@@ -358,9 +361,12 @@ class CV_Tribute(ep.EP_Mode):
             animLayer.opaque = True
             # add sound keyframes for fireworks
             animLayer.add_frame_listener(8,self.game.sound.play,param=self.game.assets.sfx_cvDoubleBoom)
+            animLayer.add_frame_listener(10,self.music_on,param=self.game.assets.music_cvGear)
             animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_cvElephant)
+            animLayer.add_frame_listener(15,self.game.sound.play,param=self.game.assets.quote_cvEnd)
             animLayer.add_frame_listener(29,self.game.sound.play,param=self.game.assets.sfx_cvAcrobats)
             animLayer.add_frame_listener(52,self.game.sound.play,param=self.game.assets.sfx_cvSqueakyWheel)
+            animLayer.add_frame_listener(52,self.game.sound.play,param=self.game.assets.sfx_cvCrash)
             animLayer.add_frame_listener(59,self.game.sound.play,param=self.game.assets.sfx_cvClowns)
 
             self.layer = animLayer
@@ -400,7 +406,8 @@ class CV_Tribute(ep.EP_Mode):
             pointsLayer = ep.EP_TextLayer(64,17,self.game.assets.font_12px_az,"center",opaque=False).set_text(str(ep.format_score(1000000)),color=ep.MAGENTA)
             combined = dmd.GroupedLayer(128,32,[pointsLayer,animLayer2,animLayer])
             self.layer = combined
-            self.game.sound.play(self.game.assets.quote_cvEnd)
+            self.stop_music()
+            self.game.sound.play(self.game.assets.sfx_cvExplosion)
             self.delay(delay = myWait, handler=self.done)
 
     def done(self):
