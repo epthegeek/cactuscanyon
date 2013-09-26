@@ -39,15 +39,21 @@ class BadGuys(ep.EP_Mode):
                       self.game.coils.badGuyC1,
                       self.game.coils.badGuyC2,
                       self.game.coils.badGuyC3]
+        self.switches = [self.game.switches.badGuySW0,
+                         self.game.switches.badGuySW1,
+                         self.game.switches.badGuySW2,
+                         self.game.switches.badGuySW3]
         #self.coilStrings = ["Hold 0","Hold 1","Hold 2","Hold 3"]
         self.lamps = [self.game.lamps.badGuyL0,
                        self.game.lamps.badGuyL1,
                        self.game.lamps.badGuyL2,
                        self.game.lamps.badGuyL3]
+
         self.posts = [self.game.coils.leftGunFightPost,
                       self.game.coils.rightGunFightPost]
         self.shows = [self.game.assets.lamp_target0,self.game.assets.lamp_target1,self.game.assets.lamp_target2,self.game.assets.lamp_target3]
         self.pending = [False,False,False,False]
+        self.pending_delay = [None,None,None,None]
         self.on_time = self.game.user_settings['Machine (Standard)']['Drop Target Boost']
 
     def tilted(self):
@@ -170,16 +176,26 @@ class BadGuys(ep.EP_Mode):
             self.lamps[target].schedule(0x00FF00FF)
         # set a pending flag for this target
         self.pending[target] = True
+        # attempt a re-raise in one second
+        self.pending_delay[target] = self.delay(delay = 1,handler=self.check_pending,param=target)
         # If fakepinproc is true, activate the target right away
         if self.game.fakePinProc:
             self.target_activate(target)
 
-    def target_hold(self,target):
-        self.coils[target].patter(on_time=2,off_time=10)
+    def check_pending(self,target):
+        # if this target is still pending and the switch is on so the target is down
+        if self.pending[target] and self.switches[target].is_active():
+                print "PENDING CHECK RETRYING TARGET " + str(target)
+                self.target_up(target)
+        else:
+            print "TARGET " + str(target) + " PENDING CHECK PASSED"
+            pass
 
     def target_down(self,target,lamp= True):
         if self.game.high_noon.running:
             lamp = False
+        # remove the delay
+        self.cancel_delayed(self.pending_delay[target])
         self.game.set_tracking('badGuyUp',False,target)
         print "DEACTIVATING TARGET " + str(target)
         self.coils[target].disable()
@@ -189,6 +205,8 @@ class BadGuys(ep.EP_Mode):
     def target_activate(self,target):
         if self.game.show_tracking('badGuyUp',target) == False:
             print "ACTIVATING TARGET " + str(target)
+            # cancel the pending delay
+            self.cancel_delayed(self.pending_delay[target])
             # switch to new alternate patter for holding target
             # TRYING THIS IN A NEW METHOD
             self.coils[target].patter(on_time=2,off_time=10)
@@ -212,6 +230,7 @@ class BadGuys(ep.EP_Mode):
     def kill_power(self):
         # drop all the targets
         self.drop_targets()
+        self.wipe_delays()
         for coil in self.posts:
             coil.disable()
 
