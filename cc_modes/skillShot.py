@@ -238,7 +238,7 @@ class SkillShot(ep.EP_Mode):
             if self.game.show_tracking('marshallMultiballRun') != "True" and self.game.badge.marshallValue == 'Enabled':
                 prizes.append("U")
             # extra ball
-            if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            if not self.game.max_extra_balls_reached():
                 prizes.append("J")
             # move your train
             if self.mytValue == 'Enabled' and self.game.move_your_train not in self.game.modes and not self.game.train.mytFail:

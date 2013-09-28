@@ -236,7 +236,7 @@ class Saloon(ep.EP_Mode):
         if not self.game.tournament:
             # - Choices:
             #   1 - Light Extra Ball - include as long as we're not at maximum
-            if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            if not self.game.max_extra_balls_reached():
                 prizes.append('extraBall')
             #   2 - Light Gun Fight - include if not currently lit via dead bart
             if self.game.show_tracking('bartStatus') != "DEAD":

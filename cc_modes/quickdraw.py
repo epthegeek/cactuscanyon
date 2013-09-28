@@ -258,7 +258,7 @@ class Quickdraw(ep.EP_Mode):
         # play a quote
         duration = self.game.base.priority_quote(self.game.assets.quote_quickdrawWin)
         # if this is the 4th one , and we're not at the EB max, then light extra ball
-        if dudesDead == self.eb_wins and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+        if dudesDead == self.eb_wins and not self.game.max_extra_balls_reached():
             # call the extra ball lit with a callback to the check bounty routine after
             # audit
             self.game.game_data['Feature']['EB Lit Quickdraws'] += 1

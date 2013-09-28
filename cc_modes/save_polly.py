@@ -50,7 +50,7 @@ class SavePolly(ep.EP_Mode):
         self.cowLayer = dmd.AnimatedLayer(frames=anim.frames,hold=False,opaque=True,repeat=True,frame_time=6)
         self.pollyTitle = ep.EP_TextLayer(34, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL",color=ep.MAGENTA)
         # if we haven't maxed extra balls, the prize is an extra ball light - otherwise, 5 mil
-        if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+        if not self.game.max_extra_balls_reached():
             reward = "EXTRA BALL LIT"
         else:
             reward = str(ep.format_score(5000000))
@@ -411,7 +411,7 @@ class SavePolly(ep.EP_Mode):
         self.delay("Operational",delay=myWait,handler=self.give_award)
 
     def give_award(self):
-        if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+        if not self.game.max_extra_balls_reached():
             # light extra ball if not maxxed out
             self.game.mine.light_extra_ball()
         else:

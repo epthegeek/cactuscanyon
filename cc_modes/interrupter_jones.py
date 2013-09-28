@@ -615,6 +615,8 @@ class Interrupter(ep.EP_Mode):
         textLayer1 = ep.EP_TextLayer(58, 5, self.game.assets.font_10px_AZ, "center", opaque=True).set_text(textLine1,color=ep.BLUE)
         textLayer1.composite_op = "blacksrc"
         textLine2 = self.game.user_settings['Machine (Standard)']['Replay Award']
+        if textLine2.upper == "EXTRA BALL" and self.game.max_extra_balls_reached():
+            textLine2 = ep.format_score(500000)
         textLayer2 = dmd.TextLayer(58, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(textLine2.upper())
         textLayer2.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])

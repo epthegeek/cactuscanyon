@@ -560,7 +560,7 @@ class CCGame(game.BasicGame):
             # if we're under x minutes and on the last ball, enable BOZO BALL (tm), if configured to do so
             if self.user_settings['Gameplay (Feature)']['Bozo Ball'] == 'Enabled':
                 time = self.user_settings['Gameplay (Feature)']['Bozo Ball Minutes'] * 60
-                if self.current_player().game_time < time and self.ball == self.balls_per_game:
+                if self.current_player().game_time < time and self.ball == self.balls_per_game and not self.max_extra_balls_reached():
                     self.base.enable_bozo_ball()
             # update the lamps
             self.lamp_control.update()
@@ -915,16 +915,26 @@ class CCGame(game.BasicGame):
             if p.score >= self.user_settings['Machine (Standard)']['Replay Score']:
                 self.award_replay()
 
+    def max_extra_balls_reached(self):
+        if self.show_tracking('extraBallsTotal') >= self.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            return True
+        else:
+            return False
+
     def award_replay(self):
         print "Player earned REPLAY! PARTYTIME!"
         # fire the knocker
         self.interrupter.knock(1)
         self.interrupter.replay_award_display()
         if self.user_settings['Machine (Standard)']['Replay Award'] == 'Extra Ball':
-            # track the extra ball
-            self.increase_tracking('extraBallsTotal')
-            # give the extra ball
-            self.current_player().extra_balls += 1
+            # if we're at the max extra balls
+            if self.max_extra_balls_reached():
+                self.score(500000)
+            else:
+                # track the extra ball0
+                self.increase_tracking('extraBallsTotal')
+                # give the extra ball
+                self.current_player().extra_balls += 1
         else:
             # do something about last call here
             pass
