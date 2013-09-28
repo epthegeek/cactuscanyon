@@ -253,7 +253,7 @@ class SkillShot(ep.EP_Mode):
         count = 0
         self.selectedPrizes = ""
         # run a loop to pick five prizes from the prizes list that was built
-        if len(prizes) >= 5:
+        if len(prizes) >= (5 - count):
             remove = True
         else:
             remove = False

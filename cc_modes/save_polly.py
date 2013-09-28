@@ -411,6 +411,7 @@ class SavePolly(ep.EP_Mode):
         self.delay("Operational",delay=myWait,handler=self.give_award)
 
     def give_award(self):
+        print "Giving Polly Award"
         if not self.game.max_extra_balls_reached():
             # light extra ball if not maxxed out
             self.game.mine.light_extra_ball()

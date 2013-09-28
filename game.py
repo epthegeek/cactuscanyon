@@ -903,6 +903,7 @@ class CCGame(game.BasicGame):
 
     def score(self, points,bonus=False,percent=7):
         """Convenience method to add *points* to the current player."""
+        print "Adding " + str(points) + " to score"
         p = self.current_player()
         p.score += points
         if bonus:
@@ -917,8 +918,10 @@ class CCGame(game.BasicGame):
 
     def max_extra_balls_reached(self):
         if self.show_tracking('extraBallsTotal') >= self.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            print "max extra balls check: reached"
             return True
         else:
+            print "max extra balls check: not reached"
             return False
 
     def award_replay(self):
@@ -926,6 +929,7 @@ class CCGame(game.BasicGame):
         # fire the knocker
         self.interrupter.knock(1)
         self.interrupter.replay_award_display()
+        self.set_tracking('replay_earned',True)
         if self.user_settings['Machine (Standard)']['Replay Award'] == 'Extra Ball':
             # if we're at the max extra balls
             if self.max_extra_balls_reached():
@@ -938,7 +942,6 @@ class CCGame(game.BasicGame):
         else:
             # do something about last call here
             pass
-        self.set_tracking('replay_earned',True)
 
     ## bonus stuff
 
