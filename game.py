@@ -112,7 +112,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2013.09.26"
+        self.revision = "2013.09.28"
 
         # basic game reset stuff, copied in
 
@@ -914,6 +914,7 @@ class CCGame(game.BasicGame):
         # check replay if they're enabled and the player hasn't earned it yet
         if self.replays and not self.show_tracking('replay_earned'):
             if p.score >= self.user_settings['Machine (Standard)']['Replay Score']:
+                self.set_tracking('replay_earned',True)
                 self.award_replay()
 
     def max_extra_balls_reached(self):
@@ -929,7 +930,6 @@ class CCGame(game.BasicGame):
         # fire the knocker
         self.interrupter.knock(1)
         self.interrupter.replay_award_display()
-        self.set_tracking('replay_earned',True)
         if self.user_settings['Machine (Standard)']['Replay Award'] == 'Extra Ball':
             # if we're at the max extra balls
             if self.max_extra_balls_reached():
