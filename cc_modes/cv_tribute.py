@@ -81,6 +81,8 @@ class CV_Tribute(ep.EP_Mode):
         self.hypnoLayer.frame_time = 6
         self.hypnoLayer.repeat = True
         self.hypnoLayer.opaque = True
+        self.won = False
+        self.switchHit = False
 
         self.intro()
 
@@ -138,8 +140,14 @@ class CV_Tribute(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_saloonGate_active(self,sw):
-        self.hit_ringmaster()
+        if not self.switchHit:
+            self.switchHit = True
+            self.hit_ringmaster()
+            self.delay("Reset Switch", delay=2,handler=self.enable_switch)
         return game.SwitchStop
+
+    def enable_switch(self):
+        self.switchHit = False
 
     def sw_saloonBart_active(self,sw):
         return game.SwitchStop
@@ -269,7 +277,9 @@ class CV_Tribute(ep.EP_Mode):
         # register the hit
         self.hitsSoFar += 1
         remain = self.hitsToWin - self.hitsSoFar
-        if remain <= 0:
+        if remain <= 0 and not self.won:
+            # flag so this only happens once
+            self.won = True
             # end this sucker
             self.infoLine.set_text("}}}}",color=ep.MAGENTA)
             self.finish_ringmaster()
