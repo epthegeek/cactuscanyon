@@ -365,9 +365,10 @@ class LastCall(ep.EP_Mode):
         self.game.enable_flippers(enable=False)
         # play a cheer
         self.game.sound.play(self.game.assets.sfx_cheers)
-        # stop the music
+        # stop the music - ifwe're out of players
         #self.game.sound.play_music(self.game.assets.music_lastCallEnd,loops=1)
-        self.game.sound.fadeout_music(4000)
+        if not len(self.playerList) > 1:
+            self.game.sound.fadeout_music(4000)
         # new line to reset the volume after fade
         self.delay("Fade",delay=6,handler=self.game.interrupter.reset_volume)
 
@@ -410,8 +411,6 @@ class LastCall(ep.EP_Mode):
             if tilted:
                 # update the lamps
                 self.lamp_update()
-                # turn the music back on
-                self.music_on(self.game.assets.music_lastCall)
 
             # re-run set players with any players left after the first one
             self.set_players(self.playerList[1:])
