@@ -59,7 +59,13 @@ class Match(ep.EP_Mode):
         # generate the player digits and check for replay winners
         self.generate_digits()
         # generate the probability line
-        match_target = len(set(self.playerDigits)) * self.match_percent
+        # first, we set the multiplier
+        if len(set(self.playerDigits)) > len(self.game.players):
+            multiplier = len(self.game.players)
+        # which uses the length of the digit set if it's less than the number of players
+        else:
+            multiplier = len(set(self.playerDigits))
+        match_target = multiplier * self.match_percent
         print "Len Set = " + str(set(self.playerDigits))
         print "Match break point " + str(match_target)
         # generate a random number for comparison
