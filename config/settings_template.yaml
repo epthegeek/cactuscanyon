@@ -319,6 +319,9 @@ Gameplay (Feature):
   'Attract Mode Sounds':
     options: ['Yes','No']
     default: 'Yes'
+  'Attract Mode Wind Noise':
+    options: ['Yes','No']
+    default: 'Yes'
   'Attract Mode Music':
     options: ['Yes','No']
     default: 'Yes'

@@ -199,7 +199,8 @@ class Attract(ep.EP_Mode):
             self.layer = tumbleweedWipe
             sounds = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Sounds']
             if sounds:
-                self.game.sound.play(self.game.assets.sfx_tumbleWind)
+                if self.game.user_settings['Gameplay (Feature)']['Attract Mode Wind Noise'] == "Yes":
+                    self.game.sound.play(self.game.assets.sfx_tumbleWind)
         # two versions of the transition creation to cover if a direction is needed or not
         elif frameB['direction'] != False:
             self.transition = ep.EP_Transition(self,frameA['layer'],frameB['layer'],frameB['type'],frameB['direction'])
