@@ -43,7 +43,7 @@ class InitialEntryMode(game.Mode):
         if type(right_text) != list:
             right_text = [right_text]
         if type(left_text) != list:
-            left_text = [left_text]
+            left_text = [left_text,"MAX 12"]
 
         seconds_per_text = 1.5
 

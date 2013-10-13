@@ -148,7 +148,7 @@ class EntrySequenceManager(game.Mode):
 
     def create_highscore_entry_mode(self, left_text, right_text, entered_handler):
         """Subclasses can override this to supply their own entry handler."""
-        return InitialEntryMode(game=self.game, priority=self.priority+1, left_text=left_text, right_text=right_text, entered_handler=entered_handler,max_inits=3)
+        return InitialEntryMode(game=self.game, priority=self.priority+1, left_text=left_text, right_text=right_text, entered_handler=entered_handler,max_inits=12)
 
     def prompt_for_initials(self, left_text, right_text):
         self.highscore_entry = self.create_highscore_entry_mode(left_text, right_text, self.highscore_entered)
