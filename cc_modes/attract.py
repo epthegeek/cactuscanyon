@@ -38,6 +38,7 @@ class Attract(ep.EP_Mode):
         self.NOISY_DELAY = self.game.user_settings['Gameplay (Feature)']['Attract sound delay time']
         self.marshallValue = self.game.user_settings['Gameplay (Feature)']['Marshall Multiball']
         self.flipperOK = True
+        self.max_inits = self.game.user_settings['Machine (Standard)']['Max Initials Length']
         self.slowFlipper = self.game.user_settings['Machine (Standard)']['Slow Attract Pages'] == 'Enabled'
         self.customMessage = self.game.user_settings['Custom Message']['Custom Message'] == 'Enabled'
         if self.customMessage:
@@ -382,36 +383,70 @@ class Attract(ep.EP_Mode):
                 if category.game_data_key == 'ClassicHighScoreData':
                     ## score 1 is the grand champion, gets its own frame
                     if index == 0:
-                        title = ep.EP_TextLayer(128/2, 0, self.game.assets.font_9px_az, "center", opaque=False).set_text("GRAND CHAMPION",color=ep.YELLOW)
-                        initLine1 = ep.EP_TextLayer(64, 11, self.game.assets.font_9px_az, "center", opaque=False).set_text(score.inits,color=ep.GREEN)
-                        scoreLine1 = dmd.TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str)
-                        # combine the parts together
-                        combined = dmd.GroupedLayer(128, 32, [title, initLine1, scoreLine1])
-                        # add it to the stack
-                        self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
-                    ## for the second and 4th names set the title and score line 1
+                        # this is the new style for the 12 init max
+                        if self.max_inits == 12:
+                            title = ep.EP_TextLayer(128/2, 0, self.game.assets.font_9px_az, "center", opaque=False).set_text("GRAND CHAMPION",color=ep.YELLOW)
+                            initLine1 = ep.EP_TextLayer(64, 11, self.game.assets.font_9px_az, "center", opaque=False).set_text(score.inits,color=ep.GREEN)
+                            scoreLine1 = dmd.TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str)
+                            # combine the parts together
+                            combined = dmd.GroupedLayer(128, 32, [title, initLine1, scoreLine1])
+                            # add it to the stack
+                            self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+                        # This is the original style
+                        else:
+                            short_inits = score.inits[0:3]
+                            title = ep.EP_TextLayer(128/2, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("GRAND CHAMPION",color=ep.YELLOW)
+                            initLine1 = ep.EP_TextLayer(5, 13, self.game.assets.font_12px_az, "left", opaque=False).set_text(short_inits,color=ep.GREEN)
+                            scoreLine1 = dmd.TextLayer(124, 17, self.game.assets.font_7px_bold_az, "right", opaque=False).set_text(score_str)
+                            # combine the parts together
+                            combined = dmd.GroupedLayer(128, 32, [title, initLine1, scoreLine1])
+                            # add it to the stack
+                            self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+                    # this section handles scores 2 through 5 (high scores 1 through 4)
                     else:
-                    #if index == 1 or index == 3:
-                        title = ep.EP_TextLayer(128/2, 0, self.game.assets.font_9px_az, "center", opaque=False).set_text("HIGHEST SCORES",color=ep.ORANGE)
-                        initLine1 = ep.EP_TextLayer(64, 11, self.game.assets.font_9px_az, "center", opaque=False).set_text(score.inits,color=ep.YELLOW)
-                    #    scoreLine1 = ep.EP_TextLayer(124, 12, self.game.assets.font_7px_bold_az, "right", opaque=False).set_text(score_str,color=ep.BROWN)
-                    ## for the other 2 we ad the second line and make a new layer
-                    #if index == 2 or index == 4:
-                    #    initLine2 = ep.EP_TextLayer(5, 21, self.game.assets.font_7px_bold_az, "left", opaque=False).set_text(str(index) + ")" + score.inits,color=ep.BROWN)
-                        scoreLine2 = ep.EP_TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(str(index) + ") " + score_str,color=ep.BROWN)
-                        combined = dmd.GroupedLayer(128, 32, [title, initLine1, scoreLine2])
-                    #    # add it to the stack
-                        self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST})
+                        if self.max_inits == 12:
+                            title = ep.EP_TextLayer(128/2, 0, self.game.assets.font_9px_az, "center", opaque=False).set_text("HIGHEST SCORES",color=ep.ORANGE)
+                            initLine1 = ep.EP_TextLayer(64, 11, self.game.assets.font_9px_az, "center", opaque=False).set_text(score.inits,color=ep.YELLOW)
+                            scoreLine2 = ep.EP_TextLayer(64, 22, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(str(index) + ") " + score_str,color=ep.BROWN)
+                            combined = dmd.GroupedLayer(128, 32, [title, initLine1, scoreLine2])
+                            # add it to the stack
+                            self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST})
+                        # this is the original style
+                        else:
+                            short_inits = score.inits[0:3]
+                            ## for the second and 4th names set the title and score line 1
+                            if index == 1 or index == 3:
+                                title = ep.EP_TextLayer(128/2, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("HIGHEST SCORES",color=ep.ORANGE)
+                                initLine1 = ep.EP_TextLayer(5, 12, self.game.assets.font_7px_bold_az, "left", opaque=False).set_text(str(index) + ")" + short_inits,color=ep.BROWN)
+                                scoreLine1 = ep.EP_TextLayer(124, 12, self.game.assets.font_7px_bold_az, "right", opaque=False).set_text(score_str,color=ep.BROWN)
+                            ## for the other 2 we ad the second line and make a new layer
+                            if index == 2 or index == 4:
+                                initLine2 = ep.EP_TextLayer(5, 21, self.game.assets.font_7px_bold_az, "left", opaque=False).set_text(str(index) + ")" + short_inits,color=ep.BROWN)
+                                scoreLine2 = ep.EP_TextLayer(124, 21, self.game.assets.font_7px_bold_az, "right", opaque=False).set_text(score_str,color=ep.BROWN)
+                                combined = dmd.GroupedLayer(128, 32, [title, initLine1, scoreLine1, initLine2, scoreLine2])
+                                # add it to the stack
+                                self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH})
 
                 # generate screens for marshall multiball
                 if category.game_data_key == 'MarshallHighScoreData' and self.marshallValue == 'Enabled':
                     backdrop = dmd.FrameLayer(opaque=False,frame=self.game.assets.dmd_marshallHighScoreFrame.frames[0])
-                    initsLine = dmd.TextLayer(64,20,self.game.assets.font_5px_bold_AZ,"center",opaque=False).set_text(score.inits)
-                    scoreLine = ep.EP_TextLayer(64,25,self.game.assets.font_5px_AZ,"center",opaque=False).set_text(str(index+1) + ") " + score_str,color=ep.GREY)
-                    tagLine = ep.EP_TextLayer(64,13,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("OLD TIME PINBALL",color=ep.GREY)
-                    combined = dmd.GroupedLayer(128,32,[backdrop,initsLine,scoreLine,tagLine])
-                    # add it to the stack
-                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST})
+                    # this is the new longer style
+                    if self.max_inits == 12:
+                        initsLine = dmd.TextLayer(64,20,self.game.assets.font_5px_bold_AZ,"center",opaque=False).set_text(score.inits)
+                        scoreLine = ep.EP_TextLayer(64,25,self.game.assets.font_5px_AZ,"center",opaque=False).set_text(str(index+1) + ") " + score_str,color=ep.GREY)
+                        tagLine = ep.EP_TextLayer(64,13,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("OLD TIME PINBALL",color=ep.GREY)
+                        combined = dmd.GroupedLayer(128,32,[backdrop,initsLine,scoreLine,tagLine])
+                        # add it to the stack
+                        self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST})
+                    #this is the original style
+                    else:
+                        short_inits = score.inits[0:3]
+                        text = str(index+1) + ") " + short_inits + " " + score_str
+                        initsLine = dmd.TextLayer(64,22,self.game.assets.font_7px_az,"center",opaque=False).set_text(text)
+                        scoreLine = ep.EP_TextLayer(64,14,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("OLD TIME PINBALL",color=ep.GREY)
+                        combined = dmd.GroupedLayer(128,32,[backdrop,initsLine,scoreLine])
+                        # add it to the stack
+                        self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST})
 
                 # generate a screen for the quickdraw high score champ
                 if category.game_data_key == 'QuickdrawChampHighScoreData':

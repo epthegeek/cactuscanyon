@@ -84,6 +84,9 @@ Machine (Standard):
     options: [20,50]
     increments: 5
     default: 20
+  'Max Initials Length':
+    options: [3,12]
+    default: 3
   'Replays':
     options: ['Enabled','Disabled']
     default: 'Enabled'

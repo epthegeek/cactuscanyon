@@ -40,10 +40,11 @@ class InitialEntryMode(game.Mode):
         self.max_inits = max_inits
         self.extended = extended
 
+
         if type(right_text) != list:
             right_text = [right_text]
         if type(left_text) != list:
-            left_text = [left_text,"MAX 12"]
+            left_text = [left_text,"MAX " + str(self.max_inits)]
 
         seconds_per_text = 1.5
 

@@ -124,36 +124,36 @@ SwitchHits:
   73 SALOON GATE: 0
   75 BART TOY: 0
 ClassicHighScoreData:
-- {date: 'Sun Oct  3 17:38:46 2010', inits: BIG BAD BART, score: 500000}
-- {date: 'Sun Oct  3 17:44:49 2010', inits: THE SHERIFF, score: 400000}
-- {date: 'Sun Oct  3 16:22:47 2010', inits: MISS POLLY, score: 300000}
-- {date: 'Sun Oct  3 15:04:27 2010', inits: BANDELERO, score: 200000}
-- {date: 'Sun Oct  3 22:05:01 2010', inits: UNDERTAKER, score: 100000}
+- {date: 'Sun Oct  3 17:38:46 2010', inits: OIC, score: 500000}
+- {date: 'Sun Oct  3 17:44:49 2010', inits: LIZ, score: 400000}
+- {date: 'Sun Oct  3 16:22:47 2010', inits: ABI, score: 300000}
+- {date: 'Sun Oct  3 15:04:27 2010', inits: EMM, score: 200000}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 100000}
 MarshallHighScoreData:
-- {date: 'Sun Oct  3 17:38:46 2010', inits: BLUES BROS, score: 500}
-- {date: 'Sun Oct  3 17:44:49 2010', inits: MR EASTWOOD, score: 400}
-- {date: 'Sun Oct  3 16:22:47 2010', inits: THAT ONE GUY, score: 300}
+- {date: 'Sun Oct  3 17:38:46 2010', inits: OIC, score: 500}
+- {date: 'Sun Oct  3 17:44:49 2010', inits: LIZ, score: 400}
+- {date: 'Sun Oct  3 16:22:47 2010', inits: ABI, score: 300}
 RiverBankHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: UNUSED, score: 2}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
 QuickdrawChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: KING TERRY, score: 2}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: LIZ, score: 2}
 ComboChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: BANGERJAY, score: 2}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: ABI, score: 2}
 ShowdownChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: CENTERFLANK, score: 2}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: EMM, score: 2}
 AmbushChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: EPTHEGEEK, score: 2}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 2}
 TownDrunkHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: TRILOGY, score: 2}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: LIZ, score: 2}
 TumbleweedChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: THE KORN, score: 2}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: ABI, score: 2}
 UndertakerHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: GRIM REAPER, score: 2}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: EMM, score: 2}
 BountyHunterHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: TERMINATOR, score: 3}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 3}
 MotherlodeChampHighScoreData:
-- {date: 'Sun Oct  3 22:05:01 2010', inits: GOLD DIGGER, score: 250000}
+- {date: 'Sun Oct  3 22:05:01 2010', inits: LIZ, score: 250000}
 LastCallHighScoreData:
-- {date: 'Sun Oct  3 17:38:46 2010', inits: JACOB RULES, score: 50000}
+- {date: 'Sun Oct  3 17:38:46 2010', inits: ABI, score: 50000}
 MoonlightHighScoreData:
-- {date: 'Sun Oct  3 17:38:46 2010', inits: WOLFMAN, score: 50000}
+- {date: 'Sun Oct  3 17:38:46 2010', inits: EMM, score: 50000}
