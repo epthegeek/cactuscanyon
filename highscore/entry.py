@@ -88,7 +88,7 @@ class InitialEntryMode(game.Mode):
             self.letters += [chr(ord('A')+idx)]
         self.letters += [' ', '.']
         if self.extended:
-            self.letters += ['(',')','@','*','&','<','>','=','^','/','-','+','!','$','"',"'"]
+            self.letters += ['0','1','2','3','4','5','6','7','8','9','(',')','@','*','&','<','>','=','^','/','-','+','!','$','"',"'"]
         self.letters += [self.char_back, self.char_done]
         self.current_letter_index = 0
         self.inits = self.letters[self.current_letter_index]
