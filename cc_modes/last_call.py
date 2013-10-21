@@ -30,20 +30,19 @@ class LastCall(ep.EP_Mode):
     def __init__(self,game,priority):
         super(LastCall, self).__init__(game,priority)
         self.myID = "Last Call"
-        self.starting = False
-        self.ending = False
         self.backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_simpleBorder.frames[0])
-        self.startValue = 200000
-        self.showDub = False
 
     def mode_started(self):
+        self.starting = False
+        self.ending = False
+        self.startValue = 200000
+        self.showDub = False
         # reload the basemodes for switch help
         self.game.base.load_modes()
         # kill any extra balls
         self.game.set_tracking('extraBallsPending',0)
         # kill the bozo ball if it was on
         self.game.set_tracking('bozoBall', False)
-        self.shotValue = self.startValue
         self.running = True
         # set up the info layer
         infoLine1 = ep.EP_TextLayer(128/2,16,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("BEER MUG RAISES JACKPOTS",color=ep.YELLOW)
@@ -304,6 +303,7 @@ class LastCall(ep.EP_Mode):
     def start(self):
         # set the starting flag for the double flipper start
         self.starting = True
+        self.shotValue = self.startValue
         # start the actual player
         playerNum = self.playerList[0] + 1
         textLayer1 = ep.EP_TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False)
