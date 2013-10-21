@@ -50,6 +50,9 @@ class Showdown(ep.EP_Mode):
                 self.game.base.busy = True
                 self.game.base.queued += 1
                 self.end_showdown()
+        # if we lose balls during the intro - launch another
+        if self.game.display_hold:
+            self.game.trough.launch_balls(1)
 
     def start_showdown(self,side):
         print "S H O W D O W N"

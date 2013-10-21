@@ -592,18 +592,29 @@ class CCGame(game.BasicGame):
                 return
             # Tell every mode a ball has drained by calling the ball_drained function if it exists
             if self.trough.num_balls_in_play == 0:
+                # if drunk multiball is running and was not down to one - abort
+                if self.drunk_multiball.running and not self.drunk_multiball.downToOne:
+                    print "Drunk multiball double drain catch"
+                    self.drunk_multiball.ball_drained()
+                    return
                 # kill all the display layers
                 for mode in self.ep_modes:
                     if getattr(mode, "clear_layer", None):
                         mode.clear_layer()
-                print "BALL DRAINED IS KILLING THE MUSIC"
-                self.sound.stop_music()
+                # this is a  duplication - base handles it?
+                #print "BALL DRAINED IS KILLING THE MUSIC"
+                #self.sound.stop_music()
 
             ## and tell all the modes the ball drained no matter what
             modequeue_copy = list(self.modes)
             for mode in modequeue_copy:
                 if getattr(mode, "ball_drained", None):
                     mode.ball_drained()
+
+        # showdown startup check
+        if self.showdown.running and self.display_hold:
+            self.showdown.ball_drained()
+
 
     def ball_ended(self):
         """Called by end_ball(), which is itself called by base.trough_changed."""

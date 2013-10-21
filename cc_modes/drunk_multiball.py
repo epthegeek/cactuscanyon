@@ -47,15 +47,23 @@ class DrunkMultiball(ep.EP_Mode):
         self.game.switch_blocker('add',self.myID)
         # reset the jackpots
         self.active = []
+        self.downToOne = False
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
         if self.game.trough.num_balls_in_play == 1 and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
+            self.downToOne = True
             self.end_save()
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('drunkMultiballStatus') == "RUNNING":
-            self.game.base.busy = True
-            self.game.base.queued += 1
-            self.end_drunk()
+            # if we made it down to one ball before now, end normally - but if not, kick out a new ball
+            if not self.downToOne:
+                self.game.trough.launch_balls(1)
+                self.downToOne = True
+                self.end_save()
+            else:
+                self.game.base.busy = True
+                self.game.base.queued += 1
+                self.end_drunk()
 
     ### switches
 

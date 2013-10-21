@@ -113,6 +113,9 @@ class BaseGameMode(ep.EP_Mode):
                 print "HIGH NOON IS RUNNING - HOLD IT (or boss bart)"
                 # do nothing, and bail
                 return
+            # if showdown is running and display hold is on - don't mess with things
+            if self.game.showdown.running and self.game.display_hold:
+                return
             # turn off all the lights
             for lamp in self.game.lamps.items_tagged('Playfield'):
                 lamp.disable()
