@@ -929,7 +929,10 @@ class CCGame(game.BasicGame):
                 self.award_replay()
 
     def max_extra_balls_reached(self):
-        if self.show_tracking('extraBallsTotal') >= self.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+        # used to check if player has maxed out extra balls
+        # total is earned and pending extra balls
+        total = self.show_tracking('extraBallsTotal') + self.show_tracking('extraBallsPending')
+        if total >= self.user_settings['Machine (Standard)']['Maximum Extra Balls']:
             print "max extra balls check: reached"
             return True
         else:
@@ -1291,11 +1294,3 @@ class CCGame(game.BasicGame):
     def save_game_data(self):
         super(CCGame, self).save_game_data(user_game_data_path)
 
-    def extra_ball_maxed(self):
-        # used to check if player has maxed out extra balls
-        # total is earned and pending extra balls
-        total = self.show_tracking('extraBallsTotal') + self.show_tracking('extraBallsPending')
-        if total >= self.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-            return True
-        else:
-            return False

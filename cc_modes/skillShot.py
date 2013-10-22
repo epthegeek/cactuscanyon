@@ -199,7 +199,7 @@ class SkillShot(ep.EP_Mode):
                 prizes.append("I")
 
             # extra ball (ball) don't include on ball 1 or if max extra balls is already hit
-            if self.game.ball != 1 and self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+            if self.game.ball != 1 and not self.game.max_extra_balls_reached():
                 prizes.append("J")
 
             # increae rank (star) don't include if already at max rank
@@ -322,7 +322,7 @@ class SkillShot(ep.EP_Mode):
         if self.game.badge.marshallValue == 'Enabled':
             self.choices.append("U")
         # extra ball
-        if self.game.show_tracking('extraBallsTotal') < self.game.user_settings['Machine (Standard)']['Maximum Extra Balls']:
+        if not self.game.max_extra_balls_reached():
             self.choices.append("J")
         # cva
         self.choices.append("T")
