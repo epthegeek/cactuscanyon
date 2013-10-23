@@ -270,8 +270,8 @@ class Interrupter(ep.EP_Mode):
             self.page = 1
         # then show some junk based on what page we're on
         if self.page == 1:
-            textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_12px_az, "center", opaque=True).set_text("CURRENT")
-            textLine2 = dmd.TextLayer(128/2, 16, self.game.assets.font_12px_az, "center", opaque=False).set_text("STATUS")
+            textLine1 = ep.EP_TextLayer(128/2, 1, self.game.assets.font_12px_az, "center", opaque=True).set_text("CURRENT",color=ep.YELLOW)
+            textLine2 = ep.EP_TextLayer(128/2, 16, self.game.assets.font_12px_az, "center", opaque=False).set_text("STATUS",color=ep.YELLOW)
             textLine2.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
             self.layer = combined
@@ -282,7 +282,7 @@ class Interrupter(ep.EP_Mode):
             bonus = self.game.show_tracking('bonus')
             textString3 = "BONUS: " + ep.format_score(bonus)
             # default three line display
-            self.tld("BONUS INFO:", textString2, textString3)
+            self.tld("BONUS INFO:", textString2, textString3, color2=ep.ORANGE,color3=ep.ORANGE)
         if self.page == 3:
         # Multiball/Mine information
             locked = self.game.show_tracking('ballsLocked')
@@ -293,7 +293,7 @@ class Interrupter(ep.EP_Mode):
             shots = self.game.show_tracking('mineShotsTotal')
             textString3 = str(shots) + " MINE SHOTS TOTAL"
             # stock three line display
-            self.tld("MINE STATUS:", textString2, textString3)
+            self.tld("MINE STATUS:", textString2, textString3, color2=ep.ORANGE,color3=ep.ORANGE)
         # drunk multiball status
         if self.page == 4:
             # hits left to light drunk multiball
@@ -305,7 +305,7 @@ class Interrupter(ep.EP_Mode):
                 textString2 = str(left) + " MORE HITS"
                 textString3 = "FOR MULTIBALL"
                 # default three line display
-            self.tld("BEER MUG:",textString2,textString3)
+            self.tld("BEER MUG:",textString2,textString3, color2=ep.ORANGE,color3=ep.ORANGE)
             # circle back and clear the layer
         # combos information
         if self.page == 5:
@@ -320,7 +320,7 @@ class Interrupter(ep.EP_Mode):
             else:
                 textString2 = str(have) + " COMBOS"
                 textString3 = str(left) + " MORE FOR BADGE"
-            self.tld("COMBO SHOTS:",textString2,textString3)
+            self.tld("COMBO SHOTS:",textString2,textString3, color2=ep.ORANGE,color3=ep.ORANGE)
         # Kills so far
         if self.page == 6:
             # quickdraws so far
@@ -329,17 +329,17 @@ class Interrupter(ep.EP_Mode):
             gunfightKills = self.game.show_tracking('gunfightsWon')
             textString2 = "QUICKDRAWS: " + str(quickdrawKills)
             textString3 = "GUNFIGHTS: " + str(gunfightKills)
-            self.tld("GUN BATTLE WINS:",textString2,textString3)
+            self.tld("GUN BATTLE WINS:",textString2,textString3, color2=ep.ORANGE,color3=ep.ORANGE)
         # replay score
         if self.page == 7:
             self.layer = self.replay_score_page()
 
         self.delay(name="Display",delay=3,handler=self.status)
 
-    def tld(self,textString1,textString2,textString3):
-        textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString1)
-        textLine2 = dmd.TextLayer(128/2, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2)
-        textLine3 = dmd.TextLayer(128/2, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString3)
+    def tld(self,textString1,textString2,textString3,color1=ep.WHITE,color2=ep.WHITE,color3=ep.WHITE):
+        textLine1 = ep.EP_TextLayer(128/2, 1, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString1,color=color1)
+        textLine2 = ep.EP_TextLayer(128/2, 11, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=color2)
+        textLine3 = ep.EP_TextLayer(128/2, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString3,color=color3)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3])
         self.layer = combined
 
