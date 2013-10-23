@@ -1265,8 +1265,8 @@ class Assets():
         self.game.sound.register_sound(self.music_cvaIntro, self.music_path + "bangarang-intro.wav")
         self.music_cvaLoop = 'music_cvaLoop'
         self.game.sound.register_music(self.music_cvaLoop, self.music_path + "bangarang-loop.wav")
-        self.sfx_cvaLoop = 'sfx_cvaLoop'
-        self.game.sound.register_sound(self.sfx_cvaLoop, self.music_path + "bangarang-loop.wav")
+        #self.sfx_cvaLoop = 'sfx_cvaLoop'
+        #self.game.sound.register_sound(self.sfx_cvaLoop, self.music_path + "bangarang-loop.wav")
 
         self.music_lastCallIntro = 'music_lastCallIntro'
         self.game.sound.register_sound(self.music_lastCallIntro, self.music_path + "last_call_lead_in.wav")
