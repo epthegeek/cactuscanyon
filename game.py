@@ -112,7 +112,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2013.10.14"
+        self.revision = "2013.10.23"
 
         # basic game reset stuff, copied in
 
@@ -725,6 +725,21 @@ class CCGame(game.BasicGame):
 
         # save the game data
         self.save_game_data()
+
+        # reset a bunch of tracking so it can't go off in last call
+        for player in self.players:
+            player.player_stats['extraBallsPending'] = 0
+            player.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
+            player.player_stats['showdownStatus'] = "OPEN"
+            player.player_stats['ambushStatus'] = "OVER"
+            player.self.player_stats['mineStatus'] = "OPEN"
+            player.player_stats['gunfightStatus'] = "OPEN"
+            player.player_stats['bartStatus'] = "OPEN"
+            player.self.player_stats['bionicStatus'] = "OPEN"
+            player.player_stats['isBountyLit'] = False
+            player.player_stats['drunkMultiballStatus'] = "OPEN"
+            player.player_stats['bozoBall'] = False
+
 
         # divert to the match before high score entry - unless last call is disabled
         lastCall = 'Enabled' == self.user_settings['Gameplay (Feature)']['Last Call Mode']
