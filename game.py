@@ -732,10 +732,10 @@ class CCGame(game.BasicGame):
             player.player_stats['quickdrawStatus'] = ["OPEN","OPEN"]
             player.player_stats['showdownStatus'] = "OPEN"
             player.player_stats['ambushStatus'] = "OVER"
-            player.self.player_stats['mineStatus'] = "OPEN"
+            player.player_stats['mineStatus'] = "OPEN"
             player.player_stats['gunfightStatus'] = "OPEN"
             player.player_stats['bartStatus'] = "OPEN"
-            player.self.player_stats['bionicStatus'] = "OPEN"
+            player.player_stats['bionicStatus'] = "OPEN"
             player.player_stats['isBountyLit'] = False
             player.player_stats['drunkMultiballStatus'] = "OPEN"
             player.player_stats['bozoBall'] = False
