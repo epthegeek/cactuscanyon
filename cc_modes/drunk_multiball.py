@@ -367,7 +367,7 @@ class DrunkMultiball(ep.EP_Mode):
         #self.stop_music(slice=4)
         # restat the main music - if balls still in play
         #if self.game.trough.num_balls_in_play > 0:
-        self.music_on(self.game.assets.music_mainTheme)
+        self.music_on(self.game.assets.music_mainTheme,mySlice=4)
         # tick up the shots needed for next time
         self.game.base.mug_shots += 3
         # remove the switch blocker
