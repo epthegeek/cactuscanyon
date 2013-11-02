@@ -31,6 +31,9 @@ class LastCall(ep.EP_Mode):
         super(LastCall, self).__init__(game,priority)
         self.myID = "Last Call"
         self.backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_simpleBorder.frames[0])
+        self.starting = False
+        self.ending = False
+        self.running = False
 
     def mode_started(self):
         self.starting = False
