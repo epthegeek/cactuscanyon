@@ -25,6 +25,7 @@ import locale
 import random
 import sys
 
+
 # Used to put commas in the score.
 locale.setlocale(locale.LC_ALL, "")
 
@@ -229,7 +230,12 @@ class Attract(ep.EP_Mode):
             self.show_scores()
         # if going left - bump the index down
         elif self.flipperOK:
-            self.myIndex -= 2
+            if self.myIndex == 0:
+                self.myIndex = len(self.layers) - 2
+            elif self.myIndex == 1:
+                self.myIndex = len(self.layers) - 1
+            else:
+                self.myIndex -= 2
             self.flipper_action()
         else:
             pass
