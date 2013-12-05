@@ -13,6 +13,7 @@ import itertools
 from procgame.events import EventManager
 import os
 
+
 try:
     import pygame
     import pygame.locals
@@ -346,10 +347,6 @@ class EP_Desktop():
         """Draw the given :class:`~procgame.dmd.Frame` in the window."""
         # Use adjustment to add a one pixel border around each dot, if
         # the screen size is large enough to accomodate it.
-        if self.screen_multiplier >= 4:
-            adjustment = -1
-        else:
-            adjustment = 0
 
         frame_string = frame.get_data()
 
@@ -369,30 +366,48 @@ class EP_Desktop():
                 if brightness and (dot_value >>4) == 0:
                     color = 16
                     bright_value = brightness
+                    del brightness
                 # otherwise, find the color and set the brightness
                 else:
                     if brightness <= 3:
                         bright_value = 0
+                        del brightness
                     elif brightness <= 8:
                         bright_value = 1
+                        del brightness
                     elif brightness <= 13:
                         bright_value = 2
+                        del brightness
                     else:
                         bright_value = 3
+                        del brightness
                     color = (dot_value >> 4)
+
                 #print "Dot Value: " + str(derp) +" - color: " + str(color) + " - Brightness: " +str(brightness)
                 # set the image based on color and brightness
-                image = self.colors[color][bright_value]
+                ##image = self.colors[color][bright_value]
+                if self.colors[color][bright_value]:
+                    self.screen.blit(self.colors[color][bright_value],((x*self.pixel_size), (y*self.pixel_size)))
+                del color
+                del bright_value
+            del dot
+            del dot_value
 
-
-            if image:
-                self.screen.blit(image, ((x*self.pixel_size), (y*self.pixel_size)))
+            #if image:
+            #    self.screen.blit(image, ((x*self.pixel_size), (y*self.pixel_size)))
             x += 1
             if x == 128:
                 x = 0
                 y += 1
+            #del image
+
+        del x
+        del y
+        del frame_string
 
         pygame.display.update()
+
+
 
     def __str__(self):
         return '<Desktop pygame>'
