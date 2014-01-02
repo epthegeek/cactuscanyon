@@ -132,7 +132,7 @@ class SkillShot(ep.EP_Mode):
         else:
             # if we're on ball three and the player hasn't reached the replay score - show that
             if self.game.replays:
-                if self.game.ball == 3 and not self.game.show_tracking('replay_earned'):
+                if self.game.ball == self.game.balls_per_game and not self.game.show_tracking('replay_earned'):
                 # on any ball other than ball one, announce which players turn it is if there is more than one
                     self.game.interrupter.replay_score_display()
             if len(self.game.players) > 1 and not self.game.interrupter.hush:
