@@ -43,6 +43,7 @@ class Match(ep.EP_Mode):
 
     def mode_started(self):
         self.playerDigits = [0,0,0,0]
+        self.uniqueDigits = []
         self.winners = 0
         self.zeroLayer.set_text("0",blink_frames=0,color=ep.RED)
         self.p1Layer.set_text("",blink_frames=0,color=ep.RED)
@@ -60,13 +61,14 @@ class Match(ep.EP_Mode):
         self.generate_digits()
         # generate the probability line
         # first, we set the multiplier
-        if len(set(self.playerDigits)) > len(self.game.players):
+        if len(self.uniqueDigits) > len(self.game.players):
             multiplier = len(self.game.players)
         # which uses the length of the digit set if it's less than the number of players
         else:
-            multiplier = len(set(self.playerDigits))
+            multiplier = len(self.uniqueDigits)
+            print "Multiplier = " + str(multiplier)
         match_target = multiplier * self.match_percent
-        print "Len Set = " + str(set(self.playerDigits))
+        print "Len Set = " + str(self.uniqueDigits)
         print "Match break point " + str(match_target)
         # generate a random number for comparison
         match_value = random.randint(1,100)
@@ -76,11 +78,11 @@ class Match(ep.EP_Mode):
         if match_value <= match_target:
             print "Match winner via value selection!"
             # here's our winning number - comes from all choices, including replay winners, so non replay winners may get shafted.
-            self.selection = str(random.choice(self.playerDigits))
+            self.selection = str(random.choice(self.uniqueDigits))
         # If not, the selection comes from unused digits
         else:
             # take out the player digits
-            for n in self.playerDigits:
+            for n in self.uniqueDigits:
                 print "Attempting to remove " + str(n)
                 if n in possible:
                     print "Found it"
@@ -127,10 +129,12 @@ class Match(ep.EP_Mode):
                 digitString = str(digit) + "0"
                 self.playerLayers[i].set_text(digitString,color=ep.RED)
 
-            # add digit only if it's not in the list of already picked digits
-            if digit not in self.playerDigits:
-                print "Adding digit " + str(digit)
+            # set the player position digit
                 self.playerDigits[i] = str(digit)
+            # add digit only if it's not in the list of already picked digits
+            if digit not in self.uniqueDigits:
+                print "Adding digit " + str(digit)
+                self.uniqueDigits.append(str(digit))
 
     def run_animation(self):
         # run the animation with sound
@@ -165,7 +169,9 @@ class Match(ep.EP_Mode):
 
     def award_match(self):
         # check the scores to see if anybody won
-        for i in range(len(self.game.players)):
+        print "Number of players = " + str(len(self.game.players))
+        for i in range(0,len(self.game.players),1):
+            print "Award processing Player " + str((i + 1))
             if str(self.playerDigits[i]) == self.selection:
                 # set the text on that layer to blink
                 self.playerLayers[i].set_text(str(self.playerDigits[i]) + "0",blink_frames=8,color=ep.GREEN)
