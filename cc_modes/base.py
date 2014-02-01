@@ -135,6 +135,8 @@ class BaseGameMode(ep.EP_Mode):
                 self.delay(delay=1,handler=self.check_bonus)
             # this is the last ball drain on a tilt
             else:
+                # cancel the eject delay
+                self.cancel_delayed("Tilt Ejects")
                 self.wipe_delays()
                 self.layer = None
                 self.game.interrupter.clear_layer()
@@ -391,6 +393,9 @@ class BaseGameMode(ep.EP_Mode):
             self.stop_music()
             self.game.sound.play(self.game.assets.sfx_spinDown)
 
+            #clear the mine and the saloon in 4 seconds
+            self.delay(name="Tilted Ejects",delay=4,handler=self.tilted_ejects)
+
             # tilt out all the modes
             modequeue_copy = list(self.game.modes)
             for mode in modequeue_copy:
@@ -398,6 +403,13 @@ class BaseGameMode(ep.EP_Mode):
                 if getattr(mode, "tilted", None):
                     mode.tilted()
 
+    def tilted_ejects(self):
+        if self.game.switches.saloonPopper.is_active():
+            self.game.saloon.kick()
+        if self.game.switches.minePopper.is_active():
+            self.game.mountain.eject()
+        # swing back in two seconds to re-check
+        self.delay(name="Tilted Ejects",delay=2,handler=self.tilted_ejects)
 
     def tilted(self):
         pass
