@@ -135,8 +135,6 @@ class BaseGameMode(ep.EP_Mode):
                 self.delay(delay=1,handler=self.check_bonus)
             # this is the last ball drain on a tilt
             else:
-                # cancel the eject delay
-                self.cancel_delayed("Tilt Ejects")
                 self.wipe_delays()
                 self.layer = None
                 self.game.interrupter.clear_layer()
