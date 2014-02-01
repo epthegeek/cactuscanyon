@@ -31,7 +31,7 @@ class Train(ep.EP_Mode):
         self.mytIncrement = 20
         self.ticksCounted = 0
         self.calibrating = False
-        self.mytFail = True
+        self.mytFail = False
 
     def tilted(self):
         pass
