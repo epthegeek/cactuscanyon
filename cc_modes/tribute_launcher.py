@@ -31,8 +31,7 @@ class TributeLauncher(ep.EP_Mode):
         mm_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mmLogo.frames[0])
         cv_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cvLogo.frames[0])
         ss_logo = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_ssLogo.frames[0])
-#        self.slides = [mb_logo,taf_logo,mm_logo,cv_logo,ss_logo]
-        self.slides = [mb_logo,taf_logo,mm_logo,cv_logo]
+        self.slides = [mb_logo,taf_logo,mm_logo,cv_logo,ss_logo]
         self.songs = [self.game.assets.music_mb,self.game.assets.music_taf,self.game.assets.music_mm,self.game.assets.music_cv,self.game.assets.music_ss]
         self.shot = 0
         self.selecting = False
@@ -46,7 +45,7 @@ class TributeLauncher(ep.EP_Mode):
         self.selecting = False
         # set the stack level
         self.game.stack_level(5,True)
-        choices = [0,1,2,3] # add 4 back in to enable ss when it's ready
+        choices = [0,1,2,3,4] #
         self.index = random.choice(choices)
         # throw up a text thing telling player to hit flippers to select
         title = ep.EP_TextLayer(58, 3, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("TRIBUTE",color=ep.ORANGE)
@@ -153,7 +152,7 @@ class TributeLauncher(ep.EP_Mode):
             self.game.modes.add(self.game.cv_tribute)
         elif self.index == 4:
             print "Selected Scared Stiff"
-            self.game.modes.add(self.game.mm_tribute)
+            self.game.modes.add(self.game.ss_tribute)
         else:
             print "WAT"
         # and then unload -- tribute modes will unload this mode
