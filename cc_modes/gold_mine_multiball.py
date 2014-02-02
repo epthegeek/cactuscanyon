@@ -218,9 +218,13 @@ class GoldMine(ep.EP_Mode):
         # turn it on
         self.layer = animLayer
         # start the lampshow
-        self.game.lampctrl.play_show(self.game.assets.lamp_gmStart, repeat=False,callback=self.lamp_update)
+        self.game.lampctrl.play_show(self.game.assets.lamp_gmStart, repeat=False,callback=self.reset_lamps)
         # when the animation is over go to the next step
         self.delay(delay=myWait,handler=self.intro_banner)
+
+    def reset_lamps(self):
+        self.lamp_update()
+        self.game.gi_control("ON")
 
     def ta_da(self):
         self.stop_music()
