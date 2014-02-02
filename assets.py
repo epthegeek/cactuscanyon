@@ -542,6 +542,20 @@ class Assets():
         self.sfx_cvCrash = 'sfx_cvCrash'
         self.game.sound.register_sound(self.sfx_cvCrash, self.sfx_path + "cv_14-218_clown_crash.wav")
 
+        # Scared Stiff Tribue stuff
+        self.sfx_ssSquish = 'sfx_ssSquish'
+        self.game.sound.register_sound(self.sfx_ssSquish, self.sfx_path + "ss_squish.wav")
+        self.sfx_ssScream = 'sfx_ssScream'
+        self.game.sound.register_sound(self.sfx_ssScream, self.sfx_path + "ss_scream.wav")
+        self.sfx_ssHeavyRiff = 'sfx_ssHeavyRiff'
+        self.game.sound.register_sound(self.sfx_ssHeavyRiff, self.sfx_path + "ss_heavy_riff.wav")
+        self.sfx_ssHappyRiff = 'sfx_ssHappyRiff'
+        self.game.sound.register_sound(self.sfx_ssHappyRiff, self.sfx_path + "ss_happy_riff.wav")
+        self.sfx_ssTensePiano = 'sfx_ssTensePiano'
+        self.game.sound.register_sound(self.sfx_ssTensePiano, self.sfx_path + "ss_tense_piano_riff.wav")
+        self.sfx_ssRibbit = 'sfx_ssRibbit'
+        self.game.sound.register_sound(self.sfx_ssRibbit, self.sfx_path + "ss_ribbit.wav")
+
         self.sfx_franks = 'sfx_franks'
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks01.wav")
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks02.wav")
@@ -558,6 +572,8 @@ class Assets():
 
 
         # Quotes
+        self.quote_ssWin = 'quote_ssWin'
+        self.game.sound.register_sound(self.quote_ssWin, self.quotes_path + "ss_elvira_oh_yeah.wav")
 
         self.quote_cvIntroLead = 'quote_cvIntroLead'
         self.game.sound.register_sound(self.quote_cvIntroLead, self.quotes_path + "cv_1201-r-intro.wav")
