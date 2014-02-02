@@ -282,6 +282,7 @@ class RiverChase(ep.EP_Mode):
     # fail
     def polly_died(self):
         self.game.peril = False
+        self.running = False
         self.wipe_delays()
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
         textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.RED)
