@@ -1652,6 +1652,22 @@ class Assets():
         self.dmd_cvFireworks = dmd.Animation().load(self.dmd_path+'cv-fireworks.dmd')
 
         self.dmd_ssLogo = dmd.Animation().load(self.dmd_path+'ss-logo.dmd')
+        self.dmd_ssLogo = dmd.Animation().load(self.dmd_path+'ss-logo.dmd')
+        self.dmd_ssBorder = dmd.Animation().load(self.dmd_path+'ss_border.dmd')
+        self.dmd_ssBlueLeft = dmd.Animation().load(self.dmd_path+'ss_blue_frog_left.dmd')
+        self.dmd_ssBlueRight = dmd.Animation().load(self.dmd_path+'ss_blue_frog_right.dmd')
+        self.dmd_ssGreenLeft = dmd.Animation().load(self.dmd_path+'ss_green_frog_left.dmd')
+        self.dmd_ssGreenRight = dmd.Animation().load(self.dmd_path+'ss_green_frog_right.dmd')
+        self.dmd_ssOrangeLeft = dmd.Animation().load(self.dmd_path+'ss_orange_frog_left.dmd')
+        self.dmd_ssOrangeRight = dmd.Animation().load(self.dmd_path+'ss_orange_frog_right.dmd')
+        self.dmd_ssPurpleLeft = dmd.Animation().load(self.dmd_path+'ss_purple_frog_left.dmd')
+        self.dmd_ssPurpleRight= dmd.Animation().load(self.dmd_path+'ss_purple_frog_right.dmd')
+        self.dmd_ssSquishBlue = dmd.Animation().load(self.dmd_path+'ss_squish-part-1-blue.dmd')
+        self.dmd_ssSquishGreen = dmd.Animation().load(self.dmd_path+'ss_squish-part-1-green.dmd')
+        self.dmd_ssSquishOrange = dmd.Animation().load(self.dmd_path+'ss_squish-part-1.dmd')
+        self.dmd_ssSquishPurple = dmd.Animation().load(self.dmd_path+'ss_squish-part-1-purple.dmd')
+        self.dmd_ssSquishWipe = dmd.Animation().load(self.dmd_path+'ss_squish-part-2.dmd')
+        self.dmd_ssLeaperWipe = dmd.Animation().load(self.dmd_path+'ss_leaper_wipe.dmd')
 
 
         self.dmd_franksBackdrop = dmd.Animation().load(self.dmd_path+'beans_n_franks.dmd')
