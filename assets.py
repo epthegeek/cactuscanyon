@@ -555,6 +555,12 @@ class Assets():
         self.game.sound.register_sound(self.sfx_ssTensePiano, self.sfx_path + "ss_tense_piano_riff.wav")
         self.sfx_ssRibbit = 'sfx_ssRibbit'
         self.game.sound.register_sound(self.sfx_ssRibbit, self.sfx_path + "ss_ribbit.wav")
+        self.sfx_ssBubbling = 'sfx_ssBubbling'
+        self.game.sound.register_sound(self.sfx_ssBubbling, self.sfx_path + "ss_bubbling.wav")
+        self.sfx_ssPop = 'sfx_ssPop'
+        self.game.sound.register_sound(self.sfx_ssPop, self.sfx_path + "ss_pop_noise.wav")
+        self.sfx_ssGong = 'sfx_ssGong'
+        self.game.sound.register_sound(self.sfx_ssGong, self.sfx_path + "ss_final_gong.wav")
 
         self.sfx_franks = 'sfx_franks'
         self.game.sound.register_sound(self.sfx_franks, self.sfx_path + "franks01.wav")
@@ -1668,7 +1674,8 @@ class Assets():
         self.dmd_ssSquishPurple = dmd.Animation().load(self.dmd_path+'ss_squish-part-1-purple.dmd')
         self.dmd_ssSquishWipe = dmd.Animation().load(self.dmd_path+'ss_squish-part-2.dmd')
         self.dmd_ssLeaperWipe = dmd.Animation().load(self.dmd_path+'ss_leaper_wipe.dmd')
-
+        self.dmd_ssBubbles = dmd.Animation().load(self.dmd_path+ 'ss_bubbles.dmd')
+        self.dmd_ssPop = dmd.Animation().load(self.dmd_path+ 'ss_bubbles2.dmd')
 
         self.dmd_franksBackdrop = dmd.Animation().load(self.dmd_path+'beans_n_franks.dmd')
 

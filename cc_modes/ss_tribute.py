@@ -79,9 +79,6 @@ class SS_Tribute(ep.EP_Mode):
         # reset the frogs
         self.liveFrogs = [self.blue_frog,self.green_frog,self.orange_frog,self.purple_frog]
         random.shuffle(self.liveFrogs)
-        # check the output
-        print "Frogs Order: "
-        print self.liveFrogs
         # pick 2 to go right
         righties = random.sample(self.liveFrogs,2)
         for frog in righties:
@@ -201,15 +198,15 @@ class SS_Tribute(ep.EP_Mode):
             # sounds ?
             animLayer.add_frame_listener(5,self.game.sound.play,param=self.game.assets.sfx_ssScream)
             # layers behind the wipe
-            textLine1 = ep.EP_TextLayer(64,15,self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("HIT BEER MUG TO",color=ep.GREEN)
-            textLine2 = ep.EP_TextLayer(64,22,self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("SQUASH LEAPERS",color=ep.GREEN)
+            textLine1 = ep.EP_TextLayer(64,11,self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("HIT BEER MUG TO",color=ep.YELLOW)
+            textLine2 = ep.EP_TextLayer(64,22,self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("SQUASH LEAPERS",color=ep.BROWN)
             combined = dmd.GroupedLayer(128,32,[self.titleLine,textLine2,textLine1,animLayer])
             self.layer = combined
             self.delay(delay = myWait,handler=self.intro,param=3)
 
         if step == 3:
-            textLine1 = ep.EP_TextLayer(64,15,self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("HIT BEER MUG TO",color=ep.GREEN)
-            textLine2 = ep.EP_TextLayer(64,22,self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("SQUASH LEAPERS",color=ep.GREEN)
+            textLine1 = ep.EP_TextLayer(64,11,self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("HIT BEER MUG TO",blink_frames=8,color=ep.YELLOW)
+            textLine2 = ep.EP_TextLayer(64,22,self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("SQUASH LEAPERS",color=ep.BROWN)
             combined = dmd.GroupedLayer(128,32,[self.titleLine,textLine2,textLine1])
             self.layer = combined
             self.delay(delay = 1.5,handler=self.get_going)
@@ -310,15 +307,15 @@ class SS_Tribute(ep.EP_Mode):
             animLayer.opaque = False
             # sounds ?
             animLayer.add_frame_listener(1,self.game.sound.play,param=self.game.assets.sfx_ssScream)
-            animLayer.add_frame_listener(8,self.game.sound.play,param=self.game.assets.sfx_ssSquish)
+            animLayer.add_frame_listener(1,self.game.sound.play,param=self.game.assets.sfx_ssSquish)
             self.layer = animLayer
             # call part 2 after the animation
             self.delay("Display",delay=myWait,handler=self.kill_frog,param=2)
 
         if step == 2:
             # display the hit
-            title = ep.EP_TextLayer(64,4,self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("LEAPER SQUASHED",color=ep.RED)
-            score = ep.EP_TextLayer(64,15,self.game.assets.font_9px_az, "center", opaque=False).set_text(ep.format_score(self.value),color=ep.GREEN)
+            title = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az, "center", opaque=False).set_text("LEAPER SQUASHED",color=ep.RED)
+            score = ep.EP_TextLayer(64,13,self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.value),blink_frames=6,color=ep.GREEN)
             anim = self.game.assets.dmd_ssSquishWipe
             myWait = len(anim.frames) / 10.0
             animLayer = ep.EP_AnimatedLayer(anim)
@@ -387,18 +384,46 @@ class SS_Tribute(ep.EP_Mode):
         self.display_frogs("idle")
 
 
-    def finish_frogs(self):
-        # kill the delays
-        self.wipe_delays()
-        border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_ssBorder.frames[0])
-        textLayer1 = ep.EP_TextLayer(64,6,self.game.assets.font_5px_AZ,"center",opaque=False).set_text("LEAPER TOTAL",color=ep.GREEN)
-        textLayer2 = ep.EP_TextLayer(64,16,self.game.assets.font_9px_az,"center",opaque=False).set_text(str(ep.format_score(self.totalPoints)),color=ep.RED)
-        combined = dmd.GroupedLayer(128,32,[border,textLayer1,textLayer2,textLayer3])
-        self.layer = combined
-        # play a final quote
-        if len(self.availFrogs) == 0:
-            self.game.sound.play(self.game.assets.quote_ssWin)
-        self.delay(delay=1.5,handler=self.done)
+    def finish_frogs(self,step=1):
+        if step == 1:
+            # kill the delays
+            self.wipe_delays()
+            # stop the music
+            self.stop_music()
+            anim = self.game.assets.dmd_ssBubbles
+            myWait = len(anim.frames) / 10.0
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold = False
+            animLayer.frame_time = 6
+            animLayer.repeat = True
+            animLayer.opaque = False
+            animLayer.composite_op = "blacksrc"
+            textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_5px_AZ,"center",opaque=False).set_text("LEAPER TOTAL",color=ep.GREEN)
+            textLayer2 = ep.EP_TextLayer(64,11,self.game.assets.font_9px_az,"center",opaque=False).set_text(str(ep.format_score(self.totalPoints)),color=ep.RED)
+            combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
+            self.layer = combined
+            # play a final quote
+            if len(self.availFrogs) == 0:
+                self.delay(delay=0.3,handler=self.game.sound.play,param=self.game.assets.quote_ssWin)
+            self.game.sound.play(self.game.assets.sfx_ssBubbling)
+            self.game.sound.play(self.game.assets.sfx_ssGong)
+            self.delay(delay=1.5,handler=self.finish_frogs,param=2)
+        if step == 2:
+            # do the pop
+            anim = self.game.assets.dmd_ssPop
+            myWait = len(anim.frames) / 10.0
+            animLayer = ep.EP_AnimatedLayer(anim)
+            animLayer.hold = True
+            animLayer.frame_time = 6
+            animLayer.repeat = False
+            animLayer.opaque = False
+            animLayer.composite_op = "blacksrc"
+            animLayer.add_frame_listener(6,self.game.sound.play,param=self.game.assets.sfx_ssPop)
+            textLayer1 = ep.EP_TextLayer(64,2,self.game.assets.font_5px_AZ,"center",opaque=False).set_text("LEAPER TOTAL",color=ep.GREEN)
+            textLayer2 = ep.EP_TextLayer(64,11,self.game.assets.font_9px_az,"center",opaque=False).set_text(str(ep.format_score(self.totalPoints)),color=ep.RED)
+            combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
+            self.layer = combined
+            self.delay(delay=1.5,handler=self.done)
 
     def done(self):
         self.running = False
