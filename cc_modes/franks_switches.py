@@ -34,7 +34,7 @@ class FranksSwitches(ep.EP_Mode):
         self.game.sound.franks = True
 
     def switch_action(self,sw):
-        if sw.name == "trough1" or sw.name == "trough2" or sw.name == "trough3" or sw.name == "trough4":
+        if sw.name == "trough1" or sw.name == "trough2" or sw.name == "trough3" or sw.name == "trough4" or sw.name == "flipperLwL" or sw.name == "flipperLwR":
             return
         # score 20k points
         self.game.score(20000)

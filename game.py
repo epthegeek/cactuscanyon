@@ -173,6 +173,9 @@ class CCGame(game.BasicGame):
         self.sound.set_volume(self.volume_to_set)
         self.previousVolume = self.volume_to_set
 
+        # Party Mode
+        self.party_setting = self.user_settings['Gameplay (Feature)']['Party Mode']
+        print "Party Setting: " + str(self.party_setting)
 
         self.immediateRestart = "Enabled" == self.user_settings['Gameplay (Feature)']['Fast Restart After Game']
 
@@ -370,6 +373,12 @@ class CCGame(game.BasicGame):
         self.moonlight = cc_modes.Moonlight(game=self,priority=200)
         # Switch Hit Tracker - Rides above everything else
         self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=250)
+        # Party Mode - if it's enabled
+        if self.party_setting != 'Disabled':
+            print "PARTY ON DUDES"
+            self.party_mode = cc_modes.PartyMode(game=self,priority=251)
+            self.modes.add(self.party_mode)
+
         # new service mode test
         self.new_service = ep.ep_new_service.NewServiceMode(game=self,priority=200)
 
@@ -430,6 +439,10 @@ class CCGame(game.BasicGame):
         self.modes.add(self.score_display)
 
     def start_game(self,forceMoonlight=False):
+        # Remove the party mode attract display
+        if self.party_setting != 'Disabled':
+            self.party_mode.clear_layer()
+
         # Check the time
         now = datetime.datetime.now()
         print "Hour: " + str(now.hour) + " Minutes: " + str(now.minute)
@@ -492,6 +505,9 @@ class CCGame(game.BasicGame):
                     pass
             else:
                 self.interrupter.display_player_number()
+        # if party mode - update the party display
+        if self.party_setting != 'Disabled':
+            self.party_mode.update_display()
 
     def create_player(self,name):
         # create an object wiht the Tracking Class - subclassed off game.Player
@@ -528,8 +544,12 @@ class CCGame(game.BasicGame):
         self.trough.balls_to_autoplunge = 0
         # enable the ball search
         self.ball_search.enable()
-        # turn the flippers on
-        self.enable_flippers(True)
+        # turn the flippers on - if not party exhausted
+        if self.party_setting == 'Flip Ct':
+            if self.show_tracking('Total Flips') > self.party_mode.flip_limit:
+                pass
+            else:
+                self.enable_flippers(True)
         # reset the tilt status
         self.set_tracking('tiltStatus',0)
         # reset the stack levels
@@ -929,7 +949,7 @@ class CCGame(game.BasicGame):
 
     def score(self, points,bonus=False,percent=7):
         """Convenience method to add *points* to the current player."""
-        print "Adding " + str(points) + " to score"
+        #print "Adding " + str(points) + " to score"
         p = self.current_player()
         p.score += points
         if bonus:

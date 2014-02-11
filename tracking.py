@@ -193,3 +193,8 @@ class Tracking(game.Player):
 
         # bounty index for tournament mode
         self.player_stats['bountyIndex'] = 0
+
+        # flip counts for party mode
+        self.player_stats['Total Flips'] = 0
+        self.player_stats['Left Flips'] = 0
+        self.player_stats['Right Flips'] = 0

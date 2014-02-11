@@ -185,6 +185,13 @@ Gameplay (Feature):
   'Ambush or Showdown First':
     options: ['Ambush','Showdown']
     default: 'Showdown'
+  'Party Mode':
+    options: ['Disabled','Flip Ct']
+    default: 'Disabled'
+  'Party - Flip Count':
+    options: [10,500]
+    increments: 5
+    default: 50
   'Save Polly Shots - Train':
     options: [2,15]
     increments: 1

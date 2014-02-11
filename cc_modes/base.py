@@ -940,6 +940,9 @@ class BaseGameMode(ep.EP_Mode):
         self.delay("Bonus Display",delay=myWait,handler=self.finish_bonus)
 
     def finish_bonus(self):
+        # Clear the party mode display
+        if self.game.party_setting != 'Disabled':
+            self.game.party_mode.clear_layer()
         # set up the text display
         anim = self.game.assets.dmd_burstWipe2
         myWait = len(anim.frames) / 15.0 + 1.5

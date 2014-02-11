@@ -132,6 +132,8 @@ class ScoreDisplay(ep.EP_Mode):
 
         if self.game.tournament:
             credit_str = 'TOURNAMENT'
+        elif self.game.party_setting != 'Disabled':
+            credit_str = 'PARTY MODE'
         else:
             credit_str = 'FREE PLAY'
 

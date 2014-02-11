@@ -176,6 +176,10 @@ class Attract(ep.EP_Mode):
         # then kick off the timer to run it after that
         self.timer_countdown()
 
+        # Add the party layer if party is enabled
+        if self.game.party_setting != 'Disabled':
+            self.game.party_mode.attract_display()
+
     def run_animation_loop(self):
         # grab the current index
         indexA = self.myIndex
@@ -249,6 +253,9 @@ class Attract(ep.EP_Mode):
             pass
 
     def show_scores(self):
+        # kill the party mode banner during score review
+        if self.game.party_setting != 'Disabled':
+            self.game.party_mode.null_display(5)
         self.cancel_delayed('slideshow_timer')
         self.cancel_delayed('show scores')
         self.layer = None
@@ -258,8 +265,9 @@ class Attract(ep.EP_Mode):
 # holding flippers enables tournament mode
     def sw_flipperLwL_active_for_2s(self,sw):
         if self.tournamentTimer == 0 and self.game.user_settings['Gameplay (Feature)']['Tournament Mode'] == "Enabled":
-            print "LEFT FLIPPER ACTIVATING TOURNAMENT"
-            self.activate_tournament()
+            if self.game.party_setting == 'Disabled':
+                print "LEFT FLIPPER ACTIVATING TOURNAMENT"
+                self.activate_tournament()
 
     def activate_tournament(self):
         self.game.sound.play(self.game.assets.sfx_churchBell)

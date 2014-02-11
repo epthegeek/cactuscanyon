@@ -65,7 +65,8 @@ __all__ = [
     'franks_switches',
     'franks_display',
     'cv_tribute',
-    'ss_tribute'
+    'ss_tribute',
+    'party_mode'
 ]
 from base import *
 from attract import *
@@ -118,3 +119,4 @@ from franks_switches import *
 from franks_display import *
 from cv_tribute import *
 from ss_tribute import *
+from party_mode import *
