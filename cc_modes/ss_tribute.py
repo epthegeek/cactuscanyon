@@ -32,6 +32,7 @@ class SS_Tribute(ep.EP_Mode):
         self.hitsToWin = 4
         self.hitsSoFar = 0
         self.beerHit = False
+        self.won = False
 
         script = []
         # set up the pause text layer
@@ -71,6 +72,7 @@ class SS_Tribute(ep.EP_Mode):
         self.value = 175000
         self.bump = 75000
         self.running = True
+        self.won = False
         self.halted = False
         # overall mode timer
         self.modeTimer = 20
@@ -159,7 +161,7 @@ class SS_Tribute(ep.EP_Mode):
             self.delay("Resume",delay=1,handler=self.resume_frogs)
 
     # kill a frog if the beer GETS IT
-    def sw_beerMug_active(self,sw):
+    def sw_phantomSwitch4_active(self,sw):
         if self.beerHit:
             pass
         else:
@@ -234,54 +236,62 @@ class SS_Tribute(ep.EP_Mode):
         self.delay(delay = 0.6, handler=lambda: self.display_frogs(mode="jump",num=random.choice(self.availFrogs)))
 
     def display_frogs(self,mode=None,num=None,fade=False):
-        self.cancel_delayed("Display")
-        # set the frogs
-        for n in self.availFrogs:
-            if n != num:
-                # grab the last frame from the first slot animation
-                self.frogLayers[n] = dmd.FrameLayer(opaque=False,frame=self.liveFrogs[n][4].frames[5])
-                # set the composite op
-                self.frogLayers[n].composite_op = "blacksrc"
-                # adjust the position
-                self.frogLayers[n].set_target_position(self.offsets[n],0)
+        if not self.won:
+            self.cancel_delayed("Display")
+            # set the frogs
+            for n in self.availFrogs:
+                if n != num:
+                    # grab the last frame from the first slot animation
+                    self.frogLayers[n] = dmd.FrameLayer(opaque=False,frame=self.liveFrogs[n][4].frames[5])
+                    # set the composite op
+                    self.frogLayers[n].composite_op = "blacksrc"
+                    # adjust the position
+                    self.frogLayers[n].set_target_position(self.offsets[n],0)
 
-        if mode == "jump":
-            anim = self.liveFrogs[num][0]
-            myWait = len(anim.frames) / 10.0
-            self.frogLayers[num] = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
-            self.frogLayers[num].composite_op = "blacksrc"
-            self.frogLayers[num].set_target_position(self.offsets[num],0)
-            # reverse the order of that frog for next jump
-            self.liveFrogs[num].reverse()
-        else:
-            # if we didn't get a cue to change cousin it, we don't mess with him
-            pass
+            if mode == "jump":
+                anim = self.liveFrogs[num][0]
+                myWait = len(anim.frames) / 10.0
+                self.frogLayers[num] = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
+                self.frogLayers[num].composite_op = "blacksrc"
+                self.frogLayers[num].set_target_position(self.offsets[num],0)
+                # reverse the order of that frog for next jump
+                self.liveFrogs[num].reverse()
+            else:
+                # if we didn't get a cue to change cousin it, we don't mess with him
+                pass
 
-        # build the layer
-        layers = []
-        layers.append(self.titleLine)
-        layers.append(self.leftTimerLine)
-        layers.append(self.rightTimerLine)
-        layers.append(self.scoreLine)
-        for layer in self.frogLayers:
-            layers.append(layer)
-        combined = dmd.GroupedLayer(128,32,layers)
-        # turn on the layer - crossfade at startup
-        self.layer = combined
-        # set the delay for fixing it after a hit or a miss
-        if mode == "jump":
-            choices = [0.65,0.8,1.0,1.2,1.4]
-            self.game.sound.play(self.game.assets.sfx_ssRibbit)
-            self.delay("Display",delay=random.choice(choices),handler=lambda: self.display_frogs(mode="jump",num=random.choice(self.availFrogs)))
+            # build the layer
+            layers = []
+            layers.append(self.titleLine)
+            layers.append(self.leftTimerLine)
+            layers.append(self.rightTimerLine)
+            layers.append(self.scoreLine)
+            for layer in self.frogLayers:
+                layers.append(layer)
+            combined = dmd.GroupedLayer(128,32,layers)
+            # turn on the layer - crossfade at startup
+            self.layer = combined
+            # set the delay for fixing it after a hit or a miss
+            if mode == "jump":
+                choices = [0.65,0.8,1.0,1.2,1.4]
+                self.game.sound.play(self.game.assets.sfx_ssRibbit)
+                self.delay("Display",delay=random.choice(choices),handler=lambda: self.display_frogs(mode="jump",num=random.choice(self.availFrogs)))
 
 
     def kill_frog(self,step=1):
         if step == 1:
             print "Kill Frog"
-            # stop the timer
-            self.cancel_delayed("Mode Timer")
             # cancel any display timer
             self.cancel_delayed("Display")
+            # choose a frog to kill
+            dead = random.choice(self.availFrogs)
+            # remove it from the available frogs
+            self.availFrogs.remove(dead)
+            if len(self.availFrogs) == 0:
+                self.won = True
+                print "All frogs squashed!"
+            # stop the timer
+            self.cancel_delayed("Mode Timer")
             # on a hit, increase the value, and add the new value to the total and display the hit
             self.value += self.bump
             # score the points
@@ -290,10 +300,6 @@ class SS_Tribute(ep.EP_Mode):
             # register the hit
             self.hitsSoFar += 1
             # sound ?
-            # choose a frog to kill
-            dead = random.choice(self.availFrogs)
-            # remove it from the available frogs
-            self.availFrogs.remove(dead)
             # remove the live layer
             self.frogLayers[dead] = dmd.FrameLayer(opaque=False,frame=self.game.assets.dmd_blank.frames[0])
             self.frogLayers[dead].composite_op = "blacksrc"
