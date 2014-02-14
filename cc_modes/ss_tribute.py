@@ -161,7 +161,7 @@ class SS_Tribute(ep.EP_Mode):
             self.delay("Resume",delay=1,handler=self.resume_frogs)
 
     # kill a frog if the beer GETS IT
-    def sw_phantomSwitch4_active(self,sw):
+    def sw_beerMug_active(self,sw):
         if self.beerHit:
             pass
         else:
@@ -272,7 +272,7 @@ class SS_Tribute(ep.EP_Mode):
             # turn on the layer - crossfade at startup
             self.layer = combined
             # set the delay for fixing it after a hit or a miss
-            if mode == "jump":
+            if mode == "jump" and len(self.availFrogs) > 0:
                 choices = [0.65,0.8,1.0,1.2,1.4]
                 self.game.sound.play(self.game.assets.sfx_ssRibbit)
                 self.delay("Display",delay=random.choice(choices),handler=lambda: self.display_frogs(mode="jump",num=random.choice(self.availFrogs)))
