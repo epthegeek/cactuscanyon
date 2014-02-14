@@ -58,6 +58,7 @@ class EP_Desktop():
         print "Init Color Desktop"
         self.ctrl = 0
         self.i = 0
+        self.HD = False
 
         self.add_key_map(pygame.locals.K_LSHIFT, 3)
         self.add_key_map(pygame.locals.K_RSHIFT, 1)
@@ -86,7 +87,7 @@ class EP_Desktop():
         else:
             print 'Desktop init skipping setup_window(); pygame does not appear to be loaded.'
 
-    def load_images(self,dots_path):
+    def load_images(self,dots_path,images_path):
         ## dot images
         #dot_black = pygame.image.load(dots_path+ 'DotBlack.png')
         dot_dark_grey_low = pygame.image.load(dots_path+ 'DotDarkGreyLow.png')
@@ -267,6 +268,14 @@ class EP_Desktop():
         dot_magenta = pygame.transform.scale(dot_magenta, (self.pixel_size,self.pixel_size))
         dot_magenta.convert()
 
+        image_kapow = pygame.image.load(images_path+'kapow.jpg').convert()
+        image_boom = pygame.image.load(images_path+'boom.jpg').convert()
+        image_powie = pygame.image.load(images_path+'powie.jpg').convert()
+        image_bang = pygame.image.load(images_path+'bang.jpg').convert()
+        image_zap = pygame.image.load(images_path+'zap.jpg').convert()
+
+        self.mm_banners = [image_kapow, image_boom, image_powie, image_bang, image_zap]
+
         self.colors = [[None,None,None,None], # blank
                        [None,dot_grey_low,dot_grey_mid,dot_grey], # color 1 grey
                        [None,dot_dark_grey_low,dot_dark_grey_mid,dot_dark_grey], # color 2 dark grey
@@ -347,64 +356,77 @@ class EP_Desktop():
         """Draw the given :class:`~procgame.dmd.Frame` in the window."""
         # Use adjustment to add a one pixel border around each dot, if
         # the screen size is large enough to accomodate it.
+        if not self.HD:
 
-        frame_string = frame.get_data()
+            frame_string = frame.get_data()
 
-        x = 0
-        y = 0
-        # fill the screen black
-        self.screen.fill((0,0,0))
+            x = 0
+            y = 0
+            # fill the screen black
+            self.screen.fill((0,0,0))
 
-        for dot in frame_string:
-            dot_value = ord(dot)
-            image = None
-            # if we got something other than 0
-            if dot_value != 0:
-                # set the brightness and color
-                brightness = (dot_value&0xf)
-                # if we have a brightness but no color - use white
-                if brightness and (dot_value >>4) == 0:
-                    color = 16
-                    bright_value = brightness
-                    del brightness
-                # otherwise, find the color and set the brightness
-                else:
-                    if brightness <= 3:
-                        bright_value = 0
+            for dot in frame_string:
+                dot_value = ord(dot)
+                image = None
+                # if we got something other than 0
+                if dot_value != 0:
+                    # set the brightness and color
+                    brightness = (dot_value&0xf)
+                    # if we have a brightness but no color - use white
+                    if brightness and (dot_value >>4) == 0:
+                        color = 16
+                        bright_value = brightness
                         del brightness
-                    elif brightness <= 8:
-                        bright_value = 1
-                        del brightness
-                    elif brightness <= 13:
-                        bright_value = 2
-                        del brightness
+                    # otherwise, find the color and set the brightness
                     else:
-                        bright_value = 3
-                        del brightness
-                    color = (dot_value >> 4)
+                        if brightness <= 3:
+                            bright_value = 0
+                            del brightness
+                        elif brightness <= 8:
+                            bright_value = 1
+                            del brightness
+                        elif brightness <= 13:
+                            bright_value = 2
+                            del brightness
+                        else:
+                            bright_value = 3
+                            del brightness
+                        color = (dot_value >> 4)
 
-                #print "Dot Value: " + str(derp) +" - color: " + str(color) + " - Brightness: " +str(brightness)
-                # set the image based on color and brightness
-                ##image = self.colors[color][bright_value]
-                if self.colors[color][bright_value]:
-                    self.screen.blit(self.colors[color][bright_value],((x*self.pixel_size), (y*self.pixel_size)))
-                del color
-                del bright_value
-            del dot
-            del dot_value
+                    #print "Dot Value: " + str(derp) +" - color: " + str(color) + " - Brightness: " +str(brightness)
+                    # set the image based on color and brightness
+                    ##image = self.colors[color][bright_value]
+                    if self.colors[color][bright_value]:
+                        self.screen.blit(self.colors[color][bright_value],((x*self.pixel_size), (y*self.pixel_size)))
+                    del color
+                    del bright_value
+                del dot
+                del dot_value
 
-            #if image:
-            #    self.screen.blit(image, ((x*self.pixel_size), (y*self.pixel_size)))
-            x += 1
-            if x == 128:
-                x = 0
-                y += 1
-            #del image
+                #if image:
+                #    self.screen.blit(image, ((x*self.pixel_size), (y*self.pixel_size)))
+                x += 1
+                if x == 128:
+                    x = 0
+                    y += 1
+                #del image
 
-        del x
-        del y
-        del frame_string
+            del x
+            del y
+            del frame_string
 
+            pygame.display.update()
+
+    def clear_hd(self):
+        self.HD = False
+
+    def blit(self,image,x=0,y=0):
+        self.HD = True
+        self.screen.blit(image,(x,y))
+        pygame.display.update()
+
+    def blackout(self):
+        self.screen.fill((0,0,0))
         pygame.display.update()
 
 

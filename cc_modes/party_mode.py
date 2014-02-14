@@ -76,7 +76,7 @@ class PartyMode(ep.EP_Mode):
             self.layer = textLayer
 
     def sw_flipperLwL_active(self,sw):
-        if self.game.party_setting == 'Flip Ct' and not self.game.skill_shot.live:
+        if self.game.party_setting == 'Flip Ct' and not self.game.skill_shot.live and self.game.base in self.game.modes:
             self.game.increase_tracking('Left Flips')
             self.game.increase_tracking('Total Flips')
             if self.game.show_tracking('Total Flips') > self.flip_limit and self.flip_limit != 0:
@@ -85,7 +85,7 @@ class PartyMode(ep.EP_Mode):
             self.update_display()
 
     def sw_flipperLwR_active(self,sw):
-        if self.game.party_setting == 'Flip Ct'and not self.game.skill_shot.live:
+        if self.game.party_setting == 'Flip Ct'and not self.game.skill_shot.live and self.game.base in self.game.modes:
             self.game.increase_tracking('Right Flips')
             self.game.increase_tracking('Total Flips')
             if self.game.show_tracking('Total Flips') > self.flip_limit and self.flip_limit != 0:

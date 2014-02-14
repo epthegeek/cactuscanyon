@@ -43,6 +43,7 @@ game_data_defaults_path = curr_file_path + "/config/game_data_template.yaml"
 settings_defaults_path = curr_file_path + "/config/settings_template.yaml"
 user_settings_path = curr_file_path + "/config/user_settings.yaml"
 dots_path = curr_file_path + "/dots/"
+images_path = curr_file_path + "/images/"
 
 ## Subclass BasicGame to create the main game
 class CCGame(game.BasicGame):
@@ -423,7 +424,7 @@ class CCGame(game.BasicGame):
         if self.color_desktop:
             self.desktop.draw_window(self.user_settings['Machine (Standard)']['Color Display Pixel Size'],self.user_settings['Machine (Standard)']['Color Display X Offset'],self.user_settings['Machine (Standard)']['Color Display Y Offset'])
             # load the images for the colorized display
-            self.desktop.load_images(dots_path)
+            self.desktop.load_images(dots_path,images_path)
 
 
         # Add in the base modes that are active at start

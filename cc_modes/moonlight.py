@@ -264,6 +264,8 @@ class Moonlight(ep.EP_Mode):
         self.moonlightTotal = 0
         self.running = True
         self.starting = True
+        self.hd_banners = []
+        self.shuffle_hd_banners()
         # kill the GI - and all the lights
         self.game.gi_control("OFF")
         self.game.lamp_control.disable_all_lamps()
@@ -410,13 +412,29 @@ class Moonlight(ep.EP_Mode):
         if display:
             self.cancel_delayed("Display")
             banner = random.choice(self.banners)
-            self.layer = banner
-            if banner == self.banners[6]:
-                self.game.sound.play(self.game.assets.quote_toasty)
-            else:
+            # New HD
+            if self.game.user_settings['Gameplay (Feature)']['High Def Flair'] == 'Enabled':
+                n = self.hd_banners[0]
+                self.hd_banners.remove(n)
+                self.game.desktop.blit(self.game.desktop.mm_banners[n])
+                self.delay(delay=0.6,handler=self.game.desktop.clear_hd)
+                if len(self.hd_banners) == 0:
+                    self.shuffle_hd_banners()
+                # play a noise - add pookie after banner is done
                 boom = random.choice(self.booms)
                 self.game.sound.play(boom)
+
+            # End New HD
+            else:
+                self.layer = banner
+                if banner == self.banners[6]:
+                    self.game.sound.play(self.game.assets.quote_toasty)
+                else:
+                    boom = random.choice(self.booms)
+                    self.game.sound.play(boom)
             self.delay("Display",delay=0.6,handler=self.update_display)
+
+
 
     def start_bonanza(self):
         self.bonanza = True
@@ -469,3 +487,11 @@ class Moonlight(ep.EP_Mode):
     # when the mode unloads, re-run ball starting
     def mode_stopped(self):
         self.game.ball_starting()
+
+
+    def shuffle_hd_banners(self):
+        banner_list = [0,1,2,3,4]
+        random.shuffle(banner_list)
+        self.hd_banners = banner_list
+        print "BANNER LIST MON "
+        print self.hd_banners
