@@ -263,7 +263,7 @@ class Attract(ep.EP_Mode):
         self.delay("show scores", delay=5,handler=self.timer_countdown)
 
 # holding flippers enables tournament mode
-    def sw_flipperLwL_active_for_2s(self,sw):
+    def sw_flipperLwL_active_for_3s(self,sw):
         if self.tournamentTimer == 0 and self.game.user_settings['Gameplay (Feature)']['Tournament Mode'] == "Enabled":
             if self.game.party_setting == 'Disabled':
                 print "LEFT FLIPPER ACTIVATING TOURNAMENT"
@@ -369,7 +369,7 @@ class Attract(ep.EP_Mode):
                     # stop the GI lampshow just in case the flasher show is playing
                     self.game.GI_lampctrl.stop_show()
                     # Initialize game
-                    if self.game.switches.flipperLwL.is_active() and self.tournamentTimer <= 0:
+                    if self.game.switches.flipperLwL.is_active() and self.tournamentTimer <= 0 and self.game.user_settings['Gameplay (Feature)']['Midnight Force'] == 'Enabled':
                         force = True
                     else:
                         force = False

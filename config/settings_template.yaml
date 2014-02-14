@@ -257,6 +257,12 @@ Gameplay (Feature):
   'Marshall Multiball':
     options: ['Enabled','Disabled']
     default: 'Enabled'
+  'Midnight Force':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Super Cheat':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
   'Marshall Jackpot Timer':
     options: [5,60]
     increments: 5

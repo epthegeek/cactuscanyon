@@ -81,7 +81,7 @@ class SkillShot(ep.EP_Mode):
         if self.selecting and self.game.switches.shooterLane.is_active():
             self.change_prizes(-1)
             return game.SwitchStop
-        elif self.super and self.game.switches.shooterLane.is_active():
+        elif self.super and self.game.switches.shooterLane.is_active() and self.game.user_settings['Gameplay (Feature)']['Super Cheat'] == 'Enabled':
             #print "Left flipper hit - super is active"
             if self.rcount == 5:
                 self.lcount += 1
@@ -99,7 +99,7 @@ class SkillShot(ep.EP_Mode):
         if self.selecting and self.game.switches.shooterLane.is_active():
             self.change_prizes(1)
             return game.SwitchStop
-        elif self.super and self.game.switches.shooterLane.is_active():
+        elif self.super and self.game.switches.shooterLane.is_active() and self.game.user_settings['Gameplay (Feature)']['Super Cheat'] == 'Enabled':
             #print "right flipper hit - super is active"
             self.rcount += 1
             return game.SwitchStop
