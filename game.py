@@ -547,10 +547,10 @@ class CCGame(game.BasicGame):
         self.ball_search.enable()
         # turn the flippers on - if not party exhausted
         if self.party_setting == 'Flip Ct':
-            if self.show_tracking('Total Flips') > self.party_mode.flip_limit:
-                pass
-            else:
+            if self.show_tracking('Total Flips') < self.party_mode.flip_limit:
                 self.enable_flippers(True)
+        else:
+            self.enable_flippers(True)
         # reset the tilt status
         self.set_tracking('tiltStatus',0)
         # reset the stack levels
