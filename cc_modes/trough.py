@@ -349,23 +349,29 @@ class Trough(ep.EP_Mode):
         self.ball_save_lamp.disable()
 
     def start_ball_save(self, num_balls_to_save=1, time=0, now=True, allow_multiple_saves=False):
-        if time == 0:
-            time = self.default_time
         """Activates the ball save logic."""
-        print "Starting Ball Save for " + str(time) + " seconds"
-        self.allow_multiple_saves = allow_multiple_saves
-        self.num_balls_to_save = num_balls_to_save
-        if time > self.ball_save_timer: self.ball_save_timer = time
-        self.update_lamps()
-        # if starting right away, do that
-        if now:
-            self.cancel_delayed('ball_save_timer')
-            self.delay(name='ball_save_timer', event_type=None, delay=1, handler=self.ball_save_countdown)
-            self.ball_save_active = True
-        # if not starting right away - stash the timer value and set the flag for delayed start
+
+        # If limited flip party mode is on - and player is at/over limit, don't turn on the ball save
+        if self.game.user_settings['Gameplay (Feature)']['Party Mode'] == 'Flip Ct' \
+        and self.game.show_tracking('Total Flips') >= self.game.user_settings['Gameplay (Feature)']['Party - Flip Count']:
+            pass
         else:
-            self.ball_save_begin = 1
-            self.timer_hold = time
+            if time == 0:
+                time = self.default_time
+            print "Starting Ball Save for " + str(time) + " seconds"
+            self.allow_multiple_saves = allow_multiple_saves
+            self.num_balls_to_save = num_balls_to_save
+            if time > self.ball_save_timer: self.ball_save_timer = time
+            self.update_lamps()
+            # if starting right away, do that
+            if now:
+                self.cancel_delayed('ball_save_timer')
+                self.delay(name='ball_save_timer', event_type=None, delay=1, handler=self.ball_save_countdown)
+                self.ball_save_active = True
+            # if not starting right away - stash the timer value and set the flag for delayed start
+            else:
+                self.ball_save_begin = 1
+                self.timer_hold = time
 
     def ball_save_countdown(self):
         self.ball_save_timer -= 1
