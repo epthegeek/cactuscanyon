@@ -264,6 +264,7 @@ class Moonlight(ep.EP_Mode):
         self.moonlightTotal = 0
         self.running = True
         self.starting = True
+        self.hd_flair = self.game.user_settings['Gameplay (Feature)']['High Def Flair'] == 'Enabled'
         self.hd_banners = []
         self.shuffle_hd_banners()
         # kill the GI - and all the lights
@@ -413,7 +414,7 @@ class Moonlight(ep.EP_Mode):
             self.cancel_delayed("Display")
             banner = random.choice(self.banners)
             # New HD
-            if self.game.user_settings['Gameplay (Feature)']['High Def Flair'] == 'Enabled':
+            if self.hd_flair:
                 n = self.hd_banners[0]
                 self.hd_banners.remove(n)
                 self.game.desktop.blit(self.game.desktop.mm_banners[n])
