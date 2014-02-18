@@ -45,6 +45,11 @@ class PartyMode(ep.EP_Mode):
         # set up the type of mode text
         if self.game.party_setting == 'Flip Ct':
             textString1 = "< LIMITED FLIPS - " + str(self.flip_limit) + " >"
+        elif self.game.party_setting == 'Drunk':
+            textString1 = "< DRUNK - FLIPPERS REVERSED >"
+        # last case is release to flip
+        else:
+            textString1 = "< RELEASE TO FLIP >"
             textLayer1 = ep.EP_TextLayer(64,0, self.game.assets.font_6px_az_inverse, "center", opaque = False).set_text(textString1,color=ep.MAGENTA)
             script.append({'seconds':1.0,'layer':textLayer1})
             # and another blank

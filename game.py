@@ -113,7 +113,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2014.02.14"
+        self.revision = "2014.02.18"
 
         # basic game reset stuff, copied in
 
@@ -1020,30 +1020,40 @@ class CCGame(game.BasicGame):
     ### Standard flippers
     def enable_flippers(self, enable):
         """Enables or disables the flippers AND bumpers."""
+        if self.party_setting == "Drunk":
+            self.enable_inverted_flippers(True)
+        else:
+            for flipper in self.config['PRFlippers']:
+                self.logger.info("Programming flipper %s", flipper)
+                main_coil = self.coils[flipper+'Main']
+                self.logger.info("Enabling WPC style flipper")
+                hold_coil = self.coils[flipper+'Hold']
+                switch_num = self.switches[flipper].number
 
-        for flipper in self.config['PRFlippers']:
-            self.logger.info("Programming flipper %s", flipper)
-            main_coil = self.coils[flipper+'Main']
-            self.logger.info("Enabling WPC style flipper")
-            hold_coil = self.coils[flipper+'Hold']
-            switch_num = self.switches[flipper].number
+                drivers = []
+                if enable:
+                    drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
+                    drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
+                if self.party_setting == "Rel Flip":
+                # release to flip
+                    state = 'open_nondebounced'
+                    state2 = 'closed_nondebounced'
+                # normal
+                else:
+                    state = 'closed_nondebounced'
+                    state2 = 'open_nondebounced'
+                self.proc.switch_update_rule(switch_num, state, {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
-            drivers = []
-            if enable:
-                drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
-                drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
-            self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
+                drivers = []
+                if enable:
+                    drivers += [pinproc.driver_state_disable(main_coil.state())]
+                    drivers += [pinproc.driver_state_disable(hold_coil.state())]
 
-            drivers = []
-            if enable:
-                drivers += [pinproc.driver_state_disable(main_coil.state())]
-                drivers += [pinproc.driver_state_disable(hold_coil.state())]
+                self.proc.switch_update_rule(switch_num, state2, {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
-            self.proc.switch_update_rule(switch_num, 'open_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
-
-            if not enable:
-                main_coil.disable()
-                hold_coil.disable()
+                if not enable:
+                    main_coil.disable()
+                    hold_coil.disable()
 
         self.enable_bumpers(enable)
 
