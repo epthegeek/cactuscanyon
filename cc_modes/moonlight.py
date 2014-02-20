@@ -63,7 +63,7 @@ class Moonlight(ep.EP_Mode):
                       self.game.assets.sfx_hitBionicBart,
                       self.game.assets.sfx_glassSmash]
         self.shotsAtStart = self.game.user_settings['Gameplay (Feature)']['Moonlight Shots at Start']
-
+        self.gimmick_sounds = [self.game.assets.quote_kapooya, self.game.assets.quote_toasty]
 
     ## switches
     def sw_rightRampBottom_active(self,sw):
@@ -417,12 +417,18 @@ class Moonlight(ep.EP_Mode):
             if self.hd_flair:
                 n = self.hd_banners[0]
                 self.hd_banners.remove(n)
-                self.game.desktop.blit(self.game.desktop.mm_banners[n])
+                if n == 6:
+                    self.game.desktop.blit(self.game.desktop.mm_gimmick[0])
+                    boom = self.gimmick_sounds[0]
+                    self.game.desktop.mm_gimmick.reverse()
+                    self.gimmick_sounds.reverse()
+                else:
+                    self.game.desktop.blit(self.game.desktop.mm_banners[n])
+                    # play a noise - add pookie after banner is done
+                    boom = random.choice(self.booms)
                 self.delay(delay=0.6,handler=self.game.desktop.clear_hd)
                 if len(self.hd_banners) == 0:
                     self.shuffle_hd_banners()
-                # play a noise - add pookie after banner is done
-                boom = random.choice(self.booms)
                 self.game.sound.play(boom)
 
             # End New HD
@@ -491,8 +497,6 @@ class Moonlight(ep.EP_Mode):
 
 
     def shuffle_hd_banners(self):
-        banner_list = [0,1,2,3,4]
+        banner_list = [0,1,2,3,4,5,6]
         random.shuffle(banner_list)
         self.hd_banners = banner_list
-        print "BANNER LIST MON "
-        print self.hd_banners

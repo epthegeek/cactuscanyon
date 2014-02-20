@@ -1243,6 +1243,8 @@ class Assets():
 
         self.quote_toasty = 'quote_toasty'
         self.game.sound.register_sound(self.quote_toasty, self.quotes_path + "mm-570-toasty.wav")
+        self.quote_kapooya = 'quote_kapooya'
+        self.game.sound.register_sound(self.quote_kapooya, self.quotes_path + "kapooya.wav")
 
         # Music
         self.music_drumRiff = 'music_drumRiff'

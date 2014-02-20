@@ -273,8 +273,12 @@ class EP_Desktop():
         image_powie = pygame.image.load(images_path+'powie.jpg').convert()
         image_bang = pygame.image.load(images_path+'bang.jpg').convert()
         image_zap = pygame.image.load(images_path+'zap.jpg').convert()
+        image_doho = pygame.image.load(images_path+'doho.jpg').convert()
+        image_kapooya = pygame.image.load(images_path+'kapooya.jpg').convert()
+        image_jacob = pygame.image.load(images_path+'jacob.jpg').convert()
 
-        self.mm_banners = [image_kapow, image_boom, image_powie, image_bang, image_zap]
+        self.mm_banners = [image_kapow, image_boom, image_powie, image_bang, image_zap, image_doho, "GIMMICK"]
+        self.mm_gimmick = [image_kapooya, image_jacob]
 
         self.colors = [[None,None,None,None], # blank
                        [None,dot_grey_low,dot_grey_mid,dot_grey], # color 1 grey
