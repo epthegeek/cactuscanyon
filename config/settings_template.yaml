@@ -136,6 +136,10 @@ Gameplay (Feature):
     options: [2,20]
     increments: 1
     default: 5
+  'Beer Mug Hits Boost':
+    options: [2,20]
+    increments: 1
+    default: 3
   'Bart Brothers Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
