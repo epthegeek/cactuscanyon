@@ -384,6 +384,6 @@ class DrunkMultiball(ep.EP_Mode):
             # reset the mug hits for next time
             self.game.set_tracking('beerMugHits',0)
             # tick up the shots needed for next time
-            self.game.base.mug_shots += 3
+            self.game.base.mug_shots += self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits Boost']
         self.running = False
         self.unload()
