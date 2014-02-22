@@ -113,7 +113,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2014.02.20"
+        self.revision = "2014.02.22"
 
         # basic game reset stuff, copied in
 
@@ -1032,8 +1032,14 @@ class CCGame(game.BasicGame):
 
                 drivers = []
                 if enable:
-                    drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
-                    drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
+                    if self.party_setting == "Newb":
+                        # if we're on newbie, turn all the flippers on per button
+                        for flipper in self.config['PRFlippers']:
+                            drivers += [pinproc.driver_state_pulse(self.coils[flipper+'Main'].state(), self.flipperPulse)]
+                            drivers += [pinproc.driver_state_pulse(self.coils[flipper+'Hold'].state(), 0)]
+                    else:
+                        drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
+                        drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
                 if self.party_setting == "Rel Flip":
                 # release to flip
                     state = 'open_nondebounced'
@@ -1046,12 +1052,20 @@ class CCGame(game.BasicGame):
 
                 drivers = []
                 if enable:
-                    drivers += [pinproc.driver_state_disable(main_coil.state())]
-                    drivers += [pinproc.driver_state_disable(hold_coil.state())]
+                    if self.party_setting == "Newb":
+                    # if we're on newbie, turn all the flippers off per button release
+                        for flipper in self.config['PRFlippers']:
+                            drivers += [pinproc.driver_state_disable(self.coils[flipper+'Main'].state())]
+                            drivers += [pinproc.driver_state_disable(self.coils[flipper+'Hold'].state())]
+                    else:
+
+                        drivers += [pinproc.driver_state_disable(main_coil.state())]
+                        drivers += [pinproc.driver_state_disable(hold_coil.state())]
 
                 self.proc.switch_update_rule(switch_num, state2, {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
                 if not enable:
+
                     main_coil.disable()
                     hold_coil.disable()
 
