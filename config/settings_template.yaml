@@ -190,7 +190,7 @@ Gameplay (Feature):
     options: ['Ambush','Showdown']
     default: 'Showdown'
   'Party Mode':
-    options: ['Disabled','Flip Ct','Drunk','Rel Flip','Newb']
+    options: ['Disabled','Flip Ct','Alt Flip','Rel Flip','Drunk','Newbie']
     default: 'Disabled'
   'Party - Flip Count':
     options: [10,500]
@@ -333,6 +333,10 @@ Gameplay (Feature):
     options: ['Yes','No']
     default: 'No'
   'Tumbleweeds for CVA':
+    options: [2,20]
+    increments: 1
+    default: 3
+  'Tumbleweeds for CVA Boost':
     options: [2,20]
     increments: 1
     default: 3

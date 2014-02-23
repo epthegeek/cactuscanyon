@@ -48,8 +48,10 @@ class PartyMode(ep.EP_Mode):
         elif self.game.party_setting == 'Drunk':
             textString1 = "< DRUNK - FLIPPERS REVERSED >"
         # last case is release to flip
-        elif self.game.party_setting == 'Newb':
-            textString1 = "< NEWB - DOUBLE FLIP >"
+        elif self.game.party_setting == 'Newbie':
+            textString1 = "< NEWBIE - DOUBLE FLIP >"
+        elif self.game.party_setting == 'Alt Flip':
+            textString1 = "< ALTERNATING FLIPPERS >"
         else:
             textString1 = "< RELEASE TO FLIP >"
         textLayer1 = ep.EP_TextLayer(64,0, self.game.assets.font_6px_az_inverse, "center", opaque = False).set_text(textString1,color=ep.MAGENTA)
@@ -90,6 +92,11 @@ class PartyMode(ep.EP_Mode):
                 # we're over the total, disable the flippers
                 self.game.enable_flippers(False)
             self.update_display()
+        elif self.game.party_setting == 'Alt Flip' and self.game.flip_side == "Left":
+            self.game.flip_side = "Right"
+            self.game.flipper_swap('flipperLwR','flipperLwL')
+        else:
+            pass
 
     def sw_flipperLwR_active(self,sw):
         if self.game.party_setting == 'Flip Ct'and not self.game.skill_shot.live and self.game.base in self.game.modes:
@@ -99,3 +106,8 @@ class PartyMode(ep.EP_Mode):
                 # we're over the total disable the flippers
                 self.game.enable_flippers(False)
             self.update_display()
+        elif self.game.party_setting == 'Alt Flip' and self.game.flip_side == "Right":
+            self.game.flip_side = "Left"
+            self.game.flipper_swap('flipperLwL','flipperLwR')
+        else:
+            pass

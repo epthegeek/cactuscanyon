@@ -151,6 +151,8 @@ class CCGame(game.BasicGame):
         # status display ok ornot
         self.statusOK = False
         self.endBusy = False
+        # party mode flipper side
+        self.flipper_side = "Right"
 
         """docstring for setup"""
         # load up the game data Game data
@@ -764,8 +766,11 @@ class CCGame(game.BasicGame):
 
         # divert to the match before high score entry - unless last call is disabled
         lastCall = 'Enabled' == self.user_settings['Gameplay (Feature)']['Last Call Mode']
+        # turn off last call in limited flip party mode
+        if self.party_setting == "Flip Ct":
+            lastCall = False
         # if replays are enabled, and last call is not, then there may be last call to do if someone won
-        if self.replays and not lastCall and self.user_settings['Machine (Standard)']['Replay Award'] == 'Last Call':
+        if self.replays and not lastCall and self.user_settings['Machine (Standard)']['Replay Award'] == 'Last Call' and not self.party_setting == "Flip Ct":
             winners = 0
             lastCallers = []
             # check to see if anybody won
@@ -1022,6 +1027,9 @@ class CCGame(game.BasicGame):
         """Enables or disables the flippers AND bumpers."""
         if self.party_setting == "Drunk":
             self.enable_inverted_flippers(True)
+        elif self.party_setting == "Alt Flip":
+            self.flipper_side = "Right"
+            self.flipper_swap('flipperLwR','flipperLwL')
         else:
             for flipper in self.config['PRFlippers']:
                 self.logger.info("Programming flipper %s", flipper)
@@ -1032,7 +1040,7 @@ class CCGame(game.BasicGame):
 
                 drivers = []
                 if enable:
-                    if self.party_setting == "Newb":
+                    if self.party_setting == "Newbie":
                         # if we're on newbie, turn all the flippers on per button
                         for flipper in self.config['PRFlippers']:
                             drivers += [pinproc.driver_state_pulse(self.coils[flipper+'Main'].state(), self.flipperPulse)]
@@ -1041,7 +1049,7 @@ class CCGame(game.BasicGame):
                         drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
                         drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
                 if self.party_setting == "Rel Flip":
-                # release to flip
+                # release to flip inverts switch behavior so the states flip
                     state = 'open_nondebounced'
                     state2 = 'closed_nondebounced'
                 # normal
@@ -1052,7 +1060,7 @@ class CCGame(game.BasicGame):
 
                 drivers = []
                 if enable:
-                    if self.party_setting == "Newb":
+                    if self.party_setting == "Newbie":
                     # if we're on newbie, turn all the flippers off per button release
                         for flipper in self.config['PRFlippers']:
                             drivers += [pinproc.driver_state_disable(self.coils[flipper+'Main'].state())]
@@ -1071,7 +1079,28 @@ class CCGame(game.BasicGame):
 
         self.enable_bumpers(enable)
 
-    ### Flipper inversion
+    def flipper_swap(self, flipperOn, flipperOff):
+        # set the coils
+        main_coil = self.coils[flipperOn+'Main']
+        main_coil_off = self.coils[flipperOff+'Main']
+        hold_coil = self.coils[flipperOn+'Hold']
+        hold_coil_off = self.coils[flipperOff+'Hold']
+        switch_num = self.switches[flipperOn].number
+        # enable the new priority
+        drivers = []
+        drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
+        drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
+        self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
+        drivers = []
+        drivers += [pinproc.driver_state_disable(main_coil.state())]
+        drivers += [pinproc.driver_state_disable(hold_coil.state())]
+        self.proc.switch_update_rule(switch_num, 'open_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
+        # disable the other
+        main_coil_off.disable()
+        hold_coil_off.disable()
+
+
+        ### Flipper inversion
 
     def enable_inverted_flippers(self, enable):
         """Enables or disables the flippers AND bumpers."""
