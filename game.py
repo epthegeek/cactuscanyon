@@ -151,8 +151,6 @@ class CCGame(game.BasicGame):
         # status display ok ornot
         self.statusOK = False
         self.endBusy = False
-        # party mode flipper side
-        self.flipper_side = "Right"
 
         """docstring for setup"""
         # load up the game data Game data
@@ -1027,9 +1025,6 @@ class CCGame(game.BasicGame):
         """Enables or disables the flippers AND bumpers."""
         if self.party_setting == "Drunk":
             self.enable_inverted_flippers(True)
-        elif self.party_setting == "Alt Flip":
-            self.flipper_side = "Right"
-            self.flipper_swap('flipperLwR','flipperLwL')
         else:
             for flipper in self.config['PRFlippers']:
                 self.logger.info("Programming flipper %s", flipper)
@@ -1078,26 +1073,6 @@ class CCGame(game.BasicGame):
                     hold_coil.disable()
 
         self.enable_bumpers(enable)
-
-    def flipper_swap(self, flipperOn, flipperOff):
-        # set the coils
-        main_coil = self.coils[flipperOn+'Main']
-        main_coil_off = self.coils[flipperOff+'Main']
-        hold_coil = self.coils[flipperOn+'Hold']
-        hold_coil_off = self.coils[flipperOff+'Hold']
-        switch_num = self.switches[flipperOn].number
-        # enable the new priority
-        drivers = []
-        drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
-        drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
-        self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
-        drivers = []
-        drivers += [pinproc.driver_state_disable(main_coil.state())]
-        drivers += [pinproc.driver_state_disable(hold_coil.state())]
-        self.proc.switch_update_rule(switch_num, 'open_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
-        # disable the other
-        main_coil_off.disable()
-        hold_coil_off.disable()
 
 
         ### Flipper inversion
