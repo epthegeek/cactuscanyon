@@ -92,8 +92,8 @@ class PartyMode(ep.EP_Mode):
                 # we're over the total, disable the flippers
                 self.game.enable_flippers(False)
             self.update_display()
-        elif self.game.party_setting == 'Alt Flip' and self.game.flip_side == "Left":
-            self.game.flip_side = "Right"
+        elif self.game.party_setting == 'Alt Flip' and self.game.flipper_side == "Left":
+            self.game.flipper_side = "Right"
             self.game.flipper_swap('flipperLwR','flipperLwL')
         else:
             pass
@@ -106,8 +106,8 @@ class PartyMode(ep.EP_Mode):
                 # we're over the total disable the flippers
                 self.game.enable_flippers(False)
             self.update_display()
-        elif self.game.party_setting == 'Alt Flip' and self.game.flip_side == "Right":
-            self.game.flip_side = "Left"
+        elif self.game.party_setting == 'Alt Flip' and self.game.flipper_side == "Right":
+            self.game.flipper_side = "Left"
             self.game.flipper_swap('flipperLwL','flipperLwR')
         else:
             pass
