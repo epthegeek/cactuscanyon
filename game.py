@@ -113,7 +113,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2014.02.20"
+        self.revision = "2014.02.28"
 
         # basic game reset stuff, copied in
 
@@ -1033,7 +1033,8 @@ class CCGame(game.BasicGame):
                 drivers = []
                 if enable:
                     drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
-                    drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
+                    if self.party_setting != "No Hold":
+                        drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
                 if self.party_setting == "Rel Flip":
                 # release to flip
                     state = 'open_nondebounced'
@@ -1080,15 +1081,24 @@ class CCGame(game.BasicGame):
             drivers = []
             if enable:
                 drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
-                drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
-            self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
+                if self.party_setting != "No Hold":
+                    drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
+                if self.party_setting == "Rel Flip":
+                # release to flip
+                    state = 'open_nondebounced'
+                    state2 = 'closed_nondebounced'
+                # normal
+                else:
+                    state = 'closed_nondebounced'
+                    state2 = 'open_nondebounced'
+                self.proc.switch_update_rule(switch_num, state, {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
             drivers = []
             if enable:
                 drivers += [pinproc.driver_state_disable(main_coil.state())]
                 drivers += [pinproc.driver_state_disable(hold_coil.state())]
 
-            self.proc.switch_update_rule(switch_num, 'open_nondebounced', {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
+                self.proc.switch_update_rule(switch_num, state2, {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
             if not enable:
                 main_coil.disable()
