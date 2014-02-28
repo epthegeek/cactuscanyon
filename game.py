@@ -1042,7 +1042,8 @@ class CCGame(game.BasicGame):
                             drivers += [pinproc.driver_state_pulse(self.coils[flipper+'Hold'].state(), 0)]
                     else:
                         drivers += [pinproc.driver_state_pulse(main_coil.state(), self.flipperPulse)]
-                        drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
+                        if self.party_setting != "No Hold":
+                            drivers += [pinproc.driver_state_pulse(hold_coil.state(), 0)]
                 if self.party_setting == "Rel Flip":
                 # release to flip inverts switch behavior so the states flip
                     state = 'open_nondebounced'

@@ -190,7 +190,7 @@ Gameplay (Feature):
     options: ['Ambush','Showdown']
     default: 'Showdown'
   'Party Mode':
-    options: ['Disabled','Flip Ct','Rel Flip','Drunk','Newbie']
+    options: ['Disabled','Flip Ct','Rel Flip','Drunk','Newbie','No Hold']
     default: 'Disabled'
   'Party - Flip Count':
     options: [10,500]
