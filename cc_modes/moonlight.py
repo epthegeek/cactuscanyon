@@ -302,6 +302,10 @@ class Moonlight(ep.EP_Mode):
             self.ending = True
             self.darken()
         if self.game.trough.num_balls_in_play == 0 and self.running:
+            # check if we're ending - if we aren't turn that crap on .. or LOOOOOP
+            if not self.ending:
+                self.ending = True
+                self.darken()
             self.cancel_delayed("Display")
             # wrap up the mode
             self.final_display()

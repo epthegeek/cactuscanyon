@@ -369,7 +369,7 @@ class DrunkMultiball(ep.EP_Mode):
         #if self.game.trough.num_balls_in_play > 0:
         self.music_on(self.game.assets.music_mainTheme,mySlice=4)
         # tick up the shots needed for next time
-        self.game.base.mug_shots += 3
+        self.game.base.mug_shots += self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits Boost']
         # remove the switch blocker
         self.game.switch_blocker('remove',self.myID)
         self.game.base.busy = False
@@ -384,6 +384,6 @@ class DrunkMultiball(ep.EP_Mode):
             # reset the mug hits for next time
             self.game.set_tracking('beerMugHits',0)
             # tick up the shots needed for next time
-            self.game.base.mug_shots += 3
+            self.game.base.mug_shots += self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits Boost']
         self.running = False
         self.unload()
