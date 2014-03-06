@@ -103,3 +103,8 @@ class PartyMode(ep.EP_Mode):
             self.update_display()
         else:
             print "No match on Right"
+
+    def tilted(self):
+    # default tilt action is just to unload - this is here so it can be redefined
+    # in each mode if something extra is needed
+        print "Tilted: " + self.myID

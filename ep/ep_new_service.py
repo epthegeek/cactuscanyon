@@ -1300,7 +1300,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         self.game.sound.play(self.game.assets.sfx_menuUp)
         if self.state == 'nav':
             self.index += 1
-            print "Up - Index size: " + str(len(self.items)) + " - Current index: " + str(self.index)
+            #print "Up - Index size: " + str(len(self.items)) + " - Current index: " + str(self.index)
             # if we get too high, go to zero
             if self.index >= len(self.items):
                 self.index = 0
@@ -1321,7 +1321,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         self.game.sound.play(self.game.assets.sfx_menuDown)
         if self.state == 'nav':
             self.index -= 1
-            print "Down - Index size: " + str(len(self.items)) + " - Current index: " + str(self.index)
+            #print "Down - Index size: " + str(len(self.items)) + " - Current index: " + str(self.index)
             # if we get below zero, loop around
             if self.index < 0:
                 self.index = (len(self.items) - 1)
