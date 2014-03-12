@@ -1,0 +1,81 @@
+##   ____           _                ____
+##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
+## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
+## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
+##  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
+##                                                   |___/
+##           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
+##          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
+##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
+##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
+##
+## A P-ROC Project by Eric Priepke, Copyright 2012-2013
+## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
+## Original Cactus Canyon software by Matt Coriale
+##
+##
+## This list is arranged top to bottom on the playfield
+##
+#                                   1         2         3           1         2         3           1         2         3
+#           METER        | 1234567890123456789012345678901|1234567890123456789012345678901|1234567890123456789012345678901|
+lamp:rightBonusLane      | [      ]
+lamp:leftBonusLane       | [      ]
+lamp:bountySaloon        | [      ]
+lamp:rightLoopCombo      | [      ]
+lamp:centerRampCombo     | [      ]
+lamp:saloonArrow         | [        ]
+lamp:rightLoopJackpot    | [        ]
+lamp:centerRampJackpot   | [        ]
+lamp:rightLoopMarksman   | [        ]
+lamp:extraBall           | [          ]
+lamp:rightLoopGunslinger | [          ]
+lamp:centerRampSavePolly | [          ]
+lamp:rightLoopGoodShot   | [          ]
+lamp:mineLock            | [            ]
+lamp:beerMug             | [            ]
+lamp:badGuyL2            | [            ]
+lamp:centerRampStopTrain | [            ]
+lamp:rightRampCombo      | [            ]
+lamp:leftLoopCombo       | [            ]
+lamp:leftRampCombo       | [              ]
+lamp:badGuyL3            | [              ]
+lamp:rightRampJackpot    | [              ]
+lamp:centerRampCatchTrain| [              ]
+lamp:leftLoopJackpot     | [                ]
+lamp:leftRampJackpot     | [                ]
+lamp:badGuyL1            | [                ]
+lamp:badGuyL0            | [                ]
+lamp:rightRampSavePolly  | [                ]
+lamp:leftLoopRideEm      | [                  ]
+lamp:leftRampSavePolly   | [                  ]
+lamp:rightRampShootOut   | [                  ]
+lamp:leftLoopWildRide    | [                  ]
+lamp:leftRampWaterfall   | [                  ]
+lamp:topRightQuickdraw   | [                    ]
+lamp:leftLoopBuckNBronco | [                    ]
+lamp:rightRampSoundAlarm | [                    ]
+lamp:leftRampWhiteWater  | [                    ]
+lamp:leftQuickdraw       | [                    ]
+lamp:shootToCollect      | [                      ]
+lamp:bottomRightQuickdraw| [                      ]
+lamp:extraBallLitBeacon  | [                      ]
+lamp:jackpotBeacon       | [                      ]
+lamp:bountyBeacon        | [                      ]
+lamp:rankDeputy          | [                        ]
+lamp:rankPartner         | [                        ]
+lamp:rankSheriff         | [                        ]
+lamp:starMotherlode      | [                        ]
+lamp:rankStranger        | [                        ]
+lamp:rankMarshall        | [                        ]
+lamp:leftReturnQuickdraw | [                          ]
+lamp:rightReturnQuickdraw| [                          ]
+lamp:starStampede        | [                          ]
+lamp:starCombo           | [                          ]
+lamp:starBartBrothers    | [                            ]
+lamp:leftOutGunfight     | [                            ]
+lamp:rightOutSpecial     | [                            ]
+lamp:leftGunfightPin     | [                            ]
+lamp:starShowdown        | [                              ]
+lamp:starHighNoon        | [                              ]
+lamp:rightGunfightPin    | [                              ]
+lamp:shootAgain          | [                              ]

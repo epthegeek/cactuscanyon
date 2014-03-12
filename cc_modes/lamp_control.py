@@ -1043,3 +1043,15 @@ class LampControl(ep.EP_Mode):
         self.game.lamps.leftBonusLane.disable()
         self.game.lamps.rightBonusLane.disable()
 
+
+    #
+    #  Extra crap
+    #
+
+    def feature_lamps_on(self):
+        for lamp in self.game.lamps:
+            lamp.enable()
+
+    def feature_lamps_off(self):
+        for lamp in self.game.lamps:
+            lamp.disable()

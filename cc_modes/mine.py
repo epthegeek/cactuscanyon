@@ -412,9 +412,11 @@ class Mine(ep.EP_Mode):
             animLayer.add_frame_listener(17,self.game.sound.play,param=self.game.assets.sfx_ebDrink)
             animLayer.add_frame_listener(23,self.game.base.play_quote,param=self.game.assets.quote_whatThe)
             animLayer.add_frame_listener(25,self.game.sound.play,param=self.game.assets.sfx_ebGunfire)
+            animLayer.add_frame_listener(25,lambda: self.game.lampctrl.play_show(self.game.assets.lamp_sparkle, repeat=False,callback=self.game.lampctrl.feature_lamps_on))
             animLayer.add_frame_listener(41,self.game.sound.play,param=self.game.assets.sfx_ebLookRight)
             animLayer.add_frame_listener(45,self.game.sound.play,param=self.game.assets.sfx_ebLookLeft)
             animLayer.add_frame_listener(46,self.game.sound.play,param=self.game.assets.sfx_ebFallAndCrash)
+            animLayer.add_frame_listener(46,lambda: self.game.lampctrl.play_show(self.game.assets.lamp_wipeToBottom, repeat=False,callback=self.lamp_update))
             # play the intro sounds
             self.game.sound.play(self.game.assets.sfx_ebMusic)
             self.game.base.play_quote(self.game.assets.quote_thirsty)
