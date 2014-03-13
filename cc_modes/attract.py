@@ -155,6 +155,8 @@ class Attract(ep.EP_Mode):
             self.game.assets.lamp_topToBottom,
             self.game.assets.lamp_chase,
             self.game.assets.lamp_chase,
+            self.game.assets.lamp_chase,
+            self.game.assets.lamp_chase,
             self.game.assets.lamp_fanRight,
             self.game.assets.lamp_fanLeft,
             self.game.assets.lamp_fanFillRight,
