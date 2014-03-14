@@ -241,7 +241,7 @@ class SkillShot(ep.EP_Mode):
             if not self.game.max_extra_balls_reached():
                 prizes.append("J")
             # move your train
-            if self.mytValue == 'Enabled' and self.game.move_your_train not in self.game.modes and not self.game.train.mytFail:
+            if self.mytValue == "Enabled" and self.game.move_your_train not in self.game.modes and not self.game.train.mytFail:
                 prizes.append("S")
             # cva
             prizes.append("T")
@@ -301,7 +301,6 @@ class SkillShot(ep.EP_Mode):
 
         # add the far right symbol to the left side so that it can be slid right
         self.selectedPrizes = self.selectedPrizes[4:5] + self.selectedPrizes
-
         print "Selected Prizes: " + self.selectedPrizes
         # if we're not in the super skillshot, update the display right away
         if not self.super:

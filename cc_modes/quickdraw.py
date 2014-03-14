@@ -210,6 +210,9 @@ class Quickdraw(ep.EP_Mode):
         self.timer(self.target)
 
     def won(self,target):
+        # update the bad guys
+        self.game.set_tracking('badGuysDead',"True",target)
+        self.update_tracking()
         # audit
         self.game.game_data['Feature']['Quickdraws Won'] += 1
         # kill the timer
@@ -248,8 +251,6 @@ class Quickdraw(ep.EP_Mode):
         self.game.score(self.points)
         # add some bonus
         self.game.add_bonus(50000)
-        # update the bad guys
-        self.game.set_tracking('badGuysDead',"True",target)
         self.lamp_update()
         # stall a bit, then do the rest of the winning
         self.delay("Operational",delay=0.5,handler=self.finish_win,param=dudesDead)
@@ -295,8 +296,8 @@ class Quickdraw(ep.EP_Mode):
         print "ENDING QUICKDRAW"
         # turn off the layer
         self.layer = None
-
-        self.update_tracking()
+        # moving the tracking update to sooner
+        #self.update_tracking()
 
         self.lamp_update()
         print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
