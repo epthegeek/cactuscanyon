@@ -392,7 +392,7 @@ class SS_Tribute(ep.EP_Mode):
         # tick up the counter
         self.urged += 1
         # Check for overage - and reset
-        if self.urged > 5:
+        if self.urged >= len(self.urge_keys):
             random.shuffle(self.urge_keys)
             self.urged = 0
 

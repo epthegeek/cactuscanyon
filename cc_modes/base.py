@@ -328,7 +328,7 @@ class BaseGameMode(ep.EP_Mode):
     def end_quote(self,key):
         self.active_quotes.remove(key)
 
-    def priority_quote(self,quote,loops=0, max_time=0, fade_ms=0,squelch=False,nr=None):
+    def priority_quote(self,quote,loops=0, max_time=0, fade_ms=0,squelch=False,nr=999):
         # cancel any other voice quote
         for key in self.active_quotes:
             print "STOPPING " + str(key)

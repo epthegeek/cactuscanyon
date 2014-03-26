@@ -47,6 +47,13 @@ class Quickdraw(ep.EP_Mode):
         self.pauseView = dmd.ScriptedLayer(128,32,script)
         self.pauseView.composite_op = "blacksrc"
         self.eb_wins = self.game.user_settings['Gameplay (Feature)']['Quickdraw Wins for EB']
+        self.taunt_keys = list(range(len(self.game.sound.sounds[self.game.assets.quote_quickdrawTaunt])))
+        random.shuffle(self.taunt_keys)
+        self.taunt_count = 0
+        self.taunting = False
+        self.win_keys = list(range(len(self.game.sound.sounds[self.game.assets.quote_quickdrawWin])))
+        random.shuffle(self.win_keys)
+        self.win_count = 0
 
     def mode_started(self):
         self.paused = False
@@ -115,6 +122,7 @@ class Quickdraw(ep.EP_Mode):
         self.game.increase_tracking('quickdrawsStarted')
 
         print "STARTING QUICKDRAW ON SIDE:" + str(side)
+        print "Taunt count: " + str(self.taunt_count) + " Taunt List length: " + str(len(self.taunt_keys))
         # set the status of this side to running
         self.game.set_tracking('quickdrawStatus',"RUNNING",side)
         # figure out the available bad guys
@@ -172,7 +180,7 @@ class Quickdraw(ep.EP_Mode):
         else:
             # every 3 seconds, play a taunt quote
             if int(self.runtime % 5.0) == 0 and self.runtime >= 6:
-                self.game.base.play_quote(self.game.assets.quote_quickdrawTaunt)
+                self.taunt_player()
             # play a hurry quote if we're at 2 seconds.
             if self.runtime == 2:
                 self.game.base.play_quote(self.game.assets.quote_hurry)
@@ -195,6 +203,23 @@ class Quickdraw(ep.EP_Mode):
             self.layer = dmd.GroupedLayer(128,32,[self.animLayer,scoreLayer])
             # delay the next iteration
             self.delay("Timer Delay", delay = 0.2, handler = self.timer, param=target)
+
+    def taunt_player(self):
+        if not self.taunting:
+            self.taunting = True
+            # play the current quote - using a specific position in the list from the ssUrge quotes
+            self.game.base.play_quote(self.game.assets.quote_quickdrawTaunt,nr=self.taunt_keys[self.taunt_count])
+            # tick up the counter
+            self.taunt_count += 1
+            print "Taunt count: " + str(self.taunt_count) + " Taunt List length: " + str(len(self.taunt_keys))
+            self.delay(delay = 1,handler=self.untaunt)
+            # Check for overage - and reset
+            if self.taunt_count >= len(self.taunt_keys):
+                random.shuffle(self.taunt_keys)
+                self.taunt_count = 0
+
+    def untaunt(self):
+        self.taunting = False
 
     def pause(self):
         self.paused = True
@@ -257,7 +282,7 @@ class Quickdraw(ep.EP_Mode):
 
     def finish_win(self,dudesDead):
         # play a quote
-        duration = self.game.base.priority_quote(self.game.assets.quote_quickdrawWin)
+        duration = self.win_quote()
         # if this is the 4th one , and we're not at the EB max, then light extra ball
         if dudesDead == self.eb_wins and not self.game.max_extra_balls_reached():
             # call the extra ball lit with a callback to the check bounty routine after
@@ -267,6 +292,18 @@ class Quickdraw(ep.EP_Mode):
         # any other case, just go to check bounty
         else:
             self.delay("Operational",delay=duration,handler=self.check_bounty)
+
+    def win_quote(self):
+        # play the current quote - using a specific position in the list from the ssUrge quotes
+        duration = self.game.base.play_quote(self.game.assets.quote_quickdrawWin,nr=self.win_keys[self.win_count])
+        # tick up the counter
+        self.win_count += 1
+        # Check for overage - and reset
+        if self.win_count >= len(self.win_keys):
+            random.shuffle(self.win_keys)
+            self.win_count = 0
+        return duration
+
 
     def check_bounty(self):
         # if the bounty isn't lit, light bounty - should these stack?
@@ -288,6 +325,8 @@ class Quickdraw(ep.EP_Mode):
         # stuff specific to losing
         # drop the coil and kill the lamp
         self.game.bad_guys.target_down(target)
+        # update the tracking
+        self.update_tracking()
         # else just end the quickdraw
         self.end_quickdraw()
 
