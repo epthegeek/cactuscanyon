@@ -121,7 +121,7 @@ class Trough(ep.EP_Mode):
     # the delay will call the real handler (check_switches).
     def position_switch_handler(self, sw):
         self.cancel_delayed('check_switches')
-        self.delay(name='check_switches', event_type=None, delay=0.50, handler=self.check_switches)
+        self.delay(name='check_switches', event_type=None, delay=1, handler=self.check_switches)
 
     def check_switches(self):
         print "CHECKING SWITCHES - Balls in play: " + str(self.num_balls_in_play)
