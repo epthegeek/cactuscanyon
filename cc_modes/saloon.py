@@ -152,8 +152,9 @@ class Saloon(ep.EP_Mode):
 
     def sw_jetBumpersExit_active(self,sw):
         # if there's an active bart, play a quote
-        if self.game.show_tracking('bartStatus') == "RUNNING":
-            self.game.base.play_quote(self.game.bart.tauntQuote)
+        if self.game.show_tracking('bartStatus') == "RUNNING" or self.game.show_tracking('bartStatus') == "LAST":
+            #self.game.base.play_quote(self.game.bart.tauntQuote)
+            self.game.bart.play_ordered_quote(self.game.bart.tauntQuote,'taunt')
             # and move the bart
             self.game.bart.animate(2)
         # score some points
