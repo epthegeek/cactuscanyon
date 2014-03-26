@@ -54,7 +54,8 @@ class SS_Tribute(ep.EP_Mode):
         self.infoLine = ep.EP_TextLayer(0,1,self.game.assets.font_5px_AZ,"center", opaque=False)
         # offset position for the frog layers based on index position
         self.offsets = [0,-9,-18,-28]
-
+        self.hit_keys = list(range(len(self.game.sound.sounds[self.game.assets.quote_ssHit])))
+        self.urge_keys = list(range(len(self.game.sound.sounds[self.game.assets.quote_ssUrge])))
 
     def mode_started(self):
         self.frogLayers = [None,None,None,None]
@@ -74,6 +75,10 @@ class SS_Tribute(ep.EP_Mode):
         self.running = True
         self.won = False
         self.halted = False
+        random.shuffle(self.hit_keys)
+        random.shuffle(self.urge_keys)
+        self.hitsSoFar = 0
+        self.urged = 0
         # overall mode timer
         self.modeTimer = 20
         # score for the mode
@@ -172,6 +177,19 @@ class SS_Tribute(ep.EP_Mode):
             self.kill_frog()
         return game.SwitchStop
 
+    # kill a frog if the beer GETS IT
+    def sw_phantomSwitch4_active(self,sw):
+        if self.beerHit:
+            pass
+        else:
+            self.beerHit = True
+            # delay to re-allow due to debounce being off
+            self.delay(delay=0.050,handler=self.beer_unhit)
+            print "Beer Mug Hit - Kill Frog"
+            self.kill_frog()
+        return game.SwitchStop
+
+
     def beer_unhit(self):
         self.beerHit = False
 
@@ -211,6 +229,7 @@ class SS_Tribute(ep.EP_Mode):
             textLine2 = ep.EP_TextLayer(64,22,self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("SQUASH LEAPERS",color=ep.BROWN)
             combined = dmd.GroupedLayer(128,32,[self.titleLine,textLine2,textLine1])
             self.layer = combined
+            self.game.sound.play(self.game.assets.quote_ssStart)
             self.delay(delay = 1.5,handler=self.get_going)
 
 
@@ -319,6 +338,8 @@ class SS_Tribute(ep.EP_Mode):
             self.delay("Display",delay=myWait,handler=self.kill_frog,param=2)
 
         if step == 2:
+            # play a hit quote
+            self.game.base.play_quote(self.game.assets.quote_ssHit,nr=self.hit_keys[self.hitsSoFar -1])
             # display the hit
             title = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az, "center", opaque=False).set_text("LEAPER SQUASHED",color=ep.RED)
             score = ep.EP_TextLayer(64,13,self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.value),blink_frames=6,color=ep.GREEN)
@@ -359,9 +380,21 @@ class SS_Tribute(ep.EP_Mode):
                 color = ep.YELLOW
             else:
                 color = ep.RED
+            if self.modeTimer == 12 or self.modeTimer == 5:
+                self.urge_player()
             self.leftTimerLine.set_text(str(self.modeTimer),color=color)
             self.rightTimerLine.set_text(str(self.modeTimer),color=color)
             self.delay("Mode Timer",delay=1,handler=self.time_frogs)
+
+    def urge_player(self):
+        # play the current quote - using a specific position in the list from the ssUrge quotes
+        self.game.base.play_quote(self.game.assets.quote_ssUrge,nr=self.urge_keys[self.urged])
+        # tick up the counter
+        self.urged += 1
+        # Check for overage - and reset
+        if self.urged > 5:
+            random.shuffle(self.urge_keys)
+            self.urged = 0
 
     def score_update(self):
         # update the score line total every half second
@@ -411,6 +444,8 @@ class SS_Tribute(ep.EP_Mode):
             # play a final quote
             if len(self.availFrogs) == 0:
                 self.delay(delay=0.3,handler=self.game.sound.play,param=self.game.assets.quote_ssWin)
+            else:
+                self.delay(delay=0.3,handler=self.game.sound.play,param=self.game.assets.quote_ssLose)
             self.game.sound.play(self.game.assets.sfx_ssBubbling)
             self.game.sound.play(self.game.assets.sfx_ssGong)
             self.delay(delay=1.5,handler=self.finish_frogs,param=2)

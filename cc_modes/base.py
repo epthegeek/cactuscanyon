@@ -285,7 +285,7 @@ class BaseGameMode(ep.EP_Mode):
 
     # modified version of play voice from procgame.sound that stores a list of active quotes
     # even though more than one shouldn't be possible given the time checking
-    def play_quote(self,key, loops=0, max_time=0, fade_ms=0,override=False,squelch=False):
+    def play_quote(self,key, loops=0, max_time=0, fade_ms=0,override=False,squelch=False,nr=999):
         if not self.game.sound.enabled:
             return 0
         current_time = time.time()
@@ -300,10 +300,20 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.squelch_music()
             # store the key in a list
             self.active_quotes.append(key)
-            if len(self.game.sound.sounds[key]) > 0:
-                random.shuffle(self.game.sound.sounds[key])
-            self.game.sound.sounds[key][0].play(loops,max_time,fade_ms)
-            duration = self.game.sound.sounds[key][0].get_length() * (loops+1)
+            # allow the code to pick specific items out of batches of quotes if specified
+            if nr != 999:
+                n = nr
+                print "Quote Specific Number is: " + str(n)
+            elif len(self.game.sound.sounds[key]) > 0:
+                l = list(range(len(self.game.sound.sounds[key])))
+                n = random.choice(l)
+                print "Randomized Quote Number is: " + str(n)
+            else:
+                print "Quote Number Defaulted to zero"
+                n = 0
+            # then play the quote based on the new selection
+            self.game.sound.sounds[key][n].play(loops,max_time,fade_ms)
+            duration = self.game.sound.sounds[key][n].get_length() * (loops+1)
             self.game.sound.voice_end_time = current_time + duration
             # delay a removal of the active quote from the list
             self.delay(delay=duration,handler=self.end_quote,param=key)
@@ -318,13 +328,13 @@ class BaseGameMode(ep.EP_Mode):
     def end_quote(self,key):
         self.active_quotes.remove(key)
 
-    def priority_quote(self,quote,loops=0, max_time=0, fade_ms=0,squelch=False):
+    def priority_quote(self,quote,loops=0, max_time=0, fade_ms=0,squelch=False,nr=None):
         # cancel any other voice quote
         for key in self.active_quotes:
             print "STOPPING " + str(key)
             self.game.sound.stop(key)
         # then play the quote - overriding the voice delay timer
-        duration = self.play_quote(quote,loops,max_time,fade_ms,override=True,squelch=squelch)
+        duration = self.play_quote(quote,loops,max_time,fade_ms,override=True,squelch=squelch,nr=nr)
         return duration
 
     def repeat_ding(self,times):

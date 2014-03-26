@@ -579,7 +579,27 @@ class Assets():
 
         # Quotes
         self.quote_ssWin = 'quote_ssWin'
-        self.game.sound.register_sound(self.quote_ssWin, self.quotes_path + "ss_elvira_oh_yeah.wav")
+        self.game.sound.register_sound(self.quote_ssWin, self.quotes_path + "ss_youre_the_best.wav")
+        self.game.sound.register_sound(self.quote_ssWin, self.quotes_path + "ss_you_did_it.wav")
+        self.game.sound.register_sound(self.quote_ssWin, self.quotes_path + "ss_that_was_awesome.wav")
+        self.quote_ssLose = 'quote_ssLose'
+        self.game.sound.register_sound(self.quote_ssLose, self.quotes_path + "ss_oh_no.wav")
+        self.quote_ssStart = 'quote_ssStart'
+        self.game.sound.register_sound(self.quote_ssStart, self.quotes_path + "ss_i_hate_frogs.wav")
+        self.game.sound.register_sound(self.quote_ssStart, self.quotes_path + "ss_frogs_everywhere.wav")
+        self.quote_ssHit = 'quote_ssHit'
+        self.game.sound.register_sound(self.quote_ssHit, self.quotes_path + "ss_elvira_oh_yeah.wav")
+        self.game.sound.register_sound(self.quote_ssHit, self.quotes_path + "ss_ooh_do_it_again.wav")
+        self.game.sound.register_sound(self.quote_ssHit, self.quotes_path + "ss_nice_move.wav")
+        self.game.sound.register_sound(self.quote_ssHit, self.quotes_path + "ss_great_shot.wav")
+        self.quote_ssUrge = 'quote_ssUrge'
+        self.game.sound.register_sound(self.quote_ssUrge, self.quotes_path + "ss_theyre_everywhere.wav")
+        self.game.sound.register_sound(self.quote_ssUrge, self.quotes_path + "ss_what_are_you_dead.wav")
+        self.game.sound.register_sound(self.quote_ssUrge, self.quotes_path + "ss_stop_them.wav")
+        self.game.sound.register_sound(self.quote_ssUrge, self.quotes_path + "ss_get_the_leapers.wav")
+        self.game.sound.register_sound(self.quote_ssUrge, self.quotes_path + "ss_faster.wav")
+        self.game.sound.register_sound(self.quote_ssUrge, self.quotes_path + "ss_bash_those_leapers.wav")
+
 
         self.quote_cvIntroLead = 'quote_cvIntroLead'
         self.game.sound.register_sound(self.quote_cvIntroLead, self.quotes_path + "cv_1201-r-intro.wav")
