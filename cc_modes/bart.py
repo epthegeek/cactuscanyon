@@ -188,6 +188,11 @@ class Bart(ep.EP_Mode):
         self.hitQuote = hits[index]
         # taunt quotes
         self.tauntQuote = taunts[index]
+        # keys and counts for ordered quotes
+        self.keys_index = {'hit':range(len(self.game.sound.sounds[self.hitQuote])),
+                           'taunt':range(len(self.game.sound.sounds[self.tauntQuote]))}
+        self.counts_index = {'hit':0,
+                             'taunt':0}
         # death quote
         self.defeatQuote = defeats[index]
         # intro quote
@@ -217,7 +222,8 @@ class Bart(ep.EP_Mode):
         # log the hit in audits
         self.game.game_data['Feature']['Bart Hits'] += 1
         # play a quote appropriate to the current bart
-        self.game.base.priority_quote(self.hitQuote,squelch=True)
+        #self.game.base.priority_quote(self.hitQuote,squelch=True)
+        self.play_ordered_quote(self.hitQuote,'hit',priority=True,squelch=True)
 
         # move bart
         self.animate(1)
