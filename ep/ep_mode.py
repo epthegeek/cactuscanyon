@@ -18,6 +18,7 @@ from procgame import dmd
 import time
 import re
 import uuid
+import random
 
 # Documented in game.rst:
 SwitchStop = True
@@ -401,6 +402,22 @@ class EP_Mode(object):
     def lamp_update(self):
         self.game.lamp_control.update()
 
+    def play_ordered_quote(self,quote,index,priority=False,squelch=False):
+        keys = self.keys_index[index]
+        nr = keys[self.counts_index[index]]
+        if priority:
+            duration = self.game.base.priority_quote(quote,squelch=squelch,nr=nr)
+        else:
+            duration = self.game.base.play_quote(quote,squelch=squelch,nr=nr)
+        # tick up the count
+        self.counts_index[index] += 1
+        # check for overage - reset the count if over
+        if self.counts_index[index] >= len(self.keys_index[index]):
+            random.shuffle(self.keys_index[index])
+            self.counts_index[index] = 0
+        # pass back the duration just in case it's wanted
+        return duration
+
     # Data structure used by the __accepted_switches array:
     class AcceptedSwitch:
         def __init__(self, name, event_type, delay, handler, param):
@@ -422,3 +439,4 @@ class EP_Mode(object):
             self.param = param
         def __str__(self):
             return '<name=%s time=%s event_type=%s>' % (self.name, self.time, self.event_type)
+
