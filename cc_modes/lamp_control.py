@@ -52,6 +52,8 @@ class LampControl(ep.EP_Mode):
                       self.game.lamps.badGuyL3]
 
         self.bigFive = [self.left_loop,self.left_ramp,self.center_ramp,self.right_loop,self.right_ramp]
+        self.lights_out = self.game.user_settings['Gameplay (Feature)']['Party Mode'] == 'Lights Out'
+
 
     def tilted(self):
         pass
@@ -77,6 +79,10 @@ class LampControl(ep.EP_Mode):
         # this is the big mother.  Called any time playfield lamps should change.
         # first, disable the lamps
         self.disable_lamps()
+
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
 
         #   ____        _
         #  / ___|_   __/ \
@@ -337,6 +343,10 @@ class LampControl(ep.EP_Mode):
 
     # This is a combo routine for the 5 main shots
     def update_bigFive(self,mode='Base'):
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
+
         # polly only updates the main 3 - run the other 2 as base
         if mode == "Polly":
             self.left_ramp('Polly')
@@ -355,6 +365,10 @@ class LampControl(ep.EP_Mode):
     # |_____\___|_|  \__| |_____\___/ \___/| .__/
     #                                      |_|
     def left_loop(self,mode='Base'):
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
+
         # the left loop collection of lights
         ## high noon
         if mode == "highNoon":
@@ -454,6 +468,9 @@ class LampControl(ep.EP_Mode):
     # |_____\___|_|  \__| |_| \_\__,_|_| |_| |_| .__/
     #                                          |_|
     def left_ramp(self,mode='Base'):
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
         # the left ramp collection of lights
         ## high noon check
         if mode == "highNoon":
@@ -558,6 +575,10 @@ class LampControl(ep.EP_Mode):
     #  \____\___|_| |_|\__\___|_|    |_| \_\__,_|_| |_| |_| .__/
     #                                                     |_|
     def center_ramp(self,mode='Base'):
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
+
         # the center ramp collection of lights
         ## high noon check
         if mode == "highNoon":
@@ -669,6 +690,9 @@ class LampControl(ep.EP_Mode):
     # |_| \_\_|\__, |_| |_|\__| |_____\___/ \___/| .__/
     #          |___/                             |_|
     def right_loop(self,mode='Base'):
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
         # the right loop collection of lights
         ## high noon check
         if mode == "highNoon":
@@ -765,6 +789,10 @@ class LampControl(ep.EP_Mode):
     # |_| \_\_|\__, |_| |_|\__| |_| \_\__,_|_| |_| |_| .__/
     #          |___/                                 |_|
     def right_ramp(self,mode='Base'):
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
+
         # the right ramp collection of lights
         ## high noon check
         if mode =="highNoon":
@@ -873,6 +901,9 @@ class LampControl(ep.EP_Mode):
     def combos(self,mode='Timer'):
         # kill 'em first - they're not in the main shutoff
         self.disable_combos()
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
 
         if mode == 'Timer':
             # if goldmine is running, don't do this
@@ -922,6 +953,9 @@ class LampControl(ep.EP_Mode):
     #                    |___/
     def badge(self,mode='Level'):
         self.disable_badge()
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
 
         if mode == 'Level':
             # turn on all the badge lights that have been earned
@@ -966,6 +1000,10 @@ class LampControl(ep.EP_Mode):
     # |_| \_\__,_|_| |_|_|\_\
     #
     def rank_level(self):
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
+
         rank = self.game.show_tracking('rank')
         # loop through 0 through current rank and turn the lamps on
         for lamp in range(0,(rank +1),1):
@@ -973,6 +1011,10 @@ class LampControl(ep.EP_Mode):
 
 
     def saloon_flash(self,speed=0):
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
+
         if speed == 0:
             self.game.lamps.saloonArrow.schedule(0x00FF00FF)
             self.game.lamps.bountySaloon.schedule(0x00FF00FF)
@@ -996,6 +1038,10 @@ class LampControl(ep.EP_Mode):
             return
         # first disable, they're not in the common wipe
         self.disable_bad_guys()
+
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
 
         # Then, turn on lights accordingly
         for lamp in range(0,4,1):
@@ -1022,6 +1068,10 @@ class LampControl(ep.EP_Mode):
     def bonus_lanes(self,External=True):
         # reset first
         self.disable_bonus_lanes()
+
+        # if lights out party mode is on - bail
+        if self.lights_out == True:
+            return
 
         # if it was an external call just to the bonus lanes, make sure they should be on
         if External:

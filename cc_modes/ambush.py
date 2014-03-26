@@ -247,7 +247,7 @@ class Ambush(ep.EP_Mode):
             self.badGuyTimer[target] -= 1
         #print "TIMER WORKING ON TARGET: " + str(target) + " - TIME: " + str(self.badGuyTimer[target])
         # if we're down to 2 seconds speed the light up and maybe play a quote
-        if self.badGuyTimer[target] == 2:
+        if self.badGuyTimer[target] == 2 and not self.game.lamp_control.lights_out:
             self.lamps[target].schedule(0x0F0F0F0F)
             odds = [False,True,False]
             decision = random.choice(odds)
@@ -257,7 +257,7 @@ class Ambush(ep.EP_Mode):
                 self.game.base.play_quote(self.game.assets.quote_ambushUrge)
 
         # if the time is almost up change the light schedule
-        if self.badGuyTimer[target] == 1:
+        if self.badGuyTimer[target] == 1 and not self.game.lamp_control.lights_out:
             self.lamps[target].schedule(0xCCCCCCCC)
         # if he's out of time, he shoots back and goes away
         if self.badGuyTimer[target] <= 0:

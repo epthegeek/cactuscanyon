@@ -160,9 +160,10 @@ class LeftRamp(ep.EP_Mode):
         if stage < 3:
             self.game.increase_tracking('leftRampStage')
             # do a little lamp flourish
-            self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
-            self.game.lamps.leftRampWaterfall.schedule(0x0FF00FF0)
-            self.game.lamps.leftRampSavePolly.schedule(0xFF00FF00)
+            if not self.game.lamp_control.lights_out:
+                self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+                self.game.lamps.leftRampWaterfall.schedule(0x0FF00FF0)
+                self.game.lamps.leftRampSavePolly.schedule(0xFF00FF00)
             # update the lamps
             self.delay(delay=1,handler=self.lamp_update)
             print "CHECING TRACKING Left ramp LR: " + str(self.game.show_tracking('leftRampStage'))

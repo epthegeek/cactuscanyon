@@ -400,7 +400,10 @@ class EP_Mode(object):
         self.__delayed = []
 
     def lamp_update(self):
-        self.game.lamp_control.update()
+        if self.game.lamp_control.lights_out == True:
+            pass
+        else:
+            self.game.lamp_control.update()
 
     def play_ordered_quote(self,quote,index,priority=False,squelch=False):
         keys = self.keys_index[index]

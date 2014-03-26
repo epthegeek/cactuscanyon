@@ -136,11 +136,12 @@ class CenterRamp(ep.EP_Mode):
                 pass
             else:
                 self.game.increase_tracking('centerRampStage')
-            # do a little lamp flourish
-            self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
-            self.game.lamps.centerRampStopTrain.schedule(0x0FF00FF0)
-            self.game.lamps.centerRampSavePolly.schedule(0xFF00FF00)
-            self.delay(delay=1,handler=self.lamp_update)
+            if not self.game.lamp_control.lights_out:
+                # do a little lamp flourish
+                self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
+                self.game.lamps.centerRampStopTrain.schedule(0x0FF00FF0)
+                self.game.lamps.centerRampSavePolly.schedule(0xFF00FF00)
+                self.delay(delay=1,handler=self.lamp_update)
 
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):

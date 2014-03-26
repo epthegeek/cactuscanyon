@@ -870,6 +870,8 @@ class SkillShot(ep.EP_Mode):
 
     def super_update_lamps(self,blink=False):
         self.super_disable_lamps()
+        if self.game.lamp_control.lights_out:
+            return
         # one is the left loop
         if self.active == 1:
             for lamp in self.leftLoopLamps:

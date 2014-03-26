@@ -139,10 +139,11 @@ class Gunfight(ep.EP_Mode):
         self.game.lamp_control.disable_bad_guys()
         self.game.lamp_control.disable_bonus_lanes()
         self.lamp_update()
-        if side == 0:
+        if side == 0 and not self.game.lamp_control.lights_out:
             self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
         else:
-            self.game.lamps.rightGunfightPin.schedule(0x00FF00FF)
+            if not self.game.lamp_control.lights_out:
+                self.game.lamps.rightGunfightPin.schedule(0x00FF00FF)
         self.game.increase_tracking('gunfightsStarted')
         # set the bad guy pop order accounting for the side it started on
         badGuys = [0,1,2,3]

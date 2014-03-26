@@ -61,11 +61,12 @@ class MarshallMultiball(ep.EP_Mode):
         # set up the main lights
         self.update_lamps()
         # chase the rank lamps
-        self.game.lamps.rankStranger.schedule(0xFFF00000)
-        self.game.lamps.rankPartner.schedule(0x0FFF0000)
-        self.game.lamps.rankDeputy.schedule(0x000FFF00)
-        self.game.lamps.rankSheriff.schedule(0x0000FFF0)
-        self.game.lamps.rankMarshall.schedule(0x00000FFF)
+        if not self.game.lamp_control.lights_out:
+            self.game.lamps.rankStranger.schedule(0xFFF00000)
+            self.game.lamps.rankPartner.schedule(0x0FFF0000)
+            self.game.lamps.rankDeputy.schedule(0x000FFF00)
+            self.game.lamps.rankSheriff.schedule(0x0000FFF0)
+            self.game.lamps.rankMarshall.schedule(0x00000FFF)
         # if there's a quickdraw running, shut it down
         if self.game.quickdraw.running:
             self.game.quickdraw.lost(self.game.quickdraw.side)
@@ -93,6 +94,8 @@ class MarshallMultiball(ep.EP_Mode):
     def update_lamps(self):
         # first reset everything
         self.disable_lamps()
+        if self.game.lamp_control.lights_out:
+            return
         # then turn on what's needed
         # left loop
         if self.leftLoopLevel == 0:

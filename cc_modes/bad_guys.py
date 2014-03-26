@@ -172,7 +172,7 @@ class BadGuys(ep.EP_Mode):
         # new coil raise based on research with on o-scope by jim (jvspin)
         print "Target Start " + str(target) + " on time " + str(self.on_time)
         self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
-        if lamp:
+        if lamp and not self.game.lamp_control.lights_out:
             self.lamps[target].schedule(0x00FF00FF)
         # set a pending flag for this target
         self.pending[target] = True

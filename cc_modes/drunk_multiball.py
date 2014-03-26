@@ -97,12 +97,14 @@ class DrunkMultiball(ep.EP_Mode):
             self.light_jackpot()
         else:
             pass
-        self.game.lamps.beerMug.schedule(0x00000CCC,cycle_seconds=1)
-        self.delay(delay=1,handler=self.flash_mug)
+        if not self.game.lamp_control.lights_out:
+            self.game.lamps.beerMug.schedule(0x00000CCC,cycle_seconds=1)
+            self.delay(delay=1,handler=self.flash_mug)
         return game.SwitchStop
 
     def flash_mug(self):
-        self.game.lamps.beerMug.schedule(0xFF00FF00)
+        if not self.game.lamp_control.lights_out:
+            self.game.lamps.beerMug.schedule(0xFF00FF00)
 
     # if it lands in the mine, just kick it out
     def sw_minePopper_active_for_390ms(self,sw):

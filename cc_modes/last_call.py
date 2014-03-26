@@ -475,10 +475,11 @@ class LastCall(ep.EP_Mode):
         # turn on theflag
         self.double = True
         # flash thelights
-        self.game.lamps.centerRampCatchTrain.schedule(0xF0F0F0F0)
-        self.game.lamps.centerRampStopTrain.schedule(0xF0F0F0F0)
-        self.game.lamps.centerRampSavePolly.schedule(0xF0F0F0F0)
-        self.game.lamps.centerRampJackpot.schedule(0xF0F0F0F0)
+        if not self.game.lamp_control.lights_out:
+            self.game.lamps.centerRampCatchTrain.schedule(0xF0F0F0F0)
+            self.game.lamps.centerRampStopTrain.schedule(0xF0F0F0F0)
+            self.game.lamps.centerRampSavePolly.schedule(0xF0F0F0F0)
+            self.game.lamps.centerRampJackpot.schedule(0xF0F0F0F0)
         # que the shut off
         self.delay("Double", delay=3,handler=self.disable_double)
 

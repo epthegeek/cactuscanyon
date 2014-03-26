@@ -47,9 +47,13 @@ class PartyMode(ep.EP_Mode):
             textString1 = "< LIMITED FLIPS - " + str(self.flip_limit) + " >"
         elif self.game.party_setting == 'Drunk':
             textString1 = "< DRUNK - FLIPPERS REVERSED >"
-        # last case is release to flip
+        # newbie mode - both flippers all the time
         elif self.game.party_setting == 'Newbie':
             textString1 = "< NEWBIE - DOUBLE FLIP >"
+        # lights out mode
+        elif self.game.party_setting == 'Lights Out':
+            textString1 = "< LIGHTS OUT >"
+        # last case is release to flip
         else:
             textString1 = "< RELEASE TO FLIP >"
         textLayer1 = ep.EP_TextLayer(64,0, self.game.assets.font_6px_az_inverse, "center", opaque = False).set_text(textString1,color=ep.MAGENTA)

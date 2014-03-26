@@ -461,9 +461,10 @@ class Moonlight(ep.EP_Mode):
 
     def refresh_lights(self):
         for item in self.liveShots:
-            # for each lamp, schedule it to blink
-            for lamp in self.lampList[item]:
-                lamp.schedule(0x00FF00FF)
+            if not self.game.lamp_control.lights_out:
+                # for each lamp, schedule it to blink
+                for lamp in self.lampList[item]:
+                    lamp.schedule(0x00FF00FF)
 
     def darken(self):
         # stop the lampshow

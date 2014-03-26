@@ -141,9 +141,10 @@ class LeftLoop(ep.EP_Mode):
         if stage < 4:
             newstage = self.game.increase_tracking('leftLoopStage')
             # do a little lamp flourish
-            self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
-            self.game.lamps.leftLoopWildRide.schedule(0x0FF00FF0)
-            self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
+            if not self.game.lamp_control.lights_out:
+                self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
+                self.game.lamps.leftLoopWildRide.schedule(0x0FF00FF0)
+                self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
             # update the lamps
             self.delay(delay=1,handler=self.lamp_update)
             # if we're complete, check the stampede tally
