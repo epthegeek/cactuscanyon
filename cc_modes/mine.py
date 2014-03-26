@@ -20,6 +20,7 @@
 
 from procgame import dmd
 import ep
+import random
 
 class Mine(ep.EP_Mode):
     """Game mode for controlling the mine and such"""
@@ -42,6 +43,9 @@ class Mine(ep.EP_Mode):
         self.callback = None
         self.collectingEB = False
         self.lockAnimation = False
+        self.keys_index = {'lit_extra_ball':list(range(len(self.game.sound.sounds[self.game.assets.quote_extraBallLit])))}
+        self.counts_index = {'lit_extra_ball':0}
+        random.shuffle(self.keys_index['lit_extra_ball'])
 
         # if the ball lands in the kicker
     def sw_minePopper_active_for_400ms(self,sw):
@@ -366,7 +370,7 @@ class Mine(ep.EP_Mode):
         # with a sound effect
         self.game.sound.play(self.game.assets.sfx_leftLoopEnter)
         # play a quote
-        self.game.base.play_quote(self.game.assets.quote_extraBallLit)
+        self.play_ordered_quote(self.game.assets.quote_extraBallLit,'lit_extra_ball')
         self.lamp_update()
         # callback process for calling from skill shot
         if callback:

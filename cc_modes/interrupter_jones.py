@@ -34,6 +34,9 @@ class Interrupter(ep.EP_Mode):
         self.hush = False
         self.knockerStrength = self.game.user_settings['Machine (Standard)']['Real Knocker Strength']
         self.idle = False
+        self.keys_index = {'shoot_again':list(range(len(self.game.sound.sounds[self.game.assets.quote_shootAgain])))}
+        self.counts_index = {'shoot_again':0}
+        random.shuffle(self.keys_index['shoot_again'])
 
 
     def display_player_number(self,idle=False):
@@ -369,7 +372,7 @@ class Interrupter(ep.EP_Mode):
             self.delay(delay=myWait,handler=self.shoot_again,param=3)
         if step == 3:
             imageLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_shootAgain.frames[7])
-            self.game.base.play_quote(self.game.assets.quote_shootAgain)
+            self.play_ordered_quote(self.game.assets.quote_shootAgain,'shoot_again')
             textLine1 = ep.EP_TextLayer(80,5, self.game.assets.font_9px_az, "center", opaque= False).set_text("SHOOT",color=ep.GREEN)
             textLine2 = ep.EP_TextLayer(80,15, self.game.assets.font_9px_az, "center", opaque= False).set_text("AGAIN",color=ep.GREEN)
             combined = dmd.GroupedLayer(128,32,[imageLayer,textLine1,textLine2])

@@ -45,6 +45,9 @@ class RiverChase(ep.EP_Mode):
         # make a script layer with the two
         self.pauseView = dmd.ScriptedLayer(128,32,script)
         self.pauseView.composite_op = "blacksrc"
+        self.keys_index = {'start':list(range(len(self.game.sound.sounds[self.game.assets.quote_rotrIntro])))}
+        self.counts_index = {'start':0}
+        random.shuffle(self.keys_index['start'])
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -207,7 +210,7 @@ class RiverChase(ep.EP_Mode):
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
             self.delay("Get Going",delay=2,handler=self.in_progress)
-            self.delay("Operational",delay=2,handler=self.game.base.play_quote,param=self.game.assets.quote_rotrIntro)
+            self.delay("Operational",delay=2,handler=lambda: self.play_ordered_quote(self.game.assets.quote_rotrIntro,'start'))
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause

@@ -53,6 +53,9 @@ class BaseGameMode(ep.EP_Mode):
         self.multiballSaver = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Multiball Ball Savers']
         self.multiballSaverTimer = self.game.user_settings['Gameplay (Feature)']['Multiball Savers Timer']
         self.autoplungeStrength = self.game.user_settings['Machine (Standard)']['Autoplunger Strength']
+        self.keys_index = {'beer_mug':list(range(len(self.game.sound.sounds[self.game.assets.quote_beerMug])))}
+        self.counts_index = {'beer_mug':0}
+        random.shuffle(self.keys_index['beer_mug'])
 
     def mode_started(self):
         # set the number for the hits to the beer mug to start drunk multiball
@@ -240,7 +243,7 @@ class BaseGameMode(ep.EP_Mode):
                 if self.game.skill_shot.super:
                     weDo = False
                 if weDo:
-                    self.game.base.play_quote(self.game.assets.quote_beerMug)
+                    self.play_ordered_quote(self.game.assets.quote_beerMug,'beer_mug')
             ## -- set the last switch -- ##
             ep.last_switch = 'beerMug'
             ## kill the combo shot chain

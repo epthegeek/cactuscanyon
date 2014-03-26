@@ -20,6 +20,7 @@
 
 from procgame import dmd
 import ep
+import random
 
 class SavePolly(ep.EP_Mode):
     """Polly Peril - Tied to the Tracks"""
@@ -34,6 +35,9 @@ class SavePolly(ep.EP_Mode):
         self.won = False
         self.paused = False
         self.finishing_up = False
+        self.keys_index = {'start':list(range(len(self.game.sound.sounds[self.game.assets.quote_ttttIntro])))}
+        self.counts_index = {'start':0}
+        random.shuffle(self.keys_index['start'])
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -237,7 +241,7 @@ class SavePolly(ep.EP_Mode):
             # delay the start process
             self.delay("Get Going",delay=2,handler=self.in_progress)
             # play the intro quote
-            duration = self.game.base.play_quote(self.game.assets.quote_ttttIntro)
+            duration = self.play_ordered_quote(self.game.assets.quote_ttttIntro,'start')
             # delay the long train whistle
             self.delay("Train Whistle",delay=duration,handler=self.game.sound.play,param=self.game.assets.sfx_longTrainWhistle)
 
