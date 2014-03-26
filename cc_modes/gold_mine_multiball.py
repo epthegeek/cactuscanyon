@@ -34,6 +34,9 @@ class GoldMine(ep.EP_Mode):
             self.motherlodesForStar = 3
         self.restartFlag = False
         self.moo = False
+        self.keys_index = {'jackpot':list(range(len(self.game.sound.sounds[self.game.assets.quote_jackpot])))}
+        self.counts_index = {'jackpot':0}
+        random.shuffle(self.keys_index['jackpot'])
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -352,7 +355,7 @@ class GoldMine(ep.EP_Mode):
             # then do the transition
             transition = ep.EP_Transition(self,backdrop,jackpotLine,ep.EP_Transition.TYPE_CROSSFADE)
             # play a quote
-            self.game.base.priority_quote(self.game.assets.quote_jackpot)
+            self.play_ordered_quote(self.game.assets.quote_jackpot,'jackpot',priority=True)
             # and loop back for step 3
             self.delay(name="Display",delay=.8,handler=self.jackpot_hit,param=3)
         if step == 3:
