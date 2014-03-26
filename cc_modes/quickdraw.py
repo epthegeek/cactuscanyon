@@ -47,13 +47,13 @@ class Quickdraw(ep.EP_Mode):
         self.pauseView = dmd.ScriptedLayer(128,32,script)
         self.pauseView.composite_op = "blacksrc"
         self.eb_wins = self.game.user_settings['Gameplay (Feature)']['Quickdraw Wins for EB']
-        self.taunt_keys = list(range(len(self.game.sound.sounds[self.game.assets.quote_quickdrawTaunt])))
-        random.shuffle(self.taunt_keys)
-        self.taunt_count = 0
         self.taunting = False
-        self.win_keys = list(range(len(self.game.sound.sounds[self.game.assets.quote_quickdrawWin])))
-        random.shuffle(self.win_keys)
-        self.win_count = 0
+        self.keys_index = {'taunt':list(range(len(self.game.sound.sounds[self.game.assets.quote_quickdrawTaunt]))),
+                           'hit':list(range(len(self.game.sound.sounds[self.game.assets.quote_quickdrawWin])))}
+        self.counts_index = {'taunt': 0,
+                             'hit': 0}
+        random.shuffle(self.keys_index['hit'])
+        random.shuffle(self.keys_index['taunt'])
 
     def mode_started(self):
         self.paused = False
@@ -122,7 +122,6 @@ class Quickdraw(ep.EP_Mode):
         self.game.increase_tracking('quickdrawsStarted')
 
         print "STARTING QUICKDRAW ON SIDE:" + str(side)
-        print "Taunt count: " + str(self.taunt_count) + " Taunt List length: " + str(len(self.taunt_keys))
         # set the status of this side to running
         self.game.set_tracking('quickdrawStatus',"RUNNING",side)
         # figure out the available bad guys
@@ -207,16 +206,10 @@ class Quickdraw(ep.EP_Mode):
     def taunt_player(self):
         if not self.taunting:
             self.taunting = True
-            # play the current quote - using a specific position in the list from the ssUrge quotes
-            self.game.base.play_quote(self.game.assets.quote_quickdrawTaunt,nr=self.taunt_keys[self.taunt_count])
-            # tick up the counter
-            self.taunt_count += 1
-            print "Taunt count: " + str(self.taunt_count) + " Taunt List length: " + str(len(self.taunt_keys))
+            # play the current quote - using a specific position in the list
+            self.play_ordered_quote(self.game.assets.quote_quickdrawTaunt,'taunt')
+            # delay when taunting is ok again - due to the sub-second timer
             self.delay(delay = 1,handler=self.untaunt)
-            # Check for overage - and reset
-            if self.taunt_count >= len(self.taunt_keys):
-                random.shuffle(self.taunt_keys)
-                self.taunt_count = 0
 
     def untaunt(self):
         self.taunting = False
@@ -282,7 +275,7 @@ class Quickdraw(ep.EP_Mode):
 
     def finish_win(self,dudesDead):
         # play a quote
-        duration = self.win_quote()
+        duration = self.play_ordered_quote(self.game.assets.quote_quickdrawWin,'hit')
         # if this is the 4th one , and we're not at the EB max, then light extra ball
         if dudesDead == self.eb_wins and not self.game.max_extra_balls_reached():
             # call the extra ball lit with a callback to the check bounty routine after
@@ -292,18 +285,6 @@ class Quickdraw(ep.EP_Mode):
         # any other case, just go to check bounty
         else:
             self.delay("Operational",delay=duration,handler=self.check_bounty)
-
-    def win_quote(self):
-        # play the current quote - using a specific position in the list from the ssUrge quotes
-        duration = self.game.base.play_quote(self.game.assets.quote_quickdrawWin,nr=self.win_keys[self.win_count])
-        # tick up the counter
-        self.win_count += 1
-        # Check for overage - and reset
-        if self.win_count >= len(self.win_keys):
-            random.shuffle(self.win_keys)
-            self.win_count = 0
-        return duration
-
 
     def check_bounty(self):
         # if the bounty isn't lit, light bounty - should these stack?

@@ -193,6 +193,8 @@ class Bart(ep.EP_Mode):
                            'taunt':range(len(self.game.sound.sounds[self.tauntQuote]))}
         self.counts_index = {'hit':0,
                              'taunt':0}
+        random.shuffle(self.keys_index['hit'])
+        random.shuffle(self.keys_index['taunt'])
         # death quote
         self.defeatQuote = defeats[index]
         # intro quote
