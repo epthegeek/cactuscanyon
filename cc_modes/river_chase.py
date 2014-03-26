@@ -20,6 +20,7 @@
 
 from procgame import dmd
 import ep
+import random
 
 class RiverChase(ep.EP_Mode):
     """Polly Peril - Rescue on the River"""
