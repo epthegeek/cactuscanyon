@@ -70,6 +70,10 @@ class SkillShot(ep.EP_Mode):
             self.easy = False
         self.mytValue = self.game.user_settings['Gameplay (Feature)']['Move Your Train Mode']
 
+        self.keys_index = {'welcome':list(range(len(self.game.sound.sounds[self.game.assets.quote_welcomes])))}
+        self.counts_index = {'welcome':0}
+        random.shuffle(self.keys_index['welcome'])
+
 
     def ball_drained(self):
         # if somehow all the balls go away and this crap is still running, it should unload. SRSLY.
@@ -128,7 +132,7 @@ class SkillShot(ep.EP_Mode):
             # set the flag so we only do this onece
             self.game.set_tracking('greeted',True)
             # play a random voice call from a pre-set collection
-            self.delay(delay=0.3,handler=self.game.base.play_quote,param=self.game.assets.quote_welcomes)
+            self.delay(delay=0.3,handler=lambda: self.play_ordered_quote(self.game.assets.quote_welcomes,'welcome'))
         else:
             # if we're on ball three and the player hasn't reached the replay score - show that
             if self.game.replays:
