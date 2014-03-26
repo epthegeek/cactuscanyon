@@ -54,8 +54,12 @@ class SS_Tribute(ep.EP_Mode):
         self.infoLine = ep.EP_TextLayer(0,1,self.game.assets.font_5px_AZ,"center", opaque=False)
         # offset position for the frog layers based on index position
         self.offsets = [0,-9,-18,-28]
-        self.hit_keys = list(range(len(self.game.sound.sounds[self.game.assets.quote_ssHit])))
-        self.urge_keys = list(range(len(self.game.sound.sounds[self.game.assets.quote_ssUrge])))
+        self.keys_index = {'hit':list(range(len(self.game.sound.sounds[self.game.assets.quote_ssHit]))),
+                           'urge':list(range(len(self.game.sound.sounds[self.game.assets.quote_ssUrge])))}
+        self.counts_index = {'hit':0,
+                             'urge':0}
+        random.shuffle(self.keys_index['hit'])
+        random.shuffle(self.keys_index['urge'])
 
     def mode_started(self):
         self.frogLayers = [None,None,None,None]
@@ -75,10 +79,7 @@ class SS_Tribute(ep.EP_Mode):
         self.running = True
         self.won = False
         self.halted = False
-        random.shuffle(self.hit_keys)
-        random.shuffle(self.urge_keys)
         self.hitsSoFar = 0
-        self.urged = 0
         # overall mode timer
         self.modeTimer = 20
         # score for the mode
@@ -339,7 +340,7 @@ class SS_Tribute(ep.EP_Mode):
 
         if step == 2:
             # play a hit quote
-            self.game.base.play_quote(self.game.assets.quote_ssHit,nr=self.hit_keys[self.hitsSoFar -1])
+            self.play_ordered_quote(self.game.assets.quote_ssHit,'hit')
             # display the hit
             title = ep.EP_TextLayer(64,2,self.game.assets.font_9px_az, "center", opaque=False).set_text("LEAPER SQUASHED",color=ep.RED)
             score = ep.EP_TextLayer(64,13,self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.value),blink_frames=6,color=ep.GREEN)
@@ -381,20 +382,10 @@ class SS_Tribute(ep.EP_Mode):
             else:
                 color = ep.RED
             if self.modeTimer == 12 or self.modeTimer == 5:
-                self.urge_player()
+                self.play_ordered_quote(self.game.assets.quote_ssUrge,'urge')
             self.leftTimerLine.set_text(str(self.modeTimer),color=color)
             self.rightTimerLine.set_text(str(self.modeTimer),color=color)
             self.delay("Mode Timer",delay=1,handler=self.time_frogs)
-
-    def urge_player(self):
-        # play the current quote - using a specific position in the list from the ssUrge quotes
-        self.game.base.play_quote(self.game.assets.quote_ssUrge,nr=self.urge_keys[self.urged])
-        # tick up the counter
-        self.urged += 1
-        # Check for overage - and reset
-        if self.urged >= len(self.urge_keys):
-            random.shuffle(self.urge_keys)
-            self.urged = 0
 
     def score_update(self):
         # update the score line total every half second
