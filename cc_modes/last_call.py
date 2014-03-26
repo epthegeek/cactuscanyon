@@ -389,8 +389,11 @@ class LastCall(ep.EP_Mode):
         self.delay("Operational",delay=3,handler=self.ball_collection)
 
     def ball_collection(self,tilted=False):
+        # set a 20 second ball search delay just in case
+        self.delay("Search",delay=20,handler=self.game.ball_search.perform_search)
         # holding pattern until the balls are all back
         if self.game.trough.is_full() or self.game.fakePinProc:
+            self.cancel_delayed("Search")
             self.end(tilted)
         else:
             self.delay("Operational",delay=2,handler=self.ball_collection)
