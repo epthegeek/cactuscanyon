@@ -44,6 +44,12 @@ class Gunfight(ep.EP_Mode):
         self.win = False
         self.starting = False
         self.shooting = False
+        self.keys_index = {'start':list(range(len(self.game.sound.sounds[self.game.assets.quote_gunfightStart]))),
+                           'fail':list(range(len(self.game.sound.sounds[self.game.assets.quote_gunFail])))}
+        self.counts_index = {'start':0,
+                             'fail':0}
+        random.shuffle(self.keys_index['start'])
+        random.shuffle(self.keys_index['fail'])
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
@@ -166,7 +172,7 @@ class Gunfight(ep.EP_Mode):
         # delayed play the drum roll
         self.delay("Operational",delay=myWait,handler=self.music_on,param=self.game.assets.music_drumRoll)
         # play a quote
-        self.game.base.play_quote(self.game.assets.quote_gunfightStart)
+        self.play_ordered_quote(self.game.assets.quote_gunfightStart,'start')
         # display the clouds with gunfight text
         title = ep.EP_TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight",color=ep.ORANGE)
         title.composite_op = "blacksrc"
@@ -230,7 +236,7 @@ class Gunfight(ep.EP_Mode):
         # only kill the music if there's not a higher level running
         self.stop_music(slice=1)
         # play a quote
-        duration = self.game.base.play_quote(self.game.assets.quote_gunFail)
+        duration = self.play_ordered_quote(self.game.assets.quote_gunFail,'fail')
         # shut things down
         self.end_gunfight(duration)
 

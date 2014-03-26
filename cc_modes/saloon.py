@@ -30,6 +30,10 @@ class Saloon(ep.EP_Mode):
         self.smacked = False
         self.mytValue = self.game.user_settings['Gameplay (Feature)']['Move Your Train Mode']
         self.saloonPulse = self.game.user_settings['Machine (Standard)']['Saloon Eject Strength']
+        self.keys_index = {'gunfight':list(range(len(self.game.sound.sounds[self.game.assets.quote_gunfightLit])))}
+        self.counts_index = {'gunfight':0}
+        random.shuffle(self.keys_index['gunfight'])
+
 
     def tilted(self):
         if self.game.switches.saloonPopper.is_active():
@@ -464,7 +468,7 @@ class Saloon(ep.EP_Mode):
         self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2])
         # play a quote
         self.game.sound.play(self.game.assets.sfx_flourish6)
-        self.game.base.priority_quote(self.game.assets.quote_gunfightLit)
+        self.play_ordered_quote(self.game.assets.quote_gunfightLit,'gunfight',priority=True)
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
         self.lamp_update()
