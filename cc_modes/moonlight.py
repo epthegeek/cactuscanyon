@@ -267,10 +267,12 @@ class Moonlight(ep.EP_Mode):
         self.hd_flair = self.game.user_settings['Gameplay (Feature)']['High Def Flair'] == 'Enabled'
         self.hd_banners = []
         self.shuffle_hd_banners()
+        self.tilted = False
         # kill the GI - and all the lights
         self.game.gi_control("OFF")
         self.game.lamp_control.disable_all_lamps()
         # pick a random shot to light to start with
+        self.enable = 0
         self.enable += self.shotsAtStart
         self.enable_shots()
         duration = self.game.sound.play(self.game.assets.sfx_churchBell)
