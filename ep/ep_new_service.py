@@ -1256,7 +1256,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         else:
             self.state = 'nav'
             self.change_item()
-            self.infoLine.set_text("NOW SET TO:")
+            self.infoLine.set_text("CHANGED:",color=ep.GREEN)
             self.game.sound.play(self.game.assets.sfx_menuSave)
             self.game.user_settings[self.name][self.item.name]=self.item.value
             self.game.save_settings()
@@ -1290,7 +1290,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             self.change_item()
             # don't update these lines if we're coming out of text
             if self.state != 'text':
-                self.infoLine.set_text("REMAINS:")
+                self.infoLine.set_text("REMAINS:",color=ep.RED)
                 self.currentSetting.set_text(str(self.item.value).upper())
             self.state = 'nav'
             self.game.sound.play(self.game.assets.sfx_menuCancel)
@@ -1352,10 +1352,10 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
                 self.currentSetting.set_text(" VIEW")
             else:
                 self.option_index = self.item.options.index(self.item.value)
-                self.infoLine.set_text("CURRENT:")
+                self.infoLine.set_text("CURRENT:",color=ep.ORANGE)
                 self.currentSetting.set_text(str(self.item.value).upper())
         else:
-            self.infoLine.set_text("CHANGE TO:")
+            self.infoLine.set_text("MODIFY:",color=ep.MAGENTA)
             self.currentSetting.set_text(str(self.item.value).upper(),blink_frames=10)
 
     def change_instructions(self):
@@ -1378,9 +1378,9 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         self.settingName = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text(self.item.name.upper())
         self.settingName.composite_op = "blacksrc"
         layers.append(self.settingName)
-        self.infoLine = dmd.TextLayer(72,14,self.game.assets.font_9px_az_mid,"right").set_text(str("CURRENT:"))
+        self.infoLine = ep.EP_TextLayer(52,14,self.game.assets.font_9px_az_mid,"right").set_text(str("CURRENT:"),color=ep.ORANGE)
         layers.append(self.infoLine)
-        self.currentSetting = dmd.TextLayer(74,14,self.game.assets.font_9px_az,"left").set_text(str(self.item.value).upper())
+        self.currentSetting = dmd.TextLayer(54,14,self.game.assets.font_9px_az,"left").set_text(str(self.item.value).upper())
         layers.append(self.currentSetting)
         self.instructions = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("+/- TO SELECT")
         self.instructions2 = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO MODIFY")
