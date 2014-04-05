@@ -17,6 +17,7 @@
 
 from procgame import dmd
 import ep
+import random
 
 class MoveYourTrain(ep.EP_Mode):
     def __init__(self,game,priority):
@@ -39,6 +40,10 @@ class MoveYourTrain(ep.EP_Mode):
         self.running = False
         self.shots = 0
         self.maxShots = self.game.user_settings['Gameplay (Feature)']['Move Your Train Max Shots']
+        self.keys_index = {'taunt':list(range(len(self.game.sound.sounds[self.game.assets.quote_mytTaunt])))}
+        self.counts_index = {'taunt': 0}
+        random.shuffle(self.keys_index['taunt'])
+
 
     def mode_started(self):
         print "Beginning Move Your Train"
@@ -112,13 +117,14 @@ class MoveYourTrain(ep.EP_Mode):
 
     def intro_display(self,step = 1,side =0):
         if step == 1:
+            self.game.base.priority_quote(self.game.assets.quote_mytStart)
             moveLayer = self.game.showcase.make_string(1,3,0,text="MOVE")
             self.layer = moveLayer
-            self.delay(delay=1,handler=self.intro_display,param=2)
+            self.delay(delay=0.5,handler=self.intro_display,param=2)
         if step == 2:
             yourLayer = self.game.showcase.make_string(1,3,0,text="THAT")
             self.layer = yourLayer
-            self.delay(delay=1,handler=self.intro_display,param=3)
+            self.delay(delay=0.5,handler=self.intro_display,param=3)
         if step == 3:
             trainLayer = self.game.showcase.make_string(1,3,0,text="TRAIN")
             self.layer = trainLayer
@@ -136,6 +142,12 @@ class MoveYourTrain(ep.EP_Mode):
             self.game.saloon.kick()
         else:
             self.postUse = False
+        # start the taunt delay
+        self.delay("Taunt", delay=11,handler=self.taunt_player)
+
+    def taunt_player(self):
+        self.play_ordered_quote(self.game.assets.quote_mytTaunt,'taunt')
+        self.delay("Taunt", delay=11,handler=self.taunt_player)
 
     def main_display(self):
         # flush any queued display updates
@@ -164,9 +176,11 @@ class MoveYourTrain(ep.EP_Mode):
         print "TRAIN OFFSET: " + str(self.trainOffset)
         # four movements in one direction is win
         if self.trainOffset == 80 or self.trainOffset == -80:
+            self.cancel_delayed("Taunt")
             self.delay(delay=self.animWait,handler=self.win)
         # if we've hit the max number of allowed shots, do the lost display
         elif self.shots == self.maxShots:
+            self.cancel_delayed("Taunt")
             self.delay(delay=self.animWait,handler=self.lose)
         else:
             # set a delay to go back to idle for all other cases
@@ -181,8 +195,8 @@ class MoveYourTrain(ep.EP_Mode):
             # increase the shots taken
             self.shots += 1
             # if shots is 2 less than the max allowed, taunt
-            if self.shots +2 == self.maxShots:
-                self.game.sound.play(self.game.assets.quote_mytTaunt)
+#            if self.shots +2 == self.maxShots:
+#                self.game.sound.play(self.game.assets.quote_mytTaunt)
             self.game.train.stopAt = self.game.train.mytIncrement
             print "Stop train at value: " + str(self.game.train.stopAt)
             if direction == "left":
@@ -245,6 +259,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.game.score(score)
         combined = dmd.GroupedLayer(128,32,[textLine,pointsLine])
         self.layer = combined
+        self.game.base.priority_quote(self.game.assets.quote_mytWin)
         # end after 2 seconds
         self.delay(delay=2,handler=self.end)
 
@@ -264,9 +279,9 @@ class MoveYourTrain(ep.EP_Mode):
         # three shifts off center
         else:
             textString = "TRAIN MOSTLY MOVED"
-            poitns = 250000
+            points = 250000
         # play the glum riff
-        self.game.sound.play(self.game.assets.sfx_glumRiff)
+        self.game.sound.play(self.game.assets.quote_mytEnd)
         textLine = dmd.TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString)
         pointsLine = dmd.TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(points)),blink_frames = 8)
         self.game.score(points)
