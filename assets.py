@@ -1032,7 +1032,7 @@ class Assets():
 
         self.quote_mytWin = 'quote_mytWin'
         self.game.sound.register_sound(self.quote_mytWin, self.quotes_path + "woohoo_the_path_is_clear.wav")
-        self.game.sound.register_sound(self.quote_mytWin, self.quotes_path + "yahoo_you_move_that_train.wav")
+        self.game.sound.register_sound(self.quote_mytWin, self.quotes_path + "yahoo_you_moved_that_train.wav")
 
         self.quote_mytEnd = 'quote_mytEnd'
         self.game.sound.register_sound(self.quote_mytEnd, self.quotes_path + "nice_work_partner.wav")
