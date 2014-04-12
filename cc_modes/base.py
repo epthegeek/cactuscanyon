@@ -188,8 +188,7 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.ballStarting:
             self.game.ballStarting = False
             if not self.game.skill_shot.super:
-                ball_save_time = 10
-                self.game.trough.start_ball_save(num_balls_to_save=1, time=ball_save_time, now=True, allow_multiple_saves=False)
+                self.game.trough.start_ball_save(num_balls_to_save=1, time=0, now=True, allow_multiple_saves=False)
 
     def beer_unhit(self):
         self.beerHit = False
