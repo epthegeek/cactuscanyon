@@ -1026,13 +1026,13 @@ class Assets():
 
         self.quote_mytTaunt = 'quote_mytTaunt'
         self.game.sound.register_sound(self.quote_mytTaunt, self.quotes_path + "mayor-need-to-move-that-train.wav")
-        self.game.sound.register_sound(self.qutoe_mytTaunt, self.quotes_path + "will_you_move_that_train_already.wav")
-        self.game.sound.register_sound(self.qutoe_mytTaunt, self.quotes_path + "come_on.wav")
-        self.game.sound.register_sound(self.qutoe_mytTaunt, self.quotes_path + "come_on_partner_move_that_train.wav")
+        self.game.sound.register_sound(self.quote_mytTaunt, self.quotes_path + "will_you_move_that_train_already.wav")
+        self.game.sound.register_sound(self.quote_mytTaunt, self.quotes_path + "come_on.wav")
+        self.game.sound.register_sound(self.quote_mytTaunt, self.quotes_path + "come_on_partner_move_that_train.wav")
 
         self.quote_mytWin = 'quote_mytWin'
         self.game.sound.register_sound(self.quote_mytWin, self.quotes_path + "woohoo_the_path_is_clear.wav")
-        self.game.sound.register_sound(self.quote_mytWin, self.quotes_path + "yahoo_you_move_that_train.wav")
+        self.game.sound.register_sound(self.quote_mytWin, self.quotes_path + "yahoo_you_moved_that_train.wav")
 
         self.quote_mytEnd = 'quote_mytEnd'
         self.game.sound.register_sound(self.quote_mytEnd, self.quotes_path + "nice_work_partner.wav")

@@ -146,7 +146,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.delay("Taunt", delay=11,handler=self.taunt_player)
 
     def taunt_player(self):
-        self.play_ordered_quote(self.game.assets.quote_mytTaunt,'taunt')
+        self.play_ordered_quote(self.game.assets.quote_mytTaunt,'taunt',squelch=True)
         self.delay("Taunt", delay=11,handler=self.taunt_player)
 
     def main_display(self):
@@ -246,7 +246,7 @@ class MoveYourTrain(ep.EP_Mode):
         duration = self.game.sound.play(self.game.assets.sfx_longTrainWhistle)
         self.delay(delay = duration,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
         textString = "TRAIN MOVED IN " + str(self.shots) + " SHOTS"
-        textLine = dmd.TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString)
+        textLine = ep.EP_TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString,color=ep.BROWN)
         # calculate the score
         # four shots is a perfect score - so we take off 4 shots
         if self.shots == 4:
@@ -255,11 +255,11 @@ class MoveYourTrain(ep.EP_Mode):
         else:
         # if they finish, but not in perfectly, then it's 750
             score = 750000
-        pointsLine = dmd.TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(score)),blink_frames = 8)
+        pointsLine = ep.EP_TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(score)),blink_frames = 8,color=ep.RED)
         self.game.score(score)
         combined = dmd.GroupedLayer(128,32,[textLine,pointsLine])
         self.layer = combined
-        self.game.base.priority_quote(self.game.assets.quote_mytWin)
+        self.game.base.priority_quote(self.game.assets.quote_mytWin,squelch=True)
         # end after 2 seconds
         self.delay(delay=2,handler=self.end)
 
@@ -281,9 +281,9 @@ class MoveYourTrain(ep.EP_Mode):
             textString = "TRAIN MOSTLY MOVED"
             points = 250000
         # play the glum riff
-        self.game.sound.play(self.game.assets.quote_mytEnd)
-        textLine = dmd.TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString)
-        pointsLine = dmd.TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(points)),blink_frames = 8)
+        self.game.sound.play(self.game.assets.quote_mytEnd,squelch=True)
+        textLine = ep.EP_TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString,color=ep.BROWN)
+        pointsLine = ep.EP_TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(points)),blink_frames = 8,color=ep.RED)
         self.game.score(points)
         combined = dmd.GroupedLayer(128,32,[textLine,pointsLine])
         self.layer = combined
