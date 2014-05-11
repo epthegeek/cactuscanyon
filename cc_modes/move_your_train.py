@@ -281,7 +281,7 @@ class MoveYourTrain(ep.EP_Mode):
             textString = "TRAIN MOSTLY MOVED"
             points = 250000
         # play the glum riff
-        self.game.sound.play(self.game.assets.quote_mytEnd,squelch=True)
+        self.game.base.play_quote(self.game.assets.quote_mytEnd,squelch=True)
         textLine = ep.EP_TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=True).set_text(textString,color=ep.BROWN)
         pointsLine = ep.EP_TextLayer(64, 10, self.game.assets.font_17px_score, "center", opaque=False).set_text(str(ep.format_score(points)),blink_frames = 8,color=ep.RED)
         self.game.score(points)
