@@ -175,7 +175,8 @@ class SS_Tribute(ep.EP_Mode):
             # delay to re-allow due to debounce being off
             self.delay(delay=0.050,handler=self.beer_unhit)
             print "Beer Mug Hit - Kill Frog"
-            self.kill_frog()
+            if not self.won:
+                self.kill_frog()
         return game.SwitchStop
 
     # kill a frog if the beer GETS IT
@@ -187,9 +188,9 @@ class SS_Tribute(ep.EP_Mode):
             # delay to re-allow due to debounce being off
             self.delay(delay=0.050,handler=self.beer_unhit)
             print "Beer Mug Hit - Kill Frog"
-            self.kill_frog()
+            if not self.won:
+                self.kill_frog()
         return game.SwitchStop
-
 
     def beer_unhit(self):
         self.beerHit = False
@@ -309,6 +310,7 @@ class SS_Tribute(ep.EP_Mode):
             self.availFrogs.remove(dead)
             if len(self.availFrogs) == 0:
                 self.won = True
+                self.cancel_delayed("Display")
                 print "All frogs squashed!"
             # stop the timer
             self.cancel_delayed("Mode Timer")
@@ -364,7 +366,7 @@ class SS_Tribute(ep.EP_Mode):
                 self.modeTimer = 21
                 self.time_frogs()
                 self.display_frogs()
-                self.delay(delay=0.7, handler=lambda: self.display_frogs(mode="jump",num=random.choice(self.availFrogs)))
+                self.delay("Display",delay=0.7, handler=lambda: self.display_frogs(mode="jump",num=random.choice(self.availFrogs)))
 
 
     def time_frogs(self):
