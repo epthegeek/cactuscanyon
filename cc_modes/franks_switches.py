@@ -28,13 +28,14 @@ class FranksSwitches(ep.EP_Mode):
         for switch in self.game.switches:
             self.add_switch_handler(name=switch.name, event_type='active', delay=None, handler=self.switch_action)
         self.running = False
+        self.excluded = ["trough1","trough2","trough3","trough4","flipperLwL","flipperLwR","mineEncoder","mineHome","trainEncoder"]
 
     def mode_started(self):
         self.running = True
         self.game.sound.franks = True
 
     def switch_action(self,sw):
-        if sw.name == "trough1" or sw.name == "trough2" or sw.name == "trough3" or sw.name == "trough4" or sw.name == "flipperLwL" or sw.name == "flipperLwR":
+        if sw.name in self.excluded:
             return
         # score 20k points
         self.game.score(20000)
