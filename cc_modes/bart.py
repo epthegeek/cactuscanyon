@@ -131,14 +131,14 @@ class Bart(ep.EP_Mode):
         self.setup()
         # show the 'challenges you' display
         # clear the banner layer
-        textLayer1 = ep.EP_TextLayer(42,2,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer1 = ep.EP_TextLayer(40,2,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
         textLayer1.set_text(self.nameLine,color=ep.BROWN)
-        textLayer2 = ep.EP_TextLayer(42,16,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer2 = ep.EP_TextLayer(40,15,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
         textLayer2.set_text("CHALLENGES",color=ep.RED)
-        textLayer3 = ep.EP_TextLayer(42,24,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
+        textLayer3 = ep.EP_TextLayer(40,23,self.game.assets.font_7px_bold_az,justify="center",opaque=False)
         textLayer3.set_text("YOU",color=ep.RED)
 
-        textLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3])
+        textLayer = dmd.GroupedLayer(128,32,[self.faceFrame,textLayer1,textLayer2,textLayer3])
 
         # play the intro
         duration = self.game.base.play_quote(self.introQuote,squelch=True)
@@ -174,16 +174,27 @@ class Bart(ep.EP_Mode):
         taunts = (self.game.assets.quote_tauntBigBart, self.game.assets.quote_tauntBandeleroBart,self.game.assets.quote_tauntBubbaBart,self.game.assets.quote_tauntBossBart)
         defeats = (self.game.assets.quote_defeatBigBart, self.game.assets.quote_defeatBandeleroBart,self.game.assets.quote_defeatBubbaBart,self.game.assets.quote_defeatBossBart)
         intros = (self.game.assets.quote_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart,self.game.assets.quote_introBossBart)
-        posterA = (self.game.assets.dmd_bigPosterA, self.game.assets.dmd_bandeleroPosterA, self.game.assets.dmd_bubbaPosterA,self.game.assets.dmd_bossHit)
-        posterB = (self.game.assets.dmd_bigPosterB, self.game.assets.dmd_bandeleroPosterB, self.game.assets.dmd_bubbaPosterB,self.game.assets.dmd_boss)
+        posterA = (self.game.assets.dmd_bigPosterA, self.game.assets.dmd_bandeleroPosterA, self.game.assets.dmd_bubbaPosterA,self.game.assets.dmd_bossPosterA)
+        posterB = (self.game.assets.dmd_bigPosterB, self.game.assets.dmd_bandeleroPosterB, self.game.assets.dmd_bubbaPosterB,self.game.assets.dmd_bossPosterB)
+        faces = (self.game.assets.dmd_big, self.game.assets.dmd_bandelero, self.game.assets.dmd_bubba, self.game.assets.dmd_boss)
+        reactions = (self.game.assets.dmd_bigHit, self.game.assets.dmd_bandeleroHit, self.game.assets.dmd_bubbaHit, self.game.assets.dmd_bossHit)
+
         # look up which one is current
         index = self.game.show_tracking('currentBart')
         # setting up all the bits like name for text display
         self.brother = names[index].upper()
+
         # wanted poster
         self.wantedFrameA = dmd.FrameLayer(opaque=False, frame=posterA[index].frames[0])
         self.wantedFrameA.composite_op = "blacksrc"
         self.wantedFrameB = dmd.FrameLayer(opaque=False, frame=posterB[index].frames[0])
+
+        # face and reaction
+        self.faceFrame = dmd.FrameLayer(opaque=False, frame=faces[index].frames[0])
+        self.faceFrame.composite_op = "blacksrc"
+        self.reactionFrame = dmd.FrameLayer(opaque=False, frame=reactions[index].frames[0])
+        self.reactionFrame.composite_op = "blacksrc"
+
         # hit quotes
         self.hitQuote = hits[index]
         # taunt quotes
@@ -255,7 +266,7 @@ class Bart(ep.EP_Mode):
         if self.brother == "BOSS":
             offset = 40
         else:
-            offset = 42
+            offset = 38
         textLayer1 = ep.EP_TextLayer(offset,1,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(self.nameLine,color=ep.BROWN)
         textLayer2 = ep.EP_TextLayer(offset,9,self.game.assets.font_7px_bold_az,justify="center",opaque=False).set_text(str(self.hitString))
         textLayer3 = ep.EP_TextLayer(offset,17,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText,color=ep.YELLOW)
@@ -317,19 +328,30 @@ class Bart(ep.EP_Mode):
             # drop all the targets that are still up
             self.drop_posse()
         # setup the display
-        backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_weaveBorder.frames[0])
-        textLayer1 = ep.EP_TextLayer(64,1,self.game.assets.font_9px_az,justify="center",opaque=False).set_text("BART DEFEATED",color=ep.BROWN)
-        textLayer2 = ep.EP_TextLayer(64,12,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString),color=ep.GREEN)
+        #backdrop = dmd.FrameLayer(opaque=False, frame=self.wantedFrameB)
+        textLayer1 = ep.EP_TextLayer(40,1,self.game.assets.font_7px_az,justify="center",opaque=False).set_text("BART DEFEATED",color=ep.BROWN)
+        textLayer2 = ep.EP_TextLayer(40,9,self.game.assets.font_9px_az,justify="center",opaque=False).set_text(str(self.defeatString),color=ep.GREEN)
+        textLayer2.composite_op ="blacksrc"
         if total < self.bartsForStar:
-            theText = str(self.bartsForStar - total) + " MORE FOR BADGE"
+            theText = str(self.bartsForStar - total) + " MORE"
+            theText2 = str("FOR BADGE")
         elif total == self.bartsForStar:
-            theText = "BADGE COLLECTED!"
+            theText = "COLLECTED!"
+            theText2 = "COLLECTED!"
             # actually collect the badge - barts defeated is 2
             self.game.badge.update(2)
         else:
-            theText = str(globalTotal) + " DEFEATED!"
-        textLayer3 = ep.EP_TextLayer(64,24,self.game.assets.font_6px_az,justify="center",opaque=False).set_text(theText, color=ep.DARK_RED)
-        self.layer = dmd.GroupedLayer(128,32,[backdrop,textLayer1,textLayer2,textLayer3])
+            theText = str(globalTotal) + "BARTS"
+            theText2 = "DEFEATED!"
+        textLayer3 = ep.EP_TextLayer(40,20,self.game.assets.font_5px_AZ,justify="center",opaque=False).set_text(theText, color=ep.DARK_RED)
+        textLayer3.composite_op = "blacksrc"
+        textLayer4 = ep.EP_TextLayer(40,26,self.game.assets.font_5px_AZ,justify="center",opaque=False).set_text(theText2, color=ep.DARK_RED)
+        textLayer4.composite_op = "blacksrc"
+        # banner top layer
+        primaryLayer = dmd.GroupedLayer(128,32,[self.bannerLayer,self.wantedFrameA])
+        self.layer = primaryLayer
+        secondaryLayer = dmd.GroupedLayer(128,32,[self.wantedFrameB,textLayer1,textLayer2,textLayer3,textLayer4])
+        transition = ep.EP_Transition(self,primaryLayer,secondaryLayer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
          # light gunfight?
         self.delay(delay=myWait,handler=self.game.saloon.light_gunfight)
         # clear the layer
@@ -338,15 +360,16 @@ class Bart(ep.EP_Mode):
     def display_damage_one(self):
         print "MADE IT TO DAMAGE ONE"
         # set up the top layer
-        layerOne = dmd.GroupedLayer(128,32,[self.bannerLayer,self.wantedFrameA])
+        layerOne = dmd.GroupedLayer(128,32,[self.bannerLayer,self.reactionFrame])
         # activate it
         self.layer = layerOne
-        self.delay("Display",delay=0.2,handler=self.display_damage_two,param=layerOne)
+        self.delay("Display",delay=0.7,handler=self.display_damage_two,param=layerOne)
 
     def display_damage_two(self,layerOne):
         # set up the second layer
-        layerTwo = dmd.GroupedLayer(128,32,[self.wantedFrameB,self.textLayer])
-        transition = ep.EP_Transition(self,layerOne,layerTwo,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
+        layerTwo = dmd.GroupedLayer(128,32,[self.textLayer, self.faceFrame])
+        self.layer = layerTwo
+        #transition = ep.EP_Transition(self,layerOne,layerTwo,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
         self.delay("Display",delay = 1.5,handler=self.clear_layer)
         self.delay(delay=1.5,handler=self.game.saloon.unbusy)
 
@@ -391,14 +414,14 @@ class Bart(ep.EP_Mode):
         self.cancel_delayed("Boss Display")
         # make a group layer of the banner and the hit bart face
         self.bannerLayer.composite_op = "blacksrc"
-        combined = dmd.GroupedLayer(128,32,[self.wantedFrameA,self.bannerLayer])
+        combined = dmd.GroupedLayer(128,32,[self.reactionFrame,self.bannerLayer])
         self.layer = combined
-        self.delay("Display",delay=0.7,handler=self.boss_display_two)
+        self.delay("Boss Display",delay=0.7,handler=self.boss_display_two)
 
     def boss_display_two(self):
-        self.layer = dmd.GroupedLayer(128,32,[self.wantedFrameB,self.textLayer])
+        self.layer = dmd.GroupedLayer(128,32,[self.faceFrame,self.textLayer])
         # delay a loop back to the boss display
-        self.delay("Display",delay = 2,handler=self.clear_layer)
+        self.delay("Boss Display",delay = 2,handler=self.clear_layer)
         self.delay(delay=2,handler=self.game.saloon.unbusy)
 
     ## OTHER BITS

@@ -1567,9 +1567,23 @@ class Assets():
         self.dmd_bigPosterA = dmd.Animation().load(self.dmd_path +'wanted-BIG-A.dmd')
         self.dmd_bandeleroPosterA = dmd.Animation().load(self.dmd_path + 'wanted-BANDELERO-A.dmd')
         self.dmd_bubbaPosterA = dmd.Animation().load(self.dmd_path + 'wanted-BUBBA-A.dmd')
+        self.dmd_bossPosterA = dmd.Animation().load(self.dmd_path + 'wanted-BOSS-A.dmd')
+
         self.dmd_bigPosterB = dmd.Animation().load(self.dmd_path +'wanted-BIG-B.dmd')
         self.dmd_bandeleroPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BANDELERO-B.dmd')
         self.dmd_bubbaPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BUBBA-B.dmd')
+        self.dmd_bossPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BOSS-B.dmd')
+
+        self.dmd_big = dmd.Animation().load(self.dmd_path + 'face-BIG.dmd')
+        self.dmd_bandelero = dmd.Animation().load(self.dmd_path + 'face-BANDELERO.dmd')
+        self.dmd_bubba = dmd.Animation().load(self.dmd_path + 'face-BUBBA.dmd')
+        self.dmd_boss = dmd.Animation().load(self.dmd_path + 'boss.dmd')
+
+        self.dmd_bigHit = dmd.Animation().load(self.dmd_path + 'hit-BIG.dmd')
+        self.dmd_bandeleroHit = dmd.Animation().load(self.dmd_path + 'hit-BANDELERO.dmd')
+        self.dmd_bubbaHit = dmd.Animation().load(self.dmd_path + 'hit-BUBBA.dmd')
+        self.dmd_bossHit = dmd.Animation().load(self.dmd_path+'boss-hit.dmd')
+
 
         self.dmd_trainOnTracks = dmd.Animation().load(self.dmd_path+'train-on-tracks.dmd')
         self.dmd_trainMoveRight = dmd.Animation().load(self.dmd_path+'train-on-tracks-move-right.dmd')
@@ -1632,9 +1646,6 @@ class Assets():
 
         self.dmd_marshallBorder = dmd.Animation().load(self.dmd_path+'marshall-border.dmd')
         self.dmd_marshallHighScoreFrame = dmd.Animation().load(self.dmd_path+'marshall-highscore-frame.dmd')
-
-        self.dmd_boss = dmd.Animation().load(self.dmd_path+'boss.dmd')
-        self.dmd_bossHit = dmd.Animation().load(self.dmd_path+'boss-hit.dmd')
 
         self.dmd_lastCall = dmd.Animation().load(self.dmd_path+'last_call.dmd')
         self.dmd_beerFill = dmd.Animation().load(self.dmd_path+'beer-fill.dmd')
