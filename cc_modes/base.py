@@ -917,10 +917,42 @@ class BaseGameMode(ep.EP_Mode):
         self.game.set_tracking('bonus',0)
         # and clear the running total
         self.runningTotal = 0
-        # throw up a  layer that says bonus as an interstitial
-        self.layer = self.game.showcase.blink_fill(2,2,3,1,0.3,isOpaque=True,text="BONUS")
-        # then 1.5 seconds later, move on
-        self.delay("Bonus Display",delay=1.5,handler=self.display_bonus,param=times)
+    # Original Bonus Display
+    #    # throw up a  layer that says bonus as an interstitial
+    #    self.layer = self.game.showcase.blink_fill(2,2,3,1,0.3,isOpaque=True,text="BONUS")
+    #    # then 1.5 seconds later, move on
+    #    self.delay("Bonus Display",delay=1.5,handler=self.display_bonus,param=times)
+    # End Original Bonus Display
+
+    # New Test version
+        # Blank Track
+        trackLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_emptyTrack.frames[0])
+        trackLayer.composite_op = "blacksrc"
+        # Train animation
+        anim = self.game.assets.dmd_bonusTrain
+        myWait = len(anim.frames) / 30.0
+        animLayer = ep.EP_AnimatedLayer(anim)
+        animLayer.hold = True
+        animLayer.frame_time = 2
+        animLayer.composite_op = "blacksrc"
+        # Text Placeholders
+        self.bonusTopLine = ep.EP_TextLayer(64,1,self.game.assets.font_7px_az, "center",opaque=True)
+        self.bonusTopLineText = str(times) + " X " + ep.format_score(self.bonus) + " ="
+        self.bonusScoreLine = ep.EP_TextLayer(64,11,self.game.assets.font_13px_score,"center")
+        self.bonusScoreLineText = ep.format_score(bonus_points)
+        # Play the train whistle
+        self.game.sound.play(self.game.assets.sfx_longTrainWhistle)
+        # Play the train sound
+        self.game.sound.play(self.game.assets.sfx_trainChugLong)
+        # setup the layer
+        combined = dmd.GroupedLayer(128,32,[self.bonusTopLine, self.bonusScoreLine,trackLayer,animLayer])
+        self.layer = combined
+        # Delay the setting the text part
+        self.delay("Bonus Display",delay=1.5,handler=lambda: self.bonusTopLine.set_text(self.bonusTopLineText,color=ep.ORANGE))
+        self.delay("Bonus Display",delay=1.5,handler=lambda: self.bonusScoreLine.set_text(self.bonusScoreLineText,color=ep.YELLOW))
+        # Finish the bonus
+        self.delay("Bonus Display",delay=myWait, handler=self.finish_bonus)
+
 
     def display_bonus(self,times):
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_cactusBorder.frames[0])
@@ -956,22 +988,30 @@ class BaseGameMode(ep.EP_Mode):
         # Clear the party mode display
         if self.game.party_setting != 'Disabled':
             self.game.party_mode.clear_layer()
-        # set up the text display
-        anim = self.game.assets.dmd_burstWipe2
-        myWait = len(anim.frames) / 15.0 + 1.5
-        animLayer = ep.EP_AnimatedLayer(anim)
-        animLayer.hold = True
-        animLayer.frame_time = 4
-        animLayer.composite_op = "blacksrc"
-
-        titleString = "TOTAL SCORE:"
-        titleLine = ep.EP_TextLayer(128/2, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(titleString,color=ep.ORANGE)
-        pointsLine = dmd.TextLayer(128/2, 17, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(ep.format_score(self.game.current_player().score))
-        self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
+     #   # set up the text display
+     #   anim = self.game.assets.dmd_burstWipe2
+     #   myWait = len(anim.frames) / 15.0 + 1.5
+     #   animLayer = ep.EP_AnimatedLayer(anim)
+     #   animLayer.hold = True
+     #   animLayer.frame_time = 4
+     #   animLayer.composite_op = "blacksrc"
+     #
+     #   titleString = "TOTAL SCORE:"
+     #   titleLine = ep.EP_TextLayer(128/2, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(titleString,color=ep.ORANGE)
+     #   pointsLine = dmd.TextLayer(128/2, 17, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(ep.format_score(self.game.current_player().score))
+     #   self.layer = dmd.GroupedLayer(128,32,[titleLine,pointsLine,animLayer])
         # play a final sound
         self.game.sound.play(self.game.assets.sfx_flourish6)
         # unset the flag
         self.doingBonus = False
+     # New Display
+        trackLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_emptyTrack.frames[0])
+        trackLayer.composite_op = "blacksrc"
+        combined = dmd.GroupedLayer(128,32,[self.bonusTopLine, self.bonusScoreLine,trackLayer])
+        self.bonusTopLine.set_text(self.bonusTopLineText,color=ep.ORANGE)
+        self.bonusScoreLine.set_text(self.bonusScoreLineText,blink_frames=10,color=ep.YELLOW)
+        self.layer = combined
+
         # then loop back to end ball
         self.delay("Bonus Display",delay=2,handler=self.game.ball_ended)
         self.delay("Bonus Display",delay=2,handler=self.clear_layer)

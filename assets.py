@@ -97,7 +97,8 @@ class Assets():
         self.font_dangerFont.make_colors([ep.RED])
         self.font_dangerFont.composite_op = "blacksrc"
 
-        self.font_13px_score = dmd.Font(self.dmd_path + "Font_8_CactusCanyon.dmd")
+        self.font_13px_score = ep.ColorFont(self.dmd_path + "Font_8_CactusCanyon.dmd")
+        self.font_13px_score.make_colors([ep.YELLOW])
     #    self.font_13px_extra_thin_score = dmd.Font(self.dmd_path + "Font_11_CactusCanyon.dmd")
         self.font_13px_thin_score = ep.ColorFont(self.dmd_path + "Font_7_CactusCanyon.dmd")
         self.font_13px_thin_score.make_colors([ep.RED,ep.GREEN])
@@ -249,6 +250,8 @@ class Assets():
         self.game.sound.register_sound(self.sfx_longTrainWhistle, self.sfx_path + "00-sfx-long-train-whistle.wav")
         self.sfx_trainChugShort = 'sfx_trainChugShort'
         self.game.sound.register_sound(self.sfx_trainChugShort, self.sfx_path + "203-sfx-train-chug-short.wav")
+        self.sfx_trainChugLong = 'sfx_trainChugLong'
+        self.game.sound.register_sound(self.sfx_trainChugLong, self.sfx_path + "207-sfx-train-chug-long.wav")
         self.sfx_ebMusic = 'sfx_ebMusic'
         self.game.sound.register_sound(self.sfx_ebMusic, self.sfx_path + "029-sfx-extra-ball-intro.wav")
         self.sfx_ebDrink = 'sfx_ebDrink'
@@ -1547,6 +1550,7 @@ class Assets():
         self.dmd_ball = dmd.Animation().load(self.dmd_path +'ball.dmd')
         self.dmd_extraBall = dmd.Animation().load(self.dmd_path +'extra-ball.dmd')
         self.dmd_bonusCactus = dmd.Animation().load(self.dmd_path+'bonus-cactus-mash.dmd')
+        self.dmd_bonusTrain = dmd.Animation().load(self.dmd_path+'bonus-train.dmd')
 
         self.dmd_lockOne = dmd.Animation().load(self.dmd_path +'ball-one-locked.dmd')
         self.dmd_lockTwo = dmd.Animation().load(self.dmd_path +'ball-two-locked.dmd')
