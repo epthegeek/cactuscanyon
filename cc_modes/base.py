@@ -951,7 +951,7 @@ class BaseGameMode(ep.EP_Mode):
         self.delay("Bonus Display",delay=1.5,handler=lambda: self.bonusTopLine.set_text(self.bonusTopLineText,color=ep.ORANGE))
         self.delay("Bonus Display",delay=1.5,handler=lambda: self.bonusScoreLine.set_text(self.bonusScoreLineText,color=ep.YELLOW))
         # Finish the bonus
-        self.delay("Bonus Display",delay=myWait, handler=self.finish_bonus)
+        self.delay("Bonus Display",delay=myWait+0.3, handler=self.finish_bonus)
 
 
     def display_bonus(self,times):
