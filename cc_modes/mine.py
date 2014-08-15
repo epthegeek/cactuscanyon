@@ -56,7 +56,7 @@ class Mine(ep.EP_Mode):
             return
         # for MMB just kick out and last call
         if self.game.marshall_multiball.running or self.game.last_call.running or self.game.moonlight.running \
-            or self.game.showdown.running or self.game.ambush.running:
+            or self.game.showdown.running or self.game.ambush.running or self.stampede.running:
             self.game.mountain.eject()
             return
         # for bionic & cva - still collect extra ball
