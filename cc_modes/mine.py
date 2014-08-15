@@ -55,15 +55,16 @@ class Mine(ep.EP_Mode):
             self.game.skill_shot.wasActive = 0
             return
         # for MMB just kick out and last call
-        if self.game.marshall_multiball.running or self.game.last_call.running or self.game.moonlight.running \
-            or self.game.showdown.running or self.game.ambush.running or self.stampede.running:
+        if self.game.marshall_multiball.running or self.game.last_call.running or self.game.moonlight.running:
             self.game.mountain.eject()
             return
         # for bionic & cva - still collect extra ball
         if self.game.show_tracking('bionicStatus') == "RUNNING" or \
            self.game.show_tracking('cvaStatus') == "RUNNING" or \
-           self.game.high_noon.running:
-            print "WAIT, HOW DID I GET HERE"
+           self.game.high_noon.running or \
+           self.game.showdown.running or \
+           self.game.ambush.running or \
+           self.game.stampede.running:
             # if there's an extra ball pending, award it
             eb = self.game.show_tracking('extraBallsPending')
             if eb > 0:
