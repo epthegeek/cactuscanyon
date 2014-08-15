@@ -56,7 +56,7 @@ class LeftRamp(ep.EP_Mode):
             combo = self.game.combos.start()
 
         # if a polly mode is running, let it go man
-        if self.game.peril:
+        if self.game.peril or self.game.showdown.running or self.game.ambush.running:
             pass
         else:
             # play the river ramp sound

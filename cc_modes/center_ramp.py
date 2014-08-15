@@ -67,7 +67,7 @@ class CenterRamp(ep.EP_Mode):
             combo = self.game.combos.start()
 
         # if a polly mode is runnning, let it go, man
-        if self.game.peril:
+        if self.game.peril or self.game.showdown.running or self.game.ambush.running:
             pass
         else:
             self.award_ramp_score(combo)

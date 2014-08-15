@@ -825,7 +825,7 @@ class BaseGameMode(ep.EP_Mode):
     def quickdraw_hit(self, position,side):
         # lookup the status of the side, and difficulty
         stat = self.game.show_tracking('quickdrawStatus',side)
-        difficulty = self.game.user_settings['Gameplay (Feature)']['Multiball Locks Difficulty']
+        difficulty = self.game.user_settings['Gameplay (Feature)']['Quickdraws Lit Difficulty']
         # if quickdraw is running or lit on the side hit, or position matches stat, or bionic bart is running
         if "RUNNING" in self.game.show_tracking('quickdrawStatus') or \
           stat == "READY" or  \
