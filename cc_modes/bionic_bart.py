@@ -108,12 +108,12 @@ class BionicBart(ep.EP_Mode):
 
     # switches
     def sw_leftLoopTop_active(self,sw):
+        # pulse the coil to open the gate
+        self.game.coils.rightLoopGate.pulse(240)
         self.process_shot(0)
         return game.SwitchStop
 
     def sw_leftRampEnter_active(self, sw):
-        # pulse the coil to open the gate
-        self.game.coils.rightLoopGate.pulse(240)
         self.process_shot(1)
         return game.SwitchStop
 
