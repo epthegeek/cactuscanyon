@@ -229,6 +229,13 @@ Gameplay (Feature):
     options: [15,60]
     increments: 1
     default: 30
+  'Bonus X Limit':
+    options: ['Enabled','Disabled']
+    default: 'Disabled'
+  'Bonus X Max':
+    options: [5,30]
+    increments: 1
+    default: 10
   'Tribute Mode':
     options: ['Enabled','Disabled']
     default: 'Enabled'

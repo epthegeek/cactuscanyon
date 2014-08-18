@@ -29,6 +29,8 @@ class BonusLanes(ep.EP_Mode):
     def __init__(self, game, priority):
         super(BonusLanes, self).__init__(game, priority)
         self.myID = "Bonus Lanes"
+        self.limited = 'Enabled' == self.game.user_settings['Gameplay (Feature)']['Bonus X Limit']
+        self.max = self.game.user_settings['Gameplay (Feature)']['Bonus X Max']
 
     def mode_started(self):
         # reset the bonus multiplier
@@ -98,8 +100,11 @@ class BonusLanes(ep.EP_Mode):
         animLayer.add_frame_listener(4,self.game.base.red_flasher_flourish)
         # run the animation
         self.layer = animLayer
-        # increase the bonus
-        self.game.increase_tracking('bonusX')
+        # increase the bonus if we're not limited
+        if self.limited and self.game.show_tracking('bonusX') == self.max:
+            pass
+        else:
+            self.game.increase_tracking('bonusX')
         # turn both lights off
         self.game.set_tracking('bonusLaneStatus',"OFF",0)
         self.game.set_tracking('bonusLaneStatus',"OFF",1)
@@ -113,7 +118,14 @@ class BonusLanes(ep.EP_Mode):
         awardTextTop.set_text("BONUS:",color=ep.GREEN)
         ## The second line is the tracking value + X
         awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
-        awardTextBottom.set_text(str(self.game.show_tracking('bonusX')) + "X",color=ep.BROWN)
+        if self.limited and self.game.show_tracking('bonusX') == self.max:
+        # If we're at the limit and limit is enabled, show "maxed"
+            awardTextBottom.set_text("MAXED",color=ep.BROWN)
+            # and score 150k
+            self.game.score(150000)
+        else:
+        ## The second line is the tracking value + X
+            awardTextBottom.set_text(str(self.game.show_tracking('bonusX')) + "X",color=ep.BROWN)
         # combine the text onto the held cactus animation
         if self.layer == None:
             self.layer = self.no_layer()
