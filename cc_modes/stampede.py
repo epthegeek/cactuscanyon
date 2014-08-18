@@ -169,7 +169,7 @@ class Stampede(ep.EP_Mode):
         # second pass layers the score over the text
         if step == 2:
             self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_stampedeJackpot.frames[42])
-            self.scoreLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(str(ep.format_score(self.game.show_tracking('Stampede Value') * 2)))
+            self.scoreLine = ep.EP_TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(str(ep.format_score(self.game.show_tracking('Stampede Value') * 2)),color=ep.YELLOW)
             self.scoreLine.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
             # loop back to cleear

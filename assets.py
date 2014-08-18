@@ -89,7 +89,7 @@ class Assets():
         self.font_12px_az_dim.make_colors([ep.RED,ep.GREEN])
 
         self.font_12px_az_outline = ep.ColorFont(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
-        self.font_12px_az_outline.make_colors([ep.GREEN,ep.ORANGE,ep.RED])
+        self.font_12px_az_outline.make_colors([ep.GREEN,ep.ORANGE,ep.RED,ep.YELLOW])
         self.font_12px_az_outline.tracking = -1
         self.font_12px_az_outline.composite_op = "blacksrc"
 
