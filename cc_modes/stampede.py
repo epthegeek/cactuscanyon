@@ -145,10 +145,10 @@ class Stampede(ep.EP_Mode):
         self.cancel_delayed("Display")
         if active == number:
             self.jackpots += 1
-            self.game.score(500000)
+            self.game.score((self.game.show_tracking('Stampede Value') * 2))
             self.jackpot_hit()
         else:
-            self.game.score(250000)
+            self.game.score(self.game.show_tracking('Stamepde Value'))
             self.jackpot_wiff()
 
     def jackpot_hit(self,step=1):
@@ -168,7 +168,7 @@ class Stampede(ep.EP_Mode):
         # second pass layers the score over the text
         if step == 2:
             self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_stampedeJackpot.frames[42])
-            self.scoreLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(str(ep.format_score(500000)))
+            self.scoreLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(str(ep.format_score(self.game.show_tracking('Stampede Value'))))
             self.scoreLine.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
             self.game.base.play_quote(self.game.assets.quote_jackpot)
@@ -202,6 +202,7 @@ class Stampede(ep.EP_Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=5)
             animLayer.composite_op = "blacksrc"
             bannerLayer = dmd.AnimatedLayer(frames=banner.frames,hold=True, opaque=False,repeat=False,frame_time=5)
+            # TODO: add a layer with the score on it, after editing the dmd anim to remove the score
             #bannerLayer.composite_op = "blacksrc"
             if layerCopy:
                 combined = dmd.GroupedLayer(128,32,[layerCopy,bannerLayer,animLayer])
@@ -270,6 +271,8 @@ class Stampede(ep.EP_Mode):
             self.game.switch_blocker('remove',self.myID)
             self.lamp_update()
 
+        # Reset the stamepde value
+        self.game.set_tracking('Stampede Value', 250000)
         self.running = False
         # badge light - stampede is 4
         self.game.badge.update(4)

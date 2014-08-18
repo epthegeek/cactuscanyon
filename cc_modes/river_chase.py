@@ -371,6 +371,9 @@ class RiverChase(ep.EP_Mode):
         # only kill the music if there's not a higher level running
         #self.stop_music(slice=3)
         self.layer = None
+        # up the stampede value if won
+        if self.won:
+            self.game.increase_tracking('Stampede Value',250000)
         # set the tracking on the ramps
         if self.game.save_polly.winsRequired and not self.won:
             self.game.set_tracking('leftRampStage',1)

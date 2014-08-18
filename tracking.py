@@ -198,3 +198,6 @@ class Tracking(game.Player):
         self.player_stats['Total Flips'] = 0
         self.player_stats['Left Flips'] = 0
         self.player_stats['Right Flips'] = 0
+
+        # jackpot value for stampede
+        self.player_stats['Stampede Value'] = 250000

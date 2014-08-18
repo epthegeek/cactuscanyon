@@ -64,29 +64,34 @@ class LeftLoop(ep.EP_Mode):
         if ep.last_switch == 'leftLoopBottom':
             # Register the hit in audits
             self.game.game_data['Feature']['Left Loop Hits'] += 1
-            # cancel any other displays
-            for mode in self.game.ep_modes:
-                if getattr(mode, "abort_display", None):
-                    mode.abort_display()
-
-                # if we're complete open the gate for a full run through
-            # if we're "complete" open the full loop
-            if self.game.show_tracking('leftLoopStage') >= 4:
+            # If showdown is running, let that sucker pass
+            if self.game.showdown.running or self.game.ambush.running:
                 # pulse the coil to open the gate
                 self.game.coils.rightLoopGate.pulse(240)
-                # play a lampshow
-                self.game.lampctrl.play_show(self.game.assets.lamp_leftToRight, repeat=False,callback=self.lamp_update)
-            ## if the combo timer is on:
-            if self.game.combos.myTimer > 0:
-                # register the combo and reset the timer
-                combo = self.game.combos.hit()
-            # else the combo timer is NOT on so run award loop without the flag
             else:
-                # and turn on the combo timer
-                combo = self.game.combos.start()
+                # cancel any other displays
+                for mode in self.game.ep_modes:
+                    if getattr(mode, "abort_display", None):
+                        mode.abort_display()
 
-            # award the loop reward
-            self.award_loop_score(combo)
+                # if we're complete open the gate for a full run through
+                # if we're "complete" open the full loop
+                if self.game.show_tracking('leftLoopStage') >= 4:
+                    # pulse the coil to open the gate
+                    self.game.coils.rightLoopGate.pulse(240)
+                    # play a lampshow
+                    self.game.lampctrl.play_show(self.game.assets.lamp_leftToRight, repeat=False,callback=self.lamp_update)
+                ## if the combo timer is on:
+                if self.game.combos.myTimer > 0:
+                    # register the combo and reset the timer
+                    combo = self.game.combos.hit()
+                # else the combo timer is NOT on so run award loop without the flag
+                else:
+                    # and turn on the combo timer
+                    combo = self.game.combos.start()
+
+                # award the loop reward
+                self.award_loop_score(combo)
         # if it's a roll through so just add some points
         elif ep.last_switch == 'rightLoopTop':
             self.game.score(2530,bonus=True)

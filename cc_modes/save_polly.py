@@ -475,6 +475,9 @@ class SavePolly(ep.EP_Mode):
         self.game.train.reset_toy(type=2)
         # turn off the polly display
         self.layer = None
+        # up the stampede value if won
+        if self.won:
+            self.game.increase_tracking('Stampede Value',500000)
         # set the tracking on the ramps
         # if wins are required, and player did not win, reset ramp to stage 1
         if self.winsRequired and not self.won:
