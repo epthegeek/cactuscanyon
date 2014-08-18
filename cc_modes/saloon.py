@@ -257,7 +257,16 @@ class Saloon(ep.EP_Mode):
                 prizes.append('awardLock')
             #   5 - Bonus multiplier + 5
             if self.game.show_tracking('bonusX') < 6:
-                prizes.append('bonusX')
+                # we're probably going to add this item
+                additem = True
+                # but if bonus x limits are on
+                if self.game.bonus_lanes.limited:
+                    # If adding 5 would go over max, don't do that
+                    if (self.game.show_tracking('bonusX') + 5) > self.game.bonus_lanes.max:
+                        additem = False
+
+                if additem:
+                    prizes.append('bonusX')
             #   6 - Increase your rank
             if self.game.show_tracking('rank') < 4 and not self.game.bart.bossFight:
                 prizes.append('rank')

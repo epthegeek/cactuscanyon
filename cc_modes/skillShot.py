@@ -212,7 +212,16 @@ class SkillShot(ep.EP_Mode):
 
             # bonus X don't include if bonus already 6x or more
             if self.game.show_tracking('bonusX') < 6:
-                prizes.append("L")
+                # we're probably going to allow bonus x
+                additem = True
+                # BUT if we're limiting bonus max - check that
+                if self.game.bonus_lanes.limited:
+                    # If adding 3 would go over, then don't do that
+                    if (self.game.show_tracking('bonusX') + 3) > self.game.bonus_lanes.max:
+                        additem = False
+
+                if additem:
+                    prizes.append("L")
 
             # center ramp complete (train)
             if self.game.show_tracking('centerRampStage') < 3:
@@ -230,7 +239,16 @@ class SkillShot(ep.EP_Mode):
             # bonus 5x
             if self.game.show_tracking('bonusX') < 9 and\
                self.game.user_settings['Gameplay (Feature)']['Super Skill Bonus X'] == "Enabled":
-                prizes.append("P")
+                # we're probably going to add this item
+                additem = True
+                # But if bouns x is limited
+                if self.game.bonus_lanes.limited:
+                    # If adding 5 would go over, then don't do that
+                    if (self.game.show_tracking('bonusX') + 5) > self.game.bonus_lanes.max:
+                        additem = False
+
+                if additem:
+                    prizes.append("P")
             # light gunfight
             if self.game.show_tracking('gunfightStatus') != "READY" and \
                self.game.user_settings['Gameplay (Feature)']['Super Skill Gunfight'] == "Enabled":
@@ -281,11 +299,20 @@ class SkillShot(ep.EP_Mode):
                 self.selectedPrizes += "E"
             else:
                 self.selectedPrizes += "X"
+
             # bonus X don't include if bonus already 6x or more
             if self.game.show_tracking('bonusX') < 6:
-                self.selectedPrizes += "L"
-            else:
-                self.selectedPrizes += "X"
+                additem = True
+                if self.game.bonus_lanes.limited:
+                    # If adding 3 would go over, then don't do that
+                    if (self.game.show_tracking('bonusX') + 3) > self.game.bonus_lanes.max:
+                            additem = False
+
+                if additem:
+                    self.selectedPrizes += "L"
+                else:
+                    self.selectedPrizes += "X"
+
             # increae rank (star) don't include if already at max rank
             if self.game.show_tracking('rank') < 4:
                 self.selectedPrizes += "K"
