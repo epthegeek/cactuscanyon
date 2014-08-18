@@ -43,7 +43,7 @@ class GoldMine(ep.EP_Mode):
         self.restartFlag = False
         self.restarted = False
         self.game.switch_blocker('add',self.myID)
-        self.motherlodeValue = 0
+        self.set_motherlode_value()
         self.displayMotherlodeValue = 0
         self.counter = 0
         self.multiplier = False
@@ -554,7 +554,7 @@ class GoldMine(ep.EP_Mode):
         if motherLodeScore > self.game.show_tracking('motherlodeValue'):
             self.game.set_tracking('motherlodeValue', motherLodeScore)
         # and reset the motherlode value and multiplier
-        self.motherlodeValue = 0
+        self.set_motherlode_value()
         # reset the motherlode multiplier
         self.game.set_tracking('motherlodeMultiplier',1)
 
@@ -781,3 +781,6 @@ class GoldMine(ep.EP_Mode):
     def mode_stopped(self):
         if self.game.switches.minePopper.is_active():
             self.game.mountain.eject()
+
+    def set_motherlode_value(self):
+        self.motherlodeValue = 0 + (250000 * self.game.show_tracking('rank'))
