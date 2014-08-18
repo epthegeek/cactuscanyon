@@ -148,7 +148,7 @@ class Stampede(ep.EP_Mode):
             self.game.score((self.game.show_tracking('Stampede Value') * 2))
             self.jackpot_hit()
         else:
-            self.game.score(self.game.show_tracking('Stamepde Value'))
+            self.game.score(self.game.show_tracking('Stampede Value'))
             self.jackpot_wiff()
 
     def jackpot_hit(self,step=1):
@@ -161,6 +161,7 @@ class Stampede(ep.EP_Mode):
             myWait = len(anim.frames) / 15.0
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=4)
             self.layer = animLayer
+            self.game.base.play_quote(self.game.assets.quote_jackpot)
             # and some sounds
             self.game.sound.play(self.game.assets.sfx_revRicochet)
             # loop back to do the next part
@@ -168,10 +169,9 @@ class Stampede(ep.EP_Mode):
         # second pass layers the score over the text
         if step == 2:
             self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_stampedeJackpot.frames[42])
-            self.scoreLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(str(ep.format_score(self.game.show_tracking('Stampede Value'))))
+            self.scoreLine = dmd.TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(str(ep.format_score(self.game.show_tracking('Stampede Value') * 2)))
             self.scoreLine.composite_op = "blacksrc"
             self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
-            self.game.base.play_quote(self.game.assets.quote_jackpot)
             # loop back to cleear
             self.delay(name="Display",delay=2,handler=self.jackpot_hit,param=3)
         # third pass plays the wipe
@@ -202,12 +202,15 @@ class Stampede(ep.EP_Mode):
             animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=5)
             animLayer.composite_op = "blacksrc"
             bannerLayer = dmd.AnimatedLayer(frames=banner.frames,hold=True, opaque=False,repeat=False,frame_time=5)
-            # TODO: add a layer with the score on it, after editing the dmd anim to remove the score
+            textLayer = ep.EP_TextLayer(64,13,self.game.assets.font_13px_score,"center",opaque=False)
+            textLayer.composite_op = "blacksrc"
+            # frame listener to set the text on the score display
+            animLayer.add_frame_listener(19, lambda: textLayer.set_text(ep.format_score(self.game.show_tracking('Stampede Value')),color=ep.MAGENTA,blink_frames=8))
             #bannerLayer.composite_op = "blacksrc"
             if layerCopy:
-                combined = dmd.GroupedLayer(128,32,[layerCopy,bannerLayer,animLayer])
+                combined = dmd.GroupedLayer(128,32,[layerCopy,bannerLayer,textLayer,animLayer])
             else:
-                combined = dmd.GroupedLayer(128,32,[bannerLayer,animLayer])
+                combined = dmd.GroupedLayer(128,32,[bannerLayer,textLayer,animLayer])
             combined.composite_op = "blacksrc"
             self.layer = combined
             # and some sounds
@@ -271,7 +274,7 @@ class Stampede(ep.EP_Mode):
             self.game.switch_blocker('remove',self.myID)
             self.lamp_update()
 
-        # Reset the stamepde value
+        # Reset the stampede value
         self.game.set_tracking('Stampede Value', 250000)
         self.running = False
         # badge light - stampede is 4
