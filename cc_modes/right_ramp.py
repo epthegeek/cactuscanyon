@@ -138,13 +138,27 @@ class RightRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
 
         elif stage == 3:
-            # if drunk stacking isn't allowed - don't start save polly
-            if self.game.drunk_multiball.running and not self.game.base.drunkStacking:
-                self.game.score(50000,bonus=True)
+        # if move your train is running, don't start save polly
+            if self.game.move_your_train.running or \
+                self.game.drunk_multiball.running:
+                self.score(50000,bonus=True)
+                return
             else:
                 self.game.increase_tracking('rightRampStage')
-                self.game.modes.add(self.game.bank_robbery)
-                self.game.bank_robbery.start_bank_robbery()
+                ## New logic branch - if this is the last item for stamepede, go straight there instead of polly
+                ## *IF* we're on ball 3, *AND* player has no extra balls.
+                if self.game.ball == self.game.balls_per_game and self.game.show_tracking('extraBallsTotal') == 0 \
+                    and self.game.show_tracking('leftRampStage') == 5 \
+                    and self.game.show_tracking('centerRampStage') == 5:
+                    # increase the tracking again to "finish" the ramp
+                    self.game.increase_tracking('rightRampStage')
+                    # bump up the stampede score by 100k
+                    self.game.increase_tracking('Stampede Value',100000)
+                    # Then check stampede
+                    self.game.base.check_stampede()
+                else:
+                    self.game.modes.add(self.game.bank_robbery)
+                    self.game.bank_robbery.start_bank_robbery()
 
 
     ## for now, anything above 3 is 'complete'

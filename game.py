@@ -497,7 +497,7 @@ class CCGame(game.BasicGame):
         # run the start_ball from proc.game.BasicGame
         super(CCGame, self).start_ball()
         if len(self.players) > 1 and not self.interrupter.hush:
-            if self.replays and self.ball == 3:
+            if self.replays and self.ball == self.balls_per_game:
                 # if they already earned a replay - still show their number
                 if self.show_tracking('replay_earned'):
                     self.interrupter.display_player_number()
