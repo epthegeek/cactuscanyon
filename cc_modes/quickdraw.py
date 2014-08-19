@@ -106,6 +106,18 @@ class Quickdraw(ep.EP_Mode):
         if not self.paused:
             self.pause()
 
+    # add light & sound to flipper if we just came through the inlane
+    def sw_flipperLwL_active(self,sw):
+        if ep.last_switch == "leftReturnLane":
+            self.game.sound.play(self.game.assets.sfx_explosion11)
+            self.game.coils.leftGunFlasher.schedule(0x0000025F,cycle_seconds=1)
+
+    def sw_flipperLwR_active(self,sw):
+        if ep.last_switch == "rightReturnLane":
+            self.game.sound.play(self.game.assets.sfx_explosion11)
+            self.game.coils.rightGunFlasher.schedule(0x0000025F,cycle_seconds=1)
+
+
     def start_quickdraw(self,side):
         # audit
         self.game.game_data['Feature']['Quickdraws Started'] += 1

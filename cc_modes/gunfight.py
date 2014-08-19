@@ -110,12 +110,12 @@ class Gunfight(ep.EP_Mode):
     def sw_flipperLwL_active(self,sw):
         if self.shooting and self.activeSide == 0:
             self.game.sound.play(self.game.assets.sfx_explosion11)
-            self.game.coils.leftGunFlasher.pulse(30)
+            self.game.coils.leftGunFlasher.schedule(0x0000025F,cycle_seconds=1)
 
     def sw_flipperLwR_active(self,sw):
         if self.shooting and self.activeSide == 1:
             self.game.sound.play(self.game.assets.sfx_explosion11)
-            self.game.coils.rightGunFlasher.pulse(30)
+            self.game.coils.rightGunFlasher.schedule(0x0000025F,cycle_seconds=1)
 
     def start_gunfight(self,side):
         # audit
@@ -339,8 +339,8 @@ class Gunfight(ep.EP_Mode):
         # play the 4 bells
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
         # flash the gun flashers
-        self.game.coils.leftGunFlasher.schedule(0x00020821)
-        self.game.coils.rightGunFlasher.schedule(0x00020821)
+        self.game.coils.leftGunFlasher.schedule(0x00020821,cycle_seconds=1)
+        self.game.coils.rightGunFlasher.schedule(0x00020821,cycle_seconds=1)
         self.delay("Operational",delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
         # run the animation
         anim = self.game.assets.dmd_gunfightBoots

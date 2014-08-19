@@ -1025,6 +1025,8 @@ class LampControl(ep.EP_Mode):
     def gunfight_flash(self):
         self.game.lamps.rightGunfightPin.schedule(0x00FF00FF)
         self.game.lamps.leftGunfightPin.schedule(0x00FF00FF)
+        self.game.coils.leftGunFlasher.schedule(0x11111111)
+        self.game.coils.rightGunFlasher.schedule(0x11111111)
 
     #  ____            _    ____
     # | __ )  __ _  __| |  / ___|_   _ _   _ ___
