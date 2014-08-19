@@ -338,6 +338,9 @@ class Gunfight(ep.EP_Mode):
         self.game.bad_guys.target_up(enemy)
         # play the 4 bells
         self.game.sound.play(self.game.assets.sfx_gunfightBell)
+        # flash the gun flashers
+        self.game.coils.leftGunFlasher.schedule(0x00020821)
+        self.game.coils.rightGunFlasher.schedule(0x00020821)
         self.delay("Operational",delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
         # run the animation
         anim = self.game.assets.dmd_gunfightBoots
