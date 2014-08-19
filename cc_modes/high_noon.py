@@ -37,6 +37,7 @@ class HighNoon(ep.EP_Mode):
         self.grandTotal = 0
         self.hasWon = False
         self.starting = False
+        self.timeLeft = 30
 
     def ball_drained(self):
         if self.running:
@@ -185,11 +186,13 @@ class HighNoon(ep.EP_Mode):
     def timer(self,seconds):
         # if we're out of time, end
         if seconds <= 0:
+            self.timeLeft = seconds
             self.stop_music()
             self.finish_up()
         else:
             seconds -= 1
             self.myTimer = seconds
+            self.timeLeft = seconds
             self.delay(name="Timer",delay = 1, handler=self.timer,param=seconds)
 
     # start high noon
@@ -382,10 +385,16 @@ class HighNoon(ep.EP_Mode):
     def won(self):
         # audit
         self.game.game_data['Feature']['High Noon Won'] += 1
-        self.game.score(10000000)
         self.hasWon = True
         # cancel the mode timer
         self.cancel_delayed("Timer")
+        # set the victory amount
+        if self.game.showdown.difficulty == "Hard":
+            self.victoryPoints = 20000000
+        else:
+            self.victoryPoints = 10000000
+        self.timeBonus = self.timeLeft * 1000000
+        self.game.score(self.timeBonus + self.victoryPoints)
         # cancel the church bell
         self.cancel_delayed("Church Bell")
         # kill the music
@@ -430,7 +439,7 @@ class HighNoon(ep.EP_Mode):
             animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_fireworks3)
             animLayer.composite_op = "blacksrc"
             textLayer1 = ep.EP_TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("VICTORY",color=ep.GREEN)
-            textLayer2 = ep.EP_TextLayer(64, 13, self.game.assets.font_12px_az, "center", opaque=False).set_text(str(ep.format_score(20000000)),color=ep.ORANGE)
+            textLayer2 = ep.EP_TextLayer(64, 13, self.game.assets.font_13px_az, "center", opaque=False).set_text(str(ep.format_score(self.victoryPoints + self.timeBonus)),color=ep.ORANGE)
             combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
             self.layer = combined
         else:
@@ -502,7 +511,7 @@ class HighNoon(ep.EP_Mode):
             print "HIGH NOON TOTAL"
             titleLine = ep.EP_TextLayer(64,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("COMBINED TOTAL:",color=ep.BROWN)
             if self.hasWon:
-                self.grandTotal += 20000000
+                self.grandTotal += (self.victoryPoints + self.timeBonus)
             pointsLine = ep.EP_TextLayer(64, 12, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.grandTotal),color=ep.YELLOW)
             combined = dmd.GroupedLayer(128,32,[titleLine,pointsLine])
             # play a sound
