@@ -423,9 +423,9 @@ class LampControl(ep.EP_Mode):
             ## left loop is #0 in the stampede jackpot list
             if self.game.stampede.active == 0:
                 self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
-                self.game.lamps.leftLoopRideEm.schedule(0xFF00FF00)
-                self.game.lamps.leftLoopWildRide.schedule(0xF0F0F0F0)
-                self.game.lamps.leftLoopBuckNBronco.schedule(0xF00FF00F)
+                self.game.lamps.leftLoopRideEm.schedule(0x0F000F00)
+                self.game.lamps.leftLoopWildRide.schedule(0x00F000F0)
+                self.game.lamps.leftLoopBuckNBronco.schedule(0x000F000F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.leftLoopJackpot.schedule(0xFF00FF00)
@@ -523,9 +523,9 @@ class LampControl(ep.EP_Mode):
         elif mode == "Stampede":
             if self.game.stampede.active == 1:
                 self.game.lamps.leftRampJackpot.schedule(0xF000F000)
-                self.game.lamps.leftRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.leftRampWaterfall.schedule(0xF0F0F0F0)
-                self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+                self.game.lamps.leftRampSavePolly.schedule(0x0F000F00)
+                self.game.lamps.leftRampWaterfall.schedule(0x00F000F0)
+                self.game.lamps.leftRampWhiteWater.schedule(0x000F000F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.leftRampJackpot.schedule(0xFF00FF00)
@@ -630,9 +630,9 @@ class LampControl(ep.EP_Mode):
         ## center ramp is #2 in the stampede jackpot list
             if self.game.stampede.active == 2:
                 self.game.lamps.centerRampJackpot.schedule(0xF000F000)
-                self.game.lamps.centerRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.centerRampStopTrain.schedule(0xF0F0F0F0)
-                self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
+                self.game.lamps.centerRampSavePolly.schedule(0x0F000F00)
+                self.game.lamps.centerRampStopTrain.schedule(0x00F000F0)
+                self.game.lamps.centerRampCatchTrain.schedule(0x000F000F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.centerRampJackpot.schedule(0xFF00FF00)
@@ -747,9 +747,9 @@ class LampControl(ep.EP_Mode):
             ## right loop is #3 in the stampede jackpot list
             if self.game.stampede.active == 3:
                 self.game.lamps.rightLoopJackpot.schedule(0xF000F000)
-                self.game.lamps.rightLoopMarksman.schedule(0xFF00FF00)
-                self.game.lamps.rightLoopGunslinger.schedule(0xF0F0F0F0)
-                self.game.lamps.rightLoopGoodShot.schedule(0xF00FF00F)
+                self.game.lamps.rightLoopMarksman.schedule(0x0F000F00)
+                self.game.lamps.rightLoopGunslinger.schedule(0x00F000F0)
+                self.game.lamps.rightLoopGoodShot.schedule(0x000F000F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.rightLoopJackpot.schedule(0xFF00FF00)
@@ -846,9 +846,9 @@ class LampControl(ep.EP_Mode):
         ## right ramp is #4 in the stampede jackpot list
             if self.game.stampede.active == 4:
                 self.game.lamps.rightRampJackpot.schedule(0xF000F000)
-                self.game.lamps.rightRampSavePolly.schedule(0xFF00FF00)
-                self.game.lamps.rightRampShootOut.schedule(0xF0F0F0F0)
-                self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
+                self.game.lamps.rightRampSavePolly.schedule(0x0F000F00)
+                self.game.lamps.rightRampShootOut.schedule(0x00F000F0)
+                self.game.lamps.rightRampSoundAlarm.schedule(0x000F000F)
             # if not active, just turn on the jackpot light only
             else:
                 self.game.lamps.rightRampJackpot.schedule(0xFF00FF00)
@@ -937,6 +937,13 @@ class LampControl(ep.EP_Mode):
                 if self.game.show_tracking('jackpotStatus',i):
                     self.comboLights[i].schedule(0x0F0FF000)
             ## if status is anything other than ON bail here
+
+        elif mode == 'Stampede':
+            # loop through and turn on the appropriate light
+            for i in range(0,5,1):
+                if self.game.stampede.active == i:
+                    self.comboLights[i].schedule(0x000F000F)
+
         else:
             pass
 
