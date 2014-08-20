@@ -168,6 +168,18 @@ class GoldMine(ep.EP_Mode):
     def process_shot(self,shot):
         # we've hit a potential jackpot
         print "JACKPOT STATUS: " + str(self.game.show_tracking('jackpotStatus',shot))
+        # if 0 and 3 are out, for the loop shots, pop the gate for a roll through
+        if self.game.show_tracking('jackpotStatus',0) == False and \
+            self.game.show_tracking('jackpotStatus',3) == False:
+            if shot == 0:
+                # left loop, pulse the right gate
+                self.game.coils.rightLoopGate.pulse(240)
+            elif shot == 3:
+                # right loop, pulse the left gate
+                self.game.coils.leftLoopGate.pulse(240)
+            else:
+                pass
+
         # check to see if it was an active jackpot - if bandits aren't about
         if self.game.show_tracking('jackpotStatus',shot) and not self.bandits:
             # if it was, set the flag
