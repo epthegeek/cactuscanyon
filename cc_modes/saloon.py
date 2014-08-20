@@ -484,6 +484,9 @@ class Saloon(ep.EP_Mode):
         # set the tracking
         self.game.set_tracking('gunfightStatus',"READY")
         self.lamp_update()
+        self.game.coils.leftGunFlasher.schedule(0x11111111,cycle_seconds=1)
+        self.game.coils.rightGunFlasher.schedule(0x11111111,cycle_seconds=1)
+
         if callback != None:
             print "I GOT A GUNFIGHT CALLBACK"
             self.delay("Callback",delay=2,handler=callback)
