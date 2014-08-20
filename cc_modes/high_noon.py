@@ -651,6 +651,8 @@ class HighNoon(ep.EP_Mode):
     def church_bell(self,rings=12):
         # rin the bell mon
         duration = self.game.sound.play(self.game.assets.sfx_churchBell)
+        # flash the red flashers for fabulousness!
+        self.game.base.red_flasher_flourish()
         # delay coming back to ring again if there are more left
         rings -= 1
         if rings > 0:
