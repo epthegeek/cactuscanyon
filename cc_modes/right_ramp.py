@@ -141,7 +141,7 @@ class RightRamp(ep.EP_Mode):
         # if move your train is running, don't start save polly
             if self.game.move_your_train.running or \
                 self.game.drunk_multiball.running:
-                self.score(50000,bonus=True)
+                self.game.score(50000,bonus=True)
                 return
             else:
                 self.game.increase_tracking('rightRampStage')
