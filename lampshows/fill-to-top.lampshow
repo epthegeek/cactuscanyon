@@ -18,7 +18,6 @@
 ##
 #                                   1         2         3           1         2         3           1         2         3
 #           METER        # 1234567890123456789012345678901-1234567890123456789012345678901-1234567890123456789012345678901-
-lamp:shootAgain          | [                              ]
 lamp:rightGunfightPin    | [                              ]
 lamp:starHighNoon        | [                              ]
 lamp:starShowdown        | [                              ]
