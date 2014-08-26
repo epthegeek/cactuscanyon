@@ -566,6 +566,15 @@ class Attract(ep.EP_Mode):
                     combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
                     self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
 
+                # Generate a screen for the motherlode champ
+                if category.game_data_key == 'StampedeChampHighScoreData' and self.game.stampede.alternate:
+                    backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cowsParading.frames[2])
+                    title = ep.EP_TextLayer(64, 1, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("STAMPEDE CHAMP",color=ep.ORANGE)
+                    initLine1 = dmd.TextLayer(64, 6, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score.inits)
+                    scoreLine1 = ep.EP_TextLayer(64, 14, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(score_str,color=ep.RED)
+                    combined = dmd.GroupedLayer(128, 32, [backdrop, title, initLine1, scoreLine1])
+                    self.layers.append({'layer':combined,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_SOUTH})
+
                 # Generate a screen for last call
                 if category.game_data_key == 'LastCallHighScoreData':
                     backdrop = dmd.FrameLayer(opaque = False, frame=self.game.assets.dmd_bartender.frames[0])

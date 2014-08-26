@@ -309,6 +309,9 @@ Gameplay (Feature):
   'Super Skill 3 Million':
     options: ['Enabled','Disabled']
     default: 'Disabled'
+  'Stampede Mode':
+    options: ['Original','Alternate']
+    default: 'Original'
   'Motherlode Badge Difficulty':
     options: ['Easy','Normal']
     default: 'Easy'

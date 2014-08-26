@@ -113,7 +113,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2014.08.25"
+        self.revision = "2014.08.26"
 
         # basic game reset stuff, copied in
 
@@ -272,6 +272,12 @@ class CCGame(game.BasicGame):
         self.highscore_categories.append(cat)
 
         cat = highscore.HighScoreCategory()
+        cat.game_data_key = 'StampedeChampHighScoreData'
+        cat.score_for_player = lambda player: player.player_stats['Stampede Best']
+        cat.titles = ['Stampede Champ']
+        self.highscore_categories.append(cat)
+
+        cat = highscore.HighScoreCategory()
         cat.game_data_key = 'ComboChampHighScoreData'
         cat.score_for_player = lambda player: player.player_stats['bigChain']
         cat.titles = ['Combo Champ']
@@ -335,7 +341,11 @@ class CCGame(game.BasicGame):
         # general bad guy handling
         self.bad_guys = cc_modes.BadGuys(game=self,priority=67)
         # stampede multiball
-        self.stampede = cc_modes.Stampede(game=self,priority=69)
+        # Two versions now
+        if self.user_settings['Gameplay (Feature)']['Stampede Mode'] == 'Original':
+            self.stampede = cc_modes.Stampede(game=self,priority=69)
+        else:
+            self.stampede = cc_modes.StampedeContinued(game=self,priority=69)
         # this mode unloads when not in use
         self.skill_shot = cc_modes.SkillShot(game=self,priority=70)
         # tribute launcher

@@ -35,6 +35,7 @@ __all__ = [
     'combos',
     'trough',
     'stampede',
+    'stampede_continued',
     'high_noon',
     'drunk_multiball',
     'quickdraw',
@@ -88,6 +89,7 @@ from bonus_lanes import *
 from combos import *
 from trough import *
 from stampede import *
+from stampede_continued import *
 from high_noon import *
 from drunk_multiball import *
 from quickdraw import *

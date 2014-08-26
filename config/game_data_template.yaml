@@ -153,6 +153,8 @@ BountyHunterHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: OIC, score: 3}
 MotherlodeChampHighScoreData:
 - {date: 'Sun Oct  3 22:05:01 2010', inits: LIZ, score: 250000}
+StampedeChampHighScoreData:
+- {date: 'Sun Oct  3 22:05:01 2010', inits: LIZ, score: 250000}
 LastCallHighScoreData:
 - {date: 'Sun Oct  3 17:38:46 2010', inits: ABI, score: 50000}
 MoonlightHighScoreData:

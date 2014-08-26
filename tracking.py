@@ -202,3 +202,5 @@ class Tracking(game.Player):
         # jackpot value for stampede
         self.player_stats['Stampede Value'] = 250000
         self.player_stats['Stampede Addon'] = 0
+        self.player_stats['Stampede Total'] = 0
+        self.player_stats['Stampede Best'] = 0

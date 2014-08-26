@@ -13,16 +13,14 @@
 ## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
 ## Original Cactus Canyon software by Matt Coriale
 ##
-## This is an alternate version of Stampede multiball from the mind of Keith Elwin
-##
 from procgame import dmd
 import ep
 import random
 
-class Stampede(ep.EP_Mode):
+class StampedeContinued(ep.EP_Mode):
     """Cactus Canyon Stampede"""
     def __init__(self, game, priority):
-        super(Stampede, self).__init__(game, priority)
+        super(StampedeContinued, self).__init__(game, priority)
         self.myID = "Stampede"
         self.shotModes = [self.game.left_loop,self.game.right_loop,self.game.left_ramp,self.game.center_ramp,self.game.right_ramp]
         self.shots = ['leftLoopStage','leftRampStage','centerRampStage','rightLoopStage','rightRampStage']
@@ -40,15 +38,13 @@ class Stampede(ep.EP_Mode):
         self.banners.append(banner0)
         banner1 = self.game.assets.dmd_stampedeBannerRight
         self.banners.append(banner1)
-        # a flag to identify old stampede from new
-        self.alternate = False
+        self.alternate = True
 
     def mode_started(self):
         # log the hit in audits
         self.game.game_data['Feature']['Stampede Started'] += 1
         # which jackpot is active
-        self.active = 9
-        # jackpots scored
+        self.active = 2
         self.jackpots = 0
         # cancel any other displays
         for mode in self.game.ep_modes:
@@ -58,6 +54,25 @@ class Stampede(ep.EP_Mode):
         self.game.switch_blocker('add',self.myID)
         # add the stampede value and addon to get the points for this round
         self.jackpotValue = self.game.show_tracking('Stampede Value') + self.game.show_tracking('Stampede Addon')
+        # base value
+        self.baseValue = self.game.show_tracking('Stampede Value')
+        # set the total to 0
+        self.game.set_tracking('Stampede Total',0)
+        # The first center shot is a jackpot - but it has to be able to be lowered
+        self.centerValue = self.jackpotValue
+        # timers for pulling the jackpot back to center
+        self.longTimer = 9
+        self.shortTimer = 6
+        # set up some display bits
+        # title line
+        self.titleLine = ep.EP_TextLayer(128/2, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("STAMPEDE MULTIBALL",color=ep.PURPLE)
+        # score line
+        p = self.game.current_player()
+        scoreString = ep.format_score(p.score)
+        self.mainScoreLine = ep.EP_TextLayer(64, 7, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,color=ep.YELLOW)
+        self.mainScoreLine.composite_op = "blacksrc"
+        # jackpot info line
+        self.jackpotLine = ep.EP_TextLayer(64,1, self.game.assets.font_5px_AZ, "center", opaque=False)
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
@@ -97,10 +112,7 @@ class Stampede(ep.EP_Mode):
         self.running = True
         # stop the current music
         self.stop_music()
-        # turn on a starting jackpot
-        choices = [0,1,2,3,4]
-        self.active = random.choice(choices)
-        # set the ramp status for lights
+        # set the ramp status for lights -- outdated lamp_control doesn't use
         for shot in self.shots:
             print "SETTING TRACKING FOR:" + shot
             self.game.set_tracking(shot,89)
@@ -109,8 +121,6 @@ class Stampede(ep.EP_Mode):
         # If the multiball ball savers are a thing, do that
         self.game.base.multiball_saver()
 
-        # start the timer for the moving jackpot
-        self.jackpot_shift()
         #play the opening anim
         anim = self.game.assets.dmd_stampede
         myWait = len(anim.frames) / 10 + 1.5
@@ -132,15 +142,25 @@ class Stampede(ep.EP_Mode):
 
     def main_display(self):
         # this is the main score display for stampede - it's got score on it, so we'll have to loop
-        # title line
-        titleLine = ep.EP_TextLayer(128/2, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("STAMPEDE MULTIBALL",color=ep.PURPLE)
         # score line
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = ep.EP_TextLayer(64, 7, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,color=ep.YELLOW)
-        scoreLine.composite_op = "blacksrc"
+        self.mainScoreLine.set_text(scoreString,color=ep.YELLOW)
+        # jackpot info line
+        # Center shot
+        if self.active == 2:
+            string = "JACKPOT = " + ep.format_score(self.centerValue)
+            self.jackpotLine.set_text(string,color=ep.PURPLE)
+        # One off center is 2x
+        if self.active == 1 or self.active == 3:
+            string = "JACKPOT = 2 X " + ep.format_score(self.jackpotValue)
+            self.jackpotLine.set_text(string,color=ep.PURPLE)
+        # two off center is 4x
+        if self.active == 0 or self.active == 4:
+            string = "JACKPOT = 4 X " + ep.format_score(self.jackpotValue)
+            self.jackpotLine.set_text(string,color=ep.PURPLE,blink_frames=4)
         # group with cow layer
-        combined = dmd.GroupedLayer(128,32,[self.cowLayer,titleLine,scoreLine])
+        combined = dmd.GroupedLayer(128,32,[self.cowLayer,self.mainScoreLine,self.jackpotLine])
         # set the layer active
         self.layer = combined
         # loop back again in .2 for score update
@@ -150,13 +170,39 @@ class Stampede(ep.EP_Mode):
     def process_shot(self,number,active):
          # cancel the display if any
         self.cancel_delayed("Display")
+        # we hit the active shot
         if active == number:
             self.jackpots += 1
-            self.game.score((self.jackpotValue * 2))
+            # if it's the middle shot, it's 1x
+            if active == 2:
+                self.scored = self.centerValue
+                # then set it to the base value for a second score
+                self.centerValue = self.baseValue
+            # if it's one off center, it's 2x
+            if self.is_near():
+                self.scored = self.jackpotValue * 2
+            # if it's the far side shots, it's 4x
+            if self.is_far():
+                self.scored = self.jackpotValue * 4
+            # then move the jackpot back to center
+            if self.active != 2:
+                self.active = 2
+            # score the points
+            self.game.score(self.scored)
+            # update the lamps
+            self.lamp_update()
+            # add the points to the tracking
+            self.game.increase_tracking('Stampede Total',self.scored)
+            # and display the hit
             self.jackpot_hit()
+        # if the number is higher than the active, move right
+        elif number > active:
+            self.game.score(self.baseValue)
+            self.shift(1)
+        # the other option is if it's lower, we move left
         else:
-            self.game.score(self.jackpotValue)
-            self.jackpot_wiff()
+            self.game.score(self.baseValue)
+            self.shift(0)
 
     def jackpot_hit(self,step=1):
         if step == 1:
@@ -176,7 +222,7 @@ class Stampede(ep.EP_Mode):
         # second pass layers the score over the text
         if step == 2:
             self.backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_stampedeJackpot.frames[42])
-            self.scoreLine = ep.EP_TextLayer(64, 8, self.game.assets.font_17px_score, "center", opaque=True).set_text(str(ep.format_score(self.game.show_tracking('Stampede Value') * 2)),color=ep.YELLOW)
+            self.scoreLine = ep.EP_TextLayer(64, 8, self.game.assets.font_17px_score, "center", opaque=True).set_text(str(ep.format_score(self.scored)),color=ep.YELLOW)
 #            self.scoreLine.composite_op = "blacksrc"
 #            self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
             # loop back to cleear
@@ -197,45 +243,80 @@ class Stampede(ep.EP_Mode):
             # then do the main display
             self.delay(name="Display",delay=myWait,handler=self.main_display)
 
-    def jackpot_wiff(self,step=1):
-        if step == 1:
-            layerCopy = self.layer
-            # load the animation based on which was last played
-            anim = self.anims[0]
-            banner = self.banners[0]
-            myWait = len(banner.frames) / 12.0
-            # reverse them for next time
-            self.anims.reverse()
-            self.banners.reverse()
-            # play an animation
-            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=5)
-            animLayer.composite_op = "blacksrc"
-            bannerLayer = dmd.AnimatedLayer(frames=banner.frames,hold=True, opaque=False,repeat=False,frame_time=5)
-            textLayer = ep.EP_TextLayer(64,13,self.game.assets.font_13px_score,"center",opaque=False)
-            textLayer.composite_op = "blacksrc"
-            # frame listener to set the text on the score display
-            animLayer.add_frame_listener(19, lambda: textLayer.set_text(ep.format_score(self.game.show_tracking('Stampede Value')),color=ep.MAGENTA,blink_frames=8))
-            #bannerLayer.composite_op = "blacksrc"
-            if layerCopy:
-                combined = dmd.GroupedLayer(128,32,[layerCopy,bannerLayer,textLayer,animLayer])
-            else:
-                combined = dmd.GroupedLayer(128,32,[bannerLayer,textLayer,animLayer])
-            combined.composite_op = "blacksrc"
-            self.layer = combined
-            # and some sounds
-            self.game.base.play_quote(self.game.assets.quote_stampedeWiff)
-            self.delay(name="Display", delay=myWait, handler=self.main_display)
+    def shift(self,direction):
+        # move the active shot
+        # Going right
+        if direction == 1:
+            self.active += 1
+            # just in case
+            if self.active > 4:
+                self.active = 4
+        # going Left
+        else:
+            self.active -= 1
+            # just in case
+            if self.active < 0:
+                self.active = 0
 
-    def jackpot_shift(self):
-        # bump up by one
-        self.active += 1
-        # then see if we went over
-        if self.active >= 5:
-            self.active = 0
         # update the lamps
         self.lamp_update()
-        # then come back in 6 seconds and do it all over again
-        self.delay(name="Timer",delay=6,handler=self.jackpot_shift)
+        # now we need to start a timer for pulling back to center
+        # If we're in the One away, set the long timer
+        if self.is_near():
+            self.shift_timer(self.longTimer + 1)
+        # If we're two away, set the short timer
+        if self.is_far():
+            self.shift_timer(self.shortTimer + 1)
+
+        layerCopy = self.layer
+        # Set the cow animation
+        anim = self.anims[direction]
+        banner = self.banners[direction]
+        myWait = len(banner.frames) / 12.0
+        # play an animation
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False,frame_time=5)
+        animLayer.composite_op = "blacksrc"
+        bannerLayer = dmd.AnimatedLayer(frames=banner.frames,hold=True, opaque=False,repeat=False,frame_time=5)
+        textLayer = ep.EP_TextLayer(64,13,self.game.assets.font_13px_score,"center",opaque=False)
+        textLayer.composite_op = "blacksrc"
+        # frame listener to set the text on the score display
+        animLayer.add_frame_listener(19, lambda: textLayer.set_text(ep.format_score(self.baseValue),color=ep.MAGENTA,blink_frames=8))
+        #bannerLayer.composite_op = "blacksrc"
+        if layerCopy:
+            combined = dmd.GroupedLayer(128,32,[layerCopy,bannerLayer,textLayer,animLayer])
+        else:
+            combined = dmd.GroupedLayer(128,32,[bannerLayer,textLayer,animLayer])
+        combined.composite_op = "blacksrc"
+        self.layer = combined
+        # and some sounds
+        self.game.base.play_quote(self.game.assets.quote_stampedeWiff)
+        self.delay(name="Display", delay=myWait, handler=self.main_display)
+
+    def jackpot_shift(self):
+        # if off to the right, pull back by one
+        if self.active > 2:
+            self.active -= 1
+        # if off to the left, pull back by one
+        elif self.active < 2:
+            self.active += 1
+        # if we're already in the middle, do nothing
+        else:
+            pass
+        print "Shifting - active jackpot is now " + str(self.active)
+        # update the lamps
+        self.lamp_update()
+
+    def shift_timer(self,time):
+        # cancel any other shift timer
+        self.cancel_delayed("Shift Timer")
+        # decrement by one
+        time -= 1
+        # are we out of time?
+        if time <= 0:
+            self.jackpot_shift()
+        # if not, loop back in one second
+        else:
+            self.delay(name="Shift Timer", delay=1,handler=self.shift_timer, param = time)
 
     def end_stampede(self):
         print "ENDING S T A M P E D E"
@@ -245,12 +326,15 @@ class Stampede(ep.EP_Mode):
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_skullsBorder.frames[0])
         textLine1 = dmd.TextLayer(128/2, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
-        textString = "STAMPEDE: " + str(self.jackpots) + " JACKPOTS"
+        textString = "STAMPEDE TOTAL"
         textLine1.set_text(textString)
         textLine1.composite_op = "blacksrc"
         textLine2 = dmd.TextLayer(128/2,11, self.game.assets.font_12px_az, "center", opaque=False)
-        totalPoints = self.jackpots * 500000
+        totalPoints = self.game.show_tracking('Stampede Total')
         textLine2.set_text(ep.format_score(totalPoints))
+        # if the total is higher than best, set best
+        if self.game.show_tracking('Stampede Best') < totalPoints:
+            self.game.set_tracking('Stampede Best',totalPoints)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
         self.delay(name="Display",delay=2,handler=self.clear_layer)
@@ -305,3 +389,15 @@ class Stampede(ep.EP_Mode):
     def abort_display(self):
         self.cancel_delayed('Display')
         self.clear_layer()
+
+    def is_near(self):
+        if self.active == 1 or self.active == 3:
+            return True
+        else:
+            return False
+
+    def is_far(self):
+        if self.active == 0 or self.active == 4:
+            return True
+        else:
+            return False
