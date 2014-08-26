@@ -48,6 +48,8 @@ class DrunkMultiball(ep.EP_Mode):
         # reset the jackpots
         self.active = []
         self.downToOne = False
+        self.jackpotValue = 2000000
+        self.jackpotIncrement = 100000
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
@@ -242,7 +244,7 @@ class DrunkMultiball(ep.EP_Mode):
         textLine1 = ep.EP_TextLayer(80, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("DRUNK MULTIBALL",color=ep.ORANGE)
         if self.active:
             textLine2 = ep.EP_TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JACKPOTS",color=ep.BROWN)
-            textString = "WORTH " + str(ep.format_score(5000000))
+            textString = "WORTH " + str(ep.format_score(self.jackpotValue))
             textLine3 = ep.EP_TextLayer(80, 25, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(textString,color=ep.BROWN)
         else:
             textLine2 = ep.EP_TextLayer(80, 18, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("HIT BEER MUG",color=ep.BROWN)
@@ -302,7 +304,9 @@ class DrunkMultiball(ep.EP_Mode):
             self.delay("GI Reset",delay=1,handler=self.game.gi_control,param="ON")
 
         # score some points
-        self.game.score(5000000)
+        self.game.score(self.jackpotValue)
+        self.jackpotEarned = self.jackpotValue
+        self.jackpotValue += self.jackpotIncrement
         # load up the animation
         anim = self.game.assets.dmd_beerSlide
         # setup the animated layer
@@ -330,7 +334,7 @@ class DrunkMultiball(ep.EP_Mode):
 
     def jackpot_score(self):
         self.game.sound.play(self.game.assets.sfx_orchestraSpike)
-        scoreString = str(ep.format_score(5000000)) + "*"
+        scoreString = str(ep.format_score(self.jackpotEarned)) + "*"
         scoreLine = ep.EP_TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString,color=ep.YELLOW)
         scoreLine.composite_op = "blacksrc"
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])

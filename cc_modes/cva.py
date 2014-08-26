@@ -97,11 +97,11 @@ class CvA(ep.EP_Mode):
         # flip the direction of the ship
             self.direction.reverse()
         # starting saucer value
-        self.saucerValue = 2000000
+        self.saucerValue = 1000000
         self.saucerIncrement = 500000
         self.saucerPoints = 0
         # starting alien value
-        self.alienValue = 250000
+        self.alienValue = 150000
         self.alienIncrement = 50000
         self.alienPoints = 0
         self.activeAliens = []
