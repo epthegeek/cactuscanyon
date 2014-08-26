@@ -63,6 +63,8 @@ class StampedeContinued(ep.EP_Mode):
         # timers for pulling the jackpot back to center
         self.longTimer = 9
         self.shortTimer = 6
+        self.time = 0
+        self.halted = False
         # set up some display bits
         # title line
         self.titleLine = ep.EP_TextLayer(128/2, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("STAMPEDE MULTIBALL",color=ep.PURPLE)
@@ -103,6 +105,47 @@ class StampedeContinued(ep.EP_Mode):
     def sw_rightRampMake_active(self, sw):
         active = self.active
         self.process_shot(4,active)
+
+   # bonus lanes pause timer
+    def sw_leftBonusLane_active(self,sw):
+        if not self.halted:
+            self.halt()
+
+    def sw_rightBonusLane_active(self,sw):
+        if not self.halted:
+            self.halt()
+
+    # bumpers also
+    def sw_leftJetBumper_active(self,sw):
+        if not self.halted:
+            self.halt()
+
+    def sw_rightJetBumper_active(self,sw):
+        if not self.halted:
+            self.halt()
+
+    def sw_bottomJetBumper_active(self,sw):
+        if not self.halted:
+            self.halt()
+
+    # so does the mine and saloon
+    def sw_minePopper_active_for_390ms(self,sw):
+        if not self.halted:
+            self.halt()
+
+    def sw_saloonPopper_active_for_290ms(self,sw):
+        if not self.halted:
+            self.halt()
+
+    def sw_saloonPopper_inactive(self,sw):
+        if self.running and self.halted:
+            self.resume()
+
+    # resume when exit
+    def sw_jetBumpersExit_active(self,sw):
+        if self.running and self.halted:
+            self.resume()
+
 
     def start_stampede(self):
         # reset the jackpot count, just in case
@@ -263,10 +306,12 @@ class StampedeContinued(ep.EP_Mode):
         # now we need to start a timer for pulling back to center
         # If we're in the One away, set the long timer
         if self.is_near():
-            self.shift_timer(self.longTimer + 1)
+            self.time = self.longTimer + 1
+            self.shift_timer()
         # If we're two away, set the short timer
         if self.is_far():
-            self.shift_timer(self.shortTimer + 1)
+            self.time = self.shortTimer + 1
+            self.shift_timer()
 
         layerCopy = self.layer
         # Set the cow animation
@@ -306,17 +351,28 @@ class StampedeContinued(ep.EP_Mode):
         # update the lamps
         self.lamp_update()
 
-    def shift_timer(self,time):
+    def shift_timer(self):
         # cancel any other shift timer
         self.cancel_delayed("Shift Timer")
         # decrement by one
-        time -= 1
+        self.time -= 1
         # are we out of time?
-        if time <= 0:
+        if self.time <= 0:
             self.jackpot_shift()
         # if not, loop back in one second
         else:
-            self.delay(name="Shift Timer", delay=1,handler=self.shift_timer, param = time)
+            self.delay(name="Shift Timer", delay=1,handler=self.shift_timer)
+
+    def halt(self):
+        # stop the timer
+        self.cancel_delayed("Shift Timer")
+        self.halted = True
+
+    def resume(self):
+        self.halted = False
+        # resume counting after 1 second
+        if self.time > 0:
+            self.delay("Shift Timer",delay = 1,handler = self.shift_timer)
 
     def end_stampede(self):
         print "ENDING S T A M P E D E"
