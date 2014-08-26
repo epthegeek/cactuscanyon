@@ -165,14 +165,16 @@ class Stampede(ep.EP_Mode):
             # and some sounds
             self.game.sound.play(self.game.assets.sfx_revRicochet)
             # loop back to do the next part
-            self.delay(name="Display",delay=myWait,handler=self.jackpot_hit,param=2)
+            self.delay(name="Display",delay=myWait+0.5,handler=self.jackpot_hit,param=2)
         # second pass layers the score over the text
         if step == 2:
-            self.backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_stampedeJackpot.frames[42])
-            self.scoreLine = ep.EP_TextLayer(64, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(str(ep.format_score(self.game.show_tracking('Stampede Value') * 2)),color=ep.YELLOW)
-            self.scoreLine.composite_op = "blacksrc"
-            self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
+            self.backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_stampedeJackpot.frames[42])
+            self.scoreLine = ep.EP_TextLayer(64, 8, self.game.assets.font_17px_score, "center", opaque=True).set_text(str(ep.format_score(self.game.show_tracking('Stampede Value') * 2)),color=ep.YELLOW)
+#            self.scoreLine.composite_op = "blacksrc"
+#            self.layer = dmd.GroupedLayer(128,32,[self.backdrop,self.scoreLine])
             # loop back to cleear
+            # transition to the score
+            transition = ep.EP_Transition(self,self.backdrop,self.scoreLine,ep.EP_Transition.TYPE_CROSSFADE)
             self.delay(name="Display",delay=2,handler=self.jackpot_hit,param=3)
         # third pass plays the wipe
         if step == 3:
