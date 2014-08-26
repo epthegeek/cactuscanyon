@@ -51,6 +51,8 @@ class Stampede(ep.EP_Mode):
                 mode.abort_display()
         # fire up the switch block if it's not already loaded
         self.game.switch_blocker('add',self.myID)
+        # add the stampede value and addon to get the points for this round
+        self.jackpotValue = self.game.show_tracking('Stampede Value') + self.game.show_tracking('Stampede Addon')
 
     def ball_drained(self):
     # if we're dropping down to one ball, and stampede is running - do stuff
@@ -145,10 +147,10 @@ class Stampede(ep.EP_Mode):
         self.cancel_delayed("Display")
         if active == number:
             self.jackpots += 1
-            self.game.score((self.game.show_tracking('Stampede Value') * 2))
+            self.game.score((self.jackpotValue * 2))
             self.jackpot_hit()
         else:
-            self.game.score(self.game.show_tracking('Stampede Value'))
+            self.game.score(self.jackpotValue)
             self.jackpot_wiff()
 
     def jackpot_hit(self,step=1):
@@ -278,6 +280,7 @@ class Stampede(ep.EP_Mode):
 
         # Reset the stampede value
         self.game.set_tracking('Stampede Value', 250000)
+        self.game.set_tracking('Stamepde Addon', 0)
         self.running = False
         # badge light - stampede is 4
         self.game.badge.update(4)

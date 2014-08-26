@@ -448,7 +448,7 @@ class BankRobbery(ep.EP_Mode):
         self.layer = None
         # up the stampede value if won
         if self.won:
-            self.game.increase_tracking('Stampede Value',250000)
+            self.game.increase_tracking('Stampede Addon',250000)
         # set the tracking on the ramps
         # if wins are required, and player did not win, reset ramp to stage 1
         if self.game.save_polly.winsRequired and not self.won:
