@@ -336,7 +336,7 @@ class Bart(ep.EP_Mode):
             theText = str(self.bartsForStar - total) + " MORE"
             theText2 = str("FOR BADGE")
         elif total == self.bartsForStar:
-            theText = "COLLECTED!"
+            theText = "BADGE"
             theText2 = "COLLECTED!"
             # actually collect the badge - barts defeated is 2
             self.game.badge.update(2)
