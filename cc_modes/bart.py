@@ -39,6 +39,8 @@ class Bart(ep.EP_Mode):
         self.bartsForStar = self.game.user_settings['Gameplay (Feature)']['Bart Brothers for Star']
         # setup the difficulty
         difficulty = self.game.user_settings['Gameplay (Feature)']['Bart Brothers Difficulty']
+        # Check the boss bart style
+        self.boss_alternate = 'Avoid' == self.game.user_settings['Gameplay (Feature)']['Boss Bart Posse']
         # Easy version
         print "Difficulty is set to - " + difficulty
         if difficulty == 'Easy':
@@ -242,7 +244,14 @@ class Bart(ep.EP_Mode):
         self.animate(1)
 
         # score the points
-        self.game.score(self.hitValue)
+        ## new thing for alternate rules for boss bart
+        # if alternate boss version - multiply points by bad guys and update the string
+        if self.boss_alternate and self.brother == "BOSS":
+            points = self.hitValue * self.game.bad_guys.count_active()
+            self.game.score(points)
+            self.hitString = locale.format("%d", points, True)
+        else:
+            self.game.score(self.hitValue)
         # add some bonus
         self.game.add_bonus(25000)
         # flash the light and move the dude
@@ -315,7 +324,13 @@ class Bart(ep.EP_Mode):
         else:
             self.game.increase_tracking('currentBart')
             # score some points
-        self.game.score(self.defeatValue)
+        # if alternate boss version - multiply points by bad guys and update the string
+        if self.boss_alternate:
+            points = self.defeatValue * self.game.bad_guys.count_active()
+            self.game.score(points)
+            self.defeatString = locale.format("%d", self.defeatValue, True) # Add commas
+        else:
+            self.game.score(self.defeatValue)
         # add some bonus
         self.game.add_bonus(150000)
         # reset the hits on bart
@@ -389,7 +404,12 @@ class Bart(ep.EP_Mode):
         textString = str(ep.format_score(25000))
         pointsLayer = ep.EP_TextLayer(64, 1, self.game.assets.font_15px_az, "center", opaque=True).set_text(textString,blink_frames=4,color=ep.RED)
         textLine = ep.EP_TextLayer(64,18,self.game.assets.font_5px_AZ, "center",opaque = False).set_text("BOSS SHOTS",color=ep.GREEN)
-        textLine2 = ep.EP_TextLayer(64,24,self.game.assets.font_5px_AZ,"center",opaque = False).set_text("VALUE INCREASED",color=ep.GREEN)
+        textLine2 = ep.EP_TextLayer(64,24,self.game.assets.font_5px_AZ,"center",opaque = False)
+        if self.boss_alternate:
+            string = "VALUE DECREASED"
+        else:
+            string = "VALUE INCREASED"
+        textLine2.set_text(string,color=ep.GREEN)
         self.layer = dmd.GroupedLayer(128,32,[pointsLayer,textLine,textLine2,animLayer])
         myWait = len(anim.frames) / 10.0 + 1
         # play a shot sound
@@ -405,9 +425,13 @@ class Bart(ep.EP_Mode):
             self.bossFight = False
         # score points - dudes worth 20,000
         self.game.score(25000)
-        # increase the shot value and defeat value
-        self.hitValue += 50000
-        self.defeatValue += 100000
+        if not self.boss_alternate:
+            # increase the shot value and defeat value if not alternate scoring
+            self.hitValue += 50000
+            self.hitString = locale.format("%d", self.hitValue, True) # Add commas
+            self.defeatValue += 100000
+            self.defeatString = locale.format("%d", self.defeatValue, True) # Add commas
+
 
     def boss_damage_display(self,loop = True):
         # cancel the delay to be safe

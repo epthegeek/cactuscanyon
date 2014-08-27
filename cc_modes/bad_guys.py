@@ -239,3 +239,10 @@ class BadGuys(ep.EP_Mode):
         for coil in self.coils:
             coil.disable()
 
+    def count_active(self):
+        # return the amount of bad guy targets active
+        count = 0
+        for target in self.game.show_tracking('badGuyUp'):
+            if target == True:
+                count += 1
+        return count

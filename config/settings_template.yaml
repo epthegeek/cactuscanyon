@@ -143,6 +143,9 @@ Gameplay (Feature):
   'Bart Brothers Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Boss Bart Posse':
+    options: ['Shoot','Avoid']
+    default: 'Avoid'
   'Bart Brothers for Star':
     options: [2,10]
     increments: 1
