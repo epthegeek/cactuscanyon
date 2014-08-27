@@ -57,7 +57,8 @@ class LeftRamp(ep.EP_Mode):
 
         # if a polly mode is running, let it go man
         if self.game.peril or self.game.showdown.running or self.game.ambush.running:
-            pass
+            if self.game.combos.chain > 1:
+                self.game.combos.mini_display()
         else:
             # play the river ramp sound
             self.game.sound.play(self.game.assets.sfx_leftRampEnter)
@@ -76,6 +77,10 @@ class LeftRamp(ep.EP_Mode):
         ## -- set the last switch hit --
         ep.last_switch = "leftRampMake"
 
+        # if we're in a combo - play a noise on the bottom switch
+        if self.game.combos.chain > 1:
+            self.game.sound.play(self.game.assets.sfx_ricochetSet)
+
 
     def award_ramp_score(self, combo=False):
         # cancel any other displays
@@ -93,6 +98,8 @@ class LeftRamp(ep.EP_Mode):
         stage = self.game.show_tracking('leftRampStage')
         print "Ramp Stage " + str(stage)
         if stage == 1:
+            if combo:
+                self.game.combos.mini_display()
             self.awardString = "WHITE WATER"
             self.awardPoints = str(ep.format_score(125000))
             self.game.score(125000,bonus=True)
@@ -114,6 +121,8 @@ class LeftRamp(ep.EP_Mode):
             # set a delay to show the award
             self.delay(name="Display",delay=myWait,handler=self.show_award_text)
         elif stage == 2:
+            if combo:
+                self.game.combos.mini_display()
             self.awardString = "WATER FALL"
             self.awardPoints = str(ep.format_score(150000))
             self.game.score(150000,bonus=True)
@@ -130,6 +139,8 @@ class LeftRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.show_award_text)
 
         elif stage == 3:
+            if combo:
+                self.game.combos.mini_display()
         # if move your train is running, don't start save polly
             if self.game.move_your_train.running or \
                 self.game.drunk_multiball.running:

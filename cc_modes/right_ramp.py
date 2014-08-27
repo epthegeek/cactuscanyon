@@ -65,7 +65,8 @@ class RightRamp(ep.EP_Mode):
 
         # if a polly mode is running - let it go man
         if self.game.peril or self.game.showdown.running or self.game.ambush.running:
-            pass
+            if self.game.combos.chain > 1:
+                self.game.combos.mini_display()
         else:
             self.award_ramp_score(combo)
 
@@ -78,6 +79,9 @@ class RightRamp(ep.EP_Mode):
         self.game.score(2530,bonus=True)
         ## -- set the last switch hit --
         ep.last_switch = "rightRampBottom"
+        # if we're in a combo - play a noise on the bottom switch
+        if self.game.combos.chain > 1:
+            self.game.sound.play(self.game.assets.sfx_ricochetSet)
 
     def award_ramp_score(self,combo):
         # cancel any other displays
@@ -87,6 +91,8 @@ class RightRamp(ep.EP_Mode):
 
         stage = self.game.show_tracking('rightRampStage')
         if stage == 1:
+            if combo:
+                self.game.combos.mini_display()
             ## set the text lines for the display later
             self.awardString = "SOUND ALARM"
             self.awardPoints = str(ep.format_score(125000)) + "*"
@@ -112,6 +118,8 @@ class RightRamp(ep.EP_Mode):
             # apply the calculated delay to the next step
             self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
         elif stage == 2:
+            if combo:
+                self.game.combos.mini_display()
             # set the text lines for the display
             self.awardString = "SHOOT OUT"
             self.awardPoints = str(ep.format_score(150000)) + "*"
@@ -138,6 +146,8 @@ class RightRamp(ep.EP_Mode):
             self.delay(name="Display",delay=myWait,handler=self.blink_award_text)
 
         elif stage == 3:
+            if combo:
+                self.game.combos.mini_display()
         # if move your train is running, don't start save polly
             if self.game.move_your_train.running or \
                 self.game.drunk_multiball.running:

@@ -82,7 +82,15 @@ class Combos(ep.EP_Mode):
         return False
     
     def hit(self):
-        print "COMBO HIT"
+        print "COMBO HIT - SCORING"
+        # score the points here, not in the display, dummy
+        if self.chain > 1:
+            if ep.last_shot == "center":
+                points = 25000 * self.chain
+            else:
+                points = 50000
+            self.game.score(points)
+
         # cancel the current combo_timer delay
         self.cancel_delayed("Combo Timer")
         # add one to the combo total and reset the timer
@@ -121,7 +129,6 @@ class Combos(ep.EP_Mode):
                 textString = str(self.chain) + "-WAY COMBO"
                 points = 50000
             textString2 = str(ep.format_score(points)) + " POINTS"
-            self.game.score(points)
         else:
             textString = "COMBO AWARDED"
             textString2 = str(combos) + " COMBOS"
@@ -153,3 +160,9 @@ class Combos(ep.EP_Mode):
         # check it against the tracking and set the new if it's high - to be used for combo champ
         if self.chain > self.game.show_tracking('bigChain'):
             self.game.set_tracking('bigChain',self.chain)
+
+    def mini_display(self):
+        if self.chain > 1:
+            string = "< CHAIN COMBO " + str(self.chain) + " - " + ep.format_score(25000 * self.chain) + " >"
+            textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(string,color=ep.MAGENTA)
+            self.game.interrupter.broadcast(textLayer,2)

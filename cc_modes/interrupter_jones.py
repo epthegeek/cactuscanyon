@@ -635,3 +635,9 @@ class Interrupter(ep.EP_Mode):
         self.tournamentTimerLayer = ep.EP_TextLayer(122,8,self.game.assets.font_17px_score, "right",opaque=False).set_text("9",color=ep.GREEN)
         self.tournamentTimerLayer2 = ep.EP_TextLayer(6,8,self.game.assets.font_17px_score, "left",opaque=False).set_text("9",color=ep.GREEN)
         self.layer = dmd.GroupedLayer(128,32,[textLine1,textLine2,textLine3,textLine4,self.tournamentTimerLayer,self.tournamentTimerLayer2])
+
+    def broadcast(self,layer,time):
+        # take a layer sent in and show it for x seconds
+        self.cancel_delayed("Display")
+        self.layer = layer
+        self.delay("Display",delay = time,handler = self.clear_layer)
