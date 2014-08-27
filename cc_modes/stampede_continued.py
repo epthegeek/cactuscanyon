@@ -53,7 +53,7 @@ class StampedeContinued(ep.EP_Mode):
         # fire up the switch block if it's not already loaded
         self.game.switch_blocker('add',self.myID)
         # add the stampede value and addon to get the points for this round
-        self.jackpotValue = self.game.show_tracking('Stampede Value') + self.game.show_tracking('Stampede Addon')
+        self.jackpotValue = (self.game.show_tracking('Stampede Value') * 2) + self.game.show_tracking('Stampede Addon')
         # base value
         self.baseValue = self.game.show_tracking('Stampede Value')
         # set the total to 0
