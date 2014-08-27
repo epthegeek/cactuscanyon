@@ -70,6 +70,7 @@ class Mine(ep.EP_Mode):
             if eb > 0:
                 # force the short extra ball collect
                 self.collect_extra_ball(type=1)
+            self.game.mountain.eject()
             return
         # stock sound for the switch
         if self.game.show_tracking('highNoonStatus') != "READY" and self.game.show_tracking('mineStatus') != "RUNNING":
