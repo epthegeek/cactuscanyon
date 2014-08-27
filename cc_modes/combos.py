@@ -165,4 +165,4 @@ class Combos(ep.EP_Mode):
         if self.chain > 1:
             string = "< CHAIN COMBO " + str(self.chain) + " - " + ep.format_score(25000 * self.chain) + " >"
             textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(string,color=ep.MAGENTA)
-            self.game.interrupter.broadcast(textLayer,2)
+            self.game.interrupter.broadcast(textLayer,1.5)
