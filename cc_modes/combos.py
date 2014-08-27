@@ -163,6 +163,11 @@ class Combos(ep.EP_Mode):
 
     def mini_display(self):
         if self.chain > 1:
-            string = "< CHAIN COMBO " + str(self.chain) + " - " + ep.format_score(25000 * self.chain) + " >"
-            textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(string,color=ep.MAGENTA)
-            self.game.interrupter.broadcast(textLayer,1.5)
+            string = "CHAIN COMBO " + str(self.chain) + " - " + ep.format_score(25000 * self.chain)
+            backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_status_banner_magenta.frames[0])
+            backdrop.composite_op = "blacksrc"
+            textLayer = dmd.TextLayer(128/2, 26, self.game.assets.font_5px_AZ_inverted, "center", opaque=False).set_text(string)
+            textLayer.composite_op = "blacksrc"
+            combined = dmd.GroupedLayer(128,32, [backdrop,textLayer])
+            combined.composite_op = "blacksrc"
+            self.game.interrupter.broadcast(combined,1.5)

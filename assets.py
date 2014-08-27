@@ -1462,6 +1462,7 @@ class Assets():
         self.dmd_bartender = dmd.Animation().load(self.dmd_path + 'bartender.dmd')
         self.dmd_escaped = dmd.Animation().load(self.dmd_path +'escaped.dmd')
         self.dmd_stringBorder = dmd.Animation().load(self.dmd_path+'string-border.dmd')
+        self.dmd_status_banner_magenta = dmd.Animation().load(self.dmd_path+'message_banner_magenta.dmd')
 
         self.dmd_tombstone = dmd.Animation().load(self.dmd_path+'tombstone.dmd')
         self.dmd_beerMug = dmd.Animation().load(self.dmd_path +'beer-mug-1.dmd')
