@@ -45,7 +45,7 @@ class Assets():
         # _score = Numerals only
         self.font_5px_AZ = ep.ColorFont(self.dmd_path + "Font_3_CactusCanyon.dmd")
         self.font_5px_AZ.make_colors([ep.GREY,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.YELLOW,ep.BROWN,ep.DARK_BROWN,ep.MAGENTA,ep.DARK_RED,ep.PURPLE,ep.RED,ep.CYAN,ep.BLUE])
-        self.font_5px_AZ_inverted = dmd.Font(self.dmd_path + "Font_3_CactusCanyon_inverted.dmd")
+        self.g = dmd.Font(self.dmd_path + "Font_3_CactusCanyon_inverted.dmd")
         self.font_5px_bold_AZ = ep.ColorFont(self.dmd_path + "Font_21_CactusCanyon.dmd")
         self.font_5px_bold_AZ.make_colors([ep.BLUE,ep.YELLOW,ep.MAGENTA,ep.CYAN,ep.GREEN,ep.DARK_GREEN,ep.ORANGE,ep.RED,ep.BROWN,ep.DARK_BROWN])
 
@@ -1043,6 +1043,11 @@ class Assets():
 
         self.quote_mytStart = 'quote_mytStart'
         self.game.sound.register_sound(self.quote_mytStart, self.quotes_path + "move_that_train.wav")
+
+        self.quote_tilt = 'quote_tilt'
+        self.game.sound.register_sound(self.quote_tilt, self.quotes_path + "000_big_thats_a_tilt_there_pilgrim.wav")
+        self.game.sound.register_sound(self.quote_tilt, self.quotes_path + "1467-big-taunt-what-do-you-think-youre-doin-pilgrim.wav")
+
 
         self.quote_introBigBart = 'quote_introBigBart'
         self.game.sound.register_sound(self.quote_introBigBart, self.quotes_path + "1466-big-name-is-big-bart-tough-guy.wav")

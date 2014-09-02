@@ -114,6 +114,8 @@ class Interrupter(ep.EP_Mode):
         tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT",color=ep.RED)
         # Display the tilt graphic
         self.layer = tiltLayer
+        # play the tilt quote
+        self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.quote_tilt)
 
     def tilted(self):
         print "Interrupter Passing Tilt"
