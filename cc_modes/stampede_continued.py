@@ -334,7 +334,8 @@ class StampedeContinued(ep.EP_Mode):
         combined.composite_op = "blacksrc"
         self.layer = combined
         # and some sounds
-        self.game.base.play_quote(self.game.assets.quote_stampedeWiff)
+        self.game.sound.play(self.game.assets.sfx_flyByNoise)
+        self.delay(delay=1,handler=self.game.base.play_quote,param=self.game.assets.quote_stampedeWiff)
         self.delay(name="Display", delay=myWait, handler=self.main_display)
 
     def jackpot_shift(self):
