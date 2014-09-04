@@ -35,6 +35,7 @@ import datetime
 import os
 import yaml
 import copy
+import random
 
 curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
 ## Define the config file locations
@@ -113,7 +114,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2014.09.03"
+        self.revision = "2014.09.04"
 
         # basic game reset stuff, copied in
 
@@ -490,6 +491,10 @@ class CCGame(game.BasicGame):
         super(CCGame,self).start_game()
         # Add the first player
         self.add_player()
+        # set a random bart bro
+        barts = [0,1,2]
+        self.set_tracking('currentBart',random.choice(barts))
+        # set the mob battle order
         self.order_mobs()
         # reset the music volume
         self.volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
