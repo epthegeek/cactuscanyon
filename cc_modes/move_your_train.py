@@ -43,13 +43,14 @@ class MoveYourTrain(ep.EP_Mode):
         self.keys_index = {'taunt':list(range(len(self.game.sound.sounds[self.game.assets.quote_mytTaunt])))}
         self.counts_index = {'taunt': 0}
         random.shuffle(self.keys_index['taunt'])
-
+        self.won = False
 
     def mode_started(self):
         print "Beginning Move Your Train"
         # set the status to ready
         self.game.set_tracking("mytStatus", "READY")
         self.postUse = False
+        self.won = False
         # move the train to the middle of the track
         # set a stop point for the encoder
         self.game.train.stopAt = self.game.train.mytStop
@@ -191,7 +192,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.game.train.cancel_delayed("Zero")
         print "TRAIN STATUS:" + str(self.game.train.inMotion)
         # if we're not currently moving, then we can move again - tweak for running in fakepinproc?
-        if not self.game.train.inMotion or self.game.fakePinProc:
+        if not self.game.train.inMotion or self.game.fakePinProc and not self.won:
             # increase the shots taken
             self.shots += 1
             # if shots is 2 less than the max allowed, taunt
@@ -243,6 +244,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.trainOffset = value
 
     def win(self):
+        self.won = True
         duration = self.game.sound.play(self.game.assets.sfx_longTrainWhistle)
         self.delay(delay = duration,handler=self.game.sound.play,param=self.game.assets.sfx_cheers)
         textString = "TRAIN MOVED IN " + str(self.shots) + " SHOTS"
