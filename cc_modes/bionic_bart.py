@@ -83,7 +83,7 @@ class BionicBart(ep.EP_Mode):
         script.append({'layer':hurtLayer2,'seconds':0.16})
         self.whineLayer = dmd.ScriptedLayer(128,32,script)
         self.title = dmd.TextLayer(46, 3, self.game.assets.font_15px_bionic, "center", opaque=False).set_text("BIONIC BART")
-        self.title2 = dmd.TextLayer(46,20, self.game.assets.font_6px_az, "center", opaque=False).set_text("CHALLENGES YOU!")
+        self.title2 = ep.EP_TextLayer(46,20, self.game.assets.font_6px_az, "center", opaque=False).set_text("CHALLENGES YOU!",color=ep.RED)
         self.title2.composite_op = "blacksrc"
         # bart hit layer
         anim = self.game.assets.dmd_bionicHit
@@ -303,11 +303,11 @@ class BionicBart(ep.EP_Mode):
         # whateve the current bart layer is, default is idle
         backdrop = self.bartLayer
         # title line
-        titleLine = dmd.TextLayer(46, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("BIONIC BART")
+        titleLine = ep.EP_TextLayer(46, -1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("BIONIC BART",color=ep.GREY)
         # score line
         p = self.game.current_player()
         scoreString = ep.format_score(p.score)
-        scoreLine = dmd.TextLayer(46, 5, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4)
+        scoreLine = ep.EP_TextLayer(46, 5, self.game.assets.font_9px_az, "center", opaque=False).set_text(scoreString,blink_frames=4,color=ep.YELLOW)
         scoreLine.composite_op = "blacksrc"
         combined = dmd.GroupedLayer(128,32,[backdrop,titleLine,scoreLine,self.actionLine,self.statusLine])
         self.layer = combined
@@ -318,7 +318,7 @@ class BionicBart(ep.EP_Mode):
         self.bartLayer = layer
 
     def set_action_line(self,string="LOAD WEAPON"):
-        self.actionLine = dmd.TextLayer(46, 16, self.game.assets.font_7px_az, "center", opaque=False).set_text(string)
+        self.actionLine = ep.EP_TextLayer(46, 16, self.game.assets.font_7px_az, "center", opaque=False).set_text(string,color=ep.RED)
         self.actionLine.composite_op = "blacksrc"
 
     def set_status_line(self,amount=2,style="LOAD"):
@@ -338,7 +338,7 @@ class BionicBart(ep.EP_Mode):
             string = "NICE SHOT!"
         else:
             string = str(amount) + " " + theWord + " TO " + theEnd
-        self.statusLine = dmd.TextLayer(46, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(string)
+        self.statusLine = ep.EP_TextLayer(46, 24, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(string,color=ep.GREEN)
 
     def load_weapon(self):
         amount = self.hitsToDefeat - self.hits
@@ -366,7 +366,7 @@ class BionicBart(ep.EP_Mode):
     def weapon_loaded(self,prompt=False):
         # show some display
         line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("LOADED")
-        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT BIONIC BART")
+        line2 = ep.EP_TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT BIONIC BART",color=ep.YELLOW)
         combined = dmd.GroupedLayer(128,32,[line1,line2])
         self.layer = combined
         if prompt:
@@ -401,7 +401,7 @@ class BionicBart(ep.EP_Mode):
         textLine = dmd.TextLayer(127,1,self.game.assets.font_15px_bionic,"right", opaque=False).set_text(string)
         textLine.composite_op = "blacksrc"
         string = "<" + str(amount) + " MORE>"
-        textLine2 = dmd.TextLayer(127,18,self.game.assets.font_6px_az_inverse,"right",opaque=False).set_text(string)
+        textLine2 = ep.EP_TextLayer(127,18,self.game.assets.font_6px_az_inverse,"right",opaque=False).set_text(string,color=ep.YELLOW)
         combined = dmd.GroupedLayer(128,32,[animLayer,textLine,textLine2])
         self.layer = combined
         self.game.sound.play(sound)
@@ -563,7 +563,7 @@ class BionicBart(ep.EP_Mode):
             # then do the text display
             line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("DEFEATED!")
             scoreString = str(ep.format_score(5000000)) + " POINTS"
-            line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8)
+            line2 = ep.EP_TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text(scoreString,blink_frames=8,color=ep.ORANGE)
             combined = dmd.GroupedLayer(128,32,[line1,line2])
             self.layer = combined
 
@@ -622,7 +622,7 @@ class BionicBart(ep.EP_Mode):
 
     def high_noon_lit(self):
         line1 = dmd.TextLayer(64, 3, self.game.assets.font_15px_bionic, "center", opaque=True).set_text("HIGH NOON LIT")
-        line2 = dmd.TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT THE MINE!")
+        line2 = ep.EP_TextLayer(64, 22, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("SHOOT THE MINE!",color=ep.ORANGE)
         combined = dmd.GroupedLayer(128,32,[line1,line2])
         self.layer = combined
         self.repeat_ding(3)
