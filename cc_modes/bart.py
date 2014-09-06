@@ -247,7 +247,7 @@ class Bart(ep.EP_Mode):
         ## new thing for alternate rules for boss bart
         # if alternate boss version - multiply points by bad guys and update the string
         if self.boss_alternate and self.brother == "BOSS":
-            points = self.hitValue * self.game.bad_guys.count_active()
+            points = self.hitValue * (self.game.bad_guys.count_active()  + 1)
             self.game.score(points)
             self.hitString = locale.format("%d", points, True)
         else:
