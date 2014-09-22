@@ -150,6 +150,9 @@ Gameplay (Feature):
     options: [2,10]
     increments: 1
     default: 3
+  'Bart Brothers Guests':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
   'Bozo Ball':
     options: ['Enabled','Disabled']
     default: 'Enabled'

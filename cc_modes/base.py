@@ -154,7 +154,11 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.ball == 1 and len(self.game.players) < 4:
             self.game.add_player()
             # set a random bart bro
-            barts = [0,1,2]
+            # barts: bandelero, bubba, big, rudy & boss
+            if self.game.bart.guests:
+                barts = [0,1,2,3]
+            else:
+                barts = [0,1,2]
             self.game.set_tracking('currentBart',random.choice(barts))
 
             # tick up the audits

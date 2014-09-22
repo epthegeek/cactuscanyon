@@ -41,6 +41,8 @@ class Bart(ep.EP_Mode):
         difficulty = self.game.user_settings['Gameplay (Feature)']['Bart Brothers Difficulty']
         # Check the boss bart style
         self.boss_alternate = 'Avoid' == self.game.user_settings['Gameplay (Feature)']['Boss Bart Posse']
+        # check if extra barts are on
+        self.guests = 'Enabled' == self.game.user_settings['Gameplay (Feature)']['Bart Brothers Guests']
         # Easy version
         print "Difficulty is set to - " + difficulty
         if difficulty == 'Easy':
@@ -171,15 +173,15 @@ class Bart(ep.EP_Mode):
 
     def setup(self):
         # our cast of characters
-        names = ('big','bandelero','bubba','boss')
-        hits = (self.game.assets.quote_hitBigBart, self.game.assets.quote_hitBandeleroBart,self.game.assets.quote_hitBubbaBart,self.game.assets.quote_hitBossBart)
-        taunts = (self.game.assets.quote_tauntBigBart, self.game.assets.quote_tauntBandeleroBart,self.game.assets.quote_tauntBubbaBart,self.game.assets.quote_tauntBossBart)
-        defeats = (self.game.assets.quote_defeatBigBart, self.game.assets.quote_defeatBandeleroBart,self.game.assets.quote_defeatBubbaBart,self.game.assets.quote_defeatBossBart)
-        intros = (self.game.assets.quote_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart,self.game.assets.quote_introBossBart)
-        posterA = (self.game.assets.dmd_bigPosterA, self.game.assets.dmd_bandeleroPosterA, self.game.assets.dmd_bubbaPosterA,self.game.assets.dmd_bossPosterA)
-        posterB = (self.game.assets.dmd_bigPosterB, self.game.assets.dmd_bandeleroPosterB, self.game.assets.dmd_bubbaPosterB,self.game.assets.dmd_bossPosterB)
-        faces = (self.game.assets.dmd_big, self.game.assets.dmd_bandelero, self.game.assets.dmd_bubba, self.game.assets.dmd_boss)
-        reactions = (self.game.assets.dmd_bigHit, self.game.assets.dmd_bandeleroHit, self.game.assets.dmd_bubbaHit, self.game.assets.dmd_bossHit)
+        names = ('big','bandelero','bubba', 'rudy','boss')
+        hits = (self.game.assets.quote_hitBigBart, self.game.assets.quote_hitBandeleroBart,self.game.assets.quote_hitBubbaBart,self.game.assets.quote_hitRudy,self.game.assets.quote_hitBossBart)
+        taunts = (self.game.assets.quote_tauntBigBart, self.game.assets.quote_tauntBandeleroBart,self.game.assets.quote_tauntBubbaBart,self.game.assets.quote_tauntRudy,self.game.assets.quote_tauntBossBart)
+        defeats = (self.game.assets.quote_defeatBigBart, self.game.assets.quote_defeatBandeleroBart,self.game.assets.quote_defeatBubbaBart,self.game.assets.quote_defeatRudy,self.game.assets.quote_defeatBossBart)
+        intros = (self.game.assets.quote_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart,self.game.assets.quote_introRudy,self.game.assets.quote_introBossBart)
+        posterA = (self.game.assets.dmd_bigPosterA, self.game.assets.dmd_bandeleroPosterA, self.game.assets.dmd_bubbaPosterA,self.game.assets.dmd_rudyPosterA,self.game.assets.dmd_bossPosterA)
+        posterB = (self.game.assets.dmd_bigPosterB, self.game.assets.dmd_bandeleroPosterB, self.game.assets.dmd_bubbaPosterB,self.game.assets.dmd_rudyPosterB,self.game.assets.dmd_bossPosterB)
+        faces = (self.game.assets.dmd_big, self.game.assets.dmd_bandelero, self.game.assets.dmd_bubba, self.game.assets.dmd_rudy,self.game.assets.dmd_boss)
+        reactions = (self.game.assets.dmd_bigHit, self.game.assets.dmd_bandeleroHit, self.game.assets.dmd_bubbaHit, self.game.assets.dmd_rudyHit,self.game.assets.dmd_bossHit)
 
         # look up which one is current
         index = self.game.show_tracking('currentBart')
@@ -226,7 +228,7 @@ class Bart(ep.EP_Mode):
         self.hitsThisBart = self.hitsToDefeatBart[defeated]
         # set up the name line for the cards
         print self.brother + " IS THE BROTHER"
-        if self.brother != "BANDELERO":
+        if self.brother != "BANDELERO" and self.brother != "RUDY":
             self.nameLine = self.brother.upper() + " BART"
         else:
             self.nameLine = self.brother
@@ -307,18 +309,26 @@ class Bart(ep.EP_Mode):
         # play a defeated quote
         myWait = self.game.base.play_quote(self.defeatQuote,squelch=True)
 
+        # set the end number for cyling back around - new due to guests
+        if self.guests:
+            endnumber = 3
+        else:
+            endnumber = 2
+        bossPosition = 4
+
+
         # set the status to dead - gunfight has to set it back to open
         self.game.set_tracking('bartStatus',"DEAD")
         # if we're one away from the badge, switch to boss
         if self.bartsForStar - total == 1:
-            # by jumping ahead to the 4th spot
-            self.game.set_tracking('currentBart',3)
+            # by jumping ahead to the 5th spot
+            self.game.set_tracking('currentBart',bossPosition)
         # if we just did boss bart, figure out where we were in the rotation
-        elif self.game.show_tracking('currentBart') == 3:
-            nextBart = self.game.show_tracking('regularBartsDefeated') % 3
+        elif self.game.show_tracking('currentBart') == bossPosition:
+            nextBart = (self.game.show_tracking('regularBartsDefeated') % (endnumber + 1)) - 1
             self.game.set_tracking('currentBart',nextBart)
         # if we're at the end of the line, reset to 0
-        elif self.game.show_tracking('currentBart') == 2:
+        elif self.game.show_tracking('currentBart') == endnumber:
             self.game.set_tracking('currentBart',0)
         # if not tick up the current bart for next time
         else:
