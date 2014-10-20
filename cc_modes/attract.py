@@ -55,15 +55,18 @@ class Attract(ep.EP_Mode):
 
         # show the switch warning on the interrupter level if any switch hits the warning limit
         warn = self.game.user_settings['Machine (Standard)']['Inactive Switch Warning']
-        bad_switches = []
-        for switch in self.game.game_data['SwitchHits']:
-            # if any switch is up to the warning level
-            if self.game.game_data['SwitchHits'][switch] >= warn:
-                # add it to the list of warning swtiches
-                bad_switches.append({'switchName':switch,'count':self.game.game_data['SwitchHits'][switch]})
-        # if we get here and there's something in bad switches, it's time to act
-        if bad_switches:
-            self.game.interrupter.switch_warning(bad_switches)
+        if warn == 0:
+            pass
+        else:
+            bad_switches = []
+            for switch in self.game.game_data['SwitchHits']:
+                # if any switch is up to the warning level
+                if self.game.game_data['SwitchHits'][switch] >= warn:
+                    # add it to the list of warning swtiches
+                    bad_switches.append({'switchName':switch,'count':self.game.game_data['SwitchHits'][switch]})
+            # if we get here and there's something in bad switches, it's time to act
+            if bad_switches:
+                self.game.interrupter.switch_warning(bad_switches)
 
         ## Set up the layers to use
         ballyBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ballyBanner.frames[0])

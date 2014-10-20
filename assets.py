@@ -98,7 +98,7 @@ class Assets():
         self.font_dangerFont.composite_op = "blacksrc"
 
         self.font_13px_score = ep.ColorFont(self.dmd_path + "Font_8_CactusCanyon.dmd")
-        self.font_13px_score.make_colors([ep.YELLOW,ep.MAGENTA])
+        self.font_13px_score.make_colors([ep.YELLOW,ep.MAGENTA,ep.ORANGE])
     #    self.font_13px_extra_thin_score = dmd.Font(self.dmd_path + "Font_11_CactusCanyon.dmd")
         self.font_13px_thin_score = ep.ColorFont(self.dmd_path + "Font_7_CactusCanyon.dmd")
         self.font_13px_thin_score.make_colors([ep.RED,ep.GREEN])

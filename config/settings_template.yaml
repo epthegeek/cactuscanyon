@@ -74,7 +74,7 @@ Machine (Standard):
     increments: 5
     default: 30
   'Inactive Switch Warning':
-    options: [3,30]
+    options: [0,30]
     increments: 1
     default: 5
   'Real Knocker Installed':

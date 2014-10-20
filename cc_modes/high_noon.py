@@ -439,7 +439,7 @@ class HighNoon(ep.EP_Mode):
             animLayer.add_frame_listener(20,self.game.sound.play,param=self.game.assets.sfx_fireworks3)
             animLayer.composite_op = "blacksrc"
             textLayer1 = ep.EP_TextLayer(64, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("VICTORY",color=ep.GREEN)
-            textLayer2 = ep.EP_TextLayer(64, 13, self.game.assets.font_13px_az, "center", opaque=False).set_text(str(ep.format_score(self.victoryPoints + self.timeBonus)),color=ep.ORANGE)
+            textLayer2 = ep.EP_TextLayer(64, 13, self.game.assets.font_13px_score, "center", opaque=False).set_text(str(ep.format_score(self.victoryPoints + self.timeBonus)),color=ep.ORANGE)
             combined = dmd.GroupedLayer(128,32,[textLayer1,textLayer2,animLayer])
             self.layer = combined
         else:
