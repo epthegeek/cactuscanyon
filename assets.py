@@ -1139,7 +1139,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_targetBossBart, self.quotes_path+ "1535-leader-bart-target-you-shot-my-brother.wav")
 
         self.quote_introRudy = 'quote_introRudy'
-        self.game.sound.register_sound(self.quote_tauntRudy, self.quotes_path + "rudy_taunt-hey_its_only_pinball.wav")
+        self.game.sound.register_sound(self.quote_introRudy, self.quotes_path + "rudy_taunt-hey_its_only_pinball.wav")
         self.game.sound.register_sound(self.quote_introRudy, self.quotes_path + "rudy_intro-im_watchin_ya.wav")
 
         self.quote_hitRudy = 'quote_hitRudy'
