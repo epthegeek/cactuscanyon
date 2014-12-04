@@ -1414,6 +1414,10 @@ class Assets():
         self.music_leapers = 'music_leapers'
         self.game.sound.register_music(self.music_leapers, self.music_path + "ss_leaper_song.wav")
 
+        self.music_party = 'music_party'
+        self.game.sound.register_music(self.music_party, self.music_path + "party_select.wav")
+
+
         # lampshows
         lampshows = list()
 

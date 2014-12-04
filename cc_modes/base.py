@@ -206,56 +206,61 @@ class BaseGameMode(ep.EP_Mode):
         if self.beerHit:
             pass
         else:
-            print "Beer Mug Hit"
-            self.beerHit = True
-            # delay to re-allow due to debounce being off
-            self.delay(delay=0.050,handler=self.beer_unhit)
-            hits = self.game.increase_tracking('beerMugHits')
-            self.game.increase_tracking('beerMugHitsTotal')
-            # flash the light if present
-            if not self.game.lamp_control.lights_out:
-                self.game.lamps.beerMug.schedule(0x00000CCC,cycle_seconds=1)
-            # score points
-            self.game.score(2130)
-            # play a sound
-            self.game.sound.play(self.game.assets.sfx_ricochetSet)
-            # a little display action
-            textLine1 = ep.EP_TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG",color=ep.ORANGE)
-            left = self.mug_shots - hits
-            ## if we're at zero, it's lit and the display shows it
-            if left == 0:
-                self.light_drunk_multiball()
-            ## if we're past zero then it shows a message
-            elif left < 0:
-                textString = "SHOOT THE SALOON"
-                textString2 = "FOR MULTIBALL"
-                textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString,blink_frames=8)
-                textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
-                self.mug_display(textLine1,textLine2,textLine3)
-
-            ## if we're still not there yet, show how much is left
+            if self.game.user_settings['Gameplay (Feature)']['Party Mode'] == 'Spiked':
+                # set the tilt all the way up and then run it
+                self.game.set_tracking('tiltStatus',3)
+                self.tilt()
             else:
-                if left == 1:
-                    textString = "1 MORE HIT FOR"
-                else:
-                    textString = str(left) + " MORE HITS FOR"
-                textString2 = "DRUNK MULTIBALL"
-                textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
-                textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
-                self.mug_display(textLine1,textLine2,textLine3)
+                print "Beer Mug Hit"
+                self.beerHit = True
+                # delay to re-allow due to debounce being off
+                self.delay(delay=0.050,handler=self.beer_unhit)
+                hits = self.game.increase_tracking('beerMugHits')
+                self.game.increase_tracking('beerMugHitsTotal')
+                # flash the light if present
+                if not self.game.lamp_control.lights_out:
+                    self.game.lamps.beerMug.schedule(0x00000CCC,cycle_seconds=1)
+                # score points
+                self.game.score(2130)
+                # play a sound
+                self.game.sound.play(self.game.assets.sfx_ricochetSet)
+                # a little display action
+                textLine1 = ep.EP_TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG",color=ep.ORANGE)
+                left = self.mug_shots - hits
+                ## if we're at zero, it's lit and the display shows it
+                if left == 0:
+                    self.light_drunk_multiball()
+                ## if we're past zero then it shows a message
+                elif left < 0:
+                    textString = "SHOOT THE SALOON"
+                    textString2 = "FOR MULTIBALL"
+                    textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString,blink_frames=8)
+                    textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
+                    self.mug_display(textLine1,textLine2,textLine3)
 
-            if left != 0:
-                # play a quote on a random 1/3 choice
-                weDo = random.choice([False,True,False])
-                # if super skill shot is running, don't use a quote here
-                if self.game.skill_shot.super:
-                    weDo = False
-                if weDo:
-                    self.play_ordered_quote(self.game.assets.quote_beerMug,'beer_mug')
-            ## -- set the last switch -- ##
-            ep.last_switch = 'beerMug'
-            ## kill the combo shot chain
-            ep.last_shot = None
+                ## if we're still not there yet, show how much is left
+                else:
+                    if left == 1:
+                        textString = "1 MORE HIT FOR"
+                    else:
+                        textString = str(left) + " MORE HITS FOR"
+                    textString2 = "DRUNK MULTIBALL"
+                    textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
+                    textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
+                    self.mug_display(textLine1,textLine2,textLine3)
+
+                if left != 0:
+                    # play a quote on a random 1/3 choice
+                    weDo = random.choice([False,True,False])
+                    # if super skill shot is running, don't use a quote here
+                    if self.game.skill_shot.super:
+                        weDo = False
+                    if weDo:
+                        self.play_ordered_quote(self.game.assets.quote_beerMug,'beer_mug')
+                ## -- set the last switch -- ##
+                ep.last_switch = 'beerMug'
+                ## kill the combo shot chain
+                ep.last_shot = None
 
 
     def mug_display(self,textLine1,textLine2,textLine3):

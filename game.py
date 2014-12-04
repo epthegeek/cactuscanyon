@@ -114,7 +114,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2014.10.20"
+        self.revision = "2014.12.04"
 
         # basic game reset stuff, copied in
 
@@ -386,9 +386,9 @@ class CCGame(game.BasicGame):
         # Switch Hit Tracker - Rides above everything else
         self.switch_tracker = cc_modes.SwitchTracker(game=self,priority=250)
         # Party Mode - if it's enabled
+        self.party_mode = cc_modes.PartyMode(game=self,priority=251)
         if self.party_setting != 'Disabled':
             print "PARTY ON DUDES"
-            self.party_mode = cc_modes.PartyMode(game=self,priority=251)
             self.modes.add(self.party_mode)
 
         # new service mode test

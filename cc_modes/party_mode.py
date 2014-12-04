@@ -32,6 +32,8 @@ class PartyMode(ep.EP_Mode):
             self.flip_limit = 0
 
     def attract_display(self):
+        if self.game.party_setting == 'Flip Ct':
+            self.flip_limit = self.game.user_settings['Gameplay (Feature)']['Party - Flip Count']
         # Banner for attract mode to alert that party mode is on
         script = []
         # set up the text layer
@@ -46,13 +48,16 @@ class PartyMode(ep.EP_Mode):
         if self.game.party_setting == 'Flip Ct':
             textString1 = "< LIMITED FLIPS - " + str(self.flip_limit) + " >"
         elif self.game.party_setting == 'Drunk':
-            textString1 = "< DRUNK - FLIPPERS REVERSED >"
+            textString1 = "< DRUNK - FLIPS REVERSED >"
         # newbie mode - both flippers all the time
         elif self.game.party_setting == 'Newbie':
-            textString1 = "< NEWBIE - DOUBLE FLIP >"
+            textString1 = "< NEWBIE - BOTH FLIP >"
         # lights out mode
         elif self.game.party_setting == 'Lights Out':
             textString1 = "< LIGHTS OUT >"
+        # spiked beer
+        elif self.game.party_setting == 'Spiked':
+            textString1 = "< SPIKED - BEER TILTS >"
         # last case is release to flip
         else:
             textString1 = "< RELEASE TO FLIP >"
