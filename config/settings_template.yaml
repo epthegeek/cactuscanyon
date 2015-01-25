@@ -297,6 +297,9 @@ Gameplay (Feature):
     options: [2,8]
     increments: 1
     default: 4
+  'Gunfight Difficulty':
+    options: ['Easy','Hard']
+    default: 'Easy'
   'Multiball Locks Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'

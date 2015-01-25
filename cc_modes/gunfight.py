@@ -50,6 +50,7 @@ class Gunfight(ep.EP_Mode):
                              'fail':0}
         random.shuffle(self.keys_index['start'])
         random.shuffle(self.keys_index['fail'])
+        self.hard = 'Hard' ==  self.game.user_settings['Gameplay (Feature)']['Gunfight Difficulty']
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
@@ -278,7 +279,26 @@ class Gunfight(ep.EP_Mode):
         myWait = len(anim.frames) / 30 + 1.2
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=2)
         self.layer = animLayer
-        self.delay("Operational",delay=myWait,handler=self.gunfight_intro_eyes,param=badGuys)
+        # Split here for optional HARD setting
+        if self.hard:
+            handler = self.gunfight_intro_hard
+        else:
+            handler = self.gunfight_intro_eyes
+        self.delay("Operational",delay=myWait,handler=handler,param=badGuys)
+
+    def gunfight_intro_hard(self,badGuys):
+        # put the last bad guy in the zero spot
+        badGuys[0] = badGuys[3]
+        print "Hard mode: Active Target is now: " +str(badGuys[0])
+        # set the display to the eyes
+        anim = self.game.assets.dmd_gunfightEyes
+        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+        self.layer = animLayer
+        # pick a random wait time between 1 and 4 seconds
+        myWait = random.randrange(1,4,1)
+        print "Hard Mode: wait time is " + str(myWait)
+        # go to the draw after the delay
+        self.delay("Operational",delay=myWait,handler=self.gunfight_intro_draw,param=badGuys)
 
     def gunfight_intro_eyes(self,badGuys):
         # pop up the first bad guy and remove it from the array
@@ -337,16 +357,22 @@ class Gunfight(ep.EP_Mode):
         self.enemy = enemy
         self.game.bad_guys.target_up(enemy)
         # play the 4 bells
-        self.game.sound.play(self.game.assets.sfx_gunfightBell)
-        # flash the gun flashers
-        self.game.coils.leftGunFlasher.schedule(0x00020821,cycle_seconds=1)
-        self.game.coils.rightGunFlasher.schedule(0x00020821,cycle_seconds=1)
-        self.delay("Operational",delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
-        # run the animation
-        anim = self.game.assets.dmd_gunfightBoots
-        myWait = len(anim.frames) / 10.0
-        animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
-        self.layer = animLayer
+        if not self.hard:
+            self.game.sound.play(self.game.assets.sfx_gunfightBell)
+            # flash the gun flashers
+            self.game.coils.leftGunFlasher.schedule(0x00020821,cycle_seconds=1)
+            self.game.coils.rightGunFlasher.schedule(0x00020821,cycle_seconds=1)
+            self.delay("Operational",delay=0.6,handler=self.game.sound.play,param=self.game.assets.sfx_gunCock)
+            # run the animation
+            anim = self.game.assets.dmd_gunfightBoots
+            myWait = len(anim.frames) / 10.0
+            animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+            self.layer = animLayer
+        else:
+            myWait = 0.2
+            # flash the gun flashers
+            self.game.coils.leftGunFlasher.schedule(0x00000021,cycle_seconds=1)
+            self.game.coils.rightGunFlasher.schedule(0x00000021,cycle_seconds=1)
         # pass one last time to the release
         self.delay("Operational",delay=myWait,handler=self.gunfight_release)
 
