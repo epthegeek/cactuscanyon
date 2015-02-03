@@ -433,9 +433,15 @@ class CCGame(game.BasicGame):
 
         # set up the color desktop if we're using that
         if self.color_desktop:
-            self.desktop.draw_window(self.user_settings['Machine (Standard)']['Color Display Pixel Size'],self.user_settings['Machine (Standard)']['Color Display X Offset'],self.user_settings['Machine (Standard)']['Color Display Y Offset'])
+            self.desktop.draw_window(self.user_settings['Machine (Standard)']['Color Display Pixel Size'],
+                                     self.user_settings['Machine (Standard)']['Color Display X Offset'],
+                                     self.user_settings['Machine (Standard)']['Color Display Y Offset'])
             # load the images for the colorized display
-            self.desktop.load_images(dots_path,images_path)
+            if self.user_settings['Machine (Standard)']['Color Display Dot Style'] == "SQUARE":
+                dotsToUse = curr_file_path + "/dots_square/"
+            else:
+                dotsToUse = dots_path
+            self.desktop.load_images(dotsToUse,images_path)
 
 
         # Add in the base modes that are active at start

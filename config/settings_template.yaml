@@ -23,6 +23,9 @@ Machine (Standard):
   'Color Display Pixel Size':
     options: [14,10,8]
     default: 8
+  'Color Display Dot Style':
+    options: ["ROUND","SQUARE"]
+    default: "ROUND"
   'Color Display X Offset':
     options: [-2500,2500]
     increments: 1
