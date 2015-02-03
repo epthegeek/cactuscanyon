@@ -259,7 +259,7 @@ class Attract(ep.EP_Mode):
             # if we're in party select, move the index
             if self.partySelectFlag:
                 if self.pindex == 0:
-                    self.pindex = len(self.pmode_settings)
+                    self.pindex = len(self.pmode_settings) - 1
                 else:
                     self.pindex -= 1
                 # then update the display
