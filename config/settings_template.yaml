@@ -24,7 +24,7 @@ Machine (Standard):
     options: [14,10,8]
     default: 8
   'Color Display Dot Style':
-    options: ["ROUND","SQUARE"]
+    options: ["ROUND","SQUARE","GRID"]
     default: "ROUND"
   'Color Display X Offset':
     options: [-2500,2500]

@@ -114,7 +114,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2015.02.03"
+        self.revision = "2015.02.05"
 
         # basic game reset stuff, copied in
 
@@ -439,6 +439,8 @@ class CCGame(game.BasicGame):
             # load the images for the colorized display
             if self.user_settings['Machine (Standard)']['Color Display Dot Style'] == "SQUARE":
                 dotsToUse = curr_file_path + "/dots_square/"
+            elif self.user_settings['Machine (Standard)']['Color Display Dot Style'] == "GRID":
+                dotsToUse = curr_file_path + "/dots_sm_square/"
             else:
                 dotsToUse = dots_path
             self.desktop.load_images(dotsToUse,images_path)
