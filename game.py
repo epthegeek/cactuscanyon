@@ -426,7 +426,8 @@ class CCGame(game.BasicGame):
                          self.river_chase,
                          self.cva,
                          self.marshall_multiball,
-                         self.moonlight]
+                         self.moonlight,
+                         self.franks_display]
 
         self.ep_modes.sort(lambda x, y: y.priority - x.priority)
 
