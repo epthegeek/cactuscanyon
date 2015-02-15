@@ -146,7 +146,7 @@ class BaseGameMode(ep.EP_Mode):
                     self.game.moonlight.tilted = False
                     self.delay(delay=2,handler=self.game.ball_starting)
                 else:
-                    self.delay(delay=2,handler=self.game.ball_ended)
+                    self.delay(delay=2,handler=lambda: self.wait_for_queue(self.game.ball_ended))
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
