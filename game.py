@@ -114,7 +114,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2015.02.05"
+        self.revision = "2015.02.15"
 
         # basic game reset stuff, copied in
 
