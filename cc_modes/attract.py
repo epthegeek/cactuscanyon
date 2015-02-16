@@ -266,7 +266,7 @@ class Attract(ep.EP_Mode):
                 self.update_party_text()
             # if we're not in party select
             else:
-                if self.myIndex == 0:
+                if self.myIndex <= 0:
                     self.myIndex = len(self.layers) - 2
                 elif self.myIndex == 1:
                     self.myIndex = len(self.layers) - 1
@@ -278,7 +278,7 @@ class Attract(ep.EP_Mode):
 
     def sw_flipperLwR_active(self,sw):
         if self.game.switches.flipperLwL.is_active():
-            self.show_scores()
+            self.dub_flip_action()
         elif self.flipperOK:
             if self.partySelectFlag:
                 # if we're at the high end, reset to zero
