@@ -48,7 +48,9 @@ class Interrupter(ep.EP_Mode):
             p = self.game.current_player_index
             # set up the text
             textString = "PLAYER> " + myNumber[p]
-            textLayer = dmd.TextLayer(128/2, 7, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(textString)
+            textLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_12px_az_outline, "center", opaque=False)
+            textLayer.composite_op = "blacksrc"
+            textLayer.set_text(textString)
             script = [{'seconds':0.3,'layer':textLayer},{'seconds':0.3,'layer':None}]
             display = dmd.ScriptedLayer(128,32,script)
             display.composite_op = "blacksrc"
@@ -177,7 +179,9 @@ class Interrupter(ep.EP_Mode):
     def showdown_hit(self,points):
         pointString = str(ep.format_score(points))
         textLine1 = ep.EP_TextLayer(128/2, 2, self.game.assets.font_9px_AZ_outline, "center", opaque=False).set_text("<BAD> <GUY> <SHOT!>",color=ep.ORANGE)
-        textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(pointString,blink_frames=8,color=ep.RED)
+        textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False)
+        textLine2.composite_op = "blacksrc"
+        textLine2.set_text(pointString,blink_frames=8,color=ep.RED)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
         combined.composite_op = "blacksrc"
         self.layer = combined
@@ -191,7 +195,9 @@ class Interrupter(ep.EP_Mode):
 
     def ball_save_activated(self):
         textLine1 = dmd.TextLayer(128/2, 2, self.game.assets.font_9px_AZ_outline, "center", opaque=False).set_text("<BALL> <SAVER>")
-        textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("ACTIVATED",blink_frames=8,color=ep.GREEN)
+        textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False)
+        textLine2.composite_op = "blacksrc"
+        textLine2.set_text("ACTIVATED",blink_frames=8,color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
         combined.composite_op = "blacksrc"
         self.layer = combined
@@ -422,11 +428,13 @@ class Interrupter(ep.EP_Mode):
         backdrop = dmd.FrameLayer(opaque=True,frame=self.game.assets.dmd_singleCactusBorder.frames[0])
         topLine = dmd.TextLayer(60,1,self.game.assets.font_5px_AZ, "center", opaque=False).set_text("JET BUMPERS VALUE")
         increasedLine1 = dmd.TextLayer(60,8,self.game.assets.font_12px_az, "center", opaque=False).set_text("INCREASED")
-        increasedLine2 = dmd.TextLayer(60,8,self.game.assets.font_15px_az_outline, "center", opaque=False).set_text("INCREASED")
+        increasedLine2 = dmd.TextLayer(60,8,self.game.assets.font_15px_az_outline, "center", opaque=False)
         increasedLine1.composite_op = "blacksrc"
         increasedLine2.composite_op = "blacksrc"
-        pointsLine = dmd.TextLayer(60,18,self.game.assets.font_12px_az_outline,"center",opaque=False).set_text(str(ep.format_score(value)))
+        increasedLine2.set_text("INCREASED")
+        pointsLine = dmd.TextLayer(60,18,self.game.assets.font_12px_az_outline,"center",opaque=False)
         pointsLine.composite_op = "blacksrc"
+        pointsLine.set_text(str(ep.format_score(value)))
         script = []
         layer1 = dmd.GroupedLayer(128,32,[backdrop,topLine,increasedLine1,pointsLine])
         layer2 = dmd.GroupedLayer(128,32,[backdrop,topLine,pointsLine,increasedLine2])
@@ -447,16 +455,19 @@ class Interrupter(ep.EP_Mode):
             noises = [self.game.assets.sfx_cow1,self.game.assets.sfx_cow2]
             sound = random.choice(noises)
             self.game.sound.play(sound)
-            textLine1 = dmd.TextLayer(64,1,self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("MAD",blink_frames=15)
-            textLine2 = dmd.TextLayer(64,16,self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("COW",blink_frames=15)
+            textLine1 = dmd.TextLayer(64,1,self.game.assets.font_12px_az_outline, "center", opaque=False)
+            textLine2 = dmd.TextLayer(64,16,self.game.assets.font_12px_az_outline, "center", opaque=False)
             textLine1.composite_op = "blacksrc"
             textLine2.composite_op = "blacksrc"
+            textLine1.set_text("MAD",blink_frames=15)
+            textLine2.set_text("COW",blink_frames=15)
             combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
             self.layer = combined
             self.delay("Display",delay=1.5,handler=self.mad_cow,param=2)
         elif step == 2:
-            textLine1 = dmd.TextLayer(64,9,self.game.assets.font_12px_az_outline, "center",opaque=False).set_text(str(ep.format_score(50000)))
+            textLine1 = dmd.TextLayer(64,9,self.game.assets.font_12px_az_outline, "center",opaque=False)
             textLine1.composite_op = "blacksrc"
+            textLine1.set_text(str(ep.format_score(50000)))
             combined = dmd.GroupedLayer(128,32,[backdrop,textLine1])
             self.layer = combined
             self.delay("Display",delay=1.5,handler=self.clear_layer)

@@ -228,14 +228,17 @@ class LastCall(ep.EP_Mode):
         print "Score string: " + scoreString
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])
         if double:
-            scoreLine1 = ep.EP_TextLayer(64,2, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("DOUBLE<",color=ep.GREEN)
+            scoreLine1 = ep.EP_TextLayer(64,2, self.game.assets.font_12px_az_outline, "center", opaque=False)
             scoreLine1.composite_op = "blacksrc"
-            scoreLine2 = ep.EP_TextLayer(64,15, self.game.assets.font_12px_az_outline, "center",opaque=False).set_text(scoreString,color=ep.GREEN)
+            scoreLine1.set_text("DOUBLE",color=ep.GREEN)
+            scoreLine2 = ep.EP_TextLayer(64,15, self.game.assets.font_12px_az_outline, "center",opaque=False)
             scoreLine2.composite_op = "blacksrc"
+            scoreLine2.set_text(scoreString,color=ep.GREEN)
             combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine1,scoreLine2])
         else:
-            scoreLine = ep.EP_TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False).set_text(scoreString,color=ep.GREEN)
+            scoreLine = ep.EP_TextLayer(64, 8, self.game.assets.font_15px_az_outline, "center", opaque=False)
             scoreLine.composite_op = "blacksrc"
+            scoreLine.set_text(scoreString,color=ep.GREEN)
             combined = dmd.GroupedLayer(128,32,[backdrop,scoreLine])
 
         self.layer = combined

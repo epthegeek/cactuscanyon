@@ -328,8 +328,9 @@ class Mine(ep.EP_Mode):
             self.game.sound.play(self.game.assets.sfx_orchestraRiff)
         if lock == 2:
             self.game.sound.play(self.game.assets.sfx_lockTwoFlourish)
-        textLine = ep.EP_TextLayer(128/2, 9, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("BALL " + str(self.game.show_tracking('ballsLocked')) + " LOCKED",color=ep.GREEN)
+        textLine = ep.EP_TextLayer(128/2, 9, self.game.assets.font_12px_az_outline, "center", opaque=False)
         textLine.composite_op = "blacksrc"
+        textLine.set_text("BALL " + str(self.game.show_tracking('ballsLocked')) + " LOCKED",color=ep.GREEN)
         if self.layer == None:
             self.layer = self.no_layer()
 
@@ -450,8 +451,9 @@ class Mine(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_ebFlourish)
         # setup the backdrop
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_extraBall.frames[58])
-        textLine = ep.EP_TextLayer(128/2, 10, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("EXTRA  BALL",color=ep.GREEN)
-        textLine.composite_op = "blacksrc"
+        textLine = ep.EP_TextLayer(128/2, 10, self.game.assets.font_12px_az_outline, "center", opaque=False)
+        textLine.composite_op ="blacksrc"
+        textLine.set_text("EXTRA   BALL",color=ep.GREEN)
         myLayer = dmd.GroupedLayer(128,32,[backdrop,textLine])
         self.layer = myLayer
         # turn off the bozo ball if it's on

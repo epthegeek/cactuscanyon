@@ -45,8 +45,9 @@ class CV_Tribute(ep.EP_Mode):
         self.pauseView = dmd.ScriptedLayer(128,32,script)
         self.pauseView.composite_op = "blacksrc"
 
-        self.titleLine = ep.EP_TextLayer(64,1,self.game.assets.font_5px_bold_AZ_outline, "center", opaque=False).set_text("HIT THE RINGMASTER",color=ep.MAGENTA)
+        self.titleLine = ep.EP_TextLayer(64,1,self.game.assets.font_5px_bold_AZ_outline, "center", opaque=False)
         self.titleLine.composite_op = "blacksrc"
+        self.titleLine.set_text("HIT THE RINGMASTER",color=ep.MAGENTA)
         self.leftTimerLine = ep.EP_TextLayer(0,1,self.game.assets.font_5px_bold_AZ_outline, "left",False)
         self.leftTimerLine.composite_op = "blacksrc"
         self.rightTimerLine = ep.EP_TextLayer(128,1,self.game.assets.font_5px_bold_AZ_outline,"right",False)
