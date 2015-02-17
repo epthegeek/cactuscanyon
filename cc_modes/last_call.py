@@ -224,7 +224,7 @@ class LastCall(ep.EP_Mode):
         else:
             double = False
         self.game.sound.play(self.game.assets.sfx_orchestraSpike)
-        scoreString = str(ep.format_score(points)) + "*"
+        scoreString = str(ep.format_score(points))
         print "Score string: " + scoreString
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])
         if double:

@@ -116,7 +116,7 @@ class ColorFont(object):
                 continue
             width = self.char_widths[char_offset]
             x += width + self.tracking
-        return (x, self.char_size)
+        return (x - self.tracking, self.char_size)
 
     def draw_in_rect(self, frame, text, rect=(0,0,128,32), anchor=AnchorCenter):
         """Draw *text* on *frame* within the given *rect*, aligned in accordance with *anchor*.

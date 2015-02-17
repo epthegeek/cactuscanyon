@@ -43,7 +43,7 @@ class Interrupter(ep.EP_Mode):
         # if the skillshot display is busy, we don't trample on it
         if not self.game.skill_shot.busy:
             # for when the ball is sitting in the shooter lane with nothing going on
-            myNumber = ("ONE<","TWO*","THREE<","FOUR>")
+            myNumber = ("ONE","TWO","THREE","FOUR")
             # get the current player
             p = self.game.current_player_index
             # set up the text
@@ -175,7 +175,7 @@ class Interrupter(ep.EP_Mode):
         self.game.sound.set_volume(self.game.volume_to_set)
 
     def showdown_hit(self,points):
-        pointString = str(ep.format_score(points)) + "#"
+        pointString = str(ep.format_score(points))
         textLine1 = ep.EP_TextLayer(128/2, 2, self.game.assets.font_9px_AZ_outline, "center", opaque=False).set_text("<BAD> <GUY> <SHOT!>",color=ep.ORANGE)
         textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text(pointString,blink_frames=8,color=ep.RED)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
@@ -191,7 +191,7 @@ class Interrupter(ep.EP_Mode):
 
     def ball_save_activated(self):
         textLine1 = dmd.TextLayer(128/2, 2, self.game.assets.font_9px_AZ_outline, "center", opaque=False).set_text("<BALL> <SAVER>")
-        textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("ACTIVATED#",blink_frames=8,color=ep.GREEN)
+        textLine2 = ep.EP_TextLayer(128/2, 14, self.game.assets.font_12px_az_outline, "center", opaque=False).set_text("ACTIVATED",blink_frames=8,color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[textLine1,textLine2])
         combined.composite_op = "blacksrc"
         self.layer = combined

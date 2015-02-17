@@ -457,7 +457,7 @@ class SavePolly(ep.EP_Mode):
             self.stop_music(slice=3)
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
             awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False).set_text("POLLY")
-            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False).set_text("DIED*")
+            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False).set_text("DIED")
             awardTextBottom.composite_op = "blacksrc"
             awardTextTop.composite_op = "blacksrc"
             combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom])

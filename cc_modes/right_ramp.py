@@ -95,7 +95,7 @@ class RightRamp(ep.EP_Mode):
                 self.game.combos.mini_display()
             ## set the text lines for the display later
             self.awardString = "SOUND ALARM"
-            self.awardPoints = str(ep.format_score(125000)) + "*"
+            self.awardPoints = str(ep.format_score(125000))
             self.game.score(125000,bonus=True)
             # load the animation
             anim = self.game.assets.dmd_bankExplodes
@@ -122,7 +122,7 @@ class RightRamp(ep.EP_Mode):
                 self.game.combos.mini_display()
             # set the text lines for the display
             self.awardString = "SHOOT OUT"
-            self.awardPoints = str(ep.format_score(150000)) + "*"
+            self.awardPoints = str(ep.format_score(150000))
             self.game.score(150000,bonus=True)
             # load the animation
             anim = self.game.assets.dmd_bankSheriff
@@ -183,7 +183,7 @@ class RightRamp(ep.EP_Mode):
                 self.awardString = "BANK ROBBED"
                 value = self.game.increase_tracking('rightRampValue',500)
                 frame = 13
-            self.awardPoints = str(ep.format_score(value)) + "*"
+            self.awardPoints = str(ep.format_score(value))
             self.game.score(value,bonus=True)
             # play sounds
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
