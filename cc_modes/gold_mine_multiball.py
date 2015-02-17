@@ -408,8 +408,8 @@ class GoldMine(ep.EP_Mode):
             self.get_going()
 
         elif self.game.show_tracking('motherlodeLit') and not self.bandits:
-            # if motherlode is lit, collect it on the first multiball, otherwise divert to the bandits
-            if self.game.show_tracking('goldMineStarted') >= 2:
+            # if motherlode is lit, collect it on the first multiball, otherwise divert to the bandits if enabled
+            if self.game.show_tracking('goldMineStarted') >= 2 and self.game.user_settings['Gameplay (Feature)']['Gold Mine Bandits'] == 'Enabled':
                 self.bandits = True
             self.motherlode_hit()
         else:
@@ -492,7 +492,7 @@ class GoldMine(ep.EP_Mode):
         # set a counter for how many are up
         self.banditsUp = len(available)
         # set the timer
-        self.banditTimer = 31
+        self.banditTimer = self.game.user_settings['Gameplay (Feature)']['Gold Mine Bandits Timer'] + 1
         # delay a bit for the display and whatnot, then move on
         self.delay(delay=1.5,handler=self.bandits_begin)
 

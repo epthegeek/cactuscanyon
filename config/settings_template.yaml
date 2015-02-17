@@ -327,6 +327,13 @@ Gameplay (Feature):
   'Motherlode Badge Difficulty':
     options: ['Easy','Normal']
     default: 'Easy'
+  'Gold Mine Bandits':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  'Gold Mine Bandits Timer':
+    options: [10,60]
+    increments: 5
+    default: 30
   'Gold Mine Multiball Restart':
     options: ['Yes','No']
     default: 'Yes'
