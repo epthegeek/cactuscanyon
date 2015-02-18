@@ -114,7 +114,7 @@ class CCGame(game.BasicGame):
         self.display_hold = False
 
         # software version number
-        self.revision = "2015.02.15"
+        self.revision = "2015.02.18"
 
         # basic game reset stuff, copied in
 
@@ -501,7 +501,7 @@ class CCGame(game.BasicGame):
         # Add the first player
         self.add_player()
         # set a random bart bro
-        barts = [0,1,2]
+        barts = [0,1,2,3]
         self.set_tracking('currentBart',random.choice(barts))
         # set the mob battle order
         self.order_mobs()

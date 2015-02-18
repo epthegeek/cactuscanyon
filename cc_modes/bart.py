@@ -173,15 +173,55 @@ class Bart(ep.EP_Mode):
 
     def setup(self):
         # our cast of characters
-        names = ('big','bandelero','bubba', 'rudy','boss')
-        hits = (self.game.assets.quote_hitBigBart, self.game.assets.quote_hitBandeleroBart,self.game.assets.quote_hitBubbaBart,self.game.assets.quote_hitRudy,self.game.assets.quote_hitBossBart)
-        taunts = (self.game.assets.quote_tauntBigBart, self.game.assets.quote_tauntBandeleroBart,self.game.assets.quote_tauntBubbaBart,self.game.assets.quote_tauntRudy,self.game.assets.quote_tauntBossBart)
-        defeats = (self.game.assets.quote_defeatBigBart, self.game.assets.quote_defeatBandeleroBart,self.game.assets.quote_defeatBubbaBart,self.game.assets.quote_defeatRudy,self.game.assets.quote_defeatBossBart)
-        intros = (self.game.assets.quote_introBigBart, self.game.assets.quote_introBandeleroBart,self.game.assets.quote_introBubbaBart,self.game.assets.quote_introRudy,self.game.assets.quote_introBossBart)
-        posterA = (self.game.assets.dmd_bigPosterA, self.game.assets.dmd_bandeleroPosterA, self.game.assets.dmd_bubbaPosterA,self.game.assets.dmd_rudyPosterA,self.game.assets.dmd_bossPosterA)
-        posterB = (self.game.assets.dmd_bigPosterB, self.game.assets.dmd_bandeleroPosterB, self.game.assets.dmd_bubbaPosterB,self.game.assets.dmd_rudyPosterB,self.game.assets.dmd_bossPosterB)
-        faces = (self.game.assets.dmd_big, self.game.assets.dmd_bandelero, self.game.assets.dmd_bubba, self.game.assets.dmd_rudy,self.game.assets.dmd_boss)
-        reactions = (self.game.assets.dmd_bigHit, self.game.assets.dmd_bandeleroHit, self.game.assets.dmd_bubbaHit, self.game.assets.dmd_rudyHit,self.game.assets.dmd_bossHit)
+        names = ('big','bandelero','bubba', 'bull', 'rudy','boss')
+        hits = (self.game.assets.quote_hitBigBart,
+                self.game.assets.quote_hitBandeleroBart,
+                self.game.assets.quote_hitBubbaBart,
+                self.game.assets.quote_hitBull,
+                self.game.assets.quote_hitRudy,
+                self.game.assets.quote_hitBossBart)
+        taunts = (self.game.assets.quote_tauntBigBart,
+                  self.game.assets.quote_tauntBandeleroBart,
+                  self.game.assets.quote_tauntBubbaBart,
+                  self.game.assets.quote_tauntBull,
+                  self.game.assets.quote_tauntRudy,
+                  self.game.assets.quote_tauntBossBart)
+        defeats = (self.game.assets.quote_defeatBigBart,
+                   self.game.assets.quote_defeatBandeleroBart,
+                   self.game.assets.quote_defeatBubbaBart,
+                   self.game.assets.quote_defeatBull,
+                   self.game.assets.quote_defeatRudy,
+                   self.game.assets.quote_defeatBossBart)
+        intros = (self.game.assets.quote_introBigBart,
+                  self.game.assets.quote_introBandeleroBart,
+                  self.game.assets.quote_introBubbaBart,
+                  self.game.assets.quote_introBull,
+                  self.game.assets.quote_introRudy,
+                  self.game.assets.quote_introBossBart)
+        posterA = (self.game.assets.dmd_bigPosterA,
+                   self.game.assets.dmd_bandeleroPosterA,
+                   self.game.assets.dmd_bubbaPosterA,
+                   self.game.assets.dmd_bullPosterA,
+                   self.game.assets.dmd_rudyPosterA,
+                   self.game.assets.dmd_bossPosterA)
+        posterB = (self.game.assets.dmd_bigPosterB,
+                   self.game.assets.dmd_bandeleroPosterB,
+                   self.game.assets.dmd_bubbaPosterB,
+                   self.game.assets.dmd_bullPosterB,
+                   self.game.assets.dmd_rudyPosterB,
+                   self.game.assets.dmd_bossPosterB)
+        faces = (self.game.assets.dmd_big,
+                 self.game.assets.dmd_bandelero,
+                 self.game.assets.dmd_bubba,
+                 self.game.assets.dmd_bull,
+                 self.game.assets.dmd_rudy,
+                 self.game.assets.dmd_boss)
+        reactions = (self.game.assets.dmd_bigHit,
+                     self.game.assets.dmd_bandeleroHit,
+                     self.game.assets.dmd_bubbaHit,
+                     self.game.assets.dmd_bullHit,
+                     self.game.assets.dmd_rudyHit,
+                     self.game.assets.dmd_bossHit)
 
         # look up which one is current
         index = self.game.show_tracking('currentBart')
@@ -311,10 +351,10 @@ class Bart(ep.EP_Mode):
 
         # set the end number for cyling back around - new due to guests
         if self.guests:
-            endnumber = 3
+            endnumber = 4
         else:
-            endnumber = 2
-        bossPosition = 4
+            endnumber = 3
+        bossPosition = 5
 
 
         # set the status to dead - gunfight has to set it back to open
