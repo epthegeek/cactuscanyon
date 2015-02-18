@@ -1138,6 +1138,24 @@ class Assets():
         self.game.sound.register_sound(self.quote_targetBossBart, self.quotes_path+ "1868-leader-bart-target-you-shot-my-brother.wav")
         self.game.sound.register_sound(self.quote_targetBossBart, self.quotes_path+ "1535-leader-bart-target-you-shot-my-brother.wav")
 
+        self.quote_introBull = 'quote_introBull'
+        self.game.sound.register_sound(self.quote_introBull, self.quotes_path + "intro_bull.wav")
+
+        self.quote_hitBull = 'quote_hitBull'
+        self.game.sound.register_sound(self.quote_hitBull, self.quotes_path + "hit_bull_1.wav")
+        self.game.sound.register_sound(self.quote_hitBull, self.quotes_path + "hit_bull_2.wav")
+        self.game.sound.register_sound(self.quote_hitBull, self.quotes_path + "hit_bull_3.wav")
+        self.game.sound.register_sound(self.quote_hitBull, self.quotes_path + "hit_bull_4.wav")
+
+        self.quote_tauntBull = 'quote_tauntBull'
+        self.game.sound.register_sound(self.quote_tauntBull, self.quotes_path + "taunt_bull_1.wav")
+        self.game.sound.register_sound(self.quote_tauntBull, self.quotes_path + "taunt_bull_2.wav")
+        self.game.sound.register_sound(self.quote_tauntBull, self.quotes_path + "taunt_bull_3.wav")
+        self.game.sound.register_sound(self.quote_tauntBull, self.quotes_path + "taunt_bull_4.wav")
+
+        self.quote_defeatBull = 'quote_defeatBull'
+        self.game.sound.register_sound(self.quote_defeatBull, self.quotes_path + "dead_bull.wav")
+
         self.quote_introRudy = 'quote_introRudy'
         self.game.sound.register_sound(self.quote_introRudy, self.quotes_path + "rudy_taunt-hey_its_only_pinball.wav")
         self.game.sound.register_sound(self.quote_introRudy, self.quotes_path + "rudy_intro-im_watchin_ya.wav")
@@ -1614,24 +1632,28 @@ class Assets():
         self.dmd_bubbaPosterA = dmd.Animation().load(self.dmd_path + 'wanted-BUBBA-A.dmd')
         self.dmd_bossPosterA = dmd.Animation().load(self.dmd_path + 'wanted-BOSS-A.dmd')
         self.dmd_rudyPosterA = dmd.Animation().load(self.dmd_path + 'rudy-wanted-a.dmd')
+        self.dmd_bullPosterA = dmd.Animation().load(self.dmd_path + 'bull-wanted-a.dmd')
 
         self.dmd_bigPosterB = dmd.Animation().load(self.dmd_path +'wanted-BIG-B.dmd')
         self.dmd_bandeleroPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BANDELERO-B.dmd')
         self.dmd_bubbaPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BUBBA-B.dmd')
         self.dmd_bossPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BOSS-B.dmd')
         self.dmd_rudyPosterB = dmd.Animation().load(self.dmd_path + 'rudy-wanted-b.dmd')
+        self.dmd_bullPosterB = dmd.Animation().load(self.dmd_path + 'bull-wanted-b.dmd')
 
         self.dmd_big = dmd.Animation().load(self.dmd_path + 'face-BIG.dmd')
         self.dmd_bandelero = dmd.Animation().load(self.dmd_path + 'face-BANDELERO.dmd')
         self.dmd_bubba = dmd.Animation().load(self.dmd_path + 'face-BUBBA.dmd')
         self.dmd_boss = dmd.Animation().load(self.dmd_path + 'boss.dmd')
         self.dmd_rudy = dmd.Animation().load(self.dmd_path + 'rudy-start.dmd')
+        self.dmd_bull = dmd.Animation().load(self.dmd_path + 'bull-start.dmd')
 
         self.dmd_bigHit = dmd.Animation().load(self.dmd_path + 'hit-BIG.dmd')
         self.dmd_bandeleroHit = dmd.Animation().load(self.dmd_path + 'hit-BANDELERO.dmd')
         self.dmd_bubbaHit = dmd.Animation().load(self.dmd_path + 'hit-BUBBA.dmd')
         self.dmd_bossHit = dmd.Animation().load(self.dmd_path+'boss-hit.dmd')
         self.dmd_rudyHit = dmd.Animation().load(self.dmd_path + 'rudy-hit.dmd')
+        self.dmd_bullHit = dmd.Animation().load(self.dmd_path + 'bull-hit.dmd')
 
 
         self.dmd_trainOnTracks = dmd.Animation().load(self.dmd_path+'train-on-tracks.dmd')
