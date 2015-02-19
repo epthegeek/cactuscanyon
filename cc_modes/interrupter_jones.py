@@ -270,7 +270,7 @@ class Interrupter(ep.EP_Mode):
         # cancel the delay, in case we got pushed early
         self.cancel_delayed("Display")
         # hide the replay page if replays are disabled
-        max_page = 6
+        max_page = 7
         # by bumping up the max page by one if replays are enabled
         if self.game.replays:
             max_page += 1
@@ -318,8 +318,18 @@ class Interrupter(ep.EP_Mode):
                 # default three line display
             self.tld("BEER MUG:",textString2,textString3, color2=ep.ORANGE,color3=ep.ORANGE)
             # circle back and clear the layer
-        # combos information
+        # CVA Information & Tumbleweeds
         if self.page == 5:
+            left = self.game.base.tumbleweedShots - self.game.show_tracking('tumbleweedHits')
+            if left <= 0:
+                textString2 = "COWBOYS V ALIENS"
+                textString3 = "IS LIT"
+            else:
+                textString2 = str(left) + " MORE WEEDS FOR"
+                textString3 = "COWBOYS V ALIENS"
+            self.tld("TUMBLEWEEDS:",textString2,textString3,color2=ep.ORANGE,color3=ep.ORANGE)
+        # combos information
+        if self.page == 6:
             # combos to light badge
             needed = self.game.user_settings['Gameplay (Feature)']['Combos for Star']
             # combos so far
@@ -333,7 +343,7 @@ class Interrupter(ep.EP_Mode):
                 textString3 = str(left) + " MORE FOR BADGE"
             self.tld("COMBO SHOTS:",textString2,textString3, color2=ep.ORANGE,color3=ep.ORANGE)
         # Kills so far
-        if self.page == 6:
+        if self.page == 7:
             # quickdraws so far
             quickdrawKills = self.game.show_tracking('quickdrawsWon')
             # gunfights
@@ -342,7 +352,7 @@ class Interrupter(ep.EP_Mode):
             textString3 = "GUNFIGHTS: " + str(gunfightKills)
             self.tld("GUN BATTLE WINS:",textString2,textString3, color2=ep.ORANGE,color3=ep.ORANGE)
         # replay score
-        if self.page == 7:
+        if self.page == 8:
             self.layer = self.replay_score_page()
 
         self.delay(name="Display",delay=3,handler=self.status)
