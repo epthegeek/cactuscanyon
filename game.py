@@ -116,7 +116,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2015.02.18"
+        self.revision = "2015.02.19"
 
         # basic game reset stuff, copied in
 
@@ -1408,5 +1408,5 @@ class CCGame(game.BasicGame):
 
     def check_doubler(self):
         # if the doubler is loaded, but not started, remove it
-        if self.doubler in self.game.modes and not self.doubler.running:
+        if self.doubler in self.modes and not self.doubler.running:
             self.doubler.unload()
