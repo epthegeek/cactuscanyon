@@ -836,21 +836,25 @@ class BaseGameMode(ep.EP_Mode):
 
 
     def quickdraw_hit(self, position,side):
-        # lookup the status of the side, and difficulty
-        stat = self.game.show_tracking('quickdrawStatus',side)
-        difficulty = self.game.user_settings['Gameplay (Feature)']['Quickdraws Lit Difficulty']
-        # if quickdraw is running or lit on the side hit, or position matches stat, or bionic bart is running
-        if "RUNNING" in self.game.show_tracking('quickdrawStatus') or \
-          stat == "READY" or  \
-          stat == position or \
-          self.game.show_tracking('bionicStatus') == "RUNNING":
-            #print "QUICKDRAW IS RUNNING OR LIT"
-            # register a lit hit
-            self.quickdraw_lit_hit()
-        # otherwise quickdraw is NOT running or LIT
+        # if the doubler is running, pass on quickdraw hits
+        if self.game.doubler in self.game.modes:
+            print "Doubler enabled - Passing QD Hit"
         else:
-            # register an unlit hit
-            self.quickdraw_unlit_hit(position,side,stat,difficulty)
+            # lookup the status of the side, and difficulty
+            stat = self.game.show_tracking('quickdrawStatus',side)
+            difficulty = self.game.user_settings['Gameplay (Feature)']['Quickdraws Lit Difficulty']
+            # if quickdraw is running or lit on the side hit, or position matches stat, or bionic bart is running
+            if "RUNNING" in self.game.show_tracking('quickdrawStatus') or \
+              stat == "READY" or  \
+              stat == position or \
+              self.game.show_tracking('bionicStatus') == "RUNNING":
+                #print "QUICKDRAW IS RUNNING OR LIT"
+                # register a lit hit
+                self.quickdraw_lit_hit()
+            # otherwise quickdraw is NOT running or LIT
+            else:
+                # register an unlit hit
+                self.quickdraw_unlit_hit(position,side,stat,difficulty)
 
     def quickdraw_lit_hit(self):
         #play the alt sound

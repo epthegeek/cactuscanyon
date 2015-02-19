@@ -119,6 +119,13 @@ Sound:
     options: [-0.4,-0.3,-0.2,-0.1,0,0.1,0.2,0.3,0.4]
     default: 0
 Gameplay (Feature):
+  '2X Scoring Feature':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
+  '2X Scoring Timer':
+    options: [15,60]
+    increments: 5
+    default: 30
   'Attract sounds to play':
     options: [3,10]
     increments: 1

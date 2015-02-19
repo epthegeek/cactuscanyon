@@ -112,6 +112,8 @@ class CCGame(game.BasicGame):
         self.tournament = False
         # new flag for controlling layover during showdown startup display - and maybe others
         self.display_hold = False
+        # multiplier value
+        self.multiplier = 1
 
         # software version number
         self.revision = "2015.02.18"
@@ -357,6 +359,9 @@ class CCGame(game.BasicGame):
         self.showdown = cc_modes.Showdown(game=self,priority=80)
         self.ambush = cc_modes.Ambush(game=self,priority=80)
 
+        # doubler
+        self.doubler = cc_modes.Doubler(game=self,priority=81)
+
         # tribute modes
         self.mm_tribute = cc_modes.MM_Tribute(game=self,priority=82)
         self.mb_tribute = cc_modes.MB_Tribute(game=self,priority=82)
@@ -520,6 +525,9 @@ class CCGame(game.BasicGame):
         self.trough.balls_to_autoplunge = 0
         # run the start_ball from proc.game.BasicGame
         super(CCGame, self).start_ball()
+        # just to be safe, remove the doubler if it's loaded
+        if self.doubler in self.modes:
+            self.doubler.unload()
         if len(self.players) > 1 and not self.interrupter.hush:
             if self.replays and self.ball == self.balls_per_game:
                 # if they already earned a replay - still show their number
@@ -977,9 +985,9 @@ class CCGame(game.BasicGame):
 
     def score(self, points,bonus=False,percent=7):
         """Convenience method to add *points* to the current player."""
-        #print "Adding " + str(points) + " to score"
+        print "Adding " + str(points) + " to score - multiplier: " + str(self.multiplier)
         p = self.current_player()
-        p.score += points
+        p.score += (points * self.multiplier)
         if bonus:
         # divide the score by 100 to get what 1 % is (rounded), then multiply by the applied percent, then round to an even 10.
         # why? because that's what modern pinball does. Score always ends in 0
@@ -1392,3 +1400,13 @@ class CCGame(game.BasicGame):
     def save_game_data(self):
         super(CCGame, self).save_game_data(user_game_data_path)
 
+    def load_doubler(self):
+        if self.user_settings['Gameplay (Feature)']['2X Scoring Feature'] == 'Enabled':
+            if self.doubler not in self.modes:
+                print "Loading Score Doubler"
+                self.modes.add(self.doubler)
+
+    def check_doubler(self):
+        # if the doubler is loaded, but not started, remove it
+        if self.doubler in self.game.modes and not self.doubler.running:
+            self.doubler.unload()

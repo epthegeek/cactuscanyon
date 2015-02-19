@@ -63,6 +63,8 @@ class GoldMine(ep.EP_Mode):
         if value == "No":
             # if not allowed, set the flag to true right from the start
             self.restarted = True
+        # Bring in the doubler if it's enabled
+        self.game.load_doubler()
 
     def ball_drained(self):
         # if we're dropping down to one ball, and goldmine multiball is running - do stuff
@@ -738,6 +740,8 @@ class GoldMine(ep.EP_Mode):
         self.layer = combined
 
     def end_multiball(self):
+        # remove the doubler if not running via check_doubler
+        self.game.check_doubler()
         self.wipe_delays()
         self.running = False
         # clear the layer

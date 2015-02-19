@@ -89,7 +89,7 @@ class Assets():
         self.font_12px_az_dim.make_colors([ep.RED,ep.GREEN])
 
         self.font_12px_az_outline = ep.ColorFont(self.dmd_path + "Font_16_mask_CactusCanyon.dmd")
-        self.font_12px_az_outline.make_colors([ep.GREEN,ep.ORANGE,ep.RED,ep.YELLOW])
+        self.font_12px_az_outline.make_colors([ep.GREEN,ep.ORANGE,ep.RED,ep.YELLOW,ep.BLUE])
         self.font_12px_az_outline.tracking = -1
         self.font_12px_az_outline.composite_op = "blacksrc"
 
@@ -470,6 +470,9 @@ class Assets():
 
         self.sfx_ballSaved = 'sfx_ballSaved'
         self.game.sound.register_sound(self.sfx_ballSaved, self.sfx_path + "00-ball_saved.wav")
+
+        self.sfx_fanfare1 = 'sfx_fanfare1'
+        self.game.sound.register_sound(self.sfx_fanfare1, self.sfx_path + "070-generic-fanfare-1.wav")
 
         self.sfx_tafMissIt = 'sfx_tafMissIt'
         self.game.sound.register_sound(self.sfx_tafMissIt, self.sfx_path + "taf-ball-whiff.wav")
