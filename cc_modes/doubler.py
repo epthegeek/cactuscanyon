@@ -27,6 +27,7 @@ class Doubler(ep.EP_Mode):
         self.myID = "Doubler"
         self.baseTime = self.game.user_settings['Gameplay (Feature)']['2X Scoring Timer'] + 1
         self.timer = 0
+        self.hitsRequired = self.game.user_settings['Gameplay (Feature)']['2X Scoring Hits']
 
     def mode_started(self):
         # set up the status
@@ -61,11 +62,11 @@ class Doubler(ep.EP_Mode):
             dud = False
             if side == 'Left':
                 self.leftHits += 1
-                if self.leftHits > 2:
+                if self.leftHits > self.hitsRequired:
                     dud = True
             if side == 'Right':
                 self.rightHits += 1
-                if self.rightHits > 2:
+                if self.rightHits > self.hitsRequired:
                     dud = True
             # play a sound
             if dud:
@@ -74,19 +75,19 @@ class Doubler(ep.EP_Mode):
                 self.game.sound.play(self.game.assets.sfx_quickdrawOff)
             # set the lights
             if side == 'Left':
-                if self.leftHits == 1:
+                if self.leftHits == self.hitsRequired - 1:
                     self.game.lamps.leftQuickdraw.schedule(0x0F0F0F0F)
-                elif self.leftHits >= 2:
+                elif self.leftHits >= self.hitsRequired:
                     self.game.lamps.leftQuickdraw.enable()
             if side == 'Right':
-                if self.rightHits == 1:
+                if self.rightHits == self.hitsRequired -1:
                     self.game.lamps.topRightQuickdraw.schedule(0x0F0F0F0F)
                     self.game.lamps.bottomRightQuickdraw.schedule(0x0F0F0F0F)
-                elif self.leftHits >= 2:
+                elif self.leftHits >= self.hitsRequired:
                     self.game.lamps.topRightQuickdraw.enable()
                     self.game.lamps.bottomRightQuickdraw.enable()
             # check ready status
-            if self.rightHits >= 2 and self.leftHits >= 2 and not self.running:
+            if self.rightHits >= self.hitsRequired and self.leftHits >= self.hitsRequired and not self.running:
                 # set the ready flag
                 self.ready = True
                 # flash the light
