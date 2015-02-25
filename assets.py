@@ -1296,6 +1296,9 @@ class Assets():
         self.game.sound.register_sound(self.quote_deepLaugh, self.quotes_path + "1580-leader-bart-laugh-1.wav")
         self.quote_superSkillShot = 'quote_SuperSKillShot'
         self.game.sound.register_sound(self.quote_superSkillShot, self.quotes_path + "00-Mayor-SuperSkillShot.wav")
+        self.game.sound.register_sound(self.quote_superSkillShot, self.quotes_path + "mayor-youve-raised-the-stakes-sheriff.wav")
+        self.game.sound.register_sound(self.quote_superSkillShot, self.quotes_path + "mayor-youre-a-gamblin-man.wav")
+        self.game.sound.register_sound(self.quote_superSkillShot, self.quotes_path + "mayor-its-all-or-nothin-sheriff.wav")
         self.quote_leftLoopSS = 'quote_leftLoopSS'
         self.game.sound.register_sound(self.quote_leftLoopSS, self.quotes_path + "00-Mayor-LeftLoop.wav")
         self.quote_leftRampSS = 'quote_leftRampSS'

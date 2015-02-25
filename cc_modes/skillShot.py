@@ -70,9 +70,11 @@ class SkillShot(ep.EP_Mode):
             self.easy = False
         self.mytValue = self.game.user_settings['Gameplay (Feature)']['Move Your Train Mode']
 
-        self.keys_index = {'welcome':list(range(len(self.game.sound.sounds[self.game.assets.quote_welcomes])))}
-        self.counts_index = {'welcome':0}
+        self.keys_index = {'welcome':list(range(len(self.game.sound.sounds[self.game.assets.quote_welcomes]))),
+                           'super':list(range(len(self.game.sound.sounds[self.game.assets.quote_SuperSkillShot])))}
+        self.counts_index = {'welcome':0,'super':0}
         random.shuffle(self.keys_index['welcome'])
+        random.shuffle(self.keys_index['super'])
 
 
     def ball_drained(self):
@@ -857,7 +859,7 @@ class SkillShot(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_ropeWoosh)
         # turn it on
         self.layer = combined
-        self.game.base.priority_quote(self.game.assets.quote_superSkillShot)
+        self.play_ordered_quote(self.game.assets.quote_superSkillShot)
         self.delay(delay=myWait,handler=self.music_on,param=self.game.assets.music_drumRoll)
         # show the prizes
         self.delay(name="Display",delay=myWait+1,handler=self.update_layer)
