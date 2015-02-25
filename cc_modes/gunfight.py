@@ -176,7 +176,11 @@ class Gunfight(ep.EP_Mode):
         # play a quote
         self.play_ordered_quote(self.game.assets.quote_gunfightStart,'start')
         # display the clouds with gunfight text
-        title = ep.EP_TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight",color=ep.ORANGE)
+        if self.game.user_settings['Gameplay (Feature)']['Gunfight Mountain'] == 'Green':
+            thecolor = ep.ORANGE
+        else:
+            thecolor = ep.RED
+        title = ep.EP_TextLayer(64, 5, self.game.assets.font_20px_az, "center", opaque=False).set_text("Gunfight",color=thecolor)
         title.composite_op = "blacksrc"
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_gunfightPan.frames[0])
         mask = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_gunfightMask.frames[0])
