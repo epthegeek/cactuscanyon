@@ -314,6 +314,9 @@ Gameplay (Feature):
   'Gunfight Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'
+  'Gunfight Mountain':
+    options: ['Green','Brown']
+    default: 'Brown'
   'Multiball Locks Difficulty':
     options: ['Easy','Hard']
     default: 'Easy'

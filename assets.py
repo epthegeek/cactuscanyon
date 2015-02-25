@@ -1593,7 +1593,10 @@ class Assets():
 
         #self.dmd_gunfightTop = dmd.Animation().load(self.dmd_path+'gunfight-top.dmd')
         self.dmd_gunfightMask = dmd.Animation().load(self.dmd_path +'gunfight-mask.dmd')
-        self.dmd_gunfightPan = dmd.Animation().load(self.dmd_path+'gunfight-pan.dmd')
+        if self.game.user_settings['Gameplay (Feature)']['Gunfight Mountain'] == 'Green':
+            self.dmd_gunfightPan = dmd.Animation().load(self.dmd_path+'gunfight-pan.dmd')
+        else:
+            self.dmd_gunfightPan = dmd.Animation().load(self.dmd_path+'gunfight-pan-brown.dmd')
         self.dmd_gunfightEyes = dmd.Animation().load(self.dmd_path+'gunfight-eyes.dmd')
         self.dmd_gunfightHands = dmd.Animation().load(self.dmd_path+'gunfight-hands.dmd')
         self.dmd_gunfightBoots = dmd.Animation().load(self.dmd_path+'gunfight-boots.dmd')

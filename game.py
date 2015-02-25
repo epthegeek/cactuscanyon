@@ -119,6 +119,12 @@ class CCGame(game.BasicGame):
         self.revision = "2015.02.25"
 
         # basic game reset stuff, copied in
+        # load up the game data Game data
+        print "Loading game data"
+        self.load_game_data(game_data_defaults_path, user_game_data_path)
+        # and settings Game settings
+        print "Loading game settings"
+        self.load_settings(settings_defaults_path, user_settings_path)
 
         ## init the sound
         self.sound = sound.SoundController(self)
@@ -155,13 +161,6 @@ class CCGame(game.BasicGame):
         self.statusOK = False
         self.endBusy = False
 
-        """docstring for setup"""
-        # load up the game data Game data
-        print "Loading game data"
-        self.load_game_data(game_data_defaults_path, user_game_data_path)
-        # and settings Game settings
-        print "Loading game settings"
-        self.load_settings(settings_defaults_path, user_settings_path)
 
         # check for the knocker setting
         if self.user_settings['Machine (Standard)']['Real Knocker Installed'] == "Yes":
