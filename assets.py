@@ -895,6 +895,7 @@ class Assets():
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1505-leader-bart-better-luck-next-time.wav")
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1564-leader-bart-well-im-still-standin.wav")
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1563-leader-bart-aw-you-missed.wav")
+        self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "mayor-this-is-very-embarassing.wav")
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1321-undertaker-your-shooting-is-killing-me.wav")
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1244-prospector-say-is-that-thing-loaded.wav")
         self.game.sound.register_sound(self.quote_gunFail, self.quotes_path + "1280-prospector-check-the-sights.wav")
@@ -1322,6 +1323,11 @@ class Assets():
         self.quote_yippie = 'quote_yippie'
         self.game.sound.register_sound(self.quote_yippie, self.quotes_path + "1959-yip-yip-yippie.wav")
         self.game.sound.register_sound(self.quote_yippie, self.quotes_path + "1957-woohoo-yippie.wav")
+
+        self.quote_dejected = 'quote_dejected'
+        self.game.sound.register_sound(self.quote_dejected, self.quotes_path + "mayor-i-thought-you-were-good-at-this.wav")
+        self.game.sound.register_sound(self.quote_dejected, self.quotes_path + "mayor-our-poor-town-is-doomed.wav")
+        self.game.sound.register_sound(self.quote_dejected, self.quotes_path + "mayor-put-the-signs-back-up.wav")
 
         self.quote_mineOpen = 'quote_mineOpen'
         self.game.sound.register_sound(self.quote_mineOpen, self.quotes_path + "1183-quote-mayor-mine-is-wide-open.wav")

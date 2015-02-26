@@ -102,6 +102,7 @@ class CCGame(game.BasicGame):
         #super(CCGame,self).reset()
         # game reset stuff - copied in
         """Reset the game state as a slam tilt might."""
+        self.dejected = True
         self.ball = 0
         self.old_players = []
         self.old_players = self.players[:]
@@ -116,7 +117,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2015.02.25"
+        self.revision = "2015.02.26"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
@@ -464,6 +465,8 @@ class CCGame(game.BasicGame):
         self.modes.add(self.score_display)
 
     def start_game(self,forceMoonlight=False):
+        # dejected quote flag - resets at game start
+        self.dejected = True
         # Remove the party mode attract display
         if self.party_setting != 'Disabled':
             self.party_mode.clear_layer()
@@ -838,6 +841,8 @@ class CCGame(game.BasicGame):
         self.modes.add(self.seq_manager)
 
     def highscore_entry_ready_to_prompt(self, mode, prompt):
+        # If someone got a high score, turn off the dejected flag
+        self.dejected = False
         banner_mode = game.Mode(game=self, priority=8)
         anim = self.assets.dmd_fireworks
         myWait = (len(anim.frames) / 10.0) + 2
@@ -886,7 +891,11 @@ class CCGame(game.BasicGame):
         # re-add the attract mode
         self.modes.add(self.attract_mode)
         # play a quote
-        duration = self.sound.play(self.assets.quote_goodbye)
+        if self.dejected:
+            line = self.assets.quote_dejected
+        else:
+            line = self.assets.quote_goodbye
+        duration = self.sound.play(line)
 
         # play the closing song
         self.interrupter.closing_song(duration)
