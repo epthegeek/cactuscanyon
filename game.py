@@ -564,6 +564,8 @@ class CCGame(game.BasicGame):
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
         self.ballStarting = True
+        # Set the score multiplier to 1 as a safety catch
+        self.multiplier = 1
         # turn on the GI
         self.gi_control("ON")
         # set peril (polly indicator) to false
