@@ -69,6 +69,8 @@ class CCGame(game.BasicGame):
         self.shutdownFlag = config.value_for_key_path(keypath='shutdown_flag',default=False)
         self.buttonShutdown = config.value_for_key_path(keypath='power_button_combo', default=False)
         self.moonlightFlag = False
+        self.rgb = config.value_for_key_path(keypath='lamp_serial_port',default=False)
+        print str(self.rgb)
 
         use_desktop = config.value_for_key_path(keypath='use_desktop', default=True)
         self.color_desktop = config.value_for_key_path(keypath='color_desktop', default=False)
@@ -1420,3 +1422,68 @@ class CCGame(game.BasicGame):
         # if the doubler is loaded, but not started, remove it
         if self.doubler in self.modes and not self.doubler.running:
             self.doubler.unload()
+
+    # copied load config here so it would use my local process_config
+    def load_config(self, filename):
+        """Reads the YAML machine configuration file into memory.
+        Configures the switches, lamps, and coils members.
+        Enables notifyHost for the open and closed debounced states on each configured switch.
+        """
+        self.logger.info('Loading machine configuration from "%s"...', filename)
+        self.config = game.config_named(filename)
+        if not self.config:
+            raise ValueError, 'load_config(filename="%s") could not be found. Did you set config_path?' % (filename)
+        self.process_config()
+
+    def process_config(self):
+        """ A subclassed version of process_config. Does what the
+        usual one does first by calling the super-class' method of the same,
+        then looks for WsRGBs section in the game yaml to define any
+        ws2811/ws2812-based RGB LEDs
+        """
+
+        # I'm assuming your game isn't called 'BuffyGame' --season to taste :)
+        super(CCGame, self).process_config()
+
+        if self.rgb:
+
+            from ArduinoDriver import ArduinoClient, wsRGB
+            self.wsRGBs = game.AttrCollection()
+
+        ## Open up the Arduino COM port if one is specified.
+        #if ('arduino' in self.config['PRGame'] and self.config['PRGame']['arduino'] != False) :
+            #comport = self.config['PRGame']['arduino']
+            self.arduino_client = ArduinoClient(self.rgb, baud_rate=9600,timeout=1)
+
+
+            if 'WsRGBs' in self.config:
+                print "found wsrgbs in config"
+                sect_dict = self.config['WsRGBs']
+                for name in sect_dict:
+                    item_dict = sect_dict[name]
+
+                    item = None
+                    yaml_number = item_dict['number']
+                    if(not isinstance(yaml_number, basestring) or yaml_number[0] != 'A'):
+                        raise ValueError('Malformed Yaml File: wsRGB item named "%s" should have a number of the form: A#' % name)
+
+                    number = int(yaml_number[1:])
+
+                    item = wsRGB(game=self, name=name, number=number)
+                    item.yaml_number = yaml_number
+                    if 'label' in item_dict:
+                        item.label = item_dict['label']
+                    if 'type' in item_dict:
+                        item.type = item_dict['type']
+
+                    if 'default_color' in item_dict:
+                        color = item_dict['default_color']
+                        item.color = color
+                    else:
+                        self.logger.warning('Configuration item named "%s" has no default_color attribute.  Defaulting to white.' % name)
+                        item.color = 'W'
+
+                    self.wsRGBs.add(name, item)
+
+                    self.logger.warning(" wsRGB name=%s; number=%s; color=%s" % (item.name,item.yaml_number, item.color))
+                    self.lamps.add(name,item)
