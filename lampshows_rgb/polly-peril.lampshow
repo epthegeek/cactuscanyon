@@ -15,17 +15,17 @@
 ##
 #                                   1         2         3
 #           METER        # 1234567890123456789012345678901-
-lamp:comboRGB1           |      ..      ..       ..      ..
+lamp:leftRampComboB      |      ..      ..       ..      ..
 lamp:leftRampJackpot     |      ..      ..       ..      ..
 lamp:leftRampSavePolly   |     ..      ..       ..      ..
 lamp:leftRampWaterfall   |   ..      ..       ..      ..
 lamp:leftRampWhiteWater  | ..      ..       ..      ..
-lamp:comboRGB2           |             ....            ....
+lamp:centerRampComboG    |             ....            ....
 lamp:centerRampJackpot   |             ....            ....
 lamp:centerRampSavePolly |         ....            ....
 lamp:centerRampStopTrain |     ....            ....
 lamp:centerRampCatchTrain| ....            ....
-lamp:comboRGB5           |      ..      ..       ..      ..
+lamp:rightRampComboM     |      ..      ..       ..      ..
 lamp:rightRampJackpot    |      ..      ..       ..      ..
 lamp:rightRampSavePolly  |     ..      ..       ..      ..
 lamp:rightRampShootOut   |   ..      ..       ..      ..

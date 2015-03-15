@@ -19,13 +19,13 @@
 lamp:rightBonusLane      | ..  ..  ..  ..  ..  ..  ..  ..
 lamp:leftBonusLane       |   ..  ..  ..  ..  ..  ..  ..  ..
 ## Left Ramp
-lamp:comboRGB1           |     ..  ..      ..  ..      ..
+lamp:leftRampComboB      |     ..  ..      ..  ..      ..
 lamp:leftRampJackpot     |       ..  ..      ..  ..      ..
 lamp:leftRampSavePolly   | ..      ..  ..      ..  ..
 lamp:leftRampWaterfall   |   ..      ..  ..      ..  ..
 lamp:leftRampWhiteWater  | ..  ..      ..  ..      ..  ..
 ## Left Loop
-lamp:comboRGB0           |     ..  ..      ..  ..      ..
+lamp:leftLoopComboM      |     ..  ..      ..  ..      ..
 lamp:leftLoopJackpot     |       ..  ..      ..  ..      ..
 lamp:leftLoopRideEm      | ..      ..  ..      ..  ..
 lamp:leftLoopWildRide    |   ..      ..  ..      ..  ..
@@ -34,22 +34,22 @@ lamp:leftLoopBuckNBronco | ..  ..      ..  ..      ..  ..
 lamp:extraBall           | ..  ..  ..  ..  ..  ..  ..  ..
 lamp:mineLock            |   ..  ..  ..  ..  ..  ..  ..  ..
 ## Center Ramp
-lamp:comboRGB2           |     ..  ..      ..  ..      ..
+lamp:centerRampComboG    |     ..  ..      ..  ..      ..
 lamp:centerRampJackpot   |       ..  ..      ..  ..      ..
 lamp:centerRampSavePolly | ..      ..  ..      ..  ..
 lamp:centerRampStopTrain |   ..      ..  ..      ..  ..
 lamp:centerRampCatchTrain| ..  ..      ..  ..      ..  ..
 ## Saloon
-lamp:comboRGB3           | ..  ..  ..  ..  ..  ..  ..  ..
+lamp:bountySaloonY       | ..  ..  ..  ..  ..  ..  ..  ..
 lamp:saloonArrow         |   ..  ..  ..  ..  ..  ..  ..  ..
 ## Right Loop
-lamp:comboRGB4           |     ..  ..      ..  ..      ..
+lamp:rightLoopComboB     |     ..  ..      ..  ..      ..
 lamp:rightLoopJackpot    |       ..  ..      ..  ..      ..
 lamp:rightLoopMarksman   | ..      ..  ..      ..  ..
 lamp:rightLoopGunslinger |   ..      ..  ..      ..  ..
 lamp:rightLoopGoodShot   | ..  ..      ..  ..      ..  ..
 ## Right Ramp
-lamp:comboRGB5           |     ..  ..      ..  ..      ..
+lamp:rightRampComboM     |     ..  ..      ..  ..      ..
 lamp:rightRampJackpot    |       ..  ..      ..  ..      ..
 lamp:rightRampSavePolly  | ..      ..  ..      ..  ..
 lamp:rightRampShootOut   |   ..      ..  ..      ..  ..

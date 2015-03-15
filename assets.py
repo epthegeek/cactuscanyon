@@ -1456,7 +1456,9 @@ class Assets():
         lampshows = list()
 
         self.lamp_giTest = 'gi-test'; lampshows.append(self.lamp_giTest)
-        self.lamp_colors = 'colors'; lampshows.append(self.lamp_colors)
+        self.lamp_colorsWhite = 'colors-white'; lampshows.append(self.lamp_colorsWhite)
+        self.lamp_colorsYellow = 'colors-yellow'; lampshows.append(self.lamp_colorsYellow)
+        self.lamp_colorsRed = 'colors-red'; lampshows.append(self.lamp_colorsRed)
         self.lamp_chase = 'chase'; lampshows.append(self.lamp_chase)
         self.lamp_topToBottom = "top-to-bottom"; lampshows.append(self.lamp_topToBottom)
         self.lamp_wipeToBottom = "wipe-to-bottom"; lampshows.append(self.lamp_wipeToBottom)

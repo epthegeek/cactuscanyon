@@ -88,7 +88,11 @@ class CCGame(game.BasicGame):
 
         super(CCGame, self).__init__(machineType)
 
-        self.load_config('cc_machine.yaml')
+        # swap out the machine config yaml to avoid RGB duplication
+        if self.rgb:
+            self.load_config('cc_machine_rgb.yaml')
+        else:
+            self.load_config('cc_machine.yaml')
 
     def setup(self):
         # Instead of resetting everything here as well as when a user
