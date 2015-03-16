@@ -879,7 +879,7 @@ WsRGBs:
         number: A0
         label: Left Loop - ComboY
         tags: Playfield,leftLoop,rgb
-        default_color: y
+        default_color: Y
     leftRampComboY:
         number: A1
         label: Left Ramp - ComboY
