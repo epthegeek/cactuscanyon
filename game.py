@@ -1439,6 +1439,19 @@ class CCGame(game.BasicGame):
             raise ValueError, 'load_config(filename="%s") could not be found. Did you set config_path?' % (filename)
         self.process_config()
 
+        # Setup the key mappings from the config.yaml.
+        # We used to do this in __init__, but at that time the
+        # configuration isn't loaded so we can't peek into self.switches.
+        key_map_config = config.value_for_key_path(keypath='keyboard_switch_map', default={})
+        if self.desktop:
+            for k, v in key_map_config.items():
+                switch_name = str(v)
+                if self.switches.has_key(switch_name):
+                    switch_number = self.switches[switch_name].number
+                else:
+                    switch_number = pinproc.decode(self.machine_type, switch_name)
+                self.desktop.add_key_map(ord(str(k)), switch_number)
+
     def process_config(self):
         """ A subclassed version of process_config. Does what the
         usual one does first by calling the super-class' method of the same,

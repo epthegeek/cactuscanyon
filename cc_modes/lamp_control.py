@@ -269,10 +269,11 @@ class LampControl(ep.EP_Mode):
         #
         # if bionic is ready, both lights flash fast
         if bionicStatus == "READY":
-            self.saloon_flash(1)
+            self.saloon_flash(1,color="R")
         # if drunk multiball is ready - flash the arrow
         elif drunkStatus == "READY":
             self.game.lamps.bountySaloon.disable()
+            self.game.lamps.bountySaloon.color = "Y"
             self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
         # Otherwise, if there's a live bart bro, turn on the saloon arrow
         elif bartStatus == 'RUNNING' or bartStatus == 'LAST':
@@ -280,6 +281,11 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.saloonArrow.enable()
         else:
             pass
+        # if a bounty is lit, turn the RGB green
+        if self.game.show_tracking('isBountyLit') and bionicStatus != "READY" and drunkStatus != "READY":
+            self.game.lamps.bountySaloon.disable()
+            self.game.lamps.bountySaloon.color = "G"
+            self.game.lamps.bountySaloon.enable()
 
         #  ____                                ____ _           _
         # | __ )  ___  __ _  ___ ___  _ __    / ___| |_   _ ___| |_ ___ _ __
@@ -1018,10 +1024,12 @@ class LampControl(ep.EP_Mode):
             self.rankLamps[lamp].enable()
 
 
-    def saloon_flash(self,speed=0):
+    def saloon_flash(self,speed=0,color="W"):
         # if lights out party mode is on - bail
         if self.lights_out == True:
             return
+        self.game.lamps.bountySaloon.disable()
+        self.game.lamps.bountySaloon.color = color
 
         if speed == 0:
             self.game.lamps.saloonArrow.schedule(0x00FF00FF)
