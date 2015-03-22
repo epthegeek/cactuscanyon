@@ -41,6 +41,7 @@ class Combos(ep.EP_Mode):
     def mode_started(self):
         self.myTimer = 0
         self.chain = 1
+        self.colors = ["W","W","W","W","W"]
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -125,6 +126,8 @@ class Combos(ep.EP_Mode):
             if ep.last_shot == "center":
                 textString = str(self.chain) + "-WAY SUPER COMBO"
                 points = 25000 * self.chain
+                # reset the colors to white
+                self.colors = ["W","W","W","W","W"]
             else:
                 textString = str(self.chain) + "-WAY COMBO"
                 points = 50000
@@ -154,12 +157,19 @@ class Combos(ep.EP_Mode):
         self.clear_layer()
         self.cancel_delayed("Display")
 
-    def increase_chain(self):
+    def increase_chain(self,side):
         # up the count
         self.chain += 1
         # check it against the tracking and set the new if it's high - to be used for combo champ
         if self.chain > self.game.show_tracking('bigChain'):
             self.game.set_tracking('bigChain',self.chain)
+
+    def set_colors(self,side,center):
+        # set the colors
+        if side == "L":
+            self.colors = ["W","W",center,"W","G"]
+        elif side == "R":
+            self.colors = ["W","G",center,"W","W"]
 
     def mini_display(self):
         if self.chain > 1:

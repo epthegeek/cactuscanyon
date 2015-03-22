@@ -45,6 +45,7 @@ class LampControl(ep.EP_Mode):
                             self.game.lamps.centerRampCombo,
                             self.game.lamps.leftLoopCombo,
                             self.game.lamps.rightLoopCombo]
+        self.comboColor = ["M","B","G","M","B"]
         # bad guys
         self.badGuyLamps = [self.game.lamps.badGuyL0,
                       self.game.lamps.badGuyL1,
@@ -917,6 +918,8 @@ class LampControl(ep.EP_Mode):
             if self.game.gm_multiball.running or self.game.gunfight.running:
                 return
             value = self.game.combos.myTimer
+            # set the colors with the value from combos mode
+            self.setComboColor(self.game.combos.colors)
             # if timer is greater than 2, slow blink
             if value > 2:
                 for myLamp in self.comboLights:
@@ -934,14 +937,16 @@ class LampControl(ep.EP_Mode):
 
             # high noon check
         elif mode == 'highNoon':
-            for lamp in self.comboLights:
-                lamp.schedule(0x00FF00FF)
+            for i in range(0,5,1):
+                self.setColor(self.comboLights[i],self.comboColor[i])
+                self.comboLights[i].schedule(0x00FF00FF)
 
         # if status is multiball ...
         elif mode == 'Mine':
             # loop through and turn on the appropriate lights
             for i in range(0,5,1):
                 if self.game.show_tracking('jackpotStatus',i):
+                    self.setColor(self.comboLights[i],self.comboColor[i])
                     self.comboLights[i].schedule(0x000F000F)
             ## if status is anything other than ON bail here
 
@@ -949,6 +954,7 @@ class LampControl(ep.EP_Mode):
             # loop through and turn on the appropriate light
             for i in range(0,5,1):
                 if self.game.stampede.active == i:
+                    self.setColor(self.comboLights[i],self.comboColor[i])
                     self.comboLights[i].schedule(0x000F000F)
 
         else:
@@ -1121,3 +1127,12 @@ class LampControl(ep.EP_Mode):
     def feature_lamps_off(self):
         for lamp in self.game.lamps:
             lamp.disable()
+
+    def setColor(self,lamp,color="W"):
+        lamp.disble()
+        lamp.color = color
+
+    # combos order: Left Loop, Left Ramp, Center Ramp, Right Loop, Right Ramp
+    def setComboColor(self,colors=["W","W","W","W","W"]):
+        for i in range(0,5,1):
+            self.comboLights[i].color = colors[i]

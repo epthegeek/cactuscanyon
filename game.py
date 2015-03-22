@@ -1458,8 +1458,6 @@ class CCGame(game.BasicGame):
         then looks for WsRGBs section in the game yaml to define any
         ws2811/ws2812-based RGB LEDs
         """
-
-        # I'm assuming your game isn't called 'BuffyGame' --season to taste :)
         super(CCGame, self).process_config()
 
         if self.rgb:
