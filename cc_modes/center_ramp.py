@@ -47,30 +47,12 @@ class CenterRamp(ep.EP_Mode):
         # so I don't either
         # tick one on to the total of player shots on the right ramp
         self.game.increase_tracking('centerRampShots')
-        # check the chain status
-        if ep.last_shot == "left" or ep.last_shot == "right":
-            # if there have been at least 2 combo chain shots before, we take action
-            if self.game.combos.chain >= 2:
-            #  and that action is, increase the chain increase the chain
-                self.game.combos.increase_chain()
-        else:
-            # if not, set it back to one
-            self.game.combos.chain = 1
-
-        # hitting this switch counts as a made ramp - really
-        # score the points and mess with the combo
-        if self.game.combos.myTimer > 0:
-            # register the combo and reset the timer - returns true for use later
-            combo = self.game.combos.hit()
-        else:
-            # and turn on the combo timer - returns false for use later
-            combo = self.game.combos.start()
 
         # if a polly mode is runnning, let it go, man
         if self.game.peril or self.game.showdown.running or self.game.ambush.running:
             pass
         else:
-            self.award_ramp_score(combo)
+            self.award_ramp_score(self.game.combos.comboStatus)
 
         ## -- set the last switch hit --
         ep.last_switch = "centerRampMake"

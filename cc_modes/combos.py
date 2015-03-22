@@ -37,11 +37,14 @@ class Combos(ep.EP_Mode):
                             self.game.lamps.rightLoopCombo]
         self.default = self.game.user_settings['Gameplay (Feature)']['Combo Timer']
         self.myTimer = 0
+        self.colors = ["W","W","W","W","W"]
+        self.comboStatus = False
 
     def mode_started(self):
         self.myTimer = 0
         self.chain = 1
         self.colors = ["W","W","W","W","W"]
+        self.comboStatus = False
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -50,6 +53,66 @@ class Combos(ep.EP_Mode):
             self.myTimer = 0
             self.chain = 1
             self.layer = None
+
+    # Switches for combos
+    def sw_centerRampMake_active(self,sw):
+        # check the chain status
+        if ep.last_shot == "left" or ep.last_shot == "right":
+            # if there have been at least 2 combo chain shots before, we take action
+            if self.chain >= 2:
+            #  and that action is, increase the chain increase the chain
+                self.increase_chain()
+        else:
+            # if not, set it back to one
+            self.chain = 1
+            # reset the colors to whites.
+        self.set_colors("C","W")
+
+        # hitting this switch counts as a made ramp - really
+        # score the points and mess with the combo
+        if self.myTimer > 0:
+            # register the combo and reset the timer - returns true for use later
+            self.comboStatus = self.hit()
+        else:
+            # and turn on the combo timer - returns false for use later
+            self.comboStatus = self.start()
+
+    def sw_leftRampEnter_active(self,sw):
+        # check the chain status
+        if ep.last_shot == "right":
+            # if we're coming from the right ramp, chain goes up
+            self.increase_chain()
+            self.set_colors("L","B")
+        else:
+            # if we're not, reset the chain to one
+            self.chain = 1
+            self.set_colors("L","W")
+            # score the points and mess with the combo
+        if self.myTimer > 0:
+            # register the combo and reset the timer - returns true for use later
+            self.comboStatus = self.game.combos.hit()
+        else:
+            # and turn on the combo timer - returns false for use later
+            self.comboStatus = self.game.combos.start()
+
+    def sw_rightRampMake_active(self,sw):
+    # check the chain status
+        if ep.last_shot == "left":
+            # if we're coming from the left ramp, increase the chain
+            self.increase_chain()
+            self.set_colors("R","B")
+        else:
+            # if not, set it back to one
+            self.chain = 1
+            self.set_colors("R","W")
+
+            # score the points and mess with the combo
+        if self.myTimer > 0:
+            # register the combo and reset the timer - returns true for use later
+            self.comboStatus = self.game.combos.hit()
+        else:
+            # and turn on the combo timer - returns false for use later
+            self.comboStatus = self.game.combos.start()
 
     def timer(self):
         # just to be sure
@@ -66,6 +129,9 @@ class Combos(ep.EP_Mode):
     
     def end(self):
         self.lamp_update()
+        # set the chain back to one
+        self.chain = 1
+        ep.last_shot = "none"
         #print "Combos have ENDED"
     
     def start(self):
@@ -157,7 +223,7 @@ class Combos(ep.EP_Mode):
         self.clear_layer()
         self.cancel_delayed("Display")
 
-    def increase_chain(self,side):
+    def increase_chain(self):
         # up the count
         self.chain += 1
         # check it against the tracking and set the new if it's high - to be used for combo champ
@@ -165,11 +231,15 @@ class Combos(ep.EP_Mode):
             self.game.set_tracking('bigChain',self.chain)
 
     def set_colors(self,side,center):
+        for lamp in self.comboLights:
+            lamp.disable()
         # set the colors
         if side == "L":
             self.colors = ["W","W",center,"W","G"]
         elif side == "R":
             self.colors = ["W","G",center,"W","W"]
+        else:
+            self.colors = ["W","W","W","W","W"]
 
     def mini_display(self):
         if self.chain > 1:

@@ -40,22 +40,6 @@ class LeftRamp(ep.EP_Mode):
         # hitting this switch counts as a made ramp - really
         # tick one onto the total of ramp shots
         self.game.increase_tracking('leftRampShots')
-        # check the chain status
-        if ep.last_shot == "right":
-            # if we're coming from the right ramp, chain goes up
-            self.game.combos.increase_chain()
-            self.game.combos.set_colors("L","B")
-        else:
-            # if we're not, reset the chain to one
-            self.game.combos.chain = 1
-            self.game.combos.set_colors("L","W")
-        # score the points and mess with the combo
-        if self.game.combos.myTimer > 0:
-            # register the combo and reset the timer - returns true for use later
-            combo = self.game.combos.hit()
-        else:
-            # and turn on the combo timer - returns false for use later
-            combo = self.game.combos.start()
 
         # if a polly mode is running, let it go man
         if self.game.peril or self.game.showdown.running or self.game.ambush.running:
@@ -65,7 +49,7 @@ class LeftRamp(ep.EP_Mode):
             # play the river ramp sound
             self.game.sound.play(self.game.assets.sfx_leftRampEnter)
 
-            self.award_ramp_score(combo)
+            self.award_ramp_score(self.game.combos.comboStatus)
 
         ## -- set the last switch hit --
         ep.last_switch = "leftRampEnter"
