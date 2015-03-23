@@ -1497,6 +1497,8 @@ class CCGame(game.BasicGame):
                     else:
                         self.logger.warning('Configuration item named "%s" has no default_color attribute.  Defaulting to white.' % name)
                         item.color = 'W'
+                    # add busy flag for later
+                    self.is_not_busy = True
 
                     self.wsRGBs.add(name, item)
 

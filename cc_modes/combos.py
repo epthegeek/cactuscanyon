@@ -82,7 +82,7 @@ class Combos(ep.EP_Mode):
         if ep.last_shot == "right":
             # if we're coming from the right ramp, chain goes up
             self.increase_chain()
-            self.set_colors("L","B")
+            self.set_colors("L","R")
         else:
             # if we're not, reset the chain to one
             self.chain = 1
@@ -100,7 +100,7 @@ class Combos(ep.EP_Mode):
         if ep.last_shot == "left":
             # if we're coming from the left ramp, increase the chain
             self.increase_chain()
-            self.set_colors("R","B")
+            self.set_colors("R","R")
         else:
             # if not, set it back to one
             self.chain = 1
@@ -235,9 +235,9 @@ class Combos(ep.EP_Mode):
             lamp.disable()
         # set the colors
         if side == "L":
-            self.colors = ["W","W",center,"W","G"]
+            self.colors = ["W","W",center,"W","Y"]
         elif side == "R":
-            self.colors = ["W","G",center,"W","W"]
+            self.colors = ["W","Y",center,"W","W"]
         else:
             self.colors = ["W","W","W","W","W"]
 
