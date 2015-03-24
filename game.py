@@ -123,7 +123,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2015.02.26"
+        self.revision = "2015.03.23"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
@@ -1498,7 +1498,7 @@ class CCGame(game.BasicGame):
                         self.logger.warning('Configuration item named "%s" has no default_color attribute.  Defaulting to white.' % name)
                         item.color = 'W'
                     # add busy flag for later
-                    self.is_not_busy = True
+                    item.is_not_busy = True
 
                     self.wsRGBs.add(name, item)
 
