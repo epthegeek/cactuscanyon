@@ -124,11 +124,13 @@ class Combos(ep.EP_Mode):
         if self.myTimer <= 0:
             self.end()
         else:
-            self.lamp_update()
+            # if we're at 2 or 1 second left, refresh the combo schedules.
+            if self.myTimer == 2 or self.myTimer == 1:
+                self.game.lamp_control.combos(mode='Timer')
             self.delay(name="Combo Timer",delay=1,handler=self.timer)
     
     def end(self):
-        self.lamp_update()
+        self.game.lamp_control.disable_combos()
         # set the chain back to one
         self.chain = 1
         ep.last_shot = "none"
@@ -142,7 +144,7 @@ class Combos(ep.EP_Mode):
         # set the timer at the max settings from the game
         self.myTimer = self.default
         # turn the lights on
-        self.lamp_update()
+        self.game.lamp_control.combos(mode='Timer')
         #loop to the timer
         self.delay(name="Combo Timer",delay=1,handler=self.timer)
         # send this back to what called it for use in determining if in a combo or not
@@ -160,8 +162,12 @@ class Combos(ep.EP_Mode):
 
         # cancel the current combo_timer delay
         self.cancel_delayed("Combo Timer")
-        # add one to the combo total and reset the timer
-        self.myTimer = self.default
+        # add one to the combo total and reset the timer - if at 2 or less seconds already, refresh the lamps
+        if self.myTimer <= 2:
+            self.myTimer = self.default
+            self.game.lamp_control.combos(mode='Timer')
+        else:
+            self.myTimer = self.default
         # add the new combo and check the badge
         self.add_combo()
         # then loop back to the timer
