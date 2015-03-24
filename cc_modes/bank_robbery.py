@@ -171,13 +171,6 @@ class BankRobbery(ep.EP_Mode):
             return
         # kill the mode timer for good measure
         self.cancel_delayed("Mode Timer")
-        # combos
-        if self.game.combos.myTimer > 0:
-        # register the combo and reset the timer - returns true for use later
-            combo = self.game.combos.hit()
-        else:
-            # and turn on the combo timer - returns false for use later
-            combo = self.game.combos.start()
 
         if self.isActive[shot]:
             # if we hit an active shot, it's a hit
@@ -456,6 +449,7 @@ class BankRobbery(ep.EP_Mode):
         # if wins are not required then the ramp goes to 'done' even if lost
         else:
             self.game.set_tracking('rightRampStage',5)
+        self.game.combos.unbusy_lamps()
         self.lamp_update()
         self.end_save_polly()
 

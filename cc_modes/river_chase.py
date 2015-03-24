@@ -155,14 +155,6 @@ class RiverChase(ep.EP_Mode):
         self.game.sound.play(self.game.assets.sfx_horse)
 
     def process_shot(self):
-        # combos
-        if self.game.combos.myTimer > 0:
-        # register the combo and reset the timer - returns true for use later
-            combo = self.game.combos.hit()
-        else:
-            # and turn on the combo timer - returns false for use later
-            combo = self.game.combos.start()
-
         # count the shot
         self.shotsSoFar += 1
         if self.shotsSoFar >= self.shotsToWin and not self.won:
@@ -381,6 +373,7 @@ class RiverChase(ep.EP_Mode):
         else:
             self.game.set_tracking('leftRampStage',5)
         self.shotsSoFar = 0
+        self.game.combos.unbusy_lamps()
         self.lamp_update()
         self.end_save_polly()
 

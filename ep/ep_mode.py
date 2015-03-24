@@ -400,6 +400,7 @@ class EP_Mode(object):
         self.__delayed = []
 
     def lamp_update(self):
+        print "Lamp Update Called!"
         if self.game.lamp_control.lights_out == True:
             pass
         else:

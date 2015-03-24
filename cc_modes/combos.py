@@ -86,7 +86,7 @@ class Combos(ep.EP_Mode):
         else:
             # if we're not, reset the chain to one
             self.chain = 1
-            self.set_colors("L","W")
+            self.set_colors("L","R")
             # score the points and mess with the combo
         if self.myTimer > 0:
             # register the combo and reset the timer - returns true for use later
@@ -232,12 +232,13 @@ class Combos(ep.EP_Mode):
 
     def set_colors(self,side,center):
         for lamp in self.comboLights:
-            lamp.disable()
+            if lamp.is_not_busy:
+                lamp.disable()
         # set the colors
         if side == "L":
-            self.colors = ["W","W",center,"W","Y"]
+            self.colors = ["R","W",center,"W","W"]
         elif side == "R":
-            self.colors = ["W","Y",center,"W","W"]
+            self.colors = ["W","R",center,"W","W"]
         else:
             self.colors = ["W","W","W","W","W"]
 
@@ -251,3 +252,7 @@ class Combos(ep.EP_Mode):
             combined = dmd.GroupedLayer(128,32, [backdrop,textLayer])
             combined.composite_op = "blacksrc"
             self.game.interrupter.broadcast(combined,1.5)
+
+    def unbusy_lamps(self):
+        for lamp in self.comboLights:
+            lamp.is_not_busy = True
