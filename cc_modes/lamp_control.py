@@ -1150,7 +1150,7 @@ class LampControl(ep.EP_Mode):
             lamp.disable()
 
     def setColor(self,lamp,busy=True,color="W"):
-        lamp.disble()
+        lamp.disable()
         # default action is to set the lamp NOT busy
         lamp.is_not_busy = busy
         # set the lamp to a color
