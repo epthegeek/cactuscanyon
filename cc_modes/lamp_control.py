@@ -269,7 +269,9 @@ class LampControl(ep.EP_Mode):
         # |____/ \__,_|_|\___/ \___/|_| |_|
         #
         # if bionic is ready, both lights flash fast
-        if bionicStatus == "READY":
+        if self.game.doubler.ready:
+            self.saloon_flash(1,color="B")
+        elif bionicStatus == "READY":
             self.saloon_flash(1,color="R")
         # if drunk multiball is ready - flash the arrow
         elif drunkStatus == "READY":
