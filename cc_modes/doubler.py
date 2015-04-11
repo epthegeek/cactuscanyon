@@ -28,6 +28,7 @@ class Doubler(ep.EP_Mode):
         self.baseTime = self.game.user_settings['Gameplay (Feature)']['2X Scoring Timer'] + 1
         self.timer = 0
         self.hitsRequired = self.game.user_settings['Gameplay (Feature)']['2X Scoring Hits']
+        self.ready = False
 
     def mode_started(self):
         # set up the status
