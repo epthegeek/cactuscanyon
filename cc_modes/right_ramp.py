@@ -51,11 +51,9 @@ class RightRamp(ep.EP_Mode):
         if ep.last_shot == "left":
             # if we're coming from the left ramp, increase the chain
             self.game.combos.increase_chain()
-            self.game.combos.set_colors("R","B")
         else:
             # if not, set it back to one
             self.game.combos.chain = 1
-            self.game.combos.set_colors("R","W")
 
     # score the points and mess with the combo
         if self.game.combos.myTimer > 0:

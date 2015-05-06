@@ -45,7 +45,6 @@ class LampControl(ep.EP_Mode):
                             self.game.lamps.centerRampCombo,
                             self.game.lamps.leftLoopCombo,
                             self.game.lamps.rightLoopCombo]
-        self.comboColor = ["M","B","G","M","B"]
         # bad guys
         self.badGuyLamps = [self.game.lamps.badGuyL0,
                       self.game.lamps.badGuyL1,
@@ -538,7 +537,6 @@ class LampControl(ep.EP_Mode):
             # if bank robbery is running - lights are only on if active
             if self.game.bank_robbery.running:
                 if not self.game.bank_robbery.isActive[0]:
-                    self.game.lamps.leftRampCombo.is_not_busy = True
                     return
             self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
@@ -651,8 +649,6 @@ class LampControl(ep.EP_Mode):
                     self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
                     self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
                     self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
-                else:
-                    self.game.lamps.centerRampCombo.is_not_busy = True
             else:
                 self.game.lamps.centerRampSavePolly.schedule(0x00FFFF00)
                 self.game.lamps.centerRampStopTrain.schedule(0x0000FFFF)
@@ -863,7 +859,6 @@ class LampControl(ep.EP_Mode):
         elif mode == "Polly":
             if self.game.bank_robbery.running:
                 if not self.game.bank_robbery.isActive[2]:
-                    self.game.lamps.rightRampCombo.is_not_busy = True
                     return
             self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
@@ -908,7 +903,6 @@ class LampControl(ep.EP_Mode):
     def combos(self,mode='Timer'):
         # kill 'em first - they're not in the main shutoff
         for lamp in self.comboLights:
-            if lamp.is_not_busy:
                 lamp.disable()
         # if lights out party mode is on - bail
         if self.lights_out == True:
@@ -919,30 +913,24 @@ class LampControl(ep.EP_Mode):
             if self.game.gm_multiball.running or self.game.gunfight.running:
                 return
             value = self.game.combos.myTimer
-            # set the colors with the value from combos mode
-            self.setComboColor(self.game.combos.colors)
             # if timer is greater than 2, slow blink
             if value > 2:
                 for myLamp in self.comboLights:
-                    if myLamp.is_not_busy:
-                        myLamp.schedule(0x0000FFFF)
+                    myLamp.schedule(0x0000FFFF)
             # if timer is AT 2, speed it up
             elif value == 2:
                 for myLamp in self.comboLights:
-                    if myLamp.is_not_busy:
-                        myLamp.schedule(0x00FF00FF)
+                    myLamp.schedule(0x00FF00FF)
             # one second left, speed it up even more
             elif value == 1:
                 for myLamp in self.comboLights:
-                    if myLamp.is_not_busy:
-                        myLamp.schedule(0x0F0F0F0F)
+                    myLamp.schedule(0x0F0F0F0F)
             else:
                 pass
 
             # high noon check
         elif mode == 'highNoon':
             for i in range(0,5,1):
-                self.setColor(self.comboLights[i],color=self.comboColor[i])
                 self.comboLights[i].schedule(0x00FF00FF)
 
         # if status is multiball ...
@@ -950,7 +938,6 @@ class LampControl(ep.EP_Mode):
             # loop through and turn on the appropriate lights
             for i in range(0,5,1):
                 if self.game.show_tracking('jackpotStatus',i):
-                    self.setColor(self.comboLights[i],color=self.comboColor[i])
                     self.comboLights[i].schedule(0x000F000F)
             ## if status is anything other than ON bail here
 
@@ -958,7 +945,6 @@ class LampControl(ep.EP_Mode):
             # loop through and turn on the appropriate light
             for i in range(0,5,1):
                 if self.game.stampede.active == i:
-                    self.setColor(self.comboLights[i],color=self.comboColor[i])
                     self.comboLights[i].schedule(0x000F000F)
 
         else:
@@ -966,8 +952,7 @@ class LampControl(ep.EP_Mode):
 
     def disable_combos(self):
         for myLamp in self.comboLights:
-            if myLamp.is_not_busy:
-                myLamp.disable()
+            myLamp.disable()
 
 
     #  ____            _
@@ -1035,12 +1020,10 @@ class LampControl(ep.EP_Mode):
             self.rankLamps[lamp].enable()
 
 
-    def saloon_flash(self,speed=0,color="W"):
+    def saloon_flash(self,speed=0):
         # if lights out party mode is on - bail
         if self.lights_out == True:
             return
-        self.game.lamps.bountySaloon.disable()
-        self.game.lamps.bountySaloon.color = color
 
         if speed == 0:
             self.game.lamps.saloonArrow.schedule(0x00FF00FF)
@@ -1133,15 +1116,4 @@ class LampControl(ep.EP_Mode):
         for lamp in self.game.lamps:
             lamp.disable()
 
-    def setColor(self,lamp,busy=True,color="W"):
-        lamp.disable()
-        # default action is to set the lamp NOT busy
-        lamp.is_not_busy = busy
-        # set the lamp to a color
-        lamp.color = color
 
-    # combos order: Left Loop, Left Ramp, Center Ramp, Right Loop, Right Ramp
-    def setComboColor(self,colors=["W","W","W","W","W"]):
-        for i in range(0,5,1):
-            if self.comboLights[i].is_not_busy:
-                self.comboLights[i].color = colors[i]

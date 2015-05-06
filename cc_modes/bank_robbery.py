@@ -449,7 +449,6 @@ class BankRobbery(ep.EP_Mode):
         # if wins are not required then the ramp goes to 'done' even if lost
         else:
             self.game.set_tracking('rightRampStage',5)
-        self.game.combos.unbusy_lamps()
         self.lamp_update()
         self.end_save_polly()
 

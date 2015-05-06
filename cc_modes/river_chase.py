@@ -373,7 +373,6 @@ class RiverChase(ep.EP_Mode):
         else:
             self.game.set_tracking('leftRampStage',5)
         self.shotsSoFar = 0
-        self.game.combos.unbusy_lamps()
         self.lamp_update()
         self.end_save_polly()
 

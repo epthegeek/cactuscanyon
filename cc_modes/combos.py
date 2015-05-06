@@ -37,13 +37,11 @@ class Combos(ep.EP_Mode):
                             self.game.lamps.rightLoopCombo]
         self.default = self.game.user_settings['Gameplay (Feature)']['Combo Timer']
         self.myTimer = 0
-        self.colors = ["W","W","W","W","W"]
         self.comboStatus = False
 
     def mode_started(self):
         self.myTimer = 0
         self.chain = 1
-        self.colors = ["W","W","W","W","W"]
         self.comboStatus = False
 
     def ball_drained(self):
@@ -65,8 +63,6 @@ class Combos(ep.EP_Mode):
         else:
             # if not, set it back to one
             self.chain = 1
-            # reset the colors to whites.
-        self.set_colors("C","W")
 
         # hitting this switch counts as a made ramp - really
         # score the points and mess with the combo
@@ -82,11 +78,9 @@ class Combos(ep.EP_Mode):
         if ep.last_shot == "right":
             # if we're coming from the right ramp, chain goes up
             self.increase_chain()
-            self.set_colors("L","R")
         else:
             # if we're not, reset the chain to one
             self.chain = 1
-            self.set_colors("L","R")
             # score the points and mess with the combo
         if self.myTimer > 0:
             # register the combo and reset the timer - returns true for use later
@@ -100,11 +94,9 @@ class Combos(ep.EP_Mode):
         if ep.last_shot == "left":
             # if we're coming from the left ramp, increase the chain
             self.increase_chain()
-            self.set_colors("R","R")
         else:
             # if not, set it back to one
             self.chain = 1
-            self.set_colors("R","W")
 
             # score the points and mess with the combo
         if self.myTimer > 0:
@@ -198,8 +190,6 @@ class Combos(ep.EP_Mode):
             if ep.last_shot == "center":
                 textString = str(self.chain) + "-WAY SUPER COMBO"
                 points = 25000 * self.chain
-                # reset the colors to white
-                self.colors = ["W","W","W","W","W"]
             else:
                 textString = str(self.chain) + "-WAY COMBO"
                 points = 50000
@@ -236,17 +226,6 @@ class Combos(ep.EP_Mode):
         if self.chain > self.game.show_tracking('bigChain'):
             self.game.set_tracking('bigChain',self.chain)
 
-    def set_colors(self,side,center):
-        for lamp in self.comboLights:
-            if lamp.is_not_busy:
-                lamp.disable()
-        # set the colors
-        if side == "L":
-            self.colors = ["R","W",center,"W","W"]
-        elif side == "R":
-            self.colors = ["W","R",center,"W","W"]
-        else:
-            self.colors = ["W","W","W","W","W"]
 
     def mini_display(self):
         if self.chain > 1:
@@ -259,6 +238,3 @@ class Combos(ep.EP_Mode):
             combined.composite_op = "blacksrc"
             self.game.interrupter.broadcast(combined,1.5)
 
-    def unbusy_lamps(self):
-        for lamp in self.comboLights:
-            lamp.is_not_busy = True
