@@ -72,6 +72,10 @@ class Combos(ep.EP_Mode):
         else:
             # and turn on the combo timer - returns false for use later
             self.comboStatus = self.start()
+        ## -- set the last switch hit --
+        ep.last_switch = "centerRampMake"
+        ## -- set the last shot for combos
+        ep.last_shot = "center"
 
     def sw_leftRampEnter_active(self,sw):
         # check the chain status
@@ -88,6 +92,9 @@ class Combos(ep.EP_Mode):
         else:
             # and turn on the combo timer - returns false for use later
             self.comboStatus = self.game.combos.start()
+        ## -- set the last switch hit --
+        ep.last_switch = "leftRampEnter"
+        ep.last_shot = "left"
 
     def sw_rightRampMake_active(self,sw):
     # check the chain status
@@ -105,6 +112,9 @@ class Combos(ep.EP_Mode):
         else:
             # and turn on the combo timer - returns false for use later
             self.comboStatus = self.game.combos.start()
+        ## -- set the last switch hit --
+        ep.last_switch = "rightRampMake"
+        ep.last_shot = "right"
 
     def timer(self):
         # just to be sure
