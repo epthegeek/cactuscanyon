@@ -270,13 +270,11 @@ class LampControl(ep.EP_Mode):
         #
         # if bionic is ready, both lights flash fast
         if self.game.doubler.ready:
-            self.saloon_flash(1,color="B")
+            self.saloon_flash(1)
         elif bionicStatus == "READY":
-            self.saloon_flash(1,color="R")
+            self.saloon_flash(1)
         # if drunk multiball is ready - flash the arrow
         elif drunkStatus == "READY":
-            self.game.lamps.bountySaloon.disable()
-            self.game.lamps.bountySaloon.color = "Y"
             self.game.lamps.bountySaloon.schedule(0xF0F0F0F0)
         # Otherwise, if there's a live bart bro, turn on the saloon arrow
         elif bartStatus == 'RUNNING' or bartStatus == 'LAST':
@@ -284,11 +282,6 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.saloonArrow.enable()
         else:
             pass
-        # if a bounty is lit, turn the RGB green
-        if self.game.show_tracking('isBountyLit') and bionicStatus != "READY" and drunkStatus != "READY":
-            self.game.lamps.bountySaloon.disable()
-            self.game.lamps.bountySaloon.color = "G"
-            self.game.lamps.bountySaloon.enable()
 
         #  ____                                ____ _           _
         # | __ )  ___  __ _  ___ ___  _ __    / ___| |_   _ ___| |_ ___ _ __
@@ -547,10 +540,6 @@ class LampControl(ep.EP_Mode):
                 if not self.game.bank_robbery.isActive[0]:
                     self.game.lamps.leftRampCombo.is_not_busy = True
                     return
-            if self.game.rgb:
-                # setcolor disables the existing lamp, sets the busy flag, then sets the color
-                self.setColor(self.game.lamps.leftRampCombo,False,"B")
-                self.game.lamps.leftRampCombo.schedule(0xFF00FF00)
             self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
@@ -654,26 +643,17 @@ class LampControl(ep.EP_Mode):
 
         elif mode == "Polly":
             if self.game.river_chase.running:
-                if self.game.rgb:
-                    self.setColor(self.game.lamps.centerRampCombo,False,"G")
-                    self.game.lamps.centerRampCombo.schedule(0xFF00FF00)
                 self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
                 self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
                 self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
             elif self.game.bank_robbery.running:
                 if self.game.bank_robbery.isActive[1]:
-                    if self.game.rgb:
-                        self.setColor(self.game.lamps.centerRampCombo,False,"G")
-                        self.game.lamps.centerRampCombo.schedule(0xFF00FF00)
                     self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
                     self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
                     self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
                 else:
                     self.game.lamps.centerRampCombo.is_not_busy = True
             else:
-                if self.game.rgb:
-                    self.setColor(self.game.lamps.centerRampCombo,False,"B")
-                    self.game.lamps.centerRampCombo.schedule(0xFFFF0000)
                 self.game.lamps.centerRampSavePolly.schedule(0x00FFFF00)
                 self.game.lamps.centerRampStopTrain.schedule(0x0000FFFF)
                 self.game.lamps.centerRampCatchTrain.schedule(0xFF0000FF)
@@ -885,10 +865,6 @@ class LampControl(ep.EP_Mode):
                 if not self.game.bank_robbery.isActive[2]:
                     self.game.lamps.rightRampCombo.is_not_busy = True
                     return
-            if self.game.rgb:
-                # setcolor disables the existing lamp, sets the busy flag, then sets the color
-                self.setColor(self.game.lamps.rightRampCombo,False,"M")
-                self.game.lamps.rightRampCombo.schedule(0xFF00FF00)
             self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)

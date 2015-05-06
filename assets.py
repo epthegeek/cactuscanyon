@@ -32,11 +32,7 @@ class Assets():
         print "Color Desktop Assets: " + str(color_desktop)
 
         # Paths
-        # if there's an rgb entry in the config, use the rgb lampshows
-        if self.game.rgb:
-            self.lampshows_path = curr_file_path + "/lampshows_rgb/"
-        else:
-            self.lampshows_path = curr_file_path + "/lampshows/"
+        self.lampshows_path = curr_file_path + "/lampshows/"
         self.sounds_path = curr_file_path + "/sounds/"
         self.sfx_path = curr_file_path + "/sounds/sfx/"
         self.music_path = curr_file_path + "/sounds/music/"
