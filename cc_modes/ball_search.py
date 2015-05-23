@@ -106,6 +106,9 @@ class BallSearch(ep.EP_Mode):
             delay += .150
         self.delay(name='start_special_handler_modes', event_type=None, delay=delay, handler=self.start_special_handler_modes)
 
+        # shake bart around
+        self.game.bart.hardMove()
+
         # home the mountain
         self.game.mountain.reset_toy(True)
         # drop the gunfight posts
