@@ -505,11 +505,12 @@ class Bart(ep.EP_Mode):
         self.game.coils.moveBart.pulse(25)
 
     def hardMove(self,repeat=1):
-        if repeat >= 3:
+        if repeat >= 4:
             pass
         else:
-            self.game.coils.moveBart.pules(50)
-            self.delay(delay=0.3,handler=self.hardMove,param=(repeat+1))
+            self.game.coils.moveBart.pulse(50)
+            repeat += 1
+            self.delay(delay=0.3,handler=self.hardMove,param=repeat)
 
     def hat(self):
         self.game.coils.moveBartHat.pulse(30)
