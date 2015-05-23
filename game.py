@@ -469,6 +469,8 @@ class CCGame(game.BasicGame):
     def start_game(self,forceMoonlight=False):
         # dejected quote flag - resets at game start
         self.dejected = True
+        # reset the slam tilt
+        self.base.slammed = False
         # Remove the party mode attract display
         if self.party_setting != 'Disabled':
             self.party_mode.clear_layer()
@@ -805,8 +807,12 @@ class CCGame(game.BasicGame):
         # turn off last call in limited flip party mode
         if self.party_setting == "Flip Ct":
             lastCall = False
+        # If slammed, go straight back to attract mode
+        if self.game.base.slammed:
+            self.game.base.slammed = False
+            self.modes.add(self.attract_mode)
         # if replays are enabled, and last call is not, then there may be last call to do if someone won
-        if self.replays and not lastCall and self.user_settings['Machine (Standard)']['Replay Award'] == 'Last Call' and not self.party_setting == "Flip Ct":
+        elif self.replays and not lastCall and self.user_settings['Machine (Standard)']['Replay Award'] == 'Last Call' and not self.party_setting == "Flip Ct":
             winners = 0
             lastCallers = []
             # check to see if anybody won
