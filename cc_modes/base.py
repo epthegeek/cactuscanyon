@@ -132,7 +132,7 @@ class BaseGameMode(ep.EP_Mode):
             self.game.ball_search.disable()
             # turn off the flippers
             self.game.enable_flippers(False)
-            if self.game.show_tracking('tiltStatus') < 3:
+            if self.game.show_tracking('tiltStatus') < self.game.tilt_warnings:
                 # play the ball end riff
                 self.game.sound.play(self.game.assets.sfx_ballEnd)
                 # go check the bonus - after that we'll finish the ball
@@ -216,7 +216,7 @@ class BaseGameMode(ep.EP_Mode):
         else:
             if self.game.user_settings['Gameplay (Feature)']['Party Mode'] == 'Spiked':
                 # set the tilt all the way up and then run it
-                self.game.set_tracking('tiltStatus',3)
+                self.game.set_tracking('tiltStatus',self.game.tilt_warnings)
                 self.tilt()
             else:
                 print "Beer Mug Hit"
@@ -382,10 +382,10 @@ class BaseGameMode(ep.EP_Mode):
         status = self.game.increase_tracking('tiltStatus')
         print "TILT STATUS: " + str(status)
         # if that puts us at three, time to tilt
-        if status == 3:
+        if status == self.game.tilt_warnings:
             self.tilt()
         # if it keeps banging, ignore it
-        elif status > 3:
+        elif status > self.game.tilt_warnings:
             pass
         # for 2 or 1 hand off to interrupter jones
         else:
@@ -394,7 +394,7 @@ class BaseGameMode(ep.EP_Mode):
     def sw_tilt_active(self,sw):
         # slam tilt switch
         self.slammed = True
-        self.game.set_tracking('tiltStatus',3)
+        self.game.set_tracking('tiltStatus',self.game.tilt_warnings)
         # pass the slammed state to the tilt routine
         self.tilt(self.slammed)
 
@@ -402,7 +402,7 @@ class BaseGameMode(ep.EP_Mode):
         # Process tilt.
         # First check to make sure tilt hasn't already been processed once.
         # No need to do this stuff again if for some reason tilt already occurred.
-        if self.game.show_tracking('tiltStatus') >= 3:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
             # disable status
             self.game.statusOK = False
 

@@ -168,6 +168,8 @@ class CCGame(game.BasicGame):
             self.useKnocker = True
         # check the replay settings
         self.replays = self.user_settings['Machine (Standard)']['Replays'] == "Enabled"
+        # number of tilt warnings
+        self.tilt_warnings = self.user_settings['Machine (Standard)']['Tilt Warnings']
 
         # set the volume per the settings
         self.sound.music_offset = self.user_settings['Sound']['Music volume offset']

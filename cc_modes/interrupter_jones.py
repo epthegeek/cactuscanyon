@@ -103,7 +103,11 @@ class Interrupter(ep.EP_Mode):
         else:
             print "Display"
             #add a display layer and add a delayed removal of it.
-            line1 = ep.EP_TextLayer(128/2, 10, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R",color=ep.RED)
+            if status > 2:
+                string = "D A N G E R  X  " . str(status)
+            else:
+                string = "D A N G E R"
+            line1 = ep.EP_TextLayer(128/2, 10, self.game.assets.font_dangerFont, "center", opaque=False).set_text(string,color=ep.RED)
             line1.composite_op = "blacksrc"
             self.layer = line1
             #play sound
