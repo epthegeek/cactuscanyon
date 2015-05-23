@@ -151,7 +151,7 @@ class BaseGameMode(ep.EP_Mode):
                     # if there was a slam tilt - reset all the tilt indicators and end the game
                     if self.slammed:
                         self.slammed = False
-                        self.set_tracking('tiltStatus',0)
+                        self.game.set_tracking('tiltStatus',0)
                         self.delay(delay=2,handler=lambda: self.wait_for_queue(self.game.end_game))
                     else:
                         self.delay(delay=2,handler=lambda: self.wait_for_queue(self.game.ball_ended))
@@ -400,6 +400,8 @@ class BaseGameMode(ep.EP_Mode):
 
     def tilt(self,slam=False):
         # Process tilt.
+        # disable the ball save
+        self.game.trough.disable_ball_save()
         # First check to make sure tilt hasn't already been processed once.
         # No need to do this stuff again if for some reason tilt already occurred.
         if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
