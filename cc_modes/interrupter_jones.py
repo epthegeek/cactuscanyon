@@ -104,7 +104,7 @@ class Interrupter(ep.EP_Mode):
             print "Display"
             #add a display layer and add a delayed removal of it.
             if status > 2:
-                string = "D A N G E R  X  " . str(status)
+                string = "D A N G E R  X  " + str(status)
             else:
                 string = "D A N G E R"
             line1 = ep.EP_TextLayer(128/2, 10, self.game.assets.font_dangerFont, "center", opaque=False).set_text(string,color=ep.RED)
