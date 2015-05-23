@@ -1827,7 +1827,7 @@ class Assets():
         self.dmd_ssPop = dmd.Animation().load(self.dmd_path+ 'ss_bubbles2.dmd')
 
         self.dmd_franksBackdrop = dmd.Animation().load(self.dmd_path+'beans_n_franks.dmd')
-
+        self.dmd_slammed = dmd.Animation().load(self.dmd_path+'slammed.dmd')
 
         # Shared Paths
         self.shared_dmd_path = curr_file_path + "/shared/dmd/"
