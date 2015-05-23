@@ -119,7 +119,7 @@ PRSwitches:
         tags: Standard,1,8
     tilt:
         number: S21
-        label: Tilt Plumb
+        label: Slam Tilt
         tags: Standard,2,1
     coinDoorClosed:
         number: S22
@@ -731,7 +731,7 @@ PRLamps:
         number: G05
 
 PRBallSave:
-    pulseCoils: [minePopper, saloonPopper, leftJetBumper, rightJetBumper, bottomJetBumper,moveBart, moveBartHat,moveBart]
+    pulseCoils: [minePopper, saloonPopper, leftJetBumper, rightJetBumper, bottomJetBumper,leftSlingshot,rightSlingshot]
     resetSwitches:
         rightOutlane: open
         leftOutlane: open

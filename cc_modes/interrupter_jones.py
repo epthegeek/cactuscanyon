@@ -110,14 +110,22 @@ class Interrupter(ep.EP_Mode):
             self.play_tilt_sound()
             self.delay("Display",delay=1,handler=self.clear_layer)
 
-    def tilt_display(self):
+    def tilt_display(self,slam=False):
         self.cancel_delayed("Display")
-        # build a tilt graphic
-        tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT",color=ep.RED)
-        # Display the tilt graphic
-        self.layer = tiltLayer
-        # play the tilt quote
-        self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.quote_tilt)
+
+        if slam:
+            # slam display goes here
+            tiltLayer = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_slammed.frames[0])
+            # Display the tilt graphic
+            self.layer = tiltLayer
+            self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.quote_dejected)
+        else:
+            # build a tilt graphic
+            tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT",color=ep.RED)
+            # Display the tilt graphic
+            self.layer = tiltLayer
+            # play the tilt quote
+            self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.quote_tilt)
 
     def tilted(self):
         print "Interrupter Passing Tilt"
