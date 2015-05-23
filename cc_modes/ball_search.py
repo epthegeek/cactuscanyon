@@ -104,6 +104,11 @@ class BallSearch(ep.EP_Mode):
         for coil in self.coils:
             self.delay(name='search_coils', event_type=None, delay=delay, handler=self.pop_coil, param=str(coil))
             delay += .150
+        # cycle everything twice
+        for coil in self.coils:
+            self.delay(name='search_coils', event_type=None, delay=delay, handler=self.pop_coil, param=str(coil))
+            delay += .150
+
         self.delay(name='start_special_handler_modes', event_type=None, delay=delay, handler=self.start_special_handler_modes)
 
         # shake bart around
@@ -111,12 +116,23 @@ class BallSearch(ep.EP_Mode):
 
         # home the mountain
         self.game.mountain.reset_toy(True)
-        # drop the gunfight posts
+
+        # move the train
+        self.game.train.reset_toy()
+
+        # drop the gunfight posts and pulse
         self.game.coils.leftGunFightPost.disable()
+        self.game.coils.leftGunFightPost.pulse()
         self.game.coils.rightGunFightPost.disable()
-        # kill the drop targets - if the game is running
+        self.game.coils.rightGunFightPost.pulse()
+
+        # kill the drop targets - if the game is running and pulse
         for coil in self.badGuyCoils:
             coil.disable()
+        delay = .2
+        for coil in self.badGuyCoils:
+            self.delay(name='search targets',delay=delay,handler=coil.pulse())
+            delay += .2
 
         if completion_wait_time != 0:
             pass
