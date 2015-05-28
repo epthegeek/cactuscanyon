@@ -150,8 +150,8 @@ class BaseGameMode(ep.EP_Mode):
                 else:
                     # if there was a slam tilt - reset all the tilt indicators and end the game
                     if self.slammed:
-                        self.game.set_tracking('tiltStatus',0)
-                        self.delay(delay=2,handler=lambda: self.wait_for_queue(self.game.end_game))
+                        # if we got slammed, reset the whole system
+                        self.game.reset()
                     else:
                         self.delay(delay=2,handler=lambda: self.wait_for_queue(self.game.ball_ended))
 

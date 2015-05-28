@@ -807,12 +807,8 @@ class CCGame(game.BasicGame):
         # turn off last call in limited flip party mode
         if self.party_setting == "Flip Ct":
             lastCall = False
-        # If slammed, go straight back to attract mode
-        if self.game.base.slammed:
-            self.game.base.slammed = False
-            self.modes.add(self.attract_mode)
         # if replays are enabled, and last call is not, then there may be last call to do if someone won
-        elif self.replays and not lastCall and self.user_settings['Machine (Standard)']['Replay Award'] == 'Last Call' and not self.party_setting == "Flip Ct":
+        if self.replays and not lastCall and self.user_settings['Machine (Standard)']['Replay Award'] == 'Last Call' and not self.party_setting == "Flip Ct":
             winners = 0
             lastCallers = []
             # check to see if anybody won
