@@ -1138,7 +1138,6 @@ class BaseGameMode(ep.EP_Mode):
         print ""
 
     def sw_phantomSwitch4_active(self,sw):
-        #self.game.modes.add(self.game.franks_display)
         pass
 
     def guns_flash(self,type=1):
