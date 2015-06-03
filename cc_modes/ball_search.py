@@ -131,7 +131,7 @@ class BallSearch(ep.EP_Mode):
             coil.disable()
         delay = .2
         for coil in self.badGuyCoils:
-            self.delay(name='search targets',delay=delay,handler=coil.pulse())
+            self.delay(name='search targets',delay=delay,handler=coil.pulse,param=12)
             delay += .2
 
         if completion_wait_time != 0:
