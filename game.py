@@ -104,6 +104,8 @@ class CCGame(game.BasicGame):
         """Reset the game state as a slam tilt might."""
         self.dejected = True
         self.ball = 0
+        # used to prevent music start during slam tilt
+        self.mute = False
         self.old_players = []
         self.old_players = self.players[:]
         self.players = []
@@ -469,8 +471,6 @@ class CCGame(game.BasicGame):
     def start_game(self,forceMoonlight=False):
         # dejected quote flag - resets at game start
         self.dejected = True
-        # reset the slam tilt
-        self.base.slammed = False
         # Remove the party mode attract display
         if self.party_setting != 'Disabled':
             self.party_mode.clear_layer()
@@ -1424,4 +1424,5 @@ class CCGame(game.BasicGame):
         # if the doubler is loaded, but not started, remove it
         if self.doubler in self.modes and not self.doubler.running:
             self.doubler.unload()
+
 

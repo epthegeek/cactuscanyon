@@ -583,6 +583,8 @@ class Assets():
         self.sfx_dinnerBell = 'sfx_dinnerBell'
         self.game.sound.register_sound(self.sfx_dinnerBell, self.sfx_path + "dinner_bell.wav")
 
+        self.sfx_slam = 'sfx_slam'
+        self.game.sound.register_sound(self.sfx_slam, self.sfx_path + "slam.wav")
 
         # Quotes
         self.quote_ssWin = 'quote_ssWin'

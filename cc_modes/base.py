@@ -56,8 +56,6 @@ class BaseGameMode(ep.EP_Mode):
         self.keys_index = {'beer_mug':list(range(len(self.game.sound.sounds[self.game.assets.quote_beerMug])))}
         self.counts_index = {'beer_mug':0}
         random.shuffle(self.keys_index['beer_mug'])
-        # For slam tilt
-        self.slammed = False
 
     def mode_started(self):
         # set the number for the hits to the beer mug to start drunk multiball
@@ -148,12 +146,7 @@ class BaseGameMode(ep.EP_Mode):
                     self.game.moonlight.tilted = False
                     self.delay(delay=2,handler=self.game.ball_starting)
                 else:
-                    # if there was a slam tilt - reset all the tilt indicators and end the game
-                    if self.slammed:
-                        # if we got slammed, reset the whole system
-                        self.game.reset()
-                    else:
-                        self.delay(delay=2,handler=lambda: self.wait_for_queue(self.game.ball_ended))
+                    self.delay(delay=2,handler=lambda: self.wait_for_queue(self.game.ball_ended))
 
     def sw_startButton_active(self, sw):
         # if start button is pressed during the game
@@ -390,14 +383,7 @@ class BaseGameMode(ep.EP_Mode):
         else:
             self.game.interrupter.tilt_danger(status)
 
-    def sw_tilt_active(self,sw):
-        # slam tilt switch
-        self.slammed = True
-        self.game.set_tracking('tiltStatus',self.game.tilt_warnings)
-        # pass the slammed state to the tilt routine
-        self.tilt(self.slammed)
-
-    def tilt(self,slam=False):
+    def tilt(self):
         # Process tilt.
         # disable the ball save
         self.game.trough.disable_ball_save()
@@ -409,8 +395,7 @@ class BaseGameMode(ep.EP_Mode):
 
             self.game.game_data['Audits']['Tilts'] += 1
 
-            # pass the slam status
-            self.game.interrupter.tilt_display(slam)
+            self.game.interrupter.tilt_display()
 
             # Disable flippers so the ball will drain.
             self.game.enable_flippers(enable=False)

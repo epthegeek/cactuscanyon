@@ -175,3 +175,10 @@ class ScoreDisplay(ep.EP_Mode):
 
     def mode_stopped(self):
         pass
+
+    # Throwing the slam tilt in here so it's always watching
+    ## SLAM TILT
+    def sw_tilt_active(self,sw):
+        # slam tilt switch
+        self.game.interrupter.tilt_display(slam=True)
+

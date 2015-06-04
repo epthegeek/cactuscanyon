@@ -118,11 +118,20 @@ class Interrupter(ep.EP_Mode):
         self.cancel_delayed("Display")
 
         if slam:
+            # kill all delays
+            for mode in self.game.modes:
+                mode.__delayed = []
+            self.game.mute = True
+            self.stop_music()
+            self.game.sound.play(self.game.assets.sfx_slam)
             # slam display goes here
             tiltLayer = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_slammed.frames[0])
+            textLayer = self.game.showcase.make_string(2,3,0,x=64,y=0,align="center",isOpaque=False,text="S L A M",isTransparent=True,condensed=False)
+
             # Display the tilt graphic
-            self.layer = tiltLayer
-            self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.quote_dejected)
+            self.layer = dmd.GroupedLayer(128,32,[tiltLayer,textLayer])
+            self.delay(delay=1.8,handler=self.game.sound.play,param=self.game.assets.quote_dejected)
+            self.delay(delay=3.5,handler=self.game.reset)
         else:
             # build a tilt graphic
             tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT",color=ep.RED)

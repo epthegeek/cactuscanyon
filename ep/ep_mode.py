@@ -380,12 +380,13 @@ class EP_Mode(object):
             self.game.sound.stop_music()
 
     def music_on(self,song,mySlice=0):
-        # if a song was passed, send that along
-        if song:
-            self.game.music_on(song,caller=self.myID,slice=mySlice)
-        # otherwise, just tag with the current ID and slice and play the current
-        else:
-            self.game.music_on(caller=self.myID,slice=mySlice)
+        if not self.game.mute:
+            # if a song was passed, send that along
+            if song:
+                self.game.music_on(song,caller=self.myID,slice=mySlice)
+          # otherwise, just tag with the current ID and slice and play the current
+            else:
+                self.game.music_on(caller=self.myID,slice=mySlice)
 
     def delayed_music_on(self,wait,song=None):
         self.delay(delay=wait, handler=self.music_on,param=song)
