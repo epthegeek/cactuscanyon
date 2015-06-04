@@ -145,12 +145,12 @@ class LampControl(ep.EP_Mode):
         if mineStatus == "RUNNING" or self.game.peril or self.game.stampede.running or self.game.drunk_multiball.running:
             # do these in order to the stacking shows the right item in the end
             # if drunk multiball is running, update those
-            if self.game.drunk_multiball.running:
-                self.update_bigFive('Drunk')
             # if the goldmine is running - update with those
-            elif mineStatus == "RUNNING":
+            if mineStatus == "RUNNING":
                 self.update_bigFive('Mine')
                 self.combos('Mine')
+            elif self.game.drunk_multiball.running:
+                self.update_bigFive('Drunk')
             # if stampede is running - do that next
             elif self.game.stampede.running:
                 self.update_bigFive('Stampede')
@@ -414,11 +414,18 @@ class LampControl(ep.EP_Mode):
         elif mode == "Mine":
             if not self.game.gm_multiball.restartFlag:
                 # check if this jackpot shot is active
-                if self.game.show_tracking('jackpotStatus',0):
-                    self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
-                    self.game.lamps.leftLoopRideEm.schedule(0x0F000F00)
-                    self.game.lamps.leftLoopWildRide.schedule(0x00F000F0)
-                    self.game.lamps.leftLoopBuckNBronco.schedule(0x000F000F)
+            # if drunk multiball is running - check those and update
+                if self.game.drunk_multiball.running and 'leftLoop' in self.game.drunk_multiball.active:
+                    self.game.lamps.leftLoopJackpot.schedule(0x00FF00FF)
+                    self.game.lamps.leftLoopRideEm.schedule(0x00FF00FF)
+                    self.game.lamps.leftLoopWildRide.schedule(0x00FF00FF)
+                    self.game.lamps.leftLoopBuckNBronco.schedule(0x00FF00FF)
+                else:
+                    if self.game.show_tracking('jackpotStatus',0):
+                        self.game.lamps.leftLoopJackpot.schedule(0xF000F000)
+                        self.game.lamps.leftLoopRideEm.schedule(0x0F000F00)
+                        self.game.lamps.leftLoopWildRide.schedule(0x00F000F0)
+                        self.game.lamps.leftLoopBuckNBronco.schedule(0x000F000F)
 
         ##  stampede
         elif mode == "Stampede":
@@ -516,11 +523,18 @@ class LampControl(ep.EP_Mode):
         # check for goldmine multiball
         elif mode == "Mine":
             if not self.game.gm_multiball.restartFlag:
-                if self.game.show_tracking('jackpotStatus',1):
-                    self.game.lamps.leftRampJackpot.schedule(0xF000F000)
-                    self.game.lamps.leftRampSavePolly.schedule(0x0F000F00)
-                    self.game.lamps.leftRampWaterfall.schedule(0x00F000F0)
-                    self.game.lamps.leftRampWhiteWater.schedule(0x000F000F)
+            # if drunk multiball is running - check those and update
+                if self.game.drunk_multiball.running and 'leftRamp' in self.game.drunk_multiball.active:
+                    self.game.lamps.leftRampJackpot.schedule(0x00FF00FF)
+                    self.game.lamps.leftRampSavePolly.schedule(0x00FF00FF)
+                    self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
+                    self.game.lamps.leftRampWhiteWater.schedule(0x00FF00FF)
+                else:
+                    if self.game.show_tracking('jackpotStatus',1):
+                        self.game.lamps.leftRampJackpot.schedule(0xF000F000)
+                        self.game.lamps.leftRampSavePolly.schedule(0x0F000F00)
+                        self.game.lamps.leftRampWaterfall.schedule(0x00F000F0)
+                        self.game.lamps.leftRampWhiteWater.schedule(0x000F000F)
 
         elif mode == "Stampede":
             if self.game.stampede.active == 1:
@@ -622,11 +636,18 @@ class LampControl(ep.EP_Mode):
         # check goldmine active status
         elif mode == "Mine":
             if not self.game.gm_multiball.restartFlag:
-                if self.game.show_tracking('jackpotStatus',2):
-                    self.game.lamps.centerRampJackpot.schedule(0xF000F000)
-                    self.game.lamps.centerRampSavePolly.schedule(0x0F000F00)
-                    self.game.lamps.centerRampStopTrain.schedule(0x00F000F0)
-                    self.game.lamps.centerRampCatchTrain.schedule(0x000F000F)
+            # if drunk multiball is running - check those and update
+                if self.game.drunk_multiball.running and 'centerRamp' in self.game.drunk_multiball.active:
+                    self.game.lamps.centerRampJackpot.schedule(0x00FF00FF)
+                    self.game.lamps.centerRampSavePolly.schedule(0x00FF00FF)
+                    self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
+                    self.game.lamps.centerRampCatchTrain.schedule(0x00FF00FF)
+                else:
+                    if self.game.show_tracking('jackpotStatus',2):
+                        self.game.lamps.centerRampJackpot.schedule(0xF000F000)
+                        self.game.lamps.centerRampSavePolly.schedule(0x0F000F00)
+                        self.game.lamps.centerRampStopTrain.schedule(0x00F000F0)
+                        self.game.lamps.centerRampCatchTrain.schedule(0x000F000F)
 
         elif mode == "Stampede":
         ## center ramp is #2 in the stampede jackpot list
@@ -738,11 +759,18 @@ class LampControl(ep.EP_Mode):
         # goldmine active check
         elif mode == "Mine":
             if not self.game.gm_multiball.restartFlag:
-                if self.game.show_tracking('jackpotStatus',3):
-                    self.game.lamps.rightLoopJackpot.schedule(0xF000F000)
-                    self.game.lamps.rightLoopMarksman.schedule(0x0F000F00)
-                    self.game.lamps.rightLoopGunslinger.schedule(0x00F000F0)
-                    self.game.lamps.rightLoopGoodShot.schedule(0x000F000F)
+            # if drunk multiball is running - check those and update
+                if self.game.drunk_multiball.running and 'rightLoop' in self.game.drunk_multiball.active:
+                    self.game.lamps.rightLoopJackpot.schedule(0x00FF00FF)
+                    self.game.lamps.rightLoopMarksman.schedule(0x00FF00FF)
+                    self.game.lamps.rightLoopGunslinger.schedule(0x00FF00FF)
+                    self.game.lamps.rightLoopGoodShot.schedule(0x00FF00FF)
+                else:
+                    if self.game.show_tracking('jackpotStatus',3):
+                        self.game.lamps.rightLoopJackpot.schedule(0xF000F000)
+                        self.game.lamps.rightLoopMarksman.schedule(0x0F000F00)
+                        self.game.lamps.rightLoopGunslinger.schedule(0x00F000F0)
+                        self.game.lamps.rightLoopGoodShot.schedule(0x000F000F)
 
         # stampede
         elif mode == "Stampede":
@@ -838,11 +866,18 @@ class LampControl(ep.EP_Mode):
         # goldmine multiball check
         elif mode == "Mine":
             if not self.game.gm_multiball.restartFlag:
-                if self.game.show_tracking('jackpotStatus',4):
-                    self.game.lamps.rightRampJackpot.schedule(0xF000F000)
-                    self.game.lamps.rightRampSavePolly.schedule(0x0F000F00)
-                    self.game.lamps.rightRampShootOut.schedule(0x00F000F0)
-                    self.game.lamps.rightRampSoundAlarm.schedule(0x000F000F)
+            # if drunk multiball is running - check those and update
+                if self.game.drunk_multiball.running and 'rightRamp' in self.game.drunk_multiball.active:
+                    self.game.lamps.rightRampJackpot.schedule(0x00FF00FF)
+                    self.game.lamps.rightRampSavePolly.schedule(0x00FF00FF)
+                    self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
+                    self.game.lamps.rightRampSoundAlarm.schedule(0x00FF00FF)
+                else:
+                    if self.game.show_tracking('jackpotStatus',4):
+                        self.game.lamps.rightRampJackpot.schedule(0xF000F000)
+                        self.game.lamps.rightRampSavePolly.schedule(0x0F000F00)
+                        self.game.lamps.rightRampShootOut.schedule(0x00F000F0)
+                        self.game.lamps.rightRampSoundAlarm.schedule(0x000F000F)
 
         elif mode == "Stampede":
         ## right ramp is #4 in the stampede jackpot list
