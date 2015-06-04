@@ -382,9 +382,8 @@ class Ambush(ep.EP_Mode):
             # add one to the rolling high noon total
             self.game.increase_tracking('kills')
             # score points
-            # after the 4th guy the point value goes up
-            if self.deathTally > 4:
-                self.showdownValue = 450000
+            # each guy goes up 100 grand
+            self.showdownValue += 100000
             self.game.score(self.showdownValue)
             # increase the running total by that amount
             self.game.increase_tracking('ambushPoints',self.showdownValue)
@@ -443,7 +442,7 @@ class Ambush(ep.EP_Mode):
         textLine1.composite_op = "blacksrc"
         textLine2 = ep.EP_TextLayer(74,11, self.game.assets.font_12px_az, "center", opaque=False)
         print "TOTAL AMBUSH: " + str(ep.format_score(totalPoints))
-        textLine2.set_text(ep.format_score(self.game.show_tracking('ambushPoints')),color=ep.GREEN)
+        textLine2.set_text(ep.format_score(totalPoints),color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
         # play a quote
