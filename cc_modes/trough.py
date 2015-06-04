@@ -301,12 +301,14 @@ class Trough(ep.EP_Mode):
         if self.lane_busy:
             print "Shooter lane inactive is clearing the busy flag"
             self.lane_busy = False
+            self.cancel_delayed("SafetyNet")
 
     def sw_skillBowl_active(self,sw):
         # if the skill bowl switch is hit, and the busy flag is on, turn it off.
         if self.lane_busy:
             print "Skill bowl is clearing the busy flag"
             self.lane_busy = False
+            self.cancel_delayed("SafetyNet")
 
     def clear_lane_busy(self):
         print "Safety net is clearing the lane busy"
