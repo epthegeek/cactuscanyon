@@ -53,6 +53,12 @@ class Attract(ep.EP_Mode):
 
     def mode_started(self):
 
+        # clear the mine/saloon if ball
+        if self.game.switches.minePopper.is_active():
+            self.game.mountain.kick()
+        if self.game.switches.saloonPopper.is_active():
+            self.game.saloon.kick()
+
         # new timer thing for tournament start
         self.tournamentTimer = 0
 
@@ -731,6 +737,13 @@ class Attract(ep.EP_Mode):
                     scoreLine1.composite_op = "blacksrc"
                     combined = dmd.GroupedLayer(128,32,[backdrop,title,initLine1,scoreLine1])
                     self.layers.append({'layer':combined, 'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
+
+    ## mine and saloon auto clear
+    def sw_minePopper_active_for_1s(self,sw):
+        self.game.mountain.kick()
+
+    def sw_saloonPopper_active_for_1s(self,sw):
+        self.game.saloon.kick()
 
 
     def mode_stopped(self):
