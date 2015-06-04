@@ -78,6 +78,7 @@ class Trough(ep.EP_Mode):
         self.ball_save_timer = 0
         self.ball_save_hold = 0
         self.default_time = self.game.user_settings['Gameplay (Feature)']['Default Ball Save Time']
+        self.lane_busy = False
 
     def tilted(self):
         pass
@@ -260,6 +261,12 @@ class Trough(ep.EP_Mode):
         self.eject_sw_count = 0
         # tick down the balls to launch
         self.num_balls_to_launch -= 1
+        # Set the lane as busy to hold additional launches
+        self.lane_busy = True
+        # Start a safety net delay to clear the lane busy in case nothing else works
+        self.cancel_delayed("SafetyNet")
+        self.delay(name = "SafetyNet",delay=15,handler=self.clear_lane_busy)
+
         print "BALL LAUNCHED - left to launch: " +str(self.num_balls_to_launch)
         # Only increment num_balls_in_play if there are no more
         # stealth launches to complete.
@@ -268,10 +275,10 @@ class Trough(ep.EP_Mode):
         else:
             self.num_balls_in_play += 1
         print "IN PLAY: " + str(self.num_balls_in_play)
-        # If more balls need to be launched, delay 1 second
+        # If more balls need to be launched, run the wait for clear loop
         if self.num_balls_to_launch > 0:
-            print "More balls to launch: " + str(self.num_balls_to_launch) + " - adding delay"
-            self.delay(name='launch', event_type=None, delay=1,handler=self.common_launch_code)
+            print "More balls to launch: " + str(self.num_balls_to_launch) + " - Waiting for clear"
+            self.wait_for_clear()
         # If all the requested balls are launched, go to the cleanup check
         else:
             self.launch_in_progress = False
@@ -279,6 +286,31 @@ class Trough(ep.EP_Mode):
                 self.delay(delay=.5,handler=self.post_launch_check)
             else:
                 print "Fakepinproc - post launch check skipped"
+
+    ## New routine to have more control over when to launch sucessive balls
+    def wait_for_clear(self):
+        # a looping cycle to wait for the shooter lane to clear
+        if self.lane_busy:
+            self.delay(name="waiting",delay=1,handler=self.wait_for_clear)
+        else:
+            # delay the call back to common launch code to allow the bowl to clear
+            self.delay(name="waiting",delay=2,handler=self.common_launch_code)
+
+    def sw_shooterLane_inactive_for_4s(self,sw):
+        # if the shooter lane opens for 5 seconds, and the busy flag is on, shut if off
+        if self.lane_busy:
+            print "Shooter lane inactive is clearing the busy flag"
+            self.lane_busy = False
+
+    def sw_skillBowl_active(self,sw):
+        # if the skill bowl switch is hit, and the busy flag is on, turn it off.
+        if self.lane_busy:
+            print "Skill bowl is clearing the busy flag"
+            self.lane_busy = False
+
+    def clear_lane_busy(self):
+        print "Safety net is clearing the lane busy"
+        self.lane_busy = False
 
     def post_launch_check(self):
         print "Running Post Launch Check"
