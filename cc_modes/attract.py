@@ -738,13 +738,21 @@ class Attract(ep.EP_Mode):
                     combined = dmd.GroupedLayer(128,32,[backdrop,title,initLine1,scoreLine1])
                     self.layers.append({'layer':combined, 'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
 
-    ## mine and saloon auto clear
+    ## mine and saloon and shooter lane auto clear
     def sw_minePopper_active_for_1s(self,sw):
         self.game.mountain.kick()
 
     def sw_saloonPopper_active_for_1s(self,sw):
         self.game.saloon.kick()
 
+    def sw_shooterLane_active_for_1s(self,sw):
+        self.game.coils.autoPlunger.pulse(self.game.base.autoplungeStrength)
+
+    # if the door closes while attract is running - cleare the shooter lane if active
+    def sw_coinDoorClosed_active(self,sw):
+        # clear the shooter lane if there's a ball
+        if self.game.switches.shooterLane.is_active():
+            self.game.coils.autoPlunger.pulse(self.game.base.autoplungeStrength)
 
     def mode_stopped(self):
         print "DELETING ATTRACT DELAYS"
