@@ -53,11 +53,8 @@ class Attract(ep.EP_Mode):
 
     def mode_started(self):
 
-        # clear the mine/saloon if ball
-        if self.game.switches.minePopper.is_active():
-            self.game.mountain.kick()
-        if self.game.switches.saloonPopper.is_active():
-            self.game.saloon.kick()
+        # check spots the ball could be held
+        self.clear_hold_spots()
 
         # new timer thing for tournament start
         self.tournamentTimer = 0
@@ -750,9 +747,18 @@ class Attract(ep.EP_Mode):
 
     # if the door closes while attract is running - cleare the shooter lane if active
     def sw_coinDoorClosed_active(self,sw):
+        self.clear_hold_spots()
+
+    def clear_hold_spots(self):
         # clear the shooter lane if there's a ball
         if self.game.switches.shooterLane.is_active():
             self.game.coils.autoPlunger.pulse(self.game.base.autoplungeStrength)
+        # clear the mine/saloon if ball
+        if self.game.switches.minePopper.is_active():
+            self.game.mountain.kick()
+        if self.game.switches.saloonPopper.is_active():
+            self.game.saloon.kick()
+
 
     def mode_stopped(self):
         print "DELETING ATTRACT DELAYS"
