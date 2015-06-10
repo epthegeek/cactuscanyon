@@ -30,6 +30,46 @@ class NewServiceSkeleton(ep.EP_Mode):
         self.section = []
         self.callback = None
 
+    # Turn the flippers on during service mode - includes jet bumpers
+    def mode_started(self):
+        self.game.enable_flippers(True)
+
+    # Turn the flippers off when exiting
+    def mode_stopped(self):
+        self.game.enable_flippers(False)
+
+## Enable ball clearing during service mode
+        ## mine and saloon and shooter lane auto clear
+    def sw_minePopper_active_for_1s(self,sw):
+        self.game.mountain.kick()
+
+    def sw_saloonPopper_active_for_1s(self,sw):
+        self.game.saloon.kick()
+
+    def sw_shooterLane_active_for_1s(self,sw):
+        self.game.coils.autoPlunger.pulse(self.game.base.autoplungeStrength)
+   # fire the slings if they're hit
+    def sw_leftSlingshot_active(self,sw):
+        self.game.coils.leftSlingshot.pulse()
+
+    def sw_rightSlingshot_active(self,sw):
+        self.game.coils.rightSlingshot.pulse()
+
+    # if the door closes while service is running - cleare the shooter lane if active
+    def sw_coinDoorClosed_active(self,sw):
+        self.clear_hold_spots()
+
+    def clear_hold_spots(self):
+        # clear the shooter lane if there's a ball
+        if self.game.switches.shooterLane.is_active():
+            self.game.coils.autoPlunger.pulse(self.game.base.autoplungeStrength)
+        # clear the mine/saloon if ball
+        if self.game.switches.minePopper.is_active():
+            self.game.mountain.kick()
+        if self.game.switches.saloonPopper.is_active():
+            self.game.saloon.kick()
+
+
     def sw_up_active(self,sw):
         if not self.busy:
             # play the sound for moving up
