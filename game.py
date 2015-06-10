@@ -104,6 +104,8 @@ class CCGame(game.BasicGame):
         """Reset the game state as a slam tilt might."""
         self.dejected = True
         self.ball = 0
+        # disabled flippers - just in case
+        self.enable_flippers(False)
         # used to prevent music start during slam tilt
         self.mute = False
         self.old_players = []
