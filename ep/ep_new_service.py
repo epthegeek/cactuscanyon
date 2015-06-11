@@ -41,9 +41,11 @@ class NewServiceSkeleton(ep.EP_Mode):
    # fire the slings if they're hit
     def sw_leftSlingshot_active(self,sw):
         self.game.coils.leftSlingshot.pulse()
+        return game.SwitchStop
 
     def sw_rightSlingshot_active(self,sw):
         self.game.coils.rightSlingshot.pulse()
+        return game.SwitchStop
 
     def sw_up_active(self,sw):
         if not self.busy:

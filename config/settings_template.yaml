@@ -282,6 +282,9 @@ Gameplay (Feature):
   'Drunk Multiball GI':
     options: ['Enabled','Disabled']
     default: 'Disabled'
+  'Drunk Multiball End Saver':
+    options: ['Enabled','Disabled']
+    default: 'Enabled'
   'Last Call Mode':
     options: ['Enabled','Disabled']
     default: 'Enabled'

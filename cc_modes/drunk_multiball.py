@@ -345,7 +345,8 @@ class DrunkMultiball(ep.EP_Mode):
 
     def end_save(self):
         # a ball saver to allow for reacclimation
-        self.game.trough.start_ball_save(num_balls_to_save=1, time=8, now=True, allow_multiple_saves=False)
+        if self.game.user_settings['Gameplay (Feature)']['Drunk Multiball End Saver'] == 'Enabled':
+            self.game.trough.start_ball_save(num_balls_to_save=1, time=8, now=True, allow_multiple_saves=False)
         self.end_drunk()
 
     def end_drunk(self):

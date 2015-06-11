@@ -246,19 +246,27 @@ class LampControl(ep.EP_Mode):
         # if there's an extra ball pending, flash the light at the mine
         if ebPending > 0:
             self.game.lamps.extraBall.schedule(0x0F0F0F0F)
-        # for the mine arrow , ther'es a bunch of conditionals
-        if highNoonStatus == "READY":
-            self.game.lamps.mineLock.schedule(0x00FF00FF)
-            self.game.coils.mineFlasher.schedule(0x00010001)
-        elif mineStatus == "LOCK":
-            self.game.lamps.mineLock.enable()
-        elif mineStatus == "READY":
-            self.game.lamps.mineLock.schedule(0x0F0F0F0F)
-        elif self.game.show_tracking('motherlodeLit') or self.game.gm_multiball.restartFlag:
-            self.game.coils.mineFlasher.schedule(0x00010001)
-            self.game.lamps.mineLock.schedule(0x0F0F0F0F)
-        else:
+        # This batch of stuff doesn't happen during certain modes
+        if self.game.stampede.running or \
+            self.game.ambush.running or \
+            self.game.showdown.running or \
+            self.game.cva.running or \
+            self.game.high_noon.running:
             pass
+        else:
+            # for the mine arrow , ther'es a bunch of conditionals
+            if highNoonStatus == "READY":
+                self.game.lamps.mineLock.schedule(0x00FF00FF)
+                self.game.coils.mineFlasher.schedule(0x00010001)
+            elif mineStatus == "LOCK":
+                self.game.lamps.mineLock.enable()
+            elif mineStatus == "READY":
+                self.game.lamps.mineLock.schedule(0x0F0F0F0F)
+            elif self.game.show_tracking('motherlodeLit') or self.game.gm_multiball.restartFlag:
+                self.game.coils.mineFlasher.schedule(0x00010001)
+                self.game.lamps.mineLock.schedule(0x0F0F0F0F)
+            else:
+                pass
 
         #
         #  ____        _

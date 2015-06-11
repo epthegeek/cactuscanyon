@@ -104,8 +104,6 @@ class CCGame(game.BasicGame):
         """Reset the game state as a slam tilt might."""
         self.dejected = True
         self.ball = 0
-        # disabled flippers - just in case
-        self.enable_flippers(False)
         # used to prevent music start during slam tilt
         self.mute = False
         self.old_players = []
@@ -130,6 +128,13 @@ class CCGame(game.BasicGame):
         # and settings Game settings
         print "Loading game settings"
         self.load_settings(settings_defaults_path, user_settings_path)
+        # Party Mode
+        self.party_setting = self.user_settings['Gameplay (Feature)']['Party Mode']
+        print "Party Setting: " + str(self.party_setting)
+
+        # disabled flippers - just in case
+        self.enable_flippers(False)
+
 
         ## init the sound
         self.sound = sound.SoundController(self)
@@ -183,9 +188,6 @@ class CCGame(game.BasicGame):
         self.sound.set_volume(self.volume_to_set)
         self.previousVolume = self.volume_to_set
 
-        # Party Mode
-        self.party_setting = self.user_settings['Gameplay (Feature)']['Party Mode']
-        print "Party Setting: " + str(self.party_setting)
 
         self.immediateRestart = "Enabled" == self.user_settings['Gameplay (Feature)']['Fast Restart After Game']
 
