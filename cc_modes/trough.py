@@ -289,12 +289,15 @@ class Trough(ep.EP_Mode):
 
     ## New routine to have more control over when to launch sucessive balls
     def wait_for_clear(self):
-        # a looping cycle to wait for the shooter lane to clear
-        if self.lane_busy:
-            self.delay(name="waiting",delay=1,handler=self.wait_for_clear)
+        if self.game.fakePinProc:
+            self.common_launch_code()
         else:
-            # delay the call back to common launch code to allow the bowl to clear
-            self.delay(name="waiting",delay=2,handler=self.common_launch_code)
+            # a looping cycle to wait for the shooter lane to clear
+            if self.lane_busy:
+                self.delay(name="waiting",delay=1,handler=self.wait_for_clear)
+            else:
+                # delay the call back to common launch code to allow the bowl to clear
+                self.delay(name="waiting",delay=2,handler=self.common_launch_code)
 
     def sw_shooterLane_inactive_for_4s(self,sw):
         # if the shooter lane opens for 5 seconds, and the busy flag is on, shut if off
