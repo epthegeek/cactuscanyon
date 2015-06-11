@@ -41,6 +41,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.underLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
         self.starting = False
         self.giOff = 'Disabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball GI']
+        self.beerHit = False
 
     def mode_started(self):
         # fire up the switch block if it's not already loaded
@@ -50,6 +51,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.downToOne = False
         self.jackpotValue = 2000000
         self.jackpotIncrement = 100000
+        self.beerHit = False
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
@@ -93,16 +95,26 @@ class DrunkMultiball(ep.EP_Mode):
 
     # beer mug lights jackpots
     def sw_beerMug_active(self,sw):
-        # audit
-        self.game.game_data['Feature']['Drunk MB Beers'] += 1
-        if self.availableJackpots:
-            self.light_jackpot()
-        else:
+        if self.beerHit:
             pass
-        if not self.game.lamp_control.lights_out:
-            self.game.lamps.beerMug.schedule(0x00000CCC,cycle_seconds=1)
-            self.delay(delay=1,handler=self.flash_mug)
-        return game.SwitchStop
+        else:
+            self.beerHit = True
+            # delay to re-allow due to debounce being off
+            self.delay(delay=0.050,handler=self.beer_unhit)
+            self.game.score(27500)
+            # audit
+            self.game.game_data['Feature']['Drunk MB Beers'] += 1
+            if self.availableJackpots:
+                self.light_jackpot()
+            else:
+                pass
+            if not self.game.lamp_control.lights_out:
+                self.game.lamps.beerMug.schedule(0x00000CCC,cycle_seconds=1)
+                self.delay(delay=1,handler=self.flash_mug)
+            return game.SwitchStop
+
+    def beer_unhit(self):
+        self.beerHit = False
 
     def flash_mug(self):
         if not self.game.lamp_control.lights_out:
