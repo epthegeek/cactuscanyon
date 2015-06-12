@@ -30,14 +30,6 @@ class NewServiceSkeleton(ep.EP_Mode):
         self.section = []
         self.callback = None
 
-    # Turn the flippers on during service mode - includes jet bumpers
-    def mode_started(self):
-        self.game.enable_flippers(True)
-
-    # Turn the flippers off when exiting
-    def mode_stopped(self):
-        self.game.enable_flippers(False)
-
    # fire the slings if they're hit
     def sw_leftSlingshot_active(self,sw):
         self.game.coils.leftSlingshot.pulse()
@@ -149,8 +141,14 @@ class NewServiceMode(NewServiceSkeleton):
         # play the service entrance noise
         self.game.sound.play(self.game.assets.sfx_serviceStart)
 
+        # Turn the flippers on during service mode - includes jet bumpers
+        self.game.enable_flippers(True)
+
+
 
     def mode_stopped(self):
+        # Turn the flippers off when exiting
+        self.game.enable_flippers(False)
         # save the data
         self.game.save_game_data()
         print "Service Mode Exiting"
