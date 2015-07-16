@@ -128,6 +128,9 @@ class CCGame(game.BasicGame):
         # and settings Game settings
         print "Loading game settings"
         self.load_settings(settings_defaults_path, user_settings_path)
+        # Flipper pulse strength
+        self.flipperPulse = self.user_settings['Machine (Standard)']['Flipper Pulse']
+
         # Party Mode
         self.party_setting = self.user_settings['Gameplay (Feature)']['Party Mode']
         print "Party Setting: " + str(self.party_setting)
@@ -193,8 +196,6 @@ class CCGame(game.BasicGame):
 
         # Set the balls per game per the user settings
         self.balls_per_game = self.user_settings['Machine (Standard)']['Balls Per Game']
-        # Flipper pulse strength
-        self.flipperPulse = self.user_settings['Machine (Standard)']['Flipper Pulse']
         # Moonlight window
         self.moonlightMinutes = self.user_settings['Gameplay (Feature)']['Moonlight Mins to Midnight']
 
