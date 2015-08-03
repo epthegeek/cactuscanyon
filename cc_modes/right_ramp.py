@@ -47,28 +47,13 @@ class RightRamp(ep.EP_Mode):
         # so I don't either
         # tick one on to the total of player shots on the right ramp
         self.game.increase_tracking('rightRampShots')
-        # check the chain status
-        if ep.last_shot == "left":
-            # if we're coming from the left ramp, increase the chain
-            self.game.combos.increase_chain()
-        else:
-            # if not, set it back to one
-            self.game.combos.chain = 1
-
-    # score the points and mess with the combo
-        if self.game.combos.myTimer > 0:
-            # register the combo and reset the timer - returns true for use later
-            combo = self.game.combos.hit()
-        else:
-            # and turn on the combo timer - returns false for use later
-            combo = self.game.combos.start()
 
         # if a polly mode is running - let it go man
         if self.game.peril or self.game.showdown.running or self.game.ambush.running:
             if self.game.combos.chain > 1:
                 self.game.combos.mini_display()
         else:
-            self.award_ramp_score(combo)
+            self.award_ramp_score(self.game.combos.comboStatus)
 
         ## -- set the last switch hit --
         ep.last_switch = "rightRampMake"

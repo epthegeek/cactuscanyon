@@ -182,33 +182,24 @@ class CenterRamp(ep.EP_Mode):
         if self.game.save_polly.won:
             self.awardString = "POLLY SAVED"
             value = start_value
-            # load up the animation
-            anim = self.game.assets.dmd_trainBrakes
-            # start the full on animation
-            myWait = len(anim.frames) / 8.57
-            # setup the animated layer
-            animLayer = ep.EP_AnimatedLayer(anim)
-            animLayer.hold=True
-            animLayer.frame_time = 7
-            animLayer.opaque = True
-            # keyframe sounds
-            animLayer.add_frame_listener(13,self.game.sound.play,param=self.game.assets.sfx_trainStopWithBrake)
+            complete_color = ep.GREEN
             # play the short chug
             self.game.sound.play(self.game.assets.sfx_trainChugShort)
-            # turn on the animation
-            self.layer = animLayer
         else:
             self.awardString = "POLLY DIED"
             value = start_value / 10
-
-            backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-            textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.RED)
-            textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.RED)
-            combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
-            self.layer = combined
             self.game.sound.play(self.game.assets.sfx_glumRiffShort)
+            complete_color = ep.RED
 
-            myWait = 1.5
+        anim = self.game.assets.dmd_trainHeadOn
+        trainLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=True,frame_time=6)
+        textLine1 = ep.EP_TextLayer(37,1,self.game.assets.font_7px_az,justify="center",opaque=False).set_text("TIED TO",color=ep.YELLOW)
+        textLine2 = ep.EP_TextLayer(37,9,self.game.assets.font_7px_az,justify="center",opaque=False).set_text("THE TRACKS",color=ep.YELLOW)
+        textLine3 = ep.EP_TextLayer(37,20,self.game.assets.font_7px_az,justify="center",opaque=False).set_text("COMPLETED",color=complete_color)
+        combined = dmd.GroupedLayer(128,32,[trainLayer,textLine1,textLine2,textLine3])
+        self.layer = combined
+
+        myWait = 1.5
 
         self.delay(name="Display",delay=myWait,handler=self.show_award_text)
         self.awardPoints = str(ep.format_score(value))

@@ -384,6 +384,7 @@ class SavePolly(ep.EP_Mode):
         # turn off the polly indicator
         self.game.peril = False
         self.won = True
+        self.finishing_up = True
         self.game.train.stop()
         # kill the lights on the three ramps
         self.game.lamp_control.left_ramp('Base')
