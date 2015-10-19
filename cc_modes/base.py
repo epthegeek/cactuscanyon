@@ -58,10 +58,6 @@ class BaseGameMode(ep.EP_Mode):
         random.shuffle(self.keys_index['beer_mug'])
 
     def mode_started(self):
-        # set the number for the hits to the beer mug to start drunk multiball
-        self.mug_shots = self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
-        # set the number for tumbleweed hits to start cva
-        self.tumbleweedShots = self.game.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA']
         ## cancel the closing song delay, just in case
         self.game.interrupter.cancel_delayed("Attract Fade")
         # and update the lamps
@@ -226,14 +222,17 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.sound.play(self.game.assets.sfx_ricochetSet)
                 # a little display action
                 textLine1 = ep.EP_TextLayer(51, 1, self.game.assets.font_9px_az, "center", opaque=False).set_text("BEER MUG",color=ep.ORANGE)
-                left = self.mug_shots - hits
+                left = self.game.show_tracking('mug_shots') - hits
                 ## if we're at zero, it's lit and the display shows it
                 if left == 0:
                     self.light_drunk_multiball()
                 ## if we're past zero then it shows a message
                 elif left < 0:
                     textString = "SHOOT THE SALOON"
-                    textString2 = "FOR MULTIBALL"
+                    if self.game.drunk_multiball.enabled:
+                        textString2 = "FOR MULTIBALL"
+                    else:
+                        textString2 = "FOR DRUNK BONUS"
                     textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString,blink_frames=8)
                     textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
                     self.mug_display(textLine1,textLine2,textLine3)
@@ -244,7 +243,10 @@ class BaseGameMode(ep.EP_Mode):
                         textString = "1 MORE HIT FOR"
                     else:
                         textString = str(left) + " MORE HITS FOR"
-                    textString2 = "DRUNK MULTIBALL"
+                    if self.game.drunk_multiball.enabled:
+                        textString2 = "DRUNK MULTIBALL"
+                    else:
+                        textString2 = "DRUNK BONUS"
                     textLine2 = ep.EP_TextLayer(51, 12, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString)
                     textLine3 = ep.EP_TextLayer(51, 21, self.game.assets.font_7px_az, "center", opaque=False).set_text(textString2,color=ep.YELLOW)
                     self.mug_display(textLine1,textLine2,textLine3)
@@ -275,12 +277,16 @@ class BaseGameMode(ep.EP_Mode):
 
     def light_drunk_multiball(self,callback = None):
         # set the hits to the same number it takes to light - this is a catch for the super skillshot award
-        self.game.set_tracking('beerMugHits',self.mug_shots)
+        self.game.set_tracking('beerMugHits',self.game.show_tracking('mug_shots'))
         # enable the multiball
         self.game.set_tracking('drunkMultiballStatus', "READY")
         self.lamp_update()
         textLine1 = ep.pulse_text(self,51,1,"DRUNK",color=ep.ORANGE)
-        textLine2 = ep.pulse_text(self,51,12,"MULTIBALL",color=ep.ORANGE)
+        if self.game.drunk_multiball.enabled:
+            string = "MULTIBALL"
+        else:
+            string = "BONUS"
+        textLine2 = ep.pulse_text(self,51,12,string,color=ep.ORANGE)
         textLine3 = ep.EP_TextLayer(51, 23, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("IS LIT",color=ep.GREEN)
         self.repeat_ding(4)
         duration = self.game.base.play_quote(self.game.assets.quote_drunkMultiballLit)

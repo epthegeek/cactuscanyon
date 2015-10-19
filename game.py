@@ -515,6 +515,11 @@ class CCGame(game.BasicGame):
         super(CCGame,self).start_game()
         # Add the first player
         self.add_player()
+        # set the number for the hits to the beer mug to start drunk multiball
+        self.set_tracking('mug_shots', self.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball'])
+        # set the number for tumbleweed hits to start cva
+        self.set_tracking('tumbleweedShots', self.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA'])
+
         # set a random bart bro
         barts = [0,1,2,3]
         self.set_tracking('currentBart',random.choice(barts))

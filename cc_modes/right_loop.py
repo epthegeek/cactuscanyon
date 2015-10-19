@@ -162,7 +162,7 @@ class RightLoop(ep.EP_Mode):
             # this one is a running total
             self.game.increase_tracking('tumbleweedHitsTotal')
             # compare the number to light cva with the current number
-            left = self.game.base.tumbleweedShots - value
+            left = self.game.show_tracking('tumbleweedShots') - value
             if left == 0:
                 # enable cva
                 self.game.set_tracking('cvaStatus',"READY")

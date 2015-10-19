@@ -341,7 +341,7 @@ class Interrupter(ep.EP_Mode):
             # circle back and clear the layer
         # CVA Information & Tumbleweeds
         if self.page == 5:
-            left = self.game.base.tumbleweedShots - self.game.show_tracking('tumbleweedHits')
+            left = self.game.show_tracking('tumbleweedShots') - self.game.show_tracking('tumbleweedHits')
             if left <= 0:
                 textString2 = "COWBOYS V ALIENS"
                 textString3 = "IS LIT"

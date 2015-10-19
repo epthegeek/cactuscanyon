@@ -88,7 +88,8 @@ class Saloon(ep.EP_Mode):
                 pass
             else:
                 self.game.modes.add(self.game.drunk_multiball)
-                self.wait_until_unbusy(self.game.drunk_multiball.start_drunk)
+                if self.game.drunk_multiball.enabled:
+                    self.wait_until_unbusy(self.game.drunk_multiball.start_drunk)
                 return
 
         # if last call is running - call that hit and bail

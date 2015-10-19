@@ -41,17 +41,22 @@ class DrunkMultiball(ep.EP_Mode):
         self.underLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=False,repeat=False)
         self.starting = False
         self.giOff = 'Disabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball GI']
+        self.enabled = 'Enabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball']
         self.beerHit = False
 
     def mode_started(self):
-        # fire up the switch block if it's not already loaded
-        self.game.switch_blocker('add',self.myID)
-        # reset the jackpots
-        self.active = []
-        self.downToOne = False
-        self.jackpotValue = 2000000
-        self.jackpotIncrement = 100000
-        self.beerHit = False
+        if not self.enabled:
+            # Drunk multiball is disabled, do the bonus instead
+            self.drunk_bonus()
+        else:
+            # fire up the switch block if it's not already loaded
+            self.game.switch_blocker('add',self.myID)
+            # reset the jackpots
+            self.active = []
+            self.downToOne = False
+            self.jackpotValue = 2000000
+            self.jackpotIncrement = 100000
+            self.beerHit = False
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
@@ -149,6 +154,35 @@ class DrunkMultiball(ep.EP_Mode):
         self.music_on(self.game.assets.music_drunkMultiball)
         # show some screens about the mode
         self.banner()
+
+    def drunk_bonus(self):
+        print "DMB Disabled, Drunk bonus"
+        # grab the point values
+        points = self.game.show_tracking('drunkBonusValue')
+        # show a screen
+        mug = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_beerMug1.frames[0])
+        mug.composite_op = "blacksrc"
+        words = ep.EP_TextLayer(51, 3, self.game.assets.font_9px_az, "center", opaque=False).set_text("DRUNK BONUS",color=ep.YELLOW)
+        score = ep.EP_TextLayer(51, 15, self.game.assets.font_9px_az, "center", opaque=False).set_text(ep.format_score(points),blink_frames=8,color=ep.GREEN)
+        combined = dmd.GroupedLayer(128,32,[words,score,mug])
+        self.layer = combined
+        self.game.sound.play(self.game.assets.sfx_pour)
+        # unload after 2 seconds
+        self.delay("Operational",delay=2,handler=self.unload)
+
+        # score some points
+        self.game.score(points)
+        # increase the text award
+        self.game.set_tracking('drunkBonusValue', (points + 100000))
+        # reset the mug hits for next time
+        self.game.set_tracking('beerMugHits',0)
+        # tick up the shots needed for next time
+        self.game.increase_tracking('mug_shots', self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits Boost'])
+
+        # Eject the ball
+        self.game.saloon.kick()
+        # reset the DMB status
+        self.game.set_tracking('drunkMultiballStatus',"OPEN")
 
     def banner(self):
         # set a starting flag
@@ -389,7 +423,7 @@ class DrunkMultiball(ep.EP_Mode):
         #if self.game.trough.num_balls_in_play > 0:
         self.music_on(self.game.assets.music_mainTheme,mySlice=4)
         # tick up the shots needed for next time
-        self.game.base.mug_shots += self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits Boost']
+        self.game.increase_tracking('mug_shots', self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits Boost'])
         # remove the switch blocker
         self.game.switch_blocker('remove',self.myID)
         self.game.base.busy = False
@@ -404,6 +438,6 @@ class DrunkMultiball(ep.EP_Mode):
             # reset the mug hits for next time
             self.game.set_tracking('beerMugHits',0)
             # tick up the shots needed for next time
-            self.game.base.mug_shots += self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits Boost']
-        self.running = False
+            self.game.increase_tracking('mug_shots', self.game.user_settings['Gameplay (Feature)']['Beer Mug Hits Boost'])
+            self.running = False
         self.unload()

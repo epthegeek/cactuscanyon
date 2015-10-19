@@ -898,7 +898,7 @@ class CvA(ep.EP_Mode):
         # reset the saucer x just in case
         self.saucerX = 104
         # boost the number of shots required
-        self.game.base.tumbleweedShots += self.game.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA Boost']
+        self.game.increase_tracking('tumbleweedShots', self.game.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA Boost'])
         # and reset the tracking to 0
         self.game.set_tracking('tumbleweedHits',0)
         # and then unload
@@ -917,7 +917,7 @@ class CvA(ep.EP_Mode):
             # reset the saucer x just in case
             self.saucerX = 104
             # boost the number of shots required
-            self.game.base.tumbleweedShots += self.game.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA Boost']
+            self.game.increase_tracking('tumbleweedShots', self.game.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA Boost'])
             # and reset the tracking to 0
             self.game.set_tracking('tumbleweedHits',0)
         self.running = False
