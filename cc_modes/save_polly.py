@@ -446,7 +446,7 @@ class SavePolly(ep.EP_Mode):
                 self.delay("Display",delay=myWait,handler=self.polly_died,param=2)
             # if not, just move on to polly finished
             else:
-                self.stop_music(slice=3)
+                #self.stop_music(slice=3)
                 backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
                 textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.RED)
                 textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.RED)
@@ -455,7 +455,7 @@ class SavePolly(ep.EP_Mode):
                 self.game.sound.play(self.game.assets.sfx_glumRiff)
                 self.delay("Operational",delay=1.5,handler=self.polly_finished)
         if step == 2:
-            self.stop_music(slice=3)
+            #self.stop_music(slice=3)
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
             awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)
             awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False)

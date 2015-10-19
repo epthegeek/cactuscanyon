@@ -213,7 +213,7 @@ class GoldMine(ep.EP_Mode):
         self.game.stack_level(4,True)
         print "MULTIBALL STARTING"
         # kill the music
-        self.stop_music()
+        #self.stop_music()
         # play the multiball intro music
         self.music_on(self.game.assets.music_multiball_intro)
         self.intro_animation()
