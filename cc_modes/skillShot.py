@@ -780,7 +780,7 @@ class SkillShot(ep.EP_Mode):
 
     def sw_flipperLwR_active_for_2s(self,sw):
         if self.game.switches.shooterLane.is_active():
-            if not self.super and not self.game.tournament:
+            if not self.super and not self.game.tournament and self.game.user_settings['Gameplay (Feature)']['Super Skill Shot'] == 'Enabled':
                 print "RIGHT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
                 self.activate_super()
 
