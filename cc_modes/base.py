@@ -160,7 +160,6 @@ class BaseGameMode(ep.EP_Mode):
             # tick up the audits
             self.game.game_data['Audits']['Games Started'] += 1
             self.game.order_mobs()
-            self.game.lamps.startButton.enable()
             # and play a soundbyte
             if len(self.game.players) == 2:
                 self.game.base.priority_quote(self.game.assets.quote_playerTwo)
@@ -168,8 +167,6 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.base.priority_quote(self.game.assets.quote_playerThree)
             elif len(self.game.players) == 4:
                 self.game.base.priority_quote(self.game.assets.quote_playerFour)
-                # if we get to the fourth player, the start button should go out
-                self.game.lamps.startButton.disable()
             self.game.interrupter.add_player()
         elif self.game.match in self.game.modes and self.game.immediateRestart:
             self.game.sound.stop(self.game.assets.sfx_ragtimePiano)

@@ -513,7 +513,9 @@ class CCGame(game.BasicGame):
                 lamp.disable()
         # run the start ball from parent
         super(CCGame,self).start_game()
-        # Add the first player
+        # make the start button solid
+        self.lamps.startButton.enable()
+    #    Add the first player
         self.add_player()
         # set the number for the hits to the beer mug to start drunk multiball
         self.set_tracking('mug_shots', self.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball'])
