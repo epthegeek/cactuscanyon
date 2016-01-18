@@ -510,7 +510,10 @@ class CCGame(game.BasicGame):
         # turn off all the ligths
         for lamp in self.lamps:
             if 'gi' not in lamp.name:
-                lamp.disable()
+                if lamp.name == 'startButton':
+                    pass
+                else:
+                    lamp.disable()
         # run the start ball from parent
         super(CCGame,self).start_game()
         # make the start button solid

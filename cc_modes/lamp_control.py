@@ -1157,6 +1157,9 @@ class LampControl(ep.EP_Mode):
 
     def feature_lamps_off(self):
         for lamp in self.game.lamps:
-            lamp.disable()
+            if lamp.name == 'startButton':
+                pass
+            else:
+                lamp.disable()
 
 

@@ -415,7 +415,10 @@ class BaseGameMode(ep.EP_Mode):
 
             # Ensure all lamps are off.
             for lamp in self.game.lamps:
-                lamp.disable()
+                if lamp.name == 'startButton':
+                    pass
+                else:
+                    lamp.disable()
 
             #play sound
             self.stop_music()
