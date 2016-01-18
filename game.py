@@ -1084,7 +1084,7 @@ class CCGame(game.BasicGame):
     def enable_flippers(self, enable):
         """Enables or disables the flippers AND bumpers."""
         if self.party_setting == "Drunk":
-            self.enable_inverted_flippers(True)
+            self.enable_inverted_flippers(enable)
         else:
             for flipper in self.config['PRFlippers']:
                 self.logger.info("Programming flipper %s", flipper)
