@@ -699,6 +699,8 @@ class SkillShot(ep.EP_Mode):
             self.game.set_tracking("cvaStatus", "READY")
             self.super = False
             if switch == 3:
+                #if cva is hit on the mine, clear the skillshot display - backup for switches failing
+                self.clear_layer()
                 self.game.mountain.busy = True
                 self.game.modes.add(self.game.cva)
                 self.game.cva.intro(entry = "mine")
