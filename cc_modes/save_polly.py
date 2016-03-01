@@ -473,7 +473,7 @@ class SavePolly(ep.EP_Mode):
                 myWait = len(anim.frames) / 10.0
                 self.layer = animLayer
                 self.game.sound.play(self.game.assets.sfx_trainChugShort)
-                self.delay("Display",delay=myWait,handler=self.polly_died,param=2)
+                self.delay(delay=myWait,handler=self.polly_died,param=2)
             # if not, just move on to polly finished
             else:
                 #self.stop_music(slice=3)
@@ -486,18 +486,19 @@ class SavePolly(ep.EP_Mode):
                 self.delay("Operational",delay=1.5,handler=self.polly_finished)
         if step == 2:
             #self.stop_music(slice=3)
-            backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
-            awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)
-            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False)
-            awardTextBottom.composite_op = "blacksrc"
-            awardTextTop.composite_op = "blacksrc"
-            awardTextTop.set_text("POLLY")
-            awardTextBottom.set_text("DIED")
-            combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom])
-            self.layer = combined
-            duration = self.game.sound.play(self.game.assets.sfx_glumRiff)
-            self.delay("Display",delay=duration,handler=self.clear_layer)
-            self.delay("Operational",delay=duration,handler=self.polly_finished)
+            if self.running:
+                backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
+                awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)
+                awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_15px_az_outline,justify="center",opaque=False)
+                awardTextBottom.composite_op = "blacksrc"
+                awardTextTop.composite_op = "blacksrc"
+                awardTextTop.set_text("POLLY")
+                awardTextBottom.set_text("DIED")
+                combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom])
+                self.layer = combined
+                duration = self.game.sound.play(self.game.assets.sfx_glumRiff)
+                self.delay("Display",delay=duration,handler=self.clear_layer)
+                self.delay("Operational",delay=duration,handler=self.polly_finished)
 
     def polly_finished(self):
         self.running = False
