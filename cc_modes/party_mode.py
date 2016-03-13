@@ -87,7 +87,14 @@ class PartyMode(ep.EP_Mode):
                 color = ep.YELLOW
             else:
                 color = ep.CYAN
-            textLayer = ep.EP_TextLayer(0,0, self.game.assets.font_12px_az, "left", opaque = False).set_text(str(remain),color=color)
+            p = self.game.current_player_index
+            if p == 0 or p == 2:
+                align_side = "right"
+                position = 128
+            else:
+                align_side ="left"
+                position = 0
+            textLayer = ep.EP_TextLayer(position,0, self.game.assets.font_12px_az_outline, align_side, opaque = False).set_text(str(remain),color=color)
             textLayer.composite_op = "blacksrc"
             self.layer = textLayer
 
