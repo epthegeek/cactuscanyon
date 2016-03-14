@@ -362,7 +362,7 @@ class Bart(ep.EP_Mode):
             endnumber = 5
         else:
             endnumber = 4
-        bossPosition = 5
+        bossPosition = 6
 
 
         # set the status to dead - gunfight has to set it back to open
