@@ -1162,6 +1162,31 @@ class Assets():
         self.quote_defeatBull = 'quote_defeatBull'
         self.game.sound.register_sound(self.quote_defeatBull, self.quotes_path + "dead_bull.wav")
 
+        self.quote_introBetty = 'quote_introBetty'
+        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "betty-intro-lets-tussle.wav")
+        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "betty-intro-show-those-boys.wav")
+        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "betty-intro-take-no-crap.wav")
+
+        self.quote_hitBetty = 'quote_hitBetty'
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-that-smarts.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-dont-you-know.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-ow.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-hey.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-watch-it.wav")
+
+        self.quote_tauntBetty = 'quote_tauntBetty'
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-are-you-a-mommas-boy-sheriff.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-im-waiting.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-lets-do-this.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-lets-see-what-you-got.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-you-dont-seem-so-tough.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-youre-kinda-cute.wav")
+
+        self.quote_defeatBetty = 'quote_defeatBetty'
+        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "betty-defeat-i-did-my-best.wav")
+        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "betty-defeat-im-beat.wav")
+        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "betty-defeat-this-aint-over.wav")
+
         self.quote_introRudy = 'quote_introRudy'
         self.game.sound.register_sound(self.quote_introRudy, self.quotes_path + "rudy_taunt-hey_its_only_pinball.wav")
         self.game.sound.register_sound(self.quote_introRudy, self.quotes_path + "rudy_intro-im_watchin_ya.wav")
@@ -1652,6 +1677,7 @@ class Assets():
         self.dmd_bossPosterA = dmd.Animation().load(self.dmd_path + 'wanted-BOSS-A.dmd')
         self.dmd_rudyPosterA = dmd.Animation().load(self.dmd_path + 'rudy-wanted-a.dmd')
         self.dmd_bullPosterA = dmd.Animation().load(self.dmd_path + 'bull-wanted-a.dmd')
+        self.dmd_bettyPosterA = dmd.Animation().load(self.dmd_path + 'betty-wanted-a.dmd')
 
         self.dmd_bigPosterB = dmd.Animation().load(self.dmd_path +'wanted-BIG-B.dmd')
         self.dmd_bandeleroPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BANDELERO-B.dmd')
@@ -1659,6 +1685,7 @@ class Assets():
         self.dmd_bossPosterB = dmd.Animation().load(self.dmd_path + 'wanted-BOSS-B.dmd')
         self.dmd_rudyPosterB = dmd.Animation().load(self.dmd_path + 'rudy-wanted-b.dmd')
         self.dmd_bullPosterB = dmd.Animation().load(self.dmd_path + 'bull-wanted-b.dmd')
+        self.dmd_bettyPosterB = dmd.Animation().load(self.dmd_path + 'betty-wanted-b.dmd')
 
         self.dmd_big = dmd.Animation().load(self.dmd_path + 'face-BIG.dmd')
         self.dmd_bandelero = dmd.Animation().load(self.dmd_path + 'face-BANDELERO.dmd')
@@ -1666,6 +1693,7 @@ class Assets():
         self.dmd_boss = dmd.Animation().load(self.dmd_path + 'boss.dmd')
         self.dmd_rudy = dmd.Animation().load(self.dmd_path + 'rudy-start.dmd')
         self.dmd_bull = dmd.Animation().load(self.dmd_path + 'bull-start.dmd')
+        self.dmd_betty = dmd.Animation().load(self.dmd_path + 'betty-start.dmd')
 
         self.dmd_bigHit = dmd.Animation().load(self.dmd_path + 'hit-BIG.dmd')
         self.dmd_bandeleroHit = dmd.Animation().load(self.dmd_path + 'hit-BANDELERO.dmd')
@@ -1673,7 +1701,7 @@ class Assets():
         self.dmd_bossHit = dmd.Animation().load(self.dmd_path+'boss-hit.dmd')
         self.dmd_rudyHit = dmd.Animation().load(self.dmd_path + 'rudy-hit.dmd')
         self.dmd_bullHit = dmd.Animation().load(self.dmd_path + 'bull-hit.dmd')
-
+        self.dmd_bettyHit = dmd.Animation().load(self.dmd_path + 'betty-hit.dmd')
 
         self.dmd_trainOnTracks = dmd.Animation().load(self.dmd_path+'train-on-tracks.dmd')
         self.dmd_trainMoveRight = dmd.Animation().load(self.dmd_path+'train-on-tracks-move-right.dmd')
