@@ -89,7 +89,9 @@ class SavePolly(ep.EP_Mode):
                     self.game.base.queued += 1
                     self.wipe_delays()
                     self.polly_died()
-
+                else:
+                    self.game.base.busy = True
+                    self.game.base.queued += 1
 
     # bonus lanes pause save polly
     def sw_leftBonusLane_active(self,sw):
