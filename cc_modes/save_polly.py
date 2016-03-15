@@ -81,10 +81,13 @@ class SavePolly(ep.EP_Mode):
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
             if self.game.show_tracking("centerRampStage") == 99:
-                self.game.base.busy = True
-                self.game.base.queued += 1
-                self.wipe_delays()
+#                self.game.base.busy = True
+#                self.game.base.queued += 1
+#                self.wipe_delays()
                 if not self.finishing_up:
+                    self.game.base.busy = True
+                    self.game.base.queued += 1
+                    self.wipe_delays()
                     self.polly_died()
 
 
