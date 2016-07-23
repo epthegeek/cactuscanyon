@@ -133,12 +133,21 @@ class Interrupter(ep.EP_Mode):
             self.delay(delay=1.8,handler=self.game.sound.play,param=self.game.assets.quote_dejected)
             self.delay(delay=3.5,handler=self.game.reset)
         else:
+            # if in rectify party mode show rectify instead of tilt
+            if self.game.party_setting == 'Rectify':
+                displayString = "RECTIFIED"
+                tiltSound = self.game.assets.sfx_spinDown
+                soundDelay = 0
+            else:
+                displayString = "TILT"
+                tiltSound = self.game.assets.quote_tilt
+                soundDelay = 1.5
             # build a tilt graphic
-            tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text("TILT",color=ep.RED)
+            tiltLayer = ep.EP_TextLayer(128/2, 7, self.game.assets.font_20px_az, "center", opaque=True).set_text(displayString,color=ep.RED)
             # Display the tilt graphic
             self.layer = tiltLayer
             # play the tilt quote
-            self.delay(delay=1.5,handler=self.game.sound.play,param=self.game.assets.quote_tilt)
+            self.delay(delay=soundDelay,handler=self.game.sound.play,param=tiltSound)
 
     def tilted(self):
         print "Interrupter Passing Tilt"

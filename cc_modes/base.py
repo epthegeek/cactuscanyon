@@ -699,8 +699,12 @@ class BaseGameMode(ep.EP_Mode):
         self.game.bonus_lanes.flip()
 
     def dub_flip(self):
+        # If rectify party mode is on, RECTIFY
+        if self.game.party_setting == 'Rectify':
+            self.game.set_tracking('tiltStatus',self.game.tilt_warnings)
+            self.tilt()
         # if doing the bonus, abort
-        if self.doingBonus:
+        elif self.doingBonus:
             self.abort_bonus()
         # if the long form extra ball thing is running, kill that
         elif self.game.mine.collectingEB:
