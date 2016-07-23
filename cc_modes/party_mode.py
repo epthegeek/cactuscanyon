@@ -58,6 +58,9 @@ class PartyMode(ep.EP_Mode):
         # spiked beer
         elif self.game.party_setting == 'Spiked':
             textString1 = "< SPIKED - BEER TILTS >"
+        # rectify
+        elif self.game.party_setting == 'Rectify':
+            textString1 = "< RECTIFY - NO DUB FLIP >"
         # last case is release to flip
         else:
             textString1 = "< RELEASE TO FLIP >"
