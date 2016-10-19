@@ -111,6 +111,17 @@ Machine (Standard):
     options: [1,100]
     increments: 1
     default: 10
+  'Ball Search Bart Kicks':
+    options: [2,10]
+    increments: 1
+    default: 4
+  'Ball Search Bart Strength':
+    options: [20,80]
+    increments: 5
+    default: 40
+  'Ball Search Bart Pause':
+    options: [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+    default: 0.3
 Sound:
   'Initial volume':
     options: [1,2,3,4,5,6,7,8,9,10]
