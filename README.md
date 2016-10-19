@@ -29,9 +29,7 @@ Disclaimer type stuff
 =====================
 
 This code is here, freely available to anyone for perusing and studying or whatever -- but
-I ask that if you make changes to it for your own use that you DO NOT redistribute it
-under the same project name, and make it VERY CLEAR that it was modified from the original,
-so that I don't have other people asking me about code I didn't write.
+I ask that if you make changes to it for your own use that you DO NOT REDISTRIBUTE IT TO ANYONE WITHOUT WRITTEN PERMISSION FROM ME and it must not be under the same project name, and make it VERY CLEAR that it was modified from the original, so that I don't have other people asking me about code I didn't write.
 
 I can't be blamed for anything you do with this code.  If you take it and use it for
 something, that's on you. I make no guarantees of any kind as to function or performance.
