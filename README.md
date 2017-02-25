@@ -10,7 +10,7 @@ This is built on the shoulders of giants
 A lot of code in this thing is heavily cribbed from the work of others. A LOT. Built
 upon the PyProcGame framework by Adam Preble and Gerry Stellenberg,  it includes a lot
 of borrowed ideas from the likes of Koen Heltzel, Jim Askey and others.  Without those
-guys, there'd be no this thing.  They're awesome. I'm a nub.
+guys, there would be no this thing.  They're awesome. I'm a nub.
 
 I should be clear here, due to the misrepresentation of others as to what this means:
 By "heavily cribbed from the work of others" I mean that I studied other available projects

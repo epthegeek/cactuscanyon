@@ -43,6 +43,13 @@ class Bart(ep.EP_Mode):
         self.boss_alternate = 'Avoid' == self.game.user_settings['Gameplay (Feature)']['Boss Bart Posse']
         # check if extra barts are on
         self.guests = 'Enabled' == self.game.user_settings['Gameplay (Feature)']['Bart Brothers Guests']
+        # ball search settings
+        # how many times to move bart
+        self.search_kicks = self.game.user_settings['Machine (Standard)']['Ball Search Bart Kicks']
+        # coil pulse milliseconds for ball search
+        self.search_power = self.game.user_settings['Machine (Standard)']['Ball Search Bart Strength']
+        # tenths of a second the game will wait between bart kicks in ball search
+        self.search_pause = self.game.user_settings['Machine (Standard)']['Ball Search Bart Pause']
         # Easy version
         print "Difficulty is set to - " + difficulty
         if difficulty == 'Easy':
@@ -519,6 +526,15 @@ class Bart(ep.EP_Mode):
             self.game.coils.moveBart.pulse(50)
             repeat += 1
             self.delay(delay=0.3,handler=self.hardMove,param=repeat)
+
+    def searchMove(self,repeat=1):
+        if repeat > self.search_kicks:
+            pass
+        else:
+            self.game.coils.moveBart.pulse(self.search_power)
+            repeat += 1
+            self.delay(delay=self.search_pause,handler=self.searchMove,param=repeat)
+
 
     def hat(self):
         self.game.coils.moveBartHat.pulse(30)
