@@ -78,3 +78,7 @@ class FranksDisplay(ep.EP_Mode):
         self.wipe_delays()
         self.game.franks_switches.end()
         self.unload()
+
+    def tilted(self):
+        print "Tilted: " + self.myID
+        self.end()

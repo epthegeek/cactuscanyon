@@ -56,6 +56,8 @@ class BaseGameMode(ep.EP_Mode):
         self.keys_index = {'beer_mug':list(range(len(self.game.sound.sounds[self.game.assets.quote_beerMug])))}
         self.counts_index = {'beer_mug':0}
         random.shuffle(self.keys_index['beer_mug'])
+        self.rectified = False
+        self.tiltPause = False
 
     def mode_started(self):
         ## cancel the closing song delay, just in case
@@ -373,18 +375,23 @@ class BaseGameMode(ep.EP_Mode):
     ###
 
     def sw_plumbBobTilt_active(self, sw):
-        # first, register the hit
-        status = self.game.increase_tracking('tiltStatus')
-        print "TILT STATUS: " + str(status)
-        # if that puts us at three, time to tilt
-        if status == self.game.tilt_warnings:
-            self.tilt()
-        # if it keeps banging, ignore it
-        elif status > self.game.tilt_warnings:
-            pass
-        # for 2 or 1 hand off to interrupter jones
-        else:
-            self.game.interrupter.tilt_danger(status)
+        if not self.tiltPause:
+            # larger debounce than normal
+            self.tiltPause = True
+            self.delay(delay=0.5,handler=self.tilt_unpause)
+
+            # first, register the hit
+            status = self.game.increase_tracking('tiltStatus')
+            print "TILT STATUS: " + str(status)
+            # if that puts us at three, time to tilt
+            if status == self.game.tilt_warnings:
+                self.tilt()
+            # if it keeps banging, ignore it
+            elif status > self.game.tilt_warnings:
+                pass
+            # for 2 or 1 hand off to interrupter jones
+            else:
+                self.game.interrupter.tilt_danger(status)
 
     def tilt(self):
         # Process tilt.
@@ -422,6 +429,7 @@ class BaseGameMode(ep.EP_Mode):
 
             #play sound
             self.stop_music()
+            # redundant the interrupter display does the spindown sound
             self.game.sound.play(self.game.assets.sfx_spinDown)
 
             #clear the mine and the saloon in 4 seconds
@@ -434,13 +442,21 @@ class BaseGameMode(ep.EP_Mode):
                 if getattr(mode, "tilted", None):
                     mode.tilted()
 
+    def tilt_unpause(self):
+        self.tiltPause = False
+
     def tilted_ejects(self):
-        if self.game.switches.saloonPopper.is_active():
-            self.game.saloon.kick()
-        if self.game.switches.minePopper.is_active():
-            self.game.mountain.eject()
-        # swing back in two seconds to re-check
-        self.delay(name="Tilted Ejects",delay=2,handler=self.tilted_ejects)
+        if not self.game.switches.saloonPopper.is_active() and not self.game.switches.minePopper.is_active() and not self.game.switches.shooterLane.is_active():
+            pass
+        else:
+            if self.game.switches.saloonPopper.is_active():
+                self.game.saloon.kick()
+            if self.game.switches.minePopper.is_active():
+                self.game.mountain.eject()
+            if self.game.switches.shooterLane.is_active():
+                self.game.coils.shootLane.pulse()
+            # swing back in two seconds to re-check
+            self.delay(name="Tilted Ejects",delay=2,handler=self.tilted_ejects)
 
     def tilted(self):
         pass
@@ -699,8 +715,9 @@ class BaseGameMode(ep.EP_Mode):
         self.game.bonus_lanes.flip()
 
     def dub_flip(self):
-        # If rectify party mode is on, RECTIFY
-        if self.game.party_setting == 'Rectify':
+        # If rectify party mode is on, RECTIFY if there's a ball in play
+        if self.game.party_setting == 'Rectify' and self.game.trough.num_balls_in_play > 0 and not self.rectified:
+            self.rectified = True
             self.game.set_tracking('tiltStatus',self.game.tilt_warnings)
             self.tilt()
         # if doing the bonus, abort

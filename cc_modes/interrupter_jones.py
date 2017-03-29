@@ -135,7 +135,7 @@ class Interrupter(ep.EP_Mode):
         else:
             # if in rectify party mode show rectify instead of tilt
             if self.game.party_setting == 'Rectify':
-                displayString = "RECTIFIED"
+                displayString = "RECTIFY"
                 tiltSound = self.game.assets.sfx_spinDown
                 soundDelay = 0
             else:

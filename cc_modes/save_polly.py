@@ -500,7 +500,7 @@ class SavePolly(ep.EP_Mode):
                 self.layer = combined
                 duration = self.game.sound.play(self.game.assets.sfx_glumRiff)
                 self.delay("Display",delay=duration,handler=self.clear_layer)
-                self.delay("Operational",delay=duration,handler=self.polly_finished)
+                self.delay("Operational",delay=1.5,handler=self.polly_finished)
 
     def polly_finished(self):
         self.running = False

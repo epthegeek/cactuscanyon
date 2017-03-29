@@ -115,6 +115,12 @@ class CvA(ep.EP_Mode):
         if self.game.quickdraw.running:
             print "aborting running quickdraw for CVA"
             self.game.quickdraw.lost(self.game.quickdraw.side)
+        # temporary code for John Chism's UFO mod -- TODO: make 87 more dynamic with settings options
+        self.game.lamps.jetBumpers.enable()
+
+    def mode_stopped(self):
+        # temporary code for John Chism's UFO mod
+        self.game.lamps.jetBumpers.disable()
 
     ### Jackpot switches
 

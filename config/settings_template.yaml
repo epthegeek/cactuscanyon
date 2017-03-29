@@ -220,9 +220,15 @@ Gameplay (Feature):
   'Ambush or Showdown First':
     options: ['Ambush','Showdown']
     default: 'Showdown'
+  'Party Available':
+    options: ['Yes','No']
+    default: 'Yes'
   'Party Mode':
     options: ['Disabled','Flip Ct','Rel Flip','Drunk','Newbie','No Hold','Lights Out','Spiked','Rectify']
     default: 'Disabled'
+  'Party Mode Force':
+    options: ['Yes','No']
+    default: 'No'
   'Party - Flip Count':
     options: [10,500]
     increments: 5

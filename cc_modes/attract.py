@@ -49,7 +49,7 @@ class Attract(ep.EP_Mode):
         else:
             print "Custom Message Not Enabled"
         # stuff for party menu
-        self.pmode_settings = ("Disabled","Flip Ct","Rel Flip","Drunk","Newbie","No Hold","Lights Out","Spiked")
+        self.pmode_settings = ("Disabled","Flip Ct","Rel Flip","Drunk","Newbie","No Hold","Lights Out","Spiked","Rectify")
 
     def mode_started(self):
 
@@ -96,27 +96,24 @@ class Attract(ep.EP_Mode):
         self.splash = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ccBanner.frames[0])
         continuedBanner = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_cccBanner.frames[0])
 
-        if self.game.replays:
-            border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_simpleBorder.frames[0])
-            replayTextLayer1 = ep.EP_TextLayer(64, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("REPLAY SCORE:",color=ep.ORANGE)
-            replayTextLayer2 = ep.EP_TextLayer(64, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(ep.format_score(self.game.user_settings['Machine (Standard)']['Replay Score']),color=ep.YELLOW)
-            replayPage = dmd.GroupedLayer(128,32,[border,replayTextLayer1,replayTextLayer2])
-
         self.myIndex = 0
 
 
         # adding a blank layer
         blanker = self.game.score_display.layer
 
-
-        self.layers = [ {'layer':blanker,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH},
-                        {'layer':self.splash,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
-                        #{'layer':continuedBanner,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST},
-                        {'layer':continuedBanner,'type':"NONE",'direction':"DERP"},
-                        {'layer':original,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_EAST},
-                        {'layer':ballyBanner,'type':ep.EP_Transition.TYPE_CROSSFADE, 'direction':False},
-                        {'layer':expanded,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST},
-                        {'layer':proc_banner,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False}]
+        self.layers = []
+        self.layers.append({'layer':blanker,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH})
+        self.layers.append({'layer':self.splash,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST})
+        self.layers.append({'layer':continuedBanner,'type':"NONE",'direction':"DERP"})
+        self.layers.append({'layer':original,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_EAST})
+        self.layers.append({'layer':ballyBanner,'type':ep.EP_Transition.TYPE_CROSSFADE, 'direction':False})
+        self.layers.append({'layer':expanded,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_WEST})
+        self.layers.append({'layer':proc_banner,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
+        # Add the party mode page
+        if  self.game.user_settings['Gameplay (Feature)']['Party Available'] == 'Yes':
+            self.set_party_display()
+            self.layers.append({'layer':self.party_display,'type':ep.EP_Transition.TYPE_PUSH,'direction':ep.EP_Transition.PARAM_NORTH})
 
         # new custom message stuff
         if self.customMessage:
@@ -134,6 +131,10 @@ class Attract(ep.EP_Mode):
         self.generate_score_frames()
 
         if self.game.replays:
+            border = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_simpleBorder.frames[0])
+            replayTextLayer1 = ep.EP_TextLayer(64, 5, self.game.assets.font_10px_AZ, "center", opaque=False).set_text("REPLAY SCORE:",color=ep.ORANGE)
+            replayTextLayer2 = ep.EP_TextLayer(64, 18, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(ep.format_score(self.game.user_settings['Machine (Standard)']['Replay Score']),color=ep.YELLOW)
+            replayPage = dmd.GroupedLayer(128,32,[border,replayTextLayer1,replayTextLayer2])
             # add the replay value page
             self.layers.append({'layer':replayPage,'type':ep.EP_Transition.TYPE_CROSSFADE,'direction':False})
 
@@ -208,8 +209,9 @@ class Attract(ep.EP_Mode):
         self.timer_countdown()
 
         # Add the party layer if party is enabled
-        if self.game.party_setting != 'Disabled':
-            self.game.party_mode.attract_display()
+# Removing this in favor of an interstitial display
+#        if self.game.party_setting != 'Disabled':
+#            self.game.party_mode.attract_display()
 
     def run_animation_loop(self):
         # grab the current index
@@ -248,14 +250,14 @@ class Attract(ep.EP_Mode):
         self.timer = 3
 
     def timer_countdown(self):
+        # come back to the timer - after cancelling any existing delay, just to be sure
+        self.cancel_delayed('slideshow_timer')
         # looping timer to control the animation speed of attract mode
         # can be hurried to the next step by flipper buttons
         self.timer -= 1
         #print "ATTRACT TIMER: " + str(self.timer)
         if self.timer == 0:
             self.run_animation_loop()
-        # come back to the timer - after cancelling any existing delay, just to be sure
-        self.cancel_delayed('slideshow_timer')
         self.delay('slideshow_timer', event_type=None, delay=1, handler=self.timer_countdown)
 
     def sw_flipperLwL_active(self,sw):
@@ -265,10 +267,10 @@ class Attract(ep.EP_Mode):
         elif self.flipperOK:
             # if we're in party select, move the index
             if self.partySelectFlag:
-                if self.pindex == 0:
-                    self.pindex = len(self.pmode_settings) - 1
+                if self.game.party_index == 0:
+                    self.game.party_index = len(self.pmode_settings) - 1
                 else:
-                    self.pindex -= 1
+                    self.game.party_index -= 1
                 # then update the display
                 self.update_party_text()
             # if we're not in party select
@@ -289,10 +291,10 @@ class Attract(ep.EP_Mode):
         elif self.flipperOK:
             if self.partySelectFlag:
                 # if we're at the high end, reset to zero
-                if self.pindex >= len(self.pmode_settings) - 1:
-                    self.pindex = 0
+                if self.game.party_index >= len(self.pmode_settings) - 1:
+                    self.game.party_index = 0
                 else:
-                    self.pindex += 1
+                    self.game.party_index += 1
                 # then update the display
                 self.update_party_text()
             # if we're not in party select, regular action starts here
@@ -351,35 +353,37 @@ class Attract(ep.EP_Mode):
 # Holding right flipper to do party menu
 
     def sw_flipperLwR_active_for_3s(self,sw):
-        # stop the attract timer
-        self.cancel_delayed('slideshow_timer')
-        # get the current index just to be safe
-        self.pindex = self.get_party_index()
-        # kill party mode display if it's alive
-        if self.game.party_mode in self.game.modes:
-            self.game.party_mode.clear_layer()
-        # Turn the music on
-        self.music_on("music_party")
-        # put up the display
-        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_starsBorder.frames[0])
-        textLayer1 = ep.EP_TextLayer(64, 1, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("PARTY MODE",color=ep.MAGENTA)
-        self.ptextLayer2 = ep.EP_TextLayer(64, 12, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(self.pmode_settings[self.pindex].upper(),color=ep.YELLOW)
-        instructions = dmd.TextLayer(64,23,self.game.assets.font_5px_AZ,"center").set_text("START BUTTON SELECTS")
-        instructions2 = dmd.TextLayer(64,23,self.game.assets.font_5px_AZ,"center").set_text("DOUBLE FLIP TO CANCEL")
-        script = []
-        script.append({'seconds':2,'layer':instructions})
-        script.append({'seconds':2,'layer':instructions2})
-        instruction_duo = dmd.ScriptedLayer(128,32,script)
-        instruction_duo.composite_op = "blacksrc"
-        self.layer = dmd.GroupedLayer(128,32,[background,textLayer1,self.ptextLayer2,instruction_duo])
-        # set the party mode flag
-        self.partySelectFlag = True
-        # start a bail delay
-        self.reset_party_timeout()
+        if self.game.user_settings["Gameplay (Feature)"]["Party Available"] == 'Yes':
+            # stop the attract timer
+            self.cancel_delayed('slideshow_timer')
+            # kill party mode display if it's alive
+            if self.game.party_mode in self.game.modes:
+                self.game.party_mode.clear_layer()
+            # Turn the music on
+            self.music_on("music_party")
+            # put up the display
+            background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_starsBorder.frames[0])
+            textLayer1 = ep.EP_TextLayer(64, 1, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("PARTY MODE",color=ep.MAGENTA)
+            self.ptextLayer2 = ep.EP_TextLayer(64, 12, self.game.assets.font_10px_AZ, "center", opaque=False).set_text(self.pmode_settings[self.game.party_index].upper(),color=ep.YELLOW)
+            instructions = dmd.TextLayer(64,23,self.game.assets.font_5px_AZ,"center").set_text("START BUTTON SELECTS")
+            instructions2 = dmd.TextLayer(64,23,self.game.assets.font_5px_AZ,"center").set_text("DOUBLE FLIP TO CANCEL")
+            script = []
+            script.append({'seconds':2,'layer':instructions})
+            script.append({'seconds':2,'layer':instructions2})
+            instruction_duo = dmd.ScriptedLayer(128,32,script)
+            instruction_duo.composite_op = "blacksrc"
+            self.layer = dmd.GroupedLayer(128,32,[background,textLayer1,self.ptextLayer2,instruction_duo])
+            # set the party mode flag
+            self.partySelectFlag = True
+            # start a bail delay
+            self.reset_party_timeout()
+        else:
+            # if party isn't available, skip the menu
+            pass
 
     def update_party_text(self):
         if self.partySelectFlag:
-            self.ptextLayer2.set_text(self.pmode_settings[self.pindex].upper(),color=ep.YELLOW)
+            self.ptextLayer2.set_text(self.pmode_settings[self.game.party_index].upper(),color=ep.YELLOW)
         # also reset the timeout
         self.reset_party_timeout()
 
@@ -399,9 +403,11 @@ class Attract(ep.EP_Mode):
             index = 5
         elif self.game.party_setting == "Lights Out":
             index = 6
-        # spiked is the end of the line
-        else:
+        elif self.game.party_setting == "Spiked":
             index = 7
+        # 'Rectify is the end of the line'
+        else:
+            index = 8
         return index
 
     def reset_party_timeout(self):
@@ -409,40 +415,52 @@ class Attract(ep.EP_Mode):
         self.delay("Party Timeout",delay = 15,handler=self.cancel_party_select)
 
     def cancel_party_select(self):
-        print "PARTY MODE SELECT TIMEOUT"
-        # turn off the flag
-        self.partySelectFlag = False
-        # turnoff the music
-        self.stop_music()
-        # restart the display
-        self.run_animation_loop()
-        # then kick off the timer to run it after that
-        self.timer_countdown()
+        if self.partySelectFlag:
+            self.cancel_delayed("Party Timeout")
+            print "PARTY MODE SELECT CANCEL"
+            # turn off the flag
+            self.partySelectFlag = False
+            # turnoff the music
+            self.stop_music()
+            # restart the display
+            self.run_animation_loop()
+            # then kick off the timer to run it after that
+            self.timer_countdown()
 
     def set_party_mode(self):
         print "SETTING NEW PARTY MODE"
+        self.cancel_delayed("Party Timeout")
         # set the party setting to current
-        self.game.user_settings['Gameplay (Feature)']['Party Mode'] = self.pmode_settings[self.pindex]
-        self.game.party_setting = self.pmode_settings[self.pindex]
-        # Turn off the music
-        self.stop_music()
-        # re run the animation loop
-        self.run_animation_loop()
-        # then kick off the timer to run it after that
-        self.timer_countdown()
+        self.game.user_settings['Gameplay (Feature)']['Party Mode'] = self.pmode_settings[self.game.party_index]
+        self.game.party_setting = self.pmode_settings[self.game.party_index]
+        # save the settings so the change sticks
+        self.game.save_settings()
         # turn on the party mode display if applicable - or turn it off
         if self.game.party_setting != 'Disabled':
             if self.game.party_mode not in self.game.modes:
                 self.game.modes.add(self.game.party_mode)
                 print "ADDING PARTY MODE"
-            self.game.party_mode.attract_display()
+            string = "ENABLED"
+            color_string = ep.GREEN
+            #self.game.party_mode.attract_display()
         else:
             print "REMOVING PARTY MODE"
             if self.game.party_mode in self.game.modes:
                 self.game.party_mode.unload()
+            string = "DISABLED"
+            color_string = ep.RED
+        # update the attract display
+        self.set_party_display_text()
         # turn off the flag
         self.partySelectFlag = False
-
+        # Do a display
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_starsBorder.frames[0])
+        textLayer1 = ep.EP_TextLayer(64, 1, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("PARTY MODE",color=ep.MAGENTA)
+        textLayer2 = ep.EP_TextLayer(64, 13, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(string,color=color_string)
+        self.layer = dmd.GroupedLayer(128,32,[background,textLayer1,textLayer2])
+        self.delay(delay =2,handler=self.run_animation_loop)
+        self.delay(delay =2,handler=self.timer_countdown)
+        self.delay(delay =2,handler=self.stop_music)
 
     def flipper_action(self):
         if self.slowFlipper:
@@ -514,29 +532,42 @@ class Attract(ep.EP_Mode):
                 if self.partySelectFlag:
                     self.set_party_mode()
                     return
-                # Normal non party select processing starts here
-                if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
-                    # kill the lampshow
-                    self.game.lampctrl.stop_show()
-                    # kill the music in case the 'end of game' song is playing
-                    self.stop_music()
-                    # clear the interrupter layer
-                    self.game.interrupter.clear_layer()
-                    self.game.interrupter.wipe_delays()
-                    # stop the GI lampshow just in case the flasher show is playing
-                    self.game.GI_lampctrl.stop_show()
-                    # Initialize game
-                    if self.game.switches.flipperLwL.is_active() and self.tournamentTimer <= 0 and self.game.user_settings['Gameplay (Feature)']['Midnight Force'] == 'Enabled':
-                        force = True
-                    else:
-                        force = False
-                    # kickoff tournament
-                    if self.tournamentTimer > 0:
-                        self.game.tournament = True
-                    self.game.start_game(forceMoonlight=force)
+                # if we're already in party check, do nothing with start
+                elif self.game.party_mode.party_check:
+                    pass
+                # if party mode is on, do the interstitial unless force is on
+                elif self.game.party_setting != 'Disabled' and self.game.user_settings['Gameplay (Feature)']['Party Mode Force'] == 'No':
+                    self.game.party_mode.party_check = True
+                    self.game.party_mode.party_started()
+                # Otherwise, proceed with normal start
                 else:
-                    print "BALL SEARCH"
-                    self.game.ball_search.perform_search(1)
+                    self.normal_start()
+
+    def normal_start(self):
+        print "NORMAL GAME START"
+        # Normal non party select processing starts here
+        if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
+            # kill the lampshow
+            self.game.lampctrl.stop_show()
+            # kill the music in case the 'end of game' song is playing
+            self.stop_music()
+            # clear the interrupter layer
+            self.game.interrupter.clear_layer()
+            self.game.interrupter.wipe_delays()
+            # stop the GI lampshow just in case the flasher show is playing
+            self.game.GI_lampctrl.stop_show()
+            # Initialize game
+            force = False
+            if self.game.party_setting == 'Disabled':
+                if self.game.switches.flipperLwL.is_active() and self.tournamentTimer <= 0 and self.game.user_settings['Gameplay (Feature)']['Midnight Force'] == 'Enabled':
+                    force = True
+            # kickoff tournament
+            if self.tournamentTimer > 0:
+                self.game.tournament = True
+            self.game.start_game(forceMoonlight=force)
+        else:
+            print "BALL SEARCH"
+            self.game.ball_search.perform_search(1)
 
     def generate_score_frames(self):
         # This big mess generates frames for the attract loop based on high score data.
@@ -759,6 +790,18 @@ class Attract(ep.EP_Mode):
         if self.game.switches.saloonPopper.is_active():
             self.game.saloon.kick()
 
+    def set_party_display(self):
+        background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_starsBorder.frames[0])
+        textLayer1 = ep.EP_TextLayer(64, 1, self.game.assets.font_5px_AZ, "center", opaque=False).set_text("PARTY MODE",color=ep.MAGENTA)
+        self.p_textLayer = ep.EP_TextLayer(64, 8, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text(self.game.party_mode.party_instructions[self.game.party_index][0],color=ep.YELLOW)
+        self.p_instructions = dmd.TextLayer(64,17,self.game.assets.font_5px_AZ,"center").set_text(self.game.party_mode.party_instructions[self.game.party_index][1])
+        self.p_instructions2 = dmd.TextLayer(64,23,self.game.assets.font_5px_AZ,"center").set_text(self.game.party_mode.party_instructions[self.game.party_index][2])
+        self.party_display = dmd.GroupedLayer(128,32,[background,textLayer1,self.p_textLayer,self.p_instructions,self.p_instructions2])
+
+    def set_party_display_text(self):
+        self.p_textLayer.set_text(self.game.party_mode.party_instructions[self.game.party_index][0],color=ep.YELLOW)
+        self.p_instructions.set_text(self.game.party_mode.party_instructions[self.game.party_index][1])
+        self.p_instructions2.set_text(self.game.party_mode.party_instructions[self.game.party_index][2])
 
     def mode_stopped(self):
         print "DELETING ATTRACT DELAYS"

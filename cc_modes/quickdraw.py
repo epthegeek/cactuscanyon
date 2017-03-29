@@ -58,6 +58,7 @@ class Quickdraw(ep.EP_Mode):
     def mode_started(self):
         self.paused = False
         self.running = True
+        self.wipe_delays()
 
     def ball_drained(self):
         # the the ball drains, quickdraw is lost

@@ -119,7 +119,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2016.07.23"
+        self.revision = "2017.03.26"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
@@ -131,6 +131,7 @@ class CCGame(game.BasicGame):
         # Party Mode
         self.party_setting = self.user_settings['Gameplay (Feature)']['Party Mode']
         print "Party Setting: " + str(self.party_setting)
+        self.party_index = self.set_party_index()
 
         # disabled flippers - just in case
         self.enable_flippers(False)
@@ -582,6 +583,9 @@ class CCGame(game.BasicGame):
         ## run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
         self.ballStarting = True
+        # reset the rectify flag
+        self.base.rectified = False
+        self.tiltPause = False
         # Set the score multiplier to 1 as a safety catch
         self.multiplier = 1
         # turn on the GI
@@ -605,6 +609,13 @@ class CCGame(game.BasicGame):
                 self.enable_flippers(True)
         else:
             self.enable_flippers(True)
+        # If alternate is on, validate the right flipper
+        if self.party_setting == 'Alternate':
+            self.party_mode.right_flipper('Activate')
+        # if stutter is on, validate both flippers
+        if self.party_setting == 'Stutter':
+            self.party_mode.right_flipper('Activate')
+            self.party_mode.left_flipper('Activate')
         # reset the tilt status
         self.set_tracking('tiltStatus',0)
         # reset the stack levels
@@ -1439,4 +1450,27 @@ class CCGame(game.BasicGame):
         if self.doubler in self.modes and not self.doubler.running:
             self.doubler.unload()
 
+
+    def set_party_index(self):
+    # Find the current setting
+        if self.party_setting == "Disabled":
+            index = 0
+        elif self.party_setting == "Flip Ct":
+            index = 1
+        elif self.party_setting == "Rel Flip":
+            index = 2
+        elif self.party_setting == "Drunk":
+            index = 3
+        elif self.party_setting == "Newbie":
+            index = 4
+        elif self.party_setting == "No Hold":
+            index = 5
+        elif self.party_setting == "Lights Out":
+            index = 6
+        elif self.party_setting == "Spiked":
+            index = 7
+        # 'Rectify is the end of the line'
+        else:
+            index = 8
+        return index
 

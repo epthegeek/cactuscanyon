@@ -1678,7 +1678,7 @@ class NewServiceModeUpdate(NewServiceSkeleton):
             # if enter is pressed, copy the files
             # update the layer to say copying files
             self.selectionLine.set_text("COPYING FILES")
-            self.infoLine.set_text("DO NOT POWER OFF",blink_frames=15)
+            self.infoLine.set_text("DO NOT POWER OFF")
             self.delay(delay=1,handler=self.copy_files)
         else:
             self.game.sound.play(self.game.assets.sfx_menuReject)

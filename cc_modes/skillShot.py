@@ -128,6 +128,8 @@ class SkillShot(ep.EP_Mode):
         self.lcount = 0
         self.rcount = 0
         self.prizeIndex = 0
+        # clear any existing delays
+        self.wipe_delays()
         # call the welcome quote - and start the theme song after on the first ball
         duration = self.game.sound.play(self.game.assets.music_drumRiff)
         if self.game.ball == 1 and not self.game.show_tracking('greeted'):
