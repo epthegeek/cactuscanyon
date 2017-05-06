@@ -22,7 +22,7 @@
 Machine (Standard):
   'Color Display Pixel Size':
     options: [14,10,8]
-    default: 8
+    default: 10
   'Color Display Dot Style':
     options: ["ROUND","SQUARE","GRID"]
     default: "ROUND"
