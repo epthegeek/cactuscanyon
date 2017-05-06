@@ -43,6 +43,8 @@ class DrunkMultiball(ep.EP_Mode):
         self.giOff = 'Disabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball GI']
         self.enabled = 'Enabled' == self.game.user_settings['Gameplay (Feature)']['Drunk Multiball']
         self.beerHit = False
+        self.active = []
+        self.downToOne = False
 
     def mode_started(self):
         if not self.enabled:
