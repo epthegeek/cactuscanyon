@@ -1163,29 +1163,36 @@ class Assets():
         self.game.sound.register_sound(self.quote_defeatBull, self.quotes_path + "dead_bull.wav")
 
         self.quote_introBetty = 'quote_introBetty'
-        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "betty-intro-lets-tussle.wav")
-        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "betty-intro-show-those-boys.wav")
-        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "betty-intro-take-no-crap.wav")
+        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "Betty_INTRO_betty_here_to_show_these_boys_how_its_done.wav")
+        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "Betty_INTRO_my_name_is_betty_bart_lets_do_this.wav")
+        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "Betty_INTRO_my_names_betty_bart_lets_tussle.wav")
+        self.game.sound.register_sound(self.quote_introBetty, self.quotes_path + "Betty_INTRO_my_names_betty_bart_remember_it.wav")
 
         self.quote_hitBetty = 'quote_hitBetty'
-        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-that-smarts.wav")
-        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-dont-you-know.wav")
-        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-ow.wav")
-        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-hey.wav")
-        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "betty-hit-watch-it.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "Betty_HIT_dont_you_know_its_not_nice_to_hit_a_lady.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "Betty_HIT_grunt.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "Betty_HIT_ow.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "Betty_HIT_hey.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "Betty_HIT_son_of_a.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "Betty_HIT_that_smarts.wav")
+        self.game.sound.register_sound(self.quote_hitBetty, self.quotes_path + "Betty_HIT_why_i_oughta.wav")
 
         self.quote_tauntBetty = 'quote_tauntBetty'
-        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-are-you-a-mommas-boy-sheriff.wav")
-        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-im-waiting.wav")
-        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-lets-do-this.wav")
-        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-lets-see-what-you-got.wav")
-        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-you-dont-seem-so-tough.wav")
-        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "betty-taunt-youre-kinda-cute.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_are_you_a_mommas_boy_sheriff.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_Betty_Bart_Dont_Take_no_crap.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_hah_you_cant_hurt_me.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_im_gonna_open_up_a_can_of_whopass_on_ya.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_im_waitin.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_lets_see_what_you_got.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_look_at_you_on_second_thought.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_you_dont_seem_so_tough.wav")
+        self.game.sound.register_sound(self.quote_tauntBetty, self.quotes_path + "Betty_TAUNT_youre_kinda_cute_for_a_law_man.wav")
 
         self.quote_defeatBetty = 'quote_defeatBetty'
-        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "betty-defeat-i-did-my-best.wav")
-        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "betty-defeat-im-beat.wav")
-        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "betty-defeat-this-aint-over.wav")
+        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "Betty_DEFEAT_I_did_my_best_boys_2.wav")
+        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "Betty_DEFEAT_I_did_my_best_boys.wav")
+        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "Betty_DEFEAT_im_beat_sorry_boys.wav")
+        self.game.sound.register_sound(self.quote_defeatBetty, self.quotes_path + "Betty_DEFEAT_this_aint_over_sheriff.wav")
 
         self.quote_introRudy = 'quote_introRudy'
         self.game.sound.register_sound(self.quote_introRudy, self.quotes_path + "rudy_taunt-hey_its_only_pinball.wav")
