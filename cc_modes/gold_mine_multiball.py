@@ -87,7 +87,7 @@ class GoldMine(ep.EP_Mode):
                 # stop the mountain just in case motherlode is lit
                 self.stop_mountain()
                 # open the mountain for an easy shot
-                self.game.mountain.open()
+                self.game.mountain.full_open()
                 self.restart_option()
             # otherwise, end just like no ball action
             else:

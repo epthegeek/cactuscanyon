@@ -169,6 +169,8 @@ class BadGuys(ep.EP_Mode):
             lamp = False
         print "TARGET RAISE ATTEMPT " + str(target)
         print self.game.show_tracking('badGuyUp')
+        # Disable the target first
+        self.coils[target].disable()
         # new coil raise based on research with on o-scope by jim (jvspin)
         print "Target Start " + str(target) + " on time " + str(self.on_time)
         self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
