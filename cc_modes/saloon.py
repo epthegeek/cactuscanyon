@@ -162,7 +162,7 @@ class Saloon(ep.EP_Mode):
         # if there's an active bart, play a quote
         if self.game.show_tracking('bartStatus') == "RUNNING" or self.game.show_tracking('bartStatus') == "LAST":
             #self.game.base.play_quote(self.game.bart.tauntQuote)
-            self.game.bart.play_ordered_quote(self.game.bart.tauntQuote,'taunt')
+            self.game.bart.play_ordered_quote(self.game.bart.tauntQuote,'taunt',squelch=True)
             # and move the bart
             self.game.bart.animate(2)
         # score some points

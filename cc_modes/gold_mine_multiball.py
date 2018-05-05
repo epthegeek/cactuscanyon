@@ -84,6 +84,10 @@ class GoldMine(ep.EP_Mode):
                 self.game.sound.play_music(self.game.assets.music_tensePiano1,loops=-1)
                 self.clear_layer()
                 self.lamp_update()
+                # stop the mountain just in case motherlode is lit
+                self.stop_mountain()
+                # open the mountain for an easy shot
+                self.game.mountain.open()
                 self.restart_option()
             # otherwise, end just like no ball action
             else:
@@ -456,14 +460,18 @@ class GoldMine(ep.EP_Mode):
         # log the hit in audits
         self.game.game_data['Feature']['Motherlode Hits'] += 1
         # stop the mountain
-        self.game.mountain.reset_toy()
-        # turn off the flasher
-        self.game.coils.mineFlasher.disable()
+        self.stop_mountain()
         # if the bandits attack, divert there
         if self.bandits:
             self.bandits_arrive()
         else:
             self.collect_motherlode()
+
+    def stop_mountain(self):
+        # stop the mountain
+        self.game.mountain.stop()
+        # turn off the flasher
+        self.game.coils.mineFlasher.disable()
 
     def bandits_arrive(self):
         # clear the display
@@ -749,6 +757,8 @@ class GoldMine(ep.EP_Mode):
 
         self.update_tracking()
 
+        # cancel any mountain movement and flasher
+        self.stop_mountain()
         # reset the mountain to the home position
         self.game.mountain.reset_toy()
         print "MULTIBALL ENDED"
