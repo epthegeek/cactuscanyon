@@ -59,6 +59,7 @@ class DrunkMultiball(ep.EP_Mode):
             self.jackpotValue = 2000000
             self.jackpotIncrement = 100000
             self.beerHit = False
+            self.jackpot_count = 0
 
     def ball_drained(self):
         # if we're dropping down to one ball, and drunk multiball is running - do stuff
@@ -338,6 +339,8 @@ class DrunkMultiball(ep.EP_Mode):
         # audit
         self.game.game_data['Feature']['Drunk MB Jackpots'] += 1
         # take it out of active and put it in  available
+        # count the jackpots hit so far
+        self.jackpot_count += 1
         self.active.remove(shot)
         self.availableJackpots.append(shot)
         # update the lamps for the hit ramp
@@ -352,7 +355,10 @@ class DrunkMultiball(ep.EP_Mode):
             self.delay("GI Reset",delay=1,handler=self.game.gi_control,param="ON")
 
         # score some points
-        self.game.score(self.jackpotValue)
+        if self.jackpot_count == 5:
+            self.game.score((self.jackpotValue * 2))
+        else:
+            self.game.score(self.jackpotValue)
         self.jackpotEarned = self.jackpotValue
         self.jackpotValue += self.jackpotIncrement
         # load up the animation
@@ -377,7 +383,10 @@ class DrunkMultiball(ep.EP_Mode):
         self.cancel_delayed("Display")
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_slide)
-        self.game.base.play_quote(self.game.assets.quote_drunkJackpot)
+        if self.jackpot_count == 5 and not self.game.gm_multiball.running:
+            self.music_on(self.game.assets.music_fireball)
+        else:
+            self.game.base.play_quote(self.game.assets.quote_drunkJackpot)
         self.delay(name="Display",delay=1.5,handler=self.jackpot_score)
 
     def jackpot_score(self):
