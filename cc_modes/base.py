@@ -716,7 +716,10 @@ class BaseGameMode(ep.EP_Mode):
 
     def dub_flip(self):
         # If rectify party mode is on, RECTIFY if there's a ball in play
-        if self.game.party_setting == 'Rectify' and self.game.trough.num_balls_in_play > 0 and not self.rectified:
+        if self.game.party_setting == 'Rectify' \
+           and self.game.trough.num_balls_in_play > 0 \
+           and (self.game.skill_shot not in self.game.modes) \
+           and not self.rectified:
             self.rectified = True
             self.game.set_tracking('tiltStatus',self.game.tilt_warnings)
             self.tilt()
