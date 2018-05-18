@@ -18,7 +18,7 @@
 ### Save Poor Polly from getting run over by the train!
 ###
 
-from procgame import dmd
+from procgame import dmd,game
 import random
 import ep
 
@@ -70,6 +70,10 @@ class BankRobbery(ep.EP_Mode):
         self.shooting = False
         self.shooter = 0
         self.shotWait = 0
+        self.totalPoints = 0 # holder for total points for the mode earned
+        self.valueMultiplier = 1 # shot value multiplier
+        self.extendedCount = 0
+        self.gotPaused = False # was the mode paused at any point
 
         # set up the dude standing layers
         self.dude0 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bankDude.frames[0])
@@ -165,6 +169,24 @@ class BankRobbery(ep.EP_Mode):
         if self.running:
             self.process_shot(2)
 
+    def add_time(self):
+        # add to the time if we haven't hit the max
+        if self.extendedCount < 4:
+            # increase the timer by 4 seconds
+            self.modeTimer =+ 4
+            # play a sound
+            self.game.sound.play(self.game.assets.sfx_quickdrawOff)
+            # score some points
+            self.game.score(3750)
+            # increment the extendedCount
+            self.extendedCount += 1
+        else:
+            # play a thunk
+            self.game.sound.play(self.game.assets.sfx_quickdrawOn)
+            # score some points
+            self.game.score(3750)
+
+
     def process_shot(self,shot):
         if self.have_won:
             print "It's over already!"
@@ -174,12 +196,19 @@ class BankRobbery(ep.EP_Mode):
 
         if self.isActive[shot]:
             # if we hit an active shot, it's a hit
+            # cancel the multiplier delay
+            self.cancel_delayed("Multiplier")
             # set that shot to inactive
             self.isActive[shot] = False
             # update the lamps
             self.lamp_update()
             # score points
-            self.game.score(self.shotValue)
+            points = self.shotValue * self.valueMultiplier
+            self.game.score(points)
+            # add to the total
+            self.totalPoints += points
+            # up the multiplier
+            self.raise_multiplier()
             # kill the guy
             self.kill_dude(shot)
         else:
@@ -187,6 +216,18 @@ class BankRobbery(ep.EP_Mode):
             self.game.sound.play(self.game.assets.sfx_thrownCoins)
             # if we did't hit a shot, restart the mode timer
             self.in_progress()
+
+    def raise_multiplier(self):
+        # raise the multiplier value by 1
+        self.valueMultiplier += 1
+        # update the lamps
+        self.update_lamps()
+        # set the delay to reset the timer
+        self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
+
+    def reset_multiplier(self):
+        self.valueMultiplier = 1
+        self.update_lamps()
 
     def start_bank_robbery(self,step=1):
         if step == 1:
@@ -198,6 +239,8 @@ class BankRobbery(ep.EP_Mode):
             # set the running flag
             self.running = True
             self.lamp_update()
+            ## TEMP PLAY INTRO
+            duration = self.game.base.priority_quote(self.game.assets.quote_hatbDox,squelch=True)
 
             # start the music
             self.music_on(self.game.assets.music_altPeril)
@@ -208,7 +251,7 @@ class BankRobbery(ep.EP_Mode):
             self.layer = animLayer
 
             # loop back for the title card
-            self.delay(delay=myWait,handler=self.start_bank_robbery,param=2)
+            self.delay(delay=duration,handler=self.start_bank_robbery,param=2)
         if step == 2:
             # pick a shoot delay
             self.set_shot_target()
@@ -324,7 +367,17 @@ class BankRobbery(ep.EP_Mode):
             self.cancel_delayed("Get Going")
             # set the flag
             self.halted = True
+            self.gotPaused = True
             self.layer = self.pauseView
+
+    def add_time(self):
+        # add to the time if we haven't hit the max
+        if self.extendedCount < 4:
+            # increase the timer by 4 seconds
+            self.modeTimer =+ 4
+            # increment the extendedCount
+            self.extendedCount += 1
+
 
 
     # success

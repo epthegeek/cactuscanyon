@@ -18,7 +18,7 @@
 ### Save Poor Polly from getting run over by the train!
 ###
 
-from procgame import dmd
+from procgame import dmd,game
 import ep
 import random
 
@@ -59,6 +59,10 @@ class RiverChase(ep.EP_Mode):
         self.halted = False
         self.won = False
         self.distance_value = int(30.0 / self.shotsToWin)
+        self.totalPoints = 0 # holder for total points for the mode earned
+        self.valueMultiplier = 1 # shot value multiplier
+        self.extendedCount = 0
+        self.gotPaused = False # was the mode paused at any point
 
         # position for the horse
         self.x_pos = 6
@@ -154,6 +158,20 @@ class RiverChase(ep.EP_Mode):
     def sw_rightRampBottom_active(self,sw):
         self.game.sound.play(self.game.assets.sfx_horse)
 
+    # quickdraw switch bits
+    def sw_topLeftStandUp_active(self,sw):
+        self.add_time()
+        return game.SwitchStop
+    def sw_bottomLeftStandUp_active(self,sw):
+        self.add_time()
+        return game.SwitchStop
+    def sw_topRightStandUp_active(self,sw):
+        self.add_time()
+        return game.SwitchStop
+    def sw_bottomRightStandUp_active(self,sw):
+        self.add_time()
+        return game.SwitchStop
+
     def process_shot(self):
         # count the shot
         self.shotsSoFar += 1
@@ -167,11 +185,29 @@ class RiverChase(ep.EP_Mode):
         else:
             # set the banner flag
             self.banner = True
+            self.cancel_delayed("Multiplier")
             # score points
-            self.game.score(self.shotValue)
+            points = self.shotValue * self.valueMultiplier
+            self.game.score(points)
+            # add the points to the total
+            self.totalPoints += points
+            # nudge the multiplier
+            self.raise_multiplier()
             # set the distance to move
             print "MOVING HORSE " + str(self.distance_value)
             self.distance += self.distance_value
+
+    def raise_multiplier(self):
+        # raise the multiplier value by 1
+        self.valueMultiplier += 1
+        # update the lamps
+        self.update_lamps()
+        # set the delay to reset the timer
+        self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
+
+    def reset_multiplier(self):
+        self.valueMultiplier = 1
+        self.update_lamps()
 
     def start_river_chase(self,step=1):
         if step == 1:
@@ -185,6 +221,8 @@ class RiverChase(ep.EP_Mode):
             # clear any running music
             #self.stop_music()
             self.lamp_update()
+            ## TEMP PLAY INTRO
+            duration = self.game.base.priority_quote(self.game.assets.quote_rotrDox,squelch=True)
 
             # start the music
             self.music_on(self.game.assets.music_altPeril)
@@ -195,7 +233,7 @@ class RiverChase(ep.EP_Mode):
             self.layer = animLayer
 
             # loop back for the title card
-            self.delay("Operational",delay=myWait,handler=self.start_river_chase,param=2)
+            self.delay("Operational",delay=duration,handler=self.start_river_chase,param=2)
         if step == 2:
             # set up the title card
             titleCard = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_rotrTitle.frames[0])
@@ -254,8 +292,26 @@ class RiverChase(ep.EP_Mode):
         self.cancel_delayed("Get Going")
         # set the flag
         self.halted = True
+        # flag the penalty for using pause
+        self.gotPaused = True
         self.layer = self.pauseView
 
+    def add_time(self):
+        # add to the time if we haven't hit the max
+        if self.extendedCount < 4:
+            # increase the timer by 4 seconds
+            self.modeTimer =+ 4
+            # play a sound
+            self.game.sound.play(self.game.assets.sfx_quickdrawOff)
+            # score some points
+            self.game.score(3750)
+            # increment the extendedCount
+            self.extendedCount += 1
+        else:
+            # play a thunk
+            self.game.sound.play(self.game.assets.sfx_quickdrawOn)
+            # score some points
+            self.game.score(3750)
 
     # success
     def polly_saved(self):

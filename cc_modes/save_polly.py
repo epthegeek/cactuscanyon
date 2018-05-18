@@ -77,6 +77,9 @@ class SavePolly(ep.EP_Mode):
         self.won = False
         self.paused = False
         self.finishing_up = False
+        self.totalPoints = 0 # holder for total points for the mode earned
+        self.valueMultiplier = 1 # shot value multiplier
+        self.gotPaused = False # was the mode paused at any point
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0:
@@ -230,6 +233,8 @@ class SavePolly(ep.EP_Mode):
             # set the center to crazy stage
             self.game.set_tracking('centerRampStage',99)
             self.lamp_update()
+            ## TEMP PLAY INTRO
+            duration = self.game.base.priority_quote(self.game.assets.quote_ttttDox)
 
             # start the music
             self.music_on(self.game.assets.music_pollyPeril)
@@ -263,7 +268,7 @@ class SavePolly(ep.EP_Mode):
             self.infoLayer.composite_op = "blacksrc"
 
             # loop back for the title card
-            self.delay("Operational",delay=myWait,handler=self.start_save_polly,param=2)
+            self.delay("Operational",delay=duration,handler=self.start_save_polly,param=2)
         if step == 2:
             # set up the title card
             titleCard = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_ttttBanner.frames[0])
@@ -393,10 +398,23 @@ class SavePolly(ep.EP_Mode):
         textString2 = str((self.shotsToWin - self.shotsSoFar)) + " SHOTS FOR"
         self.prog_awardLine1.set_text(textString2)
         if self.shotsSoFar >= self.shotsToWin:
+            # score points for last shot
+            # figure in the multiplier
+            points = self.shotValue * self.valueMultiplier
+            self.game.score(points)
+            # add to total
+            self.totalPoints += points
+
             self.polly_saved()
         else:
             # score points
-            self.game.score(self.shotValue)
+            # figure in the multiplier
+            points = self.shotValue * self.valueMultiplier
+            self.game.score(points)
+            # add to total
+            self.totalPoints += points
+            # increase the multiplier
+            self.raise_multiplier()
             # setup the display
             border = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_tracksBorder.frames[0])
             pollyTitle = ep.EP_TextLayer(64, 0, self.game.assets.font_5px_bold_AZ, "center", opaque=False).set_text("POLLY PERIL",color=ep.MAGENTA)
@@ -407,6 +425,18 @@ class SavePolly(ep.EP_Mode):
             transition = ep.EP_Transition(self,self.layer,completeFrame,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_NORTH)
             # pause the train briefly
             self.delay(name="Pause Timer",delay=1.5,handler=self.pause_timer,param=4)
+
+    def raise_multiplier(self):
+        # raise the multiplier value by 1
+        self.valueMultiplier += 1
+        # update the lamps
+        self.update_lamps()
+        # set the delay to reset the timer
+        self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
+
+    def reset_multiplier(self):
+        self.valueMultiplier = 1
+        self.update_lamps()
 
 
     # success
