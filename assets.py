@@ -1006,6 +1006,12 @@ class Assets():
         self.game.sound.register_sound(self.quote_hatbIntro, self.quotes_path + "mayor-miss-pollys-in-there-sheriff.wav")
         self.game.sound.register_sound(self.quote_hatbIntro, self.quotes_path + "1307-undertaker-oh-good-mayhem-at-the-bank.wav")
 
+        self.quote_hatbDox = 'quote_hatbDox'
+        self.game.sound.register_sound(self.quote_hatbDox, self.quotes_path + "yokel_HATB.wav")
+        self.quote_rotrDox = 'quote_rotrDox'
+        self.game.sound.register_sound(self.quote_rotrDox, self.quotes_path + "yokel_ROTR.wav")
+        self.quote_ttttDox = 'quote_ttttDox'
+        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yotel_TTTT.wav")
 
         self.quote_mobStart = 'quote_mobStart'
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1171-mayor-shoot-anything-that-pops-up.wav")
@@ -1480,6 +1486,9 @@ class Assets():
 
         self.music_party = 'music_party'
         self.game.sound.register_music(self.music_party, self.music_path + "party_select.wav")
+
+        self.music_beans = 'music_beans'
+        self.game.sound.register_music(self.music_beans, self.music_path + "yak_sax.wav")
 
 
         # lampshows
