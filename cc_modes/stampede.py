@@ -96,7 +96,7 @@ class Stampede(ep.EP_Mode):
         self.game.stack_level(4,True)
         self.running = True
         # stop the current music
-        self.stop_music()
+        self.stop_music(slice=2)
         # turn on a starting jackpot
         choices = [0,1,2,3,4]
         self.active = random.choice(choices)

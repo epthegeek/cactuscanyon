@@ -467,7 +467,7 @@ class SkillShot(ep.EP_Mode):
 
     def skillshot_award(self,switch=0):
         # stop the music
-        self.stop_music()
+        self.stop_music(slice=1)
         # play the sound
         if self.selectedPrizes[5:] == "V":
             self.music_on(self.game.assets.music_tribute)
@@ -826,7 +826,7 @@ class SkillShot(ep.EP_Mode):
         # cancel the idle timer from interrupter jones
         self.game.interrupter.cancel_idle()
         # turn off the music
-        self.stop_music()
+        self.stop_music(slice=1)
         # turn off the table lights
         self.game.set_tracking('lampStatus',"OFF")
         self.lamp_update()
@@ -879,7 +879,7 @@ class SkillShot(ep.EP_Mode):
         self.wasActive = self.active
         self.active = 0
         # kill the drum roll
-        self.stop_music()
+        self.stop_music(slice=1)
         # turn the lights back on
         self.game.set_tracking('lampStatus',"ON")
         self.lamp_update()
