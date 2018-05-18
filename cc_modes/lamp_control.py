@@ -564,6 +564,11 @@ class LampControl(ep.EP_Mode):
             self.game.lamps.leftRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
+            # if the multiplier is on, blink the combo
+            if self.game.bank_robbery.valueMultiplier > 1 or\
+               self.game.river_chase.valueMultiplier > 1 or\
+               self.game.save_polly.valueMultipler > 1:
+                self.game.lamps.leftRampCombo.schedule(0x33333333)
 
         elif mode == "Disable":
             for lamp in self.game.lamps.items_tagged('leftRamp'):
@@ -675,12 +680,20 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
                 self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
                 self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
+                # if the multiplier is on, blink the combo
+                if self.game.river_chase.valueMultiplier > 1:
+                    self.game.lamps.centerRampCombo.schedule(0x33333333)
+
             elif self.game.bank_robbery.running:
                 if self.game.bank_robbery.isActive[1]:
                     self.game.lamps.centerRampJackpot.enable()
                     self.game.lamps.centerRampSavePolly.schedule(0x0FF00FF0)
                     self.game.lamps.centerRampStopTrain.schedule(0x00FF00FF)
                     self.game.lamps.centerRampCatchTrain.schedule(0xF00FF00F)
+                    # if the multiplier is on, blink the combo
+                    if self.game.bank_robbery.valueMultiplier > 1:
+                        self.game.lamps.centerRampCombo.schedule(0x33333333)
+
             else:
                 self.game.lamps.centerRampJackpot.enable()
                 self.game.lamps.centerRampSavePolly.schedule(0x00FFFF00)
@@ -911,6 +924,11 @@ class LampControl(ep.EP_Mode):
             self.game.lamps.rightRampSavePolly.schedule(0x0FF00FF0)
             self.game.lamps.rightRampShootOut.schedule(0x00FF00FF)
             self.game.lamps.rightRampSoundAlarm.schedule(0xF00FF00F)
+            # if the multiplier is on, blink the combo
+            if self.game.bank_robbery.valueMultiplier > 1 or \
+               self.game.river_chase.valueMultiplier > 1 or \
+               self.game.save_polly.valueMultipler > 1:
+                self.game.lamps.rightRampCombo.schedule(0x33333333)
 
         elif mode == "Disable":
             for lamp in self.game.lamps.items_tagged('rightRamp'):
