@@ -33,6 +33,7 @@ class RiverChase(ep.EP_Mode):
         self.halted = False
         self.won = False
         self.distance_value = int(30.0 / self.shotsToWin)
+        self.valueMultiplier = 1 # shot value multiplier
 
         script = []
         # set up the text layer

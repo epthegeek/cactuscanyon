@@ -49,6 +49,7 @@ class BankRobbery(ep.EP_Mode):
         self.keys_index = {'start':list(range(len(self.game.sound.sounds[self.game.assets.quote_hatbIntro])))}
         self.counts_index = {'start':0}
         random.shuffle(self.keys_index['start'])
+        self.valueMultiplier = 1 # shot value multiplier
 
 
     def mode_started(self):
