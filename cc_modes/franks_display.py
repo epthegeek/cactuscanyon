@@ -36,7 +36,8 @@ class FranksDisplay(ep.EP_Mode):
             self.end()
 
     def mode_started(self):
-        self.game.sound.play(self.game.assets.sfx_dinnerBell)
+        duration = self.game.sound.play(self.game.assets.sfx_dinnerBell)
+        self.delay("Music", delay=duration,handler=self.music_on,param=self.game.assets.music_beans)
         self.game.modes.add(self.game.franks_switches)
         self.game.set_tracking('farted',True)
         self.running = True
@@ -77,6 +78,7 @@ class FranksDisplay(ep.EP_Mode):
         self.running = False
         self.wipe_delays()
         self.game.franks_switches.end()
+        self.music_on(self.game.assets.music_mainTheme,1)
         self.unload()
 
     def tilted(self):
