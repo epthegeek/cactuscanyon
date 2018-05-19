@@ -192,6 +192,8 @@ class RiverChase(ep.EP_Mode):
             self.game.score(points)
             # add the points to the total
             self.totalPoints += points
+            # Throw an interrupter layer with the points
+            self.game.interrupter.score_overlay(self.shotValue,self.valueMultiplier,ep.BLUE)
             # nudge the multiplier
             self.raise_multiplier()
             # set the distance to move
