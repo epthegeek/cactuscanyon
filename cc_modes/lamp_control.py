@@ -939,7 +939,7 @@ class LampControl(ep.EP_Mode):
                 self.game.lamps.rightRampJackpot.enable()
 
 
-    elif mode == "Disable":
+        elif mode == "Disable":
             for lamp in self.game.lamps.items_tagged('rightRamp'):
                 lamp.disable()
 
