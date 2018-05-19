@@ -566,7 +566,7 @@ class LampControl(ep.EP_Mode):
             # if the multiplier is on, blink the combo
             if self.game.bank_robbery.valueMultiplier > 1 or\
                self.game.river_chase.valueMultiplier > 1 or\
-               self.game.save_polly.valueMultipler > 1:
+               self.game.save_polly.valueMultiplier > 1:
                 self.game.lamps.leftRampJackpot.schedule(0x33333333)
             else:
                 self.game.lamps.leftRampJackpot.enable()
@@ -933,7 +933,7 @@ class LampControl(ep.EP_Mode):
             # if the multiplier is on, blink the combo
             if self.game.bank_robbery.valueMultiplier > 1 or \
                self.game.river_chase.valueMultiplier > 1 or \
-               self.game.save_polly.valueMultipler > 1:
+               self.game.save_polly.valueMultiplier > 1:
                 self.game.lamps.rightRampJackpot.schedule(0x33333333)
             else:
                 self.game.lamps.rightRampJackpot.enable()
