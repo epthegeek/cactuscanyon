@@ -87,7 +87,7 @@ class Interrupter(ep.EP_Mode):
         if multiplier > 1:
             string = string + " X " + str(multiplier)
         string = string + " >"
-        textLayer.set_text(string,color=ep.MAGENTA)
+        textLayer.set_text(string,color=textColor)
         self.layer = textLayer
         self.delay("Display",delay=1.5,handler=self.clear_layer)
 

@@ -934,8 +934,10 @@ class LampControl(ep.EP_Mode):
             if self.game.bank_robbery.valueMultiplier > 1 or \
                self.game.river_chase.valueMultiplier > 1 or \
                self.game.save_polly.valueMultiplier > 1:
+                print "LAMP DOES IN FACT SEE THE MULTIPLIER"
                 self.game.lamps.rightRampJackpot.schedule(0x0F0F0F0F)
             else:
+                print "LAMP DOESNT SEE MULTIPLIER"
                 self.game.lamps.rightRampJackpot.enable()
 
 

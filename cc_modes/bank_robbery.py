@@ -75,6 +75,7 @@ class BankRobbery(ep.EP_Mode):
         self.valueMultiplier = 1 # shot value multiplier
         self.extendedCount = 0
         self.gotPaused = False # was the mode paused at any point
+        self.lastPoints = 0
 
         # set up the dude standing layers
         self.dude0 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bankDude.frames[0])
@@ -208,8 +209,8 @@ class BankRobbery(ep.EP_Mode):
             self.game.score(points)
             # add to the total
             self.totalPoints += points
-            # Throw an interrupter layer with the points
-            self.game.interrupter.score_overlay(self.shotValue,self.valueMultiplier,ep.PURPLE)
+            # set the last points for the banner
+            self.lastPoints = points
             # up the multiplier
             self.raise_multiplier()
             # kill the guy
@@ -468,7 +469,7 @@ class BankRobbery(ep.EP_Mode):
         # build a text line with that
         awardTextString = str(total) + " MORE TO GO"
         # build the display layer
-        banner = self.build_display(awardTextString,str(ep.format_score(250000)))
+        banner = self.build_display(awardTextString,str(ep.format_score(self.lastPoints)))
         # activate it
         self.layer = banner
         # delay a return to in progress

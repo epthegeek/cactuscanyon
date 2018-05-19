@@ -64,6 +64,7 @@ class RiverChase(ep.EP_Mode):
         self.valueMultiplier = 1 # shot value multiplier
         self.extendedCount = 0
         self.gotPaused = False # was the mode paused at any point
+        self.lastPoints = 0
 
         # position for the horse
         self.x_pos = 6
@@ -192,8 +193,8 @@ class RiverChase(ep.EP_Mode):
             self.game.score(points)
             # add the points to the total
             self.totalPoints += points
-            # Throw an interrupter layer with the points
-            self.game.interrupter.score_overlay(self.shotValue,self.valueMultiplier,ep.BLUE)
+            # save the last points for the display
+            self.lastPoints = points
             # nudge the multiplier
             self.raise_multiplier()
             # set the distance to move
@@ -203,8 +204,10 @@ class RiverChase(ep.EP_Mode):
     def raise_multiplier(self):
         # raise the multiplier value by 1
         self.valueMultiplier += 1
+        print "RAISING MULTIPLIER OVER HERE"
         # update the lamps
         self.update_lamps()
+        print "UPDATING THE LAMPS"
         # set the delay to reset the timer
         self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
 
@@ -414,7 +417,7 @@ class RiverChase(ep.EP_Mode):
         # cancel the mode timer during the display
         self.cancel_delayed("Mode Timer")
         shotsLeftText = str(self.shotsToWin - self.shotsSoFar) + " MORE TO GO"
-        display = self.build_display(shotsLeftText,str(ep.format_score(100000)))
+        display = self.build_display(shotsLeftText,str(ep.format_score(self.lastPoints)))
         transition = ep.EP_Transition(self,self.layer,display,ep.EP_Transition.TYPE_CROSSFADE)
         self.delay("Display",delay=1.5,handler=self.in_progress)
 
