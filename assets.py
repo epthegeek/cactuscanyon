@@ -1011,7 +1011,7 @@ class Assets():
         self.quote_rotrDox = 'quote_rotrDox'
         self.game.sound.register_sound(self.quote_rotrDox, self.quotes_path + "yokel_ROTR.wav")
         self.quote_ttttDox = 'quote_ttttDox'
-        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yotel_TTTT.wav")
+        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yokel_TTTT.wav")
 
         self.quote_mobStart = 'quote_mobStart'
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1171-mayor-shoot-anything-that-pops-up.wav")
