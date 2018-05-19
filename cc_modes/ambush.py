@@ -106,6 +106,16 @@ class Ambush(ep.EP_Mode):
             self.paused = False
             self.resume()
 
+    # add light & sound to flipper if we just came through the inlane
+    def sw_flipperLwL_active(self,sw):
+        self.game.sound.play(self.game.assets.sfx_explosion11)
+        self.game.coils.leftGunFlasher.schedule(0x0000025F,cycle_seconds=1)
+
+    def sw_flipperLwR_active(self,sw):
+        self.game.sound.play(self.game.assets.sfx_explosion11)
+        self.game.coils.rightGunFlasher.schedule(0x0000025F,cycle_seconds=1)
+
+
     def bumper_hit(self,bumper):
         if not self.paused:
             self.pause()

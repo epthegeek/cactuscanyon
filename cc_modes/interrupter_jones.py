@@ -82,12 +82,13 @@ class Interrupter(ep.EP_Mode):
 
     def score_overlay(self,points,multiplier,textColor):
         # points is the shot value, multiplier is the active combo multiplier
-        textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString,color=textColor)
+        textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False)
         string = "< " + str(ep.format_score(points))
         if multiplier > 1:
             string = string + " X " + str(multiplier)
         string = string + " >"
         textLayer.set_text(string,color=ep.MAGENTA)
+        self.layer = textLayer
         self.delay("Display",delay=1.5,handler=self.clear_layer)
 
     def tilt_danger(self,status):

@@ -54,6 +54,16 @@ class Showdown(ep.EP_Mode):
         if self.game.display_hold:
             self.game.trough.launch_balls(1)
 
+    # add light & sound to flipper if we just came through the inlane
+    def sw_flipperLwL_active(self,sw):
+            self.game.sound.play(self.game.assets.sfx_explosion11)
+            self.game.coils.leftGunFlasher.schedule(0x0000025F,cycle_seconds=1)
+
+    def sw_flipperLwR_active(self,sw):
+            self.game.sound.play(self.game.assets.sfx_explosion11)
+            self.game.coils.rightGunFlasher.schedule(0x0000025F,cycle_seconds=1)
+
+
     def start_showdown(self,side):
         print "S H O W D O W N"
         # turn on the display hold to catch ball drain during intro
