@@ -204,10 +204,10 @@ class RiverChase(ep.EP_Mode):
     def raise_multiplier(self):
         # raise the multiplier value by 1
         self.valueMultiplier += 1
-        print "RAISING MULTIPLIER OVER HERE"
+        print "RAISING MULTIPLIER OVER HERE - now it's " + str(self.valueMultiplier)
         # update the lamps
         self.update_lamps()
-        print "UPDATING THE LAMPS"
+        print "River chase - UPDATING THE LAMPS"
         # set the delay to reset the timer
         self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
 
