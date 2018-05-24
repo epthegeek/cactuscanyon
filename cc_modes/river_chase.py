@@ -65,6 +65,8 @@ class RiverChase(ep.EP_Mode):
         self.extendedCount = 0
         self.gotPaused = False # was the mode paused at any point
         self.lastPoints = 0
+        self.winMultiplier = 3
+        self.winBonus = 0
 
         # position for the horse
         self.x_pos = 6
@@ -191,12 +193,16 @@ class RiverChase(ep.EP_Mode):
             # score points
             points = self.shotValue * self.valueMultiplier
             self.game.score(points)
+            print "SCORING POINTS " + str(points) + " Multiplier " + str(self.valueMultiplier)
             # add the points to the total
             self.totalPoints += points
             # save the last points for the display
             self.lastPoints = points
+            print "LAST POINTS VALUE " + str(self.lastPoints)
             # nudge the multiplier
             self.raise_multiplier()
+            # increase the shot value .... for the fuck of it
+            self.shotValue += 50000
             # set the distance to move
             print "MOVING HORSE " + str(self.distance_value)
             self.distance += self.distance_value
@@ -206,14 +212,14 @@ class RiverChase(ep.EP_Mode):
         self.valueMultiplier += 1
         print "RAISING MULTIPLIER OVER HERE - now it's " + str(self.valueMultiplier)
         # update the lamps
-        self.update_lamps()
+        self.lamp_update()
         print "River chase - UPDATING THE LAMPS"
         # set the delay to reset the timer
         self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
 
     def reset_multiplier(self):
         self.valueMultiplier = 1
-        self.update_lamps()
+        self.lamp_update()
 
     def start_river_chase(self,step=1):
         if step == 1:
@@ -228,9 +234,12 @@ class RiverChase(ep.EP_Mode):
             #self.stop_music()
             self.lamp_update()
             ## TEMP PLAY INTRO
-            duration = self.game.base.priority_quote(self.game.assets.quote_rotrDox,squelch=True)
+            duration = self.game.base.priority_quote(self.game.assets.quote_rotrDox)
+            ## secondary intro clip
+            self.delay("Operational",delay=duration+0.1,handler=lambda: self.play_ordered_quote(self.game.assets.quote_rotrIntro,'start'))
 
-            # start the music
+
+        # start the music
             self.music_on(self.game.assets.music_altPeril)
             # run the animation
             anim = self.game.assets.dmd_pollyIntro
@@ -239,7 +248,7 @@ class RiverChase(ep.EP_Mode):
             self.layer = animLayer
 
             # loop back for the title card
-            self.delay("Operational",delay=duration,handler=self.start_river_chase,param=2)
+            self.delay("Operational",delay=myWait,handler=self.start_river_chase,param=2)
         if step == 2:
             # set up the title card
             titleCard = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_rotrTitle.frames[0])
@@ -247,7 +256,6 @@ class RiverChase(ep.EP_Mode):
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
             self.delay("Get Going",delay=2,handler=self.in_progress)
-            self.delay("Operational",delay=2,handler=lambda: self.play_ordered_quote(self.game.assets.quote_rotrIntro,'start'))
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause
@@ -306,7 +314,7 @@ class RiverChase(ep.EP_Mode):
         # add to the time if we haven't hit the max
         if self.extendedCount < 4:
             # increase the timer by 4 seconds
-            self.modeTimer =+ 4
+            self.modeTimer += 4
             # play a sound
             self.game.sound.play(self.game.assets.sfx_quickdrawOff)
             # score some points
@@ -324,7 +332,25 @@ class RiverChase(ep.EP_Mode):
         # audit
         self.game.game_data['Feature']['Left Polly Won'] += 1
         self.game.peril = False
-        self.game.score(500000)
+        #self.game.score(500000)
+        # score the shot value x the current multiplier
+        points = self.shotValue * self.valueMultiplier
+        # add the points to the total
+        self.totalPoints += points
+        # score the 3rd hit points
+        self.game.score(points)
+        # immediately calculate and score the win bonus - in case the end stuff gets interrupted
+        # if the timer was paused at all, remove one multiplier
+        if self.gotPaused:
+            self.winMultiplier -= 1
+            # if extra time was added, remove one multiplier
+        if self.extendedCount > 0:
+            self.winMultiplier -=1
+            # mode bonus is total points x remaining multiplier
+        self.winBonus = self.totalPoints * self.winMultiplier
+        # score those points, pronto
+        self.game.score(self.winBonus)
+
         # set the left ramp value up
         self.game.set_tracking('leftRampValue',20000)
         self.running = False
@@ -382,8 +408,9 @@ class RiverChase(ep.EP_Mode):
             self.delay("Win Display",delay=myWait,handler=self.win_display,param=4)
         if step == 4:
             # saved banner goes here
-            awardTextString = "POLLY SAVED"
-            awardScoreString = str(ep.format_score(500000))
+            awardTextString = "POLLY SAVED BONUS"
+            # set the display string with commas
+            awardScoreString = str(ep.format_score(self.winBonus))
             # combine them
             completeFrame = self.build_display(awardTextString,awardScoreString)
             stackLevel = self.game.show_tracking('stackLevel')
@@ -401,6 +428,7 @@ class RiverChase(ep.EP_Mode):
     def build_display(self,awardTextString,awardScoreString):
     # create the two text lines
         print "BUILDING DISPLAY"
+        print "Award Text/ScoreString " + str(awardTextString) + "/" + str(awardScoreString)
         awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
         awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         # if blink frames we have to set them

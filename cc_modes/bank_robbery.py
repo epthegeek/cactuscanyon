@@ -76,6 +76,8 @@ class BankRobbery(ep.EP_Mode):
         self.extendedCount = 0
         self.gotPaused = False # was the mode paused at any point
         self.lastPoints = 0
+        self.winMultiplier = 3
+        self.winBonus = 0
 
         # set up the dude standing layers
         self.dude0 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_bankDude.frames[0])
@@ -207,10 +209,13 @@ class BankRobbery(ep.EP_Mode):
             # score points
             points = self.shotValue * self.valueMultiplier
             self.game.score(points)
+            print "POINTS FOR THIS SHOT " + str(points)
             # add to the total
             self.totalPoints += points
             # set the last points for the banner
             self.lastPoints = points
+            # increase the shot value, because why not
+            self.shotValue += 250000
             # up the multiplier
             self.raise_multiplier()
             # kill the guy
@@ -225,13 +230,13 @@ class BankRobbery(ep.EP_Mode):
         # raise the multiplier value by 1
         self.valueMultiplier += 1
         # update the lamps
-        self.update_lamps()
+        self.lamp_update()
         # set the delay to reset the timer
         self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
 
     def reset_multiplier(self):
         self.valueMultiplier = 1
-        self.update_lamps()
+        self.lamp_update()
 
     def start_bank_robbery(self,step=1):
         if step == 1:
@@ -244,9 +249,12 @@ class BankRobbery(ep.EP_Mode):
             self.running = True
             self.lamp_update()
             ## TEMP PLAY INTRO
-            duration = self.game.base.priority_quote(self.game.assets.quote_hatbDox,squelch=True)
+            duration = self.game.base.priority_quote(self.game.assets.quote_hatbDox)
+            # Secondary intro quote
+            self.delay("Operational",delay=duration+0.1,handler=lambda: self.play_ordered_quote(self.game.assets.quote_hatbIntro,'start'))
 
-            # start the music
+
+        # start the music
             self.music_on(self.game.assets.music_altPeril)
             # run the animation
             anim = self.game.assets.dmd_pollyIntro
@@ -255,7 +263,7 @@ class BankRobbery(ep.EP_Mode):
             self.layer = animLayer
 
             # loop back for the title card
-            self.delay(delay=duration,handler=self.start_bank_robbery,param=2)
+            self.delay(delay=myWait,handler=self.start_bank_robbery,param=2)
         if step == 2:
             # pick a shoot delay
             self.set_shot_target()
@@ -265,7 +273,6 @@ class BankRobbery(ep.EP_Mode):
             self.transition = ep.EP_Transition(self,self.layer,titleCard,ep.EP_Transition.TYPE_WIPE,ep.EP_Transition.PARAM_EAST)
             # delay the start process
             self.delay("Get Going",delay=2,handler=self.in_progress)
-            self.delay(delay=2,handler=lambda: self.play_ordered_quote(self.game.assets.quote_hatbIntro,'start'))
 
     ## this is the main mode loop - not passing the time to the loop because it's global
     ## due to going in and out of pause
@@ -378,9 +385,18 @@ class BankRobbery(ep.EP_Mode):
         # add to the time if we haven't hit the max
         if self.extendedCount < 4:
             # increase the timer by 4 seconds
-            self.modeTimer =+ 4
+            self.modeTimer += 4
+            # play a sound
+            self.game.sound.play(self.game.assets.sfx_quickdrawOff)
+            # score some points
+            self.game.score(3750)
             # increment the extendedCount
             self.extendedCount += 1
+        else:
+            # play a thunk
+            self.game.sound.play(self.game.assets.sfx_quickdrawOn)
+            # score some points
+            self.game.score(3750)
 
 
 
@@ -389,7 +405,18 @@ class BankRobbery(ep.EP_Mode):
         # audit
         self.game.game_data['Feature']['Right Polly Won'] += 1
         self.game.peril = False
-        self.game.score(750000)
+#        self.game.score(750000)
+        # if the timer was paused at all, remove one multiplier
+        if self.gotPaused:
+            self.winMultiplier -= 1
+            # if extra time was added, remove one multiplier
+        if self.extendedCount > 0:
+            self.winMultiplier -= 1
+            # mode bonus is total points x remaining multiplier
+        self.winBonus = self.totalPoints * self.winMultiplier
+        # score those points, pronto
+        self.game.score(self.winBonus)
+
         self.cancel_delayed("Mode Timer")
         # kill the lights on the three ramps
         self.game.lamp_control.left_ramp('Base')
@@ -441,8 +468,8 @@ class BankRobbery(ep.EP_Mode):
             self.delay("Win Display",delay=myWait,handler=self.win_display,param=4)
         if step == 4:
             # saved banner goes here
-            awardTextString = "POLLY SAVED"
-            awardScoreString = str(ep.format_score(750000))
+            awardTextString = "POLLY SAVED BONUS"
+            awardScoreString = str(ep.format_score(self.winBonus))
             # combine them
             completeFrame = self.build_display(awardTextString,awardScoreString)
             stackLevel = self.game.show_tracking('stackLevel')
