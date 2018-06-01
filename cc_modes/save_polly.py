@@ -445,7 +445,7 @@ class SavePolly(ep.EP_Mode):
         # update the lamps
         self.lamp_update()
         # set the delay to reset the timer
-        self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
+        self.delay("Multiplier",delay=3,handler=self.reset_multiplier)
 
     def reset_multiplier(self):
         self.valueMultiplier = 1

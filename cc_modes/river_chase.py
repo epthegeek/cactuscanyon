@@ -215,7 +215,7 @@ class RiverChase(ep.EP_Mode):
         self.lamp_update()
         print "River chase - UPDATING THE LAMPS"
         # set the delay to reset the timer
-        self.delay("Multiplier",delay=2,handler=self.reset_multiplier)
+        self.delay("Multiplier",delay=3,handler=self.reset_multiplier)
 
     def reset_multiplier(self):
         self.valueMultiplier = 1

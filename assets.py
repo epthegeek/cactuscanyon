@@ -1007,11 +1007,23 @@ class Assets():
         self.game.sound.register_sound(self.quote_hatbIntro, self.quotes_path + "1307-undertaker-oh-good-mayhem-at-the-bank.wav")
 
         self.quote_hatbDox = 'quote_hatbDox'
-        self.game.sound.register_sound(self.quote_hatbDox, self.quotes_path + "yokel_HATB.wav")
+        self.game.sound.register_sound(self.quote_hatbDox, self.quotes_path + "yokel_HATB_intro.wav")
+        self.game.sound.register_sound(self.quote_hatbDox, self.quotes_path + "yokel_HATB_now.wav")
+        self.game.sound.register_sound(self.quote_hatbDox, self.quotes_path + "yokel_HATB_only.wav")
+        self.game.sound.register_sound(self.quote_hatbDox, self.quotes_path + "yokel_HATB_presenting.wav")
+        self.game.sound.register_sound(self.quote_hatbDox, self.quotes_path + "yokel_HATB_time.wav")
         self.quote_rotrDox = 'quote_rotrDox'
-        self.game.sound.register_sound(self.quote_rotrDox, self.quotes_path + "yokel_ROTR.wav")
+        self.game.sound.register_sound(self.quote_rotrDox, self.quotes_path + "yokel_ROTR_intro.wav")
+        self.game.sound.register_sound(self.quote_rotrDox, self.quotes_path + "yokel_ROTR_now.wav")
+        self.game.sound.register_sound(self.quote_rotrDox, self.quotes_path + "yokel_ROTR_only.wav")
+        self.game.sound.register_sound(self.quote_rotrDox, self.quotes_path + "yokel_ROTR_presenting.wav")
+        self.game.sound.register_sound(self.quote_rotrDox, self.quotes_path + "yokel_ROTR_time.wav")
         self.quote_ttttDox = 'quote_ttttDox'
-        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yokel_TTTT.wav")
+        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yokel_TTTT_intro.wav")
+        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yokel_TTTT_now.wav")
+        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yokel_TTTT_only.wav")
+        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yokel_TTTT_presenting.wav")
+        self.game.sound.register_sound(self.quote_ttttDox, self.quotes_path + "yokel_TTTT_time.wav")
 
         self.quote_mobStart = 'quote_mobStart'
         self.game.sound.register_sound(self.quote_mobStart, self.quotes_path + "1171-mayor-shoot-anything-that-pops-up.wav")
