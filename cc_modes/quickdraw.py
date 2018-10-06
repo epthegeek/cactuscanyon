@@ -54,6 +54,7 @@ class Quickdraw(ep.EP_Mode):
                              'hit': 0}
         random.shuffle(self.keys_index['hit'])
         random.shuffle(self.keys_index['taunt'])
+        self.running = False
 
     def mode_started(self):
         self.paused = False
