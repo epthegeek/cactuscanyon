@@ -151,23 +151,18 @@ class BaseGameMode(ep.EP_Mode):
         # if we're on the first ball and there are less than four players, add one.
         if self.game.ball == 1 and len(self.game.players) < 4:
             self.game.add_player()
-            # set a random bart bro
-            # barts: bandelero, bubba, big, betty, bull, rudy & boss
-            if self.game.bart.guests:
-                barts = [0,1,2,3,4]
-            else:
-                barts = [0,1,2,3]
-            self.game.set_tracking('currentBart',random.choice(barts))
-
             # tick up the audits
             self.game.game_data['Audits']['Games Started'] += 1
             self.game.order_mobs()
             # and play a soundbyte
             if len(self.game.players) == 2:
+                self.game.set_player_defaults(1)
                 self.game.base.priority_quote(self.game.assets.quote_playerTwo)
             elif len(self.game.players) == 3:
+                self.game.set_player_defaults(2)
                 self.game.base.priority_quote(self.game.assets.quote_playerThree)
             elif len(self.game.players) == 4:
+                self.game.set_player_defaults(3)
                 self.game.base.priority_quote(self.game.assets.quote_playerFour)
             self.game.interrupter.add_player()
         elif self.game.match in self.game.modes and self.game.immediateRestart:

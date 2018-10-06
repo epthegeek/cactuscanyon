@@ -119,7 +119,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2018.09.24"
+        self.revision = "2018.10.06"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
@@ -521,14 +521,8 @@ class CCGame(game.BasicGame):
         self.lamps.startButton.enable()
     #    Add the first player
         self.add_player()
-        # set the number for the hits to the beer mug to start drunk multiball
-        self.set_tracking('mug_shots', self.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball'])
-        # set the number for tumbleweed hits to start cva
-        self.set_tracking('tumbleweedShots', self.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA'])
+        self.set_player_defaults(0)
 
-        # set a random bart bro
-        barts = [0,1,2,3]
-        self.set_tracking('currentBart',random.choice(barts))
         # set the mob battle order
         self.order_mobs()
         # reset the music volume
@@ -1011,6 +1005,22 @@ class CCGame(game.BasicGame):
     def invert_tracking(self,item):
         p = self.current_player()
         p.player_stats[item].reverse()
+
+    # set some default values for the player
+    def set_player_defaults(self,player):
+    # set a random bart bro
+        p = self.players[player]
+        # barts: bandelero, bubba, big, betty, bull, rudy & boss
+        if self.bart.guests:
+            barts = [0,1,2,3,4]
+        else:
+            barts = [0,1,2,3]
+        p.player_stats['currentBart'] = random.choice(barts)
+        # set the number for the hits to the beer mug to start drunk multiball
+        p.player_stats['mug_shots'] = self.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
+        # set the number for tumbleweed hits to start cva
+        p.player_stats['tumbleweedShots'] = self.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA']
+
 
     def stack_level(self,level,value,lamps=True):
         # just a routine for setting the stack level
