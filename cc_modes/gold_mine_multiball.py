@@ -55,7 +55,7 @@ class GoldMine(ep.EP_Mode):
         self.halted = False
         # stop any running quickdraw immediately
         if self.game.quickdraw.running:
-            self.game.quickdraw.lost()
+            self.game.quickdraw.lost(self.game.quickdraw.target)
         # reset the jackpots to false to prevent lights until the mode really starts
         for i in range(0,5,1):
             self.game.set_tracking('jackpotStatus',False,i)
