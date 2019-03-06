@@ -119,7 +119,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2018.10.23"
+        self.revision = "2019.03.06"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
@@ -556,6 +556,8 @@ class CCGame(game.BasicGame):
         # if party mode - update the party display
         if self.party_setting != 'Disabled':
             self.party_mode.update_display()
+        # Run the bart setup on start ball to be sure we're on the right one for the player
+        self.bart.setup()
 
     def create_player(self,name):
         # create an object wiht the Tracking Class - subclassed off game.Player
