@@ -119,7 +119,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2019.05.04"
+        self.revision = "2019.05.06"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
@@ -582,6 +582,8 @@ class CCGame(game.BasicGame):
         # reset the rectify flag
         self.base.rectified = False
         self.tiltPause = False
+        # clear any player number idle timer
+        self.interrupter.cancel_idle()
         # Set the score multiplier to 1 as a safety catch
         self.multiplier = 1
         # turn on the GI
