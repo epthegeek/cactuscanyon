@@ -33,14 +33,17 @@ import highscore
 import time
 import datetime
 import os
+import shutil
 import yaml
 import copy
 import random
 
 curr_file_path = os.path.dirname(os.path.abspath( __file__ ))
 ## Define the config file locations
+user_game_data_backup = curr_file_path + "/config/game_data_backup.yaml"
 user_game_data_path = curr_file_path + "/config/game_data.yaml"
 game_data_defaults_path = curr_file_path + "/config/game_data_template.yaml"
+user_settings_backup = curr_file_path + "/config/user_settings_backup.yaml"
 settings_defaults_path = curr_file_path + "/config/settings_template.yaml"
 user_settings_path = curr_file_path + "/config/user_settings.yaml"
 dots_path = curr_file_path + "/dots/"
@@ -127,7 +130,7 @@ class CCGame(game.BasicGame):
         self.load_game_data(game_data_defaults_path, user_game_data_path)
         # and settings Game settings
         print "Loading game settings"
-        self.load_settings(settings_defaults_path, user_settings_path)
+        self.load_settings(settings_defaults_path, user_settings_path, backup=True)
         # Party Mode
         self.party_setting = self.user_settings['Gameplay (Feature)']['Party Mode']
         print "Party Setting: " + str(self.party_setting)
@@ -1341,7 +1344,6 @@ class CCGame(game.BasicGame):
             self.set_tracking('ambushStatus',"OPEN")
             self.set_tracking('showdownStatus',"OVER")
 
-
     def load_settings(self, template_filename, user_filename,restore=False,type='settings'):
         """Loads the YAML game settings configuration file.  The game settings
        describe operator configuration options, such as balls per game and
@@ -1355,13 +1357,29 @@ class CCGame(game.BasicGame):
         self.settings = yaml.load(open(template_filename, 'r'))
         if os.path.exists(user_filename):
             self.user_settings = yaml.load(open(user_filename, 'r'))
-            # check that we got something
+                # check that we got something
             if self.user_settings:
                 print "Found settings. All good"
+                # make a backup copy just in case - if this is the init load
+                shutil.copyfile(user_settings_path, user_settings_backup)
             else:
-                print "Settings broken, all bad, defaulting"
-                self.user_settings = {}
-                self.save_settings()
+                # if we didn't get settings, try reading the backup
+                if os.path.exists(user_settings_backup):
+                    self.user_settings = yaml.load(open(user_settings_backup, 'r'))
+                    # check now if we got something
+                    if self.user_settings:
+                        print "Found Backup settings. All good"
+                        # run a save to create a new main file
+                        self.save_settings()
+                    else:
+                        print "Settings broken, all bad, defaulting"
+                        self.user_settings = {}
+                        self.save_settings()
+                # If even the backup failed, default everything
+                else:
+                    print "Settings broken, all bad, defaulting"
+                    self.user_settings = {}
+                    self.save_settings()
         #
         for section in self.settings:
             for item in self.settings[section]:
@@ -1398,9 +1416,6 @@ class CCGame(game.BasicGame):
                             else:
                                 self.user_settings[section][item] = self.settings[section][item]['options'][0]
 
-
-
-
         if restore:
             print "Restore - Saving settings"
             self.save_settings()
@@ -1427,9 +1442,25 @@ class CCGame(game.BasicGame):
             # check that we got something
             if self.game_data:
                 print "Found settings. All good"
+                # make a backup copy just in case - if this is the init load
+                shutil.copyfile(user_game_data_path, user_game_data_backup)
             else:
-                print "Data broken, all bad, defaulting"
-                self.game_data = {}
+                # try reading from the backup
+                if os.path.exists(user_game_data_backup):
+                    self.game_data = yaml.load(open(user_game_data_backup, 'r'))
+                    if self.game_data:
+                        print "Found Backup settings. All good"
+                        # run a save to create a new main file
+                        self.save_game_data()
+                    # If even the backup failed, default everything
+                    else:
+                        print "Data broken, all bad, defaulting"
+                        self.game_data = {}
+                        self.save_game_data()
+                else:
+                    print "Data broken, all bad, defaulting"
+                    self.game_data = {}
+                    self.save_game_data()
 
         if template:
             for key, value in template.iteritems():
