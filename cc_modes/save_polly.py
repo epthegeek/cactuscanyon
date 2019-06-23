@@ -92,7 +92,7 @@ class SavePolly(ep.EP_Mode):
                     self.game.base.busy = True
                     self.game.base.queued += 1
                     self.wipe_delays()
-                    self.polly_died()
+                    self.polly_died(drain=True)
                 else:
                     self.game.base.busy = True
                     self.game.base.queued += 1
@@ -501,7 +501,7 @@ class SavePolly(ep.EP_Mode):
         self.polly_finished() # should delay this
 
     # fail
-    def polly_died(self,step=1):
+    def polly_died(self, step=1, drain=False):
         print "OMG POLLY IS DEAD"
         if step == 1:
             # turn off the polly indicator
@@ -518,19 +518,27 @@ class SavePolly(ep.EP_Mode):
                 myWait = len(anim.frames) / 10.0
                 self.layer = animLayer
                 self.game.sound.play(self.game.assets.sfx_trainChugShort)
-                self.delay(delay=myWait,handler=self.polly_died,param=2)
+                self.delay(delay=myWait, handler=self.polly_died,param=2)
             # if not, just move on to polly finished
             else:
-                #self.stop_music(slice=3)
                 backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-                textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.RED)
-                textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.RED)
-                combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+                textLine1 = ep.EP_TextLayer(25, 8, self.game.assets.font_12px_az, justify="center", opaque=False)
+                if drain:
+                    string = "OH"
+                else:
+                    string = "TOO"
+                textLine1.set_text(string, color=ep.RED)
+                textLine2 = ep.EP_TextLayer(98, 8, self.game.assets.font_12px_az, justify="center", opaque=False)
+                if drain:
+                    string = "NO!"
+                else:
+                    string = "LATE!"
+                textLine2.set_text(string, color=ep.RED)
+                combined = dmd.GroupedLayer(128, 32, [backdrop, textLine1, textLine2])
                 self.layer = combined
                 self.game.sound.play(self.game.assets.sfx_glumRiff)
-                self.delay("Operational",delay=1.5,handler=self.polly_finished)
+                self.delay("Operational", delay=1.5, handler=self.polly_finished)
         if step == 2:
-            #self.stop_music(slice=3)
             if self.running:
                 backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_pollyMurder.frames[7])
                 awardTextTop = dmd.TextLayer(128/2,3,self.game.assets.font_5px_bold_AZ_outline,justify="center",opaque=False)

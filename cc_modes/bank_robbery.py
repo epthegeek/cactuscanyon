@@ -116,7 +116,7 @@ class BankRobbery(ep.EP_Mode):
             if self.running:
                 self.game.base.busy = True
                 self.game.base.queued += 1
-                self.polly_died()
+                self.polly_died(drain=True)
 
     # bonus lanes pause save polly
     def sw_leftBonusLane_active(self,sw):
@@ -425,17 +425,27 @@ class BankRobbery(ep.EP_Mode):
         self.win_display()
 
     # fail
-    def polly_died(self):
+    def polly_died(self, drain=False):
         self.game.peril = False
         self.cancel_delayed("Mode Timer")
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_poutySheriff.frames[0])
-        textLine1 = ep.EP_TextLayer(25,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("TOO",color=ep.RED)
-        textLine2 = ep.EP_TextLayer(98,8,self.game.assets.font_12px_az,justify="center",opaque=False).set_text("LATE!",color=ep.RED)
-        combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
+        textLine1 = ep.EP_TextLayer(25, 8, self.game.assets.font_12px_az, justify="center", opaque=False)
+        if drain:
+            string = "OH"
+        else:
+            string = "TOO"
+        textLine1.set_text(string, color=ep.RED)
+        textLine2 = ep.EP_TextLayer(98, 8, self.game.assets.font_12px_az, justify="center", opaque=False)
+        if drain:
+            string = "NO!"
+        else:
+            string = "LATE!"
+        textLine2.set_text(string, color=ep.RED)
+        combined = dmd.GroupedLayer(128, 32, [backdrop, textLine1, textLine2])
         self.layer = combined
         self.game.sound.play(self.game.assets.sfx_glumRiff)
 
-        self.delay("Operational",delay=1.5,handler=self.end_bank_robbery)
+        self.delay("Operational", delay=1.5, handler=self.end_bank_robbery)
 
     def win_display(self,step=1):
         if step == 1:
