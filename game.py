@@ -122,7 +122,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2019.05.06"
+        self.revision = "2019.06.23"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
@@ -1367,12 +1367,12 @@ class CCGame(game.BasicGame):
             else:
                 # if we didn't get settings, try reading the backup
                 if os.path.exists(user_settings_backup):
-                    self.user_settings = yaml.load(open(user_settings_backup, 'r'))
+                    # copy the backup to the main file and try again - the intent is to never open the backup
+                    shutil.copy(user_settings_backup, user_settings_path)
+                    self.user_settings = yaml.load(open(user_filename, 'r'))
                     # check now if we got something
                     if self.user_settings:
                         print "Found Backup settings. All good"
-                        # run a save to create a new main file
-                        self.save_settings()
                     else:
                         print "Settings broken, all bad, defaulting"
                         self.user_settings = {}
@@ -1449,11 +1449,11 @@ class CCGame(game.BasicGame):
             else:
                 # try reading from the backup
                 if os.path.exists(user_game_data_backup):
+                    # copy the backup to the main file and try again - the intent is to never open the backup
+                    shutil.copy(user_game_data_backup, user_game_data_path)
                     self.game_data = yaml.load(open(user_game_data_backup, 'r'))
                     if self.game_data:
                         print "Found Backup settings. All good"
-                        # run a save to create a new main file
-                        self.save_game_data()
                     # If even the backup failed, default everything
                     else:
                         print "Data broken, all bad, defaulting"
