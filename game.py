@@ -130,7 +130,7 @@ class CCGame(game.BasicGame):
         self.load_game_data(game_data_defaults_path, user_game_data_path)
         # and settings Game settings
         print "Loading game settings"
-        self.load_settings(settings_defaults_path, user_settings_path, backup=True)
+        self.load_settings(settings_defaults_path, user_settings_path)
         # Party Mode
         self.party_setting = self.user_settings['Gameplay (Feature)']['Party Mode']
         print "Party Setting: " + str(self.party_setting)
@@ -1028,8 +1028,7 @@ class CCGame(game.BasicGame):
         # set the number for tumbleweed hits to start cva
         p.player_stats['tumbleweedShots'] = self.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA']
 
-
-    def stack_level(self,level,value,lamps=True):
+    def stack_level(self, level, value, lamps=True):
         # just a routine for setting the stack level
         self.set_tracking('stackLevel',value,level)
         # that also calls a base lamp update
@@ -1039,20 +1038,20 @@ class CCGame(game.BasicGame):
         else:
             print "Stack set not updating thh lamps"
 
-    def score(self, points,bonus=False,percent=7):
+    def score(self, points, bonus=False, percent=7):
         """Convenience method to add *points* to the current player."""
-        print "Adding " + str(points) + " to score - multiplier: " + str(self.multiplier)
         p = self.current_player()
         p.score += (points * self.multiplier)
         if bonus:
-        # divide the score by 100 to get what 1 % is (rounded), then multiply by the applied percent, then round to an even 10.
-        # why? because that's what modern pinball does. Score always ends in 0
+            # divide the score by 100 to get what 1 % is (rounded),
+            # then multiply by the applied percent, then round to an even 10.
+            # why? because that's what modern pinball does. Score always ends in 0
             bonus_points = points / 100 * percent / 10 * 10
             p.player_stats['bonus'] += bonus_points
         # check replay if they're enabled and the player hasn't earned it yet
         if self.replays and not self.show_tracking('replay_earned'):
             if p.score >= self.user_settings['Machine (Standard)']['Replay Score']:
-                self.set_tracking('replay_earned',True)
+                self.set_tracking('replay_earned', True)
                 self.award_replay()
 
     def max_extra_balls_reached(self):
@@ -1346,7 +1345,7 @@ class CCGame(game.BasicGame):
             self.set_tracking('ambushStatus',"OPEN")
             self.set_tracking('showdownStatus',"OVER")
 
-    def load_settings(self, template_filename, user_filename,restore=False,type='settings'):
+    def load_settings(self, template_filename, user_filename, restore=False, type='settings'):
         """Loads the YAML game settings configuration file.  The game settings
        describe operator configuration options, such as balls per game and
        replay levels.
@@ -1356,32 +1355,57 @@ class CCGame(game.BasicGame):
        See also: :meth:`save_settings`
        """
         self.user_settings = {}
+        force_save = False
         self.settings = yaml.load(open(template_filename, 'r'))
         if os.path.exists(user_filename):
+            print "Settings file found, trying to load"
             self.user_settings = yaml.load(open(user_filename, 'r'))
                 # check that we got something
             if self.user_settings:
-                print "Found settings. All good"
+                print "Found settings. All good - Updating Backup"
                 # make a backup copy just in case - if this is the init load
                 shutil.copyfile(user_settings_path, user_settings_backup)
             else:
+                print "Checking for backup file"
                 # if we didn't get settings, try reading the backup
                 if os.path.exists(user_settings_backup):
+                    print "Found backup file, making copy"
                     # copy the backup to the main file and try again - the intent is to never open the backup
                     shutil.copy(user_settings_backup, user_settings_path)
                     self.user_settings = yaml.load(open(user_filename, 'r'))
                     # check now if we got something
                     if self.user_settings:
-                        print "Found Backup settings. All good"
+                        print "Backup settings loaded. All good"
                     else:
                         print "Settings broken, all bad, defaulting"
                         self.user_settings = {}
-                        self.save_settings()
+                        force_save = True
                 # If even the backup failed, default everything
                 else:
                     print "Settings broken, all bad, defaulting"
                     self.user_settings = {}
-                    self.save_settings()
+                    force_save = True
+        else:
+            print "Didn't find a user file, checking for backup file"
+            # if we didn't get settings, try reading the backup
+            if os.path.exists(user_settings_backup):
+                print "Found backup file, making copy"
+                # copy the backup to the main file and try again - the intent is to never open the backup
+                shutil.copy(user_settings_backup, user_settings_path)
+                self.user_settings = yaml.load(open(user_filename, 'r'))
+                # check now if we got something
+                if self.user_settings:
+                    print "Backup settings loaded. All good"
+                else:
+                    print "Settings broken, all bad, defaulting"
+                    self.user_settings = {}
+                    force_save = True
+            # If even the backup failed, default everything
+            else:
+                print "Settings broken, all bad, defaulting"
+                self.user_settings = {}
+                force_save = True
+
         #
         for section in self.settings:
             for item in self.settings[section]:
@@ -1418,9 +1442,12 @@ class CCGame(game.BasicGame):
                             else:
                                 self.user_settings[section][item] = self.settings[section][item]['options'][0]
 
-        if restore:
+        if restore or force_save:
             print "Restore - Saving settings"
             self.save_settings()
+            if not os.path.exists(user_settings_backup):
+                print "Backup settings file not found - making one"
+                shutil.copyfile(user_settings_path, user_settings_backup)
 
 
     def save_settings(self):
@@ -1438,31 +1465,54 @@ class CCGame(game.BasicGame):
         See also: :meth:`save_game_data`
         """
         self.game_data = {}
+        force_save = False
         template = yaml.load(open(template_filename, 'r'))
         if os.path.exists(user_filename):
+            print "Trying to load data from user file"
             self.game_data = yaml.load(open(user_filename, 'r'))
             # check that we got something
             if self.game_data:
-                print "Found settings. All good"
+                print "Found data. All good - updating backup"
                 # make a backup copy just in case - if this is the init load
                 shutil.copyfile(user_game_data_path, user_game_data_backup)
             else:
+                print "Data broken - Checking for backup file"
                 # try reading from the backup
                 if os.path.exists(user_game_data_backup):
                     # copy the backup to the main file and try again - the intent is to never open the backup
+                    print "Backup file found, restoring"
                     shutil.copy(user_game_data_backup, user_game_data_path)
-                    self.game_data = yaml.load(open(user_game_data_backup, 'r'))
+                    self.game_data = yaml.load(open(user_game_data_path, 'r'))
                     if self.game_data:
-                        print "Found Backup settings. All good"
+                        print "Backup data loaded. All good"
                     # If even the backup failed, default everything
                     else:
                         print "Data broken, all bad, defaulting"
                         self.game_data = {}
-                        self.save_game_data()
+                        force_save = True
                 else:
                     print "Data broken, all bad, defaulting"
                     self.game_data = {}
-                    self.save_game_data()
+                    force_save = True
+        else:
+            print "Didn't find a user file"
+            print "Checking for backup file"
+            # try reading from the backup
+            if os.path.exists(user_game_data_backup):
+                # copy the backup to the main file and try again - the intent is to never open the backup
+                print "Backup file found, restoring"
+                shutil.copy(user_game_data_backup, user_game_data_path)
+                self.game_data = yaml.load(open(user_game_data_path, 'r'))
+                if self.game_data:
+                    print "Backup data loaded. All good"
+                # If even the backup failed, default everything
+                else:
+                    print "Data broken, all bad, defaulting"
+                    self.game_data = {}
+                    force_save = True
+            else:
+                print "Didn't find a backup file - forcing save"
+                restore = True
 
         if template:
             for key, value in template.iteritems():
@@ -1475,8 +1525,11 @@ class CCGame(game.BasicGame):
                        self.game_data[key] = copy.deepcopy(value)
 
         # if we restored something, save
-        if restore:
+        if restore or force_save:
             self.save_game_data()
+            if not os.path.exists(user_game_data_backup):
+                print "No backup found - making one"
+                shutil.copyfile(user_game_data_path, user_game_data_backup)
 
     def remote_load_game_data(self,restore=None):
         self.load_game_data(game_data_defaults_path, user_game_data_path,restore)
