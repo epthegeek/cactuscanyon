@@ -58,6 +58,7 @@ class BaseGameMode(ep.EP_Mode):
         random.shuffle(self.keys_index['beer_mug'])
         self.rectified = False
         self.tiltPause = False
+        self.beer_hit = False
 
     def mode_started(self):
         ## cancel the closing song delay, just in case
@@ -67,7 +68,7 @@ class BaseGameMode(ep.EP_Mode):
         # set the jet killed flag
         self.jetKilled = False
         self.jetCount = 0
-        self.beerHit = False
+        self.beer_hit = False
 
     def mode_stopped(self):
         # Ensure flippers are disabled
@@ -181,35 +182,38 @@ class BaseGameMode(ep.EP_Mode):
         if self.game.switches.shooterLane.is_active() and self.game.ball > 1:
             self.game.game_reset()
 
-    def sw_shooterLane_open_for_3s(self,sw):
+    def sw_shooterLane_open_for_3s(self, sw):
         # don't start the ball saver if super skillshot is running
         if self.game.ballStarting:
             self.game.ballStarting = False
             if not self.game.skill_shot.super:
-                self.game.trough.start_ball_save(num_balls_to_save=1, time=0, now=True, allow_multiple_saves=False)
+                # make sure we haven't tilted
+                # if we're tilted, ignore this switch:
+                if not self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+                    self.game.trough.start_ball_save(num_balls_to_save=1, time=0, now=True, allow_multiple_saves=False)
 
     def beer_unhit(self):
-        self.beerHit = False
+        self.beer_hit = False
 
-    def sw_beerMug_active(self,sw):
-        # track it, because why not
-        if self.beerHit:
+    def sw_beerMug_active(self, sw):
+        # if been hit too recently or tilted pass
+        if self.beer_hit or self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
             pass
         else:
             if self.game.user_settings['Gameplay (Feature)']['Party Mode'] == 'Spiked':
                 # set the tilt all the way up and then run it
-                self.game.set_tracking('tiltStatus',self.game.tilt_warnings)
+                self.game.set_tracking('tiltStatus', self.game.tilt_warnings)
                 self.tilt()
             else:
                 print "Beer Mug Hit"
-                self.beerHit = True
+                self.beer_hit = True
                 # delay to re-allow due to debounce being off
-                self.delay(delay=0.050,handler=self.beer_unhit)
+                self.delay(delay=0.050, handler=self.beer_unhit)
                 hits = self.game.increase_tracking('beerMugHits')
                 self.game.increase_tracking('beerMugHitsTotal')
                 # flash the light if present
                 if not self.game.lamp_control.lights_out:
-                    self.game.lamps.beerMug.schedule(0x00000CCC,cycle_seconds=1)
+                    self.game.lamps.beerMug.schedule(0x00000CCC, cycle_seconds=1)
                 # score points
                 self.game.score(2130)
                 # play a sound
@@ -422,13 +426,13 @@ class BaseGameMode(ep.EP_Mode):
                 else:
                     lamp.disable()
 
-            #play sound
+            # play sound
             self.stop_music()
             # redundant the interrupter display does the spindown sound
             self.game.sound.play(self.game.assets.sfx_spinDown)
 
-            #clear the mine and the saloon in 4 seconds
-            self.delay(name="Tilted Ejects",delay=4,handler=self.tilted_ejects)
+            # clear the mine and the saloon in 4 seconds
+            self.delay(name="Tilted Ejects", delay=4, handler=self.tilted_ejects)
 
             # tilt out all the modes
             modequeue_copy = list(self.game.modes)
@@ -449,7 +453,7 @@ class BaseGameMode(ep.EP_Mode):
             if self.game.switches.minePopper.is_active():
                 self.game.mountain.eject()
             if self.game.switches.shooterLane.is_active():
-                self.game.coils.shootLane.pulse()
+                self.game.coils.autoPlunger.pulse()
             # swing back in two seconds to re-check
             self.delay(name="Tilted Ejects",delay=2,handler=self.tilted_ejects)
 
@@ -468,64 +472,68 @@ class BaseGameMode(ep.EP_Mode):
     def sw_leftReturnLane_active(self, sw):
         # register a left return lane hit
         self.return_lane_hit(0)
-        ## -- set the last switch hit --
+        # -- set the last switch hit --
         ep.last_switch = "leftReturnLane"
 
 
-    def sw_rightReturnLane_active(self,sw):
+    def sw_rightReturnLane_active(self, sw):
         # register a right return lane hit
         self.return_lane_hit(1)
-        ## -- set the last switch hit --
+        # -- set the last switch hit --
         ep.last_switch = "rightReturnLane"
 
-    def return_lane_hit(self,side):
-        # play the sound
-        self.game.sound.play(self.game.assets.sfx_rattlesnake)
-        # score the points
-        self.game.score(2530,bonus=True)
-        # if the skillshot is still live at this point, end that
-        if self.game.skill_shot.live:
-            self.game.skill_shot.skillshot_set()
-        # if tribute is starting, stop the ball
-        elif self.game.tribute_launcher in self.game.modes:
-            # if we hit a return lane when the launcher is running, pop the post
-            print "Tribute raising post on left"
-            self.game.coils.leftGunFightPost.patter(on_time=2,off_time=6,original_on_time=60)
-        # if there's a running quickdraw or showdown - pass
-        elif not self.guns_allowed():
+    def return_lane_hit(self, side):
+        # if we're tilted, ignore this switch entirely:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+            print "Game is tilted, passing return " + str(side)
             pass
-            #print "PASSING - Guns disabled"
-            #print self.game.show_tracking('stackLevel')
-        # Everything beyond this point only registers if there's no other mode running - so no stack checking is needed
-        # move your train
-        elif self.game.show_tracking('mytStatus') == "READY":
-            # if MYT is ready, start it and raise the post to catch the ball
-            self.game.move_your_train.start(True,side)
-        # cva
-        elif self.game.show_tracking('cvaStatus') == "READY":
-            self.game.modes.add(self.game.cva)
-            self.game.cva.intro(entry="inlane",onSide = side)
-        # if guns are allowed, and showdown is ready do that
-       # CHANGING SHOWDOWN TO START IMMEDIATELY AFTER 4TH QD
-       # elif self.game.show_tracking('showdownStatus') == "READY":
-       #     self.game.modes.add(self.game.showdown)
-       #     self.game.showdown.start_showdown(side)
-        # if guns are allowed and ambush is ready, do that
-        elif self.game.show_tracking('ambushStatus') == "READY":
-            self.game.modes.add(self.game.ambush)
-            self.game.ambush.start_ambush(side)
-        # if there's no showdown ready, gunfight is possible
-        elif self.game.show_tracking('gunfightStatus') == "READY":
-            self.game.modes.add(self.game.gunfight)
-            self.game.gunfight.start_gunfight(side)
-        # else if quickdraw is lit - run that passing which side started it
-        elif self.game.show_tracking('quickdrawStatus',side) == "READY":
-            # fire the startup
-            self.game.modes.add(self.game.quickdraw)
-            self.game.quickdraw.start_quickdraw(side)
         else:
-            # check stampede
-            self.check_stampede()
+            # play the sound
+            self.game.sound.play(self.game.assets.sfx_rattlesnake)
+            # score the points
+            self.game.score(2530,bonus=True)
+            # if the skillshot is still live at this point, end that
+            if self.game.skill_shot.live:
+                self.game.skill_shot.skillshot_set()
+            # if tribute is starting, stop the ball
+            elif self.game.tribute_launcher in self.game.modes:
+                # if we hit a return lane when the launcher is running, pop the post
+                print "Tribute raising post on left"
+                self.game.coils.leftGunFightPost.patter(on_time=2, off_time=6, original_on_time=60)
+            # if there's a running quickdraw or showdown - pass
+            elif not self.guns_allowed():
+                pass
+            # Everything beyond this point only registers if there's
+            # no other mode running - so no stack checking is needed
+            # move your train
+            elif self.game.show_tracking('mytStatus') == "READY":
+                # if MYT is ready, start it and raise the post to catch the ball
+                self.game.move_your_train.start(True,side)
+            # cva
+            elif self.game.show_tracking('cvaStatus') == "READY":
+                self.game.modes.add(self.game.cva)
+                self.game.cva.intro(entry="inlane",onSide = side)
+            # if guns are allowed, and showdown is ready do that
+           # CHANGING SHOWDOWN TO START IMMEDIATELY AFTER 4TH QD
+           # elif self.game.show_tracking('showdownStatus') == "READY":
+           #     self.game.modes.add(self.game.showdown)
+           #     self.game.showdown.start_showdown(side)
+            # if guns are allowed and ambush is ready, do that
+            elif self.game.show_tracking('ambushStatus') == "READY":
+                self.game.modes.add(self.game.ambush)
+                self.game.ambush.start_ambush(side)
+            # if there's no showdown ready, gunfight is possible
+            elif self.game.show_tracking('gunfightStatus') == "READY":
+                self.game.modes.add(self.game.gunfight)
+                self.game.gunfight.start_gunfight(side)
+            # else if quickdraw is lit - run that passing which side started it
+            elif self.game.show_tracking('quickdrawStatus',side) == "READY":
+                # fire the startup
+                self.game.modes.add(self.game.quickdraw)
+                self.game.quickdraw.start_quickdraw(side)
+            else:
+                # check stampede
+                self.check_stampede()
 
     def guns_allowed(self):
         # this is for turning the guns back on if the conditions are good
@@ -546,26 +554,28 @@ class BaseGameMode(ep.EP_Mode):
     ###  \___/ \__,_|\__|_|\__,_|_| |_|\___||___/
     ###
 
-    def sw_leftOutlane_active(self,sw):
+    def sw_leftOutlane_active(self, sw):
         self.outlane_hit(0)
-        ## -- set the last switch hit --
+        # -- set the last switch hit --
         ep.last_switch = "leftOutlane"
 
-
-    def sw_rightOutlane_active(self,sw):
+    def sw_rightOutlane_active(self, sw):
         self.outlane_hit(1)
-        ## -- set the last switch hit --
+        # -- set the last switch hit --
         ep.last_switch = "rightOutlane"
 
-
     def outlane_hit(self, side):
-        self.game.score(2530,bonus=True)
-        if self.game.show_tracking('bozoBall'):
-            # if bozo ball flag is on, award that
-            self.collect_bozo_ball()
+        # if we're tilted, ignore this switch entirely:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+            pass
         else:
-            # otherwise just play the noise
-            self.game.sound.play(self.game.assets.sfx_outlane)
+            self.game.score(2530, bonus=True)
+            if self.game.show_tracking('bozoBall'):
+                # if bozo ball flag is on, award that
+                self.collect_bozo_ball()
+            else:
+                # otherwise just play the noise
+                self.game.sound.play(self.game.assets.sfx_outlane)
 
     ###
     ###  ____  _ _                 _           _
@@ -576,28 +586,32 @@ class BaseGameMode(ep.EP_Mode):
     ###                  |___/
     ###
 
-    def sw_leftSlingshot_active(self,sw):
+    def sw_leftSlingshot_active(self, sw):
         self.slingshot_hit(0)
-        ## -- set the last switch hit --
+        # -- set the last switch hit --
         ep.last_switch = "leftSlingshot"
 
 
-    def sw_rightSlingshot_active(self,sw):
+    def sw_rightSlingshot_active(self, sw):
         self.slingshot_hit(1)
-        ## -- set the last switch hit --
+        # -- set the last switch hit --
         ep.last_switch = "rightSlingshot"
 
 
-    def slingshot_hit(self,side):
-        # play a sound
-        self.game.sound.play(self.game.assets.sfx_ricochetSet)
-        # blink a flasher
-        if side == 0:
-            self.delay(delay=0.03,handler=self.game.coils.leftGunFlasher.pulse)
+    def slingshot_hit(self, side):
+        # if we're tilted, ignore this switch entirely:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+            pass
         else:
-            self.delay(delay=0.03,handler=self.game.coils.rightGunFlasher.pulse)
-        # score points
-        self.game.score(3770)
+            # play a sound
+            self.game.sound.play(self.game.assets.sfx_ricochetSet)
+            # blink a flasher
+            if side == 0:
+                self.delay(delay=0.03,handler=self.game.coils.leftGunFlasher.pulse)
+            else:
+                self.delay(delay=0.03,handler=self.game.coils.rightGunFlasher.pulse)
+            # score points
+            self.game.score(3770)
 
     ###  ____
     ### | __ ) _   _ _ __ ___  _ __   ___ _ __ ___
@@ -613,49 +627,57 @@ class BaseGameMode(ep.EP_Mode):
         self.bumper_hit('right')
 
     def sw_bottomJetBumper_active(self,sw):
-        # count the hit
-        self.jetCount += 1
-        # if we're over six and not not killed, kill the jet
-        if self.jetCount > 3 and not self.jetKilled:
-            print "Max bumps, shut er down!"
-            self.jetKilled = True
-            self.game.enable_bottom_bumper(False)
-        # otherwise, register the hit
+        # if we're tilted, ignore this switch entirely:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+            pass
         else:
-            self.bumper_hit('bottom')
+            # count the hit
+            self.jetCount += 1
+            # if we're over six and not not killed, kill the jet
+            if self.jetCount > 3 and not self.jetKilled:
+                print "Max bumps, shut er down!"
+                self.jetKilled = True
+                self.game.enable_bottom_bumper(False)
+            # otherwise, register the hit
+            else:
+                self.bumper_hit('bottom')
 
-    def bumper_hit(self,bumper):
-        # if combos are on, award grace
-        if self.game.combos.myTimer > 0:
-            self.game.combos.myTimer = self.game.combos.default
-        hits = self.game.increase_tracking('bumperHits')
-        # flash the back left flasher per hit
-        self.game.coils.backLeftFlasher.pulse(30)
-        if hits == 125:
-            self.game.interrupter.bumpers_increased(25000)
-        elif hits == 250:
-            self.game.interrupter.bumpers_increased(50000)
-        if self.game.show_tracking('cvaStatus') == "RUNNING":
-            self.game.score(5250)
-            self.game.base.play_quote(self.game.assets.sfx_cvaBumper)
+    def bumper_hit(self, bumper):
+        # if we're tilted, ignore this switch entirely:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+            pass
+        else:
+            # if combos are on, award grace
+            if self.game.combos.myTimer > 0:
+                self.game.combos.myTimer = self.game.combos.default
+            hits = self.game.increase_tracking('bumperHits')
+            # flash the back left flasher per hit
+            self.game.coils.backLeftFlasher.pulse(30)
+            if hits == 125:
+                self.game.interrupter.bumpers_increased(25000)
+            elif hits == 250:
+                self.game.interrupter.bumpers_increased(50000)
+            if self.game.show_tracking('cvaStatus') == "RUNNING":
+                self.game.score(5250)
+                self.game.base.play_quote(self.game.assets.sfx_cvaBumper)
 
-        if hits < 125:
-            # if we're under 75 points are low
-            self.game.score(5250)
-            # and the sound is a punch
-            self.game.sound.play(self.game.assets.sfx_punch)
-            self.display_bumper(hits,"SUPER")
-        elif hits >= 125 and hits < 250:
-            # if we're in super jets the score is more
-            self.game.score(25000)
-            # and the sound is an explosion
-            self.game.sound.play(self.game.assets.sfx_smallExplosion)
-            self.display_bumper(hits,"MEGA")
-        elif hits >= 250:
-            # mega jets
-            self.game.score(50000)
-            # and the sound is the futuristic ricochet
-            self.game.sound.play(self.game.assets.sfx_futuristicRicochet)
+            if hits < 125:
+                # if we're under 75 points are low
+                self.game.score(5250)
+                # and the sound is a punch
+                self.game.sound.play(self.game.assets.sfx_punch)
+                self.display_bumper(hits,"SUPER")
+            elif hits >= 125 and hits < 250:
+                # if we're in super jets the score is more
+                self.game.score(25000)
+                # and the sound is an explosion
+                self.game.sound.play(self.game.assets.sfx_smallExplosion)
+                self.display_bumper(hits,"MEGA")
+            elif hits >= 250:
+                # mega jets
+                self.game.score(50000)
+                # and the sound is the futuristic ricochet
+                self.game.sound.play(self.game.assets.sfx_futuristicRicochet)
 
     ## TODO add the displays for shots to increase level and the various active levels
     def display_bumper(self,hits,nextup):
@@ -749,9 +771,13 @@ class BaseGameMode(ep.EP_Mode):
 
 
     def sw_shooterLane_inactive_for_100ms(self,sw):
-        # play the ball lanuch noise
-        self.game.sound.play(self.game.assets.sfx_shooterLaunch)
-        # kill the player number display if active
+        # if we're tilted, ignore this switch:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+            pass
+        else:
+            # play the ball lanuch noise
+            self.game.sound.play(self.game.assets.sfx_shooterLaunch)
+            # kill the player number display if active
         self.game.interrupter.abort_player_number()
 
     def sw_shooterLane_active_for_3s(self,sw):
@@ -860,27 +886,30 @@ class BaseGameMode(ep.EP_Mode):
         ## kill the combo shot chain
         ep.last_shot = None
 
-
-    def quickdraw_hit(self, position,side):
-        # if the doubler is running, pass on quickdraw hits
-        if self.game.doubler in self.game.modes:
-            print "Doubler enabled - Passing QD Hit"
+    def quickdraw_hit(self, position, side):
+        # if we're tilted, ignore this switch entirely:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+            pass
         else:
-            # lookup the status of the side, and difficulty
-            stat = self.game.show_tracking('quickdrawStatus',side)
-            difficulty = self.game.user_settings['Gameplay (Feature)']['Quickdraws Lit Difficulty']
-            # if quickdraw is running or lit on the side hit, or position matches stat, or bionic bart is running
-            if "RUNNING" in self.game.show_tracking('quickdrawStatus') or \
-              stat == "READY" or  \
-              stat == position or \
-              self.game.show_tracking('bionicStatus') == "RUNNING":
-                #print "QUICKDRAW IS RUNNING OR LIT"
-                # register a lit hit
-                self.quickdraw_lit_hit()
-            # otherwise quickdraw is NOT running or LIT
+            # if the doubler is running, pass on quickdraw hits
+            if self.game.doubler in self.game.modes:
+                print "Doubler enabled - Passing QD Hit"
             else:
-                # register an unlit hit
-                self.quickdraw_unlit_hit(position,side,stat,difficulty)
+                # lookup the status of the side, and difficulty
+                stat = self.game.show_tracking('quickdrawStatus', side)
+                difficulty = self.game.user_settings['Gameplay (Feature)']['Quickdraws Lit Difficulty']
+                # if quickdraw is running or lit on the side hit, or position matches stat, or bionic bart is running
+                if "RUNNING" in self.game.show_tracking('quickdrawStatus') or \
+                  stat == "READY" or  \
+                  stat == position or \
+                  self.game.show_tracking('bionicStatus') == "RUNNING":
+                    #print "QUICKDRAW IS RUNNING OR LIT"
+                    # register a lit hit
+                    self.quickdraw_lit_hit()
+                # otherwise quickdraw is NOT running or LIT
+                else:
+                    # register an unlit hit
+                    self.quickdraw_unlit_hit(position, side, stat, difficulty)
 
     def quickdraw_lit_hit(self):
         #play the alt sound
