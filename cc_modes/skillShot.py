@@ -76,6 +76,9 @@ class SkillShot(ep.EP_Mode):
         random.shuffle(self.keys_index['welcome'])
         random.shuffle(self.keys_index['super'])
 
+    def tilted(self):
+        # remove thyself if tilted
+        self.unload()
 
     def ball_drained(self):
         # if somehow all the balls go away and this crap is still running, it should unload. SRSLY.

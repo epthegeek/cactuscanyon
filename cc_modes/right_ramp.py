@@ -43,21 +43,25 @@ class RightRamp(ep.EP_Mode):
         ep.last_switch = "rightRampEnter"
 
     def sw_rightRampMake_active(self,sw):
-        # the actual game doesn't care if enter was just hit
-        # so I don't either
-        # tick one on to the total of player shots on the right ramp
-        self.game.increase_tracking('rightRampShots')
-
-        # if a polly mode is running - let it go man
-        if self.game.peril or self.game.showdown.running or self.game.ambush.running:
-            if self.game.combos.chain > 1:
-                self.game.combos.mini_display()
+        # if we're tilted, ignore this switch:
+        if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
+            pass
         else:
-            self.award_ramp_score(self.game.combos.comboStatus)
+            # the actual game doesn't care if enter was just hit
+            # so I don't either
+            # tick one on to the total of player shots on the right ramp
+            self.game.increase_tracking('rightRampShots')
 
-        ## -- set the last switch hit --
-        ep.last_switch = "rightRampMake"
-        ep.last_shot = "right"
+            # if a polly mode is running - let it go man
+            if self.game.peril or self.game.showdown.running or self.game.ambush.running:
+                if self.game.combos.chain > 1:
+                    self.game.combos.mini_display()
+            else:
+                self.award_ramp_score(self.game.combos.comboStatus)
+
+            ## -- set the last switch hit --
+            ep.last_switch = "rightRampMake"
+            ep.last_shot = "right"
 
 
     def sw_rightRampBottom_active(self,sw):
