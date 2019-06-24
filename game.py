@@ -1512,7 +1512,7 @@ class CCGame(game.BasicGame):
                     force_save = True
             else:
                 print "Didn't find a backup file - forcing save"
-                restore = True
+                force_save = True
 
         if template:
             for key, value in template.iteritems():
