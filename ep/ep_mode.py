@@ -84,6 +84,7 @@ class EP_Mode(object):
         self.running = False
         self.queued = 0
         self.myID = "Unknown"
+        self.layer = None
 
     def __scan_switch_handlers(self):
         # Format: sw_popperL_open_for_200ms(self, sw):
