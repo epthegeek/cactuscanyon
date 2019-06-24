@@ -1,58 +1,58 @@
-##   ____           _                ____
-##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
-## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
-## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
-##  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
-##                                                   |___/
-##           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
-##          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
-##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
-##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
-##
-## A P-ROC Project by Eric Priepke, Copyright 2012-2013
-## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
-## Original Cactus Canyon software by Matt Coriale
-##
-###
-###     _              _               _
-###    / \   _ __ ___ | |__  _   _ ___| |__
-###   / _ \ | '_ ` _ \| '_ \| | | / __| '_ \
-###  / ___ \| | | | | | |_) | |_| \__ \ | | |
-### /_/   \_\_| |_| |_|_.__/ \__,_|___/_| |_|
-###
-
+#   ____           _                ____
+#  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
+# | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
+# | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
+#  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
+#                                                   |___/
+#           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
+#          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
+#         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
+#          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
+#
+# A P-ROC Project by Eric Priepke, Copyright 2012-2013
+# Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
+# Original Cactus Canyon software by Matt Coriale
+#
+#
+#     _              _               _
+#    / \   _ __ ___ | |__  _   _ ___| |__
+#   / _ \ | '_ ` _ \| '_ \| | | / __| '_ \
+#  / ___ \| | | | | | |_) | |_| \__ \ | | |
+# /_/   \_\_| |_| |_|_.__/ \__,_|___/_| |_|
+#
 
 from procgame import dmd
 import ep
 import random
 
+
 class Ambush(ep.EP_Mode):
     """Showdown code """
-    def __init__(self,game,priority):
-        super(Ambush, self).__init__(game,priority)
+    def __init__(self, game, priority):
+        super(Ambush, self).__init__(game, priority)
         self.myID = "Ambush"
         self.posts = [self.game.coils.leftGunFightPost,self.game.coils.rightGunFightPost]
 
-        self.targetNames = ['Left','Left Center','Right Center','Right']
+        self.targetNames = ['Left', 'Left Center', 'Right Center', 'Right']
         # setup the standing guys
         self.guyLayers = []
         self.badGuy0 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
-        self.badGuy0.set_target_position(-49,0)
+        self.badGuy0.set_target_position(-49, 0)
         self.badGuy0.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy0)
         self.badGuy1 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
-        self.badGuy1.set_target_position(-16,0)
+        self.badGuy1.set_target_position(-16, 0)
         self.badGuy1.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy1)
         self.badGuy2 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
-        self.badGuy2.set_target_position(15,0)
+        self.badGuy2.set_target_position(15, 0)
         self.badGuy2.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy2)
         self.badGuy3 = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dudeShotFullBody.frames[0])
-        self.badGuy3.set_target_position(47,0)
+        self.badGuy3.set_target_position(47, 0)
         self.badGuy3.composite_op = "blacksrc"
         self.guyLayers.append(self.badGuy3)
-        ## lamps
+        # lamps
         self.lamps = [self.game.lamps.badGuyL0,
                       self.game.lamps.badGuyL1,
                       self.game.lamps.badGuyL2,
@@ -62,42 +62,44 @@ class Ambush(ep.EP_Mode):
         # how long the bad guys wait before disappearing
         self.SECONDS = self.game.user_settings['Gameplay (Feature)']['Ambush Target Timer']
         self.ball_saver = self.game.user_settings['Gameplay (Feature)']['Ambush Ball Saver']
+        self.startup = False
+        self.paused = False
 
         # build the pause view
         script = []
         # set up the text layer
-        textString = "< AMBUSH PAUSED >"
-        textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString,color=ep.BLUE)
-        script.append({'seconds':0.3,'layer':textLayer})
+        text_string = "< AMBUSH PAUSED >"
+        textLayer = ep.EP_TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(text_string,color=ep.BLUE)
+        script.append({'seconds': 0.3, 'layer': textLayer})
         # set up the alternating blank layer
         blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
         blank.composite_op = "blacksrc"
-        script.append({'seconds':0.3,'layer':blank})
+        script.append({'seconds': 0.3, 'layer': blank})
         # make a script layer with the two
-        self.pauseView = dmd.ScriptedLayer(128,32,script)
+        self.pauseView = dmd.ScriptedLayer(128, 32, script)
         self.pauseView.composite_op = "blacksrc"
 
 
-    def sw_leftBonusLane_active(self,sw):
+    def sw_leftBonusLane_active(self, sw):
         if not self.paused:
             self.pause()
 
-    def sw_rightBonusLane_active(self,sw):
+    def sw_rightBonusLane_active(self, sw):
         if not self.paused:
             self.pause()
 
     # bumpers pause ambush
-    def sw_leftJetBumper_active(self,sw):
+    def sw_leftJetBumper_active(self, sw):
             self.bumper_hit('left')
 
-    def sw_rightJetBumper_active(self,sw):
+    def sw_rightJetBumper_active(self, sw):
             self.bumper_hit('right')
 
-    def sw_bottomJetBumper_active(self,sw):
+    def sw_bottomJetBumper_active(self, sw):
             self.bumper_hit('bottom')
 
     # so does the mine
-    def sw_minePopper_active_for_400ms(self,sw):
+    def sw_minePopper_active_for_400ms(self, sw):
         self.pause()
 
     # resume when exit
@@ -121,8 +123,9 @@ class Ambush(ep.EP_Mode):
             self.pause()
 
     def mode_started(self):
+        self.startup = True
         self.running = True
-        self.deathTally = 0
+        self.death_tally = 0
         self.showdownValue = 300000
         self.tauntTimer = 0
         self.availableBadGuys = [0,1,2,3]
@@ -157,7 +160,7 @@ class Ambush(ep.EP_Mode):
         # turn off the bad guy lights
         self.game.lamp_control.disable_bad_guys()
         # things, they go here
-        self.deathTally = 0
+        self.death_tally = 0
         # play a startup animation
         anim = self.game.assets.dmd_ambush
         myWait = len(anim.frames) / 10.0
@@ -192,6 +195,11 @@ class Ambush(ep.EP_Mode):
         self.delay("Ambush",delay=myWait,handler=self.get_going)
 
     def get_going(self):
+        # turn off the startup flag
+        self.startup = False
+        # check if the ball drained during the intro and put one back if needed
+        if self.game.trough.num_balls_in_play == 0:
+            self.add_ball()
         # turn the GI back on
         self.game.gi_control("ON")
         # start the music
@@ -200,8 +208,6 @@ class Ambush(ep.EP_Mode):
         # add two dudes - one here, one later
         self.is_busy()
         self.add_guys(1)
-        # drop the post
-        #self.posts[self.activeSide].disable()
 
         # delay adding the second guy for 2 seconds to stagger them a bit
         self.delay("Ambush",delay=2,handler=self.add_guys,param=1)
@@ -237,17 +243,13 @@ class Ambush(ep.EP_Mode):
             # loop through and cancel all the target timers
             for target in range(0,4,1):
                 if self.badGuyTimer[target] != 0 and self.badGuyTimer[target] != None:
-                    #print "CANCEL TIMER: " + self.targetNames[target] + " HAD: " + str(self.badGuyTimer[target])
                     self.cancel_delayed(self.targetNames[target])
-            #textString = "< AMBUSH PAUSED >"
-            #self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
             self.layer = self.pauseView
 
     def resume(self):
         for target in range(0,4,1):
             # loop through and restart any timer that has value
             if self.badGuyTimer[target] != 0 and self.badGuyTimer[target] != None:
-                #print "RESTARTING TARGET: " + str(target) + " TIME: " + str(self.badGuyTimer[target])
                 self.targetTimer(target)
         self.update_display()
 
@@ -255,7 +257,6 @@ class Ambush(ep.EP_Mode):
         # tick one off the timer for that target
         if self.badGuyTimer[target] > 0:
             self.badGuyTimer[target] -= 1
-        #print "TIMER WORKING ON TARGET: " + str(target) + " - TIME: " + str(self.badGuyTimer[target])
         # if we're down to 2 seconds speed the light up and maybe play a quote
         if self.badGuyTimer[target] == 2 and not self.game.lamp_control.lights_out:
             self.lamps[target].schedule(0x0F0F0F0F)
@@ -282,10 +283,10 @@ class Ambush(ep.EP_Mode):
             # default is 2 dudes
             amount = 2
             # if we're at or above 5 kills, go to three
-            if self.deathTally >= 5:
+            if self.death_tally >= 5:
                 amount += 1
             # if we're at or above 9, add another
-            if self.deathTally >= 9:
+            if self.death_tally >= 9:
                 amount += 1
             # we should add whatever it takes to get back to amount
             thisMany = amount - len(self.activatedBadGuys)
@@ -298,7 +299,7 @@ class Ambush(ep.EP_Mode):
     def update_display(self,killed=99,escaped=99):
         # have to load the animations here so they can be used more than once
 
-        ## setup the shot guys
+        # setup the shot guys
         shotLayers = []
         shotguy = self.game.assets.dmd_dudeShotFullBody
         escapeLayers = []
@@ -385,10 +386,10 @@ class Ambush(ep.EP_Mode):
             # handle a guy hit in a showdown
             print "KILLING GUY: " + str(target)
 
-            ## cancel the timer delay for this dude
+            # cancel the timer delay for this dude
             self.cancel_delayed(self.targetNames[target])
             # add the hit to the death tally
-            self.deathTally += 1
+            self.death_tally += 1
             # add one to the rolling high noon total
             self.game.increase_tracking('kills')
             # score points
@@ -408,7 +409,7 @@ class Ambush(ep.EP_Mode):
             self.update_display(killed=target)
             self.delay(name="Poller",delay=1.5,handler=self.poller)
 
-    def lightning(self,section):
+    def lightning(self, section):
         # set which section of the GI to flash
         if section == 'top':
             lamp = self.game.giLamps[0]
@@ -418,9 +419,7 @@ class Ambush(ep.EP_Mode):
             # the only other option is left
             lamp = self.game.giLamps[2]
             # then flash it
-
         lamp.pulse(216)
-
 
     def end_ambush(self):
         # kill the taunt timer
@@ -432,8 +431,6 @@ class Ambush(ep.EP_Mode):
         self.clear_layer()
         # drop all the targets
         self.game.bad_guys.drop_targets()
-        # kill the music - if nothing else is running
-        #self.stop_music(slice=2)
         # grab the points before tracking
         totalPoints = self.game.show_tracking('ambushPoints')
         # update all the tracking
@@ -447,8 +444,8 @@ class Ambush(ep.EP_Mode):
         # setup a display frame
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
         textLine1 = ep.EP_TextLayer(74, 2, self.game.assets.font_7px_bold_az, "center", opaque=False)
-        textString = "AMBUSH: " + str(self.deathTally) + " KILLS"
-        textLine1.set_text(textString,color=ep.RED)
+        text_string = "AMBUSH: " + str(self.death_tally) + " KILLS"
+        textLine1.set_text(text_string,color=ep.RED)
         textLine1.composite_op = "blacksrc"
         textLine2 = ep.EP_TextLayer(74,11, self.game.assets.font_12px_az, "center", opaque=False)
         print "TOTAL AMBUSH: " + str(ep.format_score(totalPoints))
@@ -456,7 +453,7 @@ class Ambush(ep.EP_Mode):
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
         # play a quote
-        if self.deathTally == 0:
+        if self.death_tally == 0:
             self.game.base.play_quote(self.game.assets.quote_gunFail)
         else:
             self.game.base.play_quote(self.game.assets.quote_mobEnd)
@@ -481,8 +478,8 @@ class Ambush(ep.EP_Mode):
         bodycount = self.game.show_tracking('ambushTotal')
         # see if the death tally beats previous/existing and store in tracking if does - for ambush champ
         # if the total for this round of ambush was higher than the stored, store it
-        if self.deathTally > bodycount:
-            self.game.set_tracking('ambushTotal',self.deathTally)
+        if self.death_tally > bodycount:
+            self.game.set_tracking('ambushTotal',self.death_tally)
             # set the ambush status to over and setup showdown
         self.game.set_tracking('showdownStatus',"OPEN")
         self.game.set_tracking('ambushStatus',"OVER")

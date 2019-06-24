@@ -166,8 +166,9 @@ class Trough(ep.EP_Mode):
                     if self.drain_callback:
                         # Write off the drained balls
                         self.num_balls_in_play = num_current_machine_balls - counted_balls_in_trough
-                        # call a drain
-                        self.drain_callback()
+                        # call a drain - unless showdown or ambush is starting
+                        if not self.game.showdown.startup and not self.game.ambush.startup:
+                            self.drain_callback()
                         print "BALLS NOW IN PLAY: " + str(self.num_balls_in_play)
         # if there aren't any balls in play
         else:

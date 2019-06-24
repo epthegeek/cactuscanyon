@@ -1,29 +1,30 @@
-##   ____           _                ____
-##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
-## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
-## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
-##  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
-##                                                   |___/
-##           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
-##          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
-##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
-##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
-##
-## A P-ROC Project by Eric Priepke, Copyright 2012-2013
-## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
-## Original Cactus Canyon software by Matt Coriale
-##
-###
-###   ___        _      _       _
-###  / _ \ _   _(_) ___| | ____| |_ __ __ ___      __
-### | | | | | | | |/ __| |/ / _` | '__/ _` \ \ /\ / /
-### | |_| | |_| | | (__|   < (_| | | | (_| |\ V  V /
-###  \__\_\\__,_|_|\___|_|\_\__,_|_|  \__,_| \_/\_/
-###
+#   ____           _                ____
+#  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
+# | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
+# | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
+#  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
+#                                                   |___/
+#           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
+#          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
+#         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
+#          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
+#
+# A P-ROC Project by Eric Priepke, Copyright 2012-2013
+# Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
+# Original Cactus Canyon software by Matt Coriale
+#
+#
+#   ___        _      _       _
+#  / _ \ _   _(_) ___| | ____| |_ __ __ ___      __
+# | | | | | | | |/ __| |/ / _` | '__/ _` \ \ /\ / /
+# | |_| | |_| | | (__|   < (_| | | | (_| |\ V  V /
+#  \__\_\\__,_|_|\___|_|\_\__,_|_|  \__,_| \_/\_/
+#
 
 from procgame import dmd
 import ep
 import random
+
 
 class Quickdraw(ep.EP_Mode):
     """Quickdraw code """
@@ -55,6 +56,7 @@ class Quickdraw(ep.EP_Mode):
         random.shuffle(self.keys_index['hit'])
         random.shuffle(self.keys_index['taunt'])
         self.running = False
+        self.paused = False
 
     def mode_started(self):
         self.paused = False
@@ -151,8 +153,6 @@ class Quickdraw(ep.EP_Mode):
         # pick one of them at random
         self.target = random.choice(choices)
         print "BAD GUY ACTIVE IS: " + str(self.target)
-        # kill the game music
-        #self.stop_music()
         # start the mode music
         self.game.sound.play(self.game.assets.music_quickdrawBumper)
         self.delay("Operational",delay=1.3,handler=self.music_on,param=self.game.assets.music_quickdraw)
@@ -176,7 +176,8 @@ class Quickdraw(ep.EP_Mode):
         self.runtime = self.game.user_settings['Gameplay (Feature)']['Quickdraw Timer']
         self.third = self.runtime / 3.0
         # set the amount to subtract per 5th of a second
-        # I hope this is right - divide the points by 10, divide by 5 times the amount of seconds, times 10 again to get an even number
+        # I hope this is right - divide the points by 10, divide by 5 times the amount of
+        # seconds, times 10 again to get an even number
         # then take off 370 to get a more interesting countdown
         self.portion = ((self.points / 10) / int(self.runtime * 5) * 10) - 370
         # queue up a delay for when the timer should run out if the mode hasn't been won
@@ -206,14 +207,15 @@ class Quickdraw(ep.EP_Mode):
                 color = ep.ORANGE
             else:
                 color = ep.YELLOW
-            scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points),color=color)
-            if self.layer == None:
+            scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False)
+            scoreLayer.set_text(ep.format_score(self.points), color=color)
+            if self.layer is None:
                 self.layer = self.no_layer()
 
-            self.layer = dmd.GroupedLayer(128,32,[self.layer,scoreLayer])
+            self.layer = dmd.GroupedLayer(128,32,[self.layer, scoreLayer])
             # update the group layer
             # make it active
-            self.layer = dmd.GroupedLayer(128,32,[self.animLayer,scoreLayer])
+            self.layer = dmd.GroupedLayer(128,32,[self.animLayer, scoreLayer])
             # delay the next iteration
             self.delay("Timer Delay", delay = 0.2, handler = self.timer, param=target)
 
@@ -223,7 +225,7 @@ class Quickdraw(ep.EP_Mode):
             # play the current quote - using a specific position in the list
             self.play_ordered_quote(self.game.assets.quote_quickdrawTaunt,'taunt')
             # delay when taunting is ok again - due to the sub-second timer
-            self.delay(delay = 1,handler=self.untaunt)
+            self.delay(delay=1, handler=self.untaunt)
 
     def untaunt(self):
         self.taunting = False
@@ -233,8 +235,6 @@ class Quickdraw(ep.EP_Mode):
         # clear the layer
         self.layer = None
         self.cancel_delayed("Timer Delay")
-        #textString = "< QUICKDRAW PAUSED >"
-        #self.layer = dmd.TextLayer(128/2, 24, self.game.assets.font_6px_az_inverse, "center", opaque=False).set_text(textString)
         self.layer = self.pauseView
 
     def resume(self):
@@ -262,16 +262,16 @@ class Quickdraw(ep.EP_Mode):
         anim = self.game.assets.dmd_quickdrawHit
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         #  setup the text
-        scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points),color=ep.GREEN)
+        scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False)
+        scoreLayer.set_text(ep.format_score(self.points),color=ep.GREEN)
         # combine and activate
-        textLayer = ep.EP_TextLayer(84,20, self.game.assets.font_7px_bold_az, "center", opaque=False).set_text("QUICK DRAW!",color=ep.GREEN)
+        textLayer = ep.EP_TextLayer(84,20, self.game.assets.font_7px_bold_az, "center", opaque=False)
+        textLayer.set_text("QUICK DRAW!",color=ep.GREEN)
         self.game.sound.play(self.game.assets.sfx_quickdrawHit)
         self.game.sound.play(self.game.assets.sfx_quickdrawFinale)
         self.game.sound.play(self.game.assets.sfx_cheers)
         stackLevel = self.game.show_tracking('stackLevel')
         winLayer = dmd.GroupedLayer(128,32,[animLayer,scoreLayer,textLayer])
-        # flash the guns
-        #self.game.base.guns_flash(1)
         # if something higher is running, throw the win display in a cut in
         if True in stackLevel[1:]:
             self.game.interrupter.cut_in(winLayer,1)
@@ -287,7 +287,7 @@ class Quickdraw(ep.EP_Mode):
         # stall a bit, then do the rest of the winning
         self.delay("Operational",delay=0.5,handler=self.finish_win,param=dudesDead)
 
-    def finish_win(self,dudesDead):
+    def finish_win(self, dudesDead):
         # play a quote
         duration = self.play_ordered_quote(self.game.assets.quote_quickdrawWin,'hit')
         # if this is the 4th one , and we're not at the EB max, then light extra ball
@@ -314,9 +314,6 @@ class Quickdraw(ep.EP_Mode):
             self.end_quickdraw()
 
     def lost(self,target):
-        # kill the mode music
-        # start up the main theme again if a higher level mode isn't running
-        #self.stop_music(slice=1)
         # stuff specific to losing
         # drop the coil and kill the lamp
         self.game.bad_guys.target_down(target)
@@ -330,8 +327,6 @@ class Quickdraw(ep.EP_Mode):
         print "ENDING QUICKDRAW"
         # turn off the layer
         self.layer = None
-        # moving the tracking update to sooner
-        #self.update_tracking()
 
         self.lamp_update()
         print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
@@ -339,7 +334,7 @@ class Quickdraw(ep.EP_Mode):
         self.game.stack_level(0,False)
         # turn the main music back on - if a second level mode isn't running
         if self.game.trough.num_balls_in_play > 0:
-            self.music_on(self.game.assets.music_mainTheme,mySlice=1)
+            self.music_on(self.game.assets.music_mainTheme, mySlice=1)
         # full lamp update
         self.lamp_update()
         # remove the mode
@@ -353,19 +348,16 @@ class Quickdraw(ep.EP_Mode):
 
     def update_tracking(self):
         # set the status to OPEN
-        self.game.set_tracking('quickdrawStatus',"OPEN",self.side)
+        self.game.set_tracking('quickdrawStatus', "OPEN", self.side)
         # If all the bad guys are now dead, make showdown ready, or ambush
         if False not in self.game.show_tracking('badGuysDead'):
             if self.game.show_tracking('showdownStatus') != "OVER":
-                self.game.set_tracking('showdownStatus',"READY")
+                self.game.set_tracking('showdownStatus', "READY")
                 print "SHOWDOWN STATUS IS READY"
                 self.game.modes.add(self.game.showdown)
                 self.game.showdown.start_showdown(0)
             else:
-                self.game.set_tracking('ambushStatus',"READY")
-        #        PUTTING AMBUSH BACK TO ONLY START WHEN INLANE IS HIT - 8/29/2013
-        #        self.game.modes.add(self.game.ambush)
-        #        self.game.ambush.start_ambush(0)
+                self.game.set_tracking('ambushStatus', "READY")
 
     def mode_stopped(self):
         self.running = False
