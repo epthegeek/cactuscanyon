@@ -1029,6 +1029,8 @@ class CCGame(game.BasicGame):
         p.player_stats['mug_shots'] = self.user_settings['Gameplay (Feature)']['Beer Mug Hits For Multiball']
         # set the number for tumbleweed hits to start cva
         p.player_stats['tumbleweedShots'] = self.user_settings['Gameplay (Feature)']['Tumbleweeds for CVA']
+        # Set the flip limit for this player - party mode thing
+        p.player_stats['Flip Limit'] = self.user_settings['Gameplay (Feature)']['Party - Flip Count']
 
     def stack_level(self, level, value, lamps=True):
         # just a routine for setting the stack level

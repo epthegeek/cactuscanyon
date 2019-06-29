@@ -234,8 +234,13 @@ class SkillShot(ep.EP_Mode):
             if self.game.show_tracking('centerRampStage') < 3:
                 prizes.append("M")
 
-            # 1 million points (1M) is always available
-            prizes.append("N")
+            # 1 million points (1M) is always available - except for flip count
+            if self.game.party_setting == 'Flip Ct':
+                # add 100 grand prize
+                prizes.append("X")
+            else:
+                prizes.append("N")
+
             if self.game.user_settings['Gameplay (Feature)']['Franks N Beans'] == "Enabled" and not self.game.show_tracking('farted'):
                 prizes.append("W")
         # here's the super skill shot prizes
@@ -298,6 +303,14 @@ class SkillShot(ep.EP_Mode):
                     print "Found " + prizes[item] + " taking out of rotation"
                     prizes.remove(prizes[item])
             count += 1
+
+        # if flip count is on, replace one award with the extra flips per ball
+        if self.game.party_setting == 'Flip Ct':
+            position = random.randrange(len(prizes))
+            # dict for which prize per ball
+            flip_prize = {1:"Y", 2:"Z", 3:"A"}
+            # insert the flip count prize at a random location
+            self.selectedPrizes[position] = flip_prize[self.game.ball]
         # Tournament bit! uses the same 5 prizes - and 100,000 place holders if item is lit/unavailable
         if self.game.tournament:
             self.selectedPrizes = ""
@@ -736,6 +749,24 @@ class SkillShot(ep.EP_Mode):
             awardStringTop = "FRANKS N"
             awardStringBottom = "BEANS"
             self.game.base.start_franks()
+
+        # flip count + 5
+        elif self.selectedPrizes[5:] == "Y":
+            awardStringTop = "FIVE EXTRA"
+            awardStringBottom = "FLIPS ADDED"
+            self.game.increase_tracking('Flip Limit',5)
+
+        # flip count + 10
+        elif self.selectedPrizes[5:] == "Z":
+            awardStringTop = "TEN EXTRA"
+            awardStringBottom = "FLIPS ADDED"
+            self.game.increase_tracking('Flip Limit',10)
+
+        # flip count + 15
+        elif self.selectedPrizes[5:] == "a":
+            awardStringTop = "FIFTEEN EXTRA"
+            awardStringBottom = "FLIPS ADDED"
+            self.game.increase_tracking('Flip Limit',15)
 
         # call the lamp update so the prize is shown properly
         self.lamp_update()

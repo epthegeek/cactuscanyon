@@ -44,8 +44,6 @@ class PartyMode(ep.EP_Mode):
                              ("RECTIFY","IF BOTH FLIPPERS ACTIVATED", "TOGETHER - TILT!")]
 
     def attract_display(self):
-        if self.game.party_setting == 'Flip Ct':
-            self.flip_limit = self.game.user_settings['Gameplay (Feature)']['Party - Flip Count']
         # Banner for attract mode to alert that party mode is on
         script = []
         # set up the text layer
@@ -58,7 +56,7 @@ class PartyMode(ep.EP_Mode):
         script.append({'seconds':0.5,'layer':blank})
         # set up the type of mode text
         if self.game.party_setting == 'Flip Ct':
-            textString1 = "< LIMITED FLIPS - " + str(self.flip_limit) + " >"
+            textString1 = "< LIMITED FLIPS - " + self.game.user_settings['Gameplay (Feature)']['Party - Flip Count'] + " >"
         elif self.game.party_setting == 'Drunk':
             textString1 = "< DRUNK - FLIPS REVERSED >"
         # newbie mode - both flippers all the time
@@ -91,7 +89,7 @@ class PartyMode(ep.EP_Mode):
 
     def update_display(self):
         if self.game.party_setting == 'Flip Ct':
-            remain = self.flip_limit - self.game.show_tracking('Total Flips')
+            remain = self.game.show_tracking('Flip Limit') - self.game.show_tracking('Total Flips')
             if remain <= 0:
                 remain = 00
             if remain < 5:
@@ -117,7 +115,7 @@ class PartyMode(ep.EP_Mode):
         if self.game.party_setting == 'Flip Ct' and not self.game.skill_shot.live and self.game.base in self.game.modes and self.game.flippers_active:
             self.game.increase_tracking('Left Flips')
             self.game.increase_tracking('Total Flips')
-            if self.game.show_tracking('Total Flips') > self.flip_limit and self.flip_limit != 0:
+            if self.game.show_tracking('Total Flips') > self.game.show_tracking('Flip Limit') and self.game.show_tracking('Flip Limit') != 0:
                 # we're over the total, disable the flippers
                 self.game.enable_flippers(False)
             self.update_display()
@@ -128,7 +126,7 @@ class PartyMode(ep.EP_Mode):
         if self.game.party_setting == 'Flip Ct' and not self.game.skill_shot.live and self.game.base in self.game.modes and self.game.flippers_active:
             self.game.increase_tracking('Right Flips')
             self.game.increase_tracking('Total Flips')
-            if self.game.show_tracking('Total Flips') > self.flip_limit and self.flip_limit != 0:
+            if self.game.show_tracking('Total Flips') > self.game.show_tracking('Flip Limit') and self.game.show_tracking('Flip Limit') != 0:
                 # we're over the total disable the flippers
                 self.game.enable_flippers(False)
             self.update_display()
