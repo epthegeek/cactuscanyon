@@ -72,6 +72,8 @@ class CCGame(game.BasicGame):
         self.shutdownFlag = config.value_for_key_path(keypath='shutdown_flag',default=False)
         self.buttonShutdown = config.value_for_key_path(keypath='power_button_combo', default=False)
         self.moonlightFlag = False
+        # new flag for not counting flips when flippers are inactive in flip ct party mode
+        self.flippers_active = False
 
         use_desktop = config.value_for_key_path(keypath='use_desktop', default=True)
         self.color_desktop = config.value_for_key_path(keypath='color_desktop', default=False)
@@ -1115,6 +1117,8 @@ class CCGame(game.BasicGame):
         if self.party_setting == "Drunk":
             self.enable_inverted_flippers(enable)
         else:
+            # Set a flippers active flag
+            self.flippers_active = True
             for flipper in self.config['PRFlippers']:
                 self.logger.info("Programming flipper %s", flipper)
                 main_coil = self.coils[flipper+'Main']
@@ -1158,7 +1162,7 @@ class CCGame(game.BasicGame):
                 self.proc.switch_update_rule(switch_num, state2, {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
                 if not enable:
-
+                    self.flippers_active = False
                     main_coil.disable()
                     hold_coil.disable()
 
@@ -1169,7 +1173,7 @@ class CCGame(game.BasicGame):
 
     def enable_inverted_flippers(self, enable):
         """Enables or disables the flippers AND bumpers."""
-
+        self.flippers_active = True
         print "ENABLE INVERTED FLIPPERS, YO"
         for flipper in self.config['PRFlippers']:
 
@@ -1208,6 +1212,7 @@ class CCGame(game.BasicGame):
                 self.proc.switch_update_rule(switch_num, state2, {'notifyHost':False, 'reloadActive':False}, drivers, len(drivers) > 0)
 
             if not enable:
+                self.flippers_active = False
                 main_coil.disable()
                 hold_coil.disable()
 
