@@ -434,6 +434,8 @@ class Mine(ep.EP_Mode):
             self.delay("Collecting",delay=myWait,handler=self.extra_ball_ending)
             # update lamps to turn on the EB light
             self.lamp_update()
+        # Disable the bozo ball if one was awarded some other way
+        self.game.set_tracking('bozoBall',False)
 
     def extra_ball_ending(self,isLong=True):
         # reset the collecting flagg for later

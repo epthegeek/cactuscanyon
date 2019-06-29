@@ -1079,6 +1079,8 @@ class CCGame(game.BasicGame):
                 self.increase_tracking('extraBallsTotal')
                 # give the extra ball
                 self.current_player().extra_balls += 1
+                # turn off the bozo ball if there is one
+                self.game.set_tracking('bozoBall',False)
         else:
             # do something about last call here
             pass
