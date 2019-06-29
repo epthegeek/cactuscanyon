@@ -86,7 +86,9 @@ class SkillShot(ep.EP_Mode):
             self.wipe_delays()
             self.unload()
 
-    def sw_flipperLwL_active(self,sw):
+    def sw_flipperLwL_active(self, sw):
+        if self.game.switches.flipperLwL.is_active():
+            self.dub_flip()
         if self.selecting and self.game.switches.shooterLane.is_active():
             self.change_prizes(-1)
             return game.SwitchStop
@@ -104,7 +106,9 @@ class SkillShot(ep.EP_Mode):
             #print "Left Flipper hit"
             pass
 
-    def sw_flipperLwR_active(self,sw):
+    def sw_flipperLwR_active(self, sw):
+        if self.game.switches.flipperLwR.is_active():
+            self.dub_flip()
         if self.selecting and self.game.switches.shooterLane.is_active():
             self.change_prizes(1)
             return game.SwitchStop
@@ -115,6 +119,9 @@ class SkillShot(ep.EP_Mode):
         else:
             #print "right flipper hit"
             pass
+
+    def dub_flip(self):
+        self.game.interrupter.show_player_scores()
 
     def sw_shooterLane_inactive(self,sw):
         # turn off selecting when the ball leaves the shooter lane

@@ -67,7 +67,7 @@ class Interrupter(ep.EP_Mode):
         # with an idle call, set a repeat
         if idle:
             self.idle = True
-            self.delay(name="idle",delay=10,handler=self.display_player_number,param=True)
+            self.delay(name="idle",delay=15,handler=self.display_player_number,param=True)
 
     def cancel_idle(self):
         self.idle = False
@@ -454,6 +454,11 @@ class Interrupter(ep.EP_Mode):
         # show the score layer for a second
         self.layer = self.game.score_display.layer
         self.delay(delay = 1,handler=self.clear_layer)
+
+    def show_player_scores(self):
+        self.layer = self.game.score_display.layer
+        self.cancel_delayed("clear score")
+        self.delay("clear score", delay=2, handler=self.clear_layer)
 
     # this for low priority modes to throw a display over something else that is running
     def cut_in(self,layer,timer):

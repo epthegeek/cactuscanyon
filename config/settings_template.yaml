@@ -345,7 +345,7 @@ Gameplay (Feature):
     default: 'Easy'
   'Showdown Difficulty':
     options: ['Easy','Hard']
-    default: 'Easy'
+    default: 'Hard'
   'Super Skill Shot':
     options: ['Enabled','Disabled']
     default: 'Enabled'
