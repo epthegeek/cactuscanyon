@@ -313,11 +313,15 @@ class SkillShot(ep.EP_Mode):
 
         # if flip count is on, replace one award with the extra flips per ball
         if self.game.party_setting == 'Flip Ct':
-            position = random.randrange(len(prizes))
+            # pick a random spot for it
+            position = random.randrange(4)
             # dict for which prize per ball
-            flip_prize = {1:"Y", 2:"Z", 3:"A"}
+            flip_prize = {1: "Y", 2: "Z", 3: "a"}
             # insert the flip count prize at a random location
-            self.selectedPrizes[position] = flip_prize[self.game.ball]
+            self.selectedPrizes = self.selectedPrizes.replace(self.selectedPrizes[position],
+                                                              flip_prize[self.game.ball],
+                                                              1)
+
         # Tournament bit! uses the same 5 prizes - and 100,000 place holders if item is lit/unavailable
         if self.game.tournament:
             self.selectedPrizes = ""
