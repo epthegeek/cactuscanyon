@@ -722,31 +722,31 @@ class GoldMine(ep.EP_Mode):
                 self.game.sound.play_music(self.game.assets.music_tensePiano2,loops=-1)
             print "RESTART DISPLAY"
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
-            awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-            awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_5px_AZ,justify="center",opaque=False)
-            timeText = dmd.TextLayer(64,17,self.game.assets.font_9px_az,justify="center",opaque=False)
+            awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+            awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_5px_AZ,justify="center",opaque=False)
+            timeText = ep.EP_TextLayer(64,17,self.game.assets.font_9px_az,justify="center",opaque=False)
             timeText.composite_op = "blacksrc"
-            awardTextTop.set_text("SHOOT THE MINE")
-            awardTextBottom.set_text("TO RESTART MULTIBALL")
+            awardTextTop.set_text("SHOOT THE MINE",color=ep.GREEN)
+            awardTextBottom.set_text("TO RESTART MULTIBALL",color=ep.YELLOW)
             if self.restartTimer == 1:
                 textLine = "1 SECOND"
             else:
                 textLine = str(self.restartTimer) + " SECONDS"
-            timeText.set_text(textLine,blink_frames=4)
+            timeText.set_text(textLine,blink_frames=4,color=ep.RED)
             combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom,timeText])
             self.layer = combined
             self.delay(name="Restart Timer",delay=1.0,handler=self.restart_option)
 
     def restart_hold_display(self):
         backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
-        awardTextTop = dmd.TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
-        awardTextBottom = dmd.TextLayer(128/2,11,self.game.assets.font_5px_AZ,justify="center",opaque=False)
-        timeText = dmd.TextLayer(64,17,self.game.assets.font_9px_az,justify="center",opaque=False)
+        awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
+        awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_5px_AZ,justify="center",opaque=False)
+        timeText = ep.EP_TextLayer(64,17,self.game.assets.font_9px_az,justify="center",opaque=False)
         timeText.composite_op = "blacksrc"
-        awardTextTop.set_text("SHOOT THE MINE")
-        awardTextBottom.set_text("TO RESTART MULTIBALL")
+        awardTextTop.set_text("SHOOT THE MINE",color=ep.GREEN)
+        awardTextBottom.set_text("TO RESTART MULTIBALL", color=ep.YELLOW)
         textLine = "PAUSED"
-        timeText.set_text(textLine,blink_frames=4)
+        timeText.set_text(textLine,blink_frames=4,color=ep.MAGENTA)
         combined = dmd.GroupedLayer(128,32,[backdrop,awardTextTop,awardTextBottom,timeText])
         self.layer = combined
 
