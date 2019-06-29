@@ -144,8 +144,8 @@ class SkillShot(ep.EP_Mode):
             # if we're on ball three and the player hasn't reached the replay score - show that
             if self.game.replays:
                 if self.game.ball == self.game.balls_per_game and not self.game.show_tracking('replay_earned'):
-                # on any ball other than ball one, announce which players turn it is if there is more than one
                     self.game.interrupter.replay_score_display()
+            # on any ball other than ball one, announce which players turn it is if there is more than one
             if len(self.game.players) > 1 and not self.game.interrupter.hush:
                 playerQuotes = [self.game.assets.quote_playerOne, self.game.assets.quote_playerTwo, self.game.assets.quote_playerThree, self.game.assets.quote_playerFour]
                 myDuration = self.game.sound.play(playerQuotes[self.game.current_player_index])

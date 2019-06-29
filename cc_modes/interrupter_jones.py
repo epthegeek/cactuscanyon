@@ -422,7 +422,6 @@ class Interrupter(ep.EP_Mode):
             animLayer.frame_time = 6
             animLayer.opaque = True
             animLayer.add_frame_listener(2,self.game.sound.play,param=self.game.assets.sfx_lowBoom)
-            #animLayer.add_frame_listener(4,self.game.trough.launch_balls,param=1)
             # this flag tells the player intro quote to not play
             self.hush = True
             animLayer.add_frame_listener(4,self.game.ball_starting)
@@ -652,8 +651,12 @@ class Interrupter(ep.EP_Mode):
 
     # replay score display
     def replay_score_display(self):
-        self.layer = self.replay_score_page()
-        self.delay(delay=1.5,handler=self.clear_layer)
+        # if the player hasn't already been shown the replay hint - show it
+        if not self.game.show_tracking('replay_hint'):
+            # set the hint tracking to true to prevent showing on extra balls
+            self.game.set_tracking('replay_hint', True)
+            self.layer = self.replay_score_page()
+            self.delay(delay=1.5,handler=self.clear_layer)
 
     def replay_score_page(self):
         replay_text = ep.format_score(self.game.user_settings['Machine (Standard)']['Replay Score'])

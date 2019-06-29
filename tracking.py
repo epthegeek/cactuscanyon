@@ -194,6 +194,7 @@ class Tracking(game.Player):
 
         # player earned replay
         self.player_stats['replay_earned'] = False
+        self.player_stats['replay_hint'] = False
 
         # bounty index for tournament mode
         self.player_stats['bountyIndex'] = 0
