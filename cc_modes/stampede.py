@@ -291,7 +291,7 @@ class Stampede(ep.EP_Mode):
         # badge light - stampede is 4
         self.game.badge.update(4)
         # update lamps
-        self.lamps_update()
+        self.lamp_update()
         # unload the mode
         self.delay(delay=2,handler=self.unload)
 
