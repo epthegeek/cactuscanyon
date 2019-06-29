@@ -67,7 +67,8 @@ class BaseGameMode(ep.EP_Mode):
         self.lamp_update()
         # set the jet killed flag
         self.jetKilled = False
-        self.jetCount = 0
+        self.jet_count = 0
+        self.jet_limit = self.game.user_settings['Gameplay (Feature)']['Pop Bumper Limit']
         self.beer_hit = False
 
     def mode_stopped(self):
@@ -620,21 +621,21 @@ class BaseGameMode(ep.EP_Mode):
     ### |____/ \__,_|_| |_| |_| .__/ \___|_|  |___/
     ###                       |_|
 
-    def sw_leftJetBumper_active(self,sw):
+    def sw_leftJetBumper_active(self, sw):
         self.bumper_hit('left')
 
-    def sw_rightJetBumper_active(self,sw):
+    def sw_rightJetBumper_active(self, sw):
         self.bumper_hit('right')
 
-    def sw_bottomJetBumper_active(self,sw):
+    def sw_bottomJetBumper_active(self, sw):
         # if we're tilted, ignore this switch entirely:
         if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
             pass
         else:
             # count the hit
-            self.jetCount += 1
-            # if we're over six and not not killed, kill the jet
-            if self.jetCount > 3 and not self.jetKilled:
+            self.jet_count += 1
+            # if we're over the setting and not not killed, kill the jet
+            if self.jet_limit != 0 and self.jet_count > self.jet_limit and not self.jetKilled:
                 print "Max bumps, shut er down!"
                 self.jetKilled = True
                 self.game.enable_bottom_bumper(False)
