@@ -1,18 +1,18 @@
-##   ____           _                ____
-##  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
-## | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
-## | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
-##  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
-##                                                   |___/
-##           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
-##          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
-##         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
-##          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
-##
-## A P-ROC Project by Eric Priepke, Copyright 2012-2013
-## Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
-## Original Cactus Canyon software by Matt Coriale
-##
+#   ____           _                ____
+#  / ___|__ _  ___| |_ _   _ ___   / ___|__ _ _ __  _   _  ___  _ __
+# | |   / _` |/ __| __| | | / __| | |   / _` | '_ \| | | |/ _ \| '_ \
+# | |__| (_| | (__| |_| |_| \__ \ | |__| (_| | | | | |_| | (_) | | | |
+#  \____\__,_|\___|\__|\__,_|___/  \____\__,_|_| |_|\__, |\___/|_| |_|
+#                                                   |___/
+#           ___ ___  _  _ _____ ___ _  _ _   _ ___ ___
+#          / __/ _ \| \| |_   _|_ _| \| | | | | __|   \
+#         | (_| (_) | .` | | |  | || .` | |_| | _|| |) |
+#          \___\___/|_|\_| |_| |___|_|\_|\___/|___|___/
+#
+# A P-ROC Project by Eric Priepke, Copyright 2012-2013
+# Built on the PyProcGame Framework from Adam Preble and Gerry Stellenberg
+# Original Cactus Canyon software by Matt Coriale
+#
 
 import ep
 from procgame import dmd, game
@@ -31,15 +31,15 @@ class NewServiceSkeleton(ep.EP_Mode):
         self.callback = None
 
    # fire the slings if they're hit
-    def sw_leftSlingshot_active(self,sw):
+    def sw_leftSlingshot_active(self, sw):
         self.game.coils.leftSlingshot.pulse()
         return game.SwitchStop
 
-    def sw_rightSlingshot_active(self,sw):
+    def sw_rightSlingshot_active(self, sw):
         self.game.coils.rightSlingshot.pulse()
         return game.SwitchStop
 
-    def sw_up_active(self,sw):
+    def sw_up_active(self, sw):
         if not self.busy:
             # play the sound for moving up
             self.game.sound.play(self.game.assets.sfx_menuUp)
@@ -47,6 +47,13 @@ class NewServiceSkeleton(ep.EP_Mode):
         else:
             pass
         return game.SwitchStop
+
+    def sw_up_inactive(self, sw):
+        self.cancel_delayed("Item Up")
+
+    # attempting to add hold button down logic
+    def sw_up_active_for_750ms(self, sw):
+        self.item_up_loop()
 
     def sw_down_active(self, sw):
         if not self.busy:
@@ -57,12 +64,28 @@ class NewServiceSkeleton(ep.EP_Mode):
             pass
         return game.SwitchStop
 
+    def sw_down_inactive(self, sw):
+        self.cancel_delayed("Item Down")
+
+    # attempting to add hold button down logic
+    def sw_down_active_for_750ms(self, sw):
+        self.item_down_loop()
+
     # default behavior for exit switch is just to exit
-    def sw_exit_active(self,sw):
+    def sw_exit_active(self, sw):
         if not self.busy:
             self.game.sound.play(self.game.assets.sfx_menuExit)
             self.unload()
         return game.SwitchStop
+
+    def item_down_loop(self):
+        self.cancel_delayed("Item Down")
+        # make sure the switch is still down
+        if self.game.switches.down.is_active():
+            # Move the item down
+            self.item_down()
+            # schedule a check to see if we're still holding
+            self.delay("Item Down", delay=0.1, handler=self.item_down_loop)
 
     def item_down(self):
         self.index -= 1
@@ -74,6 +97,16 @@ class NewServiceSkeleton(ep.EP_Mode):
         else:
             # then update the display
             self.selectionLine.set_text(str(self.section[self.index]))
+
+    def item_up_loop(self):
+        self.cancel_delayed("Item Up")
+        # make sure the switch is still down
+        if self.game.switches.down.is_active():
+            # Move the item up
+            self.item_up()
+            # start a new loop
+            # schedule a check to see if we're still holding
+            self.delay("Item Up", delay=0.1, handler=self.item_up_loop)
 
     def item_up(self):
         self.index += 1
@@ -87,17 +120,19 @@ class NewServiceSkeleton(ep.EP_Mode):
             self.selectionLine.set_text(str(self.section[self.index]))
 
     # standard display structure
-    def update_display(self,titleString,selectionString,infoString="",blinkInfo = False):
+    def update_display(self, titleString, selectionString, infoString="", blinkInfo = False):
         layers = []
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
         background.set_target_position(0,-4)
         layers.append(background)
-        self.titleLine = dmd.TextLayer(1,3,self.game.assets.font_5px_AZ_inverted,"Left").set_text(titleString.upper())
+        self.titleLine = dmd.TextLayer(1,3,self.game.assets.font_5px_AZ_inverted, "Left")
+        self.titleLine.set_text(titleString.upper())
         self.titleLine.composite_op = "blacksrc"
         layers.append(self.titleLine)
-        self.selectionLine = dmd.TextLayer(64,14,self.game.assets.font_9px_az,"center").set_text(selectionString)
+        self.selectionLine = dmd.TextLayer(64,14,self.game.assets.font_9px_az, "center")
+        self.selectionLine.set_text(selectionString)
         layers.append(self.selectionLine)
-        self.infoLine = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ,"center")
+        self.infoLine = dmd.TextLayer(64,25,self.game.assets.font_5px_AZ, "center")
         if blinkInfo:
             self.infoLine.set_text(infoString,blink_frames=30)
         else:
@@ -106,11 +141,11 @@ class NewServiceSkeleton(ep.EP_Mode):
         self.layer = dmd.GroupedLayer(128,32,layers)
 
 
-##   __  __       _         __  __
-##  |  \/  | __ _(_)_ __   |  \/  | ___ _ __  _   _
-##  | |\/| |/ _` | | '_ \  | |\/| |/ _ \ '_ \| | | |
-##  | |  | | (_| | | | | | | |  | |  __/ | | | |_| |
-##  |_|  |_|\__,_|_|_| |_| |_|  |_|\___|_| |_|\__,_|
+#   __  __       _         __  __
+#  |  \/  | __ _(_)_ __   |  \/  | ___ _ __  _   _
+#  | |\/| |/ _` | | '_ \  | |\/| |/ _ \ '_ \| | | |
+#  | |  | | (_| | | | | | | |  | |  __/ | | | |_| |
+#  |_|  |_|\__,_|_|_| |_| |_|  |_|\___|_| |_|\__,_|
 
 class NewServiceMode(NewServiceSkeleton):
     """Service Mode List base class."""
@@ -119,7 +154,7 @@ class NewServiceMode(NewServiceSkeleton):
         self.myID = "Service Mode"
 
     def mode_started(self):
-        self.section = ["TESTS","SETTINGS","STATS","UTILITIES"]
+        self.section = ["TESTS", "SETTINGS", "STATS", "UTILITIES"]
         if self.game.usb_update:
             self.section.append("UPDATE")
         if self.game.shutdownFlag:
@@ -128,23 +163,24 @@ class NewServiceMode(NewServiceSkeleton):
         self.activeMode = "STARTUP"
         self.index = 0
 
-        title = dmd.TextLayer(64,1,self.game.assets.font_7px_alt_az,"center",opaque=True).set_text("Cactus Canyon Continued")
-        revision = dmd.TextLayer(64,10,self.game.assets.font_7px_alt_az,"center").set_text("Revision: " + self.game.revision)
-        info = dmd.TextLayer(64,20,self.game.assets.font_7px_az,"center").set_text("Press ENTER for Menu")
-        combo1 = dmd.GroupedLayer(128,32,[title,revision,info])
-        combo2 = dmd.GroupedLayer(128,32,[title,revision])
+        title = dmd.TextLayer(64, 1, self.game.assets.font_7px_alt_az, "center", opaque=True)
+        title.set_text("Cactus Canyon Continued")
+        revision = dmd.TextLayer(64, 10, self.game.assets.font_7px_alt_az, "center")
+        revision.set_text("Revision: " + self.game.revision)
+        info = dmd.TextLayer(64, 20, self.game.assets.font_7px_az, "center")
+        info.set_text("Press ENTER for Menu")
+        combo1 = dmd.GroupedLayer(128, 32,[title, revision, info])
+        combo2 = dmd.GroupedLayer(128, 32,[title, revision])
         script = []
-        script.append({'seconds':0.6,'layer':combo1})
-        script.append({'seconds':0.6,'layer':combo2})
-        display = dmd.ScriptedLayer(128,32,script)
+        script.append({'seconds':0.6, 'layer':combo1})
+        script.append({'seconds':0.6, 'layer':combo2})
+        display = dmd.ScriptedLayer(128, 32, script)
         self.layer = display
         # play the service entrance noise
         self.game.sound.play(self.game.assets.sfx_serviceStart)
 
         # Turn the flippers on during service mode - includes jet bumpers
         self.game.enable_flippers(True)
-
-
 
     def mode_stopped(self):
         # Turn the flippers off when exiting
@@ -160,7 +196,6 @@ class NewServiceMode(NewServiceSkeleton):
             self.game.reset()
 
     # switches
-
     def sw_enter_active(self,sw):
         if not self.busy:
             # if we're at the startup, switch to menu
@@ -176,15 +211,15 @@ class NewServiceMode(NewServiceSkeleton):
                 # Then create that mode
                 mode_to_add = None
                 if selection == "TESTS":
-                    mode_to_add = NewServiceModeTests(game=self.game,priority=201)
+                    mode_to_add = NewServiceModeTests(game=self.game, priority=201)
                 elif selection == "SETTINGS":
-                    mode_to_add = NewServiceModeSettings(game=self.game,priority=201)
+                    mode_to_add = NewServiceModeSettings(game=self.game, priority=201)
                 elif selection == "STATS":
-                    mode_to_add = NewServiceModeStats(game=self.game,priority=201)
+                    mode_to_add = NewServiceModeStats(game=self.game, priority=201)
                 elif selection == "UTILITIES":
-                    mode_to_add = NewServiceModeUtilities(game=self.game,priority=201)
+                    mode_to_add = NewServiceModeUtilities(game=self.game, priority=201)
                 elif selection == "UPDATE":
-                    mode_to_add = NewServiceModeUpdate(game=self.game,priority=201)
+                    mode_to_add = NewServiceModeUpdate(game=self.game, priority=201)
                 elif selection == "SHUTDOWN":
                     self.update_display("","SHUTTING DOWN")
                     print "Powering off"
@@ -206,7 +241,6 @@ class NewServiceMode(NewServiceSkeleton):
                 self.item_up()
         else:
             pass
-
         return game.SwitchStop
 
     def sw_down_active(self,sw):
@@ -221,11 +255,11 @@ class NewServiceMode(NewServiceSkeleton):
         return game.SwitchStop
 
 
-##   _____         _         ____            _   _
-##  |_   _|__  ___| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
-##    | |/ _ \/ __| __/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
-##    | |  __/\__ \ |_\__ \  ___) |  __/ (__| |_| | (_) | | | |
-##    |_|\___||___/\__|___/ |____/ \___|\___|\__|_|\___/|_| |_|
+#   _____         _         ____            _   _
+#  |_   _|__  ___| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
+#    | |/ _ \/ __| __/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
+#    | |  __/\__ \ |_\__ \  ___) |  __/ (__| |_| | (_) | | | |
+#    |_|\___||___/\__|___/ |____/ \___|\___|\__|_|\___/|_| |_|
 
 class NewServiceModeTests(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -236,40 +270,48 @@ class NewServiceModeTests(NewServiceSkeleton):
 
     def mode_started(self):
         # set some indexes
-        self.section = ["SWITCHES","SINGLE LAMPS", "ALL LAMPS","SOLENOIDS","FLASHERS","DROP TARGETS","MINE","TRAIN"]
-        self.update_display("Tests",str(self.section[self.index]))
+        self.section = ["SWITCHES",
+                        "SINGLE LAMPS",
+                        "ALL LAMPS",
+                        "SOLENOIDS",
+                        "FLASHERS",
+                        "DROP TARGETS",
+                        "MINE",
+                        "TRAIN"]
+        self.update_display("Tests", str(self.section[self.index]))
 
-    def sw_enter_active(self,sw):
+    def sw_enter_active(self, sw):
         self.game.sound.play(self.game.assets.sfx_menuEnter)
         selection = self.section[self.index]
         mode_to_add = None
         if selection == "SWITCHES":
-            mode_to_add = NewServiceModeSwitchEdges(game=self.game,priority=202)
+            mode_to_add = NewServiceModeSwitchEdges(game=self.game, priority=202)
         elif selection == "DROP TARGETS":
-            mode_to_add = NewServiceModeDropTargets(game=self.game,priority=202)
+            mode_to_add = NewServiceModeDropTargets(game=self.game, priority=202)
         elif selection == "MINE":
-            mode_to_add = NewServiceModeMine(game=self.game,priority=202)
+            mode_to_add = NewServiceModeMine(game=self.game, priority=202)
         elif selection == "ALL LAMPS":
-            mode_to_add = NewServiceModeAllLamps(game=self.game,priority=202)
+            mode_to_add = NewServiceModeAllLamps(game=self.game, priority=202)
         elif selection == "SINGLE LAMPS":
-            mode_to_add = NewServiceModeSingleLamps(game=self.game,priority=202)
+            mode_to_add = NewServiceModeSingleLamps(game=self.game, priority=202)
         elif selection == "FLASHERS":
-            mode_to_add = NewServiceModeFlashers(game=self.game,priority=202)
+            mode_to_add = NewServiceModeFlashers(game=self.game, priority=202)
         elif selection == "SOLENOIDS":
-            mode_to_add = NewServiceModeSolenoids(game=self.game,priority=202)
+            mode_to_add = NewServiceModeSolenoids(game=self.game, priority=202)
         elif selection == "TRAIN":
-            mode_to_add = NewServiceModeTrain(game=self.game,priority=202)
+            mode_to_add = NewServiceModeTrain(game=self.game, priority=202)
         else:
             pass
         if mode_to_add:
            self.game.modes.add(mode_to_add)
         return game.SwitchStop
 
-##   ____          _ _       _       _____         _
-##  / ___|_      _(_) |_ ___| |__   |_   _|__  ___| |_
-##  \___ \ \ /\ / / | __/ __| '_ \    | |/ _ \/ __| __|
-##   ___) \ V  V /| | || (__| | | |   | |  __/\__ \ |_
-##  |____/ \_/\_/ |_|\__\___|_| |_|   |_|\___||___/\__|
+#   ____          _ _       _       _____         _
+#  / ___|_      _(_) |_ ___| |__   |_   _|__  ___| |_
+#  \___ \ \ /\ / / | __/ __| '_ \    | |/ _ \/ __| __|
+#   ___) \ V  V /| | || (__| | | |   | |  __/\__ \ |_
+#  |____/ \_/\_/ |_|\__\___|_| |_|   |_|\___||___/\__|
+
 
 class NewServiceModeSwitchEdges(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -294,7 +336,15 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         # build the display
         self.update_display()
         # make a list of the row layers
-        self.rowStrings = [None,self.row1text,self.row2text,self.row3text,self.row4text,self.row5text,self.row6text,self.row7text,self.row8text]
+        self.rowStrings = [None,
+                           self.row1text,
+                           self.row2text,
+                           self.row3text,
+                           self.row4text,
+                           self.row5text,
+                           self.row6text,
+                           self.row7text,
+                           self.row8text]
         # setup the switches
         for switch in self.game.switches:
             if self.game.machine_type == 'sternWhitestar':
@@ -304,8 +354,14 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
             else:
                 add_handler = 0
             if add_handler:
-                self.add_switch_handler(name=switch.name, event_type='inactive', delay=None, handler=self.switch_handler)
-                self.add_switch_handler(name=switch.name, event_type='active', delay=None, handler=self.switch_handler)
+                self.add_switch_handler(name=switch.name,
+                                        event_type='inactive',
+                                        delay=None,
+                                        handler=self.switch_handler)
+                self.add_switch_handler(name=switch.name,
+                                        event_type='active',
+                                        delay=None,
+                                        handler=self.switch_handler)
             # set the switch to active on the grid if active
                 if switch.is_active():
                     self.update_row(switch,"A")
@@ -387,51 +443,72 @@ class NewServiceModeSwitchEdges(NewServiceSkeleton):
         layers = []
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_switchMatrix.frames[0])
         layers.append(background)
-        self.switchRow1 = dmd.TextLayer(0,4,self.game.assets.font_matrix,"left").set_text(self.row1text)
+        self.switchRow1 = dmd.TextLayer(0, 4, self.game.assets.font_matrix,"left")
+        self.switchRow1.set_text(self.row1text)
         self.switchRow1.composite_op = "blacksrc"
         layers.append(self.switchRow1)
-        self.switchRow2 = dmd.TextLayer(0,7,self.game.assets.font_matrix,"left").set_text(self.row2text)
+        self.switchRow2 = dmd.TextLayer(0, 7, self.game.assets.font_matrix,"left")
+        self.switchRow2.set_text(self.row2text)
         self.switchRow2.composite_op = "blacksrc"
         layers.append(self.switchRow2)
-        self.switchRow3 = dmd.TextLayer(0,10,self.game.assets.font_matrix,"left").set_text(self.row3text)
+        self.switchRow3 = dmd.TextLayer(0, 10, self.game.assets.font_matrix,"left")
+        self.switchRow3.set_text(self.row3text)
         self.switchRow3.composite_op = "blacksrc"
         layers.append(self.switchRow3)
-        self.switchRow4 = dmd.TextLayer(0,13,self.game.assets.font_matrix,"left").set_text(self.row4text)
+        self.switchRow4 = dmd.TextLayer(0, 13, self.game.assets.font_matrix,"left")
+        self.switchRow4.set_text(self.row4text)
         self.switchRow4.composite_op = "blacksrc"
         layers.append(self.switchRow4)
-        self.switchRow5 = dmd.TextLayer(0,16,self.game.assets.font_matrix,"left").set_text(self.row5text)
+        self.switchRow5 = dmd.TextLayer(0, 16, self.game.assets.font_matrix,"left")
+        self.switchRow5.set_text(self.row5text)
         self.switchRow5.composite_op = "blacksrc"
         layers.append(self.switchRow5)
-        self.switchRow6 = dmd.TextLayer(0,19,self.game.assets.font_matrix,"left").set_text(self.row6text)
+        self.switchRow6 = dmd.TextLayer(0, 19, self.game.assets.font_matrix,"left")
+        self.switchRow6.set_text(self.row6text)
         self.switchRow6.composite_op = "blacksrc"
         layers.append(self.switchRow6)
-        self.switchRow7 = dmd.TextLayer(0,22,self.game.assets.font_matrix,"left").set_text(self.row7text)
+        self.switchRow7 = dmd.TextLayer(0, 22,self. game.assets.font_matrix,"left")
+        self.switchRow7.set_text(self.row7text)
         self.switchRow7.composite_op = "blacksrc"
         layers.append(self.switchRow7)
-        self.switchRow8 = dmd.TextLayer(0,25,self.game.assets.font_matrix,"left").set_text(self.row8text)
+        self.switchRow8 = dmd.TextLayer(0, 25, self.game.assets.font_matrix,"left")
+        self.switchRow8.set_text(self.row8text)
         self.switchRow8.composite_op = "blacksrc"
         layers.append(self.switchRow8)
-        title = dmd.TextLayer(81,0,self.game.assets.font_5px_AZ,"center").set_text("SWITCH EDGES")
+        title = dmd.TextLayer(81, 0, self.game.assets.font_5px_AZ,"center")
+        title.set_text("SWITCH EDGES")
         layers.append(title)
-        self.rowText = dmd.TextLayer(35,26,self.game.assets.font_5px_AZ,"left").set_text("")
+        self.rowText = dmd.TextLayer(35, 26, self.game.assets.font_5px_AZ,"left")
+        self.rowText.set_text("")
         layers.append(self.rowText)
-        self.colText = dmd.TextLayer(125,26,self.game.assets.font_5px_AZ,"right").set_text("")
+        self.colText = dmd.TextLayer(125, 26, self.game.assets.font_5px_AZ,"right")
+        self.colText.set_text("")
         layers.append(self.colText)
-        self.lastText = dmd.TextLayer(81,18,self.game.assets.font_5px_AZ,"center").set_text("")
+        self.lastText = dmd.TextLayer(81, 18, self.game.assets.font_5px_AZ,"center")
+        self.lastText.set_text("")
         layers.append(self.lastText)
-        self.labelText = dmd.TextLayer(81,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("")
+        self.labelText = dmd.TextLayer(81, 7, self.game.assets.font_5px_AZ_inverted,"center")
+        self.labelText.set_text("")
         self.labelText.composite_op = "blacksrc"
         layers.append(self.labelText)
-        combined = dmd.GroupedLayer(128,32,layers)
+        combined = dmd.GroupedLayer(128, 32, layers)
         self.layer = combined
-        self.rowLayers = [None,self.switchRow1,self.switchRow2,self.switchRow3,self.switchRow4,self.switchRow5,self.switchRow6,self.switchRow7,self.switchRow8]
+        self.rowLayers = [None,
+                          self.switchRow1,
+                          self.switchRow2,
+                          self.switchRow3,
+                          self.switchRow4,
+                          self.switchRow5,
+                          self.switchRow6,
+                          self.switchRow7,
+                          self.switchRow8]
 
-##   ____  _             _        _                            _____         _
-##  / ___|(_)_ __   __ _| | ___  | |    __ _ _ __ ___  _ __   |_   _|__  ___| |_
-##  \___ \| | '_ \ / _` | |/ _ \ | |   / _` | '_ ` _ \| '_ \    | |/ _ \/ __| __|
-##   ___) | | | | | (_| | |  __/ | |__| (_| | | | | | | |_) |   | |  __/\__ \ |_
-##  |____/|_|_| |_|\__, |_|\___| |_____\__,_|_| |_| |_| .__/    |_|\___||___/\__|
-##                 |___/                              |_|
+#   ____  _             _        _                            _____         _
+#  / ___|(_)_ __   __ _| | ___  | |    __ _ _ __ ___  _ __   |_   _|__  ___| |_
+#  \___ \| | '_ \ / _` | |/ _ \ | |   / _` | '_ ` _ \| '_ \    | |/ _ \/ __| __|
+#   ___) | | | | | (_| | |  __/ | |__| (_| | | | | | | |_) |   | |  __/\__ \ |_
+#  |____/|_|_| |_|\__, |_|\___| |_____\__,_|_| |_| |_| .__/    |_|\___||___/\__|
+#                 |___/                              |_|
 
 class NewServiceModeSingleLamps(NewServiceSkeleton):
     """Service Mode Single Lamp Test."""
@@ -461,7 +538,7 @@ class NewServiceModeSingleLamps(NewServiceSkeleton):
             self.infoLine.set_text("SOLID ON")
         else:
             self.mode = 0
-            self.infoLine.set_text("FLASHING",blink_frames=30)
+            self.infoLine.set_text("FLASHING", blink_frames=30)
         # refresh the lamp
         self.change_lamp()
         return game.SwitchStop
@@ -485,32 +562,37 @@ class NewServiceModeSingleLamps(NewServiceSkeleton):
         layers = []
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
         layers.append(background)
-        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("SINGLE LAMPS")
+        title = dmd.TextLayer(64, 0, self.game.assets.font_5px_AZ,"center")
+        title.set_text("SINGLE LAMPS")
         layers.append(title)
-        self.lampName = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("")
+        self.lampName = dmd.TextLayer(64, 7, self.game.assets.font_5px_AZ_inverted,"center")
+        self.lampName.set_text("")
         self.lampName.composite_op = "blacksrc"
         layers.append(self.lampName)
-        instructions = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ,"center").set_text("+/- TO SELECT LAMP")
-        instructions2 = dmd.TextLayer(64,14,self.game.assets.font_5px_AZ,"center").set_text("'ENTER' TO CHANGE MODE")
+        instructions = dmd.TextLayer(64, 14, self.game.assets.font_5px_AZ,"center")
+        instructions.set_text("+/- TO SELECT LAMP")
+        instructions2 = dmd.TextLayer(64, 14, self.game.assets.font_5px_AZ,"center")
+        instructions2.set_text("'ENTER' TO CHANGE MODE")
         script = []
         script.append({'seconds':2,'layer':instructions})
         script.append({'seconds':2,'layer':instructions2})
-        instruction_duo = dmd.ScriptedLayer(128,32,script)
+        instruction_duo = dmd.ScriptedLayer(128, 32, script)
         instruction_duo.composite_op = "blacksrc"
         layers.append(instruction_duo)
-        self.infoLine = dmd.TextLayer(64,21,self.game.assets.font_7px_az,"center").set_text("FLASHING",blink_frames=30)
+        self.infoLine = dmd.TextLayer(64, 21, self.game.assets.font_7px_az,"center")
+        self.infoLine.set_text("FLASHING", blink_frames=30)
         layers.append(self.infoLine)
-        combined = dmd.GroupedLayer(128,32,layers)
+        combined = dmd.GroupedLayer(128, 32, layers)
         self.layer = combined
 
 
-##
-##      _    _ _   _                                _____         _
-##     / \  | | | | |    __ _ _ __ ___  _ __  ___  |_   _|__  ___| |_
-##    / _ \ | | | | |   / _` | '_ ` _ \| '_ \/ __|   | |/ _ \/ __| __|
-##   / ___ \| | | | |__| (_| | | | | | | |_) \__ \   | |  __/\__ \ |_
-##  /_/   \_\_|_| |_____\__,_|_| |_| |_| .__/|___/   |_|\___||___/\__|
-##                                     |_|
+#
+#      _    _ _   _                                _____         _
+#     / \  | | | | |    __ _ _ __ ___  _ __  ___  |_   _|__  ___| |_
+#    / _ \ | | | | |   / _` | '_ ` _ \| '_ \/ __|   | |/ _ \/ __| __|
+#   / ___ \| | | | |__| (_| | | | | | | |_) \__ \   | |  __/\__ \ |_
+#  /_/   \_\_|_| |_____\__,_|_| |_| |_| .__/|___/   |_|\___||___/\__|
+#                                     |_|
 
 class NewServiceModeAllLamps(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -564,11 +646,11 @@ class NewServiceModeAllLamps(NewServiceSkeleton):
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 
-##   ____        _                  _     _   _____         _
-##  / ___|  ___ | | ___ _ __   ___ (_) __| | |_   _|__  ___| |_
-##  \___ \ / _ \| |/ _ \ '_ \ / _ \| |/ _` |   | |/ _ \/ __| __|
-##   ___) | (_) | |  __/ | | | (_) | | (_| |   | |  __/\__ \ |_
-##  |____/ \___/|_|\___|_| |_|\___/|_|\__,_|   |_|\___||___/\__|
+#   ____        _                  _     _   _____         _
+#  / ___|  ___ | | ___ _ __   ___ (_) __| | |_   _|__  ___| |_
+#  \___ \ / _ \| |/ _ \ '_ \ / _ \| |/ _` |   | |/ _ \/ __| __|
+#   ___) | (_) | |  __/ | | | (_) | | (_| |   | |  __/\__ \ |_
+#  |____/ \___/|_|\___|_| |_|\___/|_|\__,_|   |_|\___||___/\__|
 
 class NewServiceModeSolenoids(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -638,11 +720,11 @@ class NewServiceModeSolenoids(NewServiceSkeleton):
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 
-##   _____ _           _                 _____         _
-##  |  ___| | __ _ ___| |__   ___ _ __  |_   _|__  ___| |_
-##  | |_  | |/ _` / __| '_ \ / _ \ '__|   | |/ _ \/ __| __|
-##  |  _| | | (_| \__ \ | | |  __/ |      | |  __/\__ \ |_
-##  |_|   |_|\__,_|___/_| |_|\___|_|      |_|\___||___/\__|
+#   _____ _           _                 _____         _
+#  |  ___| | __ _ ___| |__   ___ _ __  |_   _|__  ___| |_
+#  | |_  | |/ _` / __| '_ \ / _ \ '__|   | |/ _ \/ __| __|
+#  |  _| | | (_| \__ \ | | |  __/ |      | |  __/\__ \ |_
+#  |_|   |_|\__,_|___/_| |_|\___|_|      |_|\___||___/\__|
 
 class NewServiceModeFlashers(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -696,13 +778,13 @@ class NewServiceModeFlashers(NewServiceSkeleton):
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 
+#   ____                    _____                    _         _____         _
+#  |  _ \ _ __ ___  _ __   |_   _|_ _ _ __ __ _  ___| |_ ___  |_   _|__  ___| |_
+#  | | | | '__/ _ \| '_ \    | |/ _` | '__/ _` |/ _ \ __/ __|   | |/ _ \/ __| __|
+#  | |_| | | | (_) | |_) |   | | (_| | | | (_| |  __/ |_\__ \   | |  __/\__ \ |_
+#  |____/|_|  \___/| .__/    |_|\__,_|_|  \__, |\___|\__|___/   |_|\___||___/\__|
+#                  |_|                    |___/
 
-##   ____                    _____                    _         _____         _
-##  |  _ \ _ __ ___  _ __   |_   _|_ _ _ __ __ _  ___| |_ ___  |_   _|__  ___| |_
-##  | | | | '__/ _ \| '_ \    | |/ _` | '__/ _` |/ _ \ __/ __|   | |/ _ \/ __| __|
-##  | |_| | | | (_) | |_) |   | | (_| | | | (_| |  __/ |_\__ \   | |  __/\__ \ |_
-##  |____/|_|  \___/| .__/    |_|\__,_|_|  \__, |\___|\__|___/   |_|\___||___/\__|
-##                  |_|                    |___/
 
 class NewServiceModeDropTargets(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -834,7 +916,6 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         else:
             self.instructionLine.set_text("PRESS ENTER TO LOWER TARGET")
 
-
     def update_display(self):
         layers = []
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
@@ -901,11 +982,12 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         for i in range(0,4,1):
             self.target_down(i)
 
-##   __  __ _              _____         _
-##  |  \/  (_)_ __   ___  |_   _|__  ___| |_
-##  | |\/| | | '_ \ / _ \   | |/ _ \/ __| __|
-##  | |  | | | | | |  __/   | |  __/\__ \ |_
-##  |_|  |_|_|_| |_|\___|   |_|\___||___/\__|
+#   __  __ _              _____         _
+#  |  \/  (_)_ __   ___  |_   _|__  ___| |_
+#  | |\/| | | '_ \ / _ \   | |/ _ \/ __| __|
+#  | |  | | | | | |  __/   | |  __/\__ \ |_
+#  |_|  |_|_|_| |_|\___|   |_|\___||___/\__|
+
 
 class NewServiceModeMine(NewServiceSkeleton):
     """Service Mode Tests Section."""
@@ -966,7 +1048,6 @@ class NewServiceModeMine(NewServiceSkeleton):
             # loop back in 1 second to try again
             self.delay(delay=1,handler=self.clear_mine)
 
-
     def sw_minePopper_inactive(self,sw):
         self.box1.set_text("a")
         return game.SwitchStop
@@ -993,7 +1074,6 @@ class NewServiceModeMine(NewServiceSkeleton):
         self.box3.set_text("a")
         return game.SwitchStop
 
-
     def jog(self):
         if not self.inMotion:
             self.inMotion = True
@@ -1016,51 +1096,66 @@ class NewServiceModeMine(NewServiceSkeleton):
         layers = []
         background = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_testBackdrop.frames[0])
         layers.append(background)
-        title = dmd.TextLayer(64,0,self.game.assets.font_5px_AZ,"center").set_text("MINE TEST")
+        title = dmd.TextLayer(64, 0, self.game.assets.font_5px_AZ,"center")
+        title.set_text("MINE TEST")
         layers.append(title)
-        self.instructionLine = dmd.TextLayer(64,7,self.game.assets.font_5px_AZ_inverted,"center").set_text("+/- TO JOG   'ENTER' TO HOME")
+        self.instructionLine = dmd.TextLayer(64, 7, self.game.assets.font_5px_AZ_inverted,"center")
+        self.instructionLine.set_text("+/- TO JOG   'ENTER' TO HOME")
         self.instructionLine.composite_op = "blacksrc"
         layers.append(self.instructionLine)
-        name0 = dmd.TextLayer(16,14,self.game.assets.font_5px_AZ,"center").set_text("ENTER")
+        name0 = dmd.TextLayer(16, 14, self.game.assets.font_5px_AZ,"center")
+        name0.set_text("ENTER")
         layers.append(name0)
-        name1 = dmd.TextLayer(47,14,self.game.assets.font_5px_AZ,"center").set_text("POPPER")
+        name1 = dmd.TextLayer(47, 14, self.game.assets.font_5px_AZ,"center")
+        name1.set_text("POPPER")
         layers.append(name1)
-        name2 = dmd.TextLayer(81,14,self.game.assets.font_5px_AZ,"center").set_text("ENCODE")
+        name2 = dmd.TextLayer(81, 14, self.game.assets.font_5px_AZ,"center")
+        name2.set_text("ENCODE")
         layers.append(name2)
-        name3 = dmd.TextLayer(112,14,self.game.assets.font_5px_AZ,"center").set_text("HOME")
+        name3 = dmd.TextLayer(112, 14, self.game.assets.font_5px_AZ,"center")
+        name3.set_text("HOME")
         layers.append(name3)
-        label0 = dmd.TextLayer(16,20,self.game.assets.font_5px_AZ,"center").set_text("SW.15")
+        label0 = dmd.TextLayer(16, 20, self.game.assets.font_5px_AZ,"center")
+        label0.set_text("SW.15")
         layers.append(label0)
-        label1 = dmd.TextLayer(47,20,self.game.assets.font_5px_AZ,"center").set_text("SW.41")
+        label1 = dmd.TextLayer(47, 20, self.game.assets.font_5px_AZ,"center")
+        label1.set_text("SW.41")
         layers.append(label1)
-        label2 = dmd.TextLayer(81,20,self.game.assets.font_5px_AZ,"center").set_text("SW.78")
+        label2 = dmd.TextLayer(81, 20, self.game.assets.font_5px_AZ,"center")
+        label2.set_text("SW.78")
         layers.append(label2)
-        label3 = dmd.TextLayer(112,20,self.game.assets.font_5px_AZ,"center").set_text("SW.77")
+        label3 = dmd.TextLayer(112, 20, self.game.assets.font_5px_AZ,"center")
+        label3.set_text("SW.77")
         layers.append(label3)
-        self.box0 = dmd.TextLayer(16,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        self.box0 = dmd.TextLayer(16, 26, self.game.assets.font_5px_AZ,"center")
+        self.box0.set_text("a")
         if self.game.switches.mineEntrance.is_active():
             self.box0.set_text("b")
         layers.append(self.box0)
-        self.box1 = dmd.TextLayer(47,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        self.box1 = dmd.TextLayer(47, 26, self.game.assets.font_5px_AZ,"center")
+        self.box1.set_text("a")
         if self.game.switches.minePopper.is_active():
             self.box1.set_text("b")
         layers.append(self.box1)
-        self.box2 = dmd.TextLayer(81,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        self.box2 = dmd.TextLayer(81, 26, self.game.assets.font_5px_AZ,"center")
+        self.box2.set_text("a")
         if self.game.switches.mineEncoder.is_active():
             self.box2.set_text("b")
         layers.append(self.box2)
-        self.box3 = dmd.TextLayer(112,26,self.game.assets.font_5px_AZ,"center").set_text("a")
+        self.box3 = dmd.TextLayer(112, 26, self.game.assets.font_5px_AZ,"center")
+        self.box3.set_text("a")
         if self.game.switches.mineHome.is_active():
             self.box3.set_text("b")
         layers.append(self.box3)
-        combined = dmd.GroupedLayer(128,32,layers)
+        combined = dmd.GroupedLayer(128, 32, layers)
         self.layer = combined
 
-##   _____          _         _____         _
-##  |_   _| __ __ _(_)_ __   |_   _|__  ___| |_
-##    | || '__/ _` | | '_ \    | |/ _ \/ __| __|
-##    | || | | (_| | | | | |   | |  __/\__ \ |_
-##    |_||_|  \__,_|_|_| |_|   |_|\___||___/\__|
+#   _____          _         _____         _
+#  |_   _| __ __ _(_)_ __   |_   _|__  ___| |_
+#    | || '__/ _` | | '_ \    | |/ _ \/ __| __|
+#    | || | | (_| | | | | |   | |  __/\__ \ |_
+#    |_||_|  \__,_|_|_| |_|   |_|\___||___/\__|
+
 
 class NewServiceModeTrain(NewServiceSkeleton):
     """Service Mode Train Test."""
@@ -1181,13 +1276,13 @@ class NewServiceModeTrain(NewServiceSkeleton):
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 
+#   ____       _   _   _                   ____            _   _
+#  / ___|  ___| |_| |_(_)_ __   __ _ ___  / ___|  ___  ___| |_(_) ___  _ __
+#  \___ \ / _ \ __| __| | '_ \ / _` / __| \___ \ / _ \/ __| __| |/ _ \| '_ \
+#   ___) |  __/ |_| |_| | | | | (_| \__ \  ___) |  __/ (__| |_| | (_) | | | |
+#  |____/ \___|\__|\__|_|_| |_|\__, |___/ |____/ \___|\___|\__|_|\___/|_| |_|
+#                              |___/
 
-##   ____       _   _   _                   ____            _   _
-##  / ___|  ___| |_| |_(_)_ __   __ _ ___  / ___|  ___  ___| |_(_) ___  _ __
-##  \___ \ / _ \ __| __| | '_ \ / _` / __| \___ \ / _ \/ __| __| |/ _ \| '_ \
-##   ___) |  __/ |_| |_| | | | | (_| \__ \  ___) |  __/ (__| |_| | (_) | | | |
-##  |____/ \___|\__|\__|_|_| |_|\__, |___/ |____/ \___|\___|\__|_|\___/|_| |_|
-##                              |___/
 
 class NewServiceModeSettings(NewServiceSkeleton):
     """Service Mode Settings Section."""
@@ -1214,12 +1309,13 @@ class NewServiceModeSettings(NewServiceSkeleton):
         self.game.modes.add(mode_to_add)
         return game.SwitchStop
 
-##   ____       _   _   _                   _____    _ _ _
-##  / ___|  ___| |_| |_(_)_ __   __ _ ___  | ____|__| (_) |_ ___  _ __
-##  \___ \ / _ \ __| __| | '_ \ / _` / __| |  _| / _` | | __/ _ \| '__|
-##   ___) |  __/ |_| |_| | | | | (_| \__ \ | |__| (_| | | || (_) | |
-##  |____/ \___|\__|\__|_|_| |_|\__, |___/ |_____\__,_|_|\__\___/|_|
-##                              |___/
+#   ____       _   _   _                   _____    _ _ _
+#  / ___|  ___| |_| |_(_)_ __   __ _ ___  | ____|__| (_) |_ ___  _ __
+#  \___ \ / _ \ __| __| | '_ \ / _` / __| |  _| / _` | | __/ _ \| '__|
+#   ___) |  __/ |_| |_| | | | | (_| \__ \ | |__| (_| | | || (_) | |
+#  |____/ \___|\__|\__|_|_| |_|\__, |___/ |_____\__,_|_|\__\___/|_|
+#                              |___/
+
 
 class NewServiceModeSettingsEditor(NewServiceSkeleton):
     """Service Mode Settings Section."""
@@ -1237,9 +1333,13 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
                 option_list = []
                 for i in range(0,num_options):
                     option_list.append(itemlist[item]['options'][0] + (i * itemlist[item]['increments']))
-                self.items.append( EditItem(str(item), option_list, self.game.user_settings[self.name][item]) )
+                self.items.append(EditItem(str(item),
+                                           option_list,
+                                           self.game.user_settings[self.name][item]))
             else:
-                self.items.append( EditItem(str(item), itemlist[item]['options'], self.game.user_settings[self.name][item]) )
+                self.items.append(EditItem(str(item),
+                                           itemlist[item]['options'],
+                                           self.game.user_settings[self.name][item]))
 
     def mode_started(self):
         self.state = 'nav'
@@ -1255,12 +1355,21 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             if self.items[self.index].name.endswith('Text'):
                 print "This is a text entry"
                 self.state = 'text'
-                self.text_entry = highscore.InitialEntryMode(game=self.game, priority=self.priority+1, left_text=self.items[self.index].name, right_text='', entered_handler=self.set_text,max_inits=16,extended=True)
+                self.text_entry = highscore.InitialEntryMode(game=self.game,
+                                                             priority=self.priority+1,
+                                                             left_text=self.items[self.index].name,
+                                                             right_text='',
+                                                             entered_handler=self.set_text,
+                                                             max_inits=16,
+                                                             extended=True)
                 self.game.modes.add(self.text_entry)
             elif self.items[self.index].name.endswith('Preview'):
                 print "This is a preview"
                 self.state = 'preview'
-                self.preview = ep.EP_MessagePreview(self.game,self.priority+1,self.item.value,self.end_preview)
+                self.preview = ep.EP_MessagePreview(self.game,
+                                                    self.priority+1,
+                                                    self.item.value,
+                                                    self.end_preview)
                 self.game.modes.add(self.preview)
             else:
                 self.change_item()
@@ -1409,6 +1518,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         combined = dmd.GroupedLayer(128,32,layers)
         self.layer = combined
 
+
 # edit item object thing
 class EditItem:
     """Service Mode Items."""
@@ -1417,11 +1527,12 @@ class EditItem:
         self.options = options
         self.value = value
 
-##   ____  _        _         ____            _   _
-##  / ___|| |_ __ _| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
-##  \___ \| __/ _` | __/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
-##   ___) | || (_| | |_\__ \  ___) |  __/ (__| |_| | (_) | | | |
-##  |____/ \__\__,_|\__|___/ |____/ \___|\___|\__|_|\___/|_| |_|
+#   ____  _        _         ____            _   _
+#  / ___|| |_ __ _| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
+#  \___ \| __/ _` | __/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
+#   ___) | || (_| | |_\__ \  ___) |  __/ (__| |_| | (_) | | | |
+#  |____/ \__\__,_|\__|___/ |____/ \___|\___|\__|_|\___/|_| |_|
+
 
 class NewServiceModeStats(NewServiceSkeleton):
     """Service Stats Menu Section."""
@@ -1448,6 +1559,7 @@ class NewServiceModeStats(NewServiceSkeleton):
         if mode_to_add:
             self.game.modes.add(mode_to_add)
         return game.SwitchStop
+
 
 class NewServiceModeStatsDisplay(NewServiceSkeleton):
     """Service Stats Display Section."""
@@ -1492,7 +1604,6 @@ class NewServiceModeStatsDisplay(NewServiceSkeleton):
         self.selectionLine.set_text(str(self.section[self.index]))
         self.infoLine.set_text(str(self.values[self.index]))
 
-
     # standard display structure
     def update_display(self,titleString,selectionString,infoString="",blinkInfo = False):
         layers = []
@@ -1508,11 +1619,12 @@ class NewServiceModeStatsDisplay(NewServiceSkeleton):
         layers.append(self.infoLine)
         self.layer = dmd.GroupedLayer(128,32,layers)
 
-##   _   _ _   _ _ _ _   _             ____            _   _
-##  | | | | |_(_) (_) |_(_) ___  ___  / ___|  ___  ___| |_(_) ___  _ __
-##  | | | | __| | | | __| |/ _ \/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
-##  | |_| | |_| | | | |_| |  __/\__ \  ___) |  __/ (__| |_| | (_) | | | |
-##   \___/ \__|_|_|_|\__|_|\___||___/ |____/ \___|\___|\__|_|\___/|_| |_|
+#   _   _ _   _ _ _ _   _             ____            _   _
+#  | | | | |_(_) (_) |_(_) ___  ___  / ___|  ___  ___| |_(_) ___  _ __
+#  | | | | __| | | | __| |/ _ \/ __| \___ \ / _ \/ __| __| |/ _ \| '_ \
+#  | |_| | |_| | | | |_| |  __/\__ \  ___) |  __/ (__| |_| | (_) | | | |
+#   \___/ \__|_|_|_|\__|_|\___||___/ |____/ \___|\___|\__|_|\___/|_| |_|
+
 
 class NewServiceModeUtilities(NewServiceSkeleton):
     """Service Mode Utilities Section."""
@@ -1531,12 +1643,13 @@ class NewServiceModeUtilities(NewServiceSkeleton):
         self.game.modes.add(mode_to_add)
         return game.SwitchStop
 
-##   _   _ _   _ _ _ _              _        _   _
-##  | | | | |_(_) (_) |_ _   _     / \   ___| |_(_) ___  _ __
-##  | | | | __| | | | __| | | |   / _ \ / __| __| |/ _ \| '_ \
-##  | |_| | |_| | | | |_| |_| |  / ___ \ (__| |_| | (_) | | | |
-##   \___/ \__|_|_|_|\__|\__, | /_/   \_\___|\__|_|\___/|_| |_|
-##                       |___/
+#   _   _ _   _ _ _ _              _        _   _
+#  | | | | |_(_) (_) |_ _   _     / \   ___| |_(_) ___  _ __
+#  | | | | __| | | | __| | | |   / _ \ / __| __| |/ _ \| '_ \
+#  | |_| | |_| | | | |_| |_| |  / ___ \ (__| |_| | (_) | | | |
+#   \___/ \__|_|_|_|\__|\__, | /_/   \_\___|\__|_|\___/|_| |_|
+#                       |___/
+
 
 class NewServiceModeUtility(NewServiceSkeleton):
     """Service Mode Utilities Section."""
@@ -1633,7 +1746,6 @@ class NewServiceModeUtility(NewServiceSkeleton):
         # the beatings will continue until the trough is empty
         self.delay(delay=1.5,handler=self.eject_balls)
 
-
     def update_display(self):
     # standard display structure
         layers = []
@@ -1655,12 +1767,13 @@ class NewServiceModeUtility(NewServiceSkeleton):
         layers.append(instruction_duo)
         self.layer = dmd.GroupedLayer(128,32,layers)
 
-##   _   _           _       _         ____            _   _
-##  | | | |_ __   __| | __ _| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
-##  | | | | '_ \ / _` |/ _` | __/ _ \ \___ \ / _ \/ __| __| |/ _ \| '_ \
-##  | |_| | |_) | (_| | (_| | ||  __/  ___) |  __/ (__| |_| | (_) | | | |
-##   \___/| .__/ \__,_|\__,_|\__\___| |____/ \___|\___|\__|_|\___/|_| |_|
-##        |_|
+#   _   _           _       _         ____            _   _
+#  | | | |_ __   __| | __ _| |_ ___  / ___|  ___  ___| |_(_) ___  _ __
+#  | | | | '_ \ / _` |/ _` | __/ _ \ \___ \ / _ \/ __| __| |/ _ \| '_ \
+#  | |_| | |_) | (_| | (_| | ||  __/  ___) |  __/ (__| |_| | (_) | | | |
+#   \___/| .__/ \__,_|\__,_|\__\___| |____/ \___|\___|\__|_|\___/|_| |_|
+#        |_|
+
 
 class NewServiceModeUpdate(NewServiceSkeleton):
     """Service Mode Update Section."""
