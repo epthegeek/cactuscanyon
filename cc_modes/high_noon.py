@@ -44,7 +44,7 @@ class HighNoon(ep.EP_Mode):
         # if a ball drains, we put it back in play as long as the mode is running
             self.empty_trough()
         # if all the balls drain, and we're finishing up, unflag busy
-        if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('highNoonStatus') == "FINISH":
+        if self.game.trough.num_balls_in_play <= 0 and self.game.show_tracking('highNoonStatus') == "FINISH":
             self.busy = False
 
     # jackpot shots
