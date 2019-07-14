@@ -50,10 +50,7 @@ class NewServiceSkeleton(ep.EP_Mode):
 
     def sw_up_inactive(self, sw):
         self.cancel_delayed("Item Up")
-
-    # attempting to add hold button down logic
-    def sw_up_active_for_750ms(self, sw):
-        self.item_up_loop()
+        self.up_looping = False
 
     def sw_down_active(self, sw):
         if not self.busy:
@@ -66,10 +63,7 @@ class NewServiceSkeleton(ep.EP_Mode):
 
     def sw_down_inactive(self, sw):
         self.cancel_delayed("Item Down")
-
-    # attempting to add hold button down logic
-    def sw_down_active_for_750ms(self, sw):
-        self.item_down_loop()
+        self.down_looping = False
 
     # default behavior for exit switch is just to exit
     def sw_exit_active(self, sw):
@@ -77,15 +71,6 @@ class NewServiceSkeleton(ep.EP_Mode):
             self.game.sound.play(self.game.assets.sfx_menuExit)
             self.unload()
         return game.SwitchStop
-
-    def item_down_loop(self):
-        self.cancel_delayed("Item Down")
-        # make sure the switch is still down
-        if self.game.switches.down.is_active():
-            # Move the item down
-            self.item_down()
-            # schedule a check to see if we're still holding
-            self.delay("Item Down", delay=0.1, handler=self.item_down_loop)
 
     def item_down(self):
         self.index -= 1
@@ -97,16 +82,18 @@ class NewServiceSkeleton(ep.EP_Mode):
         else:
             # then update the display
             self.selectionLine.set_text(str(self.section[self.index]))
-
-    def item_up_loop(self):
-        self.cancel_delayed("Item Up")
+        # loop around if the switch is still down
+        self.cancel_delayed("Item Down")
         # make sure the switch is still down
         if self.game.switches.down.is_active():
-            # Move the item up
-            self.item_up()
-            # start a new loop
-            # schedule a check to see if we're still holding
-            self.delay("Item Up", delay=0.1, handler=self.item_up_loop)
+            # first loop back takes longer
+            if self.down_looping:
+                d_time = 0.1
+            else:
+                d_time = 0.5
+                self.down_looping = True
+                # then circle back for more
+            self.delay("Down Loop", delay=d_time, handler=self.item_down)
 
     def item_up(self):
         self.index += 1
@@ -118,6 +105,17 @@ class NewServiceSkeleton(ep.EP_Mode):
         else:
             # then update the display
             self.selectionLine.set_text(str(self.section[self.index]))
+        self.cancel_delayed("Item Up")
+        if self.game.switches.up.is_active():
+            # first loop back takes longer
+            if self.up_looping:
+                d_time = 0.1
+            else:
+                d_time = 0.5
+                self.up_looping = True
+
+            # then circle back for more
+            self.delay("Up Loop", delay=d_time, handler=self.item_up)
 
     # standard display structure
     def update_display(self, titleString, selectionString, infoString="", blinkInfo = False):

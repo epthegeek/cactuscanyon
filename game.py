@@ -124,7 +124,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2019.06.29"
+        self.revision = "2019.07.14"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
