@@ -29,6 +29,8 @@ class NewServiceSkeleton(ep.EP_Mode):
         self.index = 0
         self.section = []
         self.callback = None
+        self.up_looping = False
+        self.down_looping = False
 
    # fire the slings if they're hit
     def sw_leftSlingshot_active(self, sw):
@@ -41,8 +43,6 @@ class NewServiceSkeleton(ep.EP_Mode):
 
     def sw_up_active(self, sw):
         if not self.busy:
-            # play the sound for moving up
-            self.game.sound.play(self.game.assets.sfx_menuUp)
             self.item_up()
         else:
             pass
@@ -54,8 +54,6 @@ class NewServiceSkeleton(ep.EP_Mode):
 
     def sw_down_active(self, sw):
         if not self.busy:
-            # play the sound for moving down
-            self.game.sound.play(self.game.assets.sfx_menuDown)
             self.item_down()
         else:
             pass
@@ -73,49 +71,55 @@ class NewServiceSkeleton(ep.EP_Mode):
         return game.SwitchStop
 
     def item_down(self):
-        self.index -= 1
-        # if we get below zero, loop around
-        if self.index < 0:
-            self.index = (len(self.section) - 1)
-        if self.callback:
-            self.callback()
-        else:
-            # then update the display
-            self.selectionLine.set_text(str(self.section[self.index]))
-        # loop around if the switch is still down
-        self.cancel_delayed("Item Down")
-        # make sure the switch is still down
         if self.game.switches.down.is_active():
-            # first loop back takes longer
-            if self.down_looping:
-                d_time = 0.1
+            # play the sound for moving down
+            self.game.sound.play(self.game.assets.sfx_menuDown)
+            self.index -= 1
+            # if we get below zero, loop around
+            if self.index < 0:
+                self.index = (len(self.section) - 1)
+            if self.callback:
+                self.callback()
             else:
-                d_time = 0.5
-                self.down_looping = True
-                # then circle back for more
-            self.delay("Down Loop", delay=d_time, handler=self.item_down)
+                # then update the display
+                self.selectionLine.set_text(str(self.section[self.index]))
+            # loop around if the switch is still down
+            self.cancel_delayed("Item Down")
+            # make sure the switch is still down
+            if self.game.switches.down.is_active():
+                # first loop back takes longer
+                if self.down_looping:
+                    d_time = 0.1
+                else:
+                    d_time = 0.5
+                    self.down_looping = True
+                    # then circle back for more
+                self.delay("Down Loop", delay=d_time, handler=self.item_down)
 
     def item_up(self):
-        self.index += 1
-        # if we get too high, go to zero
-        if self.index >= len(self.section):
-            self.index = 0
-        if self.callback:
-            self.callback()
-        else:
-            # then update the display
-            self.selectionLine.set_text(str(self.section[self.index]))
-        self.cancel_delayed("Item Up")
         if self.game.switches.up.is_active():
-            # first loop back takes longer
-            if self.up_looping:
-                d_time = 0.1
+            # play the sound for moving up
+            self.game.sound.play(self.game.assets.sfx_menuUp)
+            self.index += 1
+            # if we get too high, go to zero
+            if self.index >= len(self.section):
+                self.index = 0
+            if self.callback:
+                self.callback()
             else:
-                d_time = 0.5
-                self.up_looping = True
+                # then update the display
+                self.selectionLine.set_text(str(self.section[self.index]))
+            self.cancel_delayed("Item Up")
+            if self.game.switches.up.is_active():
+                # first loop back takes longer
+                if self.up_looping:
+                    d_time = 0.1
+                else:
+                    d_time = 0.5
+                    self.up_looping = True
 
-            # then circle back for more
-            self.delay("Up Loop", delay=d_time, handler=self.item_up)
+                # then circle back for more
+                self.delay("Up Loop", delay=d_time, handler=self.item_up)
 
     # standard display structure
     def update_display(self, titleString, selectionString, infoString="", blinkInfo = False):
@@ -1000,16 +1004,15 @@ class NewServiceModeMine(NewServiceSkeleton):
         self.inMotion = False
         self.resetFlag = False
 
-
-    def sw_enter_active(self,sw):
+    def sw_enter_active(self, sw):
         self.reset()
         return game.SwitchStop
 
-    def sw_up_active(self,sw):
+    def sw_up_active(self, sw):
         self.jog()
         return game.SwitchStop
 
-    def sw_down_active(self,sw):
+    def sw_down_active(self, sw):
         self.jog()
         return game.SwitchStop
 
@@ -1065,7 +1068,7 @@ class NewServiceModeMine(NewServiceSkeleton):
             self.stop()
             self.resetFlag = False
             self.game.sound.play(self.game.assets.sfx_menuSwitchEdge)
-            self.box3.set_text("b")
+        self.box3.set_text("b")
         return game.SwitchStop
 
     def sw_mineHome_inactive(self,sw):
