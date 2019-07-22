@@ -44,7 +44,7 @@ class BadGuys(ep.EP_Mode):
         self.knockdown_coils = [self.game.coils.badGuyC0Kn,
                                 self.game.coils.badGuyC1Kn,
                                 self.game.coils.badGuyC2Kn,
-                                self.game.coils.badGuyC3Kn]
+                                self.game.coils.knocker]
         self.switches = [self.game.switches.badGuySW0,
                          self.game.switches.badGuySW1,
                          self.game.switches.badGuySW2,

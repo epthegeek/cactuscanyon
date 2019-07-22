@@ -803,7 +803,7 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
                                 self.game.coils.badGuyC1Kn,
                                 self.game.coils.badGuyC2Kn,
                                 self.game.coils.knocker]
-        self.smart_drops = self.game.user_settings['Machine (Standard)']['Drop Target Type'] == "Smart"
+        self.smart_drops = self.game.user_settings['Machine (Standard)']['Drop Target Type'] == 'Smart'
 
     def mode_started(self):
         self.update_display()
