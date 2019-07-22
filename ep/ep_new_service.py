@@ -981,9 +981,7 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
     def target_activate(self, target):
         if not self.targetUp[target]:
             print "ACTIVATING TARGET " + str(target)
-            if self.smart_drops:
-                pass
-            else:
+            if not self.smart_drops:
                 self.coils[target].patter(on_time=2, off_time=10)
             self.targetUp[target] = True
             if self.game.fakePinProc:
@@ -991,7 +989,6 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
                 self.update_instruction(target)
         print "Targets:"
         print self.targetUp
-
 
     def drop_targets(self):
         # drop all teh targets
