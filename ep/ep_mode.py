@@ -334,8 +334,9 @@ class EP_Mode(object):
             #print myHandler
             myHandler()
         else:
+            self.cancel_delayed("Busy Loop")
             #print "BUSY LOOP - SETTING A NEW DELAY"
-            self.delay(delay=0.1,handler=self.wait_until_unbusy,param=myHandler)
+            self.delay("Busy Loop", delay=0.1, handler= self.wait_until_unbusy, param=myHandler)
 
     def wait_for_queue(self,myHandler):
     # if the queue is clear move ahead
@@ -345,7 +346,8 @@ class EP_Mode(object):
             # then do this thing
             myHandler()
         else:
-            self.delay(delay=0.5,handler=self.wait_for_queue,param=myHandler)
+            self.cancel_delayed("Queue Loop")
+            self.delay("Queue Loop", delay=0.5, handler=self.wait_for_queue, param=myHandler)
 
     # standard clear layer
     def clear_layer(self):
@@ -390,7 +392,8 @@ class EP_Mode(object):
                 self.game.music_on(caller=self.myID,slice=mySlice)
 
     def delayed_music_on(self,wait,song=None):
-        self.delay(delay=wait, handler=self.music_on,param=song)
+        self.cancel_delayed("Music On")
+        self.delay("Music On", delay=wait, handler=self.music_on, param=song)
 
     # if there's no layer, and it's wanted for a group, return a blank one
     def no_layer(self):
