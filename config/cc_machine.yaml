@@ -339,6 +339,13 @@ PRCoils:
         number: FURM
         label: Bart Toy - Move
         tags: Solenoid
+    badGuyC0Kn:
+        number: FURH
+        label: Left Drop Target Knockdown
+        tags: Mech
+    badGuyC1Kn:
+        number: FULM
+        label: Left-Center Drop Target Knockdown
     moveBartHat:
         number: FULH
         label: Bart Toy - Hat
@@ -435,6 +442,10 @@ PRCoils:
         number: C22
         label: Right Loop Gate
         tags: Solenoid
+    badGuyC2Kn:
+        number: C23
+        label: Right-Center Drop Target Knockdown
+        tags: mech
     beaconFlasher:
         number: C24
         label: Awards Beacon

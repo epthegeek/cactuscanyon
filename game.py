@@ -124,7 +124,7 @@ class CCGame(game.BasicGame):
         self.multiplier = 1
 
         # software version number
-        self.revision = "2019.06.29"
+        self.revision = "2019.07.19"
 
         # basic game reset stuff, copied in
         # load up the game data Game data
@@ -181,6 +181,9 @@ class CCGame(game.BasicGame):
         # check for the knocker setting
         if self.user_settings['Machine (Standard)']['Real Knocker Installed'] == "Yes":
             self.useKnocker = True
+            # exception for drop targets because of conflict
+            if self.user_settings['Machine (Standard)']['Drop Target Type'] == "Smart":
+                self.useKnocker = False
         # check the replay settings
         self.replays = self.user_settings['Machine (Standard)']['Replays'] == "Enabled"
         # number of tilt warnings - set one higher due to how used

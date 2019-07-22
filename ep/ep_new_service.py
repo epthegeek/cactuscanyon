@@ -792,11 +792,16 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         super(NewServiceModeDropTargets, self).__init__(game, priority)
         self.myID = "Service Mode Drop Target Test"
         self.index = 0
-        self.targets = ["LEFT DROP TARGET","LEFT CENTER DROP TARGET","RIGHT CENTER DROP TARGET","RIGHT DROP TARGET"]
+        self.targets = ["LEFT DROP TARGET", "LEFT CENTER DROP TARGET", "RIGHT CENTER DROP TARGET", "RIGHT DROP TARGET"]
         self.coils = [self.game.coils.badGuyC0,
                       self.game.coils.badGuyC1,
                       self.game.coils.badGuyC2,
                       self.game.coils.badGuyC3]
+        self.knockdown_coils = [self.game.coils.badGuyC0Kn,
+                                self.game.coils.badGuyC1Kn,
+                                self.game.coils.badGuyC2Kn,
+                                self.game.coils.knocker]
+        self.smart_drops = self.game.user_settings['Machine (Standard)']['Drop Target Type'] == "Smart"
 
     def mode_started(self):
         self.update_display()
@@ -949,8 +954,11 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
     # raise target
     def target_up(self,target):
         print "TARGET RAISED " + str(target)
-        # new coil raise based on research with on o-scope by jim (jvspin)
-        self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
+        if self.smart_drops:
+            self.coils[target].pulse(25)
+        else:
+            # new coil raise based on research with on o-scope by jim (jvspin)
+            self.coils[target].patter(on_time=2,off_time=2,original_on_time=self.on_time)
         # If fakepinproc is true, activate the target right away
         if self.game.fakePinProc:
             self.target_activate(target)
@@ -958,7 +966,10 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
     # drop target
     def target_down(self,target):
         print "DEACTIVATING TARGET " + str(target)
-        self.coils[target].disable()
+        if self.smart_drops:
+            self.knockdown_coils[target].pulse(25)
+        else:
+            self.coils[target].disable()
         self.targetUp[target] = False
         self.update_box(target)
         self.update_instruction(target)

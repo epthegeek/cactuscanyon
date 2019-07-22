@@ -60,6 +60,9 @@ Machine (Standard):
     options: [0,30]
     increments: 5
     default: 0
+  'Drop Target Type':
+    options: ['Original', 'Smart']
+    default: 'Original'
   'Mine Kicker Strength':
     options: [20,50]
     increments: 5
