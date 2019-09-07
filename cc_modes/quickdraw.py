@@ -155,23 +155,24 @@ class Quickdraw(ep.EP_Mode):
         print "BAD GUY ACTIVE IS: " + str(self.target)
         # start the mode music
         self.game.sound.play(self.game.assets.music_quickdrawBumper)
-        self.delay("Operational",delay=1.3,handler=self.music_on,param=self.game.assets.music_quickdraw)
+        self.delay("Operational", delay=1.3, handler=self.music_on, param=self.game.assets.music_quickdraw)
         # play a quote
         self.game.base.play_quote(self.game.assets.quote_quickdrawStart)
         # pop that sucker up
         self.game.bad_guys.target_up(self.target)
         # Set up the display
         anim = self.game.assets.dmd_quickdrawStart
-        self.animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
+        self.animLayer = dmd.AnimatedLayer(frames=anim.frames, hold=True, opaque=True, repeat=False, frame_time=6)
         # set the end time based on the config setting
         # set up the point value
-        value = [500000,750000,1000000,1500000,2000000]
+        value = [500000, 750000, 1000000, 1500000, 2000000]
         # based on rank
         rank = self.game.show_tracking('rank')
         self.points = value[rank]
-        scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False).set_text(ep.format_score(self.points),color=ep.YELLOW)
+        scoreLayer = ep.EP_TextLayer(84, 4, self.game.assets.font_12px_az, "center", opaque=False)
+        scoreLayer.set_text(ep.format_score(self.points), color=ep.YELLOW)
         # combine the score and animation and turn it on
-        self.layer = dmd.GroupedLayer(128,32,[self.animLayer,scoreLayer])
+        self.layer = dmd.GroupedLayer(128, 32, [self.animLayer, scoreLayer])
         # read the run time from the settings
         self.runtime = self.game.user_settings['Gameplay (Feature)']['Quickdraw Timer']
         self.third = self.runtime / 3.0

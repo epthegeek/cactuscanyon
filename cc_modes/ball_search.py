@@ -127,12 +127,18 @@ class BallSearch(ep.EP_Mode):
         self.game.coils.rightGunFightPost.pulse()
 
         # kill the drop targets - if the game is running and pulse
-        for coil in self.badGuyCoils:
-            coil.disable()
-        delay = .2
-        for coil in self.badGuyCoils:
-            self.delay(name='search targets',delay=delay,handler=coil.pulse,param=12)
-            delay += .2
+        if self.game.bad_guys.smart_drops:
+            for n in range(0, 4, 1):
+                if self.game.bad_guys.switches[n].is_inactive():
+                    self.game.bad_guys.target_down(n)
+                    self.delay(name="reset target", delay=0.5, handler=self.game.bad_guys.target_up, param=n)
+        else:
+            for coil in self.badGuyCoils:
+                coil.disable()
+            delay = .2
+            for coil in self.badGuyCoils:
+                self.delay(name='search targets',delay=delay,handler=coil.pulse,param=12)
+                delay += .2
 
         if completion_wait_time != 0:
             pass

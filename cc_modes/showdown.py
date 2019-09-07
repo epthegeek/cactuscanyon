@@ -259,7 +259,7 @@ class Showdown(ep.EP_Mode):
             self.showdownValue = 450000
         self.game.score(self.showdownValue)
         # increase the running total by that amount
-        self.game.increase_tracking('showdownPoints',self.showdownValue)
+        self.game.increase_tracking('showdownPoints', self.showdownValue)
 
         # swap out the appropriate layer
         shotguy = self.game.assets.dmd_dudeShotFullBody
@@ -267,7 +267,7 @@ class Showdown(ep.EP_Mode):
             # take out the current hit guy
             self.guyLayers.remove(self.badGuy0)
             self.badGuy0 = dmd.AnimatedLayer(frames=shotguy.frames ,hold=True, opaque=False, repeat=False, frame_time=6)
-            self.badGuy0.set_target_position(-49,0)
+            self.badGuy0.set_target_position(-49, 0)
             self.badGuy0.composite_op = "blacksrc"
             # append on the new layer to the end to put it in the front
             self.guyLayers.append(self.badGuy0)
@@ -319,7 +319,7 @@ class Showdown(ep.EP_Mode):
         # drop all teh targets
         self.game.bad_guys.drop_targets()
         # turn off the level 1 flag
-        self.game.stack_level(1,False)
+        self.game.stack_level(1, False)
         # kill the music - if nothing else is running
         # tally some score?
         # award the badge light - showdown/ambush is 3
@@ -336,7 +336,7 @@ class Showdown(ep.EP_Mode):
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboySidewaysBorder.frames[0])
         textLine1 = ep.EP_TextLayer(74, 1, self.game.assets.font_7px_bold_az, "center", opaque=False)
         textString = "SHOWDOWN: " + str(self.death_tally) + " KILLS"
-        textLine1.set_text(textString,color=ep.RED)
+        textLine1.set_text(textString, color=ep.RED)
         textLine1.composite_op = "blacksrc"
         textLine2 = ep.EP_TextLayer(74, 11, self.game.assets.font_12px_az, "center", opaque=False)
         textLine2.set_text(ep.format_score(totalPoints),color=ep.GREEN)
@@ -350,7 +350,7 @@ class Showdown(ep.EP_Mode):
         self.game.base.busy = False
         self.game.base.queued -= 1
         # unload the mode
-        self.delay(delay= 2.1, handler=self.unload)
+        self.delay(delay=2.1, handler=self.unload)
 
     def tilted(self):
         if self.running:
@@ -374,7 +374,7 @@ class Showdown(ep.EP_Mode):
             self.game.set_tracking('badGuysDead', False, i)
             print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
             # reset the badguy UP tracking just in case
-        for i in range (0,4,1):
+        for i in range (0, 4, 1):
             self.game.set_tracking('badGuyUp', False, i)
         # reset the showdown points for next time
         self.game.set_tracking('showdownPoints', 0)

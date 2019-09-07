@@ -40,11 +40,11 @@ class BadGuys(ep.EP_Mode):
         self.coils = [self.game.coils.badGuyC0,
                       self.game.coils.badGuyC1,
                       self.game.coils.badGuyC2,
-                      self.game.coils.knocker]
-        self.knockdown_coils = [self.game.coils.badGuyC0Kn,
-                                self.game.coils.badGuyC1Kn,
-                                self.game.coils.badGuyC2Kn,
-                                self.game.coils.knocker]
+                      self.game.coils.badGuyC3]
+        self.knockdown_coils = [self.game.coils.badGuyDown0,
+                                self.game.coils.badGuyDown1,
+                                self.game.coils.badGuyDown2,
+                                self.game.coils.badGuyDown3]
         self.switches = [self.game.switches.badGuySW0,
                          self.game.switches.badGuySW1,
                          self.game.switches.badGuySW2,
@@ -60,8 +60,8 @@ class BadGuys(ep.EP_Mode):
                       self.game.assets.lamp_target1,
                       self.game.assets.lamp_target2,
                       self.game.assets.lamp_target3]
-        self.pending = [False,False,False,False]
-        self.pending_delay = [None,None,None,None]
+        self.pending = [False, False, False, False]
+        self.pending_delay = [None, None, None, None]
         self.on_time = self.game.user_settings['Machine (Standard)']['Drop Target Boost']
         self.smart_drops = self.game.user_settings['Machine (Standard)']['Drop Target Type'] == 'Smart'
 
@@ -124,13 +124,13 @@ class BadGuys(ep.EP_Mode):
             self.pending[3] = False
             self.target_activate(3)
 
-    def hit_bad_guy(self,target):
+    def hit_bad_guy(self, target):
         # ding the ball search timer
         self.game.ball_search.reset('None')
         # stop the timer
         # play the target lampshow
         if not self.game.marshall_multiball.running and not self.game.high_noon.running:
-            self.game.lampctrl.play_show(self.shows[target], repeat=False,callback=self.lamp_update)
+            self.game.lampctrl.play_show(self.shows[target], repeat=False, callback=self.lamp_update)
         # kill the coil to the drop target based on position
         self.target_down(target)
         # call back to base to turn on the light for this bad guy?
@@ -192,7 +192,10 @@ class BadGuys(ep.EP_Mode):
             self.coils[target].patter(on_time=2, off_time=2, original_on_time=self.on_time)
         
         if lamp and not self.game.lamp_control.lights_out:
-            self.lamps[target].schedule(0x00FF00FF)
+            if self.smart_drops:
+                self.lamps[target].enable()
+            else:
+                self.lamps[target].schedule(0x00FF00FF)
             # set a pending flag for this target
         self.pending[target] = True
         # attempt a re-raise in one second
@@ -201,7 +204,7 @@ class BadGuys(ep.EP_Mode):
         if self.game.fakePinProc:
             self.target_activate(target)
 
-    def check_pending(self,target):
+    def check_pending(self, target):
         # if this target is still pending and the switch is on so the target is down
         if self.pending[target] and self.switches[target].is_active():
             print "PENDING CHECK RETRYING TARGET " + str(target)
@@ -210,7 +213,7 @@ class BadGuys(ep.EP_Mode):
             print "TARGET " + str(target) + " PENDING CHECK PASSED"
             pass
 
-    def target_down(self, target, lamp= True):
+    def target_down(self, target, lamp=True):
         if self.game.high_noon.running:
             lamp = False
         # remove the delay
@@ -219,15 +222,15 @@ class BadGuys(ep.EP_Mode):
         print "DEACTIVATING TARGET " + str(target)
         # new optional smart drop down
         if self.smart_drops:
-            # fire the drop coil
-            self.knockdown_coils[target].pulse(25)
+            # fire the drop coil - if the target is up
+            if self.switches[target].is_inactive():
+                self.knockdown_coils[target].pulse(25)
         # Original drop code
         else:
-            self.game.set_tracking('badGuyUp', False, target)
             self.coils[target].disable()
         # schedule a check if it went down
         self.cancel_delayed("Target Down")
-        self.delay("Target Down", delay=0.2, handler=self.target_down, param=target)
+        self.delay("Target Down", delay=0.2, handler=self.check_target_down, param=target)
         if lamp:
             self.lamps[target].disable()
 
@@ -239,7 +242,7 @@ class BadGuys(ep.EP_Mode):
             # if not, try again
             self.target_down(target)
         
-    def target_activate(self,target):
+    def target_activate(self, target):
         if not self.game.show_tracking('badGuyUp', target):
             print "ACTIVATING TARGET " + str(target)
             # cancel the pending delay
@@ -265,7 +268,12 @@ class BadGuys(ep.EP_Mode):
     def drop_targets(self):
         # drop all teh targets
         for i in range(0, 4, 1):
-            self.target_down(i)
+            # for smart drops only fire knockdown if target is up
+            if self.smart_drops:
+                if self.switches[i].is_inactive():
+                    self.target_down(i)
+            else:
+                self.target_down(i)
 
     def kill_power(self):
         # drop all the targets

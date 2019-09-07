@@ -327,6 +327,30 @@ PRSwitches:
         tags: Standard,8,7
     
 PRCoils:
+    directDrive0:
+        number: 0
+        label: Direct Drive 0
+        pulseTime: 30
+    badGuyDown0:
+        number: 1
+        label: Bad Guy 0 Down
+        pulseTime: 30
+        tags: Solenoid
+    badGuyDown1:
+        number: 2
+        label: Bad Guy 1 Down
+        pulseTime: 30
+        tags: Solenoid
+    badGuyDown2:
+        number: 3
+        label: Bad Guy 2 Down
+        pulseTime: 30
+        tags: Solenoid
+    badGuyDown3:
+        number: 4
+        label: Bad GUy 3 Down
+        pulseTime: 30
+        tags: Solenoid
     flipperLwRMain:
         number: FLRM
     flipperLwRHold:
@@ -339,13 +363,6 @@ PRCoils:
         number: FURM
         label: Bart Toy - Move
         tags: Solenoid
-    badGuyC0Kn:
-        number: FURH
-        label: Left Drop Target Knockdown
-        tags: Mech
-    badGuyC1Kn:
-        number: FULM
-        label: Left-Center Drop Target Knockdown
     moveBartHat:
         number: FULH
         label: Bart Toy - Hat
@@ -442,10 +459,6 @@ PRCoils:
         number: C22
         label: Right Loop Gate
         tags: Solenoid
-    badGuyC2Kn:
-        number: C23
-        label: Right-Center Drop Target Knockdown
-        tags: mech
     beaconFlasher:
         number: C24
         label: Awards Beacon

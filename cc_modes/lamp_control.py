@@ -347,7 +347,9 @@ class LampControl(ep.EP_Mode):
         #                                  |___/
         # if showdown or ambush are running, don't show the dead guy lights - even though they should be off
         if self.game.showdown.running or self.game.ambush.running:
-            pass
+            # processing bad guys if smarts drops is on so they stay lit
+            if self.game.bad_guys.smart_drops:
+                self.bad_guys()
         else:
             self.bad_guys()
 
@@ -1123,6 +1125,7 @@ class LampControl(ep.EP_Mode):
     # |____/ \__,_|\__,_|  \____|\__,_|\__, |___/
     #                                  |___/
     def bad_guys(self):
+        print "--- BAD GUY LAMP UPDATE ---"
         # if high noon is running ignore the bad guys
         if self.game.high_noon.running:
             return
@@ -1134,15 +1137,20 @@ class LampControl(ep.EP_Mode):
             return
 
         # Then, turn on lights accordingly
-        for lamp in range(0,4,1):
-            status = self.game.show_tracking('badGuysDead',lamp)
-            active = self.game.show_tracking('badGuyUp',lamp)
+        for lamp in range(0, 4, 1):
+            status = self.game.show_tracking('badGuysDead', lamp)
+            active = self.game.show_tracking('badGuyUp', lamp)
+            print "SANITY CHECK - ACTIVE SAYS " + str(active)
             # if the guy is dead, his light is on solid - if we're not in high noon or stampede
             if status:
                 self.badGuyLamps[lamp].enable()
             # if the guy is active (which he might be also, even if dead, based on mode) flash it
             if active:
-                self.badGuyLamps[lamp].schedule(0x00FF00FF)
+                # leaving the lamp on for new drops
+                if self.game.bad_guys.smart_drops:
+                    self.badGuyLamps[lamp].enable()
+                else:
+                    self.badGuyLamps[lamp].schedule(0x00FF00FF)
 
     def disable_bad_guys(self):
         for lamp in self.badGuyLamps:
