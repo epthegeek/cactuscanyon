@@ -19,8 +19,8 @@
 # | |  | | (_| | | | | | | |_| | (_| | | | | | |  __/
 # |_|  |_|\__,_|_|_| |_|  \____|\__,_|_| |_| |_|\___|
 
-#import logging
-#logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+import logging
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 from procgame import *
 import cc_modes
@@ -66,7 +66,7 @@ class CCGame(game.BasicGame):
         # optional real knocker setting
         self.useKnocker = config.value_for_key_path(keypath='use_knocker', default=False)
         if self.useKnocker:
-            print "Knocker Config Found!"
+            self.logger.debug("Knocker Config Found!")
         # used to prevent the high score entry from restarting the music
         self.soundIntro = False
         self.shutdownFlag = config.value_for_key_path(keypath='shutdown_flag',default=False)
@@ -80,12 +80,12 @@ class CCGame(game.BasicGame):
         if use_desktop:
             # if not color, run the old style pygame
             if not self.color_desktop:
-                print "Standard Desktop"
+                self.logger.debug("Standard Desktop")
                 from procgame.desktop import Desktop
                 self.desktop = Desktop()
             # otherwise run the color display
             else:
-                print "Color Desktop"
+                self.logger.debug("Color Desktop")
                 from ep import EP_Desktop
                 self.desktop = EP_Desktop()
 
@@ -128,14 +128,14 @@ class CCGame(game.BasicGame):
 
         # basic game reset stuff, copied in
         # load up the game data Game data
-        print "Loading game data"
+        self.logger.debug("Loading game data")
         self.load_game_data(game_data_defaults_path, user_game_data_path)
         # and settings Game settings
-        print "Loading game settings"
+        self.logger.debug("Loading game settings")
         self.load_settings(settings_defaults_path, user_settings_path)
         # Party Mode
         self.party_setting = self.user_settings['Gameplay (Feature)']['Party Mode']
-        print "Party Setting: " + str(self.party_setting)
+        self.logger.debug("Party Setting: %s" % str(self.party_setting))
         self.party_index = self.set_party_index()
 
         # disabled flippers - just in case
@@ -191,9 +191,9 @@ class CCGame(game.BasicGame):
 
         # set the volume per the settings
         self.sound.music_offset = self.user_settings['Sound']['Music volume offset']
-        print "Setting initial offset: " + str(self.sound.music_offset)
+        self.logger.debug("Setting initial offset: %s" % str(self.sound.music_offset))
         self.volume_to_set = (self.user_settings['Sound']['Initial volume'] / 10.0)
-        print "Setting initial volume: " + str(self.volume_to_set)
+        self.logger.debug("Setting initial volume: %s" % str(self.volume_to_set))
         self.sound.set_volume(self.volume_to_set)
         self.previousVolume = self.volume_to_set
 
@@ -416,7 +416,7 @@ class CCGame(game.BasicGame):
         # Party Mode - if it's enabled
         self.party_mode = cc_modes.PartyMode(game=self, priority=251)
         if self.party_setting != 'Disabled':
-            print "PARTY ON DUDES"
+            self.logger.debug("PARTY ON DUDES")
             self.modes.add(self.party_mode)
 
         # new service mode test
@@ -496,10 +496,10 @@ class CCGame(game.BasicGame):
 
         # Check the time
         now = datetime.datetime.now()
-        print "Hour: " + str(now.hour) + " Minutes: " + str(now.minute)
+        self.logger.debug("Hour: %s Minutes: %s" % (str(now.hour), str(now.minute)))
         # subtract the window minutes from 60
         window = 60 - self.moonlightMinutes
-        print "Moonlight window time: " + str(window)
+        self.logger.debug("Moonlight window time: %s" % str(window))
         # check for moonlight - always works at straight up midnight
         if now.hour == 0 and now.minute == 0:
             self.moonlightFlag = True
@@ -521,7 +521,7 @@ class CCGame(game.BasicGame):
         # tick up all the switch hit tracking by one
         for switch in self.game_data['SwitchHits']:
             self.game_data['SwitchHits'][switch] +=1
-            print switch + " " + str(self.game_data['SwitchHits'][switch])
+            self.logger.debug("%s %s" % (switch, str(self.game_data['SwitchHits'][switch])))
         # turn off all the ligths
         for lamp in self.lamps:
             if 'gi' not in lamp.name:
@@ -578,7 +578,7 @@ class CCGame(game.BasicGame):
         return tracking.Tracking(name)
 
     def game_started(self):
-        self.log("GAME STARTED")
+        self.logger.debug("GAME STARTED")
         # run the game_started from proc.game.BasicGame
         super(CCGame, self).game_started()
         # Don't start_ball() here, since Attract does that after calling start_game().
@@ -589,7 +589,7 @@ class CCGame(game.BasicGame):
     def ball_starting(self):
         # restore music, just in case
         self.restore_music()
-        print "BALL STARTING - number " + str(self.ball)
+        self.logger.debug("BALL STARTING - number %s" % str(self.ball))
         # run the ball_starting from proc.gameBasicGame
         super(CCGame, self).ball_starting()
         self.ballStarting = True
@@ -653,7 +653,7 @@ class CCGame(game.BasicGame):
             # add teh skill shot.
             self.modes.add(self.skill_shot)
             # and all the other modes
-            print "CHECKING TRACKING Ball start LR: " + str(self.show_tracking('leftRampStage'))
+            self.logger.debug("CHECKING TRACKING Ball start LR: %s" % str(self.show_tracking('leftRampStage')))
             self.base.load_modes()
             # if we're under x minutes and on the last ball, enable BOZO BALL (tm), if configured to do so
             if self.user_settings['Gameplay (Feature)']['Bozo Ball'] == 'Enabled':
@@ -668,7 +668,7 @@ class CCGame(game.BasicGame):
     def ball_saved(self):
         if self.trough.ball_save_active:
             # tell interrupter jones to show the ball save
-            print "GAME THINKS THE BALL WAS SAVED"
+            self.logger.debug("GAME THINKS THE BALL WAS SAVED")
             # the ball saved display
             self.interrupter.ball_saved()
             # kill the skillshot if it's running
@@ -680,7 +680,7 @@ class CCGame(game.BasicGame):
     # Empty callback just incase a ball drains into the trough before another
      # drain_callback can be installed by a gameplay mode.
     def ball_drained(self):
-        print "BALL DRAINED ROUTINE RUNNING"
+        self.logger.debug("BALL DRAINED ROUTINE RUNNING")
         # if we're not ejecting a new ball, then it really drained
         if not self.trough.launch_in_progress and not self.display_hold:
             # New abort for Last Call
@@ -694,16 +694,13 @@ class CCGame(game.BasicGame):
             if self.trough.num_balls_in_play == 0:
                 # if drunk multiball is running and was not down to one - abort
                 if self.drunk_multiball.running and not self.drunk_multiball.downToOne:
-                    print "Drunk multiball double drain catch"
+                    self.logger.debug("Drunk multiball double drain catch")
                     self.drunk_multiball.ball_drained()
                     return
                 # kill all the display layers
                 for mode in self.ep_modes:
                     if getattr(mode, "clear_layer", None):
                         mode.clear_layer()
-                # this is a  duplication - base handles it?
-                #print "BALL DRAINED IS KILLING THE MUSIC"
-                #self.sound.stop_music()
 
             # and tell all the modes the ball drained no matter what
             modequeue_copy = list(self.modes)
@@ -718,11 +715,11 @@ class CCGame(game.BasicGame):
 
     def ball_ended(self):
         """Called by end_ball(), which is itself called by base.trough_changed."""
-        self.log("BALL ENDED")
+        self.logger.debug("BALL ENDED")
         # reset the tilt
         self.set_tracking('tiltStatus',0)
         # stop the music
-        print "BALL ENDED IS KILLING THE MUSIC"
+        self.logger.debug("BALL ENDED IS KILLING THE MUSIC")
         # disable ball save
         self.trough.disable_ball_save()
 
@@ -730,7 +727,7 @@ class CCGame(game.BasicGame):
         # unload the base add on modes
         self.base.remove_modes()
 
-        print "CHECKING TRACKING ball ended LR: " + str(self.show_tracking('leftRampStage'))
+        self.logger.debug("CHECKING TRACKING ball ended LR: %s" % str(self.show_tracking('leftRampStage')))
 
         # then call the ball_ended from proc.game.BasicGame
         # Looping here? wha?
@@ -755,7 +752,7 @@ class CCGame(game.BasicGame):
             self.current_player().extra_balls -= 1
             #set the ball starting flag to help the trough not be SO STUPID
             self.ballStarting = True
-            print "Starting extra ball - remaining extra balls:" + str(self.current_player().extra_balls)
+            self.logger.debug("Starting extra ball - remaining extra balls: %s" % str(self.current_player().extra_balls))
             self.shoot_again()
             return
         if self.current_player_index + 1 == len(self.players):
@@ -770,7 +767,7 @@ class CCGame(game.BasicGame):
             # Consider: Do we want to call this here, or should it be called by the game? (for bonus sequence)
 
     def game_reset(self):
-        print("RESETTING GAME")
+        self.logger.debug("RESETTING GAME")
         # save existing data for audits thus far
         self.save_game_data()
         # unload all the base modes, just in case
@@ -782,7 +779,7 @@ class CCGame(game.BasicGame):
         # throw up a message about restarting
         self.interrupter.restarting()
         # lot the end of the game
-        self.log("GAME PREMATURELY ENDED")
+        self.logger.debug("GAME PREMATURELY ENDED")
         # set the Balls in play to 0
         self.trough.num_balls_in_play = 0
         # restart the game
@@ -790,7 +787,7 @@ class CCGame(game.BasicGame):
 
 
     def game_ended(self):
-        self.log("GAME ENDED")
+        self.logger.debug("GAME ENDED")
         # kill the moonlight flag
         self.moonlightFlag = False
         # call the game_ended from proc.game.BasicGame
@@ -825,7 +822,7 @@ class CCGame(game.BasicGame):
                 # 3 million is the minimum
                 if target < 3000000:
                     target = 3000000
-                print "Setting Replay score to ==== " + str(target)
+                self.logger.debug("Setting Replay score to ==== %s" % str(target))
                 # set the value and save
                 self.user_settings['Machine (Standard)']['Replay Score'] = target
                 self.save_settings()
@@ -865,7 +862,7 @@ class CCGame(game.BasicGame):
                 if self.players[i].player_stats['replay_earned']:
                     winners += 1
                     lastCallers.append(i)
-                    print ("Player " + str(i) + " gets last call")
+                    self.logger.debug("Player %s gets last call" % str(i))
             # if anybody won, it's go time
             if winners > 0:
                 self.modes.add(self.last_call)
@@ -939,10 +936,10 @@ class CCGame(game.BasicGame):
         self.soundIntro = False
         # set a busy flag so that the start button won't restart the game right away
         if not self.immediateRestart:
-            print "Immediate restart is disabled, killing start button"
+            self.logger.debug("Immediate restart is disabled, killing start button")
             self.endBusy = True
         else:
-            print "Immediate restart is enabled"
+            self.logger.debug("Immediate restart is enabled")
         # save data
         self.save_game_data()
         # re-add the attract mode
@@ -1066,10 +1063,10 @@ class CCGame(game.BasicGame):
         self.set_tracking('stackLevel',value,level)
         # that also calls a base lamp update
         if lamps:
-            print "Stack set updating the lamps"
+            self.logger.debug("Stack set updating the lamps")
             self.lamp_control.update()
         else:
-            print "Stack set not updating thh lamps"
+            self.logger.debug("Stack set not updating thh lamps")
 
     def score(self, points, bonus=False, percent=7):
         """Convenience method to add *points* to the current player."""
@@ -1092,14 +1089,14 @@ class CCGame(game.BasicGame):
         # total is earned and pending extra balls
         total = self.show_tracking('extraBallsTotal') + self.show_tracking('extraBallsPending')
         if total >= self.user_settings['Machine (Standard)']['Maximum Extra Balls']:
-            print "max extra balls check: reached"
+            self.logger.debug("max extra balls check: reached")
             return True
         else:
-            print "max extra balls check: not reached"
+            self.logger.debug("max extra balls check: not reached")
             return False
 
     def award_replay(self):
-        print "Player earned REPLAY! PARTYTIME!"
+        self.logger.debug("Player earned REPLAY! PARTYTIME!")
         # fire the knocker
         self.interrupter.knock(1)
         self.interrupter.replay_award_display()
@@ -1124,7 +1121,7 @@ class CCGame(game.BasicGame):
     def add_bonus(self,points):
         p = self.current_player()
         p.player_stats['bonus'] += points
-        print p.player_stats['bonus']
+        self.logger.debug(p.player_stats['bonus'])
 
     def calc_time_average_string(self, prev_total, prev_x, new_value):
         prev_time_list = prev_x.split(':')
@@ -1205,7 +1202,7 @@ class CCGame(game.BasicGame):
     def enable_inverted_flippers(self, enable):
         """Enables or disables the flippers AND bumpers."""
         self.flippers_active = True
-        print "ENABLE INVERTED FLIPPERS, YO"
+        self.logger.debug("ENABLE INVERTED FLIPPERS, YO")
         for flipper in self.config['PRFlippers']:
 
             # add the invert value
@@ -1257,12 +1254,12 @@ class CCGame(game.BasicGame):
 
         drivers = []
         if enable:
-            print "Enabling bottom bumper"
+            self.logger.debug("Enabling bottom bumper")
             drivers += [pinproc.driver_state_pulse(coil.state(), coil.default_pulse_time)]
         self.proc.switch_update_rule(switch_num, 'closed_nondebounced', {'notifyHost':False, 'reloadActive':True}, drivers, False)
 
         if not enable:
-            print "Disabling bottom bumper"
+            self.logger.debug("Disabling bottom bumper")
             coil.disable()
 
     # GI LAMPS
@@ -1314,17 +1311,17 @@ class CCGame(game.BasicGame):
             if True not in stackLevel[slice:] and self.trough.num_balls_in_play != 0:
                 pass
             else:
-                print "Music stop called by " + str(caller) + " But passed - Busy"
+                self.logger.debug("Music stop called by %s But passed - Busy" % str(caller))
                 execute = False
 
         if execute:
             # if a song is passed, set that to the active song
             if song:
-                print str(caller) + " changed song to " + str(song)
+                self.logger.debug("%s changed song to %s" % (str(caller), str(song)))
                 self.current_music = song
             # if not, just re-activate the current
             else:
-                print str(caller) + " restarting current song"
+                self.logger.debug("%s restarting current song" % str(caller))
                 # then start it up
             self.sound.play_music(self.current_music, loops=-1)
 
@@ -1332,46 +1329,38 @@ class CCGame(game.BasicGame):
     # switch blocker load and unload - checks to be sure if it should do what it is told
     def switch_blocker(self,function,caller):
         if function == 'add':
-            print "Switch Blocker Add Call from " + str(caller)
+            self.logger.debug("Switch Blocker Add Call from %s" % str(caller))
             if self.switch_block not in self.modes:
-                print "Switch Blocker Added"
+                self.logger.debug("Switch Blocker Added")
                 self.modes.add(self.switch_block)
             else:
-                print "Switch Blocker Already Present"
+                self.logger.debug("Switch Blocker Already Present")
         elif function == 'remove':
-            print "Switch Blocker Remove Call from " + str(caller)
+            self.logger.debug("Switch Blocker Remove Call from %s" + str(caller))
             stackLevel = self.show_tracking('stackLevel')
             if True not in stackLevel[2:]:
-                print "Switch Blocker Removed"
+                self.logger.debug("Switch Blocker Removed")
                 self.modes.remove(self.switch_block)
             else:
-                print "Switch Blocker NOT removed due to stack level"
+                self.logger.debug("Switch Blocker NOT removed due to stack level")
                 pass
 
     def volume_up(self):
         """ """
         if not self.sound.enabled: return
-        #print "Current Volume: " + str(self.sound.volume)
         setting = self.user_settings['Sound']['Initial volume']
         if setting <= 9:
             setting += 1
-            #print "new math value: " + str(self.sound.volume)
             self.sound.set_volume(setting / 10.0)
-            #print "10 value: " + str(self.sound.volume*10)
-            #print "Int value: " + str(int(self.sound.volume*10))
         return setting
 
     def volume_down(self):
         """ """
         if not self.sound.enabled: return
-        #print "Current Volume: " + str(self.sound.volume)
         setting = self.user_settings['Sound']['Initial volume']
         if setting >= 2:
             setting -= 1
-            #print "new math value: " + str(self.sound.volume)
             self.sound.set_volume(setting / 10.0)
-            #print "10 value: " + str(self.sound.volume*10)
-            #print "Int value: " + str(int(self.sound.volume*10))
         return setting
 
 
@@ -1379,7 +1368,7 @@ class CCGame(game.BasicGame):
         # set which mob mode comes first
         mobSetting = "Ambush" == self.user_settings['Gameplay (Feature)']['Ambush or Showdown First']
         if mobSetting:
-            print "User settings put Ambush first - adjusting for player"
+            self.logger.debug("User settings put Ambush first - adjusting for player")
             self.set_tracking('ambushStatus',"OPEN")
             self.set_tracking('showdownStatus',"OVER")
 
@@ -1396,51 +1385,51 @@ class CCGame(game.BasicGame):
         force_save = False
         self.settings = yaml.load(open(template_filename, 'r'))
         if os.path.exists(user_filename):
-            print "Settings file found, trying to load"
+            self.logger.debug("Settings file found, trying to load")
             self.user_settings = yaml.load(open(user_filename, 'r'))
                 # check that we got something
             if self.user_settings:
-                print "Found settings. All good - Updating Backup"
+                self.logger.debug("Found settings. All good - Updating Backup")
                 # make a backup copy just in case - if this is the init load
                 shutil.copyfile(user_settings_path, user_settings_backup)
             else:
-                print "Checking for backup file"
+                self.logger.debug("Checking for backup file")
                 # if we didn't get settings, try reading the backup
                 if os.path.exists(user_settings_backup):
-                    print "Found backup file, making copy"
+                    self.logger.debug("Found backup file, making copy")
                     # copy the backup to the main file and try again - the intent is to never open the backup
                     shutil.copy(user_settings_backup, user_settings_path)
                     self.user_settings = yaml.load(open(user_filename, 'r'))
                     # check now if we got something
                     if self.user_settings:
-                        print "Backup settings loaded. All good"
+                        self.logger.debug("Backup settings loaded. All good")
                     else:
-                        print "Settings broken, all bad, defaulting"
+                        self.logger.debug("Settings broken, all bad, defaulting")
                         self.user_settings = {}
                         force_save = True
                 # If even the backup failed, default everything
                 else:
-                    print "Settings broken, all bad, defaulting"
+                    self.logger.debug("Settings broken, all bad, defaulting")
                     self.user_settings = {}
                     force_save = True
         else:
-            print "Didn't find a user file, checking for backup file"
+            self.logger.debug("Didn't find a user file, checking for backup file")
             # if we didn't get settings, try reading the backup
             if os.path.exists(user_settings_backup):
-                print "Found backup file, making copy"
+                self.logger.debug("Found backup file, making copy")
                 # copy the backup to the main file and try again - the intent is to never open the backup
                 shutil.copy(user_settings_backup, user_settings_path)
                 self.user_settings = yaml.load(open(user_filename, 'r'))
                 # check now if we got something
                 if self.user_settings:
-                    print "Backup settings loaded. All good"
+                    self.logger.debug("Backup settings loaded. All good")
                 else:
-                    print "Settings broken, all bad, defaulting"
+                    self.logger.debug("Settings broken, all bad, defaulting")
                     self.user_settings = {}
                     force_save = True
             # If even the backup failed, default everything
             else:
-                print "Settings broken, all bad, defaulting"
+                self.logger.debug("Settings broken, all bad, defaulting")
                 self.user_settings = {}
                 force_save = True
 
@@ -1481,10 +1470,10 @@ class CCGame(game.BasicGame):
                                 self.user_settings[section][item] = self.settings[section][item]['options'][0]
 
         if restore or force_save:
-            print "Restore - Saving settings"
+            self.logger.debug("Restore - Saving settings")
             self.save_settings()
             if not os.path.exists(user_settings_backup):
-                print "Backup settings file not found - making one"
+                self.logger.debug("Backup settings file not found - making one")
                 shutil.copyfile(user_settings_path, user_settings_backup)
 
     def save_settings(self, filename=None):
@@ -1505,50 +1494,50 @@ class CCGame(game.BasicGame):
         force_save = False
         template = yaml.load(open(template_filename, 'r'))
         if os.path.exists(user_filename):
-            print "Trying to load data from user file"
+            self.logger.debug("Trying to load data from user file")
             self.game_data = yaml.load(open(user_filename, 'r'))
             # check that we got something
             if self.game_data:
-                print "Found data. All good - updating backup"
+                self.logger.debug("Found data. All good - updating backup")
                 # make a backup copy just in case - if this is the init load
                 shutil.copyfile(user_game_data_path, user_game_data_backup)
             else:
-                print "Data broken - Checking for backup file"
+                self.logger.debug("Data broken - Checking for backup file")
                 # try reading from the backup
                 if os.path.exists(user_game_data_backup):
                     # copy the backup to the main file and try again - the intent is to never open the backup
-                    print "Backup file found, restoring"
+                    self.logger.debug("Backup file found, restoring")
                     shutil.copy(user_game_data_backup, user_game_data_path)
                     self.game_data = yaml.load(open(user_game_data_path, 'r'))
                     if self.game_data:
-                        print "Backup data loaded. All good"
+                        self.logger.debug("Backup data loaded. All good")
                     # If even the backup failed, default everything
                     else:
-                        print "Data broken, all bad, defaulting"
+                        self.logger.debug("Data broken, all bad, defaulting")
                         self.game_data = {}
                         force_save = True
                 else:
-                    print "Data broken, all bad, defaulting"
+                    self.logger.debug("Data broken, all bad, defaulting")
                     self.game_data = {}
                     force_save = True
         else:
-            print "Didn't find a user file"
-            print "Checking for backup file"
+            self.logger.debug("Didn't find a user file")
+            self.logger.debug("Checking for backup file")
             # try reading from the backup
             if os.path.exists(user_game_data_backup):
                 # copy the backup to the main file and try again - the intent is to never open the backup
-                print "Backup file found, restoring"
+                self.logger.debug("Backup file found, restoring")
                 shutil.copy(user_game_data_backup, user_game_data_path)
                 self.game_data = yaml.load(open(user_game_data_path, 'r'))
                 if self.game_data:
-                    print "Backup data loaded. All good"
+                    self.logger.debug("Backup data loaded. All good")
                 # If even the backup failed, default everything
                 else:
-                    print "Data broken, all bad, defaulting"
+                    self.logger.debug("Data broken, all bad, defaulting")
                     self.game_data = {}
                     force_save = True
             else:
-                print "Didn't find a backup file - forcing save"
+                self.logger.debug("Didn't find a backup file - forcing save")
                 force_save = True
 
         if template:
@@ -1565,7 +1554,7 @@ class CCGame(game.BasicGame):
         if restore or force_save:
             self.save_game_data()
             if not os.path.exists(user_game_data_backup):
-                print "No backup found - making one"
+                self.logger.debug("No backup found - making one")
                 shutil.copyfile(user_game_data_path, user_game_data_backup)
 
     def remote_load_game_data(self, restore=None):
@@ -1577,7 +1566,7 @@ class CCGame(game.BasicGame):
     def load_doubler(self):
         if self.user_settings['Gameplay (Feature)']['2X Scoring Feature'] == 'Enabled':
             if self.doubler not in self.modes:
-                print "Loading Score Doubler"
+                self.logger.debug("Loading Score Doubler")
                 self.modes.add(self.doubler)
 
     def check_doubler(self):
