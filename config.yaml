@@ -1,0 +1,88 @@
+font_path:
+    - .
+    - /data/proc/cactuscanyon/dmd
+    - /data/proc/cactuscanyon/shared/dmd
+pinproc_class: procgame.fakepinproc.FakePinPROC
+config_path:
+    - /data/proc/cactuscanyon/config
+keyboard_switch_map:
+    # enter, up, down, Exit
+    7: SD8
+    8: SD7
+    9: SD6
+    0: SD5
+    # start:
+    1: S13
+    # jet bumpers exit
+    p: shooterLane
+    # skillBowl
+    o: S67
+    # right ramp enter
+    j: rightRampEnter
+    # right ramp make
+    k: S65
+    # right ramp bottom
+    l: S68
+    # left ramp enter
+    s: S85 
+    # jet bumper
+    a: S54
+    # left out
+    z: beerMug
+    # left in
+    x: S26
+    # center ramp enter
+    c: S82
+    # right out
+    m: beerMug
+    # right in
+    n: S17
+    # center ramp make
+    b: S84
+    # mine popper
+    v: S41
+    # saloon popper
+    w: S42
+    # left bonus lane
+    t: S47
+    # right bonus lane
+    y: S57
+    # left loop enter
+    e: S36
+    # left loop top
+    r: S58
+    # right loop enter
+    i: S37
+    # right loop top
+    u: S56
+    # saloonGate
+    q: S73
+    # top left quickdraw
+    d: topLeftStandUp
+    # bottom left quickdraw
+    f: bottomLeftStandUp
+    # bottom right quickdraw
+    g: phantomSwitch
+    # right quickdraw
+    h: bottomRightStandUp
+    # bart toy
+    2: S75
+    # badGuySW0
+    3: S61
+    # badguysw1
+    4: S62
+    # badguysw2
+    5: S63
+    # badguysw3
+    6: S64
+    # other stuff?
+    -: phantomSwitch2
+    ' ': phantomSwitch3
+desktop_dmd_scale: 4
+dmd_cache_path: ~/.pyprocgame/dmd_cache
+#usb_update: True
+usb_location: /Volumes/
+game_location: /data/proc/cactuscanyon
+shutdown_flag: True
+color_desktop: True
+#lamp_serial_port: /dev/tty.usbmodem5d11
