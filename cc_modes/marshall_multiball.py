@@ -28,7 +28,7 @@ class MarshallMultiball(ep.EP_Mode):
         self.jackpotTimer = self.game.user_settings['Gameplay (Feature)']['Marshall Jackpot Timer']
 
     def mode_started(self):
-        print "Starting Marshall Multiball"
+        #print "Starting Marshall Multiball"
         # reset the points
         self.pointTotal = 0
         self.running = True
@@ -83,7 +83,7 @@ class MarshallMultiball(ep.EP_Mode):
 
     def ball_drained(self):
         if self.running:
-            print "WELL MMB KNOWS IT IS RUNNING"
+            #print "WELL MMB KNOWS IT IS RUNNING"
             if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1:
                 self.game.base.busy = True
                 self.game.base.queued += 1
@@ -609,10 +609,10 @@ class MarshallMultiball(ep.EP_Mode):
         # clear the layer
         self.clear_layer()
         # store up the final score - if better than any previous run
-        print "Marshall Multiball points: " + str(self.pointTotal)
-        print "Current best: " + str(self.game.show_tracking('marshallBest'))
+        #print "Marshall Multiball points: " + str(self.pointTotal)
+        #print "Current best: " + str(self.game.show_tracking('marshallBest'))
         if self.pointTotal > self.game.show_tracking('marshallBest'):
-            print "Setting marshallBest to " + str(self.pointTotal)
+            #print "Setting marshallBest to " + str(self.pointTotal)
             self.game.set_tracking('marshallBest',self.pointTotal)
         # add the final total to the player's score
         self.game.score(self.pointTotal * 100)

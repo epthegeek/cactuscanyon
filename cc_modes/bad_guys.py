@@ -79,7 +79,7 @@ class BadGuys(ep.EP_Mode):
     def sw_badGuySW0_active(self, sw):
         # far left bad guy target
         if self.game.show_tracking('badGuyUp', 0):
-            print "BAD GUY 0 HIT"
+            #print "BAD GUY 0 HIT"
             self.hit_bad_guy(0)
 
     def sw_badGuySW0_inactive_for_200ms(self, sw):
@@ -91,7 +91,7 @@ class BadGuys(ep.EP_Mode):
     def sw_badGuySW1_active(self, sw):
         # center left badguy target
         if self.game.show_tracking('badGuyUp', 1):
-            print "BAD GUY 1 HIT"
+            #print "BAD GUY 1 HIT"
             self.hit_bad_guy(1)
 
     def sw_badGuySW1_inactive_for_200ms(self, sw):
@@ -103,7 +103,7 @@ class BadGuys(ep.EP_Mode):
     def sw_badGuySW2_active(self, sw):
         # center right bad guy target
         if self.game.show_tracking('badGuyUp', 2):
-            print "BAD GUY 2 HIT"
+            #print "BAD GUY 2 HIT"
             self.hit_bad_guy(2)
 
     def sw_badGuySW2_inactive_for_200ms(self, sw):
@@ -115,7 +115,7 @@ class BadGuys(ep.EP_Mode):
     def sw_badGuySW3_active(self, sw):
         # far right bad guy target
         if self.game.show_tracking('badGuyUp',3):
-            print "BAD GUY 3 HIT"
+            #print "BAD GUY 3 HIT"
             self.hit_bad_guy(3)
 
     def sw_badGuySW3_inactive_for_200ms(self, sw):
@@ -134,7 +134,7 @@ class BadGuys(ep.EP_Mode):
         # kill the coil to the drop target based on position
         self.target_down(target)
         # call back to base to turn on the light for this bad guy?
-        print "QD STATUS CHECK: " + str(self.game.show_tracking('quickdrawStatus'))
+        self.game.logger.debug("QD STATUS CHECK: " + str(self.game.show_tracking('quickdrawStatus')))
         # If there's a mb tribute running
         if self.game.mb_tribute.running:
             self.game.mb_tribute.hit_drac()
@@ -146,14 +146,14 @@ class BadGuys(ep.EP_Mode):
             self.game.quickdraw.won(target)
         # we might be fighting with boss bart
         elif self.game.bart.bossFight:
-            print "FIGHTING BOSS BART - TARGET DIVERTS"
+            #print "FIGHTING BOSS BART - TARGET DIVERTS"
             self.game.bart.boss_target_hit(target)
         # bandits in goldmine
         elif self.game.show_tracking('mineStatus') == "RUNNING":
             self.game.gm_multiball.hit_bandit(target)
         # Otherwise, if all badguys are dead, we're in a showdown
         elif self.game.show_tracking('showdownStatus') == "RUNNING":
-            print "SHOWDOWN RUNNING OMG"
+            #print "SHOWDOWN RUNNING OMG"
             self.game.showdown.hit(target)
             # showdown stuff would go here
         elif self.game.show_tracking('ambushStatus') == "RUNNING":
@@ -176,8 +176,8 @@ class BadGuys(ep.EP_Mode):
         # ignore the light if high noon is running
         if self.game.high_noon.running:
             lamp = False
-        print "TARGET RAISE ATTEMPT " + str(target)
-        print self.game.show_tracking('badGuyUp')
+        self.game.logger.debug("TARGET RAISE ATTEMPT " + str(target))
+        self.game.logger.debug(self.game.show_tracking('badGuyUp'))
         
         # Smart drop targets
         if self.smart_drops:
@@ -188,7 +188,7 @@ class BadGuys(ep.EP_Mode):
             # Disable the target first
             self.coils[target].disable()
             # new coil raise based on research with on o-scope by jim (jvspin)
-            print "Target Start " + str(target) + " on time " + str(self.on_time)
+            self.game.logger.debug("Target Start " + str(target) + " on time " + str(self.on_time))
             self.coils[target].patter(on_time=2, off_time=2, original_on_time=self.on_time)
         
         if lamp and not self.game.lamp_control.lights_out:
@@ -207,10 +207,10 @@ class BadGuys(ep.EP_Mode):
     def check_pending(self, target):
         # if this target is still pending and the switch is on so the target is down
         if self.pending[target] and self.switches[target].is_active():
-            print "PENDING CHECK RETRYING TARGET " + str(target)
+            self.game.logger.debug("PENDING CHECK RETRYING TARGET " + str(target))
             self.target_up(target)
         else:
-            print "TARGET " + str(target) + " PENDING CHECK PASSED"
+            self.game.logger.debug("TARGET " + str(target) + " PENDING CHECK PASSED")
             pass
 
     def target_down(self, target, lamp=True):
@@ -219,7 +219,7 @@ class BadGuys(ep.EP_Mode):
         # remove the delay
         self.cancel_delayed(self.pending_delay[target])
         self.game.set_tracking('badGuyUp', False, target)
-        print "DEACTIVATING TARGET " + str(target)
+        self.game.logger.debug("DEACTIVATING TARGET " + str(target))
         # new optional smart drop down
         if self.smart_drops:
             # fire the drop coil - if the target is up
@@ -244,7 +244,7 @@ class BadGuys(ep.EP_Mode):
         
     def target_activate(self, target):
         if not self.game.show_tracking('badGuyUp', target):
-            print "ACTIVATING TARGET " + str(target)
+            self.game.logger.debug("ACTIVATING TARGET " + str(target))
             # cancel the pending delay
             self.cancel_delayed(self.pending_delay[target])
 
@@ -254,9 +254,9 @@ class BadGuys(ep.EP_Mode):
                 self.coils[target].patter(on_time=2, off_time=10)
 
             self.game.set_tracking('badGuyUp', True, target)
-            print self.game.show_tracking('badGuyUp')
+            self.game.logger.debug(self.game.show_tracking('badGuyUp'))
         else:
-            print "SYSTEM THINKS TARGET " + str(target) + " IS ALREADY UP"
+            self.game.logger.debug("SYSTEM THINKS TARGET " + str(target) + " IS ALREADY UP")
 
     def setup_targets(self):
         # pop up the targets

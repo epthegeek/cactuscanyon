@@ -51,11 +51,11 @@ class Saloon(ep.EP_Mode):
         self.game.cva.intro(entry = "saloon")
 
     def sw_saloonPopper_active_for_300ms(self,sw):
-        print "Saloon popper mode - active for 300 ms"
+        #print "Saloon popper mode - active for 300 ms"
         self.saloon_shot()
 
     def saloon_shot(self):
-        print "saloon shot"
+        #print "saloon shot"
         stackLevel = self.game.show_tracking('stackLevel')
         # if MMB, moonlight or high noon is running, just kick out
         if self.game.marshall_multiball.running or self.game.moonlight.running or self.game.high_noon.running:
@@ -78,7 +78,7 @@ class Saloon(ep.EP_Mode):
         # if bionic bart is running don't do anything
         if self.game.show_tracking('bionicStatus') == "RUNNING" or \
             self.game.show_tracking('cvaStatus') == "RUNNING":
-            print "cva bionic bail"
+            #print "cva bionic bail"
             return
 
         # if drunk multiball is ready, start that, maybe
@@ -94,14 +94,14 @@ class Saloon(ep.EP_Mode):
 
         # if last call is running - call that hit and bail
         if self.game.last_call.running:
-            print "saloon passing to last call"
+            #print "saloon passing to last call"
             self.game.last_call.saloon_hit()
             return
 
         # if there's a mode running (other than polly peril and quickdraw), just kick the ball back out
         if not self.game.peril and "RUNNING" not in self.game.show_tracking('quickdrawStatus'):
             if True in stackLevel:
-                print "Saloon Stack bail"
+                #print "Saloon Stack bail"
                 self.kick()
                 return
             else:
@@ -179,7 +179,7 @@ class Saloon(ep.EP_Mode):
         ep.last_switch = "jetBumpersExit"
 
     def kick(self):
-        print "SALOON EJECTING"
+        #print "SALOON EJECTING"
         # kick the ball out
         if self.game.switches.saloonPopper.is_active():
             self.game.coils.saloonPopper.pulse(self.saloonPulse)
@@ -204,7 +204,7 @@ class Saloon(ep.EP_Mode):
     ###
     # TODO move bounty to a higher priority so it can interrupt things?
     def check_bounty(self):
-        print "CHECKING BOUNTY"
+        #print "CHECKING BOUNTY"
         # check the bounty lit status, and collect if needed
         if self.game.show_tracking('isBountyLit'):
             self.collect_bounty()
@@ -312,7 +312,7 @@ class Saloon(ep.EP_Mode):
                 index = 0
             # set the new index
             self.game.set_tracking('bountyIndex',index)
-        print "SELECTED BOUNTY: " + self.bountyPrize
+        #print "SELECTED BOUNTY: " + self.bountyPrize
         # play some sounds/music
         self.game.sound.play(self.game.assets.sfx_bountyCollected)
 
@@ -409,7 +409,7 @@ class Saloon(ep.EP_Mode):
             self.prizeHandler = self.game.score
         else:
             prizeText = "WTF"
-            print "WTF BOUNTY: " + self.bountyPrize
+            #print "WTF BOUNTY: " + self.bountyPrize
 
         # load the animation
         # set up the layer
@@ -470,7 +470,7 @@ class Saloon(ep.EP_Mode):
     ## Gunfight
 
     def light_gunfight(self,callback=None):
-        print "GUNFIGHT IS LIT"
+        #print "GUNFIGHT IS LIT"
         # turn on the lights
         # show the display
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_singleCowboyBorder.frames[0])
@@ -489,9 +489,9 @@ class Saloon(ep.EP_Mode):
         self.game.coils.rightGunFlasher.schedule(0x11111111,cycle_seconds=1)
 
         if callback != None:
-            print "I GOT A GUNFIGHT CALLBACK"
+            #print "I GOT A GUNFIGHT CALLBACK"
             self.delay("Callback",delay=2,handler=callback)
         self.delay(delay=2,handler=self.clear_layer)
         if self.busy:
-            print "Light Gunfight - Delay timer for unbusy"
+            #print "Light Gunfight - Delay timer for unbusy"
             self.delay(delay=2,handler=self.unbusy)

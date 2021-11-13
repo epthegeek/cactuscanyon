@@ -320,7 +320,7 @@ class EP_LampController(object):
                 self.shows[key] = show_file
 
     def play_show(self, key, repeat=False, callback='None'):
-        print "Playing regular lamp show - " + str(key)
+        #print "Playing regular lamp show - " + str(key)
         # Always stop any previously running show first.
         self.stop_show()
         self.show.load(self.shows[key], repeat, callback)
@@ -427,11 +427,11 @@ class EP_LampControllerGI(object):
         self.shows[key] = show_file
 
     def play_show(self, key, repeat=False, callback='None'):
-        print "PLAYING GI LAMPSHOW - " + str(key)
+        #print "PLAYING GI LAMPSHOW - " + str(key)
         # Always stop any previously running show first.
         self.stop_show()
         self.show.load(self.shows[key], repeat, callback)
-        print "GI SHOW - " + str(self.show)
+        #print "GI SHOW - " + str(self.show)
         self.game.modes.add(self.show)
         self.show_playing = True
 

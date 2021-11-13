@@ -66,7 +66,7 @@ class EP_CustomMessageFrame(object):
         # get all the bits
         # step through the lines getting the data
         for n in range (1,4,1):
-            print "Generating Line " + str(n)
+            self.game.logger.debug("Generating Line " + str(n))
             line = 'Page ' + str(self.page) + ' Line ' + str(n) + ' '
             if self.game.user_settings['Custom Message'][line + 'Text'] != 'NONE':
                 self.texts[n] = self.game.user_settings['Custom Message'][str(line) + 'Text']
@@ -111,7 +111,7 @@ class EP_CustomMessageFrame(object):
                 self.totalHeight += size
                 self.totalLines += 1
             else:
-                print "No Line " + str(n)
+                self.game.logger.debug("No Line " + str(n))
 
         # generate the vertical offsets
         # if we didn't find any lines - return just the backdrop
@@ -119,12 +119,12 @@ class EP_CustomMessageFrame(object):
             return self.backdrop
 
         elif self.totalLines == 1:
-            print "One Total Lines"
+            self.game.logger.debug("One Total Lines")
             # subtract the font height from the full height and divide by 2
             offset = ((32 - self.size[1]) / 2)
             self.y_offsets[1] = offset
         elif self.totalLines == 2:
-            print "Two Total Lines"
+            self.game.logger.debug("Two Total Lines")
             # add the fonts together, plus 2, subtract from 32, divide by 2 for first
             offset = ((32 - (self.size[1] + self.size[2] + 1)) / 2)
             self.y_offsets[1] = offset
@@ -133,7 +133,7 @@ class EP_CustomMessageFrame(object):
             self.y_offsets[2] = offset
         # three lines
         else:
-            print "Three Total Lines"
+            self.game.logger.debug("Three Total Lines")
             # add the fonts together, plus 2, subtract from 32, divide by 2 for the first - if total plus 2 is higher than 32, use 0
             tempOffset = (32 - (self.size[1] + self.size[2] + self.size[3] + 2))
             if tempOffset <= 0:
@@ -151,7 +151,7 @@ class EP_CustomMessageFrame(object):
         layers.append(self.backdrop)
         # then generate the text lines
         for n in range (1,(self.totalLines+1),1):
-            print "Layer line " + str(n) + " x offset " + str(self.x_offsets[n]) + " y offset " + str(self.y_offsets[n])
+            self.game.logger.debug("Layer line " + str(n) + " x offset " + str(self.x_offsets[n]) + " y offset " + str(self.y_offsets[n]))
             if self.size[n] == 7 or self.size[n] == 9:
                 self.y_offsets[n] -= 1
             if self.size[n] == 12:
@@ -161,8 +161,8 @@ class EP_CustomMessageFrame(object):
             layers.append(layer)
 
         # and OUTPUT THAT THING
-        print "building grouped layer"
-        print layers
+        self.game.logger.debug("building grouped layer")
+        self.game.logger.debug(layers)
         composite = dmd.GroupedLayer(128,32,layers)
         return composite
 

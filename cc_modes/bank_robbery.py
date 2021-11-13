@@ -111,7 +111,7 @@ class BankRobbery(ep.EP_Mode):
 
 
     def ball_drained(self):
-        print "Bank robbery thinks the ball drained"
+        #print "Bank robbery thinks the ball drained"
         if self.game.trough.num_balls_in_play == 0:
             if self.running:
                 self.game.base.busy = True
@@ -193,7 +193,7 @@ class BankRobbery(ep.EP_Mode):
 
     def process_shot(self,shot):
         if self.have_won:
-            print "It's over already!"
+            #print "It's over already!"
             return
         # kill the mode timer for good measure
         self.cancel_delayed("Mode Timer")
@@ -209,7 +209,7 @@ class BankRobbery(ep.EP_Mode):
             # score points
             points = self.shotValue * self.valueMultiplier
             self.game.score(points)
-            print "POINTS FOR THIS SHOT " + str(points)
+            #print "POINTS FOR THIS SHOT " + str(points)
             # add to the total
             self.totalPoints += points
             # set the last points for the banner
@@ -342,7 +342,7 @@ class BankRobbery(ep.EP_Mode):
         # killing the get going delay just in case a guy is shot before we're started
         if self.modeTimer > 29:
             self.cancel_delayed("Get Going")
-        print "KILLING DUDE " + str(shot)
+        #print "KILLING DUDE " + str(shot)
         animLayer = dmd.AnimatedLayer(frames=self.shotAnim.frames,hold=True,opaque=False,repeat=False,frame_time=6)
         animLayer.composite_op = "blacksrc"
         # set the target position based on the shot
@@ -371,7 +371,7 @@ class BankRobbery(ep.EP_Mode):
     def halt(self):
         # if guys are still alive, halt
         if True in self.isActive:
-            print "HALTING -- BUMPERS/MINE/SALOON"
+            #print "HALTING -- BUMPERS/MINE/SALOON"
             # cancel delays
             self.cancel_delayed("Mode Timer")
             # this is the initial delay - have to include it in case of a straight shot to the mine off the ramp
@@ -558,7 +558,7 @@ class BankRobbery(ep.EP_Mode):
 
     # clean up and exit
     def end_save_polly(self):
-        print "ENDING SAVE POLLY"
+        #print "ENDING SAVE POLLY"
         # turn the level 1 stack flag back off
         self.game.stack_level(2,False)
         # check to see if stampede is ready - if we're not ending due to ball fail
@@ -589,11 +589,11 @@ class BankRobbery(ep.EP_Mode):
         if self.isActive[0]: dudes.append(0)
         if self.isActive[1]: dudes.append(1)
         if self.isActive[2]: dudes.append(2)
-        print "DUDES:"
-        print dudes
+        #print "DUDES:"
+        #print dudes
         # pick a random guy to shoot
         self.shooter = random.choice(dudes)
-        print "THE SHOOTER IS: " + str(self.shooter)
+        #print "THE SHOOTER IS: " + str(self.shooter)
         # load the animation
         anim = self.game.assets.dmd_bankDude
         # math out the wait

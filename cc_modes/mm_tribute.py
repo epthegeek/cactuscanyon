@@ -128,11 +128,11 @@ class MM_Tribute(ep.EP_Mode):
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
     def sw_minePopper_active_for_350ms(self,sw):
-        print "Trolls It Mine Popper Register"
+        #print "Trolls It Mine Popper Register"
         self.halt_test()
 
     def sw_saloonPopper_active_for_250ms(self,sw):
-        print "Trolls It Saloon Popper Register"
+        #print "Trolls It Saloon Popper Register"
         self.halt_test()
 
     def sw_saloonPopper_inactive(self,sw):
@@ -243,7 +243,7 @@ class MM_Tribute(ep.EP_Mode):
         self.layer = combined
         # set the delay for fixing it after a hit or a miss
         if mode == "hit":
-            print "It's a hit - setting loop back to idle"
+            #print "It's a hit - setting loop back to idle"
             # if a troll got hit loop back to that one to set it to idle after the animation finishes
             if troll == "left":
                 self.delay("Left Display",delay=myWait,handler=self.reset_troll,param="left")
@@ -262,7 +262,7 @@ class MM_Tribute(ep.EP_Mode):
             target = 1
         else:
             target = 2
-        print "Resetting Troll on target " + str(target)
+        #print "Resetting Troll on target " + str(target)
         self.game.bad_guys.target_up(target)
 
     def hit_troll(self,target):
@@ -354,7 +354,7 @@ class MM_Tribute(ep.EP_Mode):
     def halt_trolls(self):
         if self.modeTimer <= 0:
             return
-        print "HALTING TROLLS IN BUMPERS/MINE"
+        #print "HALTING TROLLS IN BUMPERS/MINE"
         self.cancel_delayed("Resume")
         # cancel delays
         self.cancel_delayed("Mode Timer")

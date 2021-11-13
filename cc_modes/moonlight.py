@@ -356,30 +356,30 @@ class Moonlight(ep.EP_Mode):
 
     def enable_shots(self):
         # if there are shots to add, do that
-        print "To Enable is: " + str(self.enable)
+        #print "To Enable is: " + str(self.enable)
         if self.enable > 0:
             if len(self.availableShots) > 0:
                 shot = random.choice(self.availableShots)
                 # put it in the live shots
-                print "Enabled Shot: " + str(shot)
+                #print "Enabled Shot: " + str(shot)
                 self.availableShots.remove(shot)
-                print "Available: "
-                print self.availableShots
+                #print "Available: "
+                #print self.availableShots
                 self.liveShots.append(shot)
-                print "Live:"
-                print self.liveShots
+                #print "Live:"
+                #print self.liveShots
                 # tick off the enabled shot - try to stay above zero
                 if self.enable > 0:
                     self.enable -= 1
-                    print "Shots left to enable: " + str(self.enable)
+                    #print "Shots left to enable: " + str(self.enable)
                     if self.enable > 0:
                         self.enable_shots()
                     else:
                         # refresh the lights
                         self.refresh_lights()
                 else:
-                # all shots enabled! Kick into bonanza
-                    print "No Shots available to Enable"
+                    # all shots enabled! Kick into bonanza
+                    self.game.logger.debug("No Shots available to Enable")
                 if len(self.availableShots) == 0:
                     self.start_bonanza()
 
@@ -399,7 +399,7 @@ class Moonlight(ep.EP_Mode):
             self.moonlightTotal += 1000000
             self.game.increase_tracking('moonlightTotal',1000000)
             # enable more shots
-            print "Enabling 2 more shots"
+            #print "Enabling 2 more shots"
             self.enable += 2
             self.enable_shots()
         else:

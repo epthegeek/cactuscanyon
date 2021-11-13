@@ -110,11 +110,11 @@ class MB_Tribute(ep.EP_Mode):
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
     def sw_minePopper_active_for_350ms(self,sw):
-        print "Drac Mine Popper Register"
+        #print "Drac Mine Popper Register"
         self.halt_test()
 
     def sw_saloonPopper_active_for_250ms(self,sw):
-        print "Drac Saloon Popper Register"
+        #print "Drac Saloon Popper Register"
         self.halt_test()
 
     def sw_saloonPopper_inactive(self,sw):
@@ -176,13 +176,13 @@ class MB_Tribute(ep.EP_Mode):
 
     def get_going(self):
         self.game.ball_search.enable()
-        print "RELEASE THE BALL FOR TRIBUTE"
+        #print "RELEASE THE BALL FOR TRIBUTE"
         # release the ball
         if self.game.tribute_launcher.shot == 3:
-            print "TRIBUTE MINE EJECT"
+            #print "TRIBUTE MINE EJECT"
             self.game.mountain.eject()
         else:
-            print "TRIBUTE POST DROP"
+            #print "TRIBUTE POST DROP"
             self.game.coils.leftGunFightPost.disable()
         # start the music
         #self.music_on(self.game.assets.music_dracAttack)
@@ -253,7 +253,7 @@ class MB_Tribute(ep.EP_Mode):
         self.move_drac()
 
     def hit_drac(self):
-        print "Hit Drac"
+        #print "Hit Drac"
         # stop the timer
         self.cancel_delayed("Mode Timer")
         # stop the movement for now
@@ -297,7 +297,7 @@ class MB_Tribute(ep.EP_Mode):
         self.moveTimer -= 1
         if self.moveTimer <= 0:
             self.moveTimer = 8
-            print "Moving Dracula"
+            #print "Moving Dracula"
             # drop the target
             self.game.bad_guys.target_down(self.index)
             # move to the next target
@@ -331,7 +331,7 @@ class MB_Tribute(ep.EP_Mode):
     def halt_drac(self):
         if self.modeTimer <= 0:
             return
-        print "HALTING DRAC ATTACK IN BUMPERS/MINE"
+        #print "HALTING DRAC ATTACK IN BUMPERS/MINE"
         self.cancel_delayed("Resume")
         # cancel delays
         self.cancel_delayed("Mode Timer")

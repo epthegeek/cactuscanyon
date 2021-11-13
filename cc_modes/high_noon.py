@@ -112,7 +112,7 @@ class HighNoon(ep.EP_Mode):
     # bad guy targets
     def sw_badGuySW0_active(self,sw):
         # far left bad guy target
-        print "BAD GUY 0 HIT"
+        #print "BAD GUY 0 HIT"
         if self.game.show_tracking('badGuyUp',0):
             self.game.bad_guys.target_down(0)
             self.hit_bad_guy(0)
@@ -120,7 +120,7 @@ class HighNoon(ep.EP_Mode):
 
     def sw_badGuySW1_active(self,sw):
         # center left badguy target
-        print "BAD GUY 1 HIT"
+        #print "BAD GUY 1 HIT"
         if self.game.show_tracking('badGuyUp',1):
             self.game.bad_guys.target_down(1)
             self.hit_bad_guy(1)
@@ -128,14 +128,14 @@ class HighNoon(ep.EP_Mode):
 
     def sw_badGuySW2_active(self,sw):
         # center right bad guy target
-        print "BAD GUY 2 HIT"
+        #print "BAD GUY 2 HIT"
         if self.game.show_tracking('badGuyUp',2):
             self.game.bad_guys.target_down(2)
             self.hit_bad_guy(2)
         return game.SwitchStop
 
     def sw_badGuySW3_active(self,sw):
-        print "BAD GUY 3 HIT"
+        #print "BAD GUY 3 HIT"
         # far right bad guy target
         if self.game.show_tracking('badGuyUp',3):
             self.game.bad_guys.target_down(3)
@@ -177,7 +177,7 @@ class HighNoon(ep.EP_Mode):
                 self.won()
             else:
                 # pop the target back up
-                print "HIGH NOON: reactivate target " + str(target)
+                #print "HIGH NOON: reactivate target " + str(target)
                 self.delay(delay=1,handler=self.game.bad_guys.target_up,param=target)
 
     # todo other switches to trap: mine, saloon, bad guy toy ?
@@ -318,7 +318,7 @@ class HighNoon(ep.EP_Mode):
                 step += 1
                 self.delay(delay=myWait,handler=self.intro,param=step)
             elif step == 10:
-                print "SHOULD GET GOING NOW"
+                #print "SHOULD GET GOING NOW"
                 self.delay(delay=myWait,handler=self.get_going)
                 # TODO play a quote
 
@@ -480,10 +480,10 @@ class HighNoon(ep.EP_Mode):
         # disable ball search
         self.game.ball_search.disable()
         # the tally display after the mode
-        print "HIGH NOON FINAL DISPLAY - STEP " + str(step)
+        #print "HIGH NOON FINAL DISPLAY - STEP " + str(step)
         # jackpots
         if step == 1:
-            print "HIGH NOON JACKPOT TALLY"
+            #print "HIGH NOON JACKPOT TALLY"
             # start the drum roll
             self.music_on(self.game.assets.music_drumRoll)
             myDelay = 0.2
@@ -495,7 +495,7 @@ class HighNoon(ep.EP_Mode):
             self.delay(delay=musicWait+0.2,handler=self.game.sound.play,param=self.game.assets.sfx_orchestraBump2)
         # bad guys
         if step == 2:
-            print "HIGH NOON BAD GUY TALLY"
+            #print "HIGH NOON BAD GUY TALLY"
             # start the drum roll
             self.music_on(self.game.assets.music_drumRoll)
             myDelay = 0.2
@@ -508,7 +508,7 @@ class HighNoon(ep.EP_Mode):
 
         # total
         if step == 3:
-            print "HIGH NOON TOTAL"
+            #print "HIGH NOON TOTAL"
             titleLine = ep.EP_TextLayer(64,3,self.game.assets.font_7px_az, "center", opaque=False).set_text("COMBINED TOTAL:",color=ep.BROWN)
             if self.hasWon:
                 self.grandTotal += (self.victoryPoints + self.timeBonus)
@@ -594,13 +594,13 @@ class HighNoon(ep.EP_Mode):
         # add the points to the grand total
         self.grandTotal += points
         # and delay the comeback for step 2
-        print "TALLY LOOP STEP " + str(step)
+        #print "TALLY LOOP STEP " + str(step)
         self.delay(name="Display",delay=myWait+1.5,handler=callback,param=step)
 
 
     # end high noon
     def end_high_noon(self):
-        print "END HIGH NOON BEGINS"
+        #print "END HIGH NOON BEGINS"
         # reset the badge
         self.game.badge.reset()
         self.game.lamp_control.badge()
@@ -615,10 +615,10 @@ class HighNoon(ep.EP_Mode):
         self.game.set_tracking('lampStatus',"ON")
         self.lamp_update()
         # launch a ball
-        print "END HIGH NOON BALL LAUNCH"
+        #print "END HIGH NOON BALL LAUNCH"
         self.game.trough.launch_balls(1)
         # load the skillshot
-        print "END HIGH NOON LOAD SKILLSHOT GOES HERE"
+        #print "END HIGH NOON LOAD SKILLSHOT GOES HERE"
         self.game.modes.add(self.game.skill_shot)
         # turn the GI back on
         self.game.gi_control("ON")

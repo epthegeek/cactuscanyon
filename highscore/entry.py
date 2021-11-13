@@ -157,7 +157,7 @@ class InitialEntryMode(game.Mode):
             if len(self.inits) > 0:
                 self.inits = self.inits[:-1]
         elif letter == self.char_done or len(self.inits) > self.max_inits:
-            print "Ending entry"
+            #print "Ending entry"
             self.inits = self.inits[:-1] # Strip off the done character
             if self.entered_handler != None:
                 self.entered_handler(mode=self, inits=self.inits)

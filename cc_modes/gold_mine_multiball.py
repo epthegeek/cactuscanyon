@@ -76,7 +76,7 @@ class GoldMine(ep.EP_Mode):
             self.game.base.queued += 1
             self.end_multiball()
         elif self.game.trough.num_balls_in_play == 1 and self.running:
-            print "Down to one ball"
+            self.game.logger.debug("Down to one ball")
             if not self.restarted and not self.game.show_tracking("starStatus",0):
                 self.restartFlag = True
                 self.restarted = True
@@ -94,7 +94,7 @@ class GoldMine(ep.EP_Mode):
                 self.restart_option()
             # otherwise, end just like no ball action
             else:
-                print "Second 1 ball drain routine"
+                self.game.logger.debug("Second 1 ball drain routine")
                 self.game.base.busy = True
                 self.game.base.queued += 1
                 self.end_multiball()
@@ -176,7 +176,7 @@ class GoldMine(ep.EP_Mode):
 
     def process_shot(self,shot):
         # we've hit a potential jackpot
-        print "JACKPOT STATUS: " + str(self.game.show_tracking('jackpotStatus',shot))
+        self.game.logger.debug("JACKPOT STATUS: " + str(self.game.show_tracking('jackpotStatus',shot)))
         # if 0 and 3 are out, for the loop shots, pop the gate for a roll through
         if self.game.show_tracking('jackpotStatus',0) == False and \
             self.game.show_tracking('jackpotStatus',3) == False:
@@ -218,7 +218,7 @@ class GoldMine(ep.EP_Mode):
     def start_multiball(self):
         # set the stack level flag - since right now only GM Multiball is on stack 3
         self.game.stack_level(4,True)
-        print "MULTIBALL STARTING"
+        #print "MULTIBALL STARTING"
         # kill the music
         #self.stop_music()
         # play the multiball intro music
@@ -280,7 +280,7 @@ class GoldMine(ep.EP_Mode):
         if self.game.trough.num_balls_in_play < ballNumber:
             total = ballNumber - self.game.trough.num_balls_in_play
             # turn on the autoplunge
-            print("Goldmine Multiball - Launching " + str(total) + "balls")
+            #print("Goldmine Multiball - Launching " + str(total) + "balls")
             self.game.trough.balls_to_autoplunge = total
             self.game.trough.launch_balls(total)
         # reset the jackpot status to available - just in case
@@ -720,7 +720,7 @@ class GoldMine(ep.EP_Mode):
         else:
             if self.restartTimer == 2:
                 self.game.sound.play_music(self.game.assets.music_tensePiano2,loops=-1)
-            print "RESTART DISPLAY"
+            #print "RESTART DISPLAY"
             backdrop = dmd.FrameLayer(opaque=True, frame=self.game.assets.dmd_mineEntranceBorder.frames[0])
             awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
             awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_5px_AZ,justify="center",opaque=False)
@@ -764,7 +764,7 @@ class GoldMine(ep.EP_Mode):
         self.stop_mountain()
         # reset the mountain to the home position
         self.game.mountain.reset_toy()
-        print "MULTIBALL ENDED"
+        #print "MULTIBALL ENDED"
         # start the music back up
         # if save polly is running, turn that on instead
         if self.game.trough.num_balls_in_play > 0:

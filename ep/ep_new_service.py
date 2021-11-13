@@ -53,7 +53,7 @@ class NewServiceSkeleton(ep.EP_Mode):
         self.up_looping = False
 
     def sw_down_active(self, sw):
-        print "OMG ITEM DOWN"
+        #print "OMG ITEM DOWN"
         if not self.busy:
             self.item_down()
         else:
@@ -61,7 +61,7 @@ class NewServiceSkeleton(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_down_inactive(self, sw):
-        print "OMG DOWN INACTIVE"
+        #print "OMG DOWN INACTIVE"
         self.cancel_delayed("Item Down")
         self.down_looping = False
 
@@ -189,12 +189,12 @@ class NewServiceMode(NewServiceSkeleton):
         self.game.enable_flippers(False)
         # save the data
         self.game.save_game_data()
-        print "Service Mode Exiting"
+        self.game.logger.debug("Service Mode Exiting")
         if self.game.usb_update:
-            print "Reloading to pull in new files"
+            self.game.logger.debug("Reloading to pull in new files")
             sys.exit(42)
         else:
-            print "Calling Reset"
+            self.game.logger.debug("Calling Reset")
             self.game.reset()
 
     # switches
@@ -224,7 +224,7 @@ class NewServiceMode(NewServiceSkeleton):
                     mode_to_add = NewServiceModeUpdate(game=self.game, priority=201)
                 elif selection == "SHUTDOWN":
                     self.update_display("","SHUTTING DOWN")
-                    print "Powering off"
+                    self.game.logger.debug("Powering off")
                     # exit with error code 69
                     sys.exit(69)
                 else:
@@ -548,7 +548,7 @@ class NewServiceModeSingleLamps(NewServiceSkeleton):
     def change_lamp(self):
         lamp = self.section[self.index]
         lampString = lamp.label.upper()
-        print "Change Lamp " + lamp.name + " - " + lampString
+        self.game.logger.debug("Change Lamp " + lamp.name + " - " + lampString)
         # kill everything!
         for everyLamp in self.section:
             everyLamp.disable()
@@ -830,40 +830,40 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         return game.SwitchStop
 
     def sw_up_active(self, sw):
-        print "Targets:"
-        print self.targetUp
+        self.game.logger.debug("Targets:")
+        self.game.logger.debug(self.targetUp)
         self.index += 1
         if self.index > 3:
             self.index = 0
-        print "Index is: " + str(self.index)
+        self.game.logger.debug("Index is: " + str(self.index))
         self.targetLine.set_text(self.targets[self.index])
         self.update_instruction(self.index)
         return game.SwitchStop
 
     def sw_down_active(self, sw):
-        print "Targets:"
-        print self.targetUp
+        self.game.logger.debug("Targets:")
+        self.game.logger.debug(self.targetUp)
         self.index -= 1
         if self.index < 0:
             self.index = 3
-        print "Index is: " + str(self.index)
+        self.game.logger.debug("Index is: " + str(self.index))
         self.targetLine.set_text(self.targets[self.index])
         self.update_instruction(self.index)
         return game.SwitchStop
 
     def sw_enter_active(self, sw):
-        print "Enter Pressed"
-        print "Index is: " + str(self.index)
-        print "targetUp is: " + str(self.targetUp[self.index])
+        self.game.logger.debug("Enter Pressed")
+        self.game.logger.debug("Index is: " + str(self.index))
+        self.game.logger.debug("targetUp is: " + str(self.targetUp[self.index]))
         # if the selected target is down
         if not self.targetUp[self.index]:
             # raise the target
-            print "Raise target " + str(self.index)
+            self.game.logger.debug("Raise target " + str(self.index))
             self.target_up(self.index)
             # update the insruction line
         else:
-            print "Target is up, killing target"
-            print "Lower Target" +  str(self.index)
+            self.game.logger.debug("Target is up, killing target")
+            self.game.logger.debug("Lower Target" +  str(self.index))
             self.target_down(self.index)
         return game.SwitchStop
 
@@ -888,7 +888,7 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
 
     def sw_badGuySW1_inactive_for_180ms(self, sw):
         # allowance for running in fakepinproc
-        print "SW1 Inactive - Activate Target 1"
+        self.game.logger.debug("SW1 Inactive - Activate Target 1")
         if not self.game.fakePinProc:
             self.target_activate(1)
             self.update_box(1)
@@ -902,7 +902,7 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
 
     def sw_badGuySW2_inactive_for_180ms(self, sw):
         # allowance for running in fakepinproc
-        print "SW2 Inactive - Activate Target 2"
+        self.game.logger.debug("SW2 Inactive - Activate Target 2")
         if not self.game.fakePinProc:
             self.target_activate(2)
             self.update_box(2)
@@ -922,7 +922,7 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         return game.SwitchStop
 
     def update_box(self, target):
-        print "Updating checkbox " + str(target)
+        self.game.logger.debug("Updating checkbox " + str(target))
         boxes = [self.box0, self.box1, self.box2, self.box3]
         # if the bad guy is down, the box is empty
         if not self.targetUp[target]:
@@ -931,7 +931,7 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
             boxes[target].set_text("a")
 
     def update_instruction(self, target):
-        print "Update instruction for target " + str(target) + "Target val: " + str(self.targetUp[target])
+        self.game.logger.debug("Update instruction for target " + str(target) + "Target val: " + str(self.targetUp[target]))
         if not self.targetUp[target]:
             self.instructionLine.set_text("PRESS ENTER TO RAISE TARGET")
         else:
@@ -969,7 +969,7 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
 
     # raise target
     def target_up(self, target):
-        print "TARGET RAISED " + str(target)
+        self.game.logger.debug("TARGET RAISED " + str(target))
         if self.smart_drops:
             self.coils[target].pulse(25)
         else:
@@ -981,7 +981,7 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
 
     # drop target
     def target_down(self, target):
-        print "DEACTIVATING TARGET " + str(target)
+        self.game.logger.debug("DEACTIVATING TARGET " + str(target))
         if self.smart_drops:
             self.knockdown_coils[target].pulse(25)
         else:
@@ -989,12 +989,12 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
         self.targetUp[target] = False
         self.update_box(target)
         self.update_instruction(target)
-        print "Targets:"
-        print self.targetUp
+        self.game.logger.debug("Targets:")
+        self.game.logger.debug(self.targetUp)
 
     def target_activate(self, target):
         if not self.targetUp[target]:
-            print "ACTIVATING TARGET " + str(target)
+            self.game.logger.debug("ACTIVATING TARGET " + str(target))
             if not self.smart_drops:
                 self.coils[target].patter(on_time=2, off_time=10)
             self.targetUp[target] = True
@@ -1002,9 +1002,9 @@ class NewServiceModeDropTargets(NewServiceSkeleton):
                 self.update_box(target)
                 self.update_instruction(target)
         else:
-            print "I THINK TARGET UP " + str(target) + " IS TRUE"
-        print "Targets:"
-        print self.targetUp
+            self.game.logger.debug("I THINK TARGET UP " + str(target) + " IS TRUE")
+        self.game.logger.debug("Targets:")
+        self.game.logger.debug(self.targetUp)
 
     def drop_targets(self):
         # drop all teh targets
@@ -1353,7 +1353,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
         self.index = 0
         self.name = name
         self.title = name + " Settings"
-        print self.title
+        self.game.logger.debug(self.title)
         self.items = []
         for item in sorted(itemlist.iterkeys()):
             if 'increments' in itemlist[item]:
@@ -1381,7 +1381,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             self.state = 'edit'
             self.revert_value = self.item.value
             if self.items[self.index].name.endswith('Text'):
-                print "This is a text entry"
+                self.game.logger.debug("This is a text entry")
                 self.state = 'text'
                 self.text_entry = highscore.InitialEntryMode(game=self.game,
                                                              priority=self.priority+1,
@@ -1392,7 +1392,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
                                                              extended=True)
                 self.game.modes.add(self.text_entry)
             elif self.items[self.index].name.endswith('Preview'):
-                print "This is a preview"
+                self.game.logger.debug("This is a preview")
                 self.state = 'preview'
                 self.preview = ep.EP_MessagePreview(self.game,
                                                     self.priority+1,
@@ -1456,7 +1456,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             # if we get too high, go to zero
             if self.index >= len(self.items):
                 self.index = 0
-                print "Passed max - index now 0"
+                self.game.logger.debug("Passed max - index now 0")
                 self.game.sound.play(self.game.assets.sfx_menuUp)
             self.change_item()
         elif self.state == 'text' or self.state == 'preview':
@@ -1477,7 +1477,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             # if we get below zero, loop around
             if self.index < 0:
                 self.index = (len(self.items) - 1)
-                print "Passed max - index now " + str(self.index)
+                self.game.logger.debug("Passed max - index now " + str(self.index))
             self.game.sound.play(self.game.assets.sfx_menuDown)
             self.change_item()
         elif self.state == 'text' or self.state == 'preview':
@@ -1496,7 +1496,7 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
 
         if self.state == 'nav':
             if self.item.name.endswith('Text'):
-                print "This is a text item"
+                #print "This is a text item"
                 self.infoLine.set_text("ENTER TO")
                 self.currentSetting.set_text(" EDIT")
             elif self.item.name.endswith('Preview'):
@@ -1511,13 +1511,13 @@ class NewServiceModeSettingsEditor(NewServiceSkeleton):
             self.currentSetting.set_text(str(self.item.value).upper(),blink_frames=10)
 
     def change_instructions(self):
-            print "Change Instructions"
+            self.game.logger.debug("Change Instructions")
             if self.state == 'nav':
-                print "Nav Version"
+                self.game.logger.debug("Nav Version")
                 self.instructions.set_text("+/- TO SELECT")
                 self.instructions2.set_text("'ENTER' TO MODIFY")
             else:
-                print "Edit Version"
+                self.game.logger.debug("Edit Version")
                 self.instructions.set_text("+/- TO CHANGE")
                 self.instructions2.set_text("'ENTER' TO SAVE")
 
@@ -1766,7 +1766,7 @@ class NewServiceModeUtility(NewServiceSkeleton):
             self.selectionLine.set_text("COLLECT BALLS NOW")
         # kick out a ball
         if self.game.switches.troughBallOne.is_active():
-            print "Ejecting Ball"
+            self.game.logger.debug("Ejecting Ball")
             self.game.coils.troughEject.pulse(35)
         # if they're all gone, we're done here
         else:
@@ -1840,7 +1840,7 @@ class NewServiceModeUpdate(NewServiceSkeleton):
         for directory in dirs:
             checkThis = self.game.usb_location + directory + "/ccc_update_files"
             if os.path.isdir(checkThis):
-                print "Found the update"
+                self.game.logger.debug("Found the update")
                 self.myLocation = checkThis
         if self.myLocation != None:
             self.okToUpdate = True
@@ -1848,7 +1848,7 @@ class NewServiceModeUpdate(NewServiceSkeleton):
             info = "PRESS ENTER TO UPDATE"
         else:
             self.okToUpdate = False
-            print "Didn't find the update"
+            self.game.logger.debug("Didn't find the update")
             status = "FILES NOT FOUND"
             info = "CHECK USB DRIVE"
         # then update the display

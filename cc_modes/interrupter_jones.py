@@ -95,7 +95,7 @@ class Interrupter(ep.EP_Mode):
         self.cancel_delayed("Display")
         # if it puts us at 2, time for second warning
         if status == 2:
-            print "DANGER DANGER"
+            #print "DANGER DANGER"
             # double warning
             line1 = ep.EP_TextLayer(128/2, 1, self.game.assets.font_dangerFont, "center", opaque=False).set_text("D A N G E R",color=ep.RED)
             line1.composite_op = "blacksrc"
@@ -111,7 +111,7 @@ class Interrupter(ep.EP_Mode):
 
         # otherwise this must be the first warning
         else:
-            print "Display"
+            #print "Display"
             #add a display layer and add a delayed removal of it.
             if status > 2:
                 string = "DANGER X " + str(status)
@@ -160,7 +160,7 @@ class Interrupter(ep.EP_Mode):
             self.delay(delay=soundDelay,handler=self.game.sound.play,param=tiltSound)
 
     def tilted(self):
-        print "Interrupter Passing Tilt"
+        self.game.logger.debug("Interrupter Passing Tilt")
         pass
 
     def play_tilt_sound(self):
@@ -197,7 +197,7 @@ class Interrupter(ep.EP_Mode):
     def closing_song(self,duration):
         attractMusic = 'Yes' == self.game.user_settings['Gameplay (Feature)']['Attract Mode Music']
         if attractMusic:
-            print "Playing Closing Song"
+            #print "Playing Closing Song"
             self.delay(delay=duration+1,handler=self.music_on,param=self.game.assets.music_goldmineMultiball)
             # and set a delay to fade it out after 2 minutes
             self.delay("Attract Fade",delay=60,handler=self.game.sound.fadeout_music,param=2000)
@@ -206,11 +206,11 @@ class Interrupter(ep.EP_Mode):
         # play a flasher lampshow
         self.game.GI_lampctrl.play_show(self.game.assets.lamp_flashers, repeat=False)
         # set a 2 second delay to allow the start button to work again
-        print "Setting delay for start button"
+        #print "Setting delay for start button"
         self.delay(delay=duration+2,handler=self.enable_start)
 
     def enable_start(self):
-        print "Game start enabled again"
+        #print "Game start enabled again"
         self.game.endBusy = False
 
     def reset_volume(self):
@@ -291,7 +291,7 @@ class Interrupter(ep.EP_Mode):
     def status_on(self,side):
         if self.game.combos in self.game.modes:
             self.statusDisplay = side
-            print "STATUS GOES HERE"
+            #print "STATUS GOES HERE"
             # start the status display
             self.status()
         else:
@@ -299,7 +299,7 @@ class Interrupter(ep.EP_Mode):
 
     def status_off(self):
         self.statusDisplay = "Off"
-        print "STATUS ENDING"
+        #print "STATUS ENDING"
         self.cancel_delayed("Display")
         # clear the layer
         self.layer = None
@@ -531,12 +531,12 @@ class Interrupter(ep.EP_Mode):
     # volume controls
     # Outside of the service mode, up/down control audio volume.
     def sw_down_active(self, sw):
-        print "Volume Down"
+        #print "Volume Down"
         if self.game.new_service not in self.game.modes:
             # set the volume down one
             volume = self.game.volume_down()
             # save the value
-            print "New volume: " + str(volume)
+            #print "New volume: " + str(volume)
             self.game.user_settings['Sound']['Initial volume']= volume
             self.game.save_settings()
             # if we're not in a game, turn on some music and throw a display
@@ -544,11 +544,11 @@ class Interrupter(ep.EP_Mode):
             return True
 
     def sw_up_active(self, sw):
-        print "Volume Up"
+        #print "Volume Up"
         if self.game.new_service not in self.game.modes:
             # set the volume up one
             volume = self.game.volume_up()
-            print "New volume: " + str(volume)
+            #print "New volume: " + str(volume)
             self.game.user_settings['Sound']['Initial volume'] = volume
             self.game.save_settings()
             self.volume_display(volume)
@@ -609,7 +609,7 @@ class Interrupter(ep.EP_Mode):
 
     # Allow service mode to be entered during a game.
     def sw_enter_active(self, sw):
-        print "ENTERING NEW SERVICE MODE"
+        #print "ENTERING NEW SERVICE MODE"
         # clear the interrupter layer - just in case
         self.clear_layer()
         # if attract mode is running, stop the lampshow
@@ -642,7 +642,7 @@ class Interrupter(ep.EP_Mode):
     def knock(self,value,realOnly = False):
         if self.game.useKnocker:
             self.game.coils.knocker.pulse(self.knockerStrength)
-            print "Fired knocker!"
+            #print "Fired knocker!"
         else:
             if realOnly:
                 pass

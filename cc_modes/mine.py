@@ -33,7 +33,7 @@ class Mine(ep.EP_Mode):
         # can be used to get the digit
         difficulty = self.game.user_settings['Gameplay (Feature)']['Multiball Locks Difficulty']
         # Easy version
-        print "Difficulty is set to - " + difficulty
+        #print "Difficulty is set to - " + difficulty
         if difficulty == 'Easy':
             self.hitsToLightLock = [1,0,0,1,1,1,2,2,2,3]
         # Hard version
@@ -105,7 +105,7 @@ class Mine(ep.EP_Mode):
 
     def mine_shot(self):
         stackLevel = self.game.show_tracking('stackLevel')
-        print stackLevel
+        #print stackLevel
 
         # if cva is ready, we do that - as long as no mode above guns is running
         if self.game.show_tracking('cvaStatus') == "READY" and True not in stackLevel[1:] and not self.game.bart.bossFight:
@@ -119,7 +119,7 @@ class Mine(ep.EP_Mode):
             if self.game.quickdraw.running:
                 self.game.quickdraw.lost(self.game.quickdraw.target)
             self.game.modes.add(self.game.high_noon)
-            print "STARTING HIGH NOON"
+            #print "STARTING HIGH NOON"
             self.game.high_noon.start_highNoon()
         # otherwise it's a standard hit
         else:
@@ -130,7 +130,7 @@ class Mine(ep.EP_Mode):
             # if it's over 9, cap it back to 9
             if lockedBalls > 9:
                 lockedBalls = 9
-            print "LOCKED BALLS: " + str(lockedBalls)
+            #print "LOCKED BALLS: " + str(lockedBalls)
             # check if we should lock the ball or start multiball
             # if multiball is running - that handles hits to the mine
             if self.game.show_tracking('mineStatus') == "RUNNING":
@@ -158,13 +158,13 @@ class Mine(ep.EP_Mode):
     def mine_hit(self,lockedBalls):
         # register the hit
         myMineHits = self.game.increase_tracking('mineHits')
-        print "MINE HITS: " + str(myMineHits)
+        #print "MINE HITS: " + str(myMineHits)
         # now we have to see if that lights the lock
         # subtract the number of hits from the hitsToLight for the current lock position
         hitStatus = self.hitsToLightLock[lockedBalls] - myMineHits
         # if that's zero (or god forbid, less) then light the lock
-        print "HITS TO LIGHT THIS LOCK: " + str(self.hitsToLightLock[lockedBalls])
-        print "HITSTATUS: " + str(hitStatus)
+        #print "HITS TO LIGHT THIS LOCK: " + str(self.hitsToLightLock[lockedBalls])
+        #print "HITSTATUS: " + str(hitStatus)
         if hitStatus <= 0:
             ## Ok so we're lighting something
             if self.game.show_tracking('ballsLocked') == 2:
@@ -179,7 +179,7 @@ class Mine(ep.EP_Mode):
 
     def mine_update(self,hitStatus):
         # award some points ?
-        print str(hitStatus) + " shots left to light lock"
+        #print str(hitStatus) + " shots left to light lock"
         # display a "shots left to light lock type thing
         textLine = str(hitStatus) + " MORE TO"
         textLine2 = "LIGHT LOCK"
@@ -206,7 +206,7 @@ class Mine(ep.EP_Mode):
         self.delay(name="Display",delay=1.5,handler=self.clear_layer)
         # play a quote
         duration = self.game.base.priority_quote(self.game.assets.quote_lockLit)
-        print "LOCK IS LIT ... AND SO AM I"
+        #print "LOCK IS LIT ... AND SO AM I"
         ## then kick the ball
         self.lamp_update()
         self.delay(delay=duration + 0.5,handler=self.game.mountain.eject)
@@ -214,7 +214,7 @@ class Mine(ep.EP_Mode):
 
     def light_multiball(self):
         # set the multiball status
-        print "MULTIBALL IS LIT"
+        #print "MULTIBALL IS LIT"
         self.game.set_tracking('mineStatus', "READY")
         # clear the hits to light
         self.game.set_tracking('mineHits', 0)
@@ -349,7 +349,7 @@ class Mine(ep.EP_Mode):
     def light_extra_ball(self,callback=None):
         # add the ball to the pending extra balls
         derp = self.game.increase_tracking('extraBallsPending')
-        print "EXTRA BALLS PENDING: " + str(derp)
+        #print "EXTRA BALLS PENDING: " + str(derp)
         # audit tick
         self.game.game_data['Audits']['Extra Balls Earned'] += 1
         # open the mine
@@ -380,7 +380,7 @@ class Mine(ep.EP_Mode):
         if callback:
             self.delay(delay=myWait,handler=callback)
         self.delay("Display",delay=myWait,handler=self.clear_layer)
-        print "EXTRA BALL LIT"
+        #print "EXTRA BALL LIT"
 
     def collect_extra_ball(self,type=0):
         self.cancel_delayed("Display")
@@ -389,7 +389,7 @@ class Mine(ep.EP_Mode):
         # turn off the mine flasher ?
         # add one to the total of extra balls
         ebt = self.game.increase_tracking('extraBallsTotal')
-        print "Extra balls total: " + str(ebt)
+        #print "Extra balls total: " + str(ebt)
         # take one off of the pending total
         self.game.decrease_tracking('extraBallsPending')
         self.lamp_update()
@@ -466,7 +466,7 @@ class Mine(ep.EP_Mode):
         self.delay(delay=3,handler=self.game.restore_music)
 
     def abort_extra_ball(self):
-        print "Aborting extra ball display"
+        #print "Aborting extra ball display"
         self.collectingEB = False
         self.clear_layer()
         self.cancel_delayed("Collecting")

@@ -119,7 +119,7 @@ class CV_Tribute(ep.EP_Mode):
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
     def sw_minePopper_active_for_350ms(self,sw):
-        print "Ringmaster Mine Popper Register"
+        #print "Ringmaster Mine Popper Register"
         self.halt_test()
 
     def sw_leftLoopBottom_active(self,sw):
@@ -154,7 +154,7 @@ class CV_Tribute(ep.EP_Mode):
         return game.SwitchStop
 
     def sw_saloonPopper_active_for_300ms(self,sw):
-        print "Ringmaster Saloon Popper Register"
+        #print "Ringmaster Saloon Popper Register"
         # if we haven't one yet, kick that mother
         if not self.hitsSoFar >= self.hitsToWin:
             self.kick_saloon()
@@ -231,13 +231,13 @@ class CV_Tribute(ep.EP_Mode):
 
     def get_going(self):
         self.game.ball_search.enable()
-        print "RELEASE THE BALL FOR TRIBUTE"
+        #print "RELEASE THE BALL FOR TRIBUTE"
         # release the ball
         if self.game.tribute_launcher.shot == 3:
-            print "TRIBUTE MINE EJECT"
+            #print "TRIBUTE MINE EJECT"
             self.game.mountain.eject()
         else:
-            print "TRIBUTE POST DROP"
+            #print "TRIBUTE POST DROP"
             self.game.coils.leftGunFightPost.disable()
         # start the timer
         self.modeTimer += 1
@@ -265,7 +265,7 @@ class CV_Tribute(ep.EP_Mode):
             self.layer = self.display_main()
 
     def hit_ringmaster(self):
-        print "Hit Ringmaster"
+        #print "Hit Ringmaster"
         # stop the timer
         self.cancel_delayed("Mode Timer")
         # stop the movement for now
@@ -340,7 +340,7 @@ class CV_Tribute(ep.EP_Mode):
     def halt_ringmaster(self):
         if self.modeTimer <= 0:
             return
-        print "HALTING Ringmaster IN BUMPERS/MINE"
+        #print "HALTING Ringmaster IN BUMPERS/MINE"
         self.cancel_delayed("Resume")
         # cancel delays
         self.cancel_delayed("Mode Timer")

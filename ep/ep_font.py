@@ -54,7 +54,7 @@ class ColorFont(object):
         if len(self.__anim.frames) == 1:
             # We allow 1 frame for handmade fonts.
             # This is so that they can be loaded as a basic bitmap, have their char widths modified, and then be saved.
-            print "Font animation file %s has 1 frame; adding one" % (filename)
+            #print "Font animation file %s has 1 frame; adding one" % (filename)
             self.__anim.frames += [Frame(self.__anim.width, self.__anim.height)]
         elif len(self.__anim.frames) != 2:
             raise ValueError, "Expected 2 frames: %d" % (len(self.__anim.frames))

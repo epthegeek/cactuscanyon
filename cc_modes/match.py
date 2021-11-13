@@ -66,29 +66,29 @@ class Match(ep.EP_Mode):
         # which uses the length of the digit set if it's less than the number of players
         else:
             multiplier = len(self.uniqueDigits)
-            print "Multiplier = " + str(multiplier)
+            #print "Multiplier = " + str(multiplier)
         match_target = multiplier * self.match_percent
-        print "Len Set = " + str(self.uniqueDigits)
-        print "Match break point " + str(match_target)
+        #print "Len Set = " + str(self.uniqueDigits)
+        #print "Match break point " + str(match_target)
         # generate a random number for comparison
         match_value = random.randint(1,100)
-        print "Match value chosen " + str(match_value)
+        #print "Match value chosen " + str(match_value)
 
         # check if we have a winner
         if match_value <= match_target:
-            print "Match winner via value selection!"
+            #print "Match winner via value selection!"
             # here's our winning number - comes from all choices, including replay winners, so non replay winners may get shafted.
             self.selection = str(random.choice(self.uniqueDigits))
         # If not, the selection comes from unused digits
         else:
             # take out the player digits
             for n in self.uniqueDigits:
-                print "Attempting to remove " + str(n)
+                #print "Attempting to remove " + str(n)
                 if n in possible:
-                    print "Found it"
+                    #print "Found it"
                     possible.remove(n)
                 else:
-                    print "Already removed"
+                    self.game.logger.debug("Already removed")
             # pick from what's left
             self.selection = str(random.choice(possible))
         # if we get here
@@ -119,13 +119,13 @@ class Match(ep.EP_Mode):
             digit = str(score)[-2:-1]
             # if replays are on, they may already be a winner
             if self.game.replays and self.game.players[i].player_stats['replay_earned'] and self.game.user_settings['Machine (Standard)']['Replay Award'] == 'Last Call':
-                print "Player " + str(i) + "earned last call in replay"
+                #print "Player " + str(i) + "earned last call in replay"
                 self.playerLayers[i].set_text("**",color=ep.GREEN)
                 self.lastCall.append(i)
                 self.winners += 1
             else:
-                print "PLAYER SCORE - " + str(score)
-                print "MATCH DIGITS - " + str(digit)
+                #print "PLAYER SCORE - " + str(score)
+                #print "MATCH DIGITS - " + str(digit)
                 digitString = str(digit) + "0"
                 self.playerLayers[i].set_text(digitString,color=ep.RED)
 
@@ -133,7 +133,7 @@ class Match(ep.EP_Mode):
                 self.playerDigits[i] = str(digit)
             # add digit only if it's not in the list of already picked digits
             if digit not in self.uniqueDigits:
-                print "Adding digit " + str(digit)
+                #print "Adding digit " + str(digit)
                 self.uniqueDigits.append(str(digit))
 
     def run_animation(self):
@@ -169,16 +169,16 @@ class Match(ep.EP_Mode):
 
     def award_match(self):
         # check the scores to see if anybody won
-        print "Number of players = " + str(len(self.game.players))
+        #print "Number of players = " + str(len(self.game.players))
         for i in range(0,len(self.game.players),1):
-            print "Award processing Player " + str((i + 1))
+            #print "Award processing Player " + str((i + 1))
             if str(self.playerDigits[i]) == self.selection:
                 # set the text on that layer to blink
                 self.playerLayers[i].set_text(str(self.playerDigits[i]) + "0",blink_frames=8,color=ep.GREEN)
                 # and tick the winner count to true
                 self.winners += 1
                 # store a list of winning players
-                print ("Player " + str(i) + " gets last call")
+                #print ("Player " + str(i) + " gets last call")
                 # check to make sure they're not in last call already
                 if i not in self.lastCall:
                     self.lastCall.append(i)

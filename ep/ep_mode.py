@@ -200,7 +200,7 @@ class EP_Mode(object):
         except TypeError, ex:
             # Debugging code:
             for x in self.__delayed:
-                print(x)
+                self.game.logger.debug(x)
             raise ex
         return name
 
@@ -355,7 +355,7 @@ class EP_Mode(object):
 
     # simple mode shutdown
     def unload(self):
-        print "Unloading: " + self.myID
+        self.game.logger.debug("Unloading: " + self.myID)
         self.wipe_delays()
         self.layer = None
         self.game.modes.remove(self)
@@ -363,7 +363,7 @@ class EP_Mode(object):
     def tilted(self):
     # default tilt action is just to unload - this is here so it can be redefined
     # in each mode if something extra is needed
-        print "Tilted: " + self.myID
+        self.game.logger.debug("Tilted: " + self.myID)
         self.unload()
 
     # music stopper with output
@@ -379,7 +379,7 @@ class EP_Mode(object):
                 execute = False
         # if the execute flag is still true, stop the msuic
         if execute:
-            print str(self.myID) + " is stopping the music"
+            self.game.logger.debug(str(self.myID) + " is stopping the music")
             self.game.sound.stop_music()
 
     def music_on(self,song,mySlice=0):
@@ -405,7 +405,7 @@ class EP_Mode(object):
         self.__delayed = []
 
     def lamp_update(self):
-        print "Lamp Update Called!"
+        self.game.logger.debug("Lamp Update Called!")
         if self.game.lamp_control.lights_out == True:
             pass
         else:

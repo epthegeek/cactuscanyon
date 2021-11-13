@@ -50,7 +50,7 @@ class Train(ep.EP_Mode):
             self.trainProgress = 0
             if self.trainDisabled:
                 # if the train didn't enable due to the encoder - its dead
-                print("Encoder not registering - Train Disabled")
+                self.game.logger.debug("Encoder not registering - Train Disabled")
                 self.game.interrupter.train_disabled()
 
     def sw_trainEncoder_active(self,sw):
@@ -83,16 +83,16 @@ class Train(ep.EP_Mode):
             self.game.coils.trainForward.patter(on_time=3,off_time=8)
 
     def stop(self):
-        print("Stopping Train")
+        #print("Stopping Train")
         # turn off the moving train solenoids
         self.game.coils.trainForward.disable()
         self.game.coils.trainReverse.disable()
         self.inMotion = False
 
     def fast_forward(self):
-        print("Train Fast Forwrd")
+        #print("Train Fast Forwrd")
         if not self.trainDisabled or self.trainReset:
-            print("Train Moving Fast Forward")
+            #print("Train Moving Fast Forward")
             self.inMotion = True
             self.game.coils.trainForward.enable()
 
@@ -108,7 +108,7 @@ class Train(ep.EP_Mode):
 
     def reverse(self):
         if not self.trainDisabled:
-            print("Backing train up")
+            #print("Backing train up")
             self.inMotion = True
             self.game.coils.trainReverse.patter(on_time=6,off_time=6)
 
@@ -117,7 +117,7 @@ class Train(ep.EP_Mode):
         self.trainReset = True
 
         if step == 1:
-            print("Resetting Train - Step 1")
+            #print("Resetting Train - Step 1")
             # move the train forward
             immediate = False
             if type == 1:
@@ -139,24 +139,24 @@ class Train(ep.EP_Mode):
                 self.delay(delay=1,handler=self.stop)
                 self.delay(delay=1.5,handler=self.reset_toy,param=2)
         if step == 2:
-            print("Resetting Train - Step 2")
+            #print("Resetting Train - Step 2")
             if self.calibrating:
                 self.calibrating = False
-                print "I counted " + str(self.ticksCounted) + " ticks of the encoder"
+                #print "I counted " + str(self.ticksCounted) + " ticks of the encoder"
                 self.mytStop = int(self.ticksCounted * 3.4)
-                print "Setting stop point to " + str(self.mytStop)
+                #print "Setting stop point to " + str(self.mytStop)
                 if self.mytStop < 10:
-                    print "Disabling MYT, train didn't register well"
+                    #print "Disabling MYT, train didn't register well"
                     self.mytFail = True
                 self.mytIncrement = int(self.ticksCounted * 0.7)
-                print "Setting increment to " + str(self.mytIncrement)
+                #print "Setting increment to " + str(self.mytIncrement)
                 # check this again because save polly requests the reset directly
             if not self.game.switches.trainHome.is_active():
                 self.game.coils.trainForward.disable()
                 self.inMotion = True
                 self.game.coils.trainReverse.enable()
             else:
-                print "Game thinks the train is home already"
+                self.game.logger.debug("Game thinks the train is home already")
 
     def progress(self):
         return self.trainProgress

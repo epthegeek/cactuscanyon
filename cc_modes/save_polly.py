@@ -151,7 +151,7 @@ class SavePolly(ep.EP_Mode):
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
     def sw_minePopper_active_for_350ms(self,sw):
-        print "TTTT Mine Popper Register"
+        #print "TTTT Mine Popper Register"
         if self.finishing_up:
             pass
         else:
@@ -162,7 +162,7 @@ class SavePolly(ep.EP_Mode):
                 self.cancel_delayed("Resume")
 
     def sw_saloonPopper_active_for_250ms(self,sw):
-        print "TTTT Saloon Popper Register"
+        #print "TTTT Saloon Popper Register"
         if self.finishing_up:
             pass
         else:
@@ -324,7 +324,7 @@ class SavePolly(ep.EP_Mode):
     # for a ramp hit - time and if advanced or not are conditional for side vs center ramps
     def pause_train(self,advanced=False):
         if self.running:
-            print "PAUSE TRAIN"
+            #print "PAUSE TRAIN"
             self.paused = True
             # kill the in progress timer
             self.cancel_delayed("Mode Timer")
@@ -356,11 +356,11 @@ class SavePolly(ep.EP_Mode):
     def pause_timer(self,time):
         # if the timer is at 0 start the train up again
         if time <= 0:
-            print "RESUMING POLLY"
+            #print "RESUMING POLLY"
             self.paused = False
             self.in_progress()
         else:
-            print "POLLY PAUSED: " + str(time)
+            #print "POLLY PAUSED: " + str(time)
             # set up the display
             self.pause_display()
             # if not, tick off one
@@ -371,7 +371,7 @@ class SavePolly(ep.EP_Mode):
     def halt_train(self):
         if self.won or self.modeTimer <= 0:
             return
-        print "HALTING TRAIN IN BUMPERS/MINE"
+        #print "HALTING TRAIN IN BUMPERS/MINE"
         self.cancel_delayed("Resume")
         # cancel delays
         self.cancel_delayed("Mode Timer")
@@ -490,7 +490,7 @@ class SavePolly(ep.EP_Mode):
         self.delay("Operational",delay=myWait,handler=self.give_award)
 
     def give_award(self):
-        print "Giving Polly Award"
+        #print "Giving Polly Award"
         if not self.game.max_extra_balls_reached():
             # light extra ball if not maxxed out
             self.game.mine.light_extra_ball()
@@ -502,7 +502,7 @@ class SavePolly(ep.EP_Mode):
 
     # fail
     def polly_died(self, step=1, drain=False):
-        print "OMG POLLY IS DEAD"
+        #print "OMG POLLY IS DEAD"
         if step == 1:
             # turn off the polly indicator
             self.game.peril = False
@@ -576,7 +576,7 @@ class SavePolly(ep.EP_Mode):
 
     # clean up and exit
     def end_save_polly(self):
-        print "ENDING SAVE POLLY"
+        #print "ENDING SAVE POLLY"
         # turn the level 1 stack flag back off
         self.game.stack_level(2,False)
         # check to see if stampede is ready - if we're not ending due to ball fail
@@ -605,7 +605,7 @@ class SavePolly(ep.EP_Mode):
         self.unload()
 
     def mode_stopped(self):
-        print "SAVE POLLY IS DISPATCHING DELAYS"
+        #print "SAVE POLLY IS DISPATCHING DELAYS"
         self.wipe_delays()
         self.clear_layer()
         self.paused = False

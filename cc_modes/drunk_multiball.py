@@ -134,7 +134,7 @@ class DrunkMultiball(ep.EP_Mode):
 
 
     def start_drunk(self):
-        print "STARTING DRUNK ASS MULTIBALL"
+        #print "STARTING DRUNK ASS MULTIBALL"
         # audit
         self.game.game_data['Feature']['Drunk MB Started'] += 1
         self.running = True
@@ -159,7 +159,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.banner()
 
     def drunk_bonus(self):
-        print "DMB Disabled, Drunk bonus"
+        #print "DMB Disabled, Drunk bonus"
         # grab the point values
         points = self.game.show_tracking('drunkBonusValue')
         # show a screen
@@ -308,11 +308,11 @@ class DrunkMultiball(ep.EP_Mode):
         # take it out of the available and make it active
         self.availableJackpots.remove(thisOne)
         self.active.append(thisOne)
-        print self.active
+        #print self.active
         # and update the lamps
         self.lamp_update()
 
-        print "LIGHTING JACKPOT"
+        #print "LIGHTING JACKPOT"
         anim = self.game.assets.dmd_dmb
         animLayer = ep.EP_AnimatedLayer(anim)
         animLayer.hold=True
@@ -407,7 +407,7 @@ class DrunkMultiball(ep.EP_Mode):
         self.end_drunk()
 
     def end_drunk(self):
-        print "ENDING DRUNK MULTIBALL"
+        #print "ENDING DRUNK MULTIBALL"
         self.running = False
         self.wipe_delays()
         self.clear_layer()

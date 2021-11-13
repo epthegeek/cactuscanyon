@@ -566,9 +566,9 @@ class LampControl(ep.EP_Mode):
             self.game.lamps.leftRampWaterfall.schedule(0x00FF00FF)
             self.game.lamps.leftRampWhiteWater.schedule(0xF00FF00F)
             # if the multiplier is on, blink the combo
-            print "RIVER CHASE VALUE MULTIPLIER " + str(self.game.river_chase.valueMultiplier)
-            print "BANK ROBBERY VALUE MULTIPLIER " + str(self.game.bank_robbery.valueMultiplier)
-            print "TRAIN VALUE MULTIPLIER" + str(self.game.save_polly.valueMultiplier)
+            #rint "RIVER CHASE VALUE MULTIPLIER " + str(self.game.river_chase.valueMultiplier)
+            #print "BANK ROBBERY VALUE MULTIPLIER " + str(self.game.bank_robbery.valueMultiplier)
+            #print "TRAIN VALUE MULTIPLIER" + str(self.game.save_polly.valueMultiplier)
             if self.game.bank_robbery.valueMultiplier > 1 or\
                self.game.river_chase.valueMultiplier > 1 or\
                self.game.save_polly.valueMultiplier > 1:
@@ -939,10 +939,10 @@ class LampControl(ep.EP_Mode):
             if self.game.bank_robbery.valueMultiplier > 1 or \
                self.game.river_chase.valueMultiplier > 1 or \
                self.game.save_polly.valueMultiplier > 1:
-                print "LAMP DOES IN FACT SEE THE MULTIPLIER"
+                #print "LAMP DOES IN FACT SEE THE MULTIPLIER"
                 self.game.lamps.rightRampJackpot.schedule(0xCCCCCCCC)
             else:
-                print "LAMP DOESNT SEE MULTIPLIER"
+                #print "LAMP DOESNT SEE MULTIPLIER"
                 self.game.lamps.rightRampJackpot.enable()
 
 
@@ -1125,7 +1125,7 @@ class LampControl(ep.EP_Mode):
     # |____/ \__,_|\__,_|  \____|\__,_|\__, |___/
     #                                  |___/
     def bad_guys(self):
-        print "--- BAD GUY LAMP UPDATE ---"
+        #print "--- BAD GUY LAMP UPDATE ---"
         # if high noon is running ignore the bad guys
         if self.game.high_noon.running:
             return
@@ -1140,7 +1140,7 @@ class LampControl(ep.EP_Mode):
         for lamp in range(0, 4, 1):
             status = self.game.show_tracking('badGuysDead', lamp)
             active = self.game.show_tracking('badGuyUp', lamp)
-            print "SANITY CHECK - ACTIVE SAYS " + str(active)
+            #print "SANITY CHECK - ACTIVE SAYS " + str(active)
             # if the guy is dead, his light is on solid - if we're not in high noon or stampede
             if status:
                 self.badGuyLamps[lamp].enable()

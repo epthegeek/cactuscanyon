@@ -82,7 +82,7 @@ class LeftRamp(ep.EP_Mode):
         ## completed is CURRENTLY 4 - to reset the awards
         ## reset the leftRampStage
         stage = self.game.show_tracking('leftRampStage')
-        print "Ramp Stage " + str(stage)
+        #print "Ramp Stage " + str(stage)
         if stage == 1:
             if combo:
                 self.game.combos.mini_display()
@@ -177,7 +177,7 @@ class LeftRamp(ep.EP_Mode):
                 self.game.lamps.leftRampSavePolly.schedule(0xFF00FF00)
             # update the lamps
             self.delay(delay=1,handler=self.lamp_update)
-            print "CHECING TRACKING Left ramp LR: " + str(self.game.show_tracking('leftRampStage'))
+            #print "CHECING TRACKING Left ramp LR: " + str(self.game.show_tracking('leftRampStage'))
 
     # for now since this doesn't blink there's just one step
     def show_award_text(self,blink=None):
@@ -204,7 +204,7 @@ class LeftRamp(ep.EP_Mode):
 
     def anim_river_victory(self):
         if self.game.river_chase.won:
-            print "RIVER VICTORY"
+            #print "RIVER VICTORY"
             self.game.sound.play(self.game.assets.sfx_grinDing)
             victoryLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_pollyVictory.frames[12])
             self.layer = victoryLayer
@@ -230,7 +230,7 @@ class LeftRamp(ep.EP_Mode):
         self.delay(name="Display",delay=2,handler=self.show_award_text)
 
     def push_out(self):
-        print "TRANSITION MF"
+        #print "TRANSITION MF"
         blank = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_blank.frames[0])
         blank.composite_op = "blacksrc"
         transition = ep.EP_Transition(self,self.layer,blank,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_WEST)

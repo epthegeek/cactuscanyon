@@ -120,7 +120,7 @@ class PartyMode(ep.EP_Mode):
                 self.game.enable_flippers(False)
             self.update_display()
         else:
-            print "No Match on Left"
+            self.game.logger.debug("No Match on Left")
 
     def sw_flipperLwR_active(self,sw):
         if self.game.party_setting == 'Flip Ct' and not self.game.skill_shot.live and self.game.base in self.game.modes and self.game.flippers_active:
@@ -131,7 +131,7 @@ class PartyMode(ep.EP_Mode):
                 self.game.enable_flippers(False)
             self.update_display()
         else:
-            print "No match on Right"
+            self.game.logger.debug("No match on Right")
 
     def left_flipper(self,action):
         if action == 'Activate':
@@ -189,13 +189,13 @@ class PartyMode(ep.EP_Mode):
             return game.SwitchStop
 
     def continue_party(self):
-        print "PARTY ON DUDES"
+        #print "PARTY ON DUDES"
         self.cancel_delayed("Party Timeout")
         self.party_check = False
         self.game.attract_mode.normal_start()
 
     def cancel_party(self):
-        print "CANCEL PARTY"
+        #print "CANCEL PARTY"
         self.cancel_delayed("Party Timeout")
         #disable party and start game
         self.game.party_setting = 'Disabled'
@@ -212,4 +212,4 @@ class PartyMode(ep.EP_Mode):
     def tilted(self):
     # default tilt action is just to unload - this is here so it can be redefined
     # in each mode if something extra is needed
-        print "Tilted: " + self.myID
+        self.game.logger.debug("Tilted: " + self.myID)

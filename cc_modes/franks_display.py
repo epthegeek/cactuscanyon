@@ -82,5 +82,5 @@ class FranksDisplay(ep.EP_Mode):
         self.unload()
 
     def tilted(self):
-        print "Tilted: " + self.myID
+        self.game.logger.debug("Tilted: " + self.myID)
         self.end()

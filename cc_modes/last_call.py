@@ -62,7 +62,7 @@ class LastCall(ep.EP_Mode):
         if self.game.trough.num_balls_in_play <= 1:
             # and we're not already in ending mode
             if not self.ending:
-                print "Ending Last call"
+                #print "Ending Last call"
                 # then turn on ending mode
                 self.ending = True
                 # cancel the main display updates
@@ -113,9 +113,9 @@ class LastCall(ep.EP_Mode):
             self.score(2530)
 
     def saloon_hit(self):
-        print "Saloon hit"
+        #print "Saloon hit"
         if not self.ending:
-            print "not ending"
+            #print "not ending"
             # cancel the display loop
             self.cancel_delayed("Display")
             # display a thing about jackpots resetting
@@ -225,7 +225,7 @@ class LastCall(ep.EP_Mode):
             double = False
         self.game.sound.play(self.game.assets.sfx_orchestraSpike)
         scoreString = str(ep.format_score(points))
-        print "Score string: " + scoreString
+        #print "Score string: " + scoreString
         backdrop = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_dmbJackpot.frames[17])
         if double:
             scoreLine1 = ep.EP_TextLayer(64,2, self.game.assets.font_12px_az_outline, "center", opaque=False)
@@ -273,7 +273,7 @@ class LastCall(ep.EP_Mode):
     def set_players(self,players):
         self.playerList = players
         self.game.current_player_index = self.playerList[0]
-        print "Last call - player index: " + str(self.game.current_player_index)
+        #print "Last call - player index: " + str(self.game.current_player_index)
 
     def intro(self):
         # audit

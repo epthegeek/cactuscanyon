@@ -51,28 +51,28 @@ class Mountain(ep.EP_Mode):
             self.reset_toy()
 
     def stop(self):
-        print "Mine Stop Called"
+        #print "Mine Stop Called"
         self.game.coils.mineMotor.disable()
         self.solidRun = False
         self.inMotion = False
         self.open = False
 
     def full_open(self):
-        print "Opening Mine"
+        #print "Opening Mine"
         self.open = True
         self.move()
 
     def move(self):
         if not self.inMotion:
-            print "Mine Mountain Move called"
+            #print "Mine Mountain Move called"
             self.inMotion = True
             self.game.coils.mineMotor.enable()
         else:
-            print "Mountain move called - but already in motion"
+            self.game.logger.debug("Mountain move called - but already in motion")
 
     def sw_mineEncoder_active(self,sw):
         self.mineTicks += 1
-        #print "Mine Encoder :" + str(self.mineTicks) + " Solid Run: " + str(self.solidRun) + " Reset: " + str(self.mineReset)
+        self.game.logger.debug("Mine Encoder :" + str(self.mineTicks) + " Solid Run: " + str(self.solidRun) + " Reset: " + str(self.mineReset))
         if not self.mineReset and not self.solidRun:
             if self.mineTicks in self.stopPoints:
                 if self.open:
@@ -84,7 +84,7 @@ class Mountain(ep.EP_Mode):
                     self.stop()
 
     def sw_mineHome_active(self,sw):
-        print "Mine Home Active, resetting ticks - Reset = " + str(self.mineReset)
+        self.game.logger.debug("Mine Home Active, resetting ticks - Reset = " + str(self.mineReset))
         self.mineTicks = 0
         # if the switch is active and we're supposed to be resetting, then stop here
         if self.mineReset:
@@ -101,7 +101,7 @@ class Mountain(ep.EP_Mode):
 
     def eject(self):
         if self.busy:
-            print "MOUNTAIN BUSY, PASSING"
+            self.game.logger.debug("MOUNTAIN BUSY, PASSING")
             return
         # flash the light and then kick out if there's a ball in there
         if self.game.switches.minePopper.is_active() and not self.game.fakePinProc:
@@ -112,7 +112,7 @@ class Mountain(ep.EP_Mode):
             self.reset_toy()
 
     def run(self):
-        print "Mountain Solid Run Called"
+        #print "Mountain Solid Run Called"
         # if the mine is not already moving, move it
         if not self.inMotion:
             self.inMotion = True
@@ -125,7 +125,7 @@ class Mountain(ep.EP_Mode):
             self.solidRun = True
 
     def reset_toy(self,force=False):
-        print "Mountain Reset Called - force = " + str(force)
+        #print "Mountain Reset Called - force = " + str(force)
         if not self.game.switches.mineHome.is_active() or force:
             self.game.coils.mineMotor.enable()
             self.mineReset = True

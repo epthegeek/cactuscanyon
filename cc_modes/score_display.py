@@ -184,11 +184,11 @@ class ScoreDisplay(ep.EP_Mode):
 
     # this is to try to catch if a ball should have launched when the door was open
     def sw_coinDoorClosed_active(self,sw):
-        print ("Checking ball count on door close")
+        #print ("Checking ball count on door close")
         if self.game.trough.num_balls_in_play != 0:
             ball_count = self.game.trough.num_balls()
             if ball_count == 4:
-                print ("The trough is full, but there should be a ball in play. Stealth Launch")
+                #print ("The trough is full, but there should be a ball in play. Stealth Launch")
                 self.game.trough.launch_balls(1,stealth=True)
             # clear the saloon and mine too
             if self.game.switches.minePopper.is_active():

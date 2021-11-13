@@ -20,7 +20,7 @@
 # |_|  |_|\__,_|_|_| |_|  \____|\__,_|_| |_| |_|\___|
 
 import logging
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.ERROR, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 from procgame import *
 import cc_modes
@@ -63,10 +63,6 @@ class CCGame(game.BasicGame):
         if self.usb_update:
             self.usb_location = config.values['usb_location']
             self.game_location = config.values['game_location']
-        # optional real knocker setting
-        self.useKnocker = config.value_for_key_path(keypath='use_knocker', default=False)
-        if self.useKnocker:
-            self.logger.debug("Knocker Config Found!")
         # used to prevent the high score entry from restarting the music
         self.soundIntro = False
         self.shutdownFlag = config.value_for_key_path(keypath='shutdown_flag',default=False)
@@ -77,6 +73,12 @@ class CCGame(game.BasicGame):
 
         use_desktop = config.value_for_key_path(keypath='use_desktop', default=True)
         self.color_desktop = config.value_for_key_path(keypath='color_desktop', default=False)
+
+        super(CCGame, self).__init__(machineType)
+        # optional real knocker setting
+        self.useKnocker = config.value_for_key_path(keypath='use_knocker', default=False)
+        if self.useKnocker:
+            self.logger.debug("Knocker Config Found!")
         if use_desktop:
             # if not color, run the old style pygame
             if not self.color_desktop:
@@ -88,8 +90,6 @@ class CCGame(game.BasicGame):
                 self.logger.debug("Color Desktop")
                 from ep import EP_Desktop
                 self.desktop = EP_Desktop()
-
-        super(CCGame, self).__init__(machineType)
 
         self.load_config('cc_machine.yaml')
 

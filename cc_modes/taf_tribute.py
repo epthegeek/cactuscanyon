@@ -145,7 +145,7 @@ class TAF_Tribute(ep.EP_Mode):
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
     def sw_minePopper_active_for_350ms(self,sw):
-        print "Cousin It Mine Popper Register"
+        #print "Cousin It Mine Popper Register"
         if not self.halted:
             self.halt_it()
         # if the mode is already halted, cancel any pending resume delay
@@ -153,7 +153,7 @@ class TAF_Tribute(ep.EP_Mode):
             self.cancel_delayed("Resume")
 
     def sw_saloonPopper_active_for_250ms(self,sw):
-        print "Cousin It Saloon Popper Register"
+        #print "Cousin It Saloon Popper Register"
         if not self.halted:
             self.halt_it()
         # if the mode is already halted, cancel any pending resume delay
@@ -249,7 +249,7 @@ class TAF_Tribute(ep.EP_Mode):
             self.delay("Mode Timer",delay=1,handler=self.time_it)
 
     def hit_it(self):
-        print "Hit IT"
+        #print "Hit IT"
         # on a hit, increase the value, and add the new value to the total and display the hit
         self.value += self.bump
         self.total += self.value
@@ -259,7 +259,7 @@ class TAF_Tribute(ep.EP_Mode):
         self.display_it("hit")
 
     def miss_it(self):
-        print "Miss IT"
+        #print "Miss IT"
         # on a miss award the current value and display the miss
         self.total += self.value
         self.totalLayer.set_text(ep.format_score(self.total))
@@ -276,7 +276,7 @@ class TAF_Tribute(ep.EP_Mode):
     def halt_it(self):
         if self.modeTimer <= 0:
             return
-        print "HALTING COUSIN IT IN BUMPERS/MINE"
+        #print "HALTING COUSIN IT IN BUMPERS/MINE"
         self.cancel_delayed("Resume")
         # cancel delays
         self.cancel_delayed("Mode Timer")

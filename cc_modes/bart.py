@@ -51,7 +51,7 @@ class Bart(ep.EP_Mode):
         # tenths of a second the game will wait between bart kicks in ball search
         self.search_pause = self.game.user_settings['Machine (Standard)']['Ball Search Bart Pause']
         # Easy version
-        print "Difficulty is set to - " + difficulty
+        self.game.logger.debug("Difficulty is set to - " + difficulty)
         if difficulty == 'Easy':
             self.hitsToDefeatBart = [2,4,5,6,7,8]
         # Hard version
@@ -95,8 +95,8 @@ class Bart(ep.EP_Mode):
 
         # lookup the status
         status = self.game.show_tracking('bartStatus')
-        print "BART STATUS: " + status
-        print "CURRENT BART: " + str(self.game.show_tracking('currentBart'))
+        #print "BART STATUS: " + status
+        #print "CURRENT BART: " + str(self.game.show_tracking('currentBart'))
         # if no bart is currently running, a new challenger appears
         bionic = self.game.show_tracking('bionicStatus')
         if bionic == "READY" or bionic == "RUNNING":
@@ -282,7 +282,7 @@ class Bart(ep.EP_Mode):
             defeated = 5
         self.hitsThisBart = self.hitsToDefeatBart[defeated]
         # set up the name line for the cards
-        print self.brother + " IS THE BROTHER"
+        #print self.brother + " IS THE BROTHER"
         if self.brother != "BANDELERO" and self.brother != "RUDY":
             self.nameLine = self.brother.upper() + " BART"
         else:
@@ -290,7 +290,7 @@ class Bart(ep.EP_Mode):
 
 
     def damage(self,saloonHit=False):
-        print "DAMAGE BART"
+        #print "DAMAGE BART"
         # log the hit in audits
         self.game.game_data['Feature']['Bart Hits'] += 1
         # play a quote appropriate to the current bart
@@ -320,8 +320,8 @@ class Bart(ep.EP_Mode):
         currentHits = self.game.increase_tracking('bartHits')
         # check to see if we're on the last hit now - meaning, our hit total is one less than defeat
         # math the remaining hits
-        print "HITS FOR THIS BART: " + str(self.hitsThisBart)
-        print "CURRENT HITS: " + str(currentHits)
+        #print "HITS FOR THIS BART: " + str(self.hitsThisBart)
+        #print "CURRENT HITS: " + str(currentHits)
         if currentHits > self.hitsThisBart:
             self.hitsThisBart = currentHits
         hitsLeft = self.hitsThisBart - currentHits
@@ -348,7 +348,7 @@ class Bart(ep.EP_Mode):
             self.display_damage_one()
 
     def defeat(self):
-        print "DEFEATING BART"
+        #print "DEFEATING BART"
         # log the hit in audits
         self.game.game_data['Feature']['Barts Defeated'] += 1
         # count barts to the reset
@@ -438,7 +438,7 @@ class Bart(ep.EP_Mode):
         self.delay("Display",delay=myWait,handler=self.clear_layer)
 
     def display_damage_one(self):
-        print "MADE IT TO DAMAGE ONE"
+        #print "MADE IT TO DAMAGE ONE"
         # set up the top layer
         layerOne = dmd.GroupedLayer(128,32,[self.bannerLayer,self.reactionFrame])
         # activate it

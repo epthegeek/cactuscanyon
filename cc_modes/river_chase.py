@@ -193,27 +193,27 @@ class RiverChase(ep.EP_Mode):
             # score points
             points = self.shotValue * self.valueMultiplier
             self.game.score(points)
-            print "SCORING POINTS " + str(points) + " Multiplier " + str(self.valueMultiplier)
+            #print "SCORING POINTS " + str(points) + " Multiplier " + str(self.valueMultiplier)
             # add the points to the total
             self.totalPoints += points
             # save the last points for the display
             self.lastPoints = points
-            print "LAST POINTS VALUE " + str(self.lastPoints)
+            #print "LAST POINTS VALUE " + str(self.lastPoints)
             # nudge the multiplier
             self.raise_multiplier()
             # increase the shot value .... for the fuck of it
             self.shotValue += 50000
             # set the distance to move
-            print "MOVING HORSE " + str(self.distance_value)
+            #print "MOVING HORSE " + str(self.distance_value)
             self.distance += self.distance_value
 
     def raise_multiplier(self):
         # raise the multiplier value by 1
         self.valueMultiplier += 1
-        print "RAISING MULTIPLIER OVER HERE - now it's " + str(self.valueMultiplier)
+        #print "RAISING MULTIPLIER OVER HERE - now it's " + str(self.valueMultiplier)
         # update the lamps
         self.lamp_update()
-        print "River chase - UPDATING THE LAMPS"
+        #print "River chase - UPDATING THE LAMPS"
         # set the delay to reset the timer
         self.delay("Multiplier",delay=3,handler=self.reset_multiplier)
 
@@ -275,7 +275,7 @@ class RiverChase(ep.EP_Mode):
                 # tick down the distance
                 self.distance -= 1
             if self.banner and self.distance == 0:
-                print "I SHOULD DO THE BANNER MON"
+                #print "I SHOULD DO THE BANNER MON"
                 self.hit_banner()
             else:
                 # set the horse layer position
@@ -299,7 +299,7 @@ class RiverChase(ep.EP_Mode):
                     self.delay("Mode Timer",delay=0.1,handler=self.in_progress)
 
     def halt(self):
-        print "HALTING -- BUMPERS/MINE/SALOON"
+        #print "HALTING -- BUMPERS/MINE/SALOON"
         # cancel delays
         self.cancel_delayed("Mode Timer")
         # this is the initial delay - have to include it in case of a straight shot to the mine off the ramp
@@ -437,8 +437,8 @@ class RiverChase(ep.EP_Mode):
 
     def build_display(self,awardTextString,awardScoreString):
     # create the two text lines
-        print "BUILDING DISPLAY"
-        print "Award Text/ScoreString " + str(awardTextString) + "/" + str(awardScoreString)
+        #print "BUILDING DISPLAY"
+        #print "Award Text/ScoreString " + str(awardTextString) + "/" + str(awardScoreString)
         awardTextTop = ep.EP_TextLayer(128/2,5,self.game.assets.font_5px_bold_AZ,justify="center",opaque=False)
         awardTextBottom = ep.EP_TextLayer(128/2,11,self.game.assets.font_15px_az,justify="center",opaque=False)
         # if blink frames we have to set them
@@ -449,7 +449,7 @@ class RiverChase(ep.EP_Mode):
         return completeFrame
 
     def hit_banner(self):
-        print "HIT BANNER GOES HERE"
+        #print "HIT BANNER GOES HERE"
         # turn off the banner flag
         self.banner = False
         # cancel the mode timer during the display
@@ -490,7 +490,7 @@ class RiverChase(ep.EP_Mode):
 
     # clean up and exit
     def end_save_polly(self):
-        print "ENDING SAVE POLLY"
+        #print "ENDING SAVE POLLY"
         # turn the level 1 stack flag back off
         self.game.stack_level(2,False)
         # check to see if stampede is ready - if we're not ending due to ball fail

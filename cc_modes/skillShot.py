@@ -129,7 +129,7 @@ class SkillShot(ep.EP_Mode):
             self.selecting = False
 
     def mode_started(self):
-        print "Skillshot Started"
+        #print "Skillshot Started"
         # reset the super just in case
         self.super = False
         self.kick = False
@@ -172,7 +172,7 @@ class SkillShot(ep.EP_Mode):
         for value in points:
             if not value:
                 left += 1
-        print "Unlit badge points: " + str(left)
+        #print "Unlit badge points: " + str(left)
         # set the quote based on left
         theQuote = self.starQuotes[left]
         # play a quote based on how many points are left
@@ -180,7 +180,7 @@ class SkillShot(ep.EP_Mode):
             self.delay(delay=0.3,handler=self.game.base.play_quote,param=theQuote)
 
     def generate_prizes(self):
-        print "SKILLSHOT GENERATE PRIZES"
+        #print "SKILLSHOT GENERATE PRIZES"
         # set up a blank list for prizes
         prizes = []
         # completed items are not added to the random list
@@ -307,7 +307,7 @@ class SkillShot(ep.EP_Mode):
                 if prizes[item] == "J" or prizes[item] == "W":
                     # only allow extra ball to show up one time, by removing it from the array if it gets picked
                     # same for franks and beans
-                    print "Found " + prizes[item] + " taking out of rotation"
+                    #print "Found " + prizes[item] + " taking out of rotation"
                     prizes.remove(prizes[item])
             count += 1
 
@@ -363,10 +363,10 @@ class SkillShot(ep.EP_Mode):
 
         # add the far right symbol to the left side so that it can be slid right
         self.selectedPrizes = self.selectedPrizes[4:5] + self.selectedPrizes
-        print "Selected Prizes: " + self.selectedPrizes
+        #print "Selected Prizes: " + self.selectedPrizes
         # if we're not in the super skillshot, update the display right away
         if not self.super:
-            print "UPDATING LAYER AFTER PRIZE GENERATE"
+            #print "UPDATING LAYER AFTER PRIZE GENERATE"
             #self.update_layer()
             self.intro_display()
 
@@ -409,7 +409,7 @@ class SkillShot(ep.EP_Mode):
         self.update_layer()
 
     def intro_display(self):
-        print "Copying the score layer"
+        #print "Copying the score layer"
         # copy the score layer
         scoreLayer = self.game.score_display.layer
         self.layer = scoreLayer
@@ -440,7 +440,7 @@ class SkillShot(ep.EP_Mode):
                 if self.active == 5:
                     self.active = 1
                 self.super_update_lamps()
-                print "ACTIVE SHOT IS: " + str(self.active)
+                #print "ACTIVE SHOT IS: " + str(self.active)
             ##
             self.game.score(7250,bonus=True)
             # slide the prize list over
@@ -752,7 +752,7 @@ class SkillShot(ep.EP_Mode):
             awardStringBottom = "A TRIBUTE"
             self.game.modes.add(self.game.tribute_launcher)
             self.game.tribute_launcher.shot = self.wasActive
-            print "Tribute Shot Set to: " + str(self.game.tribute_launcher.shot)
+            #print "Tribute Shot Set to: " + str(self.game.tribute_launcher.shot)
             self.super = False
 
         # franks n beans
@@ -782,7 +782,7 @@ class SkillShot(ep.EP_Mode):
         # call the lamp update so the prize is shown properly
         self.lamp_update()
 
-        print "SkillShot Awarded " + str(self.selectedPrizes[5:]) + ": " + str(awardStringTop) + " " + str(awardStringBottom)
+        #print "SkillShot Awarded " + str(self.selectedPrizes[5:]) + ": " + str(awardStringTop) + " " + str(awardStringBottom)
         self.award_display(awardStringTop,awardStringBottom)
 
     def award_display(self,awardStringTop,awardStringBottom,start=True):
@@ -827,13 +827,13 @@ class SkillShot(ep.EP_Mode):
     def sw_flipperLwL_active_for_2s(self,sw):
         if self.game.switches.shooterLane.is_active():
             if not self.super and not self.game.tournament and self.game.user_settings['Gameplay (Feature)']['Super Skill Shot'] == 'Enabled':
-                print "LEFT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
+                #print "LEFT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
                 self.activate_super()
 
     def sw_flipperLwR_active_for_2s(self,sw):
         if self.game.switches.shooterLane.is_active():
             if not self.super and not self.game.tournament and self.game.user_settings['Gameplay (Feature)']['Super Skill Shot'] == 'Enabled':
-                print "RIGHT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
+                #print "RIGHT FLIPPER ACTIVATING SUPER AFTER 2 SEC"
                 self.activate_super()
 
     def sw_rightReturnLane_active(self,sw):

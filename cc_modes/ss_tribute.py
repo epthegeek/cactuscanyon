@@ -139,7 +139,7 @@ class SS_Tribute(ep.EP_Mode):
 
     # so does the mine and both pass the 'advanced' flag to avoid moo sounds
     def sw_minePopper_active_for_350ms(self,sw):
-        print "Frog Mine Popper Register"
+        #print "Frog Mine Popper Register"
         if not self.halted:
             self.halt_frogs()
         # if the mode is already halted, cancel any pending resume delay
@@ -147,7 +147,7 @@ class SS_Tribute(ep.EP_Mode):
             self.cancel_delayed("Resume")
 
     def sw_saloonPopper_active_for_250ms(self,sw):
-        print "Frog Saloon Popper Register"
+        #print "Frog Saloon Popper Register"
         if not self.halted:
             self.halt_frogs()
         # if the mode is already halted, cancel any pending resume delay
@@ -174,7 +174,7 @@ class SS_Tribute(ep.EP_Mode):
             self.beerHit = True
             # delay to re-allow due to debounce being off
             self.delay(delay=0.050,handler=self.beer_unhit)
-            print "Beer Mug Hit - Kill Frog"
+            #print "Beer Mug Hit - Kill Frog"
             if not self.won:
                 self.kill_frog()
         return game.SwitchStop
@@ -187,7 +187,7 @@ class SS_Tribute(ep.EP_Mode):
             self.beerHit = True
             # delay to re-allow due to debounce being off
             self.delay(delay=0.050,handler=self.beer_unhit)
-            print "Beer Mug Hit - Kill Frog"
+            #print "Beer Mug Hit - Kill Frog"
             if not self.won:
                 self.kill_frog()
         return game.SwitchStop
@@ -237,13 +237,13 @@ class SS_Tribute(ep.EP_Mode):
 
     def get_going(self):
         self.game.ball_search.enable()
-        print "RELEASE THE BALL FOR TRIBUTE"
+        #print "RELEASE THE BALL FOR TRIBUTE"
         # release the ball
         if self.game.tribute_launcher.shot == 3:
-            print "TRIBUTE MINE EJECT"
+            #print "TRIBUTE MINE EJECT"
             self.game.mountain.eject()
         else:
-            print "TRIBUTE POST DROP"
+            #print "TRIBUTE POST DROP"
             self.game.coils.leftGunFightPost.disable()
         # start the music
         self.music_on(self.game.assets.music_leapers)
@@ -301,7 +301,7 @@ class SS_Tribute(ep.EP_Mode):
 
     def kill_frog(self,step=1):
         if step == 1:
-            print "Kill Frog"
+            #print "Kill Frog"
             # cancel any display timer
             self.cancel_delayed("Display")
             # choose a frog to kill
@@ -311,7 +311,7 @@ class SS_Tribute(ep.EP_Mode):
             if len(self.availFrogs) == 0:
                 self.won = True
                 self.cancel_delayed("Display")
-                print "All frogs squashed!"
+                #print "All frogs squashed!"
             # stop the timer
             self.cancel_delayed("Mode Timer")
             # on a hit, increase the value, and add the new value to the total and display the hit
@@ -399,7 +399,7 @@ class SS_Tribute(ep.EP_Mode):
     def halt_frogs(self):
         if self.modeTimer <= 0:
             return
-        print "HALTING LEAPERS IN BUMPERS/MINE"
+        #print "HALTING LEAPERS IN BUMPERS/MINE"
         self.cancel_delayed("Display")
         self.cancel_delayed("Resume")
         # cancel delays

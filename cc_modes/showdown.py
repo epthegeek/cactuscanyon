@@ -52,7 +52,7 @@ class Showdown(ep.EP_Mode):
 
     def mode_stopped(self):
         self.running = False
-        print "SHOWDOWN IS DISPATCHING DELAYS"
+        #print "SHOWDOWN IS DISPATCHING DELAYS"
         self.wipe_delays()
         self.clear_layer()
 
@@ -60,7 +60,7 @@ class Showdown(ep.EP_Mode):
         if self.game.trough.num_balls_in_play == 0 or self.game.trough.num_balls_in_play == 1 and not self.game.display_hold:
             # if we're not setting up a new rack, its ok to end.  Otherwise ignore
             if self.game.show_tracking('showdownStatus') == "RUNNING" and not self.racking:
-                print "Ending Showdown due to ball drain"
+                #print "Ending Showdown due to ball drain"
                 self.game.base.busy = True
                 self.game.base.queued += 1
                 self.end_showdown()
@@ -79,7 +79,7 @@ class Showdown(ep.EP_Mode):
 
 
     def start_showdown(self,side):
-        print "S H O W D O W N"
+        #print "S H O W D O W N"
         # turn on the display hold to catch ball drain during intro
         self.game.display_hold = True
         # audits
@@ -248,7 +248,7 @@ class Showdown(ep.EP_Mode):
         # reset the taunt timer
         self.tauntTimer = 0
         # handle a guy hit in a showdown
-        print "KILLING GUY: " + str(target)
+        #print "KILLING GUY: " + str(target)
         # count the dead guy
         self.death_tally += 1
         # add one to the rolling high noon total
@@ -308,7 +308,7 @@ class Showdown(ep.EP_Mode):
         # if the 4 dudes are dead, reset them
         myWait = len(shotguy.frames) / 10.0
         if self.death_tally % 4 == 0:
-            print "THEY'RE ALL DEAD JIM"
+            #print "THEY'RE ALL DEAD JIM"
             self.delay("Operational", delay=myWait, handler=self.new_rack)
             # audit
             self.game.game_data['Feature']['Showdown Racks Clear'] += 1
@@ -370,9 +370,9 @@ class Showdown(ep.EP_Mode):
         self.game.set_tracking('ambushStatus', "OPEN")
         # turn off lights
         for i in range(0,4,1):
-            print "END SHOWDOWN BAD GUYS " + str(i)
+            #print "END SHOWDOWN BAD GUYS " + str(i)
             self.game.set_tracking('badGuysDead', False, i)
-            print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
+            #print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
             # reset the badguy UP tracking just in case
         for i in range (0, 4, 1):
             self.game.set_tracking('badGuyUp', False, i)

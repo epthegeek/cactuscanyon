@@ -153,7 +153,7 @@ class Combos(ep.EP_Mode):
         return False
     
     def hit(self):
-        print "COMBO HIT - SCORING"
+        #print "COMBO HIT - SCORING"
         # score the points here, not in the display, dummy
         if self.chain > 1:
             if ep.last_shot == "center":
@@ -183,7 +183,7 @@ class Combos(ep.EP_Mode):
         # and the global total
         comboTotal = self.game.increase_tracking('combosTotal')
         # then see if it's time to light the badge
-        print "COMBOS: " + str(comboTotal)
+        #print "COMBOS: " + str(comboTotal)
         # if we've got enough combos to light the badge, do that
         if combosForStar == self.game.user_settings['Gameplay (Feature)']['Combos for Star']:
             ## actually award the badge - combos is # 1
@@ -195,7 +195,7 @@ class Combos(ep.EP_Mode):
         # build and show the display of combos made & left
         combos = self.game.show_tracking('combos')
         # if we've got a chain going, that affects display
-        print "CHAIN VALUE: " + str(self.chain)
+        #print "CHAIN VALUE: " + str(self.chain)
         if self.chain > 1:
             if ep.last_shot == "center":
                 textString = str(self.chain) + "-WAY SUPER COMBO"
@@ -222,7 +222,7 @@ class Combos(ep.EP_Mode):
         textLine3.set_text(comboString,color=ep.BROWN)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2,textLine3])
         self.layer = combined
-        print "I MADE IT THROUGH COMBO DISPLAY"
+        #print "I MADE IT THROUGH COMBO DISPLAY"
         self.delay(name="Display",delay=2,handler=self.clear_layer)
 
     def abort_display(self):

@@ -48,11 +48,11 @@ class BionicBart(ep.EP_Mode):
             self.cancel_delayed("Display")
             self.game.base.busy = True
             self.game.base.queued += 1
-            print "BALL DRAINED - BIONIC IS ENDING"
+            #print "BALL DRAINED - BIONIC IS ENDING"
             self.bionic_failed()
 
     def mode_started(self):
-        print "Starting bionic bart battle"
+        #print "Starting bionic bart battle"
         # audit
         self.game.game_data['Feature']['Bionic Bart Started'] += 1
         # set the stack level
@@ -158,7 +158,7 @@ class BionicBart(ep.EP_Mode):
         self.game.squelch_music()
         # if the shot is active, register it as such
         if shot in self.activeShots:
-            print "Bionic Bart active shot hit " + str(shot)
+            #print "Bionic Bart active shot hit " + str(shot)
             if self.loaded == False:
                 self.shots += 1
                 # play a lamp show based on shot number
@@ -201,14 +201,14 @@ class BionicBart(ep.EP_Mode):
             self.game.score(2530)
             # but if the gun is loaded, urge player to shoot the bad guy
             if self.loaded:
-                print "WEAPON IS LOADED THIS IS A MISS"
+                #print "WEAPON IS LOADED THIS IS A MISS"
                 self.weapon_loaded(prompt=True)
             else:
-                print "WEAPON IS NOT LOADED THIS IS A MISS"
+                #print "WEAPON IS NOT LOADED THIS IS A MISS"
                 self.miss()
 
     def activate_shots(self,amount):
-        print "ACTIVATING SHOTS - VALUE: " + str(amount)
+        #print "ACTIVATING SHOTS - VALUE: " + str(amount)
         # pick the active shot
         if amount == 0:
             self.activeShots = []
@@ -410,9 +410,8 @@ class BionicBart(ep.EP_Mode):
         self.delay(name="Display",delay=1.5,handler=self.update_display)
         self.delay(delay=1.5,handler=self.game.restore_music)
 
-
     def hit(self,step=1):
-        print "Hitting bionic bart"
+        #print "Hitting bionic bart"
         if step == 1:
             # audit
             self.game.game_data['Feature']['Bionic Bart Hits'] += 1
@@ -476,7 +475,7 @@ class BionicBart(ep.EP_Mode):
             # activate the current shots
             self.activate_shots(self.shotsToLoad - self.shots)
             # kick the ball
-            print "Bionic Hit Saloon Kick"
+            #print "Bionic Hit Saloon Kick"
             self.game.saloon.kick()
             # start a ball save if configured
             if self.ballSave:
@@ -656,7 +655,7 @@ class BionicBart(ep.EP_Mode):
         # Turn the lights back on
         self.lamp_update()
         # kick the ball if it's held
-        print "Bionic Finish Up Saloon Kick"
+        #print "Bionic Finish Up Saloon Kick"
         self.game.saloon.kick()
         # unset the base busy flag
         self.game.base.busy = False

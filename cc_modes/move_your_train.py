@@ -46,7 +46,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.won = False
 
     def mode_started(self):
-        print "Beginning Move Your Train"
+        #print "Beginning Move Your Train"
         # set the status to ready
         self.game.set_tracking("mytStatus", "READY")
         self.postUse = False
@@ -54,7 +54,7 @@ class MoveYourTrain(ep.EP_Mode):
         # move the train to the middle of the track
         # set a stop point for the encoder
         self.game.train.stopAt = self.game.train.mytStop
-        print "Stop train at value: " + str(self.game.train.stopAt)
+        #print "Stop train at value: " + str(self.game.train.stopAt)
         # move the train forward
         self.game.train.fast_forward()
         # set the horizontal offset to starting point
@@ -105,7 +105,7 @@ class MoveYourTrain(ep.EP_Mode):
             self.move_train("center")
 
     def start(self,postTrap = False,side=0):
-        print "Move your train actual start"
+        #print "Move your train actual start"
         if postTrap:
             self.postUse = True
             # raise the right post to hold the ball - to trap the ball after the skillshot win
@@ -159,7 +159,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.layer = combined
 
     def move_display(self,direction):
-        print "Moving Train " + str(direction)
+        #print "Moving Train " + str(direction)
         # set the train layer
         if direction == "left":
             self.set_train_layer("left",self.trainOffset)
@@ -174,7 +174,7 @@ class MoveYourTrain(ep.EP_Mode):
             self.trainOffset += 20
         # play a chugg sound
         self.game.sound.play(self.game.assets.sfx_centerRampEnter,loops=1)
-        print "TRAIN OFFSET: " + str(self.trainOffset)
+        #print "TRAIN OFFSET: " + str(self.trainOffset)
         # four movements in one direction is win
         if self.trainOffset == 80 or self.trainOffset == -80:
             self.cancel_delayed("Taunt")
@@ -190,7 +190,7 @@ class MoveYourTrain(ep.EP_Mode):
     def move_train(self,direction):
         # cancel the zero out if one is pending
         self.game.train.cancel_delayed("Zero")
-        print "TRAIN STATUS:" + str(self.game.train.inMotion)
+        #print "TRAIN STATUS:" + str(self.game.train.inMotion)
         # if we're not currently moving, then we can move again - tweak for running in fakepinproc?
         if not self.game.train.inMotion or self.game.fakePinProc and not self.won:
             # increase the shots taken
@@ -199,7 +199,7 @@ class MoveYourTrain(ep.EP_Mode):
 #            if self.shots +2 == self.maxShots:
 #                self.game.sound.play(self.game.assets.quote_mytTaunt)
             self.game.train.stopAt = self.game.train.mytIncrement
-            print "Stop train at value: " + str(self.game.train.stopAt)
+            #print "Stop train at value: " + str(self.game.train.stopAt)
             if direction == "left":
                 self.move_display("left")
                 self.game.train.fast_forward()
@@ -218,7 +218,7 @@ class MoveYourTrain(ep.EP_Mode):
 
 
     def idle_display(self):
-        print "TRain Idle display"
+        #print "TRain Idle display"
         # set the train layer to idle
         self.set_train_layer("idle",self.trainOffset)
         # blow the wistle
@@ -239,7 +239,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.trainLayer.composite_op = "blacksrc"
 
     def set_position(self,value=0):
-        print "MYT - Setting offset to " + str(value)
+        #print "MYT - Setting offset to " + str(value)
         # for setting the offset for the train layers
         self.trainOffset = value
 
@@ -293,7 +293,7 @@ class MoveYourTrain(ep.EP_Mode):
         self.delay(delay=2,handler=self.end)
 
     def end(self):
-        print "Ending Move Your Train"
+        #print "Ending Move Your Train"
         self.clear_layer()
         # turn off the running flag
         self.running = False

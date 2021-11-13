@@ -54,7 +54,7 @@ class Gunfight(ep.EP_Mode):
 
     def ball_drained(self):
         if self.game.trough.num_balls_in_play == 0 and self.game.show_tracking('gunfightStatus') == "RUNNING":
-            print "GUNFIGHT BALL DRAINED ROUTINE"
+            #print "GUNFIGHT BALL DRAINED ROUTINE"
             self.lost()
 
     def mode_started(self):
@@ -70,42 +70,42 @@ class Gunfight(ep.EP_Mode):
     # kill switches - they check win first, in case the ball glanced off a bad guy and then hit a target
     def sw_leftRampEnter_active(self,sw):
         if not self.win and not self.starting:
-            print "Gunfight - Left ramp enter killed it"
+            #print "Gunfight - Left ramp enter killed it"
             self.lost()
 
     def sw_centerRampMake_active(self,sw):
         if not self.win and not self.starting:
-            print "Gunfight - Center ramp make killed it"
+            #print "Gunfight - Center ramp make killed it"
             self.lost()
 
     def sw_rightRampMake_active(self,sw):
         if not self.win and not self.starting:
-            print "Gunfight - right ramp make killed it"
+            #print "Gunfight - right ramp make killed it"
             self.lost()
 
     def sw_beerMug_active(self,sw):
         if not self.win and not self.starting:
-            print "Gunfight - beer mug killed it"
+            #print "Gunfight - beer mug killed it"
             self.lost()
 
     def sw_saloonGate_active(self,sw):
         if not self.win and not self.starting:
-            print "Gunfight - saloon gate killed it"
+            #print "Gunfight - saloon gate killed it"
             self.lost()
 
     def sw_mineEntrance_active(self,sw):
         if not self.win and not self.starting:
-            print "Gunfight - mine entrance killed it"
+            #print "Gunfight - mine entrance killed it"
             self.lost()
 
     def sw_leftLoopBottom_active(self,sw):
         if not self.win and not self.starting:
-            print "Gunfight - left loop bottom killed it"
+            #print "Gunfight - left loop bottom killed it"
             self.lost()
 
     def sw_rightLoopBottom_active(self,sw):
         if not self.win and not self.starting:
-            print "Gunfight - right loop bottom killed it"
+            #print "Gunfight - right loop bottom killed it"
             self.lost()
 
     def sw_flipperLwL_active(self,sw):
@@ -122,9 +122,9 @@ class Gunfight(ep.EP_Mode):
         # audit
         self.game.game_data['Feature']['Gunfights Started'] += 1
         self.starting = True
-        print "GUNFIGHT GOES HERE"
+        #print "GUNFIGHT GOES HERE"
         # pop up the post
-        print "RAISE POST ON SIDE: " + str(side)
+        #print "RAISE POST ON SIDE: " + str(side)
         self.activeSide = side
         self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=60)
         # cancel any other displays
@@ -158,14 +158,14 @@ class Gunfight(ep.EP_Mode):
             # scramble the list
         random.shuffle(badGuys)
         # pull out the enemey
-        print "ENEMY: " + str(enemy)
+        #print "ENEMY: " + str(enemy)
         # save the final target
         self.enemy = enemy
-        print badGuys
+        #print badGuys
         badGuys.remove(enemy)
         # and tag them on the end
         badGuys.append(enemy)
-        print badGuys
+        #print badGuys
         # stop the music
         # only kill the music if there's not a higher level running
         self.stop_music(slice=1)
@@ -234,7 +234,7 @@ class Gunfight(ep.EP_Mode):
 
     def lost(self):
         self.shooting = False
-        print "Gunfight - Lost routine"
+        #print "Gunfight - Lost routine"
         # cancel the delay, in case a switch sent us here
         self.cancel_delayed("Gunfight Lost")
         # drop the bad guy
@@ -293,21 +293,21 @@ class Gunfight(ep.EP_Mode):
     def gunfight_intro_hard(self,badGuys):
         # put the last bad guy in the zero spot
         badGuys[0] = badGuys[3]
-        print "Hard mode: Active Target is now: " +str(badGuys[0])
+        #print "Hard mode: Active Target is now: " +str(badGuys[0])
         # set the display to the eyes
         anim = self.game.assets.dmd_gunfightEyes
         animLayer = dmd.AnimatedLayer(frames=anim.frames,hold=True,opaque=True,repeat=False,frame_time=6)
         self.layer = animLayer
         # pick a random wait time between 1 and 4 seconds
         myWait = random.randrange(1,4,1)
-        print "Hard Mode: wait time is " + str(myWait)
+        #print "Hard Mode: wait time is " + str(myWait)
         # go to the draw after the delay
         self.delay("Operational",delay=myWait,handler=self.gunfight_intro_draw,param=badGuys)
 
     def gunfight_intro_eyes(self,badGuys):
         # pop up the first bad guy and remove it from the array
         enemy = badGuys.pop(0)
-        print "POP ENEMY: " + str(enemy)
+        #print "POP ENEMY: " + str(enemy)
         self.game.bad_guys.target_up(enemy)
         # play the orchestra hit sound
         self.game.sound.play(self.game.assets.sfx_gunfightHit1)
@@ -324,7 +324,7 @@ class Gunfight(ep.EP_Mode):
     def gunfight_intro_hands(self,badGuys):
         # pop the second bad guy and remove it
         enemy = badGuys.pop(0)
-        print "POP ENEMY: " + str(enemy)
+        #print "POP ENEMY: " + str(enemy)
         self.game.bad_guys.target_up(enemy)
         self.game.base.play_quote(self.game.assets.quote_gunfightReady)
         # play the second orchestra hit
@@ -341,7 +341,7 @@ class Gunfight(ep.EP_Mode):
     def gunfight_intro_boots(self,badGuys):
         # pop the third bad guy
         enemy = badGuys.pop(0)
-        print "POP ENEMY: " + str(enemy)
+        #print "POP ENEMY: " + str(enemy)
         self.game.bad_guys.target_up(enemy)
         self.game.base.play_quote(self.game.assets.quote_gunfightSet)
         # play the orchestra hit
@@ -356,7 +356,7 @@ class Gunfight(ep.EP_Mode):
     def gunfight_intro_draw(self,badGuys):
         # pop the last bad guy
         enemy = badGuys.pop(0)
-        print "POP ENEMY: " + str(enemy)
+        #print "POP ENEMY: " + str(enemy)
         # need this for the lost
         self.enemy = enemy
         self.game.bad_guys.target_up(enemy)
@@ -392,7 +392,7 @@ class Gunfight(ep.EP_Mode):
         self.lamp_update()
         # kill the starting flag
         self.starting = False
-        print "DROP THE POST"
+        #print "DROP THE POST"
         self.posts[self.activeSide].disable()
         # if there was ball save time left, put that back
         if self.save_timer > 0:

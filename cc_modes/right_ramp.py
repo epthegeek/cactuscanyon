@@ -196,7 +196,7 @@ class RightRamp(ep.EP_Mode):
 
     def anim_bank_victory(self):
         if self.game.bank_robbery.won:
-            print "BANK VICTORY"
+            #print "BANK VICTORY"
             self.game.sound.play(self.game.assets.sfx_grinDing)
             victoryLayer = dmd.FrameLayer(opaque=False, frame=self.game.assets.dmd_pollyVictory.frames[12])
             self.layer = victoryLayer

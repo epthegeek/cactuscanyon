@@ -102,7 +102,7 @@ class Stampede(ep.EP_Mode):
         self.active = random.choice(choices)
         # set the ramp status for lights
         for shot in self.shots:
-            print "SETTING TRACKING FOR:" + shot
+            #print "SETTING TRACKING FOR:" + shot
             self.game.set_tracking(shot,89)
         # udpate the lamps
         self.lamp_update()
@@ -239,7 +239,7 @@ class Stampede(ep.EP_Mode):
         self.delay(name="Timer",delay=6,handler=self.jackpot_shift)
 
     def end_stampede(self):
-        print "ENDING S T A M P E D E"
+        #print "ENDING S T A M P E D E"
         # stop the music
         #self.stop_music(slice=5)
         # do a final display
@@ -273,10 +273,10 @@ class Stampede(ep.EP_Mode):
         self.game.base.queued -= 1
         # clear the stack layer - if goldmine isn't running. This covers balls draining while the gold mine starts. Rare, but possible.
         if self.game.show_tracking('mineStatus') == "RUNNING":
-            print "Goldmine is running"
+            self.game.logger.debug("Goldmine is running")
             pass
         else:
-            print "Gold mine is not running"
+            self.game.logger.debug("Gold mine is not running")
             self.game.stack_level(4,False)
             # turn the main music back on
             self.music_on(self.game.assets.music_mainTheme,mySlice=5)

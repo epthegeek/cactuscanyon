@@ -137,7 +137,7 @@ class Quickdraw(ep.EP_Mode):
         # tick up the started stat
         self.game.increase_tracking('quickdrawsStarted')
 
-        print "STARTING QUICKDRAW ON SIDE:" + str(side)
+        self.game.logger.debug("STARTING QUICKDRAW ON SIDE:" + str(side))
         # set the status of this side to running
         self.game.set_tracking('quickdrawStatus',"RUNNING",side)
         # figure out the available bad guys
@@ -148,11 +148,11 @@ class Quickdraw(ep.EP_Mode):
                 choices.append(count)
             count += 1
 
-        print "AVAILABLE BAD GUYS"
-        print choices
+        #print "AVAILABLE BAD GUYS"
+        #print choices
         # pick one of them at random
         self.target = random.choice(choices)
-        print "BAD GUY ACTIVE IS: " + str(self.target)
+        #print "BAD GUY ACTIVE IS: " + str(self.target)
         # start the mode music
         self.game.sound.play(self.game.assets.music_quickdrawBumper)
         self.delay("Operational", delay=1.3, handler=self.music_on, param=self.game.assets.music_quickdraw)
@@ -252,7 +252,7 @@ class Quickdraw(ep.EP_Mode):
         self.cancel_delayed("Grace")
         self.cancel_delayed("Timer Delay")
         # kill the mode music
-        print "QUICKDRAW WON IS KILLING THE MUSIC"
+        #print "QUICKDRAW WON IS KILLING THE MUSIC"
         # add one to the total dead
         self.game.increase_tracking('kills')
         # and tick up the quickdraw wins
@@ -325,12 +325,12 @@ class Quickdraw(ep.EP_Mode):
 
     def end_quickdraw(self):
         # status passes won/lost?
-        print "ENDING QUICKDRAW"
+        #print "ENDING QUICKDRAW"
         # turn off the layer
         self.layer = None
 
         self.lamp_update()
-        print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
+        #print "QUICKDRAW MUSIC BACK ON CHECK - BALLS IN PLAY: " + str(self.game.trough.num_balls_in_play)
         # turn the level 1 flag off
         self.game.stack_level(0,False)
         # turn the main music back on - if a second level mode isn't running
@@ -354,7 +354,7 @@ class Quickdraw(ep.EP_Mode):
         if False not in self.game.show_tracking('badGuysDead'):
             if self.game.show_tracking('showdownStatus') != "OVER":
                 self.game.set_tracking('showdownStatus', "READY")
-                print "SHOWDOWN STATUS IS READY"
+                #print "SHOWDOWN STATUS IS READY"
                 self.game.modes.add(self.game.showdown)
                 self.game.showdown.start_showdown(0)
             else:
@@ -362,5 +362,5 @@ class Quickdraw(ep.EP_Mode):
 
     def mode_stopped(self):
         self.running = False
-        print "QUICKDRAW IS DISPATCHING DELAYS"
+        #print "QUICKDRAW IS DISPATCHING DELAYS"
         self.wipe_delays()

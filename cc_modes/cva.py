@@ -113,7 +113,7 @@ class CvA(ep.EP_Mode):
                 mode.abort_display()
         # if there's a quickdraw running, shut it down
         if self.game.quickdraw.running:
-            print "aborting running quickdraw for CVA"
+            self.game.logger.debug("aborting running quickdraw for CVA")
             self.game.quickdraw.lost(self.game.quickdraw.side)
         # temporary code for John Chism's UFO mod -- TODO: make 87 more dynamic with settings options
         self.game.lamps.jetBumpers.enable()
@@ -358,7 +358,7 @@ class CvA(ep.EP_Mode):
 
     def intro(self,step=1,entry="inlane",onSide = 0):
         if step == 1:
-            print "CVA started via " + str(entry)
+            self.game.logger.debug("CVA started via " + str(entry))
             self.game.sound.play(self.game.assets.quote_cvaIntro)
 
             # set the running flag
@@ -406,7 +406,7 @@ class CvA(ep.EP_Mode):
             self.gi_flutter()
 
         if step == 2:
-            print "STEP 2"
+            #print "STEP 2"
             anim = self.game.assets.dmd_cvaIntro
             myWait = len(anim.frames) / 10.0
             animLayer = ep.EP_AnimatedLayer(anim)
@@ -517,10 +517,10 @@ class CvA(ep.EP_Mode):
                     self.saucerMoving = False
                     # set the next position
                     if self.direction[0] == "LEFT":
-                        print "MOVING LEFT"
+                        #print "MOVING LEFT"
                         self.position -= 1
                     else:
-                        print "MOVING RIGHT"
+                        #print "MOVING RIGHT"
                         self.position += 1
                     # activate the shot
                     # off screen to the right
@@ -547,7 +547,7 @@ class CvA(ep.EP_Mode):
                         self.switch_modes("ALIEN")
                         return
                     else:
-                        print "WAT?"
+                        self.game.logger.debug("WAT?")
 
                 # set the position of the ship
             self.smallShip.set_target_position(self.saucerX,0)
@@ -657,7 +657,7 @@ class CvA(ep.EP_Mode):
 
     def teleport_aliens(self,wave):
         # a bunch of  bother just to make it so that the aliens don't come up the exact same every time
-        print "TELEPORT DIRECTION - " + str(self.direction[0])
+        self.game.logger.debug("TELEPORT DIRECTION - " + str(self.direction[0]))
         if wave == 1:
             if self.direction[0] == "LEFT":
                 aliens = ["Zero","Two"]
@@ -682,10 +682,10 @@ class CvA(ep.EP_Mode):
         teleport2.composite_op = "blacksrc"
         # adjust their positions
         if aliens[0] == "Zero":
-            print "ALIEN 0 - " + str(aliens[0])
+            #print "ALIEN 0 - " + str(aliens[0])
             teleport1.set_target_position(-4,0)
         else:
-            print "ALIEN 0 - " + str(aliens[0])
+            #print "ALIEN 0 - " + str(aliens[0])
             teleport1.set_target_position(28,0)
         if aliens[1] == "Two":
             teleport2.set_target_position(60,0)
@@ -737,7 +737,7 @@ class CvA(ep.EP_Mode):
             # cancel the display
             self.cancel_delayed("Display")
             # remove the dead alien
-            print "REMOVE ALIEN - " + str(target)
+            self.game.logger.debug("REMOVE ALIEN - " + str(target))
             self.activeAliens.remove(target)
             # count the kill
             self.aliensKilled += 1
@@ -766,7 +766,7 @@ class CvA(ep.EP_Mode):
             if self.aliensKilledRound == 4:
                 self.delay(delay=theDelay,handler=self.switch_modes,param="SHIP")
             elif self.aliensKilledRound == 2:
-                print "WAVE 2 NOW"
+                #print "WAVE 2 NOW"
                 self.delay("Aliens",delay=theDelay,handler=self.teleport_aliens,param=2)
             else:
                 self.delay("Display",delay=theDelay,handler=self.update_display)

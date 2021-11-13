@@ -146,7 +146,7 @@ class Ambush(ep.EP_Mode):
         self.activeSide = side
         #self.posts[self.activeSide].patter(on_time=2,off_time=6,original_on_time=30)
 
-        print "A M B U S H"
+        #print "A M B U S H"
         # audit
         self.game.game_data['Feature']['Ambush Started'] += 1
         # kill the music
@@ -347,7 +347,7 @@ class Ambush(ep.EP_Mode):
         if self.misses < self.LOSE:
             self.tauntTimer = 0
             self.cancel_delayed("Poller")
-            print "BAD GUY " + str(target) + " ESCAPES"
+            self.game.logger.debug("BAD GUY " + str(target) + " ESCAPES")
             # set drop the target
             self.game.bad_guys.target_down(target)
             # set the timer for that target to none
@@ -363,7 +363,7 @@ class Ambush(ep.EP_Mode):
             # if we're at the max misses, the mode ends
 
             if self.misses >= self.LOSE:
-                print "AMBUSH LOST"
+                #print "AMBUSH LOST"
                 # cancel any remaining timers for dudes
                 for dude in range(0,4,1):
                     self.cancel_delayed(self.targetNames[dude])
@@ -384,7 +384,7 @@ class Ambush(ep.EP_Mode):
             # reset the taunt timer
             self.tauntTimer = 0
             # handle a guy hit in a showdown
-            print "KILLING GUY: " + str(target)
+            self.game.logger.debug("KILLING GUY: " + str(target))
 
             # cancel the timer delay for this dude
             self.cancel_delayed(self.targetNames[target])
@@ -398,7 +398,7 @@ class Ambush(ep.EP_Mode):
             self.game.score(self.showdownValue)
             # increase the running total by that amount
             self.game.increase_tracking('ambushPoints',self.showdownValue)
-            print self.game.show_tracking('ambushPoints')
+            #print self.game.show_tracking('ambushPoints')
             # flash the guns with a hit
             self.game.base.guns_flash(1)
             # move target from active to available
@@ -448,7 +448,7 @@ class Ambush(ep.EP_Mode):
         textLine1.set_text(text_string,color=ep.RED)
         textLine1.composite_op = "blacksrc"
         textLine2 = ep.EP_TextLayer(74,11, self.game.assets.font_12px_az, "center", opaque=False)
-        print "TOTAL AMBUSH: " + str(ep.format_score(totalPoints))
+        #print "TOTAL AMBUSH: " + str(ep.format_score(totalPoints))
         textLine2.set_text(ep.format_score(totalPoints),color=ep.GREEN)
         combined = dmd.GroupedLayer(128,32,[backdrop,textLine1,textLine2])
         self.layer = combined
@@ -484,9 +484,9 @@ class Ambush(ep.EP_Mode):
         self.game.set_tracking('showdownStatus',"OPEN")
         self.game.set_tracking('ambushStatus',"OVER")
         for i in range(0,4,1):
-            print "END AMBUSH BAD GUYS " + str(i)
+            #print "END AMBUSH BAD GUYS " + str(i)
             self.game.set_tracking('badGuysDead',False,i)
-            print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
+            #print "BAD GUY STATUS " + str(i) + " IS " + str(self.game.show_tracking('badGuysDead',i))
             # reset the badguy UP tracking just in case
         for i in range (0,4,1):
             self.game.set_tracking('badGuyUp',False,i)
@@ -505,12 +505,12 @@ class Ambush(ep.EP_Mode):
         self.running = False
         # clear all delays
         self.wipe_delays()
-        print "AMBUSH IS DISPATCHING DELAYS"
+        #print "AMBUSH IS DISPATCHING DELAYS"
         for i in range (0,4,1):
             self.cancel_delayed(self.targetNames[i])
 
     def deactivate_guy(self,target):
-        print "DEACTIVATING BAD GUY: " + str(target)
+        #print "DEACTIVATING BAD GUY: " + str(target)
         # remove from active
         if target in self.activatedBadGuys:
             self.activatedBadGuys.remove(target)
@@ -519,7 +519,7 @@ class Ambush(ep.EP_Mode):
             self.availableBadGuys.append(target)
 
     def activate_guy(self,dude):
-        print "ACTIVATING BAD GUY:" + str(dude)
+        #print "ACTIVATING BAD GUY:" + str(dude)
         if dude in self.availableBadGuys:
             self.availableBadGuys.remove(dude)
         # put him in the active targets

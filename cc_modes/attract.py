@@ -44,10 +44,10 @@ class Attract(ep.EP_Mode):
         self.slowFlipper = self.game.user_settings['Machine (Standard)']['Slow Attract Pages'] == 'Enabled'
         self.customMessage = self.game.user_settings['Custom Message']['Custom Message'] == 'Enabled'
         if self.customMessage:
-            print "Custom Message Enabled"
+            self.game.logger.debug("Custom Message Enabled")
             self.customPages = self.game.user_settings['Custom Message']['Custom Message Pages']
         else:
-            print "Custom Message Not Enabled"
+            self.game.logger.debug("Custom Message Not Enabled")
         # stuff for party menu
         self.pmode_settings = ("Disabled","Flip Ct","Rel Flip","Drunk","Newbie","No Hold","Lights Out","Spiked","Rectify")
 
@@ -117,16 +117,17 @@ class Attract(ep.EP_Mode):
 
         # new custom message stuff
         if self.customMessage:
-            print "Building Custom Message pages " + str(self.customPages)
+            self.game.logger.debug("Building Custom Message pages " + str(self.customPages))
             for n in range (1,self.customPages +1,1):
-                print "Page " + str(n)
+                #print "Page " + str(n)
                 line = 'Page ' + str(n) + ' Line 1 Text'
                 if self.game.user_settings['Custom Message'][line] != 'NONE':
-                    print "Line one has text rendering"
+                    #print "Line one has text rendering"
                     layer = ep.EP_CustomMessageFrame().make_frame(self.game,n)
                     self.layers.append({'layer':layer,'type':ep.EP_Transition.TYPE_WIPE,'direction':ep.EP_Transition.PARAM_EAST})
                 else:
-                    print "Line 1 has no text, skipping page"
+                    #print "Line 1 has no text, skipping page"
+                    pass
 
         self.generate_score_frames()
 
@@ -325,7 +326,7 @@ class Attract(ep.EP_Mode):
     def sw_flipperLwL_active_for_3s(self,sw):
         if self.tournamentTimer == 0 and self.game.user_settings['Gameplay (Feature)']['Tournament Mode'] == "Enabled":
             if self.game.party_setting == 'Disabled':
-                print "LEFT FLIPPER ACTIVATING TOURNAMENT"
+                #print "LEFT FLIPPER ACTIVATING TOURNAMENT"
                 self.activate_tournament()
 
     def activate_tournament(self):
@@ -337,11 +338,11 @@ class Attract(ep.EP_Mode):
     def tournament_timer_tick(self):
         self.tournamentTimer -= 1
         if self.tournamentTimer <= 0:
-            print "Tournament Countdown Finished"
+            #print "Tournament Countdown Finished"
             self.tournamentTimer = 0
             self.game.interrupter.clear_layer()
         else:
-            print "Tournament Countdown Continues - " + str(self.tournamentTimer)
+            #print "Tournament Countdown Continues - " + str(self.tournamentTimer)
             if self.tournamentTimer <= 3:
                 myColor = ep.RED
             else:
@@ -417,7 +418,7 @@ class Attract(ep.EP_Mode):
     def cancel_party_select(self):
         if self.partySelectFlag:
             self.cancel_delayed("Party Timeout")
-            print "PARTY MODE SELECT CANCEL"
+            #print "PARTY MODE SELECT CANCEL"
             # turn off the flag
             self.partySelectFlag = False
             # turnoff the music
@@ -428,7 +429,7 @@ class Attract(ep.EP_Mode):
             self.timer_countdown()
 
     def set_party_mode(self):
-        print "SETTING NEW PARTY MODE"
+        #print "SETTING NEW PARTY MODE"
         self.cancel_delayed("Party Timeout")
         # set the party setting to current
         self.game.user_settings['Gameplay (Feature)']['Party Mode'] = self.pmode_settings[self.game.party_index]
@@ -439,12 +440,12 @@ class Attract(ep.EP_Mode):
         if self.game.party_setting != 'Disabled':
             if self.game.party_mode not in self.game.modes:
                 self.game.modes.add(self.game.party_mode)
-                print "ADDING PARTY MODE"
+                #print "ADDING PARTY MODE"
             string = "ENABLED"
             color_string = ep.GREEN
             #self.game.party_mode.attract_display()
         else:
-            print "REMOVING PARTY MODE"
+            #print "REMOVING PARTY MODE"
             if self.game.party_mode in self.game.modes:
                 self.game.party_mode.unload()
             string = "DISABLED"
@@ -475,7 +476,7 @@ class Attract(ep.EP_Mode):
             self.play_random()
             # increment the count
             self.soundCount += 1
-            print "SOUND COUNT: " + str(self.soundCount) + " OF " + str(self.NOISY_COUNT)
+            #print "SOUND COUNT: " + str(self.soundCount) + " OF " + str(self.NOISY_COUNT)
             # check if we're done now
             if self.soundCount >= self.NOISY_COUNT:
                 # turn the noisy flag off
@@ -528,7 +529,7 @@ class Attract(ep.EP_Mode):
         if self.game.switches.flipperLwR.is_active() and self.game.switches.flipperLwL.is_active() and self.game.buttonShutdown:
             sys.exit(69)
         else:
-            print "Attract start button got pressed"
+            #print "Attract start button got pressed"
             # If the trough is full start a game - if the end of game delay isn't active
             if not self.game.endBusy:
                 # if we're in party mode select, process that
@@ -547,7 +548,7 @@ class Attract(ep.EP_Mode):
                     self.normal_start()
 
     def normal_start(self):
-        print "NORMAL GAME START"
+        #print "NORMAL GAME START"
         # Normal non party select processing starts here
         if self.game.trough.is_full() or self.game.switches.shooterLane.is_active():
             # kill the lampshow
@@ -569,7 +570,7 @@ class Attract(ep.EP_Mode):
                 self.game.tournament = True
             self.game.start_game(forceMoonlight=force)
         else:
-            print "BALL SEARCH"
+            self.game.logger.debug("BALL SEARCH")
             self.game.ball_search.perform_search(1)
 
     def generate_score_frames(self):
@@ -807,7 +808,7 @@ class Attract(ep.EP_Mode):
         self.p_instructions2.set_text(self.game.party_mode.party_instructions[self.game.party_index][2])
 
     def mode_stopped(self):
-        print "DELETING ATTRACT DELAYS"
+        #print "DELETING ATTRACT DELAYS"
         self.wipe_delays()
         # rese the noisy flag
         self.noisy = True

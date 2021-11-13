@@ -136,25 +136,25 @@ class TributeLauncher(ep.EP_Mode):
             position = "Mine"
         else:
             position = "Lane"
-        print "Ball is in the " + position
+        #print "Ball is in the " + position
         # and then do some junk
         if self.index == 0:
-            print "Selected Monster Bash"
+            #print "Selected Monster Bash"
             self.game.modes.add(self.game.mb_tribute)
         elif self.index == 1:
-            print "Selected Addams Family"
+            #print "Selected Addams Family"
             self.game.modes.add(self.game.taf_tribute)
         elif self.index == 2:
-            print "Selected Medieval Madness"
+            #print "Selected Medieval Madness"
             self.game.modes.add(self.game.mm_tribute)
         elif self.index == 3:
-            print "Selected Cirqus Voltaire"
+            #print "Selected Cirqus Voltaire"
             self.game.modes.add(self.game.cv_tribute)
         elif self.index == 4:
-            print "Selected Scared Stiff"
+            #print "Selected Scared Stiff"
             self.game.modes.add(self.game.ss_tribute)
         else:
-            print "WAT"
+            self.game.logger.debug("WAT")
         # and then unload -- tribute modes will unload this mode
         #self.delay(delay=4,handler=self.unload)
 

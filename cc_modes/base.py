@@ -107,13 +107,13 @@ class BaseGameMode(ep.EP_Mode):
         self.game.bad_guys.unload()
 
     def ball_drained(self):
-        print "CHECKING TRACKING ball drained LR: " + str(self.game.show_tracking('leftRampStage'))
+        #print "CHECKING TRACKING ball drained LR: " + str(self.game.show_tracking('leftRampStage'))
         # if that was the last ball in play need to finish up - unless high noon is finishing up
         if self.game.trough.num_balls_in_play == 0:
             # check if we're in high noon - or boss bart fight
             status = self.game.show_tracking('highNoonStatus')
             if status == "RUNNING" or status == "FINISH" or self.game.bart.bossWin:
-                print "HIGH NOON IS RUNNING - HOLD IT (or boss bart)"
+                #print "HIGH NOON IS RUNNING - HOLD IT (or boss bart)"
                 # do nothing, and bail
                 return
             # if showdown is running and display hold is on - don't mess with things
@@ -206,7 +206,7 @@ class BaseGameMode(ep.EP_Mode):
                 self.game.set_tracking('tiltStatus', self.game.tilt_warnings)
                 self.tilt()
             else:
-                print "Beer Mug Hit"
+                #print "Beer Mug Hit"
                 self.beer_hit = True
                 # delay to re-allow due to debounce being off
                 self.delay(delay=0.050, handler=self.beer_unhit)
@@ -324,13 +324,13 @@ class BaseGameMode(ep.EP_Mode):
             # allow the code to pick specific items out of batches of quotes if specified
             if nr != 999:
                 n = nr
-                print "Quote Specific Number is: " + str(n)
+                #print "Quote Specific Number is: " + str(n)
             elif len(self.game.sound.sounds[key]) > 0:
                 l = list(range(len(self.game.sound.sounds[key])))
                 n = random.choice(l)
-                print "Randomized Quote Number is: " + str(n)
+                #print "Randomized Quote Number is: " + str(n)
             else:
-                print "Quote Number Defaulted to zero"
+                #print "Quote Number Defaulted to zero"
                 n = 0
             # then play the quote based on the new selection
             self.game.sound.sounds[key][n].play(loops,max_time,fade_ms)
@@ -352,7 +352,7 @@ class BaseGameMode(ep.EP_Mode):
     def priority_quote(self,quote,loops=0, max_time=0, fade_ms=0,squelch=False,nr=999):
         # cancel any other voice quote
         for key in self.active_quotes:
-            print "STOPPING " + str(key)
+            #print "STOPPING " + str(key)
             self.game.sound.stop(key)
         # then play the quote - overriding the voice delay timer
         duration = self.play_quote(quote,loops,max_time,fade_ms,override=True,squelch=squelch,nr=nr)
@@ -382,7 +382,7 @@ class BaseGameMode(ep.EP_Mode):
 
             # first, register the hit
             status = self.game.increase_tracking('tiltStatus')
-            print "TILT STATUS: " + str(status)
+            #print "TILT STATUS: " + str(status)
             # if that puts us at three, time to tilt
             if status == self.game.tilt_warnings:
                 self.tilt()
@@ -438,7 +438,7 @@ class BaseGameMode(ep.EP_Mode):
             # tilt out all the modes
             modequeue_copy = list(self.game.modes)
             for mode in modequeue_copy:
-                print "Tilt Roll Call: " + mode.myID
+                #print "Tilt Roll Call: " + mode.myID
                 if getattr(mode, "tilted", None):
                     mode.tilted()
 
@@ -486,7 +486,7 @@ class BaseGameMode(ep.EP_Mode):
     def return_lane_hit(self, side):
         # if we're tilted, ignore this switch entirely:
         if self.game.show_tracking('tiltStatus') >= self.game.tilt_warnings:
-            print "Game is tilted, passing return " + str(side)
+            self.game.logger.debug("Game is tilted, passing return " + str(side))
             pass
         else:
             # play the sound
@@ -499,7 +499,7 @@ class BaseGameMode(ep.EP_Mode):
             # if tribute is starting, stop the ball
             elif self.game.tribute_launcher in self.game.modes:
                 # if we hit a return lane when the launcher is running, pop the post
-                print "Tribute raising post on left"
+                #print "Tribute raising post on left"
                 self.game.coils.leftGunFightPost.patter(on_time=2, off_time=6, original_on_time=60)
             # if there's a running quickdraw or showdown - pass
             elif not self.guns_allowed():
@@ -636,7 +636,7 @@ class BaseGameMode(ep.EP_Mode):
             self.jet_count += 1
             # if we're over the setting and not not killed, kill the jet
             if self.jet_limit != 0 and self.jet_count > self.jet_limit and not self.jetKilled:
-                print "Max bumps, shut er down!"
+                #print "Max bumps, shut er down!"
                 self.jetKilled = True
                 self.game.enable_bottom_bumper(False)
             # otherwise, register the hit
@@ -767,7 +767,7 @@ class BaseGameMode(ep.EP_Mode):
         # if we're dealing with a saved ball, plunge like the wind
         if self.game.trough.balls_to_autoplunge > 0:
             self.game.trough.balls_to_autoplunge -= 1
-            print "AUTOPLUNGE, MF - Left to autoplunge " + str(self.game.trough.balls_to_autoplunge)
+            #print "AUTOPLUNGE, MF - Left to autoplunge " + str(self.game.trough.balls_to_autoplunge)
             self.game.coils.autoPlunger.pulse(self.autoplungeStrength)
 
 
@@ -813,7 +813,7 @@ class BaseGameMode(ep.EP_Mode):
 
     ### stampede
     def check_stampede(self):
-        print "CHECKING STAMPEDE"
+        #print "CHECKING STAMPEDE"
         # if both loops are done and the save polly is finished, then it's time to stampede
         if self.game.show_tracking('leftLoopStage') == 4 and \
             self.game.show_tracking('rightLoopStage') == 4 and \
@@ -823,13 +823,13 @@ class BaseGameMode(ep.EP_Mode):
             # don't start stampede during CVA, Bionic Bart, or High noon
             stackLevel = self.game.show_tracking('stackLevel')
             if True in stackLevel[5:]:
-                print "CVA, BB, or High Noon Running - no stampede"
+                self.game.logger.debug("CVA, BB, or High Noon Running - no stampede")
                 pass
             elif self.game.trough.num_balls_in_play == 0:
-                print "Balls drained before action, pass"
+                self.game.logger.debug("Balls drained before action, pass")
                 pass
             elif self.game.gunfight.running:
-                print "Stampede check: Gunfight in the way, delaying to try again"
+                self.game.logger.debug("Stampede check: Gunfight in the way, delaying to try again")
                 self.delay(delay=2,handler=self.check_stampede)
             else:
                 # if DMB is running and stacking is disabled, don't allow it to start
@@ -894,7 +894,7 @@ class BaseGameMode(ep.EP_Mode):
         else:
             # if the doubler is running, pass on quickdraw hits
             if self.game.doubler in self.game.modes:
-                print "Doubler enabled - Passing QD Hit"
+                self.game.logger.debug("Doubler enabled - Passing QD Hit")
             else:
                 # lookup the status of the side, and difficulty
                 stat = self.game.show_tracking('quickdrawStatus', side)
@@ -980,7 +980,7 @@ class BaseGameMode(ep.EP_Mode):
         self.game.statusOK = False
         # get the bonus multiplier
         times = self.game.show_tracking('bonusX')
-        print "BONUS TIMES: " + str(times)
+        #print "BONUS TIMES: " + str(times)
         # then reset it for next time
         self.game.set_tracking('bonusX',1)
         # then loop through the display
@@ -1130,10 +1130,10 @@ class BaseGameMode(ep.EP_Mode):
 
     # for starting marshall multiball, so other modes can reference it and then quit if necessary
     def kickoff_marshall(self,super=False):
-        print "Marshall Multiball Kickoff Attempt"
+        self.game.logger.debug("Marshall Multiball Kickoff Attempt")
         # if all the balls drained before this happens - bail
         if self.game.trough.num_balls_in_play == 0:
-            print "Well you blew that. Marshall aborted"
+            self.game.logger.debug("Well you blew that. Marshall aborted")
             return
         # if we haven't already run marshall multiball - or if it's coming from the super skill shot
         if not self.game.show_tracking('marshallMultiballRun') or super:
@@ -1142,7 +1142,7 @@ class BaseGameMode(ep.EP_Mode):
                 if self.game.marshall_multiball not in self.game.modes:
                     self.game.modes.add(self.game.marshall_multiball)
             else:
-                print "Game is busy - Marshall Kickoff Queued"
+                self.game.logger.debug("Game is busy - Marshall Kickoff Queued")
                 self.wait_for_stackLevel(self.kickoff_marshall)
 
     def wait_for_stackLevel(self,callback):
@@ -1163,7 +1163,7 @@ class BaseGameMode(ep.EP_Mode):
         self.game.ball_drained()
 
     def sw_phantomSwitch2_active(self,sw):
-        print "ADDING FREE EXTRA BALL"
+        self.game.logger.debug("ADDING FREE EXTRA BALL")
         # free instant extra ball
         self.game.current_player().extra_balls += 1
         # update the lamps to show extra ball
@@ -1188,7 +1188,7 @@ class BaseGameMode(ep.EP_Mode):
     def autoplunge_correct(self,string):
         # if it's still there now, and there's supposed to be balls in play - launch
         if self.game.switches.shooterLane.is_active() and self.game.trough.num_balls_in_play > 0:
-            print "AUTO PLUNGE CORRECTION - Triggered by " + string
+            self.game.logger.debug("AUTO PLUNGE CORRECTION - Triggered by " + string)
             self.game.coils.autoPlunger.pulse(self.autoplungeStrength)
 
     def abort_display(self):

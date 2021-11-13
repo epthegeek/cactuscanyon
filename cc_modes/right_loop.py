@@ -54,7 +54,7 @@ class RightLoop(ep.EP_Mode):
     def sw_rightLoopTop_active(self,sw):
         # this switch only matters if bart isn't moving - he trips it sometimes
         if not self.game.bart.moving:
-            print "RIGHT LOOP TOP HIT"
+            #print "RIGHT LOOP TOP HIT"
             # by default turn off the right side loop gate when we get to this switch
             self.game.coils.rightLoopGate.disable()
             # if we aren't coming through on a full loop - it's a natural hit and it counts
@@ -221,7 +221,7 @@ class RightLoop(ep.EP_Mode):
 
     def push_out(self):
         # crap I had this then it stopped working
-        print "TRANSITIONING WTF"
+        #print "TRANSITIONING WTF"
         self.transition = ep.EP_Transition(self,self.layer,self.game.score_display.layer,ep.EP_Transition.TYPE_PUSH,ep.EP_Transition.PARAM_SOUTH)
         self.transition.callback = self.clear_layer()
 

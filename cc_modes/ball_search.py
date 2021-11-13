@@ -51,12 +51,12 @@ class BallSearch(ep.EP_Mode):
 
     def enable(self):
         self.enabled = 1
-        print "--> BALL SEARCH ENABLED <--"
+        self.game.logger.debug("--> BALL SEARCH ENABLED <--")
         self.reset('None')
 
     def disable(self):
         self.stop(None)
-        print "-->> BALL SEARCH DISABLED <<--"
+        self.game.logger.debug("-->> BALL SEARCH DISABLED <<--")
         self.enabled = 0
 
     def reset(self,sw):
@@ -94,7 +94,7 @@ class BallSearch(ep.EP_Mode):
         self.delay("stoppedReset",delay=2,handler=self.reset,param="Ding")
 
     def perform_search(self, completion_wait_time, completion_handler = None):
-        print "DO A BARREL ROLL! - er, BALL SEARCH!"
+        self.game.logger.debug("DO A BARREL ROLL! - er, BALL SEARCH!")
         # log the search in audits
         self.game.game_data['Feature']['Ball Searches'] += 1
 
