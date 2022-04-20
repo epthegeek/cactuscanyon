@@ -67,6 +67,7 @@ class CCGame(game.BasicGame):
         self.soundIntro = False
         self.shutdownFlag = config.value_for_key_path(keypath='shutdown_flag',default=False)
         self.buttonShutdown = config.value_for_key_path(keypath='power_button_combo', default=False)
+        self.windowless = config.value_for_key_path(keypath='windowless', default=False)
         self.moonlightFlag = False
         # new flag for not counting flips when flippers are inactive in flip ct party mode
         self.flippers_active = False
@@ -89,7 +90,7 @@ class CCGame(game.BasicGame):
             else:
                 self.logger.debug("Color Desktop")
                 from ep import EP_Desktop
-                self.desktop = EP_Desktop()
+                self.desktop = EP_Desktop(windowless=self.windowless)
 
         self.load_config('cc_machine.yaml')
 
